@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import HeroCarousel from '@/components/home/hero-carousel'
+import HeroDeck from '@/components/home/hero-deck'
 import QuickCards from '@/components/home/quick-cards'
 import ProductMarquee from '@/components/home/product-marquee'
 import MediaBanner from '@/components/home/media-banner'
@@ -20,7 +20,7 @@ export default function Home() {
           __html: JSON.stringify([organizationSchema(), websiteSchema()]),
         }}
       />
-      <HeroCarousel />
+      <HeroDeck />
       <QuickCards />
       <ProductMarquee />
       <MediaBanner />

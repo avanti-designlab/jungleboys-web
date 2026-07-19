@@ -3,6 +3,8 @@
 
 const CDN = 'https://cdn.prod.website-files.com/6981ad8672f6252d7d7bb320'
 
+// Banner art contract: `image` = 16:9 (desktop), `imageMobile` = 9:16 (phones).
+// imageMobile falls back to the desktop art until vertical crops are supplied.
 export const HERO_SLIDES = [
   {
     kicker: 'JULY 13–31',
@@ -10,6 +12,7 @@ export const HERO_SLIDES = [
     cta: 'Learn more',
     href: '/710-deals',
     image: `${CDN}/69e7ee53bc94e5cc8f331c78_JB%20April%20Deals%20BG%20Desktop.png`,
+    imageMobile: undefined,
     alt: 'July deals — premium flower background',
   },
   {
@@ -18,6 +21,7 @@ export const HERO_SLIDES = [
     cta: 'Shop now',
     href: '/products',
     image: `${CDN}/69b9a86185994e827f464b24_JB%20AIO%20GAS%20TANK%20WEB%20BANNER%20Horizontal%201.jpg`,
+    imageMobile: undefined,
     alt: 'GasTank all-in-one vape banner',
   },
   {
@@ -26,9 +30,10 @@ export const HERO_SLIDES = [
     cta: 'Shop now',
     href: '/products',
     image: `${CDN}/69b9a8dd0896bcf8850494fb_JB%20GOLD%20MYLAR%20WEB%20BANNER%20Horizontal%201.jpg`,
+    imageMobile: undefined,
     alt: 'Gold Mylars 20 year anniversary edition banner',
   },
-] as const
+] as { kicker: string; title: string; cta: string; href: string; image: string; imageMobile?: string; alt: string }[]
 
 export const QUICK_CARDS = [
   {
