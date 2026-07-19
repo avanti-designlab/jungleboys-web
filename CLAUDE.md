@@ -28,6 +28,9 @@ is the execution timeline.**
 - Leads: `/api/lead` → Supabase (consent logged) → Klaviyo + email. Destination behind an interface (swappable).
 - Two-map rule: **Locations** (owned stores → Dutchie menus) and **Product Finder** (`/find-jb-products`,
   3rd-party stockists → Supabase) are separate templates that never share a data source or component.
+- **Rewards landing is `/rewards`, not `/loyalty` (Avanti, 2026-07-19 — supersedes brief docs 00/03/05):**
+  a custom landing page explaining the entire loyalty/rewards program. `/app` and `/pwf-reward` both
+  301 → `/rewards`. `/profile-reward` stays as a styled auth shell (logged-in rewards view).
 - **`/verify` template (Avanti, 2026-07-19 — adds to brief 00 §7):** product-authenticity
   verification page (customer scans QR or enters scratch code to confirm the product is genuine).
   A main anchor of the new build at the preserved `/verify` URL (currently 404s despite ~3.7k
