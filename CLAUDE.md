@@ -127,9 +127,10 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
 
 ## Recorded decisions & gate status
 
-- **Branch protection on `main`: DEFERRED by Avanti's decision (2026-07-19)** — off during Phase 0
-  foundation work to avoid merge-friction. **MUST be enabled when Phase 1 feature work starts;
-  non-negotiable before cutover.** Documentation agent: raise this at the Phase 1 entry gate.
+- **Branch protection on `main`: DEFERRED AGAIN at Phase 1 start (Avanti's explicit ruling,
+  2026-07-19)** — solo-merger friction outweighs benefit while one agent builds sequentially.
+  **Hard trigger remains: enable BEFORE CUTOVER, non-negotiable** (and revisit if multiple agents
+  ever build in parallel). Security agent: verify enabled in the pre-cutover audit.
 - **Design-token freeze: ✅ PASSED (Avanti sign-off 2026-07-19).** Global palette black/white/JB-yellow
   `#FECF0E` (AA sweep passed; yellow-on-white forbidden), scoped category accents, type = Bebas Neue
   (lead) / Lemon Milk Pro (pending file upload — build on `--font-brand` stand-in) / DM Sans (long-form).
