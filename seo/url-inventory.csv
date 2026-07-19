@@ -69,3 +69,8 @@ old_url,earns_traffic,new_url,action,template,status,verified
 /verify,3702,/verify,keep — REBUILT as own template: product-authenticity verification (QR scan / scratch-code entry); a main anchor of the new build per Avanti,verify,confirmed-by-avanti,
 /about,144,TBD,301 to new /about when built (Phase 1); interim: /,,draft,
 /menu/tlc-collective,93,/locations,301 (store closed — confirmed by Avanti; point at locations index),location-menu,confirmed-by-avanti,
+/menu/jungle-boys-dtla/category/flower,369,/menu/california/downtown-los-angeles,301 (legacy deep link; live in Webflow),location-menu,confirmed-by-avanti,live-2026-07-19
+/menu/jungle-boys-dtla/category/pre_rolls,205,/menu/california/downtown-los-angeles,301 (legacy deep link; live in Webflow),location-menu,confirmed-by-avanti,live-2026-07-19
+/menu/jungle-boys-dtla/category/vaporizers,39,/menu/california/downtown-los-angeles,301 (legacy deep link; live in Webflow),location-menu,confirmed-by-avanti,live-2026-07-19
+/menu/jungle-boys-pomona/brand/bbdf26e3-c442-4346-898a-9dc657ff3acb,23,/menu/california/pomona,301 (legacy deep link; live in Webflow),location-menu,confirmed-by-avanti,live-2026-07-19
+/menu/jungle-boys-orange-county/brand/bbdf26e3-c442-4346-898a-9dc657ff3acb,19,/menu/california/orange-county,301 (legacy deep link; live in Webflow),location-menu,confirmed-by-avanti,live-2026-07-19
