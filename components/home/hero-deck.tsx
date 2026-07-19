@@ -74,7 +74,7 @@ export default function HeroDeck() {
       style={{ height: `${HERO_SLIDES.length * 100}svh` }}
       className="relative"
     >
-      <div ref={stageRef} className="sticky top-0 h-svh w-full overflow-hidden bg-black">
+      <div ref={stageRef} className="sticky top-0 h-svh w-full overflow-hidden bg-[var(--color-background)]">
         {HERO_SLIDES.map((s, i) => (
           <div
             key={s.title}
