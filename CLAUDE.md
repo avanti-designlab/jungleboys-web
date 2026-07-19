@@ -65,6 +65,15 @@ is the execution timeline.**
   `/premium-flower`) 301 to their nested equivalents. The **Shop** is separate: full store inventory via Dutchie
   (location menus / listing with filters). Do not merge these two surfaces.
 
+## Phase status
+
+**PHASE 0: CLOSED (2026-07-19)** — setup runbook 0–9 complete, freezes passed (tagged), security
+audit PASS incl. lead-pipeline addendum. **PHASE 1: ACTIVE** — shell + home shipped (intro, inverting
+condensing header, menu, hero deck, cards, footer, themes, cookie consent, mobile tab bar); content
+templates + Storyblok wiring remain. Lead pipeline LIVE end-to-end (Klaviyo forwarding verified).
+Open: LEAD_NOTIFY_EMAIL delivery mechanism (no email provider — Klaviyo flow vs Resend, Avanti decides);
+Lemon Milk Pro files pending purchase.
+
 ## The one rule above all (06 §7)
 
 **Foundation first, frozen, then parallelize — and security gates every phase.**

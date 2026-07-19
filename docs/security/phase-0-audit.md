@@ -41,8 +41,23 @@ Steps 0–8 + foundation deliverables). `/api/lead` does not exist yet — audit
 
 **Criticals: 0. Highs: 0. → Phase 0 audit verdict: PASS** (per 04 §8, criticals block; none exist).
 
-## Step 9 addendum (to complete before Phase 0 close)
+## Step 9 addendum — COMPLETE (2026-07-19)
 
-When `/api/lead` is built (Klaviyo key pending): verify input validation (email/phone format,
-length caps), rate limiting, no PII in logs, consent text + timestamp written per submission,
-Klaviyo key server-only, and anon Supabase write path still blocked. Append results here.
+`/api/lead` audited with the Klaviyo key live:
+
+| Check | Result |
+|---|---|
+| Input validation (email/phone regex, length caps, at least one contact channel) | ✅ verified (400s on bad input) |
+| Rate limiting | ✅ verified (429 after 5/min/IP) |
+| Honeypot | ✅ verified (bot submissions silently discarded, no row) |
+| Consent ledger | ✅ verbatim 590-char TCPA text + timestamp + source page written per submission (live prod test) |
+| Forwarding | ✅ end-to-end verified: forwarded_status='forwarded', profile confirmed present in Klaviyo via API |
+| Klaviyo key exposure | ✅ server-only — client bundle scan clean; env in Vercel Production+Preview |
+| Anon Supabase write path | ✅ still blocked (RLS re-verified this session) |
+
+**Known gap (tracked, non-blocking):** the `LEAD_NOTIFY_EMAIL` copy is not yet delivered — no email
+provider exists in the stack. Options for Phase 1: a Klaviyo notification flow (no new vendor) or a
+transactional provider (e.g. Resend). Decision owner: Avanti.
+
+**PHASE 0: FORMALLY CLOSED.** All setup steps 0–9 complete and verified; both freeze gates passed;
+audit PASS held through the addendum.
