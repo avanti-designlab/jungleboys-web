@@ -23,7 +23,7 @@ export default async function SiteFooter() {
     readFile(path.join(legalDir, 'cannabis-warning.txt'), 'utf-8'),
   ])
 
-  const fire = Array(6).fill('PLAYING WITH FIRE®')
+  const fire = Array(6).fill('PLAYING WITH FIRE')
   const since = Array(8).fill('SINCE 2006')
 
   return (
@@ -67,6 +67,7 @@ export default async function SiteFooter() {
           {[...fire, ...fire].map((t, i) => (
             <span key={i} className="font-display px-6 text-7xl uppercase md:text-9xl">
               {t}
+              <sup className="align-top text-[0.28em] leading-none">®</sup>
             </span>
           ))}
         </div>

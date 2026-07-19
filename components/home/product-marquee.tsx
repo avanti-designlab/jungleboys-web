@@ -8,7 +8,7 @@ export default function ProductMarquee() {
   const row = [...MARQUEE_TILES, ...MARQUEE_TILES]
   return (
     <section aria-label="Product highlights" className="overflow-hidden py-8">
-      <div className="marquee-track flex w-max gap-4">
+      <div className="marquee-track marquee-pause flex w-max gap-4">
         {row.map((t, i) => (
           <div
             key={i}
