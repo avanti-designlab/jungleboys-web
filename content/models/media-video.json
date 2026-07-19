@@ -1,0 +1,19 @@
+{
+  "name": "media_video",
+  "display_name": "Media Video",
+  "is_root": true,
+  "schema": {
+    "title": { "type": "text", "required": true },
+    "source": { "type": "option", "options": [
+      { "name": "YouTube", "value": "youtube" },
+      { "name": "Uploaded video", "value": "upload" }
+    ], "required": true },
+    "youtube_url": { "type": "text", "description": "Full YouTube URL (source = youtube)" },
+    "video_file": { "type": "asset", "filetypes": ["videos"], "description": "Self-hosted video (source = upload)" },
+    "description": { "type": "textarea" },
+    "thumbnail_override": { "type": "asset", "filetypes": ["images"] },
+    "featured": { "type": "boolean", "description": "Pin to the top of the media gallery" },
+    "published_date": { "type": "datetime" },
+    "seo": { "type": "bloks", "restrict_components": true, "component_whitelist": ["seo"], "maximum": 1 }
+  }
+}

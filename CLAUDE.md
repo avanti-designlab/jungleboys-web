@@ -37,6 +37,12 @@ is the execution timeline.**
 - **Rewards landing is `/rewards`, not `/loyalty` (Avanti, 2026-07-19 — supersedes brief docs 00/03/05):**
   a custom landing page explaining the entire loyalty/rewards program. `/app` and `/pwf-reward` both
   301 → `/rewards`. `/profile-reward` stays as a styled auth shell (logged-in rewards view).
+- **Media template = VIDEO HUB (Avanti, 2026-07-19 — resolves brief 00 §7 "type TBD"):** a gallery of
+  (a) YouTube documentaries **auto-pulled from the JB channel** (server-side feed fetch + ISR — new
+  uploads appear automatically, no manual step) and (b) **manually-added videos via Storyblok**
+  (`media_video` content model: YouTube URL or uploaded file, featured flag). Both merge into one
+  gallery. Every video emits `VideoObject` JSON-LD. A brand-priority surface — treat with Standard
+  motion tier, video-first layout. Full-archive/stats upgrade (YouTube Data API key) deferred/optional.
 - **`/verify` template (Avanti, 2026-07-19 — adds to brief 00 §7):** product-authenticity
   verification page (customer scans QR or enters scratch code to confirm the product is genuine).
   A main anchor of the new build at the preserved `/verify` URL (currently 404s despite ~3.7k

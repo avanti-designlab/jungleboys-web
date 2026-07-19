@@ -135,6 +135,27 @@ export function articleSchema(post: {
   }
 }
 
+export function videoSchema(video: {
+  title: string
+  description?: string
+  thumbnailUrl?: string
+  uploadDate?: string
+  embedUrl?: string // YouTube embed or self-hosted
+  contentUrl?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'VideoObject',
+    name: video.title,
+    description: video.description,
+    thumbnailUrl: video.thumbnailUrl,
+    uploadDate: video.uploadDate,
+    embedUrl: video.embedUrl,
+    contentUrl: video.contentUrl,
+    publisher: { '@type': 'Organization', name: BRAND },
+  }
+}
+
 export function itemListSchema(name: string, urls: string[]) {
   return {
     '@context': 'https://schema.org',
