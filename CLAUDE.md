@@ -69,8 +69,16 @@ is the execution timeline.**
 
 **PHASE 0: CLOSED (2026-07-19)** — setup runbook 0–9 complete, freezes passed (tagged), security
 audit PASS incl. lead-pipeline addendum. **PHASE 1: ACTIVE** — shell + home shipped (intro, inverting
-condensing header, menu, hero deck, cards, footer, themes, cookie consent, mobile tab bar); content
-templates + Storyblok wiring remain. Lead pipeline LIVE end-to-end (Klaviyo forwarding verified).
+condensing header, menu, hero deck, cards, footer, themes, cookie consent, mobile tab bar);
+**/rewards shipped (2026-07-19)** — built from Figma "JB PWF Reward" frames (assets exported via
+Figma API to `public/rewards/`; program facts in `lib/rewards-content.ts`; tables/perks are real
+HTML for SEO; FAQPage JSON-LD; brand surface = forced dark incl. body behind footer gutter; app
+links: Apple id6759608318, Play com.batchsys.jungleboys — "batchsys" is the JB app vendor, same
+party as the pre-existing Klaviyo "batch" key). FAQ answers drafted from program facts (Figma had
+lorem) — **Avanti reviews copy before cutover.** Remaining content templates + Storyblok wiring:
+media hub, contact, wholesale, phenos, verify shell, terms/privacy. Lead pipeline LIVE end-to-end
+(Klaviyo forwarding verified). Known mobile-header nit: VERIFY PRODUCTS pill can crowd the theme
+toggle at 375px — global nav polish item, not page-specific.
 Open: LEAD_NOTIFY_EMAIL delivery mechanism (no email provider — Klaviyo flow vs Resend, Avanti decides);
 Lemon Milk Pro files pending purchase.
 
