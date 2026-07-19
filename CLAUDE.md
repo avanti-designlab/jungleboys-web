@@ -28,6 +28,12 @@ is the execution timeline.**
 - Leads: `/api/lead` → Supabase (consent logged) → Klaviyo + email. Destination behind an interface (swappable).
 - Two-map rule: **Locations** (owned stores → Dutchie menus) and **Product Finder** (`/find-jb-products`,
   3rd-party stockists → Supabase) are separate templates that never share a data source or component.
+- **CA-native / FL-embed rule (Avanti, 2026-07-19 — refines brief 01 §4 + 05 Phase 3):** only the
+  **4 California menus** are built natively on the Dutchie Plus API (we have no FL API access, only
+  their embed codes). The **14 Florida pages** stay as Dutchie embeds inside a branded shell — kept
+  for traffic, deliberately not the design/SEO focus (FL's transactional site is jungleboysflorida.com,
+  run by the FL team, who also control FL GBPs). The location-menu template therefore has TWO variants:
+  CA (native API) and FL (embed shell). Full FL merge into the main site = future project, OUT of scope.
 - **Rewards landing is `/rewards`, not `/loyalty` (Avanti, 2026-07-19 — supersedes brief docs 00/03/05):**
   a custom landing page explaining the entire loyalty/rewards program. `/app` and `/pwf-reward` both
   301 → `/rewards`. `/profile-reward` stays as a styled auth shell (logged-in rewards view).
