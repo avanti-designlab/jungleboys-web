@@ -51,7 +51,7 @@ export default function QuickCards() {
   }, [])
 
   return (
-    <section className="mx-auto w-full max-w-[1560px] px-3 py-10 md:px-4">
+    <section className="w-full px-2 py-10 md:px-3">
       <div ref={gridRef} className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {QUICK_CARDS.map((c) => {
           const card = (
