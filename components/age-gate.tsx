@@ -96,23 +96,11 @@ export default function AgeGate() {
         <div className="flex w-full max-w-md flex-col gap-5">
           <button
             onClick={enter}
-            className="gate-pill group relative cursor-pointer rounded-[14px] border-2 border-[#d7d7d7] px-6 py-7 transition-colors duration-200 hover:border-[var(--color-accent)]"
+            className="group relative cursor-pointer rounded-[14px] border-2 border-[#d7d7d7] px-6 py-7 transition-colors duration-200 hover:border-[var(--color-accent)]"
           >
-            <span className="mascot pointer-events-none absolute -left-4 bottom-1 h-40 w-40 md:-left-8 md:h-48 md:w-48">
-              <span className="mascot-yes-art block h-full w-full">
-                {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset, no optimization needed */}
-                <img src={MASCOT_YES} alt="" className="h-full w-full object-contain" />
-              </span>
-              {/* hand-drawn smoke wisps, rise from the joint on hover */}
-              <svg
-                viewBox="0 0 40 60"
-                aria-hidden
-                className="absolute right-1 top-2 h-14 w-9 overflow-visible"
-              >
-                <path className="smoke-wisp" d="M20 50 C14 42 26 36 20 28" fill="none" stroke="#cfcfcf" strokeWidth="2.5" strokeLinecap="round" opacity="0" />
-                <path className="smoke-wisp" d="M24 48 C30 40 18 34 24 26" fill="none" stroke="#e4e4e4" strokeWidth="2" strokeLinecap="round" opacity="0" />
-                <path className="smoke-wisp" d="M16 46 C11 39 21 33 16 26" fill="none" stroke="#bdbdbd" strokeWidth="1.8" strokeLinecap="round" opacity="0" />
-              </svg>
+            <span className="mascot-clip pointer-events-none absolute -left-4 bottom-0 h-40 w-40 md:-left-8 md:h-48 md:w-48">
+              {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset, no optimization needed */}
+              <img src={MASCOT_YES} alt="" style={{ animationDelay: '0.35s' }} className="h-full w-full object-contain object-bottom" />
             </span>
             <span
               className="pl-24 text-4xl md:text-5xl uppercase text-white md:pl-28"
@@ -124,7 +112,7 @@ export default function AgeGate() {
 
           <a
             href="https://www.google.com"
-            className="gate-pill group relative block cursor-pointer rounded-[14px] border-2 border-[#d7d7d7] px-6 py-7 transition-colors duration-200 hover:border-[var(--color-accent)]"
+            className="group relative block cursor-pointer rounded-[14px] border-2 border-[#d7d7d7] px-6 py-7 transition-colors duration-200 hover:border-[var(--color-accent)]"
           >
             <span
               className="pr-24 text-4xl md:text-5xl uppercase text-white md:pr-28"
@@ -132,11 +120,9 @@ export default function AgeGate() {
             >
               No, I&apos;m not
             </span>
-            <span className="mascot pointer-events-none absolute -right-4 bottom-1 h-40 w-40 md:-right-8 md:h-48 md:w-48">
-              <span className="mascot-no-art block h-full w-full">
-                {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset, no optimization needed */}
-                <img src={MASCOT_NO} alt="" className="h-full w-full object-contain" />
-              </span>
+            <span className="mascot-clip pointer-events-none absolute -right-4 bottom-0 h-40 w-40 md:-right-8 md:h-48 md:w-48">
+              {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset, no optimization needed */}
+              <img src={MASCOT_NO} alt="" style={{ animationDelay: '0.5s' }} className="h-full w-full object-contain object-bottom" />
             </span>
           </a>
         </div>
