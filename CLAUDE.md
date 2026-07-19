@@ -28,9 +28,13 @@ is the execution timeline.**
 - Leads: `/api/lead` → Supabase (consent logged) → Klaviyo + email. Destination behind an interface (swappable).
 - Two-map rule: **Locations** (owned stores → Dutchie menus) and **Product Finder** (`/find-jb-products`,
   3rd-party stockists → Supabase) are separate templates that never share a data source or component.
+- **Store count (verified live 2026-07-19; brief's "16 FL" is stale):** 4 CA + **15 FL** stores on
+  `/locations` — but only **14 FL menu pages** exist. **St. Petersburg is listed with NO menu page**;
+  the rebuild adds `/menu/florida/st-petersburg` (embed variant) if an embed exists — ask Avanti/FL
+  team for the St. Pete Dutchie embed when building Phase 1 locations.
 - **CA-native / FL-embed rule (Avanti, 2026-07-19 — refines brief 01 §4 + 05 Phase 3):** only the
   **4 California menus** are built natively on the Dutchie Plus API (we have no FL API access, only
-  their embed codes). The **14 Florida pages** stay as Dutchie embeds inside a branded shell — kept
+  their embed codes). The **14 (soon 15) Florida pages** stay as Dutchie embeds inside a branded shell — kept
   for traffic, deliberately not the design/SEO focus (FL's transactional site is jungleboysflorida.com,
   run by the FL team, who also control FL GBPs). The location-menu template therefore has TWO variants:
   CA (native API) and FL (embed shell). Full FL merge into the main site = future project, OUT of scope.
