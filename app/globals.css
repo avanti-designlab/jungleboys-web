@@ -76,6 +76,22 @@ body {
   font-family: var(--font-body), system-ui, sans-serif;
 }
 
+/* Neon-sign tracer on the gate logo (segment + gap = script path length 3292) */
+@keyframes neon-travel {
+  to { stroke-dashoffset: -3292; }
+}
+.neon-trace {
+  stroke-dasharray: 240 3052;
+  stroke-linecap: round;
+  animation: neon-travel 5.5s linear infinite;
+  filter: drop-shadow(0 0 3px rgba(254, 207, 14, 0.95)) drop-shadow(0 0 9px rgba(254, 207, 14, 0.55));
+}
+
+/* Age-gate staggered entrance */
+.gate-in {
+  animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 /* Full-screen menu entrance (transform/opacity only) */
 @keyframes overlay-in {
   from { opacity: 0; }

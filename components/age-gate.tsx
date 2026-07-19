@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { BRAND_ASSETS } from '@/lib/site-config'
+import NeonLogo from './neon-logo'
 
 // 21+ gate — matches the live design Avanti confirmed (2026-07-19):
 // yellow WELCOME headline, simple YES/NO, mascot characters on the buttons.
@@ -80,20 +80,22 @@ export default function AgeGate() {
         className="flex w-full max-w-2xl flex-col items-center gap-8 px-6 text-center md:max-w-4xl"
       >
         <div className="flex flex-col items-center gap-5">
-          {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset */}
-          <img src={BRAND_ASSETS.logoWhite} alt="Jungle Boys" className="h-20 w-auto md:h-24" />
-          <h1 className="font-display whitespace-nowrap text-[clamp(1.9rem,8.2vw,3.5rem)] uppercase text-[var(--color-accent)]">
+          <NeonLogo className="gate-in h-24 w-auto md:h-28" />
+          <h1
+            className="gate-in font-display whitespace-nowrap text-[clamp(1.9rem,8.2vw,3.5rem)] uppercase text-[var(--color-accent)]"
+            style={{ animationDelay: '0.15s' }}
+          >
             Welcome to the Jungle
           </h1>
           <p
-            className="text-sm md:text-base font-bold uppercase tracking-wide text-[#b9b9b9]"
-            style={{ fontFamily: 'var(--font-brand)' }}
+            className="gate-in text-sm md:text-base font-bold uppercase tracking-wide text-[#b9b9b9]"
+            style={{ fontFamily: 'var(--font-brand)', animationDelay: '0.3s' }}
           >
             You must be 21+ years old to enter this site
           </p>
         </div>
 
-        <div className="mt-14 flex w-full max-w-md flex-col gap-6 md:mt-16 md:max-w-none md:flex-row md:gap-8">
+        <div className="gate-in mt-14 flex w-full max-w-md flex-col gap-6 md:mt-16 md:max-w-none md:flex-row md:gap-8" style={{ animationDelay: '0.45s' }}>
           <button
             onClick={enter}
             className="group relative flex-1 cursor-pointer rounded-[14px] border-2 border-[#d7d7d7] px-6 py-8 outline-none transition-colors duration-200 hover:border-[var(--color-accent)] focus-visible:border-[var(--color-accent)]"
