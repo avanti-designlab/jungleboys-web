@@ -19,6 +19,26 @@ export const NAV_LINKS = [
   { label: 'Contact', href: '/contact' },
 ] as const
 
+// Full-screen menu — three-column layout matching the live site's overlay
+export const MENU_COLUMNS: { label: string; href: string; external?: boolean }[][] = [
+  [
+    { label: 'Media', href: '/media' },
+    { label: 'Phenos', href: '/phenos' },
+    { label: 'Wholesale', href: '/wholesale' },
+    { label: 'Contact', href: '/contact' },
+  ],
+  [
+    { label: 'Products', href: '/products' },
+    { label: 'Clothing', href: 'https://jungleboysclothing.com/', external: true },
+    { label: 'Rewards', href: '/rewards' },
+    { label: 'Profile', href: '/profile' },
+  ],
+  [
+    { label: 'Locations', href: '/locations' },
+    { label: 'Product Finder', href: '/find-jb-products' },
+  ],
+]
+
 export const FOOTER_LINKS = [
   { label: 'Terms', href: '/terms' },
   { label: 'Privacy', href: '/privacy' },

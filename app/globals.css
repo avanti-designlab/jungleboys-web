@@ -73,6 +73,33 @@ body {
   color: var(--color-foreground);
 }
 
+/* Full-screen menu entrance (transform/opacity only) */
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes link-rise {
+  from { transform: translateY(115%); }
+  to { transform: translateY(0); }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.menu-overlay {
+  animation: overlay-in 0.35s ease-out both;
+}
+.menu-line {
+  overflow: hidden;
+}
+.menu-line > * {
+  display: block;
+  animation: link-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.menu-socials {
+  animation: fade-up 0.5s ease-out 0.55s both;
+}
+
 /* Age-gate mascot micro-interactions (transform/opacity only) */
 @keyframes smoke-drift {
   0% { transform: translateY(0) translateX(0) scale(0.8); opacity: 0; }
