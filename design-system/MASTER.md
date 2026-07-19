@@ -15,35 +15,53 @@
 
 ## Global Rules
 
-### Color Palette
+### Color Palette — FINAL (reconciled with Figma + brand, Avanti-confirmed 2026-07-19)
+
+**Global palette (site-wide — strictly black / white / yellow):**
 
 | Role | Hex | CSS Variable |
 |------|-----|--------------|
-| Primary | `#1E293B` | `--color-primary` |
-| On Primary | `#FFFFFF` | `--color-on-primary` |
-| Secondary | `#334155` | `--color-secondary` |
-| Accent/CTA | `#DC2626` | `--color-accent` |
-| Background | `#F8FAFC` | `--color-background` |
-| Foreground | `#0F172A` | `--color-foreground` |
-| Muted | `#E9EDF1` | `--color-muted` |
-| Border | `#E2E8F0` | `--color-border` |
-| Destructive | `#DC2626` | `--color-destructive` |
-| Ring | `#1E293B` | `--color-ring` |
+| Background (near-black, from Figma usage) | `#040303` | `--color-background` |
+| Surface (charcoal, cards/nav) | `#111111` | `--color-surface` |
+| Text primary | `#FFFFFF` | `--color-foreground` |
+| Text warm / long-form | `#F5F5F5` | `--color-foreground-soft` |
+| Text muted | `#9A9AA0` | `--color-muted` |
+| Border / divider | `#231F20` | `--color-border` |
+| **Brand accent — JB Yellow (official)** | `#FECF0E` | `--color-accent` |
+| On-accent (text/icons on yellow) | `#000000` | `--color-on-accent` |
+| Light surface (rare, e.g. rewards dashboard) | `#FFFFFF` | `--color-surface-light` |
 
-**Color Notes:** Premium dark + action red
+**Pairing rules (AA-verified):** yellow works ON black (13.9:1) or AS a surface with black
+text/icons (14.1:1). **Yellow text on white is forbidden (1.5:1 — fails WCAG).** Muted gray
+#9A9AA0 passes on background (7.4:1). All verified pairings:
 
-### Typography
+| Foreground on background | Use | Ratio | AA |
+|---|---|---|---|
+| #FFFFFF on #040303 | text on background | 20.6:1 | PASS |
+| #F5F5F5 on #040303 | warm text | 18.9:1 | PASS |
+| #9A9AA0 on #040303 | muted text | 7.4:1 | PASS |
+| #FFFFFF on #111111 | text on surface | 18.9:1 | PASS |
+| #FECF0E on #040303 | yellow accents on black | 13.9:1 | PASS |
+| #000000 on #FECF0E | black on yellow (buttons/CTAs) | 14.1:1 | PASS |
+| #FECF0E on #FFFFFF | — | 1.5:1 | FAIL — never use |
 
-- **Heading Font:** Bebas Neue (main headers) / Lemon Milk (secondary)
-- **Body Font:** Cera Pro
-- **Note:** confirmed by Avanti 2026-07-19. Bebas Neue = Google Fonts (free). Lemon Milk + Cera Pro = commercial — web-licensed woff2 files required before token freeze.
-- **Mood:** dark, cinematic, technical, precision, clean, premium, developer, professional, high-end utility
-- **Google Fonts:** [Inter + Inter](https://fonts.google.com/share?selection.family=Inter:wght@300;400;500;600;700)
+**Category accents (scoped — product-line landing pages ONLY):** each JB product line carries its
+own branding palette (e.g. Hash Hole reds `#DE312A`/`#AB1F22`/`#640C0F`, Gas Tank orange `#F47702`).
+These are defined per line in `design-system/pages/<line>.md` at Phase 2 build time, extracted from
+that line's Figma frames + packaging art. They never leak into global components.
 
-**CSS Import:**
-```css
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-```
+### Typography — FINAL (Avanti-confirmed 2026-07-19)
+
+| Role | Face | Weights | Source |
+|---|---|---|---|
+| Display / main headers | **Bebas Neue** | 700 (+400 accents) | Google Fonts (free) |
+| Secondary headers, nav, labels, buttons | **LEMON MILK** | 300 / 400 / 500 / 700 | Commercial — web-licensed woff2 from Avanti |
+| Body / long-form | **Cera Pro** | 400 / 500 / 700 | Commercial — web-licensed woff2 from Avanti |
+
+- Legacy faces in old mockups (Bebas Kai, Futura Md BT, Phosphate, Helvetica) are artifacts — replace with the three above.
+- The "Jungle Boys" script exists only as the logo — always an SVG asset, never a font token.
+- Load via `next/font/local` (Lemon Milk, Cera Pro) + `next/font/google` (Bebas Neue); `font-display: swap`; preload only critical weights.
+- **Implementation prerequisite:** Lemon Milk (×4 weights) + Cera Pro files delivered by Avanti; web-embedding license verified.
 
 ### Spacing Variables
 
