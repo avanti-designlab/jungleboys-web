@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Bebas_Neue, DM_Sans, Montserrat } from "next/font/google";
 import AgeGate from "@/components/age-gate";
 import CookieConsent from "@/components/cookie-consent";
+import MobileTabBar from "@/components/mobile-tab-bar";
 import SiteNav from "@/components/site-nav";
 import SiteFooter from "@/components/site-footer";
 import "./globals.css";
@@ -63,6 +64,7 @@ export default function RootLayout({
         <SiteNav />
         <div className="flex-1">{children}</div>
         <SiteFooter />
+        <MobileTabBar />
       </body>
     </html>
   );

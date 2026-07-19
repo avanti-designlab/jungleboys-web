@@ -81,7 +81,7 @@ export default async function SiteFooter() {
       </div>
 
       {/* bottom rows */}
-      <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-5 px-8 pb-10">
+      <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-5 px-8 pb-24 lg:pb-10">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div
             className="flex flex-wrap items-center gap-x-8 gap-y-2 text-xs font-bold uppercase tracking-wider"

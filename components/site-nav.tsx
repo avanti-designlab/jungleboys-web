@@ -33,11 +33,7 @@ export default function SiteNav() {
   // condense into a pill once the hero region (or first viewport) is passed
   useEffect(() => {
     const onScroll = () => {
-      const hero = document.querySelector<HTMLElement>('[data-hero]')
-      const threshold = hero
-        ? hero.offsetTop + hero.offsetHeight - 90
-        : window.innerHeight * 0.9
-      setCondensed(window.scrollY > threshold)
+      setCondensed(window.scrollY > 80)
     }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -118,36 +114,16 @@ export default function SiteNav() {
         </div>
       )}
 
-      {/* sticky header — expanded over the hero; condenses into a floating pill after it */}
+      {/* sticky header — expanded bar morphs into a floating pill on scroll */}
       <header className="fixed inset-x-0 top-0 z-50">
-        {condensed && !open ? (
-          <div className="menu-socials mx-auto mt-3 flex w-fit items-center gap-4 rounded-full border border-white/10 bg-[#0b0b0b]/90 py-2 pl-4 pr-2 text-white shadow-2xl backdrop-blur-md">
-            <button
-              aria-expanded={open}
-              aria-label="Open menu"
-              onClick={() => setOpen(true)}
-              className="flex cursor-pointer flex-col items-start gap-[5px] p-1"
-            >
-              <span className="block h-[2px] w-7 rounded bg-white" />
-              <span className="block h-[2px] w-5 rounded bg-white" />
-              <span className="block h-[2px] w-6 rounded bg-white" />
-            </button>
-            <Link href="/" aria-label="Jungle Boys home" className="block h-10 w-14">
-              {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset */}
-              <img src={BRAND_ASSETS.logoWhite} alt="Jungle Boys" className="h-full w-full object-contain" />
-            </Link>
-            <span className="h-5 w-px bg-white/20" aria-hidden />
-            <Link
-              href="/verify"
-              className="rounded-full bg-[var(--color-accent)] px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-[var(--color-on-accent)] transition-transform duration-200 hover:scale-105"
-              style={{ fontFamily: 'var(--font-brand)' }}
-            >
-              Verify
-            </Link>
-            <ThemeToggle />
-          </div>
-        ) : (
-        <div className="mx-auto flex w-full max-w-[1560px] items-center justify-between px-6 py-4">
+        {/* expanded bar */}
+        <div
+          className={`mx-auto flex w-full items-center justify-between px-4 pt-6 pb-3 transition-all duration-500 md:px-5 ${
+            condensed && !open
+              ? 'pointer-events-none -translate-y-8 opacity-0'
+              : 'translate-y-0 opacity-100'
+          }`}
+        >
           <div className="flex items-center gap-4 text-white" style={{ mixBlendMode: 'difference' }}>
             <button
               aria-expanded={open}
@@ -159,7 +135,6 @@ export default function SiteNav() {
               <span className={`block h-[2px] rounded bg-white transition-all duration-200 ${open ? 'w-8 opacity-0' : 'w-6'}`} />
               <span className={`block h-[2px] rounded bg-white transition-all duration-300 ${open ? 'w-8 -translate-y-[9px] -rotate-45' : 'w-[30px]'}`} />
             </button>
-
             <Link
               href="/"
               aria-label="Jungle Boys home"
@@ -203,7 +178,54 @@ export default function SiteNav() {
             </div>
           )}
         </div>
-        )}
+
+        {/* condensed floating pill */}
+        <div
+          className={`absolute inset-x-0 top-0 flex justify-center transition-all duration-500 ${
+            condensed && !open
+              ? 'translate-y-3 opacity-100'
+              : 'pointer-events-none -translate-y-10 opacity-0'
+          }`}
+        >
+          <div className="flex items-center gap-4 rounded-full border border-white/10 bg-[#0b0b0b]/90 py-2 pl-4 pr-3 text-white shadow-2xl backdrop-blur-md">
+            <button
+              aria-label="Open menu"
+              onClick={() => setOpen(true)}
+              className="flex cursor-pointer flex-col items-start gap-[5px] p-1"
+            >
+              <span className="block h-[2px] w-7 rounded bg-white" />
+              <span className="block h-[2px] w-5 rounded bg-white" />
+              <span className="block h-[2px] w-6 rounded bg-white" />
+            </button>
+            <Link href="/" aria-label="Jungle Boys home" className="block h-10 w-14">
+              {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset */}
+              <img src={BRAND_ASSETS.logoWhite} alt="Jungle Boys" className="h-full w-full object-contain" />
+            </Link>
+            <span className="h-5 w-px bg-white/20" aria-hidden />
+            <Link
+              href="/verify"
+              className="hidden rounded-full bg-[var(--color-accent)] px-5 py-2.5 text-[11px] font-bold uppercase tracking-widest text-[var(--color-on-accent)] transition-transform duration-200 hover:scale-105 sm:block"
+              style={{ fontFamily: 'var(--font-brand)' }}
+            >
+              Verify Products
+            </Link>
+            <div className="hidden items-center gap-3 sm:flex">
+              {HEADER_SOCIALS.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  className="transition-transform duration-200 hover:scale-110 [&_svg]:h-4 [&_svg]:w-4"
+                >
+                  {s.icon}
+                </a>
+              ))}
+            </div>
+            <ThemeToggle />
+          </div>
+        </div>
       </header>
     </>
   )
