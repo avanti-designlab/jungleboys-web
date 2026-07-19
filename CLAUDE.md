@@ -43,6 +43,8 @@ is the execution timeline.**
   (`media_video` content model: YouTube URL or uploaded file, featured flag). Both merge into one
   gallery. Every video emits `VideoObject` JSON-LD. A brand-priority surface — treat with Standard
   motion tier, video-first layout. Full-archive/stats upgrade (YouTube Data API key) deferred/optional.
+  **Channel (confirmed): youtube.com/@JungleBoysfilms — channelId `UC3FkXgy37Xc5tRBl4ltHuDA`;
+  uploads feed `youtube.com/feeds/videos.xml?channel_id=UC3FkXgy37Xc5tRBl4ltHuDA` (verified working).**
 - **`/verify` template (Avanti, 2026-07-19 — adds to brief 00 §7):** product-authenticity
   verification page (customer scans QR or enters scratch code to confirm the product is genuine).
   A main anchor of the new build at the preserved `/verify` URL (currently 404s despite ~3.7k
