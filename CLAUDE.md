@@ -120,7 +120,11 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
 - **Data-model freeze: CANDIDATE.** `lib/dutchie/` (frozen types + provider interface), Supabase
   schema (migrations 0001/0002), and Storyblok content models (`content/models/`) are defined.
   Freeze passes after Orchestrator review at Phase 0 exit.
-- **Design-token freeze: OPEN.** `design-system/MASTER.md` generated but not Figma-reconciled.
+- **Design-token freeze: READY FOR SIGN-OFF (2026-07-19).** Tokens reconciled with Figma + brand and
+  Avanti-confirmed: global palette black/white/JB-yellow `#FECF0E` (AA sweep passed; yellow-on-white
+  forbidden), scoped per-product-line category accents, type = Bebas Neue / LEMON MILK / Cera Pro.
+  Freeze closes when: (a) Avanti gives explicit sign-off, (b) Lemon Milk + Cera Pro web-licensed
+  woff2 files are delivered and license verified.
 
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
