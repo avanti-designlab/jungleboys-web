@@ -77,7 +77,7 @@ export default function AgeGate() {
     >
       <div
         ref={panelRef}
-        className="w-full max-w-2xl rounded-[var(--radius-lg)] bg-[#0b0b0b] px-6 py-12 md:px-16 md:py-16 flex flex-col items-center gap-8 text-center"
+        className="flex w-full max-w-2xl flex-col items-center gap-8 px-6 text-center md:max-w-4xl"
       >
         <div className="flex flex-col items-center gap-5">
           {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset */}
@@ -93,25 +93,25 @@ export default function AgeGate() {
           </p>
         </div>
 
-        <div className="mt-14 flex w-full max-w-md flex-col gap-6 md:mt-16">
+        <div className="mt-14 flex w-full max-w-md flex-col gap-6 md:mt-16 md:max-w-none md:flex-row md:gap-8">
           <button
             onClick={enter}
-            className="group relative cursor-pointer rounded-[14px] border-2 border-[#d7d7d7] px-6 py-8 outline-none transition-colors duration-200 hover:border-[var(--color-accent)] focus-visible:border-[var(--color-accent)]"
+            className="group relative flex-1 cursor-pointer rounded-[14px] border-2 border-[#d7d7d7] px-6 py-8 outline-none transition-colors duration-200 hover:border-[var(--color-accent)] focus-visible:border-[var(--color-accent)]"
           >
             <span className="mascot-clip pointer-events-none absolute -left-12 bottom-0 h-44 w-44 md:-left-16 md:h-52 md:w-52">
               {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset, no optimization needed */}
               <img src={MASCOT_YES} alt="" style={{ animationDelay: '0.35s' }} className="h-full w-full object-contain object-bottom" />
             </span>
-            <span className="font-display block pl-16 text-5xl md:text-7xl uppercase text-white md:pl-20">
+            <span className="font-display block pl-16 text-5xl uppercase text-white md:pl-20 md:text-6xl">
               Yes, im 21+
             </span>
           </button>
 
           <a
             href="https://www.google.com"
-            className="group relative block cursor-pointer rounded-[14px] border-2 border-[#d7d7d7] px-6 py-8 outline-none transition-colors duration-200 hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] focus-visible:border-[var(--color-accent)]"
+            className="group relative block flex-1 cursor-pointer rounded-[14px] border-2 border-[#d7d7d7] px-6 py-8 outline-none transition-colors duration-200 hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] focus-visible:border-[var(--color-accent)]"
           >
-            <span className="font-display block pr-16 text-5xl md:text-7xl uppercase text-white transition-colors duration-200 group-hover:text-black md:pr-20">
+            <span className="font-display block pr-16 text-5xl uppercase text-white transition-colors duration-200 group-hover:text-black md:pr-20 md:text-6xl">
               No, I&apos;m not
             </span>
             <span className="mascot-clip pointer-events-none absolute -right-16 bottom-0 h-44 w-44 md:-right-24 md:h-52 md:w-52">
