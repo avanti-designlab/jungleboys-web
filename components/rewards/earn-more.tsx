@@ -1,14 +1,13 @@
 import Image from 'next/image'
-import Reveal from '@/components/reveal'
 import {
   EARN_RULES_DISCLAIMER,
   REDEMPTION_VALUES,
   REWARD_TIERS,
 } from '@/lib/rewards-content'
-import { TwoTone } from './two-tone'
+import { Scrub, SplitHeading } from './motion'
 
-// Photo collage + the two program tables (real HTML, not images — this is the
-// content search engines and AI answers should read).
+// Photo collage (scales up as you scroll, live-parity) + the two program
+// tables (real HTML, not images). "EARN MORE." pins while letters reveal.
 
 function CoinDot() {
   return (
@@ -28,35 +27,53 @@ export default function EarnMore() {
   return (
     <section className="px-6 py-16 md:px-12 md:py-24 lg:px-20">
       <div className="mx-auto max-w-6xl">
-        <Reveal>
-          <div className="rounded-[2rem] bg-[#131313] px-4 pt-4 md:px-10 md:pt-10">
-            <Image
-              src="/rewards/collage.png"
-              alt="Jungle Boys apparel and flower with reward coins"
-              width={1114}
-              height={811}
-              sizes="(max-width: 1024px) 92vw, 1000px"
-              className="mx-auto w-full max-w-4xl"
-            />
-            <div className="pb-10 pt-6 md:pb-14">
-              <TwoTone white="Earn More." yellow="Redeem Bigger." />
+        <div className="overflow-hidden rounded-[2rem] bg-[#131313] px-4 pt-4 md:px-10 md:pt-10">
+          <Scrub start="top 70%">
+            <div data-reveal="grow">
+              <Image
+                src="/rewards/collage.png"
+                alt="Jungle Boys apparel and flower with reward coins"
+                width={1114}
+                height={811}
+                sizes="(max-width: 1024px) 92vw, 1000px"
+                className="mx-auto w-full max-w-4xl"
+              />
             </div>
+          </Scrub>
+          <div className="pb-10 pt-6 md:pb-14">
+            <SplitHeading
+              mode="letters"
+              pin
+              start="top 60%"
+              className="text-center text-3xl font-extrabold uppercase leading-[1.1] tracking-tight text-white md:text-4xl xl:text-5xl"
+              lines={[
+                { text: 'Earn More.' },
+                { text: 'Redeem Bigger.', accent: true, block: true },
+              ]}
+            />
           </div>
-        </Reveal>
+        </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <Reveal>
-            <div className="h-full rounded-[2rem] bg-[#161616] p-7 md:p-10" style={{ fontFamily: 'var(--font-brand)' }}>
-              <h3 className="text-center text-2xl font-extrabold uppercase tracking-tight text-white md:text-3xl">
-                Reward Tiers
-              </h3>
+          <Scrub className="h-full rounded-[2rem] bg-[#161616] p-7 md:p-10">
+            <div style={{ fontFamily: 'var(--font-brand)' }}>
+              <SplitHeading
+                as="h3"
+                mode="letters"
+                className="text-center text-2xl font-extrabold uppercase tracking-tight text-white md:text-3xl"
+                lines={[{ text: 'Reward Tiers' }]}
+              />
               <div className="mt-6 flex justify-between text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)]">
                 <span>Tier Level</span>
                 <span>Annual Points</span>
               </div>
               <ul className="mt-2 divide-y divide-white/10">
                 {REWARD_TIERS.map((t) => (
-                  <li key={t.name} className="flex items-center justify-between gap-4 py-4">
+                  <li
+                    key={t.name}
+                    data-reveal="up"
+                    className="flex items-center justify-between gap-4 py-4"
+                  >
                     <span className="flex items-center gap-4 text-sm font-extrabold uppercase tracking-wide text-white">
                       <CoinDot />
                       {t.name}
@@ -68,15 +85,22 @@ export default function EarnMore() {
                 ))}
               </ul>
             </div>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="h-full rounded-[2rem] bg-[#161616] p-7 md:p-10" style={{ fontFamily: 'var(--font-brand)' }}>
-              <h3 className="text-center text-2xl font-extrabold uppercase tracking-tight text-white md:text-3xl">
-                Redemption Values
-              </h3>
+          </Scrub>
+          <Scrub className="h-full rounded-[2rem] bg-[#161616] p-7 md:p-10">
+            <div style={{ fontFamily: 'var(--font-brand)' }}>
+              <SplitHeading
+                as="h3"
+                mode="letters"
+                className="text-center text-2xl font-extrabold uppercase tracking-tight text-white md:text-3xl"
+                lines={[{ text: 'Redemption Values' }]}
+              />
               <ul className="mt-8 divide-y divide-white/10">
                 {REDEMPTION_VALUES.map((r) => (
-                  <li key={r.points} className="flex items-center justify-between gap-4 py-4">
+                  <li
+                    key={r.points}
+                    data-reveal="fade"
+                    className="flex items-center justify-between gap-4 py-4"
+                  >
                     <span className="flex items-center gap-4 text-sm font-extrabold uppercase tracking-wide text-white">
                       <CoinDot />
                       {r.points}
@@ -88,17 +112,18 @@ export default function EarnMore() {
                 ))}
               </ul>
             </div>
-          </Reveal>
+          </Scrub>
         </div>
 
-        <Reveal>
+        <Scrub start="top 95%">
           <p
+            data-reveal="rise"
             className="mx-auto mt-10 max-w-2xl text-center text-[11px] font-semibold uppercase leading-relaxed tracking-wide text-white/80"
             style={{ fontFamily: 'var(--font-brand)' }}
           >
             {EARN_RULES_DISCLAIMER}
           </p>
-        </Reveal>
+        </Scrub>
       </div>
     </section>
   )

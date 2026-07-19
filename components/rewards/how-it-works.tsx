@@ -1,17 +1,17 @@
 import Image from 'next/image'
-import Reveal from '@/components/reveal'
 import { STEPS } from '@/lib/rewards-content'
+import { Scrub } from './motion'
 
 // "How Playing With Fire Rewards works" banner (art from Figma) + the
-// 4-step in-store rewards strip.
+// 4-step in-store rewards strip. Banner art + caption scrub in with scroll.
 
 export default function HowItWorks() {
   return (
     <section className="px-6 py-10 md:px-12 lg:px-20">
       <div className="mx-auto max-w-6xl">
-        <Reveal>
+        <Scrub>
           <div className="grid items-center gap-8 rounded-[2rem] bg-[#161616] p-8 md:grid-cols-2 md:p-12">
-            <div>
+            <div data-reveal="up">
               <h2 className="sr-only">How Playing With Fire Rewards works</h2>
               <Image
                 src="/rewards/pwf-works.png"
@@ -23,15 +23,18 @@ export default function HowItWorks() {
               />
             </div>
             <div className="text-center">
-              <Image
-                src="/rewards/mascots-coins.png"
-                alt="Jungle Boys mascots collecting reward coins"
-                width={562}
-                height={424}
-                sizes="(max-width: 768px) 80vw, 480px"
-                className="mx-auto w-full max-w-[480px]"
-              />
+              <div data-reveal="up">
+                <Image
+                  src="/rewards/mascots-coins.png"
+                  alt="Jungle Boys mascots collecting reward coins"
+                  width={562}
+                  height={424}
+                  sizes="(max-width: 768px) 80vw, 480px"
+                  className="mx-auto w-full max-w-[480px]"
+                />
+              </div>
               <p
+                data-reveal="rise"
                 className="mt-4 text-sm font-extrabold uppercase tracking-wide text-white md:text-base"
                 style={{ fontFamily: 'var(--font-brand)' }}
               >
@@ -39,10 +42,11 @@ export default function HowItWorks() {
               </p>
             </div>
           </div>
-        </Reveal>
+        </Scrub>
 
-        <Reveal className="mt-14">
+        <Scrub className="mt-14" start="top 85%">
           <p
+            data-reveal="rise"
             className="mx-auto w-fit rounded-full bg-[#1c1c1c] px-6 py-2.5 text-xs font-extrabold uppercase tracking-widest text-white"
             style={{ fontFamily: 'var(--font-brand)' }}
           >
@@ -52,6 +56,7 @@ export default function HowItWorks() {
             {STEPS.map((s, i) => (
               <li
                 key={s.title}
+                data-reveal="up"
                 className="relative rounded-2xl border border-white/25 px-6 py-8 text-center"
               >
                 <img src={s.icon} alt="" aria-hidden className="mx-auto h-14 w-14" />
@@ -78,7 +83,7 @@ export default function HowItWorks() {
               </li>
             ))}
           </ol>
-        </Reveal>
+        </Scrub>
       </div>
     </section>
   )

@@ -1,10 +1,9 @@
 import Image from 'next/image'
-import Reveal from '@/components/reveal'
 import { EARN_RULES_DISCLAIMER, TIER_CARDS } from '@/lib/rewards-content'
-import { TwoTone } from './two-tone'
+import { Scrub, SplitHeading } from './motion'
 
-// "Earn your place in the jungle" — the three tier cards. Mascot art comes
-// from Figma; card text is real HTML so the perks are crawlable.
+// "Earn your place in the jungle" — the three tier cards rise in sequence
+// (scroll-scrubbed). Mascot art from Figma; card text is real HTML.
 
 const themes = {
   green: {
@@ -31,13 +30,18 @@ export default function TierCards() {
   return (
     <section className="px-6 py-16 md:px-12 md:py-24 lg:px-20">
       <div className="mx-auto max-w-6xl">
-        <Reveal>
-          <TwoTone white="Earn Your Place" yellow="in the Jungle" />
-        </Reveal>
+        <SplitHeading
+          mode="letters"
+          className="text-center text-3xl font-extrabold uppercase leading-[1.1] tracking-tight text-white md:text-4xl xl:text-5xl"
+          lines={[
+            { text: 'Earn Your Place' },
+            { text: 'in the Jungle', accent: true, block: true },
+          ]}
+        />
 
-        <div className="mt-20 grid gap-16 md:grid-cols-3 md:gap-6 xl:gap-8">
-          {TIER_CARDS.map((t, i) => (
-            <Reveal key={t.name} delay={i * 0.1} className="h-full">
+        <Scrub className="mt-20 grid gap-16 md:grid-cols-3 md:gap-6 xl:gap-8" end="bottom 80%">
+          {TIER_CARDS.map((t) => (
+            <div key={t.name} data-reveal="up" className="h-full">
               <article
                 className={`relative flex h-full flex-col rounded-3xl px-6 pb-8 pt-56 ${themes[t.theme].card}`}
                 style={{ fontFamily: 'var(--font-brand)' }}
@@ -81,18 +85,19 @@ export default function TierCards() {
                   ))}
                 </ul>
               </article>
-            </Reveal>
+            </div>
           ))}
-        </div>
+        </Scrub>
 
-        <Reveal>
+        <Scrub start="top 95%">
           <p
+            data-reveal="rise"
             className="mx-auto mt-12 max-w-2xl text-center text-[11px] font-semibold uppercase leading-relaxed tracking-wide text-white/80"
             style={{ fontFamily: 'var(--font-brand)' }}
           >
             {EARN_RULES_DISCLAIMER}
           </p>
-        </Reveal>
+        </Scrub>
       </div>
     </section>
   )
