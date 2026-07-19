@@ -50,18 +50,22 @@ own branding palette (e.g. Hash Hole reds `#DE312A`/`#AB1F22`/`#640C0F`, Gas Tan
 These are defined per line in `design-system/pages/<line>.md` at Phase 2 build time, extracted from
 that line's Figma frames + packaging art. They never leak into global components.
 
-### Typography — FINAL (Avanti-confirmed 2026-07-19)
+### Typography — FINAL v2 (Avanti-confirmed 2026-07-19)
 
 | Role | Face | Weights | Source |
 |---|---|---|---|
-| Display / main headers | **Bebas Neue** | 700 (+400 accents) | Google Fonts (free) |
-| Secondary headers, nav, labels, buttons | **LEMON MILK** | 300 / 400 / 500 / 700 | Commercial — web-licensed woff2 from Avanti |
-| Body / long-form | **Cera Pro** | 400 / 500 / 700 | Commercial — web-licensed woff2 from Avanti |
+| **Main headers — all bold & dramatic moments (lead voice)** | **Bebas Neue** | 700 / 400 | Google Fonts (free) |
+| Secondary headers, nav, buttons, labels, short copy | **LEMON MILK Pro** | Light / Regular / Medium / Bold | MyFonts webfont license — **purchase + upload pending (Avanti)** |
+| Long-form body ONLY (blog articles, FAQ answers, legal) | **DM Sans** | 400 / 500 / 700 | Google Fonts (free) — readability carve-out; review at first Phase 1 page render |
 
-- Legacy faces in old mockups (Bebas Kai, Futura Md BT, Phosphate, Helvetica) are artifacts — replace with the three above.
-- The "Jungle Boys" script exists only as the logo — always an SVG asset, never a font token.
-- Load via `next/font/local` (Lemon Milk, Cera Pro) + `next/font/google` (Bebas Neue); `font-display: swap`; preload only critical weights.
-- **Implementation prerequisite:** Lemon Milk (×4 weights) + Cera Pro files delivered by Avanti; web-embedding license verified.
+- History: Cera Pro existed only because original LEMON MILK lacked lowercase; **Lemon Milk Pro has
+  lowercase**, so Cera Pro is DROPPED (no license needed). Legacy faces (Bebas Kai, Futura, Phosphate)
+  are artifacts — never use.
+- Bebas Neue is deliberately prominent — the brand wants MORE of it, not less.
+- Load via `next/font/google` (Bebas Neue, DM Sans) + `next/font/local` (Lemon Milk Pro woff2 when
+  delivered); `font-display: swap`; preload critical weights only.
+- Until Lemon Milk Pro files arrive, build with a stand-in mapped to the same token so the swap is
+  one line (`--font-brand`).
 
 ### Spacing Variables
 

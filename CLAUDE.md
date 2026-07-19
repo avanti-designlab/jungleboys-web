@@ -116,10 +116,11 @@ cleaner, Subtle/Standard motion only.
 
 **Brand anchors:** charcoal base (`#111111`/`#0A0B0D` range), yellow/gold accent family (seen in
 rewards UI + gold logo — exact hex from Figma styles or Avanti), JB stacked logo, "PLAYING WITH
-FIRE®", "SINCE 2006". **Typography (confirmed by Avanti): Bebas Neue (main headers), Lemon Milk
-(secondary headers/accents), Cera Pro (body).** Bebas Neue is a free Google Font; **Lemon Milk and
-Cera Pro are commercial fonts — obtain web-licensed files (woff2) from Avanti before the token
-freeze; verify web license covers jungleboys.com.**
+FIRE®", "SINCE 2006". **Typography FINAL (Avanti 2026-07-19): Bebas Neue = LEAD voice
+(all bold/dramatic headers — brand wants it prominent); LEMON MILK Pro = secondary headers/nav/UI/
+short copy (MyFonts webfont license, purchase + upload pending — build with stand-in on the
+`--font-brand` token until files land); DM Sans = long-form body only (blog/FAQ/legal readability
+carve-out). Cera Pro DROPPED (only ever existed because old Lemon Milk lacked lowercase; Pro has it).**
 
 Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every animation has a
 `prefers-reduced-motion` fallback; animate transform/opacity only; motion never blocks LCP.
