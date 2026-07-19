@@ -60,6 +60,31 @@ body {
   font-family: var(--font-body), system-ui, sans-serif;
 }
 
+/* Light-canvas scope (home + any light-surface page — Avanti decision 2026-07-19).
+   Same token names, inverted values; components stay theme-agnostic. */
+.theme-light {
+  --color-background: #f7f7f7;
+  --color-surface: #ffffff;
+  --color-foreground: #0a0a0a;
+  --color-foreground-soft: #1c1c1c;
+  --color-muted: #62626a;
+  --color-border: #e3e3e0;
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+/* Product-tile marquee (GPU-only transform; frozen motion rules) */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

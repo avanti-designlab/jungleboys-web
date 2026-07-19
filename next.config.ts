@@ -35,6 +35,11 @@ const securityHeaders = [
 import { redirects } from "./lib/redirects";
 
 const nextConfig: NextConfig = {
+  images: {
+    // Interim: current-site assets served from Webflow's CDN while content
+    // migrates; production assets move first-party before cutover (03 CWV budget).
+    remotePatterns: [{ protocol: "https", hostname: "cdn.prod.website-files.com" }],
+  },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },
