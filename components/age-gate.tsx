@@ -90,28 +90,28 @@ export default function AgeGate() {
           </p>
         </div>
 
-        <div className="flex w-full max-w-md flex-col gap-5">
+        <div className="mt-14 flex w-full max-w-md flex-col gap-6 md:mt-16">
           <button
             onClick={enter}
-            className="group relative cursor-pointer rounded-[14px] border-2 border-[#d7d7d7] px-6 py-7 transition-colors duration-200 hover:border-[var(--color-accent)]"
+            className="group relative cursor-pointer rounded-[14px] border-2 border-[#d7d7d7] px-6 py-8 outline-none transition-colors duration-200 hover:border-[var(--color-accent)] focus-visible:border-[var(--color-accent)]"
           >
-            <span className="mascot-clip pointer-events-none absolute -left-4 bottom-0 h-40 w-40 md:-left-8 md:h-48 md:w-48">
+            <span className="mascot-clip pointer-events-none absolute -left-12 bottom-0 h-44 w-44 md:-left-16 md:h-52 md:w-52">
               {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset, no optimization needed */}
               <img src={MASCOT_YES} alt="" style={{ animationDelay: '0.35s' }} className="h-full w-full object-contain object-bottom" />
             </span>
-            <span className="font-display pl-24 text-4xl md:text-5xl uppercase text-white md:pl-28">
+            <span className="font-display block pl-16 text-5xl md:text-7xl uppercase text-white md:pl-20">
               Yes, im 21+
             </span>
           </button>
 
           <a
             href="https://www.google.com"
-            className="group relative block cursor-pointer rounded-[14px] border-2 border-[#d7d7d7] px-6 py-7 transition-colors duration-200 hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)]"
+            className="group relative block cursor-pointer rounded-[14px] border-2 border-[#d7d7d7] px-6 py-8 outline-none transition-colors duration-200 hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] focus-visible:border-[var(--color-accent)]"
           >
-            <span className="font-display pr-24 text-4xl md:text-5xl uppercase text-white transition-colors duration-200 group-hover:text-black md:pr-28">
+            <span className="font-display block pr-16 text-5xl md:text-7xl uppercase text-white transition-colors duration-200 group-hover:text-black md:pr-20">
               No, I&apos;m not
             </span>
-            <span className="mascot-clip pointer-events-none absolute -right-4 bottom-0 h-40 w-40 md:-right-8 md:h-48 md:w-48">
+            <span className="mascot-clip pointer-events-none absolute -right-12 bottom-0 h-44 w-44 md:-right-16 md:h-52 md:w-52">
               {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset, no optimization needed */}
               <img src={MASCOT_NO} alt="" style={{ animationDelay: '0.5s' }} className="h-full w-full object-contain object-bottom" />
             </span>
