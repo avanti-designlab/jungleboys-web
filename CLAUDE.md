@@ -36,8 +36,9 @@ is the execution timeline.**
 - **Products vs Shop rule (Avanti, 2026-07-19 — refines brief 00 §7 items 12–13):** the **Products tab**
   is a curated JB-only collection — each product line (Hash Holes, Pre-Rolls, 10-Pack Prerolls, Premium
   Flower…) gets its own custom design-heavy landing page with a shop option (these are the Phase 2 Figma
-  pages; today's flat URLs `/hash-hole`, `/pre-rolls`, `/10-pack-prerolls`, `/premium-flower` are their
-  predecessors and must resolve or 301). The **Shop** is separate: full store inventory via Dutchie
+  pages). **URL decision (Avanti 2026-07-19): line pages nest under `/products/` —** e.g.
+  `/products/hash-hole` — and today's flat URLs (`/hash-hole`, `/pre-rolls`, `/10-pack-prerolls`,
+  `/premium-flower`) 301 to their nested equivalents. The **Shop** is separate: full store inventory via Dutchie
   (location menus / listing with filters). Do not merge these two surfaces.
 
 ## The one rule above all (06 §7)
