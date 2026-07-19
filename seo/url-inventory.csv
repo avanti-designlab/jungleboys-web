@@ -68,4 +68,4 @@ old_url,earns_traffic,new_url,action,template,status,verified
 /menu/arizona/jungle-boys-phoenix,18728,/locations,301 (store closed — confirmed by Avanti; point at locations index),location-menu,confirmed-by-avanti,
 /verify,3702,/verify,keep — REBUILT as own template: product-authenticity verification (QR scan / scratch-code entry); a main anchor of the new build per Avanti,verify,confirmed-by-avanti,
 /about,144,TBD,301 to new /about when built (Phase 1); interim: /,,draft,
-/menu/tlc-collective,93,TBD,TBD — TLC Collective; confirm destination,,draft,
+/menu/tlc-collective,93,/locations,301 (store closed — confirmed by Avanti; point at locations index),location-menu,confirmed-by-avanti,
