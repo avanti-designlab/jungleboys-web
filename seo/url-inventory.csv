@@ -42,7 +42,7 @@ old_url,earns_traffic,new_url,action,template,status,verified
 /premium-flower,0,/products/premium-flower,301 (product-line landing nests under /products — Avanti decision 2026-07-19),product-landing (Phase 2 custom page),confirmed-by-avanti,
 /pwf-reward,0,/rewards,301 — /rewards is the new custom loyalty/rewards program landing (Avanti 2026-07-19),rewards-landing,confirmed-by-avanti,
 /app,0,/rewards,301 — app page removed; loyalty landing is /rewards (supersedes brief /loyalty assumption),rewards-landing,confirmed-by-avanti,
-/profile-reward,0,/profile-reward,"keep — logged-in rewards view, styled auth shell (revisit in Phase 3 with Dutchie account flows)",auth-shell (noindex),confirmed-by-avanti,
+/profile-reward,0,/profile-reward,"keep — CONFIRMED via Designer: logged-in rewards dashboard (points, collectibles campaign, referrals); rebuild as styled auth shell",auth-shell (noindex),confirmed-by-avanti,designer-2026-07-19
 /420-deals,46,/710-deals,301 (flatten 4-hop Webflow chain),deals,draft,
 /april-deals,6,/710-deals,301 (flatten chain),deals,draft,
 /may-deals,16,/710-deals,301 (flatten chain),deals,draft,
