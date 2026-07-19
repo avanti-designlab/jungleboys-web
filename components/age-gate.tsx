@@ -31,7 +31,11 @@ export default function AgeGate() {
   const panelRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!getVisitorState()) setOpen(true)
+    // Deferred so the gate check never causes a cascading synchronous render
+    if (!getVisitorState()) {
+      const id = requestAnimationFrame(() => setOpen(true))
+      return () => cancelAnimationFrame(id)
+    }
   }, [])
 
   useEffect(() => {
