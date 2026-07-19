@@ -114,7 +114,7 @@ export default function AgeGate() {
             <span className="font-display block pr-16 text-5xl md:text-7xl uppercase text-white transition-colors duration-200 group-hover:text-black md:pr-20">
               No, I&apos;m not
             </span>
-            <span className="mascot-clip pointer-events-none absolute -right-12 bottom-0 h-44 w-44 md:-right-16 md:h-52 md:w-52">
+            <span className="mascot-clip pointer-events-none absolute -right-16 bottom-0 h-44 w-44 md:-right-24 md:h-52 md:w-52">
               {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset, no optimization needed */}
               <img src={MASCOT_NO} alt="" style={{ animationDelay: '0.5s' }} className="h-full w-full object-contain object-bottom" />
             </span>
