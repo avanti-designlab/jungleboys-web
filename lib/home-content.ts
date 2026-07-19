@@ -52,14 +52,14 @@ export const QUICK_CARDS = [
     title: 'Clothing',
     href: 'https://jungleboysclothing.com/',
     external: true,
-    image: `${CDN}/69b9ab57cce87b1cc19d0add_jbclothing-p-800.jpg`,
+    image: `${CDN}/69b3446029edcd55bd76425d_JBC%20Image.jpg`,
     alt: 'Jungle Boys clothing',
   },
   {
-    title: 'Phenos',
+    title: 'Pheno Hunt',
     href: '/phenos',
-    image: `${CDN}/69b3446029edcd55bd76425d_JBC%20Image.jpg`,
-    alt: 'Pheno hunt macro flower',
+    image: `${CDN}/69b3324153cf4c36d0ced471_SNL%205x.1.jpg`,
+    alt: 'Pheno hunt trichome macro',
   },
 ] as const
 
@@ -86,6 +86,6 @@ export const MEDIA_BANNER = {
   copy: 'Documentaries, drops, and two decades of the hunt — straight from the jungle.',
   cta: 'Watch on Media',
   href: '/media',
-  image: `${CDN}/69b3324153cf4c36d0ced471_SNL%205x.1.jpg`,
+  image: `${CDN}/69e7ee53bc94e5cc8f331c78_JB%20April%20Deals%20BG%20Desktop.png`,
   alt: 'Jungle Boys media feature',
 }

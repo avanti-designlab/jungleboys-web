@@ -5,11 +5,11 @@ import { QUICK_CARDS } from '@/lib/home-content'
 
 export default function QuickCards() {
   return (
-    <section className="mx-auto w-full max-w-[1500px] px-4 py-10">
+    <section className="mx-auto w-full max-w-[1560px] px-3 py-10 md:px-4">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {QUICK_CARDS.map((c, i) => {
           const card = (
-            <div className="group relative aspect-[3/4] overflow-hidden rounded-[var(--radius-lg)]">
+            <div className="group relative aspect-[2/3] overflow-hidden rounded-[var(--radius-lg)]">
               <Image
                 src={c.image}
                 alt={c.alt}
@@ -18,15 +18,9 @@ export default function QuickCards() {
                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 flex items-center justify-between p-5 text-white">
-                <span className="font-display text-3xl uppercase">
+              <div className="absolute inset-x-0 bottom-0 flex justify-center p-6 text-white">
+                <span className="font-display text-5xl uppercase md:text-6xl">
                   {c.title}
-                </span>
-                <span
-                  aria-hidden
-                  className="text-[var(--color-accent)] text-2xl transition-transform duration-200 group-hover:translate-x-1"
-                >
-                  →
                 </span>
               </div>
             </div>
