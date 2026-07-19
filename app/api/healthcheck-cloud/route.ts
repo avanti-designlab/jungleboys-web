@@ -5,8 +5,20 @@ import { getStory } from '@/lib/storyblok'
 
 export async function GET(req: Request) {
   const secret = new URL(req.url).searchParams.get('secret')
-  if (!secret || secret !== process.env.REVALIDATE_SECRET) {
-    return new Response('Unauthorized', { status: 401 })
+  if (!secret || secret !== (process.env.REVALIDATE_SECRET ?? '').trim()) {
+    // TEMP diagnostics: presence booleans only — never values.
+    return Response.json(
+      {
+        error: 'unauthorized',
+        envPresent: {
+          NEXT_PUBLIC_SUPABASE_URL: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+          SUPABASE_SERVICE_ROLE_KEY: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+          STORYBLOK_TOKEN: !!process.env.STORYBLOK_TOKEN,
+          REVALIDATE_SECRET: !!process.env.REVALIDATE_SECRET,
+        },
+      },
+      { status: 401 }
+    )
   }
 
   const results: Record<string, string> = {}
