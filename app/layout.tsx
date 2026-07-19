@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, DM_Sans, Montserrat } from "next/font/google";
+import AgeGate from "@/components/age-gate";
+import SiteNav from "@/components/site-nav";
+import SiteFooter from "@/components/site-footer";
 import "./globals.css";
 
 // Type roles per the frozen tokens (design-system/MASTER.md):
@@ -43,7 +46,12 @@ export default function RootLayout({
       lang="en"
       className={`${bebas.variable} ${brandStandin.variable} ${dmSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <AgeGate />
+        <SiteNav />
+        <div className="flex-1">{children}</div>
+        <SiteFooter />
+      </body>
     </html>
   );
 }
