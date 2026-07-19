@@ -11,10 +11,14 @@ export async function GET(req: Request) {
 
   const results: Record<string, string> = {}
 
-  const { error } = await supabaseAdmin
-    .from('retailers')
-    .select('*', { count: 'exact', head: true })
-  results.supabase = error ? `ERR: ${error.message}` : 'ok'
+  try {
+    const { error } = await supabaseAdmin()
+      .from('retailers')
+      .select('*', { count: 'exact', head: true })
+    results.supabase = error ? `ERR: ${error.message}` : 'ok'
+  } catch (e) {
+    results.supabase = `ERR: ${e instanceof Error ? e.message : 'unknown'}`
+  }
 
   try {
     const story = await getStory('home')
