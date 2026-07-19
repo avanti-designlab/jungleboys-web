@@ -25,7 +25,7 @@ export async function POST(req: Request) {
   }
 
   if (slug) {
-    revalidateTag(`story:${slug}`)
+    revalidateTag(`story:${slug}`, 'max')
     revalidatePath(slug === 'home' ? '/' : `/${slug}`)
     return Response.json({ revalidated: true, slug })
   }
