@@ -101,6 +101,15 @@ templates. No PII in URLs, logs, or analytics.
 
 ## Design system
 
+**LIGHT + DARK MODE — SITE-WIDE REQUIREMENT (Avanti, 2026-07-19):** the entire build must support
+both themes. Rules for every agent: (1) components NEVER hard-code colors — tokens only (the token
+set already carries dark defaults at `:root` and a light scope in `.theme-light`; these become the
+two theme maps); (2) a `data-theme` switch on `<html>` will drive the site-wide mode (system
+preference + user toggle, persisted) — infrastructure lands in Phase 1; (3) AA contrast must pass
+in BOTH themes (dark sweep done; light sweep required at theme-system build); (4) imagery/overlays
+must be checked in both modes. Open design questions for Avanti: where the toggle lives (header /
+footer), and whether the default follows system preference or the brand's dark identity.
+
 `design-system/MASTER.md` is the token source (generated via ui-ux-pro-max; dials: variance 7,
 motion 7, density 4). **Reconciled + FROZEN 2026-07-19 (see gate status above).**
 
