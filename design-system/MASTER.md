@@ -34,8 +34,9 @@
 
 ### Typography
 
-- **Heading Font:** Inter
-- **Body Font:** Inter
+- **Heading Font:** Bebas Neue (main headers) / Lemon Milk (secondary)
+- **Body Font:** Cera Pro
+- **Note:** confirmed by Avanti 2026-07-19. Bebas Neue = Google Fonts (free). Lemon Milk + Cera Pro = commercial — web-licensed woff2 files required before token freeze.
 - **Mood:** dark, cinematic, technical, precision, clean, premium, developer, professional, high-end utility
 - **Google Fonts:** [Inter + Inter](https://fonts.google.com/share?selection.family=Inter:wght@300;400;500;600;700)
 

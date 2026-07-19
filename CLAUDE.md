@@ -87,12 +87,30 @@ templates. No PII in URLs, logs, or analytics.
 ## Design system
 
 `design-system/MASTER.md` is the token source (generated via ui-ux-pro-max; dials: variance 7,
-motion 7, density 4). **Not yet reconciled with Figma — token freeze is OPEN.** Figma:
-`figma.com/design/yi6FfGahKw0D04E1t9Unvb/Jungle-Boys-Webdesign`. Brand anchors: charcoal base
-(`#111111`/`#0A0B0D` range), JB stacked logo, "PLAYING WITH FIRE®", "SINCE 2006". Per-page
-direction arrives via `⟦FILL⟧` slots in brief doc 02. Motion: GSAP + ScrollTrigger, three tiers
-(Subtle/Standard/Complex); every animation has a `prefers-reduced-motion` fallback; animate
-transform/opacity only; motion never blocks LCP.
+motion 7, density 4). **Not yet reconciled — token freeze is OPEN.**
+
+**Design source-of-truth policy (Avanti, 2026-07-19 — Figma is STALE in places):**
+1. **Live Webflow site** = truth for structure + current content (headers, hamburger, footer,
+   landing-page details were updated in Webflow and never back-ported to Figma).
+2. **Figma** (`figma.com/design/yi6FfGahKw0D04E1t9Unvb/Jungle-Boys-Webdesign`) = truth for copy,
+   data, and design intent. Access via `FIGMA_TOKEN` in env (server-side only).
+3. **Neither is a pixel-lock.** The new build ELEVATES both — the current design is deliberately
+   being replaced with a fully interactive/motion-driven language.
+
+**Design-weight map (Avanti):** the **10 product-line landing pages are the flagship** — immersive,
+3D-heavy, scroll-driven (Complex tier; where the brand showcase lives). **Rewards landing**: already
+well-designed and on-brand — follow the existing design closely. **Most other pages**: informational,
+cleaner, Subtle/Standard motion only.
+
+**Brand anchors:** charcoal base (`#111111`/`#0A0B0D` range), yellow/gold accent family (seen in
+rewards UI + gold logo — exact hex from Figma styles or Avanti), JB stacked logo, "PLAYING WITH
+FIRE®", "SINCE 2006". **Typography (confirmed by Avanti): Bebas Neue (main headers), Lemon Milk
+(secondary headers/accents), Cera Pro (body).** Bebas Neue is a free Google Font; **Lemon Milk and
+Cera Pro are commercial fonts — obtain web-licensed files (woff2) from Avanti before the token
+freeze; verify web license covers jungleboys.com.**
+
+Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every animation has a
+`prefers-reduced-motion` fallback; animate transform/opacity only; motion never blocks LCP.
 
 ## Recorded decisions & gate status
 
