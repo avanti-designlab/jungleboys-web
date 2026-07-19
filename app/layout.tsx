@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, DM_Sans, Montserrat } from "next/font/google";
 import AgeGate from "@/components/age-gate";
+import CookieConsent from "@/components/cookie-consent";
 import SiteNav from "@/components/site-nav";
 import SiteFooter from "@/components/site-footer";
 import "./globals.css";
@@ -58,6 +59,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         <AgeGate />
+        <CookieConsent />
         <SiteNav />
         <div className="flex-1">{children}</div>
         <SiteFooter />
