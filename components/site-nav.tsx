@@ -138,18 +138,18 @@ export default function SiteNav() {
               aria-expanded={open}
               aria-label={open ? 'Close menu' : 'Open menu'}
               onClick={() => setOpen((o) => !o)}
-              className="flex cursor-pointer flex-col gap-[6px] p-2"
+              className="flex cursor-pointer flex-col items-start gap-[7px] p-2"
             >
-              <span className={`block h-[3px] w-8 rounded bg-white transition-transform duration-300 ${open ? 'translate-y-[9px] rotate-45' : ''}`} />
-              <span className={`block h-[3px] w-8 rounded bg-white transition-opacity duration-200 ${open ? 'opacity-0' : ''}`} />
-              <span className={`block h-[3px] w-8 rounded bg-white transition-transform duration-300 ${open ? '-translate-y-[9px] -rotate-45' : ''}`} />
+              <span className={`block h-[2px] rounded bg-white transition-all duration-300 ${open ? 'w-8 translate-y-[9px] rotate-45' : 'w-9'}`} />
+              <span className={`block h-[2px] rounded bg-white transition-all duration-200 ${open ? 'w-8 opacity-0' : 'w-6'}`} />
+              <span className={`block h-[2px] rounded bg-white transition-all duration-300 ${open ? 'w-8 -translate-y-[9px] -rotate-45' : 'w-[30px]'}`} />
             </button>
 
             <Link
               href="/"
               aria-label="Jungle Boys home"
               onClick={() => setOpen(false)}
-              className="block h-12 w-16 transition-transform duration-200 hover:scale-105"
+              className="block h-14 w-20 transition-transform duration-200 hover:scale-105 md:h-16 md:w-24"
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset */}
               <img src={BRAND_ASSETS.logoWhite} alt="Jungle Boys" className="h-full w-full object-contain" />
