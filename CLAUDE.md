@@ -99,7 +99,7 @@ templates. No PII in URLs, logs, or analytics.
 ## Design system
 
 `design-system/MASTER.md` is the token source (generated via ui-ux-pro-max; dials: variance 7,
-motion 7, density 4). **Not yet reconciled — token freeze is OPEN.**
+motion 7, density 4). **Reconciled + FROZEN 2026-07-19 (see gate status above).**
 
 **Design source-of-truth policy (Avanti, 2026-07-19 — Figma is STALE in places):**
 1. **Live Webflow site** = truth for structure + current content (headers, hamburger, footer,
@@ -130,14 +130,13 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
 - **Branch protection on `main`: DEFERRED by Avanti's decision (2026-07-19)** — off during Phase 0
   foundation work to avoid merge-friction. **MUST be enabled when Phase 1 feature work starts;
   non-negotiable before cutover.** Documentation agent: raise this at the Phase 1 entry gate.
-- **Data-model freeze: CANDIDATE.** `lib/dutchie/` (frozen types + provider interface), Supabase
-  schema (migrations 0001/0002), and Storyblok content models (`content/models/`) are defined.
-  Freeze passes after Orchestrator review at Phase 0 exit.
-- **Design-token freeze: READY FOR SIGN-OFF (2026-07-19).** Tokens reconciled with Figma + brand and
-  Avanti-confirmed: global palette black/white/JB-yellow `#FECF0E` (AA sweep passed; yellow-on-white
-  forbidden), scoped per-product-line category accents, type = Bebas Neue / LEMON MILK / Cera Pro.
-  Freeze closes when: (a) Avanti gives explicit sign-off, (b) Lemon Milk + Cera Pro web-licensed
-  woff2 files are delivered and license verified.
+- **Design-token freeze: ✅ PASSED (Avanti sign-off 2026-07-19).** Global palette black/white/JB-yellow
+  `#FECF0E` (AA sweep passed; yellow-on-white forbidden), scoped category accents, type = Bebas Neue
+  (lead) / Lemon Milk Pro (pending file upload — build on `--font-brand` stand-in) / DM Sans (long-form).
+  Tokens are LAW: no hard-coded values in components; changes require Orchestrator + Avanti approval.
+- **Data-model freeze: ✅ PASSED (Orchestrator review 2026-07-19).** Frozen contracts: `lib/dutchie/`
+  types + provider interface, Supabase schema (migrations 0001/0002, RLS verified live), Storyblok
+  content models (`content/models/`). Interface changes require Orchestrator approval + doc update.
 
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
