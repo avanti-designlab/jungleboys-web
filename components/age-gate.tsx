@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { BRAND_ASSETS } from '@/lib/site-config'
 
 // 21+ gate — matches the live design Avanti confirmed (2026-07-19):
 // yellow WELCOME headline, simple YES/NO, mascot characters on the buttons.
@@ -78,8 +79,10 @@ export default function AgeGate() {
         ref={panelRef}
         className="w-full max-w-2xl rounded-[var(--radius-lg)] bg-[#0b0b0b] px-6 py-12 md:px-16 md:py-16 flex flex-col items-center gap-8 text-center"
       >
-        <div className="flex flex-col gap-3">
-          <h1 className="font-display text-5xl md:text-7xl uppercase text-[var(--color-accent)]">
+        <div className="flex flex-col items-center gap-5">
+          {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset */}
+          <img src={BRAND_ASSETS.logoWhite} alt="Jungle Boys" className="h-20 w-auto md:h-24" />
+          <h1 className="font-display whitespace-nowrap text-[clamp(1.9rem,8.2vw,3.5rem)] uppercase text-[var(--color-accent)]">
             Welcome to the Jungle
           </h1>
           <p
