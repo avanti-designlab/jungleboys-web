@@ -1,12 +1,20 @@
 import Link from 'next/link'
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
-import NewsletterForm from './newsletter-form'
-import { FOOTER_LINKS, SOCIALS, BRAND_ASSETS } from '@/lib/site-config'
+import FooterSignup from './footer-signup'
+import { SocialIcons } from './social-icons'
+import { FOOTER_NAV, LICENSE_NUMBERS } from '@/lib/site-config'
 
-// Matches the live footer: "Stay up to date in the jungle." + phone-first
-// signup, verbatim TCPA consent, socials, minimal © bar. Compliance warning
-// text retained per 07 §1.
+// Live-footer design: signup button + nav row on top, double counter-scrolling
+// brand marquee ("PLAYING WITH FIRE®" / "SINCE 2006"), © row with socials,
+// license numbers + compliance warning.
+
+const FOOTER_SOCIALS = [
+  { label: 'Instagram', href: 'https://www.instagram.com/jungleboys', icon: SocialIcons.instagram },
+  { label: 'X', href: 'https://x.com/jungleboysdrops', icon: SocialIcons.x },
+  { label: 'YouTube', href: 'https://www.youtube.com/@JungleBoysfilms', icon: SocialIcons.youtube },
+  { label: 'Facebook', href: 'https://www.facebook.com/JungleBoysDrops/', icon: SocialIcons.facebook },
+]
 
 export default async function SiteFooter() {
   const legalDir = path.join(process.cwd(), 'content/legal')
@@ -15,52 +23,97 @@ export default async function SiteFooter() {
     readFile(path.join(legalDir, 'cannabis-warning.txt'), 'utf-8'),
   ])
 
-  return (
-    <footer className="bg-[#0b0b0b] text-white">
-      <div className="mx-auto w-full max-w-[1500px] px-8 py-16 flex flex-col gap-10">
-        <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-start">
-          <div className="flex flex-col gap-6">
-            <h2 className="font-display max-w-xl text-5xl md:text-6xl uppercase">
-              Stay up to date in the jungle.
-            </h2>
-            <NewsletterForm consentText={consentText.trim()} />
-          </div>
+  const fire = Array(6).fill('PLAYING WITH FIRE®')
+  const since = Array(8).fill('SINCE 2006')
 
-          <div className="flex flex-col items-start gap-6 lg:items-end">
-            <div className="relative h-24 w-36">
-              {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset */}
-            <img src={BRAND_ASSETS.logoWhite} alt="Jungle Boys" className="h-full w-full object-contain" />
-            </div>
-            <ul className="flex flex-wrap gap-5 text-xs font-bold uppercase tracking-widest" style={{ fontFamily: 'var(--font-brand)' }}>
-              {SOCIALS.map((s) => (
-                <li key={s.href}>
+  return (
+    <footer className="overflow-hidden bg-[#050505] text-white">
+      {/* top row: signup + nav */}
+      <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-8 px-8 pt-14 lg:flex-row lg:items-center lg:justify-between">
+        <FooterSignup consentText={consentText.trim()} />
+        <nav>
+          <ul
+            className="flex flex-wrap gap-x-10 gap-y-3 text-sm font-bold uppercase tracking-wider"
+            style={{ fontFamily: 'var(--font-brand)' }}
+          >
+            {FOOTER_NAV.map((l) => (
+              <li key={l.label}>
+                {'external' in l && l.external ? (
                   <a
-                    href={s.href}
+                    href={l.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="transition-colors duration-200 hover:text-[var(--color-accent)]"
                   >
-                    {s.label}
+                    {l.label}
                   </a>
-                </li>
-              ))}
-            </ul>
-            <ul className="flex flex-wrap gap-5 text-xs uppercase tracking-widest text-white/60" style={{ fontFamily: 'var(--font-brand)' }}>
-              {FOOTER_LINKS.map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href} className="transition-colors duration-200 hover:text-white">
+                ) : (
+                  <Link
+                    href={l.href}
+                    className="transition-colors duration-200 hover:text-[var(--color-accent)]"
+                  >
                     {l.label}
                   </Link>
-                </li>
-              ))}
-            </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+
+      {/* double counter-scrolling brand marquee */}
+      <div aria-hidden className="flex flex-col gap-2 py-14 select-none">
+        <div className="marquee-track flex w-max whitespace-nowrap">
+          {[...fire, ...fire].map((t, i) => (
+            <span key={i} className="font-display px-6 text-7xl uppercase md:text-9xl">
+              {t}
+            </span>
+          ))}
+        </div>
+        <div className="marquee-track-reverse flex w-max whitespace-nowrap">
+          {[...since, ...since].map((t, i) => (
+            <span key={i} className="font-display px-6 text-7xl uppercase md:text-9xl">
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* bottom rows */}
+      <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-5 px-8 pb-10">
+        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div
+            className="flex flex-wrap items-center gap-x-8 gap-y-2 text-xs font-bold uppercase tracking-wider"
+            style={{ fontFamily: 'var(--font-brand)' }}
+          >
+            <span>© {new Date().getFullYear()} Jungle Boys. All rights reserved.</span>
+            <Link href="/terms" className="transition-colors duration-200 hover:text-[var(--color-accent)]">
+              Terms
+            </Link>
+            <Link href="/privacy" className="transition-colors duration-200 hover:text-[var(--color-accent)]">
+              Privacy
+            </Link>
+          </div>
+          <div className="flex items-center gap-6">
+            {FOOTER_SOCIALS.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.label}
+                className="transition-transform duration-200 hover:scale-110 hover:text-[var(--color-accent)]"
+              >
+                {s.icon}
+              </a>
+            ))}
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 border-t border-white/10 pt-6 text-[11px] leading-relaxed text-white/40">
-          <p>{warningText.trim()}</p>
-          <p>© {new Date().getFullYear()} JUNGLE BOYS. All rights reserved.</p>
-        </div>
+        <p className="text-[11px] tracking-wide text-white/50" style={{ fontFamily: 'var(--font-brand)' }}>
+          {LICENSE_NUMBERS.join(' | ')}
+        </p>
+        <p className="max-w-4xl text-[10px] leading-relaxed text-white/30">{warningText.trim()}</p>
       </div>
     </footer>
   )

@@ -126,6 +126,13 @@ body {
 .marquee-track {
   animation: marquee 40s linear infinite;
 }
+@keyframes marquee-reverse {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+.marquee-track-reverse {
+  animation: marquee-reverse 40s linear infinite;
+}
 .marquee-track:hover {
   animation-play-state: paused;
 }

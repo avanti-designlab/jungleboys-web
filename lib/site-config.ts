@@ -54,6 +54,25 @@ export const SOCIALS = [
   { label: 'Weedmaps', href: 'https://weedmaps.com/brands/jungleboys/products' },
 ] as const
 
+// Exact license row from the live footer (includes the FL MMTC license)
+export const LICENSE_NUMBERS = [
+  'C10-0001146-LIC',
+  'C10-0000103-LIC',
+  'C12-0000542-LIC',
+  'C10-0000904-LIC',
+  'MMTC-2019-00015',
+] as const
+
+// Footer nav row (matches live footer)
+export const FOOTER_NAV = [
+  { label: 'Media', href: '/media' },
+  { label: 'Phenos', href: '/phenos' },
+  { label: 'Clothing', href: 'https://jungleboysclothing.com/', external: true },
+  { label: 'Wholesale', href: '/wholesale' },
+  { label: 'Contact', href: '/contact' },
+  { label: 'Locations', href: '/locations' },
+] as const
+
 export const BRAND = {
   name: 'Jungle Boys',
   tagline: 'Playing With Fire®',
