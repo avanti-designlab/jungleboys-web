@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { HERO_SLIDES } from '@/lib/home-content'
+import { isAgeVerified } from '@/components/age-gate'
 
 // Full-bleed pinned hero deck (reference: swissminimal.framer.website):
 //  - covers the viewport completely; scrolling flips through the slides —
@@ -30,17 +31,23 @@ export default function HeroDeck() {
 
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       // entry (swiss-minimal): the WHOLE hero — art and type together — settles
-      // in from a zoom. On first visits it lands mid-settle as the intro splits.
-      let introPlaying = false
+      // in from a zoom. Plays only when the visitor can actually SEE it: after
+      // the age gate is dismissed, or after the intro for returning visitors.
+      gsap.set(stage, { scale: 1.18 })
+      const playEntry = () => {
+        gsap.to(stage, { scale: 1, duration: 1.4, ease: 'power3.out', delay: 0.1 })
+      }
+      let introPending = false
       try {
-        introPlaying = sessionStorage.getItem('jb-intro-done') !== '1'
+        introPending = sessionStorage.getItem('jb-intro-done') !== '1'
       } catch {}
-      gsap.from(stage, {
-        scale: 1.18,
-        duration: 1.4,
-        ease: 'power3.out',
-        delay: introPlaying ? 2.7 : 0.15,
-      })
+      if (!isAgeVerified()) {
+        window.addEventListener('jb:gate-passed', playEntry, { once: true })
+      } else if (introPending) {
+        window.addEventListener('jb:intro-done', playEntry, { once: true })
+      } else {
+        playEntry()
+      }
 
       // deck: slides > 0 start parked below the viewport
       gsap.set(slides.slice(1), { yPercent: 100 })

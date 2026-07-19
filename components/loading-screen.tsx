@@ -50,6 +50,7 @@ export default function LoadingScreen() {
           sessionStorage.setItem(SESSION_KEY, '1')
         } catch {}
         document.documentElement.style.overflow = ''
+        window.dispatchEvent(new CustomEvent('jb:intro-done'))
         setShow(false)
       },
     })

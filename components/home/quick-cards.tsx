@@ -26,23 +26,23 @@ export default function QuickCards() {
       gsap.set(bars, { y: -24, autoAlpha: 0 })
       ScrollTrigger.create({
         trigger: grid,
-        start: 'top 82%',
+        start: 'top 96%',
         once: true,
         onEnter: () => {
           gsap.to(cards, {
             y: 0,
             autoAlpha: 1,
-            duration: 0.8,
-            ease: 'power3.out',
-            stagger: 0.12,
+            duration: 1.15,
+            ease: 'power4.out',
+            stagger: 0.16,
           })
           gsap.to(bars, {
             y: 0,
             autoAlpha: 1,
-            duration: 0.6,
-            ease: 'power3.out',
-            stagger: 0.12,
-            delay: 0.25,
+            duration: 0.8,
+            ease: 'power4.out',
+            stagger: 0.16,
+            delay: 0.4,
           })
         },
       })

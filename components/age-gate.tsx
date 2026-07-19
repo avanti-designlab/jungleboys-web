@@ -30,10 +30,19 @@ export default function AgeGate() {
   const panelRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!isAgeVerified()) {
+    if (isAgeVerified()) return
+    let introPending = false
+    try {
+      introPending = sessionStorage.getItem('jb-intro-done') !== '1'
+    } catch {}
+    if (!introPending) {
       const id = requestAnimationFrame(() => setOpen(true))
       return () => cancelAnimationFrame(id)
     }
+    // mount the gate fresh as the intro curtains split, so its entrance is seen
+    const onIntroDone = () => setOpen(true)
+    window.addEventListener('jb:intro-done', onIntroDone, { once: true })
+    return () => window.removeEventListener('jb:intro-done', onIntroDone)
   }, [])
 
   useEffect(() => {
@@ -66,6 +75,7 @@ export default function AgeGate() {
   function enter() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ verifiedAt: Date.now() }))
     setOpen(false)
+    window.dispatchEvent(new CustomEvent('jb:gate-passed'))
   }
 
   return (
