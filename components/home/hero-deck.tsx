@@ -54,7 +54,7 @@ export default function HeroDeck() {
       })
       slides.forEach((slide, i) => {
         if (i === slides.length - 1) return
-        tl.to(slide, { scale: 0.86, yPercent: -4, autoAlpha: 0.3, ease: 'power2.inOut', duration: 1 }, i)
+        tl.to(slide, { scale: 0.78, yPercent: -6, autoAlpha: 0.75, ease: 'power2.inOut', duration: 1 }, i)
         tl.to(slides[i + 1], { yPercent: 0, ease: 'power2.inOut', duration: 1 }, i)
       })
     })
@@ -80,7 +80,7 @@ export default function HeroDeck() {
             key={s.title}
             data-slide
             style={{ zIndex: i + 1 }}
-            className="absolute inset-0 will-change-transform"
+            className="absolute inset-2 overflow-hidden rounded-[1.75rem] will-change-transform md:inset-3 md:rounded-[2.5rem]"
           >
             {/* 9:16 art on phones when supplied; 16:9 desktop art otherwise */}
             <div className="relative h-full w-full">
