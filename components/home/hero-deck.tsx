@@ -29,17 +29,18 @@ export default function HeroDeck() {
     const mm = gsap.matchMedia()
 
     mm.add('(prefers-reduced-motion: no-preference)', () => {
-      // entry: all first-slide text zooms inward together
-      const intro = stage.querySelector('[data-content="0"]')
-      if (intro) {
-        gsap.from(intro, {
-          scale: 1.3,
-          autoAlpha: 0,
-          duration: 1.1,
-          ease: 'power3.out',
-          delay: 0.15,
-        })
-      }
+      // entry (swiss-minimal): the WHOLE hero — art and type together — settles
+      // in from a zoom. On first visits it lands mid-settle as the intro splits.
+      let introPlaying = false
+      try {
+        introPlaying = sessionStorage.getItem('jb-intro-done') !== '1'
+      } catch {}
+      gsap.from(stage, {
+        scale: 1.18,
+        duration: 1.4,
+        ease: 'power3.out',
+        delay: introPlaying ? 2.7 : 0.15,
+      })
 
       // deck: slides > 0 start parked below the viewport
       gsap.set(slides.slice(1), { yPercent: 100 })

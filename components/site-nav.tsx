@@ -33,7 +33,7 @@ export default function SiteNav() {
   // condense into a pill once the hero region (or first viewport) is passed
   useEffect(() => {
     const onScroll = () => {
-      setCondensed(window.scrollY > 80)
+      setCondensed(window.scrollY > 350)
     }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -61,13 +61,13 @@ export default function SiteNav() {
       {/* full-screen menu (under the blended header, above everything else) */}
       {open && (
         <div className="menu-overlay fixed inset-0 z-40 h-dvh overflow-hidden bg-[#0b0b0b]">
-          <nav className="mx-auto grid h-full w-full max-w-[1500px] grid-cols-1 content-start gap-x-8 gap-y-1 px-8 pt-28 md:grid-cols-3 md:pt-40">
+          <nav className="mx-auto grid h-full w-full max-w-[1560px] grid-cols-1 content-start gap-x-10 gap-y-1 px-8 pt-28 md:[grid-template-columns:1fr_1fr_1.35fr] md:pt-40">
             {MENU_COLUMNS.map((column, c) => (
               <ul key={c} className="flex flex-col">
                 {column.map((l) => {
                   const delay = `${0.12 + linkIndex++ * 0.055}s`
                   const cls =
-                    'font-display text-6xl md:text-7xl xl:text-8xl uppercase text-white transition-colors duration-200 hover:text-[var(--color-accent)]'
+                    'font-display whitespace-nowrap text-6xl md:text-7xl xl:text-8xl uppercase text-white transition-colors duration-200 hover:text-[var(--color-accent)]'
                   return (
                     <li key={l.href} className="menu-line">
                       {l.external ? (
@@ -105,7 +105,7 @@ export default function SiteNav() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={s.label}
-                className="transition-transform duration-200 hover:scale-110 hover:text-[var(--color-accent)]"
+                className="transition-transform duration-200 hover:scale-110 hover:text-[var(--color-accent)] [&_svg]:h-9 [&_svg]:w-9"
               >
                 {s.icon}
               </a>
@@ -118,7 +118,7 @@ export default function SiteNav() {
       <header className="fixed inset-x-0 top-0 z-50">
         {/* expanded bar */}
         <div
-          className={`mx-auto flex w-full items-center justify-between px-4 pt-6 pb-3 transition-all duration-500 md:px-5 ${
+          className={`mx-auto flex w-full items-center justify-between px-8 pt-6 pb-3 transition-all duration-500 md:px-12 ${
             condensed && !open
               ? 'pointer-events-none -translate-y-8 opacity-0'
               : 'translate-y-0 opacity-100'
