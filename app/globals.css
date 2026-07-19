@@ -1,26 +1,72 @@
 @import "tailwindcss";
 
+/* ─── FROZEN DESIGN TOKENS (design-system/MASTER.md — freeze/design-tokens) ───
+   No component may hard-code a color, font, space, or duration. Reference tokens.
+   Category accents (per product line) are declared ONLY in that line's page CSS. */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* color */
+  --color-background: #040303;
+  --color-surface: #111111;
+  --color-surface-light: #ffffff;
+  --color-foreground: #ffffff;
+  --color-foreground-soft: #f5f5f5;
+  --color-muted: #9a9aa0;
+  --color-border: #231f20;
+  --color-accent: #fecf0e; /* official JB yellow — never as text on light bg */
+  --color-on-accent: #000000;
+
+  /* space (density 4 — marketing rhythm) */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* radius / border */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+
+  /* motion (tiers per MASTER; all gated by prefers-reduced-motion) */
+  --duration-micro: 200ms;
+  --duration-standard: 400ms;
+  --duration-reveal: 700ms;
+  --ease-out-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-background: var(--color-background);
+  --color-surface: var(--color-surface);
+  --color-surface-light: var(--color-surface-light);
+  --color-foreground: var(--color-foreground);
+  --color-foreground-soft: var(--color-foreground-soft);
+  --color-muted: var(--color-muted);
+  --color-border: var(--color-border);
+  --color-accent: var(--color-accent);
+  --color-on-accent: var(--color-on-accent);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* type roles — fonts injected by next/font in app/layout.tsx */
+  --font-display: var(--font-bebas); /* Bebas Neue — the lead voice */
+  --font-brand: var(--font-brand-standin); /* Lemon Milk Pro when files land */
+  --font-body: var(--font-dm-sans); /* long-form + default text */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
