@@ -28,6 +28,25 @@ const OVERLAY_SOCIALS = [
 
 export default function SiteNav() {
   const [open, setOpen] = useState(false)
+  const [condensed, setCondensed] = useState(false)
+
+  // condense into a pill once the hero region (or first viewport) is passed
+  useEffect(() => {
+    const onScroll = () => {
+      const hero = document.querySelector<HTMLElement>('[data-hero]')
+      const threshold = hero
+        ? hero.offsetTop + hero.offsetHeight - 90
+        : window.innerHeight * 0.9
+      setCondensed(window.scrollY > threshold)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [])
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -99,8 +118,35 @@ export default function SiteNav() {
         </div>
       )}
 
-      {/* sticky header — hamburger/logo/socials invert via blend; VERIFY pill stays true yellow */}
+      {/* sticky header — expanded over the hero; condenses into a floating pill after it */}
       <header className="fixed inset-x-0 top-0 z-50">
+        {condensed && !open ? (
+          <div className="menu-socials mx-auto mt-3 flex w-fit items-center gap-4 rounded-full border border-white/10 bg-[#0b0b0b]/90 py-2 pl-4 pr-2 text-white shadow-2xl backdrop-blur-md">
+            <button
+              aria-expanded={open}
+              aria-label="Open menu"
+              onClick={() => setOpen(true)}
+              className="flex cursor-pointer flex-col items-start gap-[5px] p-1"
+            >
+              <span className="block h-[2px] w-7 rounded bg-white" />
+              <span className="block h-[2px] w-5 rounded bg-white" />
+              <span className="block h-[2px] w-6 rounded bg-white" />
+            </button>
+            <Link href="/" aria-label="Jungle Boys home" className="block h-10 w-14">
+              {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset */}
+              <img src={BRAND_ASSETS.logoWhite} alt="Jungle Boys" className="h-full w-full object-contain" />
+            </Link>
+            <span className="h-5 w-px bg-white/20" aria-hidden />
+            <Link
+              href="/verify"
+              className="rounded-full bg-[var(--color-accent)] px-4 py-2 text-[11px] font-bold uppercase tracking-widest text-[var(--color-on-accent)] transition-transform duration-200 hover:scale-105"
+              style={{ fontFamily: 'var(--font-brand)' }}
+            >
+              Verify
+            </Link>
+            <ThemeToggle />
+          </div>
+        ) : (
         <div className="mx-auto flex w-full max-w-[1560px] items-center justify-between px-6 py-4">
           <div className="flex items-center gap-4 text-white" style={{ mixBlendMode: 'difference' }}>
             <button
@@ -157,6 +203,7 @@ export default function SiteNav() {
             </div>
           )}
         </div>
+        )}
       </header>
     </>
   )

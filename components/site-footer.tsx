@@ -67,7 +67,7 @@ export default async function SiteFooter() {
           {[...fire, ...fire].map((t, i) => (
             <span key={i} className="font-display px-6 text-7xl uppercase md:text-9xl">
               {t}
-              <sup className="align-top text-[0.28em] leading-none">®</sup>
+              <span className="relative inline-block align-top top-[0.16em] text-[0.28em] leading-none">®</span>
             </span>
           ))}
         </div>
