@@ -48,7 +48,11 @@ export async function POST(req: Request) {
   const sourcePage =
     typeof body.sourcePage === 'string' ? body.sourcePage.slice(0, 200) : null
 
-  if (!EMAIL_RE.test(email)) {
+  // Live form is phone-first: require at least one valid contact channel.
+  if (!email && !phone) {
+    return Response.json({ error: 'Enter a phone number or email.' }, { status: 400 })
+  }
+  if (email && !EMAIL_RE.test(email)) {
     return Response.json({ error: 'Enter a valid email address.' }, { status: 400 })
   }
   if (phone && !PHONE_RE.test(phone)) {
@@ -64,7 +68,7 @@ export async function POST(req: Request) {
     .from('leads')
     .insert({
       name: name || null,
-      email,
+      email: email || null,
       phone: phone || null,
       consent_text: consentText,
       source_page: sourcePage,

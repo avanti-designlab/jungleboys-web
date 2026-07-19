@@ -23,7 +23,10 @@ is the execution timeline.**
 
 - Data fetching: **ISR + Dutchie webhooks** (`/api/revalidate`, secret-gated — already built).
 - CMS: **Storyblok** (chosen over Sanity). Supabase stays minimal — no accounts, no auth, no PII beyond leads.
-- Age gate: **DOB modal + CA/FL state selector**, client overlay; never blocks crawlers from indexable content.
+- Age gate (**revised by Avanti 2026-07-19, supersedes brief 00 §9/07 §1 DOB approach**): simple
+  YES/NO matching the live design (yellow "WELCOME TO THE JUNGLE", mascot characters on buttons).
+  No DOB entry. Client overlay; never blocks crawlers. Counsel reviews before cutover. CA/FL state
+  selection moved out of the gate — it lives in the locations/menu UX (decide in Phase 3).
 - COA data **flows from Dutchie** through the same product pipeline. No separate COA system.
 - Leads: `/api/lead` → Supabase (consent logged) → Klaviyo + email. Destination behind an interface (swappable).
 - Two-map rule: **Locations** (owned stores → Dutchie menus) and **Product Finder** (`/find-jb-products`,
