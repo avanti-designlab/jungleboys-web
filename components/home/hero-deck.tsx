@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
+import PillCta from '@/components/pill-cta'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -117,13 +117,7 @@ export default function HeroDeck() {
               <h1 className="font-display text-7xl uppercase md:text-9xl xl:text-[11rem]">
                 {s.title}
               </h1>
-              <Link
-                href={s.href}
-                className="mt-2 rounded-full bg-[var(--color-accent)] px-9 py-4 text-sm font-bold uppercase tracking-wider text-[var(--color-on-accent)] transition-transform duration-200 hover:scale-[1.04]"
-                style={{ fontFamily: 'var(--font-brand)' }}
-              >
-                {s.cta}
-              </Link>
+              <PillCta label={s.cta} href={s.href} className="mt-2" />
             </div>
           </div>
         ))}

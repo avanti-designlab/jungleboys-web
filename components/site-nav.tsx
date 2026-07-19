@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { MENU_COLUMNS, BRAND_ASSETS } from '@/lib/site-config'
 import { SocialIcons } from './social-icons'
 import ThemeToggle from './theme-toggle'
+import PillCta from './pill-cta'
 
 // Sticky transparent header that color-inverts over any background via
 // mix-blend-difference (all header art is white; the blend flips it to black
@@ -148,13 +149,7 @@ export default function SiteNav() {
 
           {!open && (
             <div className="flex items-center gap-3">
-              <Link
-                href="/verify"
-                className="rounded-full bg-[var(--color-accent)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-on-accent)] transition-transform duration-200 hover:scale-105"
-                style={{ fontFamily: 'var(--font-brand)' }}
-              >
-                Verify Products
-              </Link>
+              <PillCta label="Verify Products" href="/verify" />
               <div
                 className="flex items-center gap-4 rounded-full border-2 border-white px-5 py-3 text-white"
                 style={{ mixBlendMode: 'difference' }}
@@ -202,13 +197,7 @@ export default function SiteNav() {
               <img src={BRAND_ASSETS.logoWhite} alt="Jungle Boys" className="h-full w-full object-contain" />
             </Link>
             <span className="h-5 w-px bg-white/20" aria-hidden />
-            <Link
-              href="/verify"
-              className="hidden rounded-full bg-[var(--color-accent)] px-5 py-2.5 text-[11px] font-bold uppercase tracking-widest text-[var(--color-on-accent)] transition-transform duration-200 hover:scale-105 sm:block"
-              style={{ fontFamily: 'var(--font-brand)' }}
-            >
-              Verify Products
-            </Link>
+            <PillCta label="Verify Products" href="/verify" size="sm" className="hidden sm:inline-flex" />
             <div className="hidden items-center gap-3 sm:flex">
               {HEADER_SOCIALS.map((s) => (
                 <a

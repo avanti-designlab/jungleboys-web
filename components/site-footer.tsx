@@ -27,7 +27,8 @@ export default async function SiteFooter() {
   const since = Array(8).fill('SINCE 2006')
 
   return (
-    <footer className="overflow-hidden bg-[#050505] text-white">
+    <footer className="bg-[var(--color-background)] px-2 pb-2 md:px-3 md:pb-3">
+      <div className="overflow-hidden rounded-[1.75rem] bg-[#050505] text-white md:rounded-[2.5rem]">
       {/* top row: signup + nav */}
       <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-8 px-8 pt-14 lg:flex-row lg:items-center lg:justify-between">
         <FooterSignup consentText={consentText.trim()} />
@@ -115,6 +116,7 @@ export default async function SiteFooter() {
           {LICENSE_NUMBERS.join(' | ')}
         </p>
         <p className="max-w-4xl text-[10px] leading-relaxed text-white/30">{warningText.trim()}</p>
+      </div>
       </div>
     </footer>
   )
