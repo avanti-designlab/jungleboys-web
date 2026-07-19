@@ -19,7 +19,7 @@ export default function FooterSignup({ consentText }: { consentText: string }) {
   return (
     <button
       onClick={() => setOpen(true)}
-      className="cursor-pointer rounded-[10px] border-2 border-white px-6 py-3 text-sm font-bold uppercase tracking-widest text-white transition-colors duration-200 hover:bg-[var(--color-accent)] hover:border-[var(--color-accent)] hover:text-[var(--color-on-accent)]"
+      className="cursor-pointer rounded-full bg-[var(--color-accent)] px-8 py-4 text-sm font-bold uppercase tracking-widest text-[var(--color-on-accent)] transition-transform duration-200 hover:scale-105"
       style={{ fontFamily: 'var(--font-brand)' }}
     >
       Let&apos;s Stay In Touch

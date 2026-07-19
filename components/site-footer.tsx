@@ -103,7 +103,7 @@ export default async function SiteFooter() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={s.label}
-                className="transition-transform duration-200 hover:scale-110 hover:text-[var(--color-accent)]"
+                className="transition-transform duration-200 hover:scale-110 hover:text-[var(--color-accent)] [&_svg]:h-9 [&_svg]:w-9"
               >
                 {s.icon}
               </a>
