@@ -28,6 +28,11 @@ is the execution timeline.**
 - Leads: `/api/lead` → Supabase (consent logged) → Klaviyo + email. Destination behind an interface (swappable).
 - Two-map rule: **Locations** (owned stores → Dutchie menus) and **Product Finder** (`/find-jb-products`,
   3rd-party stockists → Supabase) are separate templates that never share a data source or component.
+- **`/verify` template (Avanti, 2026-07-19 — adds to brief 00 §7):** product-authenticity
+  verification page (customer scans QR or enters scratch code to confirm the product is genuine).
+  A main anchor of the new build at the preserved `/verify` URL (currently 404s despite ~3.7k
+  clicks/yr). Anti-counterfeit = brand protection. Backend/data source for code verification: TBD —
+  discover what system powered the old page before building (Phase 1 planning question for Avanti).
 - **Products vs Shop rule (Avanti, 2026-07-19 — refines brief 00 §7 items 12–13):** the **Products tab**
   is a curated JB-only collection — each product line (Hash Holes, Pre-Rolls, 10-Pack Prerolls, Premium
   Flower…) gets its own custom design-heavy landing page with a shop option (these are the Phase 2 Figma
