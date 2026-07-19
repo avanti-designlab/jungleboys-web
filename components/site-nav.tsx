@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { MENU_COLUMNS, BRAND_ASSETS } from '@/lib/site-config'
 import { SocialIcons } from './social-icons'
+import ThemeToggle from './theme-toggle'
 
 // Sticky transparent header that color-inverts over any background via
 // mix-blend-difference (all header art is white; the blend flips it to black
@@ -149,6 +150,9 @@ export default function SiteNav() {
                     {s.icon}
                   </a>
                 ))}
+              </div>
+              <div style={{ mixBlendMode: 'difference' }}>
+                <ThemeToggle />
               </div>
             </div>
           )}

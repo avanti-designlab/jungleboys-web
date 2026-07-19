@@ -44,8 +44,18 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${bebas.variable} ${brandStandin.variable} ${dmSans.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          // Applies the saved theme before first paint (default: light)
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(localStorage.getItem('jb-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}",
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <AgeGate />
         <SiteNav />

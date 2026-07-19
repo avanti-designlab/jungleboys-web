@@ -107,8 +107,10 @@ set already carries dark defaults at `:root` and a light scope in `.theme-light`
 two theme maps); (2) a `data-theme` switch on `<html>` will drive the site-wide mode (system
 preference + user toggle, persisted) — infrastructure lands in Phase 1; (3) AA contrast must pass
 in BOTH themes (dark sweep done; light sweep required at theme-system build); (4) imagery/overlays
-must be checked in both modes. Open design questions for Avanti: where the toggle lives (header /
-footer), and whether the default follows system preference or the brand's dark identity.
+must be checked in both modes. DECIDED (Avanti 2026-07-19): toggle lives in the sticky
+header right of the socials pill; DEFAULT IS LIGHT. Built: light tokens at :root,
+dark under [data-theme='dark'], no-flash boot script, persisted localStorage 'jb-theme'.
+Brand surfaces (footer, menu overlay, age-gate panel) stay dark in both modes by design.
 
 `design-system/MASTER.md` is the token source (generated via ui-ux-pro-max; dials: variance 7,
 motion 7, density 4). **Reconciled + FROZEN 2026-07-19 (see gate status above).**

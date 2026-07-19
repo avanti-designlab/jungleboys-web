@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main className="theme-light pb-16">
+    <main className="pb-16">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
