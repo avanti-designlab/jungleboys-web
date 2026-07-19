@@ -1,0 +1,14 @@
+{
+  "name": "seo",
+  "display_name": "SEO Fields",
+  "is_nestable": true,
+  "schema": {
+    "title": { "type": "text", "description": "Title tag override (leave blank for template default)" },
+    "description": { "type": "textarea", "max_length": 160, "description": "Meta description" },
+    "canonical": { "type": "text", "description": "Canonical URL override — leave blank for self" },
+    "noindex": { "type": "boolean", "description": "Exclude from search engines" },
+    "og_title": { "type": "text" },
+    "og_description": { "type": "textarea" },
+    "og_image": { "type": "asset", "filetypes": ["images"] }
+  }
+}

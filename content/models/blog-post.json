@@ -1,0 +1,14 @@
+{
+  "name": "blog_post",
+  "display_name": "Blog Post",
+  "is_root": true,
+  "schema": {
+    "title": { "type": "text", "required": true },
+    "excerpt": { "type": "textarea" },
+    "hero_image": { "type": "asset", "filetypes": ["images"] },
+    "body": { "type": "richtext" },
+    "category": { "type": "option", "options": [], "description": "Post category (populated in Storyblok)" },
+    "published_date": { "type": "datetime" },
+    "seo": { "type": "bloks", "restrict_components": true, "component_whitelist": ["seo"], "maximum": 1 }
+  }
+}

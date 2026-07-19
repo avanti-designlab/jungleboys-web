@@ -1,0 +1,9 @@
+{
+  "name": "faq_item",
+  "display_name": "FAQ Item",
+  "is_nestable": true,
+  "schema": {
+    "question": { "type": "text", "required": true },
+    "answer": { "type": "richtext", "required": true, "description": "Concise, extractable answer — this feeds FAQ schema (AEO surface)" }
+  }
+}

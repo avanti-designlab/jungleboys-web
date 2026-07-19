@@ -73,6 +73,16 @@ direction arrives via `⟦FILL⟧` slots in brief doc 02. Motion: GSAP + ScrollT
 (Subtle/Standard/Complex); every animation has a `prefers-reduced-motion` fallback; animate
 transform/opacity only; motion never blocks LCP.
 
+## Recorded decisions & gate status
+
+- **Branch protection on `main`: DEFERRED by Avanti's decision (2026-07-19)** — off during Phase 0
+  foundation work to avoid merge-friction. **MUST be enabled when Phase 1 feature work starts;
+  non-negotiable before cutover.** Documentation agent: raise this at the Phase 1 entry gate.
+- **Data-model freeze: CANDIDATE.** `lib/dutchie/` (frozen types + provider interface), Supabase
+  schema (migrations 0001/0002), and Storyblok content models (`content/models/`) are defined.
+  Freeze passes after Orchestrator review at Phase 0 exit.
+- **Design-token freeze: OPEN.** `design-system/MASTER.md` generated but not Figma-reconciled.
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
