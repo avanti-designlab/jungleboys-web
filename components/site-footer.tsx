@@ -20,10 +20,7 @@ export default async function SiteFooter() {
       <div className="mx-auto w-full max-w-[1500px] px-8 py-16 flex flex-col gap-10">
         <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-start">
           <div className="flex flex-col gap-6">
-            <h2
-              className="max-w-xl text-5xl md:text-6xl uppercase leading-[0.95]"
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
+            <h2 className="font-display max-w-xl text-5xl md:text-6xl uppercase">
               Stay up to date in the jungle.
             </h2>
             <NewsletterForm consentText={consentText.trim()} />

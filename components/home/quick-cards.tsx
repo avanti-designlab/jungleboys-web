@@ -19,10 +19,7 @@ export default function QuickCards() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 flex items-center justify-between p-5 text-white">
-                <span
-                  className="text-3xl uppercase"
-                  style={{ fontFamily: 'var(--font-display)' }}
-                >
+                <span className="font-display text-3xl uppercase">
                   {c.title}
                 </span>
                 <span

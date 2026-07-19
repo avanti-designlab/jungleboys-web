@@ -83,7 +83,7 @@ export default function SiteNav() {
                 {column.map((l) => {
                   const delay = `${0.12 + linkIndex++ * 0.055}s`
                   const cls =
-                    'text-5xl md:text-6xl xl:text-7xl uppercase leading-[1.15] text-white transition-colors duration-200 hover:text-[var(--color-accent)]'
+                    'font-display text-6xl md:text-7xl xl:text-8xl uppercase text-white transition-colors duration-200 hover:text-[var(--color-accent)]'
                   return (
                     <li key={l.href} className="menu-line">
                       {l.external ? (
@@ -91,7 +91,7 @@ export default function SiteNav() {
                           href={l.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          style={{ fontFamily: 'var(--font-display)', animationDelay: delay }}
+                          style={{ animationDelay: delay }}
                           className={cls}
                         >
                           {l.label}
@@ -100,7 +100,7 @@ export default function SiteNav() {
                         <Link
                           href={l.href}
                           onClick={() => setOpen(false)}
-                          style={{ fontFamily: 'var(--font-display)', animationDelay: delay }}
+                          style={{ animationDelay: delay }}
                           className={cls}
                         >
                           {l.label}
@@ -130,13 +130,10 @@ export default function SiteNav() {
         </div>
       )}
 
-      {/* sticky inverting header — everything inside stays WHITE; the blend does the rest */}
-      <header
-        className="fixed inset-x-0 top-0 z-50 text-white"
-        style={{ mixBlendMode: 'difference' }}
-      >
+      {/* sticky header — hamburger/logo/socials invert via blend; VERIFY pill stays true yellow */}
+      <header className="fixed inset-x-0 top-0 z-50">
         <div className="mx-auto flex w-full max-w-[1560px] items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 text-white" style={{ mixBlendMode: 'difference' }}>
             <button
               aria-expanded={open}
               aria-label={open ? 'Close menu' : 'Open menu'}
@@ -160,27 +157,31 @@ export default function SiteNav() {
           </div>
 
           {!open && (
-            <div className="flex items-center gap-5 rounded-full border-2 border-white px-5 py-2.5">
+            <div className="flex items-center gap-3">
               <Link
                 href="/verify"
-                className="text-xs font-bold uppercase tracking-widest transition-opacity duration-200 hover:opacity-70"
+                className="rounded-full bg-[var(--color-accent)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-on-accent)] transition-transform duration-200 hover:scale-105"
                 style={{ fontFamily: 'var(--font-brand)' }}
               >
                 Verify Products
               </Link>
-              <span className="h-4 w-px bg-white/50" aria-hidden />
-              {HEADER_SOCIALS.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={s.label}
-                  className="transition-transform duration-200 hover:scale-110"
-                >
-                  {s.icon}
-                </a>
-              ))}
+              <div
+                className="flex items-center gap-4 rounded-full border-2 border-white px-5 py-3 text-white"
+                style={{ mixBlendMode: 'difference' }}
+              >
+                {HEADER_SOCIALS.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className="transition-transform duration-200 hover:scale-110"
+                  >
+                    {s.icon}
+                  </a>
+                ))}
+              </div>
             </div>
           )}
         </div>

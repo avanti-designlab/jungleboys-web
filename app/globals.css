@@ -54,6 +54,12 @@
   --font-body: var(--font-dm-sans); /* long-form + default text */
 }
 
+.font-display {
+  font-family: var(--font-display);
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+}
+
 body {
   background: var(--color-background);
   color: var(--color-foreground);

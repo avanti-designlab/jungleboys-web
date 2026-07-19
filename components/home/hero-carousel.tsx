@@ -44,10 +44,7 @@ export default function HeroCarousel() {
               >
                 {s.kicker}
               </p>
-              <h1
-                className="text-6xl md:text-8xl xl:text-9xl uppercase leading-[0.9]"
-                style={{ fontFamily: 'var(--font-display)' }}
-              >
+              <h1 className="font-display text-6xl md:text-8xl xl:text-9xl uppercase">
                 {s.title}
               </h1>
               <Link

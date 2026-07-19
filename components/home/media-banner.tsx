@@ -27,10 +27,7 @@ export default function MediaBanner() {
             >
               {m.kicker}
             </p>
-            <h2
-              className="text-5xl md:text-7xl uppercase leading-[0.9]"
-              style={{ fontFamily: 'var(--font-display)' }}
-            >
+            <h2 className="font-display text-5xl md:text-7xl uppercase">
               {m.title}
             </h2>
             <p className="max-w-xl text-sm md:text-base text-white/80">{m.copy}</p>
