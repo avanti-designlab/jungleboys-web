@@ -21,12 +21,21 @@ The live LA site is ~32 URLs. Templates like /products, /strains, /drops,
 current site** (404) — they are NEW in the rebuild, carry no legacy equity, and
 need no redirects.
 
+## Update 2026-07-19 (v2): authoritative sitemap
+
+Avanti enabled Webflow's auto-generated sitemap — 44 URLs, now the authoritative
+page list (supersedes the Designer page-list cross-check). Added: the real auth
+suite (`/login`, `/signup`, `/auth`, `/callback`, `/forgot-password`,
+`/reset-password`, `/delete-account` — **NOT** `/sign-in` as brief doc 00/03
+assumed), `/420-pre-game`, and product/campaign landings (`/hash-hole`,
+`/pre-rolls`, `/10-pack-prerolls`, `/premium-flower`, `/pwf-reward`).
+
 ## Open items
 
 - [ ] `earns_traffic` column — populate from Avanti's GSC top-pages export
-- [ ] `/profile-reward` destination — confirm with Avanti (likely /loyalty)
+- [ ] `/profile-reward` + `/pwf-reward` destinations — confirm with Avanti (likely /loyalty)
 - [ ] Deal-redirect final targets — confirm /710-deals stays the promo landing
       (vs consolidating under /specials) before implementing
-- [ ] Cross-check against the Webflow Designer page list (static + CMS) for
-      unlinked pages the crawl can't see
-- [ ] Brief says 16 FL locations; nav shows 14 — confirm the store list
+- [ ] Product-landing pages (hash-hole, pre-rolls, 10-pack-prerolls,
+      premium-flower): keep as landings vs 301 into shop categories — Phase 1 decision
+- [ ] Brief says 16 FL locations; sitemap shows 14 — confirm the store list

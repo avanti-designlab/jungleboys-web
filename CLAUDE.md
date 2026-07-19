@@ -92,5 +92,9 @@ transform/opacity only; motion never blocks LCP.
 - Deploy domain: `jungleboys-web.vercel.app` (project name `jungleboys` under the-design-lab team).
 - Higgsfield/Motion MCP assets must enter via the `media_import_url` workflow (sandbox CDN blocked).
 - Env var names are documented in `.env.example` (names only). `DUTCHIE_PLUS_*` stay blank until Phase 3.
+- **The live site's auth paths are `/login`, `/signup`, `/auth`, `/callback`, `/forgot-password`,
+  `/reset-password`, `/delete-account` — NOT the `/sign-in` paths assumed in brief docs 00/03.**
+  Auth-shell templates must use the real paths (URL preservation). See `seo/url-inventory.csv`
+  (44-URL authoritative list from the Webflow sitemap, enabled 2026-07-19).
 - Dev server: use the workspace `.claude/launch.json` config (`jungleboys-web-dev`, autoPort on —
   port 3000 is often held by the GG project's server; never kill processes on 3000).
