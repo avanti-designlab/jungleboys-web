@@ -304,3 +304,12 @@ body {
   }
   .rw-ic-pop { animation: rw-ic-pop 3s ease-in-out infinite; transform-origin: center; }
 }
+
+/* media: banner zooms in on load (mirrors the homepage hero scale-in) */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes media-hero-in {
+    from { transform: scale(1.14); opacity: 0.6; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .media-hero-in { animation: media-hero-in 1.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+}

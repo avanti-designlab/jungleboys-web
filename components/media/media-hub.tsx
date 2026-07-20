@@ -1,15 +1,16 @@
 'use client'
 
 import Image from 'next/image'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { JB_CHANNEL_URL, youtubeThumb, type Video } from '@/lib/media/youtube'
 
-// Video gallery: one full-width featured hero, then a uniform 16:9 grid. Every
-// tile is the same shape so rows always align — no ragged masonry bottoms, no
-// dead space. Tiles slide in on entry (one scroll handler, getBoundingClientRect,
-// not IntersectionObserver). Static thumbnails with a subtle hover zoom — autoplay
-// previews were dropped because many uploads are age-restricted and won't embed.
-// Verticals still open as 9:16 in the lightbox. Click = lightbox.
+// Media gallery. The latest upload sits in its own yellow "pill" so it stands
+// out; the rest fill a mosaic where every tile is 16:9 but some span 2×2 for
+// rhythm. All rows share one computed height (--row-h = a 1-col slot's 16:9
+// height) so big tiles are exactly 2 rows tall and everything stays aligned —
+// no ragged edges, no dead space. Tiles slide in on entry (scroll handler, not
+// IntersectionObserver). Static thumbnails (age-restricted uploads won't embed).
+// Click = lightbox; verticals open 9:16 there.
 
 function PlayIcon({ className }: { className?: string }) {
   return (
@@ -30,11 +31,13 @@ function formatDate(iso: string) {
 function VideoTile({
   v,
   big,
+  fill,
   revealed,
   onOpen,
 }: {
   v: Video
   big?: boolean
+  fill?: boolean // stretch to fill a grid cell (mosaic) instead of imposing 16:9
   revealed: boolean
   onOpen: () => void
 }) {
@@ -44,38 +47,33 @@ function VideoTile({
       data-vid={v.id}
       onClick={onOpen}
       aria-label={`Play ${v.title}`}
-      className="group relative block w-full overflow-hidden rounded-2xl text-left"
+      className={`group block overflow-hidden rounded-2xl text-left ${fill ? 'absolute inset-0 h-full w-full' : 'relative w-full'}`}
       style={{
         opacity: revealed ? 1 : 0,
         transform: revealed ? 'translateY(0)' : 'translateY(-24px)',
         transition: 'opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.6s cubic-bezier(0.22,1,0.36,1)',
       }}
     >
-      <div className="relative aspect-video w-full bg-[var(--color-surface)]">
+      <div className={`relative w-full bg-[var(--color-surface)] ${fill ? 'h-full' : 'aspect-video'}`}>
         <Image
           src={youtubeThumb(v.id, big ? 'maxres' : 'hq')}
           alt={v.title}
           fill
           priority={big}
-          sizes={big ? '(max-width:1024px) 100vw, 1152px' : '(max-width:640px) 50vw, (max-width:1024px) 33vw, 384px'}
+          sizes={big ? '(max-width:1024px) 100vw, 760px' : '(max-width:640px) 50vw, (max-width:1024px) 33vw, 380px'}
           className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
         />
 
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-        <span className={`pointer-events-none absolute right-3 top-3 flex items-center justify-center rounded-full bg-black/45 text-white opacity-70 backdrop-blur-sm transition-all duration-300 group-hover:bg-[var(--color-accent)] group-hover:text-black group-hover:opacity-100 ${big ? 'h-12 w-12' : 'h-9 w-9'}`}>
+        <span className={`pointer-events-none absolute right-3 top-3 flex items-center justify-center rounded-full bg-black/45 text-white opacity-70 backdrop-blur-sm transition-all duration-300 group-hover:bg-[var(--color-accent)] group-hover:text-black group-hover:opacity-100 ${big ? 'h-11 w-11' : 'h-9 w-9'}`}>
           <PlayIcon className={`ml-0.5 ${big ? 'h-5 w-5' : 'h-4 w-4'}`} />
         </span>
-        {big && (
-          <span className="absolute left-4 top-4 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-black" style={{ fontFamily: 'var(--font-brand)' }}>
-            Latest Episode
-          </span>
-        )}
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-3 md:p-5" style={{ fontFamily: 'var(--font-brand)' }}>
-          <h3 className={`line-clamp-2 font-extrabold uppercase leading-tight tracking-wide text-white ${big ? 'text-xl md:text-3xl' : 'text-xs md:text-sm'}`}>
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-3 md:p-4" style={{ fontFamily: 'var(--font-brand)' }}>
+          <h3 className={`line-clamp-2 font-extrabold uppercase leading-tight tracking-wide text-white ${big ? 'text-base md:text-xl' : 'text-xs md:text-sm'}`}>
             {v.title}
           </h3>
-          <p className={`mt-1 uppercase tracking-wide text-white/60 ${big ? 'text-xs' : 'text-[10px]'}`}>{formatDate(v.publishedAt)}</p>
+          <p className="mt-1 text-[10px] uppercase tracking-wide text-white/60">{formatDate(v.publishedAt)}</p>
         </div>
       </div>
     </button>
@@ -86,15 +84,35 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
   const [active, setActive] = useState<Video | null>(null)
   const [revealedIds, setRevealedIds] = useState<Set<string>>(new Set())
   const rootRef = useRef<HTMLDivElement>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
   const close = useCallback(() => setActive(null), [])
 
-  // featured = latest horizontal upload; the rest fill a uniform grid
+  // featured = latest horizontal upload (goes in the yellow pill); rest → mosaic
   const featured = videos.find((v) => !v.vertical) ?? videos[0]
   const rest = videos.filter((v) => v.id !== featured?.id)
 
-  // Reveal: each tile slides in once its top crosses 92% of the viewport
-  // (sticky, scroll-driven via getBoundingClientRect). Reduced motion: reveal
-  // everything up front.
+  // Keep every mosaic row the height of a 1-col 16:9 slot, so a 2×2 tile is
+  // exactly two rows tall and the grid stays perfectly aligned.
+  useLayoutEffect(() => {
+    const grid = gridRef.current
+    if (!grid) return
+    const setRowHeight = () => {
+      const slot = grid.querySelector<HTMLElement>('[data-span="1"]')
+      const w = slot?.getBoundingClientRect().width ?? 0
+      if (w) grid.style.setProperty('--row-h', `${(w * 9) / 16}px`)
+    }
+    setRowHeight()
+    const ro = new ResizeObserver(setRowHeight)
+    ro.observe(grid)
+    window.addEventListener('resize', setRowHeight)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', setRowHeight)
+    }
+  }, [videos])
+
+  // Reveal: each tile slides in once its top crosses 92% of the viewport.
+  // Reduced motion: reveal everything up front.
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
@@ -163,16 +181,41 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
 
   return (
     <>
-      <div ref={rootRef} className="mx-auto max-w-6xl px-4 pb-4 pt-10 md:px-8 md:pt-14 lg:px-12">
+      <div ref={rootRef} className="mx-auto max-w-[1500px] px-4 pb-4 pt-10 md:px-8 md:pt-14 lg:px-12">
+        {/* Latest video — its own yellow pill so the section pops */}
         {featured && (
-          <div className="mb-4 md:mb-5">
-            <VideoTile v={featured} big {...tileProps(featured)} />
-          </div>
+          <section className="mb-8 md:mb-10">
+            <div className="rounded-[1.6rem] bg-[var(--color-accent)] p-2.5 shadow-[0_20px_60px_-20px_rgba(254,207,14,0.6)] md:rounded-[2rem] md:p-3.5">
+              <div className="flex items-center justify-between px-2 pb-2.5 pt-1 md:px-3" style={{ fontFamily: 'var(--font-brand)' }}>
+                <span className="flex items-center gap-2 text-sm font-extrabold uppercase tracking-widest text-black md:text-base">
+                  <span className="inline-block h-2.5 w-2.5 animate-pulse rounded-full bg-black" />
+                  Latest Episode
+                </span>
+                <span className="hidden text-xs font-bold uppercase tracking-widest text-black/70 sm:block">
+                  {formatDate(featured.publishedAt)}
+                </span>
+              </div>
+              <div className="relative overflow-hidden rounded-[1.1rem] md:rounded-[1.4rem]">
+                <VideoTile v={featured} big {...tileProps(featured)} />
+              </div>
+            </div>
+          </section>
         )}
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-5">
-          {rest.map((v) => (
-            <VideoTile key={v.id} v={v} {...tileProps(v)} />
-          ))}
+
+        {/* Mosaic — all 16:9, some 2×2 for rhythm, all aligned */}
+        <div
+          ref={gridRef}
+          className="grid grid-cols-2 gap-4 [grid-auto-flow:row_dense] md:grid-cols-3 lg:grid-cols-4 lg:gap-5"
+          style={{ gridAutoRows: 'var(--row-h, 200px)' }}
+        >
+          {rest.map((v, i) => {
+            const big = i % 5 === 0 // every 5th tile is a 2×2 accent (1 big + 4 small tiles the 4-col band)
+            return (
+              <div key={v.id} data-span={big ? '2' : '1'} className={`relative ${big ? 'col-span-2 row-span-2' : ''}`}>
+                <VideoTile v={v} big={big} fill {...tileProps(v)} />
+              </div>
+            )
+          })}
         </div>
       </div>
 

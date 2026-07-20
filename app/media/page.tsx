@@ -55,7 +55,7 @@ export default async function MediaPage() {
       <section className="px-2 pt-2 md:px-3">
         <div
           data-nav-theme="dark"
-          className="relative flex items-end justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 pb-8 pt-24 md:min-h-[460px] md:rounded-[2.5rem] md:pt-24"
+          className="media-hero-in relative flex items-end justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 pb-8 pt-24 md:min-h-[460px] md:rounded-[2.5rem] md:pt-24"
         >
           <img
             src="/media/media-banner-bg.jpg"
@@ -79,7 +79,7 @@ export default async function MediaPage() {
 
       {/* headline row: big header left, subtext right */}
       <section className="px-4 pt-10 md:px-8 lg:px-12">
-        <div className="mx-auto grid max-w-6xl items-center gap-4 md:grid-cols-[1.15fr_1fr] md:gap-10">
+        <div className="mx-auto grid max-w-[1500px] items-center gap-4 md:grid-cols-[1.15fr_1fr] md:gap-10">
           <h2 className="font-display text-5xl uppercase leading-[0.9] text-[var(--color-foreground)] md:text-7xl">
             The Culture Runs Deep
           </h2>
