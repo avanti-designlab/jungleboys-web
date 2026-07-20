@@ -1,19 +1,15 @@
 'use client'
 
 import Image from 'next/image'
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { JB_CHANNEL_URL, youtubeThumb, type Video } from '@/lib/media/youtube'
 
-// Bento video gallery: varied tile sizes (big featured, tall 9:16 Shorts,
-// occasional wide accents) packed with a TRUE masonry grid — each tile spans a
-// computed number of fine rows and the grid dense-packs, so mixing shapes never
-// leaves the dead space a plain grid would. Tiles slide in on entry (one scroll
-// handler, getBoundingClientRect, not IntersectionObserver). Static thumbnails
-// with a subtle hover zoom — autoplay previews were dropped because many uploads
-// are age-restricted and refuse to embed/play inline. Click = lightbox.
-
-const ROW_UNIT = 4 // px — grid-auto-rows (fine so row-span rounding stays tight)
-const GAP = 16 // px — must match the grid gap class (gap-4)
+// Video gallery: one full-width featured hero, then a uniform 16:9 grid. Every
+// tile is the same shape so rows always align — no ragged masonry bottoms, no
+// dead space. Tiles slide in on entry (one scroll handler, getBoundingClientRect,
+// not IntersectionObserver). Static thumbnails with a subtle hover zoom — autoplay
+// previews were dropped because many uploads are age-restricted and won't embed.
+// Verticals still open as 9:16 in the lightbox. Click = lightbox.
 
 function PlayIcon({ className }: { className?: string }) {
   return (
@@ -34,13 +30,11 @@ function formatDate(iso: string) {
 function VideoTile({
   v,
   big,
-  short,
   revealed,
   onOpen,
 }: {
   v: Video
   big?: boolean
-  short?: boolean
   revealed: boolean
   onOpen: () => void
 }) {
@@ -57,13 +51,13 @@ function VideoTile({
         transition: 'opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.6s cubic-bezier(0.22,1,0.36,1)',
       }}
     >
-      <div className={`relative w-full bg-[var(--color-surface)] ${short ? 'aspect-[9/16]' : 'aspect-video'}`}>
+      <div className="relative aspect-video w-full bg-[var(--color-surface)]">
         <Image
-          src={big ? youtubeThumb(v.id, 'maxres') : v.thumbnail}
+          src={youtubeThumb(v.id, big ? 'maxres' : 'hq')}
           alt={v.title}
           fill
           priority={big}
-          sizes={short ? '(max-width:640px) 50vw, 25vw' : big ? '(max-width:1024px) 100vw, 66vw' : '(max-width:640px) 100vw, 33vw'}
+          sizes={big ? '(max-width:1024px) 100vw, 1152px' : '(max-width:640px) 50vw, (max-width:1024px) 33vw, 384px'}
           className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
         />
 
@@ -77,11 +71,11 @@ function VideoTile({
           </span>
         )}
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-3 md:p-4" style={{ fontFamily: 'var(--font-brand)' }}>
-          <h3 className={`line-clamp-2 font-extrabold uppercase leading-tight tracking-wide text-white ${big ? 'text-lg md:text-2xl' : 'text-xs md:text-sm'}`}>
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-3 md:p-5" style={{ fontFamily: 'var(--font-brand)' }}>
+          <h3 className={`line-clamp-2 font-extrabold uppercase leading-tight tracking-wide text-white ${big ? 'text-xl md:text-3xl' : 'text-xs md:text-sm'}`}>
             {v.title}
           </h3>
-          <p className="mt-1 text-[10px] uppercase tracking-wide text-white/60">{formatDate(v.publishedAt)}</p>
+          <p className={`mt-1 uppercase tracking-wide text-white/60 ${big ? 'text-xs' : 'text-[10px]'}`}>{formatDate(v.publishedAt)}</p>
         </div>
       </div>
     </button>
@@ -91,52 +85,24 @@ function VideoTile({
 export default function MediaHub({ videos }: { videos: Video[] }) {
   const [active, setActive] = useState<Video | null>(null)
   const [revealedIds, setRevealedIds] = useState<Set<string>>(new Set())
-  const gridRef = useRef<HTMLDivElement>(null)
+  const rootRef = useRef<HTMLDivElement>(null)
   const close = useCallback(() => setActive(null), [])
 
-  // put the latest horizontal video first as the big featured tile
+  // featured = latest horizontal upload; the rest fill a uniform grid
   const featured = videos.find((v) => !v.vertical) ?? videos[0]
   const rest = videos.filter((v) => v.id !== featured?.id)
-  const ordered = featured ? [featured, ...rest] : videos
-
-  // MASONRY: give each cell a row-span from its measured height so the grid
-  // packs tightly with no gaps. Re-runs on mount, resize and container resize.
-  useLayoutEffect(() => {
-    const grid = gridRef.current
-    if (!grid) return
-    const layout = () => {
-      grid.querySelectorAll<HTMLElement>('[data-cell]').forEach((cell) => {
-        const tile = cell.querySelector<HTMLElement>('[data-tile]')
-        const h = tile?.getBoundingClientRect().height ?? 0
-        if (!h) return
-        cell.style.gridRowEnd = `span ${Math.ceil((h + GAP) / (ROW_UNIT + GAP))}`
-      })
-    }
-    layout()
-    const raf = requestAnimationFrame(layout)
-    const t = setTimeout(layout, 200)
-    const ro = new ResizeObserver(layout)
-    ro.observe(grid)
-    window.addEventListener('resize', layout)
-    return () => {
-      cancelAnimationFrame(raf)
-      clearTimeout(t)
-      ro.disconnect()
-      window.removeEventListener('resize', layout)
-    }
-  }, [videos])
 
   // Reveal: each tile slides in once its top crosses 92% of the viewport
   // (sticky, scroll-driven via getBoundingClientRect). Reduced motion: reveal
   // everything up front.
   useEffect(() => {
-    const grid = gridRef.current
-    if (!grid) return
+    const root = rootRef.current
+    if (!root) return
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const revealed = new Set<string>()
 
     if (reduce) {
-      grid.querySelectorAll<HTMLElement>('[data-tile]').forEach((el) => el.dataset.vid && revealed.add(el.dataset.vid))
+      root.querySelectorAll<HTMLElement>('[data-tile]').forEach((el) => el.dataset.vid && revealed.add(el.dataset.vid))
       setRevealedIds(revealed)
       return
     }
@@ -145,7 +111,7 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
     const reveal = () => {
       raf = 0
       let changed = false
-      grid.querySelectorAll<HTMLElement>('[data-tile]').forEach((el) => {
+      root.querySelectorAll<HTMLElement>('[data-tile]').forEach((el) => {
         const id = el.dataset.vid
         if (id && !revealed.has(id) && el.getBoundingClientRect().top < window.innerHeight * 0.92) {
           revealed.add(id)
@@ -193,31 +159,22 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
     )
   }
 
+  const tileProps = (v: Video) => ({ revealed: revealedIds.has(v.id), onOpen: () => setActive(v) })
+
   return (
     <>
-      <section className="px-4 py-10 md:px-8 md:py-14 lg:px-12">
-        <div
-          ref={gridRef}
-          className="grid grid-cols-2 gap-4 [grid-auto-flow:dense] [grid-auto-rows:4px] md:grid-cols-3 lg:grid-cols-4"
-        >
-          {ordered.map((v, i) => {
-            const isFeatured = v.id === featured?.id
-            const short = !!v.vertical
-            const wide = !isFeatured && !short && i % 5 === 2 // occasional wide accent
-            return (
-              <div key={v.id} data-cell className={isFeatured || wide ? 'col-span-2' : 'col-span-1'}>
-                <VideoTile
-                  v={v}
-                  big={isFeatured}
-                  short={short}
-                  revealed={revealedIds.has(v.id)}
-                  onOpen={() => setActive(v)}
-                />
-              </div>
-            )
-          })}
+      <div ref={rootRef} className="mx-auto max-w-6xl px-4 pb-4 pt-10 md:px-8 md:pt-14 lg:px-12">
+        {featured && (
+          <div className="mb-4 md:mb-5">
+            <VideoTile v={featured} big {...tileProps(featured)} />
+          </div>
+        )}
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 lg:gap-5">
+          {rest.map((v) => (
+            <VideoTile key={v.id} v={v} {...tileProps(v)} />
+          ))}
         </div>
-      </section>
+      </div>
 
       {active && (
         <div
