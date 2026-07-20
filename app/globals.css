@@ -432,3 +432,12 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .ws-logos .ws-lockup { opacity: 1; transform: none; transition: none; }
 }
+
+/* wholesale media pill: slow ken-burns zoom */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes ws-media-zoom {
+    0%, 100% { transform: scale(1.05); }
+    50% { transform: scale(1.15); }
+  }
+  .ws-media-zoom { animation: ws-media-zoom 18s ease-in-out infinite; }
+}

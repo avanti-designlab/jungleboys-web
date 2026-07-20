@@ -128,47 +128,65 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
 
   return (
     <div ref={rootRef}>
-      {/* intro: heading + JB × Nabis + paragraph */}
+      {/* intro: info pill (left) + media pill (right) */}
       <section className="px-4 pt-16 md:px-8 md:pt-24 lg:px-12">
-        <div className="mx-auto max-w-4xl text-center">
-          <h2 className="media-reveal font-display text-4xl uppercase leading-[0.92] text-[var(--color-foreground)] md:text-6xl">
-            Want to carry Jungle Boys products at your dispensary?
-          </h2>
-
-          <div className="ws-logos mt-12 flex items-center justify-center">
-            {/* eslint-disable-next-line @next/next/no-img-element -- SVG lockup */}
-            <img
-              src="/wholesale/jb-x-nabis.svg"
-              alt="Jungle Boys × Nabis"
-              className="jbnabis-logo ws-lockup h-14 w-auto md:h-[4.5rem]"
-            />
+        <div className="mx-auto grid max-w-[1280px] items-stretch gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
+          {/* LEFT — info pill */}
+          <div className="media-reveal flex flex-col justify-center rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface)] p-8 md:p-12">
+            <h2 className="font-display text-5xl uppercase leading-[0.9] text-[var(--color-foreground)] md:text-6xl xl:text-7xl">
+              Want to carry Jungle Boys products at your dispensary?
+            </h2>
+            <div className="ws-logos mt-9">
+              {/* eslint-disable-next-line @next/next/no-img-element -- SVG lockup */}
+              <img
+                src="/wholesale/jb-x-nabis.svg"
+                alt="Jungle Boys × Nabis"
+                className="jbnabis-logo ws-lockup h-12 w-auto md:h-16"
+              />
+            </div>
+            <p className="mt-9 max-w-lg text-base leading-relaxed text-[var(--color-muted)] md:text-lg">
+              From exclusive genetics to top-shelf flower, our products move fast and speak for themselves.{' '}
+              <span className="font-semibold text-[var(--color-foreground)]">Let&apos;s get you playing with fire.</span>
+            </p>
           </div>
 
-          <p className="media-reveal mx-auto mt-10 max-w-2xl text-base leading-relaxed text-[var(--color-muted)] md:text-lg">
-            From exclusive genetics to top-shelf flower, our products move fast and speak for themselves.{' '}
-            <span className="font-semibold text-[var(--color-foreground)]">Let&apos;s get you playing with fire.</span>
-          </p>
+          {/* RIGHT — media pill (branded; swap for the official Nabis video/asset) */}
+          <div className="media-reveal relative min-h-[320px] overflow-hidden rounded-[2rem] border border-[var(--color-border)] bg-[#0b0b0d] lg:min-h-0">
+            {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}
+            <img
+              src="/contact/contact-bg.jpg"
+              alt=""
+              aria-hidden
+              className="ws-media-zoom absolute inset-0 h-full w-full object-cover"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/40" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 p-8 text-center">
+              <span className="font-display text-4xl uppercase leading-none text-white md:text-5xl">Moves Fast.<br />Sells Faster.</span>
+              <span className="rounded-full border border-white/25 px-5 py-2 text-[11px] font-bold uppercase tracking-widest text-white/80" style={{ fontFamily: 'var(--font-brand)' }}>
+                Distribution by Nabis
+              </span>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* yellow pill: clickthrough form / next steps */}
-      <section className="px-4 pt-14 md:px-8 md:pt-20 lg:px-12">
-        <div className="media-reveal mx-auto max-w-3xl">
-          <div className="overflow-hidden rounded-[2.5rem] bg-[var(--color-accent)] p-6 shadow-[0_40px_120px_-40px_rgba(254,207,14,0.6)] md:p-12">
+      {/* yellow pill (wide): clickthrough form / next steps */}
+      <section className="px-4 pt-16 md:px-8 md:pt-24 lg:px-12">
+        <div className="media-reveal mx-auto max-w-[1280px]">
+          <div className="overflow-hidden rounded-[2.5rem] bg-[var(--color-accent)] p-7 shadow-[0_40px_120px_-40px_rgba(254,207,14,0.6)] md:p-14">
             {state === 'done' ? (
-              <div className="text-center text-black">
-                <h3 className="font-display text-5xl uppercase leading-none md:text-7xl">Next Steps</h3>
-                <p className="mx-auto mt-6 max-w-md text-sm font-medium uppercase leading-relaxed tracking-wide md:text-base" style={{ fontFamily: 'var(--font-brand)' }}>
-                  Thank you for submitting your information. A Jungle Boys team member will be in contact within 24 hours.
-                </p>
-                <p className="mx-auto mt-4 max-w-md text-sm font-medium uppercase leading-relaxed tracking-wide md:text-base" style={{ fontFamily: 'var(--font-brand)' }}>
-                  Click below to register with Nabis Distribution to place your first order.
-                </p>
+              <div className="flex flex-col items-center gap-6 py-6 text-center text-black md:flex-row md:justify-between md:gap-10 md:py-4 md:text-left">
+                <div>
+                  <h3 className="font-display text-6xl uppercase leading-none md:text-8xl">Next Steps</h3>
+                  <p className="mt-6 max-w-xl text-sm font-medium uppercase leading-relaxed tracking-wide md:text-base" style={{ fontFamily: 'var(--font-brand)' }}>
+                    Thank you for submitting your information. A Jungle Boys team member will be in contact within 24 hours. Click to register with Nabis Distribution and place your first order.
+                  </p>
+                </div>
                 <a
                   href={NABIS_PORTAL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-8 inline-flex items-center justify-center rounded-full bg-black px-8 py-4 text-white transition-transform duration-200 hover:scale-[1.03]"
+                  className="inline-flex shrink-0 items-center justify-center rounded-full bg-black px-10 py-5 text-white transition-transform duration-200 hover:scale-[1.03]"
                 >
                   <NabisMark />
                 </a>
@@ -176,7 +194,7 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
             ) : (
               <div className="text-black">
                 {/* progress */}
-                <div className="mb-8 flex items-center justify-between">
+                <div className="mb-4 flex items-center justify-between">
                   <span className="text-xs font-extrabold uppercase tracking-widest" style={{ fontFamily: 'var(--font-brand)' }}>
                     Become a Retailer
                   </span>
@@ -188,13 +206,16 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
                   <div className="h-full rounded-full bg-black transition-all duration-500" style={{ width: `${((step + 1) / total) * 100}%` }} />
                 </div>
 
-                {/* question (re-keyed so it animates on change) */}
-                <div key={step} className="min-h-[168px] gate-in">
-                  <label className="block">
-                    <span className="font-display block text-3xl uppercase leading-[0.95] md:text-5xl">{q.label}</span>
-                    {q.hint && <span className="mt-2 block text-sm font-medium text-black/55">{q.hint}</span>}
+                {/* wide: question left, answer + nav right */}
+                <div className="grid gap-8 md:grid-cols-2 md:items-center md:gap-14">
+                  <div key={step} className="gate-in">
+                    <span className="font-display block text-4xl uppercase leading-[0.95] md:text-6xl">{q.label}</span>
+                    {q.hint && <span className="mt-3 block text-sm font-medium text-black/55">{q.hint}</span>}
+                  </div>
+
+                  <div>
                     {q.phone ? (
-                      <div className="mt-6 flex items-stretch overflow-hidden rounded-full bg-white">
+                      <div className="flex items-stretch overflow-hidden rounded-full bg-white">
                         <span className="flex items-center border-r border-black/10 px-4 text-sm font-bold text-black/60" style={{ fontFamily: 'var(--font-brand)' }}>
                           US +1
                         </span>
@@ -217,41 +238,41 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
                         onChange={(e) => setValue(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && next()}
                         placeholder={q.placeholder}
-                        className="mt-6 w-full rounded-full bg-white px-6 py-4 text-lg text-black outline-none placeholder:text-black/30"
+                        className="w-full rounded-full bg-white px-6 py-4 text-lg text-black outline-none placeholder:text-black/30"
                       />
                     )}
-                  </label>
-                </div>
 
-                {step === total - 1 && (
-                  <p className="mt-6 text-[11px] leading-relaxed text-black/55">{consentText}</p>
-                )}
-                {state === 'error' && (
-                  <p className="mt-4 text-sm font-semibold text-red-700" role="alert">
-                    {error}
-                  </p>
-                )}
+                    {step === total - 1 && (
+                      <p className="mt-5 text-[11px] leading-relaxed text-black/55">{consentText}</p>
+                    )}
+                    {state === 'error' && (
+                      <p className="mt-4 text-sm font-semibold text-red-700" role="alert">
+                        {error}
+                      </p>
+                    )}
 
-                {/* nav */}
-                <div className="mt-8 flex items-center justify-between gap-4">
-                  <button
-                    type="button"
-                    onClick={() => setStep((s) => Math.max(0, s - 1))}
-                    disabled={step === 0}
-                    className="rounded-full px-5 py-3 text-xs font-bold uppercase tracking-widest text-black/60 transition hover:text-black disabled:opacity-0"
-                    style={{ fontFamily: 'var(--font-brand)' }}
-                  >
-                    ← Back
-                  </button>
-                  <button
-                    type="button"
-                    onClick={next}
-                    disabled={!canAdvance() || state === 'sending'}
-                    className="rounded-full bg-black px-8 py-4 text-sm font-extrabold uppercase tracking-widest text-white transition-transform duration-200 hover:scale-[1.03] disabled:opacity-40"
-                    style={{ fontFamily: 'var(--font-brand)' }}
-                  >
-                    {state === 'sending' ? 'Sending…' : step === total - 1 ? 'Submit →' : 'Next →'}
-                  </button>
+                    {/* nav */}
+                    <div className="mt-8 flex items-center justify-between gap-4">
+                      <button
+                        type="button"
+                        onClick={() => setStep((s) => Math.max(0, s - 1))}
+                        disabled={step === 0}
+                        className="rounded-full px-5 py-3 text-xs font-bold uppercase tracking-widest text-black/60 transition hover:text-black disabled:opacity-0"
+                        style={{ fontFamily: 'var(--font-brand)' }}
+                      >
+                        ← Back
+                      </button>
+                      <button
+                        type="button"
+                        onClick={next}
+                        disabled={!canAdvance() || state === 'sending'}
+                        className="rounded-full bg-black px-8 py-4 text-sm font-extrabold uppercase tracking-widest text-white transition-transform duration-200 hover:scale-[1.03] disabled:opacity-40"
+                        style={{ fontFamily: 'var(--font-brand)' }}
+                      >
+                        {state === 'sending' ? 'Sending…' : step === total - 1 ? 'Submit →' : 'Next →'}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
