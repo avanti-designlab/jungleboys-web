@@ -17,12 +17,12 @@ export const HERO_SLIDES = [
   },
   {
     kicker: 'NEW! ALL-IN-ONE',
-    title: 'GASTANK',
+    title: 'GAS TANK',
     cta: 'Shop now',
     href: '/products',
-    image: `${CDN}/69b9a86185994e827f464b24_JB%20AIO%20GAS%20TANK%20WEB%20BANNER%20Horizontal%201.jpg`,
+    image: '/hero/gas-tank-beach.jpg',
     imageMobile: undefined,
-    alt: 'GasTank all-in-one vape banner',
+    alt: 'Jungle Boys Gas Tank all-in-one vapes standing in the sand at the beach',
   },
   {
     kicker: '20 YEAR ANNIVERSARY EDITION',
