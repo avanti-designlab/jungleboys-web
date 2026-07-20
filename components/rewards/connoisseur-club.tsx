@@ -137,7 +137,7 @@ export default function ConnoisseurClub() {
       const inner = stage.querySelector('[data-club-inner]')
       gsap.set(inner, { scale: 1.08, opacity: 0.55 })
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: stage, start: 'top 65%', end: 'bottom 75%', scrub: true },
+        scrollTrigger: { trigger: stage, start: 'top 40%', end: 'bottom 85%', scrub: true },
       })
       tl.to(left, { xPercent: -104, duration: 1, ease: 'none' }, 0)
         .to(right, { xPercent: 104, duration: 1, ease: 'none' }, 0)
@@ -181,10 +181,10 @@ export default function ConnoisseurClub() {
         <img src="/rewards/curtain-right.png" alt="" aria-hidden className="absolute right-0 top-0 z-20 w-[15%] max-w-[300px] opacity-95" />
 
         {/* closing gathered curtains (scene-style art) that part on scroll */}
-        <div data-curtain-left aria-hidden className="absolute inset-y-0 left-0 z-30 w-[52%] will-change-transform">
+        <div data-curtain-left aria-hidden className="absolute inset-y-0 left-0 z-30 w-1/2 will-change-transform">
           <CurtainPanel />
         </div>
-        <div data-curtain-right aria-hidden className="absolute inset-y-0 right-0 z-30 w-[52%] will-change-transform">
+        <div data-curtain-right aria-hidden className="absolute inset-y-0 right-0 z-30 w-1/2 will-change-transform">
           <CurtainPanel mirrored />
         </div>
       </div>

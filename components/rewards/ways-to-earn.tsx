@@ -5,6 +5,13 @@ import {
 } from '@/lib/rewards-content'
 import PointsPill from './points-pill'
 import { Scrub, SplitHeading } from './motion'
+import { BirthdayIcon, FirstTimeIcon, ReferIcon } from './animated-icons'
+
+const WAY_ICONS = {
+  'Refer a Friend': ReferIcon,
+  'Birthday Perks': BirthdayIcon,
+  'First-Time Customer': FirstTimeIcon,
+} as const
 
 // "More ways to earn" (2 lines) — earn cards slide from the left; bonus rows
 // slide from the right with counting +50PTS pills. Theme-aware surfaces.
@@ -25,7 +32,9 @@ export default function WaysToEarn() {
 
         <div className="mt-14 grid gap-6 lg:grid-cols-2">
           <Scrub className="grid gap-5" end="bottom 90%">
-            {WAYS_TO_EARN.map((w) => (
+            {WAYS_TO_EARN.map((w) => {
+              const Icon = WAY_ICONS[w.title as keyof typeof WAY_ICONS] ?? ReferIcon
+              return (
               <div
                 key={w.title}
                 data-reveal="left"
@@ -33,8 +42,8 @@ export default function WaysToEarn() {
                 style={{ fontFamily: 'var(--font-brand)' }}
               >
                 <div className="flex items-center gap-4">
-                  <span className="flex h-13 w-13 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)] p-3">
-                    <img src={w.icon} alt="" aria-hidden className="h-6 w-6" />
+                  <span className="flex h-13 w-13 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)]">
+                    <Icon className="h-7 w-7" />
                   </span>
                   <div>
                     <h3 className="text-base font-extrabold uppercase tracking-wide text-[var(--color-foreground)] md:text-lg">
@@ -46,7 +55,7 @@ export default function WaysToEarn() {
                   </div>
                 </div>
                 {'badge' in w && w.badge && (
-                  <span className="mt-4 inline-block rounded-full bg-gradient-to-r from-[#8a6b00] via-[var(--color-accent)] to-[#8a6b00] px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-widest text-black">
+                  <span className="ml-[4.25rem] mt-4 inline-block rounded-full bg-gradient-to-r from-[#8a6b00] via-[var(--color-accent)] to-[#8a6b00] px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-widest text-black">
                     {w.badge}
                   </span>
                 )}
@@ -61,7 +70,8 @@ export default function WaysToEarn() {
                   ))}
                 </ul>
               </div>
-            ))}
+              )
+            })}
           </Scrub>
 
           <Scrub end="bottom 90%">

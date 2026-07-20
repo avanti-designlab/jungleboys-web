@@ -57,17 +57,26 @@ export default function TierCards() {
                   {/* base card surface above the ring */}
                   <span aria-hidden className={`absolute inset-0 rounded-3xl ${themes[t.theme].card}`} />
 
-                  {/* mascot pops out of the card top — same stage on all three */}
-                  <div className="pointer-events-none relative h-40 md:h-36">
+                  {/* mascot pops out of the card top — same stage on all three, still */}
+                  <div className="pointer-events-none relative h-44 md:h-40">
                     <Image
                       src={t.mascot}
                       alt={`${t.tier} — ${t.color} ${t.name} mascot`}
                       width={373}
                       height={464}
-                      sizes="(max-width: 768px) 75vw, 340px"
-                      className="rw-float absolute -top-36 left-1/2 h-72 w-auto max-w-none -translate-x-1/2 object-contain drop-shadow-[0_16px_30px_rgba(0,0,0,0.5)] md:-top-40"
-                      style={{ animationDelay: `${i * 0.6}s` }}
+                      sizes="(max-width: 768px) 80vw, 380px"
+                      className="absolute -top-40 h-80 w-auto max-w-none -translate-x-1/2 object-contain drop-shadow-[0_16px_30px_rgba(0,0,0,0.5)] md:-top-44"
+                      style={{ left: ['58%', '55%', '54%'][i] }}
                     />
+                    {/* living smoke rising off the character */}
+                    {t.theme !== 'gold' ? (
+                      <>
+                        <span aria-hidden className="rw-smoke left-[38%] -top-36" style={{ animationDelay: `${i * 1.1}s` }} />
+                        <span aria-hidden className="rw-smoke left-[52%] -top-40" style={{ animationDelay: `${i * 1.1 + 2.2}s` }} />
+                      </>
+                    ) : (
+                      <span aria-hidden className="rw-smoke left-[58%] -top-36" style={{ animationDelay: '1.6s', background: 'radial-gradient(circle, rgba(254,207,14,0.45), transparent 70%)' }} />
+                    )}
                   </div>
 
                   <div className="relative">

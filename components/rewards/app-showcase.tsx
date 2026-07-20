@@ -55,9 +55,9 @@ export default function AppShowcase() {
     <li
       key={label}
       {...{ [side === 'left' ? 'data-pill-left' : 'data-pill-right']: '' }}
-      className={`rounded-full bg-[#181818] px-7 py-4 text-sm font-extrabold uppercase tracking-wide text-white shadow-[0_0_24px_rgba(254,207,14,0.12)] ring-1 ring-white/15 will-change-transform md:text-base ${
+      className={`rounded-full bg-[#181818] px-8 py-5 text-base font-extrabold uppercase tracking-wide text-white shadow-[0_0_24px_rgba(254,207,14,0.12)] ring-1 ring-white/15 will-change-transform md:text-lg ${
         side === 'left' ? 'lg:text-right' : ''
-      } ${i === 1 ? (side === 'left' ? 'lg:-translate-x-6' : 'lg:translate-x-6') : ''}`}
+      } ${i === 1 ? (side === 'left' ? 'lg:-translate-x-8' : 'lg:translate-x-8') : ''}`}
       style={{ fontFamily: 'var(--font-brand)' }}
     >
       {label}
@@ -74,9 +74,12 @@ export default function AppShowcase() {
           lines={[{ text: 'Only on' }, { text: 'the App', accent: true }]}
         />
 
-        <div ref={gridRef} className="mt-12 grid items-center gap-8 lg:grid-cols-[1fr_auto_1fr]">
+        <div
+          ref={gridRef}
+          className="mt-12 grid items-center gap-8 lg:grid-cols-[1fr_minmax(420px,760px)_1fr]"
+        >
           <ul className="z-10 grid gap-5">{left.map((f, i) => pill(f, 'left', i))}</ul>
-          <div data-app-phone className="order-first mx-auto w-full max-w-[520px] lg:order-none lg:max-w-[760px]">
+          <div data-app-phone className="order-first mx-auto w-full max-w-[560px] lg:order-none lg:max-w-none">
             <Image
               src="/rewards/phone-glow.png"
               alt="The Jungle Boys app glowing on a phone"

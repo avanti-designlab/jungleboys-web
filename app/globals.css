@@ -290,3 +290,17 @@ body {
     pointer-events: none;
   }
 }
+
+/* rewards: ways-to-earn icon motion */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes rw-ic-tilt {
+    0%, 45%, 100% { transform: rotate(0deg); }
+    58%, 82% { transform: rotate(-10deg); }
+  }
+  .rw-ic-tilt { animation: rw-ic-tilt 3s ease-in-out infinite; transform-origin: 60% 70%; }
+  @keyframes rw-ic-pop {
+    0%, 40%, 100% { opacity: 0; transform: scale(0.3); }
+    55%, 85% { opacity: 1; transform: scale(1); }
+  }
+  .rw-ic-pop { animation: rw-ic-pop 3s ease-in-out infinite; transform-origin: center; }
+}

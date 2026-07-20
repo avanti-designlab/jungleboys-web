@@ -61,3 +61,49 @@ export function BonusIcon({ className = '' }: { className?: string }) {
     </svg>
   )
 }
+
+// ——— ways-to-earn icons (black strokes on the yellow circle chips) ———
+
+export function ReferIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" className={className} aria-hidden fill="none" stroke="#111" strokeWidth="2.8">
+      <circle cx="17" cy="17" r="6" />
+      <path d="M6 40c1.5-8 6-11 11-11s9.5 3 11 11" strokeLinecap="round" />
+      <g className="rw-ic-pop">
+        <circle cx="36" cy="15" r="4.6" />
+        <path d="M36 24.5c4 0 7 2.5 8 8.5" strokeLinecap="round" />
+        <path d="M36 4v5M33.5 6.5h5" strokeLinecap="round" strokeWidth="2.2" />
+      </g>
+    </svg>
+  )
+}
+
+export function BirthdayIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" className={className} aria-hidden fill="none">
+      <g className="rw-ic-tilt">
+        <path d="M14 44 24 20l10 14-20 10Z" fill="#111" />
+        <path d="M18 38l10-6" stroke="#fecf0e" strokeWidth="2" />
+      </g>
+      <path className="rw-ic-sparkle" d="M30 10l1.4 3 3 1.4-3 1.4-1.4 3-1.4-3-3-1.4 3-1.4 1.4-3Z" fill="#111" />
+      <path className="rw-ic-sparkle" d="M40 22l1 2.2 2.2 1-2.2 1-1 2.2-1-2.2-2.2-1 2.2-1 1-2.2Z" fill="#111" style={{ animationDelay: '0.5s' }} />
+      <circle className="rw-ic-sparkle" cx="38" cy="8" r="2.2" fill="#111" style={{ animationDelay: '1s' }} />
+      <circle className="rw-ic-sparkle" cx="44" cy="14" r="1.8" fill="#111" style={{ animationDelay: '1.4s' }} />
+    </svg>
+  )
+}
+
+export function FirstTimeIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" className={className} aria-hidden fill="none" stroke="#111" strokeWidth="2.8">
+      <circle cx="24" cy="19" r="7" />
+      <path d="M11 43c2-8.5 7-12 13-12s11 3.5 13 12" strokeLinecap="round" />
+      <path
+        className="rw-ic-pop"
+        d="M38 2l1.8 3.8L43.6 7.6l-3.8 1.8L38 13.2l-1.8-3.8-3.8-1.8 3.8-1.8L38 2Z"
+        fill="#111"
+        stroke="none"
+      />
+    </svg>
+  )
+}

@@ -19,10 +19,10 @@ export default function PointsPill({ value = 50 }: { value?: number }) {
       const state = { n: 0 }
       gsap.to(state, {
         n: value,
-        duration: 1.4,
-        ease: 'power2.out',
+        duration: 0.8,
+        ease: 'power1.out',
         snap: { n: 1 },
-        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+        scrollTrigger: { trigger: el, start: 'top 78%', once: true },
         onUpdate: () => {
           el.textContent = String(state.n)
         },

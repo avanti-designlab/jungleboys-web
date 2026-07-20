@@ -87,13 +87,12 @@ export default function EarnMore() {
               >
                 Redemption Values
               </h3>
-              <div
+              <p
                 data-reveal="fade"
-                className="mt-6 flex items-end justify-between px-4 text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--color-muted)]"
+                className="mt-6 text-center text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--color-muted)]"
               >
-                <span>What you get</span>
-                <span>Points</span>
-              </div>
+                What you get with your points
+              </p>
               <div className="mt-3 grid grid-cols-2 gap-4">
                 {REDEMPTION_VALUES.map((r) => (
                   <div

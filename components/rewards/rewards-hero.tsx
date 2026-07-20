@@ -19,6 +19,7 @@ const COIN_COUNT = 14
 export default function RewardsHero() {
   const phoneWrapRef = useRef<HTMLDivElement>(null)
   const coinsRef = useRef<HTMLDivElement>(null)
+  const bonusNumRef = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
     const wrap = phoneWrapRef.current
@@ -46,6 +47,20 @@ export default function RewardsHero() {
         onEnter: () => {
           burst()
           if (!loop) loop = setInterval(burst, 4600)
+          // the +50 pill counts up fast
+          const num = bonusNumRef.current
+          if (num) {
+            const state = { n: 0 }
+            gsap.to(state, {
+              n: 50,
+              duration: 0.8,
+              ease: 'power1.out',
+              snap: { n: 1 },
+              onUpdate: () => {
+                num.textContent = String(state.n)
+              },
+            })
+          }
         },
       })
       return () => {
@@ -101,7 +116,9 @@ export default function RewardsHero() {
               style={{ fontFamily: 'var(--font-brand)' }}
             >
               <Coin className="h-7 w-7" />
-              <span className="text-base font-extrabold tracking-tight">+50 PTS</span>
+              <span className="text-base font-extrabold tracking-tight">
+                +<span ref={bonusNumRef}>50</span> PTS
+              </span>
               <span className="text-[10px] font-bold uppercase leading-tight tracking-widest">
                 just for
                 <br />
