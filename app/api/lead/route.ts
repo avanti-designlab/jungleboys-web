@@ -45,6 +45,8 @@ export async function POST(req: Request) {
   const email = typeof body.email === 'string' ? body.email.trim().slice(0, 120) : ''
   const name = typeof body.name === 'string' ? body.name.trim().slice(0, 80) : ''
   const phone = typeof body.phone === 'string' ? body.phone.trim().slice(0, 20) : ''
+  const message = typeof body.message === 'string' ? body.message.trim().slice(0, 2000) : ''
+  const topic = typeof body.topic === 'string' ? body.topic.trim().slice(0, 40) : ''
   const sourcePage =
     typeof body.sourcePage === 'string' ? body.sourcePage.slice(0, 200) : null
 
@@ -82,7 +84,7 @@ export async function POST(req: Request) {
   }
 
   // 2) best-effort forward; record outcome
-  const status = await forwardLead({ name, email, phone })
+  const status = await forwardLead({ name, email, phone, message, topic })
   await supabaseAdmin().from('leads').update({ forwarded_status: status }).eq('id', row.id)
 
   return Response.json({ ok: true })
