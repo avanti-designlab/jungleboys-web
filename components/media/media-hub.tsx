@@ -1,12 +1,27 @@
 'use client'
 
 import Image from 'next/image'
-import { useCallback, useEffect, useState } from 'react'
-import Reveal from '@/components/reveal'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { JB_CHANNEL_URL, youtubeThumb, type Video } from '@/lib/media/youtube'
 
-// Video-first gallery: a featured hero + responsive grid. Any card opens a
-// lightbox with the privacy-enhanced YouTube embed (no cookies until play).
+// Bento video gallery: varied tile sizes (some big, some small) that cascade
+// down into place as you scroll. Any card opens a youtube-nocookie lightbox.
+
+gsap.registerPlugin(ScrollTrigger)
+
+// 12-col spans that tile cleanly in row-groups summing to 12; the first
+// (latest) tile is the big one. Cycles for longer feeds.
+const SPANS = [8, 4, 4, 4, 4, 6, 6, 4, 4, 4, 6, 6, 4, 4, 4]
+const spanClass: Record<number, string> = {
+  8: 'lg:col-span-8',
+  6: 'lg:col-span-6',
+  4: 'lg:col-span-4',
+}
+function spanFor(i: number) {
+  return spanClass[SPANS[i % SPANS.length]] ?? 'lg:col-span-4'
+}
 
 function PlayIcon({ className }: { className?: string }) {
   return (
@@ -26,9 +41,33 @@ function formatDate(iso: string) {
 
 export default function MediaHub({ videos }: { videos: Video[] }) {
   const [active, setActive] = useState<Video | null>(null)
-  const [featured, ...rest] = videos
+  const gridRef = useRef<HTMLDivElement>(null)
 
   const close = useCallback(() => setActive(null), [])
+
+  // cascade: tiles slide down from above as they scroll into view
+  useEffect(() => {
+    const grid = gridRef.current
+    if (!grid) return
+    const mm = gsap.matchMedia()
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const tiles = grid.querySelectorAll<HTMLElement>('[data-tile]')
+      gsap.set(tiles, { y: -70, autoAlpha: 0 })
+      ScrollTrigger.batch(tiles, {
+        start: 'top 92%',
+        onEnter: (batch) =>
+          gsap.to(batch, {
+            y: 0,
+            autoAlpha: 1,
+            duration: 0.7,
+            ease: 'power3.out',
+            stagger: 0.12,
+            overwrite: true,
+          }),
+      })
+    })
+    return () => mm.revert()
+  }, [videos])
 
   useEffect(() => {
     if (!active) return
@@ -60,87 +99,70 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
 
   return (
     <>
-      {/* Featured */}
-      <section className="px-6 pt-6 md:px-12 lg:px-20">
-        <Reveal>
-          <button
-            onClick={() => setActive(featured)}
-            className="group relative block w-full overflow-hidden rounded-[2rem] text-left"
-            aria-label={`Play ${featured.title}`}
-          >
-            <div className="relative aspect-video w-full">
-              <Image
-                src={youtubeThumb(featured.id, 'maxres')}
-                alt={featured.title}
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10" />
-            </div>
-            <div className="absolute inset-x-0 bottom-0 flex flex-col gap-4 p-6 md:flex-row md:items-end md:justify-between md:p-10">
-              <div className="max-w-3xl" style={{ fontFamily: 'var(--font-brand)' }}>
-                <span className="text-xs font-bold uppercase tracking-[0.25em] text-[var(--color-accent)]">
-                  Latest Episode
-                </span>
-                <h2 className="mt-2 text-2xl font-extrabold uppercase leading-tight tracking-tight text-white md:text-4xl">
-                  {featured.title}
-                </h2>
-                <p className="mt-2 text-xs uppercase tracking-wide text-white/60">
-                  {formatDate(featured.publishedAt)}
-                </p>
-              </div>
-              <span className="inline-flex shrink-0 items-center gap-3 rounded-full bg-[var(--color-accent)] py-3 pl-5 pr-6 text-black transition-transform duration-200 group-hover:scale-105">
-                <PlayIcon className="h-5 w-5" />
-                <span className="text-sm font-extrabold uppercase tracking-widest" style={{ fontFamily: 'var(--font-brand)' }}>
-                  Watch
-                </span>
-              </span>
-            </div>
-          </button>
-        </Reveal>
-      </section>
-
-      {/* Grid */}
-      <section className="px-6 py-14 md:px-12 md:py-20 lg:px-20">
-        <div className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-          {rest.map((v, i) => (
-            <Reveal key={v.id} delay={(i % 3) * 0.08}>
+      <section className="px-4 py-10 md:px-8 md:py-14 lg:px-12">
+        <div
+          ref={gridRef}
+          className="grid auto-rows-auto grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:gap-5"
+          style={{ gridAutoFlow: 'dense' }}
+        >
+          {videos.map((v, i) => {
+            const big = i === 0
+            return (
               <button
+                key={v.id}
+                data-tile
                 onClick={() => setActive(v)}
-                className="group block w-full text-left"
                 aria-label={`Play ${v.title}`}
+                className={`group relative block overflow-hidden rounded-2xl text-left will-change-transform ${
+                  big ? 'sm:col-span-2' : ''
+                } ${spanFor(i)}`}
               >
-                <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-[var(--color-surface)]">
+                <div className="relative aspect-video w-full bg-[var(--color-surface)]">
                   <Image
-                    src={v.thumbnail}
+                    src={big ? youtubeThumb(v.id, 'maxres') : v.thumbnail}
                     alt={v.title}
                     fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    priority={big}
+                    sizes={big ? '(max-width: 1024px) 100vw, 66vw' : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'}
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                  <span className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-black/60 text-white opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100">
+                  {/* readability gradient — stronger on the big tile which carries a caption */}
+                  <div
+                    className={`absolute inset-0 ${
+                      big
+                        ? 'bg-gradient-to-t from-black/85 via-black/20 to-transparent'
+                        : 'bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-80'
+                    }`}
+                  />
+                  <span className="absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--color-accent)] text-black opacity-0 shadow-[0_0_30px_rgba(254,207,14,0.5)] transition-all duration-300 group-hover:scale-110 group-hover:opacity-100">
                     <PlayIcon className="ml-0.5 h-6 w-6" />
                   </span>
+
+                  {big && (
+                    <span className="absolute left-4 top-4 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-black" style={{ fontFamily: 'var(--font-brand)' }}>
+                      Latest Episode
+                    </span>
+                  )}
+
+                  <div className="absolute inset-x-0 bottom-0 p-4 md:p-5" style={{ fontFamily: 'var(--font-brand)' }}>
+                    <h3
+                      className={`font-extrabold uppercase leading-tight tracking-wide text-white ${
+                        big ? 'line-clamp-2 text-lg md:text-2xl' : 'line-clamp-2 text-sm'
+                      }`}
+                    >
+                      {v.title}
+                    </h3>
+                    <p className="mt-1 text-[10px] uppercase tracking-wide text-white/60">
+                      {formatDate(v.publishedAt)}
+                    </p>
+                  </div>
                 </div>
-                <h3
-                  className="mt-3 line-clamp-2 text-sm font-extrabold uppercase leading-snug tracking-wide text-[var(--color-foreground)] transition-colors group-hover:text-[var(--color-accent-ink)]"
-                  style={{ fontFamily: 'var(--font-brand)' }}
-                >
-                  {v.title}
-                </h3>
-                <p className="mt-1 text-[11px] uppercase tracking-wide text-[var(--color-muted)]">
-                  {formatDate(v.publishedAt)}
-                </p>
               </button>
-            </Reveal>
-          ))}
+            )
+          })}
         </div>
       </section>
 
-      {/* Lightbox */}
       {active && (
         <div
           role="dialog"
