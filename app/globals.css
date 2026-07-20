@@ -506,3 +506,67 @@ body {
   }
   .group:hover .loc-clock-hand { animation: loc-clock-hand 3s linear infinite; transform-origin: 12px 12px; }
 }
+
+/* ============================ PHENO HUNT ============================ */
+
+/* Diagonal "HUNT WITH US" field — repeating rows on a rotated, oversized
+   layer (rotation is applied to the whole layer so the repeat stays seamless
+   in its own axis). Sits behind everything at low opacity site-wide. */
+.hunt-field {
+  position: absolute;
+  inset: -40% -20%;
+  transform: rotate(-19deg);
+  transform-origin: center;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.15em, 1.2vw, 0.55em);
+  overflow: hidden;
+}
+.hunt-row {
+  font-family: var(--font-display), sans-serif;
+  white-space: nowrap;
+  line-height: 0.9;
+  font-size: clamp(2.2rem, 5.4vw, 5.6rem);
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.055);
+  will-change: transform;
+}
+.hunt-row:nth-child(even) { color: rgba(255, 255, 255, 0.035); }
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes hunt-drift-l { from { transform: translateX(0); } to { transform: translateX(-16%); } }
+  @keyframes hunt-drift-r { from { transform: translateX(-16%); } to { transform: translateX(0); } }
+  .hunt-row:nth-child(odd)  { animation: hunt-drift-l 34s linear infinite; }
+  .hunt-row:nth-child(even) { animation: hunt-drift-r 40s linear infinite; }
+}
+
+/* Floating pheno jars — gentle GPU bob behind the logo */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes pheno-float {
+    0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); }
+    50% { transform: translateY(-16px) rotate(var(--tilt, 0deg)); }
+  }
+  .pheno-jar { animation: pheno-float var(--dur, 6s) ease-in-out var(--del, 0s) infinite; }
+}
+
+/* Nugs burst from behind the logo (GSAP-driven); hidden until they pop, but
+   shown at rest for reduced-motion users. */
+.pheno-nug { opacity: 0; will-change: transform; }
+@media (prefers-reduced-motion: reduce) {
+  .pheno-nug { opacity: 1 !important; }
+}
+
+/* Logo drop-in on load */
+@keyframes pheno-logo-in {
+  0% { opacity: 0; transform: translateY(40px) scale(0.94); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.pheno-logo-in { animation: pheno-logo-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both; }
+
+/* Scroll reveal for the yellow pill + form (shares the .is-in toggle) */
+.pheno-reveal { opacity: 0; transform: translateY(36px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.pheno-reveal.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .pheno-reveal { opacity: 1; transform: none; transition: none; }
+  .pheno-logo-in { animation: none; }
+}

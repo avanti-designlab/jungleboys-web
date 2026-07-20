@@ -30,7 +30,7 @@ const OVERLAY_SOCIALS = [
 
 // Routes that pin themselves dark regardless of theme — the condensed pill
 // inverts to white there so it stays visible.
-const DARK_PAGES = ['/rewards']
+const DARK_PAGES = ['/rewards', '/phenos']
 
 function UserIcon({ className }: { className: string }) {
   return (
