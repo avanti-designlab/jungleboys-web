@@ -30,7 +30,7 @@ const CITIES = [
 // 100+ stores; address/zip search (OpenStreetMap geocoder) auto-suggests for
 // accuracy, and "use my location" centers on the visitor. Click a pin → preview.
 
-type Geo = { label: string; lat: number; lng: number }
+type Geo = { label: string; lat: number; lng: number; store?: Retailer }
 
 function haversine(a: [number, number], b: [number, number]) {
   const R = 3958.8
@@ -141,10 +141,18 @@ export default function ProductFinderMap() {
   // address/zip autocomplete (debounced) via OpenStreetMap
   useEffect(() => {
     const q = query.trim()
-    if (q.length < 3) {
+    if (q.length < 2) {
       setSuggests([])
       return
     }
+    // instant local matches: store name or address contains the query
+    const ql = q.toLowerCase()
+    const local: Geo[] = STORES.filter((s) => s.name.toLowerCase().includes(ql) || s.address.toLowerCase().includes(ql))
+      .slice(0, 4)
+      .map((s) => ({ label: `${s.name} · ${s.address}`, lat: s.lat, lng: s.lng, store: s }))
+    setSuggests(local)
+
+    // + address/place suggestions from the geocoder (debounced)
     const ctrl = new AbortController()
     const t = setTimeout(async () => {
       try {
@@ -153,9 +161,10 @@ export default function ProductFinderMap() {
           { signal: ctrl.signal, headers: { Accept: 'application/json' } }
         )
         const data: Array<{ display_name: string; lat: string; lon: string }> = await res.json()
-        setSuggests(data.map((d) => ({ label: d.display_name, lat: +d.lat, lng: +d.lon })))
+        const places: Geo[] = data.map((d) => ({ label: d.display_name, lat: +d.lat, lng: +d.lon }))
+        setSuggests([...local, ...places])
       } catch {
-        /* aborted or offline */
+        /* aborted or offline — local matches still show */
       }
     }, 300)
     return () => {
@@ -207,9 +216,9 @@ export default function ProductFinderMap() {
         {/* bold stat + California-cities marquee band */}
         <div className="mb-6 overflow-hidden rounded-[1.5rem] bg-[#0b0b0d] md:rounded-[2rem]" data-nav-theme="dark">
           <div className="flex flex-col items-center gap-3 px-6 py-6 sm:flex-row sm:justify-between md:px-10 md:py-7">
-            <div className="flex items-baseline gap-3">
-              <span className="font-display text-6xl leading-none text-[var(--color-accent)] md:text-7xl">{count}</span>
-              <span className="font-display text-2xl uppercase leading-none text-white md:text-3xl">
+            <div className="flex items-center gap-4">
+              <span className="font-display text-7xl leading-[0.8] text-[var(--color-accent)] md:text-8xl">{count}</span>
+              <span className="font-display text-2xl uppercase leading-[0.95] text-white md:text-3xl">
                 Stockists
                 <br />
                 Across California
@@ -251,10 +260,22 @@ export default function ProductFinderMap() {
                 {suggests.map((s, i) => (
                   <li key={i}>
                     <button
-                      onClick={() => locateTo(s.lat, s.lng, s.label)}
-                      className="block w-full px-5 py-3 text-left text-sm text-[var(--color-foreground)] transition hover:bg-[var(--color-accent)] hover:text-black"
+                      onClick={() => {
+                        if (s.store) {
+                          setActive(s.store)
+                          locateTo(s.lat, s.lng, s.store.name)
+                        } else {
+                          locateTo(s.lat, s.lng, s.label)
+                        }
+                      }}
+                      className="flex w-full items-center gap-3 px-5 py-3 text-left text-sm text-[var(--color-foreground)] transition hover:bg-[var(--color-accent)] hover:text-black"
                     >
-                      {s.label}
+                      {s.store && (
+                        <span className="shrink-0 rounded-full bg-[var(--color-accent)] px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-widest text-black" style={{ fontFamily: 'var(--font-brand)' }}>
+                          Store
+                        </span>
+                      )}
+                      <span className="line-clamp-1">{s.label}</span>
                     </button>
                   </li>
                 ))}
