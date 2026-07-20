@@ -15,14 +15,9 @@ function StoreCard({ s }: { s: OwnedStore }) {
   const linkProps = s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {}
   return (
     <div className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.6rem] border border-[var(--color-border)] bg-[var(--color-surface)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[var(--color-accent)] hover:shadow-[0_36px_90px_-32px_rgba(254,207,14,0.5)]">
-      {/* light "paper" canvas so the black line-art illustration reads; the
+      {/* neutral light canvas so the black line-art illustration reads; the
           square illustration fills the card edge-to-edge */}
-      <div className="relative aspect-square w-full overflow-hidden bg-[#f4f3ee]">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-          style={{ background: 'radial-gradient(circle at 50% 45%, rgba(254,207,14,0.18), transparent 62%)' }}
-        />
+      <div className="relative aspect-square w-full overflow-hidden bg-[#f5f5f5]">
         <Image
           src={s.image}
           alt={`${s.name} — Jungle Boys`}
