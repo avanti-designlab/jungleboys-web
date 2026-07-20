@@ -98,22 +98,20 @@ export default function AppShowcase() {
 
         <div
           ref={gridRef}
-          className="mt-12 grid items-center gap-8 lg:grid-cols-[1fr_minmax(420px,760px)_1fr]"
+          className="mt-12 grid items-center gap-8 lg:grid-cols-[1fr_minmax(420px,560px)_1fr]"
         >
-          {/* the phone art carries wide transparent glow margins — the pill rails
-              overlap them (negative margins) so pills hug the phone itself */}
-          <ul className="z-0 grid gap-5 lg:-mr-28 xl:-mr-36">{left.map((f, i) => pill(f, 'left', i))}</ul>
-          <div data-app-phone className="relative z-20 order-first mx-auto w-full max-w-[560px] lg:order-none lg:max-w-none">
+          <ul className="z-0 grid gap-5 lg:-mr-10">{left.map((f, i) => pill(f, 'left', i))}</ul>
+          <div data-app-phone className="relative z-20 order-first mx-auto w-full max-w-[440px] lg:order-none lg:max-w-none">
             <Image
               src="/rewards/phone-glow.png"
               alt="The Jungle Boys app glowing on a phone"
-              width={1005}
-              height={1004}
-              sizes="(max-width: 1024px) 85vw, 760px"
+              width={608}
+              height={731}
+              sizes="(max-width: 1024px) 70vw, 560px"
               className="w-full"
             />
           </div>
-          <ul className="z-0 grid gap-5 lg:-ml-28 xl:-ml-36">{right.map((f, i) => pill(f, 'right', i))}</ul>
+          <ul className="z-0 grid gap-5 lg:-ml-10">{right.map((f, i) => pill(f, 'right', i))}</ul>
         </div>
 
         <div className="mt-24 text-center">
