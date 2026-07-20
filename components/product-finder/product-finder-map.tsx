@@ -58,6 +58,7 @@ export default function ProductFinderMap() {
   const [locating, setLocating] = useState(false)
   const [count, setCount] = useState(0)
   const [ctaHidden, setCtaHidden] = useState(false)
+  const [geoError, setGeoError] = useState('')
 
   // count the store total up on mount (rAF for the smooth count; a timeout
   // failsafe guarantees the final number even where rAF is throttled)
@@ -88,8 +89,11 @@ export default function ProductFinderMap() {
 
       const map = L.map(mapEl.current, { scrollWheelZoom: false, zoomControl: true })
       mapObj.current = map
-      // dismiss the idle CTA the moment the visitor interacts with the map
-      map.on('movestart zoomstart click', () => setCtaHidden(true))
+      // dismiss the idle CTA on USER interaction only — the initial fitBounds
+      // also fires movestart/zoomstart, so guard until it has settled.
+      let ready = false
+      map.on('dragstart click', () => ready && setCtaHidden(true))
+      map.on('zoomstart', () => ready && setCtaHidden(true))
       L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         subdomains: 'abcd',
         maxZoom: 19,
@@ -133,6 +137,9 @@ export default function ProductFinderMap() {
       }
       fit()
       setTimeout(fit, 300)
+      setTimeout(() => {
+        ready = true
+      }, 900)
     })()
     return () => {
       cancelled = true
@@ -201,14 +208,25 @@ export default function ProductFinderMap() {
   }, [])
 
   function useMyLocation() {
-    if (!navigator.geolocation) return
+    setGeoError('')
+    if (!navigator.geolocation) {
+      setGeoError('Location isn’t available on this device — search your address instead.')
+      return
+    }
     setLocating(true)
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setLocating(false)
         locateTo(pos.coords.latitude, pos.coords.longitude, 'My current location')
       },
-      () => setLocating(false),
+      (err) => {
+        setLocating(false)
+        setGeoError(
+          err.code === err.PERMISSION_DENIED
+            ? 'Location access was blocked — allow it in your browser, or search your address.'
+            : 'Couldn’t get your location — search your address instead.'
+        )
+      },
       { enableHighAccuracy: true, timeout: 10000 }
     )
   }
@@ -296,6 +314,12 @@ export default function ProductFinderMap() {
             {locating ? 'Locating…' : 'Use my location'}
           </button>
         </div>
+
+        {geoError && (
+          <p className="mb-4 text-sm font-medium text-red-500" role="alert">
+            {geoError}
+          </p>
+        )}
 
         {/* full-width map with a floating results panel */}
         <div
