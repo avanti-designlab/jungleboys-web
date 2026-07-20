@@ -441,3 +441,29 @@ body {
   }
   .ws-media-zoom { animation: ws-media-zoom 18s ease-in-out infinite; }
 }
+
+/* product finder map: clusters, smaller pins, "you" marker */
+.jb-cluster {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 9999px;
+  background: #fecf0e;
+  color: #000;
+  font-family: var(--font-brand), sans-serif;
+  font-weight: 800;
+  font-size: 15px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), 0 0 0 6px rgba(254, 207, 14, 0.25);
+}
+.jb-pin--sm { width: 34px; height: 34px; }
+.jb-pin--sm .jb-pin-badge { width: 28px; height: 28px; }
+.jb-pin--sm .jb-pin-badge img { width: 18px; height: 18px; }
+.jb-me {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #3b82f6;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.3);
+}

@@ -15,7 +15,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  `connect-src 'self' https://api.storyblok.com${isDev ? " ws:" : ""}`,
+  `connect-src 'self' https://api.storyblok.com https://nominatim.openstreetmap.org${isDev ? " ws:" : ""}`,
   "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com",
   "frame-ancestors 'self'",
   "base-uri 'self'",
