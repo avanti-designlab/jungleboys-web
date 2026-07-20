@@ -32,6 +32,15 @@ const OVERLAY_SOCIALS = [
 // inverts to white there so it stays visible.
 const DARK_PAGES = ['/rewards']
 
+function UserIcon({ className }: { className: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className} aria-hidden>
+      <circle cx="12" cy="8.5" r="3.75" />
+      <path d="M4.5 20c0-3.9 3.4-6 7.5-6s7.5 2.1 7.5 6" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 export default function SiteNav() {
   const [open, setOpen] = useState(false)
   const [condensed, setCondensed] = useState(false)
@@ -214,6 +223,15 @@ export default function SiteNav() {
 
           {!open && (
             <div className="flex items-center gap-3">
+              <Link
+                href="/login"
+                aria-label="Log in to your account"
+                className={`flex h-12 w-12 items-center justify-center rounded-full border-2 transition-transform duration-200 hover:scale-105 ${
+                  headerDark ? 'border-white text-white' : 'border-black text-black'
+                }`}
+              >
+                <UserIcon className="h-5 w-5" />
+              </Link>
               <PillCta label="Verify Products" href="/verify" />
               <div
                 className={`flex items-center gap-4 rounded-full border-2 px-5 py-3 transition-colors duration-300 ${
@@ -271,6 +289,15 @@ export default function SiteNav() {
               />
             </Link>
             <span className={`h-5 w-px ${onDarkPage ? 'bg-black/20' : 'bg-white/20'}`} aria-hidden />
+            <Link
+              href="/login"
+              aria-label="Log in to your account"
+              className={`flex h-8 w-8 items-center justify-center rounded-full border transition-transform duration-200 hover:scale-110 ${
+                onDarkPage ? 'border-black text-black' : 'border-white text-white'
+              }`}
+            >
+              <UserIcon className="h-4 w-4" />
+            </Link>
             <PillCta label="Verify Products" href="/verify" size="sm" className="hidden sm:inline-flex" />
             <div className="hidden items-center gap-3 sm:flex">
               {HEADER_SOCIALS.map((s) => (
