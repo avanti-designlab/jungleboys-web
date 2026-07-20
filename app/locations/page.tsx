@@ -80,27 +80,31 @@ export default function LocationsPage() {
         </div>
       </section>
 
-      {/* heading */}
-      <section className="px-4 pt-16 text-center md:px-8 md:pt-24 lg:px-12">
-        <span
-          className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-[var(--color-muted)]"
-          style={{ fontFamily: 'var(--font-brand)' }}
-        >
-          <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-[var(--color-accent)]" />
-          Come Through
-        </span>
-        <h2 className="mt-5 font-display text-6xl uppercase leading-[0.85] text-[var(--color-foreground)] md:text-8xl">
-          Visit the <span className="text-[var(--color-accent-ink)]">Jungle</span>
-        </h2>
-        <div
-          className="mt-7 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm font-bold uppercase tracking-widest text-[var(--color-muted)] md:text-base"
-          style={{ fontFamily: 'var(--font-brand)' }}
-        >
-          <span className="text-[var(--color-foreground)]">{OWNED_STORES.length} Locations</span>
-          <span className="text-[var(--color-accent)]">◆</span>
-          <span>California &amp; Florida</span>
-          <span className="text-[var(--color-accent)]">◆</span>
-          <span>Doors Open Daily</span>
+      {/* scrolling marquee — big Bebas, replaces the old static heading */}
+      <section className="overflow-hidden py-10 md:py-14" aria-label={`${OWNED_STORES.length} locations across California and Florida`}>
+        <div className="flex w-max">
+          {[0, 1].map((dup) => (
+            <div key={dup} className="marquee-track flex shrink-0 items-center" aria-hidden={dup === 1}>
+              {[
+                `${OWNED_STORES.length} Locations`,
+                'California & Florida',
+                'Doors Open Daily',
+                'Visit the Jungle',
+              ]
+                .concat([
+                  `${OWNED_STORES.length} Locations`,
+                  'California & Florida',
+                  'Doors Open Daily',
+                  'Visit the Jungle',
+                ])
+                .map((phrase, i) => (
+                  <span key={i} className="flex items-center">
+                    <span className="font-display text-6xl uppercase leading-none text-[var(--color-foreground)] md:text-8xl">{phrase}</span>
+                    <span className="mx-8 text-4xl text-[var(--color-accent)] md:mx-12 md:text-5xl">◆</span>
+                  </span>
+                ))}
+            </div>
+          ))}
         </div>
       </section>
 

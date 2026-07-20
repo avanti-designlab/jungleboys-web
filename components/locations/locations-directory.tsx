@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef } from 'react'
 import { CA_OWNED, FL_OWNED, type OwnedStore } from '@/lib/owned-stores'
+import StateMiniMap from './state-mini-map'
 
 // Locations directory — the hand-drawn store illustrations grouped under animated
 // California / Florida postcard headers. Reveals via a scroll handler toggling
@@ -14,8 +15,9 @@ function StoreCard({ s }: { s: OwnedStore }) {
   const linkProps = s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {}
   return (
     <div className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.6rem] border border-[var(--color-border)] bg-[var(--color-surface)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[var(--color-accent)] hover:shadow-[0_36px_90px_-32px_rgba(254,207,14,0.5)]">
-      {/* light "paper" canvas so the black line-art illustration reads */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#f4f3ee]">
+      {/* light "paper" canvas so the black line-art illustration reads; the
+          square illustration fills the card edge-to-edge */}
+      <div className="relative aspect-square w-full overflow-hidden bg-[#f4f3ee]">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
@@ -26,19 +28,19 @@ function StoreCard({ s }: { s: OwnedStore }) {
           alt={`${s.name} — Jungle Boys`}
           fill
           sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
-          className="object-contain p-3 transition-transform duration-500 group-hover:scale-[1.06]"
+          className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
         />
       </div>
       <div className="flex flex-1 flex-col p-5">
         <h3 className="font-display text-2xl uppercase leading-none text-[var(--color-foreground)] md:text-3xl">{s.name}</h3>
         <p className="mt-3 flex items-start gap-2 text-sm leading-relaxed text-[var(--color-muted)]">
-          <svg viewBox="0 0 24 24" className="loc-pin mt-0.5 h-4 w-4 shrink-0 text-[var(--color-accent-ink)]" fill="currentColor" aria-hidden>
+          <svg viewBox="0 0 24 24" className="loc-pin mt-0.5 h-4 w-4 shrink-0 text-[var(--color-foreground)]" fill="currentColor" aria-hidden>
             <path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z" />
           </svg>
           {s.address}
         </p>
         <p className="mt-1.5 flex items-start gap-2 text-xs uppercase tracking-wide text-[var(--color-muted)]">
-          <svg viewBox="0 0 24 24" className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-accent-ink)]" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+          <svg viewBox="0 0 24 24" className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-foreground)]" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
             <circle cx="12" cy="12" r="9" />
             <line className="loc-clock-hand" x1="12" y1="12" x2="12" y2="7.5" strokeLinecap="round" />
             <line x1="12" y1="12" x2="15" y2="13.5" strokeLinecap="round" />
@@ -78,10 +80,14 @@ function StateSection({ postcard, alt, stores }: { postcard: string; alt: string
           {/* eslint-disable-next-line @next/next/no-img-element -- illustrated postcard header */}
           <img src={postcard} alt={alt} className="loc-postcard h-auto w-[min(90vw,720px)]" />
         </div>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {stores.map((s) => (
             <StoreCard key={s.slug} s={s} />
           ))}
+          {/* fills the empty grid slot + adds life: a mini map of this state's stores */}
+          <div className="media-reveal">
+            <StateMiniMap stores={stores} label={`${alt} Stores`} />
+          </div>
         </div>
       </div>
     </section>
