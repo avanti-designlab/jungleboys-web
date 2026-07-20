@@ -48,31 +48,34 @@ export default async function MediaPage() {
 
       <h1 className="sr-only">Media — Jungle Boys Films</h1>
 
-      {/* full-width rounded character banner (brand surface, dark in both themes) */}
-      <section className="px-2 pt-24 md:px-3 md:pt-28">
+      {/* full-width rounded character banner — sits near the top; the character
+          is pushed down so it clears the sticky header. Dark in both themes. */}
+      <section className="px-2 pt-2 md:px-3">
         <div
           data-nav-theme="dark"
-          className="relative overflow-hidden rounded-[1.75rem] bg-[#0d0d0d] px-6 py-12 text-center md:rounded-[2.5rem] md:py-16"
+          className="relative flex items-end justify-center overflow-hidden rounded-[1.75rem] bg-[#0d0d0d] px-6 pb-10 pt-28 md:min-h-[520px] md:rounded-[2.5rem] md:pt-32"
         >
-          {/* accent spotlight behind the character */}
           <div
             aria-hidden
-            className="pointer-events-none absolute left-1/2 top-1/2 h-[130%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-40 blur-3xl"
+            className="pointer-events-none absolute left-1/2 top-[58%] h-[130%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-40 blur-3xl"
             style={{ background: 'radial-gradient(circle, rgba(254,207,14,0.25), transparent 60%)' }}
           />
-          <p
-            className="relative text-xs font-bold uppercase tracking-[0.35em] text-[var(--color-accent)] md:text-sm"
-            style={{ fontFamily: 'var(--font-brand)' }}
-          >
-            The Culture Runs Deep
-          </p>
           <img
             src="/media/media-character.png"
             alt="Jungle Boys Media"
-            className="rw-breathe relative mx-auto mt-6 w-[min(78vw,480px)]"
+            className="rw-breathe relative w-[min(72vw,440px)]"
           />
+        </div>
+      </section>
+
+      {/* headline row: big header left, subtext right */}
+      <section className="px-4 pt-10 md:px-8 lg:px-12">
+        <div className="mx-auto grid max-w-6xl items-center gap-4 md:grid-cols-[1.15fr_1fr] md:gap-10">
+          <h2 className="font-display text-5xl uppercase leading-[0.9] text-[var(--color-foreground)] md:text-7xl">
+            The Culture Runs Deep
+          </h2>
           <p
-            className="relative mx-auto mt-6 max-w-xl text-sm uppercase leading-relaxed tracking-wide text-white/70 md:text-base"
+            className="text-sm uppercase leading-relaxed tracking-wide text-[var(--color-muted)] md:text-base"
             style={{ fontFamily: 'var(--font-brand)' }}
           >
             Documentaries, drops, and the hunt — straight from the jungle. New
@@ -81,7 +84,7 @@ export default async function MediaPage() {
               href={JB_CHANNEL_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[var(--color-accent)] underline underline-offset-2"
+              className="text-[var(--color-accent-ink)] underline underline-offset-2"
             >
               @JungleBoysfilms
             </a>

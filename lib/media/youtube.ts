@@ -16,7 +16,23 @@ export type Video = {
   publishedAt: string // ISO
   watchUrl: string
   embedUrl: string // privacy-enhanced nocookie embed
+  vertical?: boolean // Short / 9:16
   featured?: boolean
+}
+
+// YouTube generates an "original aspect ratio" thumbnail (oardefault.jpg) only
+// for non-16:9 videos — i.e. vertical Shorts. Its presence flags orientation
+// and doubles as the 9:16 thumbnail.
+export function oarThumb(id: string) {
+  return `https://i.ytimg.com/vi/${id}/oardefault.jpg`
+}
+async function isVertical(id: string): Promise<boolean> {
+  try {
+    const res = await fetch(oarThumb(id), { method: 'HEAD', next: { revalidate: 86400 } })
+    return res.ok
+  } catch {
+    return false
+  }
 }
 
 function decodeEntities(s: string): string {
@@ -55,19 +71,26 @@ export async function fetchYouTubeUploads(): Promise<Video[]> {
     if (!res.ok) return []
     const xml = await res.text()
     const entries = xml.split('<entry>').slice(1)
-    return entries.map((block) => {
-      const id = tag(block, 'yt:videoId')
-      return {
-        id,
-        source: 'youtube' as const,
-        title: tag(block, 'media:title') || tag(block, 'title'),
-        description: tag(block, 'media:description'),
-        thumbnail: youtubeThumb(id),
-        publishedAt: tag(block, 'published'),
-        watchUrl: `https://www.youtube.com/watch?v=${id}`,
-        embedUrl: toEmbed(id),
-      }
-    }).filter((v) => v.id)
+    const parsed = entries
+      .map((block) => {
+        const id = tag(block, 'yt:videoId')
+        return {
+          id,
+          source: 'youtube' as const,
+          title: tag(block, 'media:title') || tag(block, 'title'),
+          description: tag(block, 'media:description'),
+          thumbnail: youtubeThumb(id),
+          publishedAt: tag(block, 'published'),
+          watchUrl: `https://www.youtube.com/watch?v=${id}`,
+          embedUrl: toEmbed(id),
+        }
+      })
+      .filter((v) => v.id)
+    // tag orientation + use the 9:16 thumbnail for verticals
+    const verticals = await Promise.all(parsed.map((v) => isVertical(v.id)))
+    return parsed.map((v, i) =>
+      verticals[i] ? { ...v, vertical: true, thumbnail: oarThumb(v.id) } : v
+    )
   } catch {
     return []
   }
