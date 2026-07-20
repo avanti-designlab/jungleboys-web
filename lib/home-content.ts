@@ -29,9 +29,9 @@ export const HERO_SLIDES = [
     title: 'GOLD MYLARS',
     cta: 'Shop now',
     href: '/products',
-    image: `${CDN}/69b9a8dd0896bcf8850494fb_JB%20GOLD%20MYLAR%20WEB%20BANNER%20Horizontal%201.jpg`,
+    image: '/hero/gold-mylar-skyline.jpg',
     imageMobile: undefined,
-    alt: 'Gold Mylars 20 year anniversary edition banner',
+    alt: 'Gold Jungle Boys mylar bag towering over the LA skyline at sunset',
   },
 ] as { kicker: string; title: string; cta: string; href: string; image: string; imageMobile?: string; alt: string }[]
 
