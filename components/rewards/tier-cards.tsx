@@ -68,9 +68,11 @@ export default function TierCards() {
                       sizes="(max-width: 768px) 80vw, 380px"
                       className="absolute h-auto max-w-none -translate-x-1/2 object-contain drop-shadow-[0_16px_30px_rgba(0,0,0,0.5)]"
                       style={{
-                        left: ['58%', '55%', '54%'][i],
+                        // plate centers measured from the art (PIL) — plates land
+                        // dead-center, 30px below each card's top edge
+                        left: ['50%', 'calc(50% - 12px)', '50%'][i],
                         height: ['368px', '320px', '280px'][i],
-                        top: ['-246px', '-204px', '-168px'][i],
+                        top: ['-274px', '-229px', '-201px'][i],
                       }}
                     />
                     {/* living smoke rising off the character */}
