@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react'
 import 'leaflet/dist/leaflet.css'
 import type { Map as LeafletMap } from 'leaflet'
-import { BRAND_ASSETS } from '@/lib/site-config'
 import type { OwnedStore } from '@/lib/owned-stores'
 
 // Small dark map that fills the empty grid slot for each state — gold JB pins on
@@ -26,7 +25,7 @@ export default function StateMiniMap({ stores, label }: { stores: OwnedStore[]; 
         L.marker([s.lat, s.lng], {
           icon: L.divIcon({
             className: '',
-            html: `<div class="jb-pin jb-pin--sm"><span class="jb-pin-pulse"></span><span class="jb-pin-badge"><img src="${BRAND_ASSETS.logoBlack}" alt="" /></span></div>`,
+            html: `<div class="jb-pin jb-pin--sm"><span class="jb-pin-pulse"></span><span class="jb-pin-mark"></span></div>`,
             iconSize: [30, 30],
             iconAnchor: [15, 15],
           }),

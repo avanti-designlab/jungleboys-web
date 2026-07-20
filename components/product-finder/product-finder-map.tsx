@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import type { Map as LeafletMap, Marker } from 'leaflet'
-import { BRAND_ASSETS } from '@/lib/site-config'
 import { RETAILERS, type Retailer } from '@/lib/product-finder/retailers'
 
 // California only on the finder map (FL has its own site/team)
@@ -115,7 +114,7 @@ export default function ProductFinderMap() {
       STORES.forEach((r) => {
         const icon = L.divIcon({
           className: '',
-          html: `<div class="jb-pin jb-pin--sm"><span class="jb-pin-pulse"></span><span class="jb-pin-badge"><img src="${BRAND_ASSETS.logoBlack}" alt="" /></span></div>`,
+          html: `<div class="jb-pin jb-pin--sm"><span class="jb-pin-pulse"></span><span class="jb-pin-mark"></span></div>`,
           iconSize: [34, 34],
           iconAnchor: [17, 17],
         })

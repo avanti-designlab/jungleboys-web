@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import 'leaflet/dist/leaflet.css'
 import type { Map as LeafletMap } from 'leaflet'
-import { BRAND_ASSETS } from '@/lib/site-config'
 import { CA_STORES, type Store } from '@/lib/locations'
 
 // Full-width dark charcoal locations map. Gold pulsating JB pins (CARTO dark
@@ -41,7 +40,7 @@ export default function LocationsMap() {
       const markers = CA_STORES.map((store) => {
         const icon = L.divIcon({
           className: '',
-          html: `<div class="jb-pin" data-slug="${store.slug}"><span class="jb-pin-pulse"></span><span class="jb-pin-badge"><img src="${BRAND_ASSETS.logoBlack}" alt="" /></span></div>`,
+          html: `<div class="jb-pin" data-slug="${store.slug}"><span class="jb-pin-pulse"></span><span class="jb-pin-mark"></span></div>`,
           iconSize: [46, 46],
           iconAnchor: [23, 23],
         })
