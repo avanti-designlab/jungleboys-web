@@ -280,8 +280,8 @@ export default function ProductFinderMap() {
         >
           <div ref={mapEl} className="h-[68vh] min-h-[480px] w-full" style={{ background: '#0b0b0d' }} />
 
-          {/* bold idle-state CTA (clears once a search runs) */}
-          {nearest.length === 0 && (
+          {/* bold idle-state CTA (clears once a store is picked or a search runs) */}
+          {nearest.length === 0 && !active && (
             <div className="pointer-events-none absolute inset-0 z-[400] flex items-end justify-center pb-10 md:items-center md:pb-0">
               <div className="rounded-2xl border border-white/10 bg-black/55 px-7 py-5 text-center backdrop-blur-sm">
                 <p className="font-display text-3xl uppercase leading-none text-white md:text-5xl">Find your closest drop</p>
@@ -292,7 +292,7 @@ export default function ProductFinderMap() {
             </div>
           )}
 
-          {nearest.length > 0 && (
+          {(active || nearest.length > 0) && (
             <div className="pointer-events-none absolute inset-x-3 bottom-3 z-[500] md:inset-y-4 md:left-auto md:right-4 md:w-[360px]">
               <div className="pointer-events-auto flex max-h-[60vh] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111114]/95 shadow-2xl backdrop-blur-md">
                 {active && (
@@ -313,9 +313,11 @@ export default function ProductFinderMap() {
                     </a>
                   </div>
                 )}
-                <p className="px-4 pb-1 pt-3 text-[10px] font-bold uppercase tracking-widest text-white/45" style={{ fontFamily: 'var(--font-brand)' }}>
-                  Nearest stores
-                </p>
+                {nearest.length > 0 && (
+                  <p className="px-4 pb-1 pt-3 text-[10px] font-bold uppercase tracking-widest text-white/45" style={{ fontFamily: 'var(--font-brand)' }}>
+                    Nearest stores
+                  </p>
+                )}
                 <ul className="overflow-y-auto p-2 pt-1">
                   {nearest.map((r) => (
                     <li key={r.name + r.address}>

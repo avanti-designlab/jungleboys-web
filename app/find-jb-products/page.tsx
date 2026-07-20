@@ -50,7 +50,7 @@ export default function ProductFinderPage() {
           {/* giant wordmark — drops in letter-by-letter, below the header */}
           <span
             aria-hidden
-            className="font-display pointer-events-none absolute left-1/2 top-[86px] z-0 -translate-x-1/2 whitespace-nowrap uppercase leading-none text-white/90 md:top-[104px]"
+            className="font-display pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap uppercase leading-none text-white/90"
             style={{ fontSize: 'min(20.5vw, 500px)' }}
           >
             {'PRODUCT FINDER'.split('').map((ch, i) => (
