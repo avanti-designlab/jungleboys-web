@@ -106,21 +106,48 @@ export default function ContactConsole({ consentText }: { consentText: string })
     'w-full rounded-full border border-white/15 bg-white/[0.04] px-5 py-3.5 text-[15px] text-white placeholder:text-white/35 outline-none transition focus:border-[var(--tint)] focus:bg-white/[0.07] focus:ring-2 focus:ring-[var(--tint)]/30'
 
   return (
-    <div ref={rootRef} className="mx-auto max-w-[1100px] px-4 pb-20 md:px-8">
-      {/* headline row */}
-      <div className="grid items-end gap-4 pb-8 md:grid-cols-[1.2fr_1fr] md:gap-10 md:pb-12">
-        <h1 className="media-reveal font-display text-6xl uppercase leading-[0.85] text-[var(--color-foreground)] md:text-8xl">
+    <div ref={rootRef} className="mx-auto grid max-w-[1300px] items-start gap-10 px-4 pb-20 md:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14">
+      {/* LEFT — big headline + tagline + quick links */}
+      <div className="lg:sticky lg:top-28">
+        <h1 className="media-reveal font-display text-7xl uppercase leading-[0.82] text-[var(--color-foreground)] md:text-8xl xl:text-9xl">
           Get In <span className="text-[var(--color-accent-ink)]">Touch</span>
         </h1>
         <p
-          className="media-reveal text-sm uppercase leading-relaxed tracking-wide text-[var(--color-muted)] md:text-base"
+          className="media-reveal mt-6 max-w-sm text-sm uppercase leading-relaxed tracking-wide text-[var(--color-muted)] md:text-base"
           style={{ fontFamily: 'var(--font-brand)' }}
         >
           Questions, collabs, or business? Pick a lane and tap in — we read every message.
         </p>
+
+        <div className="media-reveal mt-8 flex flex-wrap gap-3">
+          {QUICK_LINKS.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="rounded-full border border-[var(--color-border)] px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-[var(--color-foreground)] transition hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-black"
+              style={{ fontFamily: 'var(--font-brand)' }}
+            >
+              {l.label}
+            </Link>
+          ))}
+        </div>
+        <div className="media-reveal mt-4 flex items-center gap-3">
+          {SOCIALS.map((s) => (
+            <a
+              key={s.label}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={s.label}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-foreground)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent-ink)] [&_svg]:h-4 [&_svg]:w-4"
+            >
+              {s.icon}
+            </a>
+          ))}
+        </div>
       </div>
 
-      {/* dark console */}
+      {/* RIGHT — dark console */}
       <div
         className="media-reveal overflow-hidden rounded-[2rem] border border-white/10 bg-[#0c0c0f] p-5 shadow-[0_40px_120px_-40px_rgba(0,0,0,0.8)] md:p-8"
         style={{ ['--tint' as string]: active.color }}
@@ -236,36 +263,6 @@ export default function ContactConsole({ consentText }: { consentText: string })
             </div>
           </form>
         )}
-      </div>
-
-      {/* quick links + socials row */}
-      <div className="media-reveal mt-6 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-wrap gap-3">
-          {QUICK_LINKS.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className="rounded-full border border-[var(--color-border)] px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-[var(--color-foreground)] transition hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-black"
-              style={{ fontFamily: 'var(--font-brand)' }}
-            >
-              {l.label}
-            </Link>
-          ))}
-        </div>
-        <div className="flex items-center gap-3">
-          {SOCIALS.map((s) => (
-            <a
-              key={s.label}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={s.label}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-foreground)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent-ink)] [&_svg]:h-4 [&_svg]:w-4"
-            >
-              {s.icon}
-            </a>
-          ))}
-        </div>
       </div>
     </div>
   )

@@ -41,64 +41,35 @@ export default async function ContactPage() {
         }}
       />
 
-      {/* character banner — same treatment/size as the media page. Lit "stage":
-          spotlight cone, warm glow, embers, vignette; the JB hunter stands in it. */}
+      {/* character banner — matches the live design: JB hunter with a phone +
+          CONTACT plate on the graffiti mural. Media-style rounded banner, size
+          + load zoom to match. */}
       <section data-contact-banner className="px-2 pt-2 md:px-3">
         <div
           data-nav-theme="dark"
-          className="media-hero-in relative flex items-end justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 pb-6 pt-24 md:min-h-[460px] md:rounded-[2.5rem] md:pt-24"
+          className="media-hero-in relative flex items-end justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 pt-16 md:min-h-[480px] md:rounded-[2.5rem]"
         >
-          {/* spotlight cone */}
-          <div
+          {/* graffiti mural background */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}
+          <img
+            src="/contact/contact-bg.jpg"
+            alt=""
             aria-hidden
-            className="pointer-events-none absolute -top-1/3 left-1/2 h-[150%] w-[70%] -translate-x-1/2"
-            style={{
-              background:
-                'conic-gradient(from 180deg at 50% 0%, transparent 158deg, rgba(254,207,14,0.16) 174deg, rgba(255,238,190,0.22) 180deg, rgba(254,207,14,0.16) 186deg, transparent 202deg)',
-            }}
+            data-contact-bg
+            className="absolute inset-0 h-full w-full scale-110 object-cover object-center will-change-transform"
           />
-          {/* warm floor glow */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute bottom-[-30%] left-1/2 h-[95%] w-[92%] -translate-x-1/2 rounded-[100%] opacity-70 blur-3xl"
-            style={{ background: 'radial-gradient(ellipse at center, rgba(254,207,14,0.30), rgba(254,207,14,0.06) 55%, transparent 72%)' }}
-          />
-          {/* drifting embers */}
-          {[
-            { l: '15%', b: '24%', s: 6, d: '0s' },
-            { l: '27%', b: '48%', s: 4, d: '1.1s' },
-            { l: '71%', b: '30%', s: 7, d: '0.5s' },
-            { l: '83%', b: '54%', s: 4, d: '1.7s' },
-            { l: '61%', b: '66%', s: 5, d: '2.3s' },
-            { l: '39%', b: '72%', s: 3, d: '0.9s' },
-          ].map((e, i) => (
-            <span
-              key={i}
-              aria-hidden
-              className="rw-float pointer-events-none absolute rounded-full"
-              style={{
-                left: e.l,
-                bottom: e.b,
-                width: e.s,
-                height: e.s,
-                animationDelay: e.d,
-                background: 'rgba(254,207,14,0.9)',
-                boxShadow: '0 0 10px 2px rgba(254,207,14,0.7)',
-              }}
-            />
-          ))}
-          {/* vignette */}
+          {/* darken + edge vignette for character separation */}
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
-            style={{ background: 'radial-gradient(ellipse 82% 92% at 50% 60%, transparent 44%, rgba(0,0,0,0.55) 100%)' }}
+            style={{ background: 'radial-gradient(ellipse 90% 100% at 50% 60%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.72) 100%)' }}
           />
-          {/* JB hunter mascot */}
-          {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset */}
+          {/* character + CONTACT plate (art already includes the plate) */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- character art */}
           <img
-            src="/contact/contact-character.svg"
-            alt="Jungle Boys"
-            className="rw-breathe relative w-[min(58vw,300px)] drop-shadow-[0_28px_70px_rgba(0,0,0,0.7)]"
+            src="/contact/contact-header.png"
+            alt="Contact Jungle Boys"
+            className="rw-breathe relative w-[min(72vw,430px)] drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
           />
         </div>
       </section>
