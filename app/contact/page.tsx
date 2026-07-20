@@ -65,12 +65,20 @@ export default async function ContactPage() {
             className="pointer-events-none absolute inset-0"
             style={{ background: 'radial-gradient(ellipse 90% 100% at 50% 60%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.72) 100%)' }}
           />
+          {/* giant CONTACT wordmark — zooms in behind the character on load */}
+          <span
+            aria-hidden
+            className="contact-word font-display pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap uppercase leading-none text-white/90"
+            style={{ fontSize: 'min(21vw, 300px)', letterSpacing: '0.02em' }}
+          >
+            Contact
+          </span>
           {/* character + CONTACT plate (art already includes the plate) */}
           {/* eslint-disable-next-line @next/next/no-img-element -- character art */}
           <img
             src="/contact/contact-header.png"
             alt="Contact Jungle Boys"
-            className="rw-breathe relative w-[min(82vw,520px)] drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
+            className="rw-breathe relative z-10 w-[min(82vw,520px)] drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
           />
         </div>
       </section>
