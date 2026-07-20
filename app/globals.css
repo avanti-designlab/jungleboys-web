@@ -418,3 +418,25 @@ body {
   }
   .contact-alive { animation: contact-alive 5.5s ease-in-out infinite; transform-origin: 50% 88%; }
 }
+
+/* wholesale: JB × Nabis collab logos slide together on scroll-in */
+.ws-logos .ws-l,
+.ws-logos .ws-r,
+.ws-logos .ws-x {
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.ws-logos .ws-l { transform: translateX(-48px); }
+.ws-logos .ws-r { transform: translateX(48px); }
+.ws-logos .ws-x { transform: scale(0.5); transition-delay: 0.25s; }
+.ws-logos.is-in .ws-l,
+.ws-logos.is-in .ws-r,
+.ws-logos.is-in .ws-x {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ws-logos .ws-l,
+  .ws-logos .ws-r,
+  .ws-logos .ws-x { opacity: 1; transform: none; transition: none; }
+}
