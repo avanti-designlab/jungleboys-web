@@ -4,30 +4,29 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 
 // Pheno hero: the "PHENO HUNT WITH US!" logo is the hero imagery. Four jars
-// float and bob behind it (lower band, not up top), and six nugs pop out from
-// behind the logo — like the rewards coin burst — then settle into a scatter
-// and gently drift. Reduced-motion: jars/nugs sit still at rest (CSS).
+// float and bob behind it, and a stream of nugs flows out from behind/around
+// the logo (radiating outward on a loop, like the rewards coins).
+// Reduced-motion: jars sit still + a handful of static nugs (CSS).
 
-// jars — behind the logo, spread across a lower band. big center jar = jar-3.
+// jars — framing the logo: big center peeks over the top, flanks left + right,
+// one accent upper-right. big center jar = jar-3.
 const JARS = [
-  { src: '/phenos/jar-2.png', left: '25%', top: '30%', w: 118, tilt: -5, dur: 6.5, del: 0.2, z: 4 },
-  { src: '/phenos/jar-3.png', left: '50%', top: '24%', w: 168, tilt: 0, dur: 7.2, del: 0, z: 5 },
-  { src: '/phenos/jar-1.png', left: '15%', top: '46%', w: 92, tilt: -8, dur: 5.6, del: 0.6, z: 3 },
-  { src: '/phenos/jar-4.png', left: '84%', top: '40%', w: 100, tilt: 7, dur: 6.1, del: 0.4, z: 4 },
+  { src: '/phenos/jar-3.png', left: '50%', top: '15%', w: 184, tilt: 0, dur: 7.2, del: 0, z: 5 },
+  { src: '/phenos/jar-1.png', left: '12%', top: '44%', w: 132, tilt: -7, dur: 5.9, del: 0.5, z: 3 },
+  { src: '/phenos/jar-4.png', left: '88%', top: '42%', w: 134, tilt: 7, dur: 6.3, del: 0.35, z: 4 },
+  { src: '/phenos/jar-2.png', left: '73%', top: '12%', w: 122, tilt: 5, dur: 6.6, del: 0.2, z: 4 },
 ]
 
-// nugs — they burst out from behind the logo (centre) and fade, on a loop, like
-// the rewards coins. The left/top here are only the reduced-motion resting spots.
-const NUGS = [
-  { src: '/phenos/nug-1.png', left: '15%', top: '22%', w: 90 },
-  { src: '/phenos/nug-4.png', left: '85%', top: '20%', w: 94 },
-  { src: '/phenos/nug-2.png', left: '10%', top: '54%', w: 76 },
-  { src: '/phenos/nug-5.png', left: '90%', top: '52%', w: 74 },
-  { src: '/phenos/nug-3.png', left: '20%', top: '80%', w: 82 },
-  { src: '/phenos/nug-6.png', left: '80%', top: '78%', w: 86 },
-  { src: '/phenos/nug-2.png', left: '50%', top: '14%', w: 70 },
-  { src: '/phenos/nug-4.png', left: '50%', top: '88%', w: 80 },
-]
+// nugs — a stream that flows out from behind/around the logo. left/top here are
+// only the reduced-motion resting spots (a subset shows; the rest are motion-only).
+const NUG_IMGS = ['/phenos/nug-1.png', '/phenos/nug-2.png', '/phenos/nug-3.png', '/phenos/nug-4.png', '/phenos/nug-5.png', '/phenos/nug-6.png']
+const NUGS = Array.from({ length: 20 }, (_, i) => ({
+  src: NUG_IMGS[i % NUG_IMGS.length],
+  left: `${8 + ((i * 61) % 84)}%`,
+  top: `${14 + ((i * 37) % 72)}%`,
+  w: 62 + (i % 4) * 12,
+  extra: i >= 7, // beyond the first 7 → hidden under reduced-motion
+}))
 
 export default function PhenosHero() {
   const nugsRef = useRef<HTMLDivElement>(null)
@@ -39,32 +38,37 @@ export default function PhenosHero() {
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       const els = Array.from(box.querySelectorAll<HTMLElement>('[data-nug]'))
       const R = gsap.utils.random
-      // one wave: every nug launches from the logo centre and arcs outward + fades
-      const burst = () => {
+      // each nug is born somewhere behind/around the logo, then flows outward
+      // (radiating away from centre) and fades. Staggered → a continuous stream.
+      const flow = (el: HTMLElement, i: number) => {
         const c = box.getBoundingClientRect()
         const cx = c.left + c.width / 2
         const cy = c.top + c.height / 2
-        els.forEach((el, i) => {
-          gsap.killTweensOf(el)
-          // reset to its CSS home, measure, derive the vector back to centre
-          gsap.set(el, { x: 0, y: 0, xPercent: -50, yPercent: -50, rotation: 0, scale: 1 })
-          const r = el.getBoundingClientRect()
-          const toCX = cx - (r.left + r.width / 2)
-          const toCY = cy - (r.top + r.height / 2)
-          const ang = R(0, Math.PI * 2)
-          const dist = R(300, 680)
-          const outX = toCX + Math.cos(ang) * dist
-          const outY = toCY + Math.sin(ang) * dist * 0.82
-          gsap.set(el, { x: toCX, y: toCY, xPercent: -50, yPercent: -50, scale: R(0.25, 0.5), opacity: 0, rotation: R(-40, 40) })
-          gsap
-            .timeline({ delay: i * 0.12 })
-            .to(el, { opacity: 1, duration: 0.22 })
-            .to(el, { x: outX, y: outY, scale: R(0.85, 1.2), rotation: `+=${R(-160, 160)}`, duration: R(1, 1.6), ease: 'power2.out' }, '<')
-            .to(el, { opacity: 0, duration: 0.5 }, '-=0.55')
-        })
+        gsap.killTweensOf(el)
+        gsap.set(el, { x: 0, y: 0, xPercent: -50, yPercent: -50, rotation: 0, scale: 1 })
+        const r = el.getBoundingClientRect()
+        const homeX = r.left + r.width / 2
+        const homeY = r.top + r.height / 2
+        // origin: a random point within the logo's area (behind it)
+        const ox = cx + R(-c.width * 0.46, c.width * 0.46)
+        const oy = cy + R(-c.height * 0.42, c.height * 0.42)
+        const startX = ox - homeX
+        const startY = oy - homeY
+        // radiate outward from the logo centre through the origin, with jitter
+        const dir = Math.atan2(oy - cy, ox - cx) + R(-0.55, 0.55)
+        const dist = R(220, 560)
+        const endX = startX + Math.cos(dir) * dist
+        const endY = startY + Math.sin(dir) * dist
+        gsap.set(el, { x: startX, y: startY, xPercent: -50, yPercent: -50, scale: R(0.3, 0.55), opacity: 0, rotation: R(-40, 40) })
+        gsap
+          .timeline({ delay: i * 0.08 })
+          .to(el, { opacity: 1, duration: 0.35 })
+          .to(el, { x: endX, y: endY, scale: R(0.75, 1.15), rotation: `+=${R(-130, 130)}`, duration: R(1.6, 2.6), ease: 'power1.out' }, '<')
+          .to(el, { opacity: 0, duration: 0.6 }, '-=0.7')
       }
+      const burst = () => els.forEach((el, i) => flow(el, i))
       burst()
-      const loop = setInterval(burst, 2500)
+      const loop = setInterval(burst, 1900)
       return () => {
         clearInterval(loop)
         gsap.killTweensOf(els)
@@ -99,13 +103,13 @@ export default function PhenosHero() {
 
       {/* logo + nug burst */}
       <div className="relative z-10 mx-auto w-full max-w-[1120px]">
-        {/* nugs pop out from behind the logo */}
+        {/* nugs flow out from behind/around the logo */}
         <div ref={nugsRef} aria-hidden className="pointer-events-none absolute inset-0 z-20">
-          {NUGS.map((n) => (
+          {NUGS.map((n, i) => (
             <div
-              key={n.src}
+              key={i}
               data-nug
-              className="pheno-nug absolute -translate-x-1/2 -translate-y-1/2"
+              className={`pheno-nug absolute -translate-x-1/2 -translate-y-1/2 ${n.extra ? 'pheno-nug--extra' : ''}`}
               style={{ left: n.left, top: n.top, width: n.w }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- transparent bud PNG */}

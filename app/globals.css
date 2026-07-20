@@ -554,6 +554,7 @@ body {
 .pheno-nug { opacity: 0; will-change: transform; }
 @media (prefers-reduced-motion: reduce) {
   .pheno-nug { opacity: 1 !important; }
+  .pheno-nug--extra { display: none; } /* keep the static fallback uncluttered */
 }
 
 /* Logo drop-in on load */
