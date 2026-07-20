@@ -79,7 +79,7 @@ export default function AppShowcase() {
       {...{ [side === 'left' ? 'data-pill-left' : 'data-pill-right']: '' }}
       className={`w-fit rounded-full bg-[#181818] px-8 py-5 text-base font-extrabold uppercase tracking-wide text-white shadow-[0_0_24px_rgba(254,207,14,0.12)] ring-1 ring-white/15 will-change-transform md:text-lg lg:whitespace-nowrap ${
         side === 'left' ? 'lg:justify-self-end lg:text-right' : 'lg:justify-self-start'
-      } ${i === 1 ? (side === 'left' ? 'lg:-translate-x-8' : 'lg:translate-x-8') : ''}`}
+      }`}
       style={{ fontFamily: 'var(--font-brand)' }}
     >
       {label}
@@ -100,7 +100,9 @@ export default function AppShowcase() {
           ref={gridRef}
           className="mt-12 grid items-center gap-8 lg:grid-cols-[1fr_minmax(420px,760px)_1fr]"
         >
-          <ul className="z-0 grid gap-5">{left.map((f, i) => pill(f, 'left', i))}</ul>
+          {/* the phone art carries wide transparent glow margins — the pill rails
+              overlap them (negative margins) so pills hug the phone itself */}
+          <ul className="z-0 grid gap-5 lg:-mr-28 xl:-mr-36">{left.map((f, i) => pill(f, 'left', i))}</ul>
           <div data-app-phone className="relative z-20 order-first mx-auto w-full max-w-[560px] lg:order-none lg:max-w-none">
             <Image
               src="/rewards/phone-glow.png"
@@ -111,7 +113,7 @@ export default function AppShowcase() {
               className="w-full"
             />
           </div>
-          <ul className="z-0 grid gap-5">{right.map((f, i) => pill(f, 'right', i))}</ul>
+          <ul className="z-0 grid gap-5 lg:-ml-28 xl:-ml-36">{right.map((f, i) => pill(f, 'right', i))}</ul>
         </div>
 
         <div className="mt-24 text-center">
