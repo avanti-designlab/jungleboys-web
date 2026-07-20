@@ -157,6 +157,18 @@ export default function SiteNav() {
 
       {/* sticky header — expanded bar morphs into a floating pill on scroll */}
       <header className="fixed inset-x-0 top-0 z-50">
+        {/* legibility scrim: white header content can vanish over a bright hero
+            top (overlay-free images). A soft top gradient guarantees contrast.
+            Only in white mode, fades out once condensed (pill has its own bg). */}
+        {!open && headerDark && (
+          <div
+            aria-hidden
+            className={`pointer-events-none absolute inset-x-0 top-0 h-36 transition-opacity duration-500 ${
+              condensed ? 'opacity-0' : 'opacity-100'
+            }`}
+            style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.22) 45%, transparent)' }}
+          />
+        )}
         {/* expanded bar */}
         <div
           className={`mx-auto flex w-full items-center justify-between px-8 pt-6 pb-3 transition-all duration-500 md:px-12 ${
