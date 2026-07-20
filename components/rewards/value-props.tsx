@@ -24,7 +24,7 @@ export default function ValueProps() {
             { text: 'Comes Back to You in Rewards.', accent: true, block: true },
           ]}
         />
-        <Scrub className="mt-12 grid gap-5 sm:grid-cols-2">
+        <Scrub enter start="top 75%" className="mt-12 grid gap-5 sm:grid-cols-2">
           {VALUE_PROPS.map((p) => {
             const Icon = ICONS[p.title as keyof typeof ICONS] ?? EarnIcon
             return (

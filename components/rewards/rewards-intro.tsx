@@ -10,7 +10,7 @@ import Coin from './coin'
 // Hovering the logo tilts it and triggers another burst. Dark brand stage
 // in both themes.
 
-const COIN_COUNT = 14
+const COIN_COUNT = 18
 
 export default function RewardsIntro() {
   const stageRef = useRef<HTMLDivElement>(null)
@@ -25,14 +25,14 @@ export default function RewardsIntro() {
     if (now - lastBurst.current < 1200) return
     lastBurst.current = now
     box.querySelectorAll('[data-coin]').forEach((coin, i) => {
-      const x = gsap.utils.random(-340, 340)
-      const upY = gsap.utils.random(-90, -260)
-      const dur = gsap.utils.random(0.5, 0.75)
-      gsap.set(coin, { x: 0, y: 0, opacity: 1, scale: gsap.utils.random(0.55, 1.1), rotation: 0 })
+      const x = gsap.utils.random(-460, 460)
+      const upY = gsap.utils.random(-120, -340)
+      const dur = gsap.utils.random(0.55, 0.85)
+      gsap.set(coin, { x: 0, y: 0, opacity: 1, scale: gsap.utils.random(0.6, 1.25), rotation: 0 })
       gsap
-        .timeline({ delay: i * 0.03 })
+        .timeline({ delay: i * 0.035 })
         .to(coin, { x: x * 0.6, y: upY, rotation: gsap.utils.random(-200, 200), duration: dur, ease: 'power2.out' })
-        .to(coin, { x, y: 420, rotation: `+=${gsap.utils.random(120, 300)}`, duration: dur * 1.5, ease: 'power1.in' })
+        .to(coin, { x, y: 520, rotation: `+=${gsap.utils.random(120, 300)}`, duration: dur * 1.5, ease: 'power1.in' })
         .to(coin, { opacity: 0, duration: 0.25 }, '-=0.25')
     })
   }
@@ -68,6 +68,9 @@ export default function RewardsIntro() {
         .to(logo, { opacity: 1, y: 0, scale: 1, duration: 0.9, ease: 'back.out(1.4)' }, '-=0.3')
         .add(() => burst(), '-=0.15')
         .to(cue, { opacity: 1, duration: 0.6 }, '+=0.4')
+      // slot machine keeps paying out on a loop
+      const loop = setInterval(burst, 4200)
+      return () => clearInterval(loop)
     })
     return () => mm.revert()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -77,16 +80,16 @@ export default function RewardsIntro() {
     <section className="w-full px-2 pt-20 md:px-3 md:pt-24">
       <div
         ref={stageRef}
-        className="relative flex min-h-[88svh] flex-col items-center justify-center overflow-hidden rounded-[1.75rem] bg-[#0a0a0a] px-6 py-16 text-center md:rounded-[2.5rem]"
+        className="relative flex min-h-[92svh] flex-col items-center justify-center overflow-hidden rounded-[1.75rem] bg-[#0a0a0a] px-6 pb-28 pt-14 text-center md:rounded-[2.5rem]"
       >
         <img
           src={BRAND_ASSETS.logoWhite}
           alt=""
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 w-[62%] max-w-[760px] -translate-x-1/2 -translate-y-1/2 opacity-[0.045]"
+          className="pointer-events-none absolute left-1/2 top-1/2 w-[88%] max-w-[1100px] -translate-x-1/2 -translate-y-1/2 opacity-[0.05]"
         />
 
-        <h1 className="font-display text-[clamp(3.5rem,9vw,8.5rem)] uppercase leading-none text-white">
+        <h1 className="font-display text-[clamp(3.8rem,10vw,9.5rem)] uppercase leading-none text-white">
           <span className="inline-block overflow-hidden">
             <span data-intro-word className="inline-block">
               Welcome
@@ -103,7 +106,7 @@ export default function RewardsIntro() {
           ref={logoRef}
           onMouseEnter={hoverLogo}
           onClick={hoverLogo}
-          className="relative z-10 mt-8 w-[min(78vw,560px)] cursor-pointer select-none"
+          className="relative z-10 mt-10 w-[min(82vw,650px)] cursor-pointer select-none"
           role="img"
           aria-label="PWF Rewards"
         >
@@ -114,8 +117,8 @@ export default function RewardsIntro() {
         {/* coin layer — coins burst from behind the logo */}
         <div ref={coinsRef} aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 z-0">
           {Array.from({ length: COIN_COUNT }).map((_, i) => (
-            <span key={i} data-coin className="absolute -left-6 -top-6 opacity-0">
-              <Coin className="h-12 w-12" />
+            <span key={i} data-coin className="absolute -left-7 -top-7 opacity-0">
+              <Coin className="h-14 w-14" />
             </span>
           ))}
         </div>

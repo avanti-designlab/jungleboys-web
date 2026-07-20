@@ -53,14 +53,20 @@ export default function ConnoisseurClub() {
             sizes="(max-width: 768px) 88vw, 640px"
             className="relative z-10 mx-auto w-[70%] max-w-[640px]"
           />
-          <Image
-            src="/rewards/club-bg-title.png"
-            alt="Jungle Boys mascots in a private lounge"
-            width={1475}
-            height={913}
-            sizes="(max-width: 1024px) 100vw, 1280px"
-            className="mx-auto -mt-[14%] w-full max-w-[1280px]"
-          />
+          <div className="rw-breathe relative mx-auto -mt-[14%] w-full max-w-[1280px]">
+            <Image
+              src="/rewards/club-bg-title.png"
+              alt="Jungle Boys mascots in a private lounge"
+              width={1475}
+              height={913}
+              sizes="(max-width: 1024px) 100vw, 1280px"
+              className="w-full"
+            />
+            {/* smoke wisps rising from the lounge */}
+            <span aria-hidden className="rw-smoke left-[30%] top-[38%]" />
+            <span aria-hidden className="rw-smoke left-[52%] top-[30%]" style={{ animationDelay: '1.6s' }} />
+            <span aria-hidden className="rw-smoke left-[68%] top-[36%]" style={{ animationDelay: '3.1s' }} />
+          </div>
         </div>
 
         {/* decorative tied-back drapes (from the art) at the stage edges */}
@@ -90,7 +96,7 @@ export default function ConnoisseurClub() {
             className="relative rounded-[calc(2.5rem-3px)] border border-[var(--color-accent)]/40 bg-[#0b0a07] px-6 py-12 md:px-14"
             style={{ fontFamily: 'var(--font-brand)' }}
           >
-            <p className="text-center text-[11px] font-bold uppercase tracking-[0.35em] text-[#d8b53c]">
+            <p className="text-center text-[11px] font-bold uppercase tracking-[0.35em] text-white/90">
               The highest tier of PWF Rewards
             </p>
             <SplitHeading
@@ -100,14 +106,14 @@ export default function ConnoisseurClub() {
               className="mt-3 text-center text-2xl font-extrabold uppercase tracking-wide text-[var(--color-accent)] md:text-4xl"
               lines={[{ text: 'Invite Only. Limited Availability.' }]}
             />
-            <p className="mx-auto mt-4 max-w-md text-center text-xs font-bold uppercase leading-relaxed tracking-wide text-white">
+            <p className="mt-4 text-center text-xs font-bold uppercase leading-relaxed tracking-wide text-white md:whitespace-nowrap">
               Reserved for a select group of OG customers and brand loyalists.
             </p>
             <ul className="mt-10 grid gap-4 sm:grid-cols-2">
               {CLUB_PERKS.map((p) => (
                 <li
                   key={p.label}
-                  className="rw-shimmer relative flex items-center gap-4 overflow-hidden rounded-2xl bg-gradient-to-r from-[#8a6b00] via-[var(--color-accent)] to-[#8a6b00] px-6 py-5"
+                  className="rw-shimmer relative flex items-center gap-4 overflow-hidden rounded-2xl bg-gradient-to-r from-[#e0b400] via-[#ffdf47] to-[#e0b400] px-6 py-5"
                 >
                   <img src={p.icon} alt="" aria-hidden className="h-9 w-9 shrink-0" />
                   <span className="text-sm font-extrabold uppercase leading-tight tracking-wide text-black">

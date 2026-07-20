@@ -88,10 +88,7 @@ export const WAYS_TO_EARN = [
     title: 'Birthday Perks',
     points: 'Earn 100 Points',
     badge: 'Pheno Hunter Tier',
-    bullets: [
-      '100 points',
-      'Double Points Day of your choice (expires 2 weeks after birthday)',
-    ],
+    bullets: ['100 points', 'Double Points Day of your choice'],
   },
   {
     icon: '/rewards/icon-firsttime.svg',
@@ -222,6 +219,13 @@ export const REWARDS_FAQ = [
 
 export const FINE_PRINT = [
   {
+    title: 'General',
+    bullets: [
+      'Points earned on qualifying purchases',
+      'Rewards subject to change at any time',
+    ],
+  },
+  {
     title: 'Tier Qualifications',
     bullets: [
       'Tier status is based on a rolling 12-month spend',
@@ -245,13 +249,6 @@ export const FINE_PRINT = [
     bullets: [
       'Points expire after 12 months of inactivity',
       'Inactivity = no purchases or point activity',
-    ],
-  },
-  {
-    title: 'General',
-    bullets: [
-      'Points earned on qualifying purchases',
-      'Rewards subject to change at any time',
     ],
   },
 ] as const

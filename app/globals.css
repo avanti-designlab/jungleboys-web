@@ -237,7 +237,7 @@ body {
     0%, 48%, 100% { transform: rotate(0deg); }
     60%, 84% { transform: rotate(-30deg); }
   }
-  .rw-ic-shackle { animation: rw-shackle-pop 3s ease-in-out infinite; transform-origin: 7px 10px; }
+  .rw-ic-shackle { animation: rw-shackle-pop 3s ease-in-out infinite; transform-origin: 16px 21px; }
   @keyframes rw-bar-rise {
     0%, 15% { transform: scaleY(0.45); }
     45%, 80% { transform: scaleY(1); }
@@ -261,3 +261,32 @@ body {
 [data-theme='dark'] .rw-watermark { filter: none; }
 .rw-badge { background: #0a0a0a; border-radius: 0.65rem; }
 [data-theme='dark'] .rw-badge { background: transparent; }
+
+/* rewards: character/scene life */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes rw-float {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-10px); }
+  }
+  .rw-float { animation: rw-float 4.2s ease-in-out infinite; }
+  @keyframes rw-breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.015); }
+  }
+  .rw-breathe { animation: rw-breathe 7s ease-in-out infinite; }
+  @keyframes rw-smoke {
+    0% { opacity: 0; transform: translateY(16px) scale(0.7); }
+    30% { opacity: 0.5; }
+    100% { opacity: 0; transform: translateY(-70px) scale(1.35); }
+  }
+  .rw-smoke {
+    position: absolute;
+    width: 46px;
+    height: 46px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(255,255,255,0.5), transparent 70%);
+    filter: blur(9px);
+    animation: rw-smoke 5s ease-out infinite;
+    pointer-events: none;
+  }
+}

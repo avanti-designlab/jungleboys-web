@@ -14,8 +14,8 @@ import { REWARDS_FAQ } from '@/lib/rewards-content'
 import { breadcrumbSchema, faqSchema } from '@/lib/schema'
 
 // PWF Rewards landing — /rewards (supersedes /loyalty; /app + /pwf-reward 301
-// here). Theme-aware: light by default, dark via the site toggle. Brand
-// stages (intro, how-it-works banner, Connoisseur Club) stay dark by design.
+// here). DARK IN BOTH THEMES (Avanti: light version was hard to read) — the
+// page pins the theme tokens to their dark values so the toggle is a no-op here.
 
 export const metadata: Metadata = {
   title: 'PWF Rewards — Jungle Boys Loyalty Program',
@@ -25,7 +25,22 @@ export const metadata: Metadata = {
 
 export default function RewardsPage() {
   return (
-    <main className="bg-[var(--color-background)] pb-10 text-[var(--color-foreground)]">
+    <main
+      className="bg-[var(--color-background)] pb-10 text-[var(--color-foreground)]"
+      style={
+        {
+          '--color-background': '#040303',
+          '--color-surface': '#111111',
+          '--color-foreground': '#ffffff',
+          '--color-foreground-soft': '#f5f5f5',
+          '--color-muted': '#9a9aa0',
+          '--color-border': '#231f20',
+          '--color-accent-ink': '#fecf0e',
+        } as React.CSSProperties
+      }
+    >
+      {/* brand surface: dark page + dark footer gutter regardless of theme */}
+      <style>{`body { background: #040303; } .rw-watermark { filter: none; } .rw-badge { background: transparent; }`}</style>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

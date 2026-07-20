@@ -42,10 +42,14 @@ export default function EarnMore() {
               >
                 Reward Tiers
               </h3>
-              <p data-reveal="fade" className="mt-2 text-center text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--color-muted)]">
-                Tier level · Annual points
-              </p>
-              <ul className="mt-8 space-y-3">
+              <div
+                data-reveal="fade"
+                className="mt-6 flex items-end justify-between px-4 text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--color-muted)]"
+              >
+                <span>Tier level</span>
+                <span>Annual points</span>
+              </div>
+              <ul className="mt-3 space-y-3">
                 {REWARD_TIERS.map((t, i) => (
                   <li
                     key={t.name}
@@ -83,10 +87,14 @@ export default function EarnMore() {
               >
                 Redemption Values
               </h3>
-              <p data-reveal="fade" className="mt-2 text-center text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--color-muted)]">
-                Points · What you get
-              </p>
-              <div className="mt-8 grid grid-cols-2 gap-4">
+              <div
+                data-reveal="fade"
+                className="mt-6 flex items-end justify-between px-4 text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--color-muted)]"
+              >
+                <span>What you get</span>
+                <span>Points</span>
+              </div>
+              <div className="mt-3 grid grid-cols-2 gap-4">
                 {REDEMPTION_VALUES.map((r) => (
                   <div
                     key={r.points}
@@ -109,7 +117,7 @@ export default function EarnMore() {
         <Scrub start="top 95%">
           <p
             data-reveal="rise"
-            className="mx-auto mt-10 max-w-2xl text-center text-[11px] font-semibold uppercase leading-relaxed tracking-wide text-[var(--color-muted)]"
+            className="mt-10 text-center text-[11px] font-semibold uppercase leading-relaxed tracking-wide text-[var(--color-muted)] lg:whitespace-nowrap"
             style={{ fontFamily: 'var(--font-brand)' }}
           >
             {EARN_RULES_DISCLAIMER}

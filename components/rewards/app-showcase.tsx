@@ -27,17 +27,25 @@ export default function AppShowcase() {
       const phone = grid.querySelector('[data-app-phone]')
       const leftPills = grid.querySelectorAll('[data-pill-left]')
       const rightPills = grid.querySelectorAll('[data-pill-right]')
-      gsap.set(phone, { opacity: 0, scale: 0.72, transformOrigin: '50% 100%' })
+      // phone appears FIRST — quick smooth entrance the moment it's on screen
+      gsap.set(phone, { opacity: 0, scale: 0.85, transformOrigin: '50% 100%' })
+      gsap.to(phone, {
+        opacity: 1,
+        scale: 1,
+        duration: 1.1,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: grid, start: 'top 82%', once: true },
+      })
+      // then the pills pop out from behind it as you scroll — slow + smooth
       gsap.set(leftPills, { opacity: 0, xPercent: 55 })
       gsap.set(rightPills, { opacity: 0, xPercent: -55 })
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: grid, start: 'top 70%', end: 'bottom 80%', scrub: true },
+        scrollTrigger: { trigger: grid, start: 'top 55%', end: 'bottom 95%', scrub: 1.2 },
       })
-      tl.to(phone, { opacity: 1, scale: 1, duration: 0.5, ease: 'none' })
       leftPills.forEach((p, i) => {
-        tl.to(p, { opacity: 1, xPercent: 0, duration: 0.3, ease: 'none' }, 0.35 + i * 0.18)
+        tl.to(p, { opacity: 1, xPercent: 0, duration: 0.6, ease: 'power1.out' }, i * 0.5)
         const rp = rightPills[i]
-        if (rp) tl.to(rp, { opacity: 1, xPercent: 0, duration: 0.3, ease: 'none' }, 0.44 + i * 0.18)
+        if (rp) tl.to(rp, { opacity: 1, xPercent: 0, duration: 0.6, ease: 'power1.out' }, i * 0.5 + 0.25)
       })
     })
     return () => mm.revert()
@@ -68,13 +76,13 @@ export default function AppShowcase() {
 
         <div ref={gridRef} className="mt-12 grid items-center gap-8 lg:grid-cols-[1fr_auto_1fr]">
           <ul className="z-10 grid gap-5">{left.map((f, i) => pill(f, 'left', i))}</ul>
-          <div data-app-phone className="order-first mx-auto w-full max-w-[460px] lg:order-none lg:max-w-[620px]">
+          <div data-app-phone className="order-first mx-auto w-full max-w-[520px] lg:order-none lg:max-w-[760px]">
             <Image
               src="/rewards/phone-glow.png"
               alt="The Jungle Boys app glowing on a phone"
               width={1005}
               height={1004}
-              sizes="(max-width: 1024px) 80vw, 620px"
+              sizes="(max-width: 1024px) 85vw, 760px"
               className="w-full"
             />
           </div>

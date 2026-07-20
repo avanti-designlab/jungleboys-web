@@ -120,11 +120,14 @@ export function Scrub({
   className,
   start = 'top 80%',
   end = 'bottom 100%',
+  enter = false,
 }: {
   children: React.ReactNode
   className?: string
   start?: string
   end?: string
+  /** play once on enter (slow, smooth) instead of scrubbing with scroll */
+  enter?: boolean
 }) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -136,25 +139,35 @@ export function Scrub({
       const items = [...el.querySelectorAll<HTMLElement>('[data-reveal]')]
       if (!items.length) return
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: el, start, end, scrub: true },
+        scrollTrigger: enter
+          ? { trigger: el, start, once: true }
+          : { trigger: el, start, end, scrub: true },
       })
-      items.forEach((item) => {
+      items.forEach((item, i) => {
         const kind = item.dataset.reveal || 'up'
         const vars = INITIAL[kind] || INITIAL.up
         gsap.set(item, vars)
-        tl.to(item, {
-          opacity: 1,
-          y: 0,
-          yPercent: 0,
-          xPercent: 0,
-          scale: 1,
-          duration: kind === 'grow' || kind === 'scale' ? 1 : 0.45,
-          ease: 'none',
-        })
+        if (enter) {
+          tl.to(
+            item,
+            { opacity: 1, y: 0, yPercent: 0, xPercent: 0, scale: 1, duration: 1.1, ease: 'power3.out' },
+            i * 0.18
+          )
+        } else {
+          tl.to(item, {
+            opacity: 1,
+            y: 0,
+            yPercent: 0,
+            xPercent: 0,
+            scale: 1,
+            duration: kind === 'grow' || kind === 'scale' ? 1 : 0.45,
+            ease: 'none',
+          })
+        }
       })
     })
     return () => mm.revert()
-  }, [start, end])
+  }, [start, end, enter])
 
   return (
     <div ref={ref} className={className}>
