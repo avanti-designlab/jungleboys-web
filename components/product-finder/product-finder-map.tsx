@@ -57,6 +57,7 @@ export default function ProductFinderMap() {
   const [nearest, setNearest] = useState<Retailer[]>([])
   const [locating, setLocating] = useState(false)
   const [count, setCount] = useState(0)
+  const [ctaHidden, setCtaHidden] = useState(false)
 
   // count the store total up on mount (rAF for the smooth count; a timeout
   // failsafe guarantees the final number even where rAF is throttled)
@@ -87,6 +88,8 @@ export default function ProductFinderMap() {
 
       const map = L.map(mapEl.current, { scrollWheelZoom: false, zoomControl: true })
       mapObj.current = map
+      // dismiss the idle CTA the moment the visitor interacts with the map
+      map.on('movestart zoomstart click', () => setCtaHidden(true))
       L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         subdomains: 'abcd',
         maxZoom: 19,
@@ -301,9 +304,12 @@ export default function ProductFinderMap() {
         >
           <div ref={mapEl} className="h-[68vh] min-h-[480px] w-full" style={{ background: '#0b0b0d' }} />
 
-          {/* bold idle-state CTA (clears once a store is picked or a search runs) */}
+          {/* bold idle-state CTA — fades out once the visitor touches the map,
+              picks a store, or runs a search */}
           {nearest.length === 0 && !active && (
-            <div className="pointer-events-none absolute inset-0 z-[400] flex items-end justify-center pb-10 md:items-center md:pb-0">
+            <div
+              className={`pointer-events-none absolute inset-0 z-[400] flex items-end justify-center pb-10 transition-opacity duration-500 md:items-center md:pb-0 ${ctaHidden ? 'opacity-0' : 'opacity-100'}`}
+            >
               <div className="rounded-2xl border border-white/10 bg-black/55 px-7 py-5 text-center backdrop-blur-sm">
                 <p className="font-display text-3xl uppercase leading-none text-white md:text-5xl">Find your closest drop</p>
                 <p className="mt-2 text-xs uppercase tracking-widest text-white/70" style={{ fontFamily: 'var(--font-brand)' }}>
