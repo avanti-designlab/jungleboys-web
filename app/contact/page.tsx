@@ -65,13 +65,18 @@ export default async function ContactPage() {
             className="pointer-events-none absolute inset-0"
             style={{ background: 'radial-gradient(ellipse 90% 100% at 50% 60%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.72) 100%)' }}
           />
-          {/* giant CONTACT wordmark — static, centered, full-width behind character */}
+          {/* giant CONTACT wordmark — drops in letter-by-letter with the page,
+              centered + full-width behind the character */}
           <span
             aria-hidden
             className="font-display pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap uppercase leading-none text-white/90"
             style={{ fontSize: 'min(37vw, 900px)' }}
           >
-            Contact
+            {'CONTACT'.split('').map((ch, i) => (
+              <span key={i} className="contact-letter" style={{ animationDelay: `${0.2 + i * 0.075}s` }}>
+                {ch}
+              </span>
+            ))}
           </span>
           {/* character + CONTACT plate (art already includes the plate) */}
           {/* eslint-disable-next-line @next/next/no-img-element -- character art */}

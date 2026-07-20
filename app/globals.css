@@ -395,3 +395,15 @@ body {
 }
 .jb-map .leaflet-bar a:hover { background: #23232a; }
 
+
+/* contact hero: giant CONTACT drops in letter-by-letter with the page */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes contact-letter-drop {
+    0% { opacity: 0; transform: translateY(-75%); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .contact-letter {
+    display: inline-block;
+    animation: contact-letter-drop 0.75s cubic-bezier(0.34, 1.4, 0.5, 1) both;
+  }
+}
