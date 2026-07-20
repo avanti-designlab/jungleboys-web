@@ -23,6 +23,7 @@ export const HERO_SLIDES = [
     image: '/hero/gas-tank-beach.jpg',
     imageMobile: undefined,
     alt: 'Jungle Boys Gas Tank all-in-one vapes standing in the sand at the beach',
+    overlay: false, // bright + crisp per Avanti
   },
   {
     kicker: '20 YEAR ANNIVERSARY EDITION',
