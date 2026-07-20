@@ -16,7 +16,7 @@ const csp = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   `connect-src 'self' https://api.storyblok.com${isDev ? " ws:" : ""}`,
-  "frame-src 'self'",
+  "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com",
   "frame-ancestors 'self'",
   "base-uri 'self'",
   "form-action 'self'",
@@ -38,7 +38,11 @@ const nextConfig: NextConfig = {
   images: {
     // Interim: current-site assets served from Webflow's CDN while content
     // migrates; production assets move first-party before cutover (03 CWV budget).
-    remotePatterns: [{ protocol: "https", hostname: "cdn.prod.website-files.com" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "cdn.prod.website-files.com" },
+      { protocol: "https", hostname: "i.ytimg.com" }, // YouTube thumbnails (Media hub)
+      { protocol: "https", hostname: "a.storyblok.com" }, // curated Storyblok media thumbnails
+    ],
   },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
