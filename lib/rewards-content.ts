@@ -178,7 +178,7 @@ export const REWARDS_FAQ = [
   {
     question: 'How do I join PWF Rewards?',
     answer:
-      'Download the Jungle Boys app, create your account, and you are enrolled instantly — you even get 100 bonus points just for downloading.',
+      'Download the Jungle Boys app, create your account, and you are enrolled instantly — you even get 50 bonus points just for downloading.',
   },
   {
     question: 'How do I earn points?',

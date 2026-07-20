@@ -8,8 +8,9 @@ import StoreBadges from './store-badges'
 import Coin from './coin'
 import { SplitHeading } from './motion'
 
-// App-download section: everything centered, giant phone as the centerpiece
-// with coins bursting from behind it on a loop (slot-machine energy).
+// App-download section: phone rides right under the headline and runs to the
+// section bottom (no dead space); store badges + the +50 bonus pill overlap
+// the phone's lower half. Coins burst from behind the phone on a loop.
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -28,18 +29,16 @@ export default function RewardsHero() {
       const burst = () => {
         box.querySelectorAll('[data-coin]').forEach((coin, i) => {
           const x = gsap.utils.random(-380, 380)
-          const upY = gsap.utils.random(-140, -320)
+          const upY = gsap.utils.random(-140, -300)
           const dur = gsap.utils.random(0.55, 0.8)
           gsap.set(coin, { x: 0, y: 0, opacity: 1, scale: gsap.utils.random(0.55, 1.15), rotation: 0 })
           gsap
             .timeline({ delay: i * 0.04 })
             .to(coin, { x: x * 0.6, y: upY, rotation: gsap.utils.random(-180, 180), duration: dur, ease: 'power2.out' })
-            .to(coin, { x, y: 460, rotation: `+=${gsap.utils.random(120, 280)}`, duration: dur * 1.5, ease: 'power1.in' })
+            .to(coin, { x, y: 420, rotation: `+=${gsap.utils.random(120, 280)}`, duration: dur * 1.5, ease: 'power1.in' })
             .to(coin, { opacity: 0, duration: 0.25 }, '-=0.25')
         })
       }
-      // phone floats gently; coins pay out on a loop once it's on screen
-      gsap.to(wrap, { y: -14, duration: 3, yoyo: true, repeat: -1, ease: 'sine.inOut' })
       let loop: ReturnType<typeof setInterval> | null = null
       const st = ScrollTrigger.create({
         trigger: wrap,
@@ -58,7 +57,7 @@ export default function RewardsHero() {
   }, [])
 
   return (
-    <section className="relative overflow-hidden px-6 py-20 text-center md:px-12 md:py-28 lg:px-20">
+    <section className="relative overflow-hidden px-6 pt-20 text-center md:px-12 md:pt-28 lg:px-20">
       <div className="relative mx-auto max-w-5xl">
         <SplitHeading
           as="h2"
@@ -70,23 +69,16 @@ export default function RewardsHero() {
           ]}
         />
         <p
-          className="mx-auto mt-6 max-w-xl text-sm uppercase leading-relaxed tracking-wide text-[var(--color-muted)] md:text-base"
+          className="mx-auto mt-5 max-w-xl text-sm uppercase leading-relaxed tracking-wide text-[var(--color-muted)] md:text-base"
           style={{ fontFamily: 'var(--font-brand)' }}
         >
           Playing With Fire has its perks. Earn points, unlock exclusive drops,
           and get rewarded every time you shop.
         </p>
-        <StoreBadges className="mt-8 justify-center" />
-        <p
-          className="mt-4 text-[11px] uppercase tracking-widest text-[var(--color-muted)]"
-          style={{ fontFamily: 'var(--font-brand)' }}
-        >
-          Get 100 bonus points just for downloading.
-        </p>
 
-        <div ref={phoneWrapRef} className="relative mx-auto mt-14 w-full max-w-[560px] lg:max-w-[700px]">
-          {/* coin layer behind the phone */}
-          <div ref={coinsRef} aria-hidden className="pointer-events-none absolute left-1/2 top-[22%] z-0">
+        {/* phone runs to the section bottom; badges + bonus pill overlap it */}
+        <div ref={phoneWrapRef} className="relative mx-auto mt-6 w-full max-w-[560px] lg:max-w-[660px]">
+          <div ref={coinsRef} aria-hidden className="pointer-events-none absolute left-1/2 top-[16%] z-0">
             {Array.from({ length: COIN_COUNT }).map((_, i) => (
               <span key={i} data-coin className="absolute -left-7 -top-7 opacity-0">
                 <Coin className="h-14 w-14" />
@@ -99,9 +91,24 @@ export default function RewardsHero() {
             width={833}
             height={833}
             priority
-            sizes="(max-width: 1024px) 560px, 700px"
+            sizes="(max-width: 1024px) 560px, 660px"
             className="relative z-10 w-full"
           />
+          <div className="absolute inset-x-0 bottom-6 z-20 flex flex-wrap items-center justify-center gap-3 md:bottom-10">
+            <StoreBadges />
+            <span
+              className="rw-shimmer relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-[var(--color-accent)] py-3 pl-3 pr-5 text-black shadow-[0_0_34px_rgba(254,207,14,0.4)]"
+              style={{ fontFamily: 'var(--font-brand)' }}
+            >
+              <Coin className="h-7 w-7" />
+              <span className="text-base font-extrabold tracking-tight">+50 PTS</span>
+              <span className="text-[10px] font-bold uppercase leading-tight tracking-widest">
+                just for
+                <br />
+                downloading
+              </span>
+            </span>
+          </div>
         </div>
       </div>
     </section>

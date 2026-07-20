@@ -115,7 +115,7 @@ export default function AppShowcase() {
               className="mt-4 text-[11px] font-semibold uppercase tracking-widest text-[var(--color-muted)]"
               style={{ fontFamily: 'var(--font-brand)' }}
             >
-              Get 100 bonus points just for downloading.
+              Get 50 bonus points just for downloading.
             </p>
           </Scrub>
         </div>
