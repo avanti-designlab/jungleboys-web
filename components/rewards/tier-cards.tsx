@@ -68,11 +68,13 @@ export default function TierCards() {
                       sizes="(max-width: 768px) 80vw, 380px"
                       className="absolute h-auto max-w-none -translate-x-1/2 object-contain drop-shadow-[0_16px_30px_rgba(0,0,0,0.5)]"
                       style={{
-                        // plate centers measured from the art (PIL) — plates land
-                        // dead-center, 30px below each card's top edge
-                        left: ['50%', 'calc(50% - 12px)', '50%'][i],
-                        height: ['368px', '320px', '280px'][i],
-                        top: ['-274px', '-229px', '-201px'][i],
+                        // Heights area-matched (PIL): each character's colored
+                        // footprint renders the same size across all three, despite
+                        // very different poses. left/top derived from the measured
+                        // plate center so the TIER plates stay centered + aligned.
+                        left: ['50%', 'calc(50% - 10px)', '50%'][i],
+                        height: ['368px', '294px', '264px'][i],
+                        top: ['-248px', '-178px', '-155px'][i],
                       }}
                     />
                     {/* living smoke rising off the character */}
