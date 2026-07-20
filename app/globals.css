@@ -76,6 +76,15 @@ body {
   font-family: var(--font-body), system-ui, sans-serif;
 }
 
+/* No sideways scroll anywhere: entry-zoom animations (hero scale 1.18, banner
+   scale 1.14) and hover scales briefly exceed the viewport width. `clip` kills
+   the horizontal scroll without creating a scroll container (so position:sticky
+   heroes keep working, unlike overflow-x:hidden). */
+html,
+body {
+  overflow-x: clip;
+}
+
 /* Neon-sign tracer on the gate logo (segment + gap = script path length 3292) */
 @keyframes neon-travel {
   to { stroke-dashoffset: -3292; }
