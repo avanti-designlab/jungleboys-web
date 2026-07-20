@@ -467,3 +467,21 @@ body {
   border: 3px solid #fff;
   box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.3);
 }
+
+/* locations: state postcard headers — reveal (scale+fade) then a gentle idle float */
+.loc-postcard {
+  opacity: 0;
+  transform: scale(0.9) translateY(24px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.loc-postcard.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes loc-float {
+    0%, 100% { transform: translateY(0) rotate(-0.6deg); }
+    50% { transform: translateY(-10px) rotate(0.6deg); }
+  }
+  .loc-postcard.is-in { animation: loc-float 6s ease-in-out 0.9s infinite; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loc-postcard { opacity: 1; transform: none; transition: none; }
+}
