@@ -39,8 +39,15 @@ export default function RewardsPage() {
         } as React.CSSProperties
       }
     >
-      {/* brand surface: dark page + dark footer gutter regardless of theme */}
-      <style>{`body { background: #040303; } .rw-watermark { filter: none; } .rw-badge { background: transparent; }`}</style>
+      {/* brand surface: dark page + dark footer gutter regardless of theme.
+          Footer loses its inset-card look here — full-bleed black, no seams. */}
+      <style>{`
+        body { background: #040303; }
+        .rw-watermark { filter: none; }
+        .rw-badge { background: transparent; }
+        footer { padding: 0; }
+        footer > div { border-radius: 0; background: #040303; }
+      `}</style>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
