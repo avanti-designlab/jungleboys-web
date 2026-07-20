@@ -2,15 +2,14 @@
 
 import Image from 'next/image'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { JB_CHANNEL_URL, youtubeThumb, type Video } from '@/lib/media/youtube'
 
-// Video gallery: a big featured hero, a row of vertical Shorts, and a grid of
-// horizontal videos. Cards preview the actual clip (muted, looping) on hover;
-// clicking opens a full lightbox player. Tiles cascade down as you scroll.
-
-gsap.registerPlugin(ScrollTrigger)
+// Bento video gallery: varied tile sizes with vertical Shorts kept tall. Tiles
+// slide in as they enter the viewport, and clips autoplay (muted, looping)
+// while on screen — constant motion, no hover needed — pausing when scrolled
+// away. Both the reveal and the auto-preview run off one scroll handler
+// (getBoundingClientRect) rather than IntersectionObserver, so they're robust
+// everywhere. Click opens a lightbox.
 
 function PlayIcon({ className }: { className?: string }) {
   return (
@@ -32,44 +31,39 @@ function previewSrc(v: Video) {
   return `${v.embedUrl}?autoplay=1&mute=1&controls=0&loop=1&playlist=${v.id}&modestbranding=1&playsinline=1&rel=0`
 }
 
+// col-span pattern → featured is wide, horizontals occasionally wide, verticals
+// stay one column (their 9:16 aspect makes them tall for a bento feel).
+function tileSpan(v: Video, i: number, isFeatured: boolean) {
+  if (isFeatured) return 'sm:col-span-2 lg:col-span-2'
+  if (v.vertical) return 'lg:col-span-1'
+  return i % 5 === 2 ? 'sm:col-span-2 lg:col-span-2' : 'lg:col-span-1'
+}
+
 function VideoTile({
   v,
+  big,
+  revealed,
+  preview,
   onOpen,
-  big = false,
-  autoPreview = false,
 }: {
   v: Video
-  onOpen: () => void
   big?: boolean
-  autoPreview?: boolean
+  revealed: boolean
+  preview: boolean
+  onOpen: () => void
 }) {
-  const [preview, setPreview] = useState(false)
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  useEffect(() => {
-    if (!autoPreview) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const t = setTimeout(() => setPreview(true), 700)
-    return () => clearTimeout(t)
-  }, [autoPreview])
-
-  const enter = () => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    timer.current = setTimeout(() => setPreview(true), 180)
-  }
-  const leave = () => {
-    if (timer.current) clearTimeout(timer.current)
-    if (!autoPreview) setPreview(false)
-  }
-
   return (
     <button
       data-tile
+      data-vid={v.id}
       onClick={onOpen}
-      onMouseEnter={enter}
-      onMouseLeave={leave}
       aria-label={`Play ${v.title}`}
-      className="group relative block w-full overflow-hidden rounded-2xl text-left will-change-transform"
+      className="group relative block w-full overflow-hidden rounded-2xl text-left"
+      style={{
+        opacity: revealed ? 1 : 0,
+        transform: revealed ? 'translateY(0)' : 'translateY(-28px)',
+        transition: 'opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)',
+      }}
     >
       <div className={`relative w-full bg-[var(--color-surface)] ${v.vertical ? 'aspect-[9/16]' : 'aspect-video'}`}>
         <Image
@@ -77,14 +71,8 @@ function VideoTile({
           alt={v.title}
           fill
           priority={big}
-          sizes={
-            v.vertical
-              ? '(max-width: 640px) 50vw, 25vw'
-              : big
-                ? '(max-width: 1024px) 100vw, 70vw'
-                : '(max-width: 640px) 100vw, 33vw'
-          }
-          className={`object-cover transition-transform duration-700 group-hover:scale-105 ${preview ? 'opacity-0' : 'opacity-100'}`}
+          sizes={v.vertical ? '(max-width:640px) 50vw, 25vw' : big ? '(max-width:1024px) 100vw, 66vw' : '(max-width:640px) 100vw, 33vw'}
+          className={`object-cover transition-opacity duration-500 ${preview ? 'opacity-0' : 'opacity-100'}`}
         />
         {preview && (
           <iframe
@@ -97,28 +85,17 @@ function VideoTile({
         )}
 
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-
-        {!preview && (
-          <span className="pointer-events-none absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--color-accent)] text-black opacity-0 shadow-[0_0_30px_rgba(254,207,14,0.5)] transition-all duration-300 group-hover:scale-110 group-hover:opacity-100">
-            <PlayIcon className="ml-0.5 h-6 w-6" />
-          </span>
-        )}
-
+        <span className="pointer-events-none absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+          <PlayIcon className="ml-0.5 h-4 w-4" />
+        </span>
         {big && (
-          <span
-            className="absolute left-4 top-4 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-black"
-            style={{ fontFamily: 'var(--font-brand)' }}
-          >
+          <span className="absolute left-4 top-4 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-black" style={{ fontFamily: 'var(--font-brand)' }}>
             Latest Episode
           </span>
         )}
 
         <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4 md:p-5" style={{ fontFamily: 'var(--font-brand)' }}>
-          <h3
-            className={`font-extrabold uppercase leading-tight tracking-wide text-white ${
-              big ? 'line-clamp-2 text-lg md:text-2xl' : 'line-clamp-2 text-xs md:text-sm'
-            }`}
-          >
+          <h3 className={`line-clamp-2 font-extrabold uppercase leading-tight tracking-wide text-white ${big ? 'text-lg md:text-2xl' : 'text-xs md:text-sm'}`}>
             {v.title}
           </h3>
           <p className="mt-1 text-[10px] uppercase tracking-wide text-white/60">{formatDate(v.publishedAt)}</p>
@@ -130,28 +107,84 @@ function VideoTile({
 
 export default function MediaHub({ videos }: { videos: Video[] }) {
   const [active, setActive] = useState<Video | null>(null)
-  const rootRef = useRef<HTMLDivElement>(null)
+  const [revealedIds, setRevealedIds] = useState<Set<string>>(new Set())
+  const [previewIds, setPreviewIds] = useState<Set<string>>(new Set())
+  const gridRef = useRef<HTMLDivElement>(null)
   const close = useCallback(() => setActive(null), [])
 
+  // put the latest horizontal video first as the big featured tile
   const featured = videos.find((v) => !v.vertical) ?? videos[0]
-  const shorts = videos.filter((v) => v.vertical)
-  const horizontals = videos.filter((v) => !v.vertical && v.id !== featured?.id)
+  const rest = videos.filter((v) => v.id !== featured?.id)
+  const ordered = featured ? [featured, ...rest] : videos
 
-  // cascade: tiles slide down into place as they scroll into view
+  // One scroll-driven pass handles BOTH concerns:
+  //  - reveal: once a tile's top crosses 92% of the viewport it slides in (sticky)
+  //  - preview: while a tile is >50% on screen its clip autoplays; settles after
+  //    scrolling stops so fast scroll doesn't thrash iframes.
+  // Reduced motion: reveal everything up front, never autoplay.
   useEffect(() => {
-    const root = rootRef.current
-    if (!root) return
-    const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      const tiles = root.querySelectorAll<HTMLElement>('[data-tile]')
-      gsap.set(tiles, { y: -60, autoAlpha: 0 })
-      ScrollTrigger.batch(tiles, {
-        start: 'top 94%',
-        onEnter: (batch) =>
-          gsap.to(batch, { y: 0, autoAlpha: 1, duration: 0.7, ease: 'power3.out', stagger: 0.1, overwrite: true }),
+    const grid = gridRef.current
+    if (!grid) return
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const revealed = new Set<string>()
+
+    if (reduce) {
+      grid.querySelectorAll<HTMLElement>('[data-tile]').forEach((el) => el.dataset.vid && revealed.add(el.dataset.vid))
+      setRevealedIds(revealed)
+      return
+    }
+
+    let settle: ReturnType<typeof setTimeout> | null = null
+    let raf = 0
+    const compute = () => {
+      raf = 0
+      const nextPreview = new Set<string>()
+      let revealChanged = false
+      grid.querySelectorAll<HTMLElement>('[data-tile]').forEach((el) => {
+        const id = el.dataset.vid
+        if (!id) return
+        const r = el.getBoundingClientRect()
+        if (!revealed.has(id) && r.top < window.innerHeight * 0.92) {
+          revealed.add(id)
+          revealChanged = true
+        }
+        const vis = Math.max(0, Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0))
+        if (r.height > 0 && vis / r.height > 0.5) nextPreview.add(id)
       })
-    })
-    return () => mm.revert()
+      if (revealChanged) setRevealedIds(new Set(revealed))
+      setPreviewIds((prev) => {
+        if (prev.size === nextPreview.size && [...nextPreview].every((id) => prev.has(id))) return prev
+        return nextPreview
+      })
+    }
+    // reveal reacts instantly (rAF); preview settles after scrolling stops
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(revealOnly)
+      if (settle) clearTimeout(settle)
+      settle = setTimeout(compute, 160)
+    }
+    const revealOnly = () => {
+      raf = 0
+      let changed = false
+      grid.querySelectorAll<HTMLElement>('[data-tile]').forEach((el) => {
+        const id = el.dataset.vid
+        if (id && !revealed.has(id) && el.getBoundingClientRect().top < window.innerHeight * 0.92) {
+          revealed.add(id)
+          changed = true
+        }
+      })
+      if (changed) setRevealedIds(new Set(revealed))
+    }
+    const t = setTimeout(compute, 250)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      clearTimeout(t)
+      if (settle) clearTimeout(settle)
+      if (raf) cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
   }, [videos])
 
   useEffect(() => {
@@ -180,55 +213,30 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
   }
 
   return (
-    <div ref={rootRef}>
-      {/* Featured */}
-      {featured && (
-        <section className="px-4 pt-4 md:px-8 lg:px-12">
-          <div className="mx-auto max-w-5xl">
-            <VideoTile v={featured} big autoPreview onOpen={() => setActive(featured)} />
-          </div>
-        </section>
-      )}
+    <>
+      <section className="px-4 py-10 md:px-8 md:py-14 lg:px-12">
+        <div
+          ref={gridRef}
+          className="grid grid-cols-2 items-start gap-4 lg:grid-cols-4 lg:gap-5"
+          style={{ gridAutoFlow: 'dense' }}
+        >
+          {ordered.map((v, i) => {
+            const isFeatured = v.id === featured?.id
+            return (
+              <div key={v.id} className={tileSpan(v, i, isFeatured)}>
+                <VideoTile
+                  v={v}
+                  big={isFeatured}
+                  revealed={revealedIds.has(v.id)}
+                  preview={previewIds.has(v.id)}
+                  onOpen={() => setActive(v)}
+                />
+              </div>
+            )
+          })}
+        </div>
+      </section>
 
-      {/* Shorts row (vertical) */}
-      {shorts.length > 0 && (
-        <section className="px-4 pt-14 md:px-8 lg:px-12">
-          <div className="mx-auto max-w-6xl">
-            <h2
-              className="mb-5 text-lg font-extrabold uppercase tracking-widest text-[var(--color-foreground)] md:text-xl"
-              style={{ fontFamily: 'var(--font-brand)' }}
-            >
-              Quick Clips
-            </h2>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-              {shorts.map((v) => (
-                <VideoTile key={v.id} v={v} onOpen={() => setActive(v)} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Horizontal grid */}
-      {horizontals.length > 0 && (
-        <section className="px-4 py-14 md:px-8 md:py-16 lg:px-12">
-          <div className="mx-auto max-w-6xl">
-            <h2
-              className="mb-5 text-lg font-extrabold uppercase tracking-widest text-[var(--color-foreground)] md:text-xl"
-              style={{ fontFamily: 'var(--font-brand)' }}
-            >
-              Episodes & Drops
-            </h2>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {horizontals.map((v) => (
-                <VideoTile key={v.id} v={v} onOpen={() => setActive(v)} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Lightbox */}
       {active && (
         <div
           role="dialog"
@@ -237,10 +245,7 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
           onClick={close}
           className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
         >
-          <div
-            className={`relative w-full ${active.vertical ? 'max-w-sm' : 'max-w-5xl'}`}
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className={`relative w-full ${active.vertical ? 'max-w-sm' : 'max-w-5xl'}`} onClick={(e) => e.stopPropagation()}>
             <button
               onClick={close}
               aria-label="Close"
@@ -262,6 +267,6 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
           </div>
         </div>
       )}
-    </div>
+    </>
   )
 }
