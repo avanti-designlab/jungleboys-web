@@ -103,21 +103,32 @@ export default function AppShowcase() {
           ref={gridRef}
           className="mt-12 grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]"
         >
-          <ul className="z-0 grid gap-5 lg:-mr-8">{left.map((f, i) => pill(f, 'left', i))}</ul>
+          <ul className="z-0 grid gap-5 lg:-mr-28 xl:-mr-32">{left.map((f, i) => pill(f, 'left', i))}</ul>
           <div
             data-app-phone
-            className="relative z-20 order-first mx-auto w-full max-w-[440px] lg:order-none lg:w-[600px] lg:max-w-none xl:w-[680px]"
+            className="relative z-20 order-first mx-auto w-full max-w-[400px] lg:order-none lg:w-[560px] lg:max-w-none xl:w-[620px]"
           >
-            <Image
-              src="/rewards/phone-glow.png"
-              alt="The Jungle Boys app glowing on a phone"
-              width={608}
-              height={731}
-              sizes="(max-width: 1024px) 70vw, 680px"
-              className="w-full"
-            />
+            {/* clip the bottom (phone runs to the cut) so the section is shorter;
+                soft mask fade instead of a hard edge */}
+            <div
+              className="overflow-hidden"
+              style={{
+                aspectRatio: '1005 / 720',
+                maskImage: 'linear-gradient(to bottom, black 90%, transparent)',
+                WebkitMaskImage: 'linear-gradient(to bottom, black 90%, transparent)',
+              }}
+            >
+              <Image
+                src="/rewards/phone-glow.png"
+                alt="The Jungle Boys app glowing on a phone"
+                width={1005}
+                height={1004}
+                sizes="(max-width: 1024px) 60vw, 620px"
+                className="w-full"
+              />
+            </div>
           </div>
-          <ul className="z-0 grid gap-5 lg:-ml-8">{right.map((f, i) => pill(f, 'right', i))}</ul>
+          <ul className="z-0 grid gap-5 lg:-ml-28 xl:-ml-32">{right.map((f, i) => pill(f, 'right', i))}</ul>
         </div>
 
         <div className="mt-24 text-center">
