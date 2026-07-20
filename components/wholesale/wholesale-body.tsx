@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { BRAND_ASSETS } from '@/lib/site-config'
 
 // Everything below the wholesale banner: JB × Nabis intro, then a
 // one-question-at-a-time clickthrough form in a yellow pill, ending in a
@@ -136,15 +135,13 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
             Want to carry Jungle Boys products at your dispensary?
           </h2>
 
-          <div className="ws-logos mt-10 flex items-center justify-center gap-6 text-[var(--color-foreground)] md:gap-10">
-            <span className="ws-l inline-flex h-16 w-24 items-center justify-center md:h-20 md:w-32">
-              {/* eslint-disable-next-line @next/next/no-img-element -- SVG logo */}
-              <img src={BRAND_ASSETS.logoBlack} alt="Jungle Boys" className="light-hide h-full w-full object-contain" />
-              {/* eslint-disable-next-line @next/next/no-img-element -- SVG logo */}
-              <img src={BRAND_ASSETS.logoWhite} alt="" aria-hidden className="dark-only h-full w-full object-contain" />
-            </span>
-            <span className="ws-x font-display text-4xl text-[var(--color-muted)] md:text-5xl">×</span>
-            <NabisMark className="ws-r text-[var(--color-foreground)]" />
+          <div className="ws-logos mt-12 flex items-center justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element -- SVG lockup */}
+            <img
+              src="/wholesale/jb-x-nabis.svg"
+              alt="Jungle Boys × Nabis"
+              className="jbnabis-logo ws-lockup h-14 w-auto md:h-[4.5rem]"
+            />
           </div>
 
           <p className="media-reveal mx-auto mt-10 max-w-2xl text-base leading-relaxed text-[var(--color-muted)] md:text-lg">
