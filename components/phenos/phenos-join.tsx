@@ -30,8 +30,6 @@ const QUESTIONS: Q[] = [
 
 export default function PhenosJoin({ consentText }: { consentText: string }) {
   const rootRef = useRef<HTMLDivElement>(null)
-  const formRef = useRef<HTMLDivElement>(null)
-  const [started, setStarted] = useState(false)
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
@@ -88,10 +86,6 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
   function choose(opt: string) {
     setAnswers((a) => ({ ...a, [q.key]: opt }))
     setTimeout(() => (step < total - 1 ? setStep((s) => s + 1) : submit()), 240)
-  }
-  function begin() {
-    setStarted(true)
-    requestAnimationFrame(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }))
   }
 
   async function submit() {
@@ -153,39 +147,9 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
           </div>
         </div>
 
-        {/* ===== form pill on the bottom ===== */}
-        <div ref={formRef} className={`pheno-reveal mt-5 ${pill} p-7 md:mt-6 md:p-14`}>
-          {!started && (
-            <div className="flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between md:gap-12">
-              <div>
-                <span className="text-xs font-extrabold uppercase tracking-[0.4em]" style={{ fontFamily: 'var(--font-brand)' }}>
-                  The Pheno Hunt
-                </span>
-                <h3 className="font-display mt-3 text-5xl uppercase leading-[0.9] md:text-7xl">
-                  Ready to hunt with us?
-                </h3>
-                <p className="mt-4 max-w-md text-sm font-medium leading-relaxed text-black/70 md:text-base">
-                  Sign up in a few taps and we&apos;ll reach out when the next pheno drop is ready.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={begin}
-                className="group inline-flex shrink-0 items-center gap-3 rounded-full bg-black py-4 pl-8 pr-3 text-white transition-transform duration-200 hover:scale-[1.03]"
-              >
-                <span className="text-sm font-extrabold uppercase tracking-widest" style={{ fontFamily: 'var(--font-brand)' }}>
-                  Get Started
-                </span>
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-accent)] text-black">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden>
-                    <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
-              </button>
-            </div>
-          )}
-
-          {started && state === 'done' && (
+        {/* ===== form pill on the bottom (always present — GET STARTED scrolls here) ===== */}
+        <div id="join" className={`pheno-reveal mt-5 scroll-mt-28 ${pill} p-7 md:mt-6 md:p-14`}>
+          {state === 'done' ? (
             <div className="flex flex-col items-center gap-5 py-8 text-center text-black">
               <span className="text-xs font-extrabold uppercase tracking-[0.4em]" style={{ fontFamily: 'var(--font-brand)' }}>
                 You&apos;re in the hunt
@@ -196,9 +160,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
                 your inbox. Your palate is now part of Jungle Boys history.
               </p>
             </div>
-          )}
-
-          {started && state !== 'done' && (
+          ) : (
             <div className="text-black">
               {/* progress */}
               <div className="mb-4 flex items-center justify-between">

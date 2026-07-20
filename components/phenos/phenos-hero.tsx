@@ -123,14 +123,21 @@ export default function PhenosHero() {
         />
       </div>
 
-      {/* scroll cue */}
-      <div
-        aria-hidden
-        className="absolute bottom-7 left-1/2 z-10 -translate-x-1/2 text-[11px] font-bold uppercase tracking-[0.35em] text-white/45"
-        style={{ fontFamily: 'var(--font-brand)' }}
+      {/* GET STARTED — smooth-scrolls down into the sign-up form */}
+      <button
+        type="button"
+        onClick={() => document.getElementById('join')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+        className="group absolute bottom-10 left-1/2 z-30 inline-flex -translate-x-1/2 items-center gap-3 rounded-full bg-[var(--color-accent)] py-2 pl-8 pr-2 text-black shadow-[0_18px_50px_-12px_rgba(254,207,14,0.7)] transition-transform duration-200 hover:scale-[1.04]"
       >
-        Scroll ↓
-      </div>
+        <span className="text-sm font-extrabold uppercase tracking-widest" style={{ fontFamily: 'var(--font-brand)' }}>
+          Get Started
+        </span>
+        <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black text-white">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-5 w-5 transition-transform duration-200 group-hover:translate-y-0.5" aria-hidden>
+            <path d="M12 5v14M6 13l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </span>
+      </button>
     </section>
   )
 }
