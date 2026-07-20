@@ -15,15 +15,19 @@ function StoreCard({ s }: { s: OwnedStore }) {
   const linkProps = s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {}
   return (
     <div className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.6rem] border border-[var(--color-border)] bg-[var(--color-surface)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[var(--color-accent)] hover:shadow-[0_36px_90px_-32px_rgba(254,207,14,0.5)]">
-      {/* neutral light canvas so the black line-art illustration reads; the
-          square illustration fills the card edge-to-edge */}
+      {/* neutral light canvas so the black line-art illustration reads */}
       <div className="relative aspect-square w-full overflow-hidden bg-[#f5f5f5]">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          style={{ background: 'radial-gradient(circle at 50% 45%, rgba(254,207,14,0.22), transparent 62%)' }}
+        />
         <Image
           src={s.image}
           alt={`${s.name} — Jungle Boys`}
           fill
           sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+          className={`relative object-cover ${s.imageInset ? 'scale-[0.8]' : ''}`}
         />
       </div>
       <div className="flex flex-1 flex-col p-5">

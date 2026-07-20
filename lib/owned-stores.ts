@@ -17,6 +17,7 @@ export type OwnedStore = {
   lng: number
   external?: boolean // link opens off-site (e.g. the clothing store)
   cta?: string // override the button label
+  imageInset?: boolean // illustration fills more of the frame — inset it to match
 }
 
 const CA_HOURS_OC = '8AM – 8PM Mon–Thu · 8AM–9PM Fri–Sat · 9AM–8PM Sun'
@@ -56,6 +57,7 @@ export const OWNED_STORES: OwnedStore[] = [
     menuUrl: 'https://jungleboysclothing.com',
     external: true,
     cta: 'Shop Clothing →',
+    imageInset: true,
   },
   // ── Florida ──
   store('FL', 'bonita-springs', 'Bonita Springs', '28751 S Tamiami Trl, Bonita Springs, FL 34134', '(239) 488-2007', FL_HOURS, 26.31958, -81.80504),
