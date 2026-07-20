@@ -75,8 +75,11 @@ Figma API to `public/rewards/`; program facts in `lib/rewards-content.ts`; table
 HTML for SEO; FAQPage JSON-LD; brand surface = forced dark incl. body behind footer gutter; app
 links: Apple id6759608318, Play com.batchsys.jungleboys — "batchsys" is the JB app vendor, same
 party as the pre-existing Klaviyo "batch" key). FAQ answers drafted from program facts (Figma had
-lorem) — **Avanti reviews copy before cutover.** Remaining content templates + Storyblok wiring:
-media hub, contact, wholesale, phenos, verify shell, terms/privacy. Lead pipeline LIVE end-to-end
+lorem) — **Avanti reviews copy before cutover.** **`/media` shipped (2026-07-20)** — video hub auto-pulling @JungleBoysfilms uploads (Atom feed,
+no API key, hourly ISR) merged w/ optional Storyblok `media_video` blocks; featured hero + grid +
+youtube-nocookie lightbox; VideoObject JSON-LD; CSP frame-src opened for the embed. Storyblok
+`media` story not modeled yet (page works from YouTube alone until it is). Remaining content
+templates: contact, wholesale, phenos, verify shell, terms/privacy. Lead pipeline LIVE end-to-end
 (Klaviyo forwarding verified). Known mobile-header nit: VERIFY PRODUCTS pill can crowd the theme
 toggle at 375px — global nav polish item, not page-specific.
 Open: LEAD_NOTIFY_EMAIL delivery mechanism (no email provider — Klaviyo flow vs Resend, Avanti decides).
