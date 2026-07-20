@@ -48,7 +48,7 @@ export default async function ContactPage() {
       <section data-contact-banner className="px-2 pt-2 md:px-3">
         <div
           data-nav-theme="dark"
-          className="media-hero-in relative flex items-end justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 pb-8 pt-24 md:min-h-[460px] md:rounded-[2.5rem] md:pt-24"
+          className="media-hero-in relative flex min-h-[400px] items-center justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 md:h-[520px] md:rounded-[2.5rem]"
         >
           {/* graffiti mural background */}
           {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}
@@ -81,9 +81,9 @@ export default async function ContactPage() {
           {/* character + CONTACT plate (art already includes the plate) */}
           {/* eslint-disable-next-line @next/next/no-img-element -- character art */}
           <img
-            src="/contact/contact-header.png"
+            src="/contact/contact-header.svg"
             alt="Contact Jungle Boys"
-            className="rw-breathe relative z-10 w-[min(82vw,520px)] drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
+            className="rw-breathe relative z-10 w-[min(104vw,900px)] translate-y-[4%] drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
           />
         </div>
       </section>
