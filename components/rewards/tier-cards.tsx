@@ -68,13 +68,12 @@ export default function TierCards() {
                       sizes="(max-width: 768px) 80vw, 380px"
                       className="absolute h-auto max-w-none -translate-x-1/2 object-contain drop-shadow-[0_16px_30px_rgba(0,0,0,0.5)]"
                       style={{
-                        // Characters sized to read the same across all three (the
-                        // source arts are drawn at different character:plate ratios,
-                        // so this prioritizes matching the FIGURES; plates differ
-                        // slightly as a result). left/top keep plates centered.
+                        // Scaled so all three TIER PLATES render the same width
+                        // (264px, measured per-art with PIL). Characters land where
+                        // they land — the plates are the consistent anchor.
                         left: ['50%', 'calc(50% - 12px)', '50%'][i],
-                        height: ['368px', '342px', '325px'][i],
-                        top: ['-248px', '-223px', '-213px'][i],
+                        height: ['368px', '341px', '298px'][i],
+                        top: ['-248px', '-222px', '-188px'][i],
                       }}
                     />
                     {/* living smoke rising off the character */}
