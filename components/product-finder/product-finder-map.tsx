@@ -7,6 +7,9 @@ import type { Map as LeafletMap, Marker } from 'leaflet'
 import { BRAND_ASSETS } from '@/lib/site-config'
 import { RETAILERS, type Retailer } from '@/lib/product-finder/retailers'
 
+// California only on the finder map (FL has its own site/team)
+const STORES = RETAILERS.filter((r) => r.state !== 'FL')
+
 // Product Finder map — 3rd-party stockists (SEPARATE data + component from the
 // owned-locations map, per the two-map rule). Gold pulsing JB pins clustered for
 // 100+ stores; address/zip search (OpenStreetMap geocoder) auto-suggests for
@@ -67,7 +70,7 @@ export default function ProductFinderMap() {
           }),
       })
 
-      RETAILERS.forEach((r) => {
+      STORES.forEach((r) => {
         const icon = L.divIcon({
           className: '',
           html: `<div class="jb-pin jb-pin--sm"><span class="jb-pin-pulse"></span><span class="jb-pin-badge"><img src="${BRAND_ASSETS.logoBlack}" alt="" /></span></div>`,
@@ -83,8 +86,15 @@ export default function ProductFinderMap() {
         cluster.addLayer(m)
       })
       map.addLayer(cluster)
-      map.fitBounds(cluster.getBounds(), { padding: [50, 50] })
-      setTimeout(() => map.invalidateSize(), 200)
+      // size the map before fitting, else the fit computes against a 0-height
+      // box and never leaves the default world zoom. Re-fit once laid out.
+      const fit = () => {
+        map.invalidateSize()
+        const b = cluster.getBounds()
+        if (b.isValid()) map.fitBounds(b, { padding: [40, 40], maxZoom: 11 })
+      }
+      fit()
+      setTimeout(fit, 300)
     })()
     return () => {
       cancelled = true
@@ -125,7 +135,7 @@ export default function ProductFinderMap() {
     const map = mapObj.current
     if (map) map.flyTo([lat, lng], 11, { duration: 0.8 })
     // nearest 6 stores
-    const list = [...RETAILERS]
+    const list = [...STORES]
       .map((r) => ({ r, d: haversine([lat, lng], [r.lat, r.lng]) }))
       .sort((a, b) => a.d - b.d)
       .slice(0, 6)
@@ -196,41 +206,38 @@ export default function ProductFinderMap() {
           </button>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-[1fr_340px]">
-          {/* map */}
-          <div
-            data-nav-theme="dark"
-            className="jb-map relative order-2 overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0b0b0d] md:rounded-[2.5rem] lg:order-1"
-          >
-            <div ref={mapEl} className="h-[64vh] min-h-[460px] w-full" style={{ background: '#0b0b0d' }} />
-          </div>
+        {/* full-width map with a floating results panel */}
+        <div
+          data-nav-theme="dark"
+          className="jb-map relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0b0b0d] md:rounded-[2.5rem]"
+        >
+          <div ref={mapEl} className="h-[68vh] min-h-[480px] w-full" style={{ background: '#0b0b0d' }} />
 
-          {/* nearest list / preview */}
-          <div className="order-1 lg:order-2">
-            {active && (
-              <div className="mb-4 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
-                  {active.state === 'FL' ? 'Florida' : 'California'} stockist
-                </p>
-                <h3 className="mt-1 font-display text-2xl uppercase leading-none text-[var(--color-foreground)]">{active.name}</h3>
-                <p className="mt-2 text-sm text-[var(--color-muted)]">{active.address}</p>
-                <a
-                  href={dirUrl(active)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-flex rounded-full bg-[var(--color-accent)] px-5 py-2.5 text-xs font-extrabold uppercase tracking-widest text-black transition-transform hover:scale-[1.03]"
-                  style={{ fontFamily: 'var(--font-brand)' }}
-                >
-                  Directions →
-                </a>
-              </div>
-            )}
-            {nearest.length > 0 ? (
-              <div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-2">
-                <p className="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
+          {nearest.length > 0 && (
+            <div className="pointer-events-none absolute inset-x-3 bottom-3 z-[500] md:inset-y-4 md:left-auto md:right-4 md:w-[360px]">
+              <div className="pointer-events-auto flex max-h-[60vh] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#111114]/95 shadow-2xl backdrop-blur-md">
+                {active && (
+                  <div className="border-b border-white/10 p-5">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)]" style={{ fontFamily: 'var(--font-brand)' }}>
+                      Closest stockist
+                    </p>
+                    <h3 className="mt-1 font-display text-2xl uppercase leading-none text-white">{active.name}</h3>
+                    <p className="mt-2 text-sm text-white/60">{active.address}</p>
+                    <a
+                      href={dirUrl(active)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 inline-flex rounded-full bg-[var(--color-accent)] px-5 py-2.5 text-xs font-extrabold uppercase tracking-widest text-black transition-transform hover:scale-[1.03]"
+                      style={{ fontFamily: 'var(--font-brand)' }}
+                    >
+                      Directions →
+                    </a>
+                  </div>
+                )}
+                <p className="px-4 pb-1 pt-3 text-[10px] font-bold uppercase tracking-widest text-white/45" style={{ fontFamily: 'var(--font-brand)' }}>
                   Nearest stores
                 </p>
-                <ul className="max-h-[46vh] overflow-y-auto">
+                <ul className="overflow-y-auto p-2 pt-1">
                   {nearest.map((r) => (
                     <li key={r.name + r.address}>
                       <button
@@ -238,21 +245,17 @@ export default function ProductFinderMap() {
                           setActive(r)
                           mapObj.current?.flyTo([r.lat, r.lng], 13, { duration: 0.6 })
                         }}
-                        className={`block w-full rounded-xl px-3 py-3 text-left transition hover:bg-[var(--color-background)] ${active?.name === r.name && active?.address === r.address ? 'bg-[var(--color-background)]' : ''}`}
+                        className={`block w-full rounded-xl px-3 py-2.5 text-left transition hover:bg-white/5 ${active?.name === r.name && active?.address === r.address ? 'bg-white/5' : ''}`}
                       >
-                        <span className="block text-sm font-bold text-[var(--color-foreground)]">{r.name}</span>
-                        <span className="block text-xs text-[var(--color-muted)]">{r.address}</span>
+                        <span className="block text-sm font-bold text-white">{r.name}</span>
+                        <span className="block text-xs text-white/50">{r.address}</span>
                       </button>
                     </li>
                   ))}
                 </ul>
               </div>
-            ) : (
-              <div className="rounded-2xl border border-dashed border-[var(--color-border)] p-6 text-center text-sm text-[var(--color-muted)]">
-                Search your address or use your location to find the closest stores.
-              </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

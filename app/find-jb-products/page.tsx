@@ -51,10 +51,10 @@ export default function ProductFinderPage() {
           <span
             aria-hidden
             className="font-display pointer-events-none absolute left-1/2 top-[86px] z-0 -translate-x-1/2 whitespace-nowrap uppercase leading-none text-white/90 md:top-[104px]"
-            style={{ fontSize: 'min(19vw, 440px)' }}
+            style={{ fontSize: 'min(20.5vw, 500px)' }}
           >
-            {'FIND JB'.split('').map((ch, i) => (
-              <span key={i} className={ch === ' ' ? '' : 'contact-letter'} style={{ animationDelay: `${0.18 + i * 0.07}s` }}>
+            {'PRODUCT FINDER'.split('').map((ch, i) => (
+              <span key={i} className={ch === ' ' ? '' : 'contact-letter'} style={{ animationDelay: `${0.15 + i * 0.05}s` }}>
                 {ch === ' ' ? ' ' : ch}
               </span>
             ))}
@@ -63,7 +63,7 @@ export default function ProductFinderPage() {
           <img
             src="/product-finder/pf-header.svg"
             alt="Find Jungle Boys products"
-            className="contact-alive relative z-10 h-[116%] w-auto max-w-none drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
+            className="contact-alive relative z-10 h-[104%] w-auto max-w-none translate-y-[5%] drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
           />
         </div>
       </section>
@@ -71,11 +71,8 @@ export default function ProductFinderPage() {
       {/* heading */}
       <section className="px-4 pt-14 text-center md:px-8 md:pt-20 lg:px-12">
         <h2 className="font-display text-5xl uppercase leading-[0.9] text-[var(--color-foreground)] md:text-7xl">
-          Find Jungle Boys Products <span className="text-[var(--color-accent-ink)]">Near You</span>
+          Find Jungle Boys Products Near You
         </h2>
-        <p className="mx-auto mt-4 max-w-xl text-sm uppercase tracking-wide text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
-          Search your address or ZIP — or use your location — to find the closest spots carrying Jungle Boys.
-        </p>
       </section>
 
       <div className="pt-10 md:pt-12">
