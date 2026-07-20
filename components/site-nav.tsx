@@ -35,8 +35,38 @@ const DARK_PAGES = ['/rewards']
 export default function SiteNav() {
   const [open, setOpen] = useState(false)
   const [condensed, setCondensed] = useState(false)
+  // adaptive header: true = a dark section is behind the bar → use white content;
+  // false = light behind → use black. Detected by sampling the page under the bar
+  // (mix-blend-difference can't work here — the fixed header isolates the blend).
+  const [headerDark, setHeaderDark] = useState(true)
   const pathname = usePathname()
   const onDarkPage = DARK_PAGES.some((p) => pathname?.startsWith(p))
+
+  // sample what's painted behind the header and flip the header color to match
+  useEffect(() => {
+    let raf = 0
+    const sample = () => {
+      raf = 0
+      // probe at the logo's x, just below the top edge
+      const stack = document.elementsFromPoint(80, 42)
+      const el = stack.find((e) => !e.closest('header') && !e.closest('[data-nav-overlay]'))
+      const region = el?.closest('[data-nav-theme]') as HTMLElement | null
+      setHeaderDark(region?.dataset.navTheme === 'dark')
+    }
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(sample)
+    }
+    // let layout/images settle, then sample
+    const t = setTimeout(sample, 60)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      clearTimeout(t)
+      if (raf) cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [pathname])
 
   // condense into a pill once the hero region (or first viewport) is passed
   useEffect(() => {
@@ -64,11 +94,14 @@ export default function SiteNav() {
 
   let linkIndex = 0 // running index for the stagger delay across all columns
 
+  // the bar's left cluster is white over any dark backdrop OR the open menu
+  const barDark = open || headerDark
+
   return (
     <>
-      {/* full-screen menu (under the blended header, above everything else) */}
+      {/* full-screen menu (under the header, above everything else) */}
       {open && (
-        <div className="menu-overlay fixed inset-0 z-40 h-dvh overflow-hidden bg-[#0b0b0b]">
+        <div data-nav-overlay className="menu-overlay fixed inset-0 z-40 h-dvh overflow-hidden bg-[#0b0b0b]">
           <nav className="mx-auto grid h-full w-full max-w-[1560px] grid-cols-1 content-start gap-x-10 gap-y-1 px-8 pt-28 md:[grid-template-columns:1fr_1fr_1.35fr] md:pt-40">
             {MENU_COLUMNS.map((column, c) => (
               <ul key={c} className="flex flex-col">
@@ -132,16 +165,16 @@ export default function SiteNav() {
               : 'translate-y-0 opacity-100'
           }`}
         >
-          <div className="flex items-center gap-4 text-white" style={{ mixBlendMode: 'difference' }}>
+          <div className={`flex items-center gap-4 transition-colors duration-300 ${barDark ? 'text-white' : 'text-black'}`}>
             <button
               aria-expanded={open}
               aria-label={open ? 'Close menu' : 'Open menu'}
               onClick={() => setOpen((o) => !o)}
               className="flex cursor-pointer flex-col items-start gap-[7px] p-2"
             >
-              <span className={`block h-[2px] rounded bg-white transition-all duration-300 ${open ? 'w-8 translate-y-[9px] rotate-45' : 'w-9'}`} />
-              <span className={`block h-[2px] rounded bg-white transition-all duration-200 ${open ? 'w-8 opacity-0' : 'w-6'}`} />
-              <span className={`block h-[2px] rounded bg-white transition-all duration-300 ${open ? 'w-8 -translate-y-[9px] -rotate-45' : 'w-[30px]'}`} />
+              <span className={`block h-[2px] rounded bg-current transition-all duration-300 ${open ? 'w-8 translate-y-[9px] rotate-45' : 'w-9'}`} />
+              <span className={`block h-[2px] rounded bg-current transition-all duration-200 ${open ? 'w-8 opacity-0' : 'w-6'}`} />
+              <span className={`block h-[2px] rounded bg-current transition-all duration-300 ${open ? 'w-8 -translate-y-[9px] -rotate-45' : 'w-[30px]'}`} />
             </button>
             <Link
               href="/"
@@ -150,7 +183,11 @@ export default function SiteNav() {
               className="block h-14 w-20 transition-transform duration-200 hover:scale-105 md:h-16 md:w-24"
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset */}
-              <img src={BRAND_ASSETS.logoWhite} alt="Jungle Boys" className="h-full w-full object-contain" />
+              <img
+                src={barDark ? BRAND_ASSETS.logoWhite : BRAND_ASSETS.logoBlack}
+                alt="Jungle Boys"
+                className="h-full w-full object-contain"
+              />
             </Link>
           </div>
 
@@ -158,8 +195,9 @@ export default function SiteNav() {
             <div className="flex items-center gap-3">
               <PillCta label="Verify Products" href="/verify" />
               <div
-                className="flex items-center gap-4 rounded-full border-2 border-white px-5 py-3 text-white"
-                style={{ mixBlendMode: 'difference' }}
+                className={`flex items-center gap-4 rounded-full border-2 px-5 py-3 transition-colors duration-300 ${
+                  headerDark ? 'border-white text-white' : 'border-black text-black'
+                }`}
               >
                 {HEADER_SOCIALS.map((s) => (
                   <a
@@ -174,9 +212,7 @@ export default function SiteNav() {
                   </a>
                 ))}
               </div>
-              <div style={{ mixBlendMode: 'difference' }}>
-                <ThemeToggle />
-              </div>
+              <ThemeToggle className={headerDark ? 'border-white text-white' : 'border-black text-black'} />
             </div>
           )}
         </div>

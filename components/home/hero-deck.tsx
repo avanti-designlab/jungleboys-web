@@ -79,6 +79,7 @@ export default function HeroDeck() {
     <section
       ref={wrapRef}
       data-hero
+      data-nav-theme="dark"
       aria-label="Featured promotions"
       style={{ height: `${HERO_SLIDES.length * 100}svh` }}
       className="relative"

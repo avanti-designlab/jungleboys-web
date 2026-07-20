@@ -26,6 +26,7 @@ export const metadata: Metadata = {
 export default function RewardsPage() {
   return (
     <main
+      data-nav-theme="dark"
       className="bg-[var(--color-background)] pb-10 text-[var(--color-foreground)]"
       style={
         {

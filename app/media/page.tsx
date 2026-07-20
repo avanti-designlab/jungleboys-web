@@ -50,7 +50,10 @@ export default async function MediaPage() {
 
       {/* full-width rounded character banner (brand surface, dark in both themes) */}
       <section className="px-2 pt-24 md:px-3 md:pt-28">
-        <div className="relative overflow-hidden rounded-[1.75rem] bg-[#0d0d0d] px-6 py-12 text-center md:rounded-[2.5rem] md:py-16">
+        <div
+          data-nav-theme="dark"
+          className="relative overflow-hidden rounded-[1.75rem] bg-[#0d0d0d] px-6 py-12 text-center md:rounded-[2.5rem] md:py-16"
+        >
           {/* accent spotlight behind the character */}
           <div
             aria-hidden
