@@ -37,7 +37,7 @@ export default function TierCards() {
         <Scrub
           enter
           start="top 70%"
-          className="mt-56 grid items-stretch gap-y-36 md:mt-64 md:grid-cols-3 md:gap-x-6 md:gap-y-0 xl:gap-x-8"
+          className="mt-64 grid items-stretch gap-y-44 md:mt-72 md:grid-cols-3 md:gap-x-6 md:gap-y-0 xl:gap-x-8"
         >
           {TIER_CARDS.map((t, i) => {
             const isGold = t.theme === 'gold'
@@ -69,11 +69,11 @@ export default function TierCards() {
                       className="absolute h-auto max-w-none -translate-x-1/2 object-contain drop-shadow-[0_16px_30px_rgba(0,0,0,0.5)]"
                       style={{
                         // Scaled so all three TIER PLATES render the same width
-                        // (264px, measured per-art with PIL). Characters land where
+                        // (318px, measured per-art with PIL). Characters land where
                         // they land — the plates are the consistent anchor.
-                        left: ['50%', 'calc(50% - 12px)', '50%'][i],
-                        height: ['368px', '341px', '298px'][i],
-                        top: ['-248px', '-222px', '-188px'][i],
+                        left: ['50%', 'calc(50% - 14px)', '50%'][i],
+                        height: ['443px', '411px', '359px'][i],
+                        top: ['-304px', '-273px', '-232px'][i],
                       }}
                     />
                     {/* living smoke rising off the character */}
