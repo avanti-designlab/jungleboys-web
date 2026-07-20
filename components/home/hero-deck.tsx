@@ -110,7 +110,11 @@ export default function HeroDeck() {
                 className={`object-cover ${s.imageMobile ? 'hidden md:block' : ''}`}
               />
             </div>
-            {s.overlay !== false && <div className="absolute inset-0 bg-black/30" />}
+            {s.overlay === 'scrim' ? (
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+            ) : (
+              s.overlay !== false && <div className="absolute inset-0 bg-black/30" />
+            )}
             <div
               data-content={i}
               className="absolute inset-0 flex flex-col items-start justify-end gap-4 p-8 pb-16 text-white md:p-16 md:pb-20"

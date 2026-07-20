@@ -11,9 +11,12 @@ export const HERO_SLIDES = [
     title: 'JULY DEALS',
     cta: 'Learn more',
     href: '/710-deals',
-    image: `${CDN}/69e7ee53bc94e5cc8f331c78_JB%20April%20Deals%20BG%20Desktop.png`,
-    imageMobile: undefined,
-    alt: 'July deals — premium flower background',
+    image: '/hero/july-deals-fireworks.jpg',
+    imageMobile: '/hero/july-deals-mobile.jpg',
+    alt: 'Fourth of July fireworks over the downtown LA skyline and the 6th Street Viaduct',
+    // bright fireworks stay crisp; a bottom scrim keeps the headline legible
+    // over the lit bridge arches
+    overlay: 'scrim',
   },
   {
     kicker: 'NEW! ALL-IN-ONE',
@@ -21,7 +24,7 @@ export const HERO_SLIDES = [
     cta: 'Shop now',
     href: '/products',
     image: '/hero/gas-tank-beach.jpg',
-    imageMobile: undefined,
+    imageMobile: '/hero/gas-tank-mobile.jpg',
     alt: 'Jungle Boys Gas Tank all-in-one vapes standing in the sand at the beach',
     overlay: false, // bright + crisp per Avanti
   },
@@ -31,7 +34,7 @@ export const HERO_SLIDES = [
     cta: 'Shop now',
     href: '/products',
     image: '/hero/gold-mylar-skyline.jpg',
-    imageMobile: undefined,
+    imageMobile: '/hero/gold-mylar-mobile.jpg',
     alt: 'Gold Jungle Boys mylar bag towering over the LA skyline at sunset',
     overlay: false, // art is bright + crisp on its own (Avanti)
   },
@@ -43,8 +46,9 @@ export const HERO_SLIDES = [
   image: string
   imageMobile?: string
   alt: string
-  /** dark readability overlay — defaults to on */
-  overlay?: boolean
+  /** dark readability overlay: true/undefined = full wash, 'scrim' = bottom
+   *  gradient only (keeps image bright), false = none */
+  overlay?: boolean | 'scrim'
 }[]
 
 export const QUICK_CARDS = [
