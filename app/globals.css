@@ -67,7 +67,7 @@
 .font-display {
   font-family: var(--font-display);
   line-height: 0.9;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.02em; /* condensed — Bebas letters sit closer together */
 }
 
 body {
@@ -395,11 +395,3 @@ body {
 }
 .jb-map .leaflet-bar a:hover { background: #23232a; }
 
-/* contact hero: giant CONTACT wordmark zooms in behind the character on load */
-@media (prefers-reduced-motion: no-preference) {
-  @keyframes contact-word-in {
-    from { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
-    to { opacity: 0.9; transform: translate(-50%, -50%) scale(1); }
-  }
-  .contact-word { animation: contact-word-in 1.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both; }
-}
