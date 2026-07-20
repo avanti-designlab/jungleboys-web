@@ -160,3 +160,104 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* ===== /rewards page: theme + motion helpers ===== */
+
+/* accent-colored TEXT that passes AA in both themes (yellow-on-white forbidden) */
+:root {
+  --color-accent-ink: #8a6a00;
+}
+[data-theme='dark'] {
+  --color-accent-ink: #fecf0e;
+}
+
+/* show/hide by theme (e.g. watermark logo variants) */
+.dark-only { display: none; }
+[data-theme='dark'] .dark-only { display: block; }
+[data-theme='dark'] .light-hide { display: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* scroll cue chevrons */
+  @keyframes rw-arrow-cascade {
+    0%, 100% { opacity: 0.15; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(7px); }
+  }
+  .rw-chevron { animation: rw-arrow-cascade 1.6s ease-in-out infinite; }
+
+  /* rotating illumination ring (Pheno Hunter card + invite panel) */
+  @keyframes rw-rotate { to { transform: rotate(360deg); } }
+  .rw-ring::before {
+    content: '';
+    position: absolute;
+    inset: -60%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      transparent 250deg,
+      rgba(254, 207, 14, 0.15) 290deg,
+      #fecf0e 330deg,
+      #fff3b0 345deg,
+      #fecf0e 355deg,
+      transparent 360deg
+    );
+    animation: rw-rotate 3.5s linear infinite;
+  }
+
+  /* shine sweep across gold surfaces */
+  @keyframes rw-shimmer {
+    0% { transform: translateX(-160%) skewX(-18deg); }
+    100% { transform: translateX(260%) skewX(-18deg); }
+  }
+  .rw-shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 34%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+    animation: rw-shimmer 3.2s ease-in-out infinite;
+  }
+
+  /* glow pulse (Pheno Hunter card) */
+  @keyframes rw-glow-pulse {
+    0%, 100% { box-shadow: 0 0 45px rgba(254, 207, 14, 0.3); }
+    50% { box-shadow: 0 0 90px rgba(254, 207, 14, 0.55); }
+  }
+  .rw-glow { animation: rw-glow-pulse 2.8s ease-in-out infinite; }
+
+  /* value-prop icon part animations */
+  @keyframes rw-coin-drop {
+    0% { transform: translateY(-9px); opacity: 0; }
+    25% { opacity: 1; }
+    45%, 70% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(0); opacity: 0; }
+  }
+  .rw-ic-coin { animation: rw-coin-drop 2.4s ease-in infinite; }
+  @keyframes rw-shackle-pop {
+    0%, 48%, 100% { transform: rotate(0deg); }
+    60%, 84% { transform: rotate(-30deg); }
+  }
+  .rw-ic-shackle { animation: rw-shackle-pop 3s ease-in-out infinite; transform-origin: 7px 10px; }
+  @keyframes rw-bar-rise {
+    0%, 15% { transform: scaleY(0.45); }
+    45%, 80% { transform: scaleY(1); }
+    100% { transform: scaleY(0.45); }
+  }
+  .rw-ic-bar { animation: rw-bar-rise 2.6s ease-in-out infinite; transform-origin: bottom; }
+  @keyframes rw-lid-lift {
+    0%, 40%, 100% { transform: translateY(0) rotate(0deg); }
+    58%, 82% { transform: translateY(-4.5px) rotate(-7deg); }
+  }
+  .rw-ic-lid { animation: rw-lid-lift 3.2s ease-in-out infinite; }
+  @keyframes rw-sparkle {
+    0%, 45%, 100% { opacity: 0; transform: scale(0.4); }
+    60%, 80% { opacity: 1; transform: scale(1); }
+  }
+  .rw-ic-sparkle { animation: rw-sparkle 3.2s ease-in-out infinite; }
+}
+
+/* rewards: theme-adaptive artwork */
+.rw-watermark { filter: invert(0.92); }
+[data-theme='dark'] .rw-watermark { filter: none; }
+.rw-badge { background: #0a0a0a; border-radius: 0.65rem; }
+[data-theme='dark'] .rw-badge { background: transparent; }

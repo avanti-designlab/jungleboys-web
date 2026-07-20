@@ -14,7 +14,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-type Line = { text: string; accent?: boolean; block?: boolean }
+type Line = { text: string; accent?: boolean; block?: boolean; nowrap?: boolean }
 
 export function SplitHeading({
   lines,
@@ -24,6 +24,7 @@ export function SplitHeading({
   pin = false,
   start = 'top 80%',
   load = false,
+  accentClass = 'text-[var(--color-accent-ink)]',
 }: {
   lines: Line[]
   as?: 'h1' | 'h2' | 'h3'
@@ -33,6 +34,8 @@ export function SplitHeading({
   start?: string
   /** animate once on mount (hero) instead of scrubbing with scroll */
   load?: boolean
+  /** color class for accent lines — pass text-[var(--color-accent)] on always-dark surfaces */
+  accentClass?: string
 }) {
   const ref = useRef<HTMLHeadingElement>(null)
 
@@ -85,7 +88,7 @@ export function SplitHeading({
         <span
           key={li}
           aria-hidden
-          className={`${l.block ? 'block' : ''} ${l.accent ? 'text-[var(--color-accent)]' : ''}`}
+          className={`${l.block ? 'block' : ''} ${l.nowrap ? 'md:whitespace-nowrap' : ''} ${l.accent ? accentClass : ''}`}
         >
           {(mode === 'letters' ? [...l.text] : l.text.split(/(\s+)/)).map((part, i) =>
             /^\s+$/.test(part) || part === ' ' ? (

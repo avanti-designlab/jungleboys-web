@@ -6,6 +6,7 @@ import FinePrint from '@/components/rewards/fine-print'
 import HowItWorks from '@/components/rewards/how-it-works'
 import RewardsFaq from '@/components/rewards/rewards-faq'
 import RewardsHero from '@/components/rewards/rewards-hero'
+import RewardsIntro from '@/components/rewards/rewards-intro'
 import TierCards from '@/components/rewards/tier-cards'
 import ValueProps from '@/components/rewards/value-props'
 import WaysToEarn from '@/components/rewards/ways-to-earn'
@@ -13,7 +14,8 @@ import { REWARDS_FAQ } from '@/lib/rewards-content'
 import { breadcrumbSchema, faqSchema } from '@/lib/schema'
 
 // PWF Rewards landing — /rewards (supersedes /loyalty; /app + /pwf-reward 301
-// here). Dark brand surface in both themes, like the footer and menu overlay.
+// here). Theme-aware: light by default, dark via the site toggle. Brand
+// stages (intro, how-it-works banner, Connoisseur Club) stay dark by design.
 
 export const metadata: Metadata = {
   title: 'PWF Rewards — Jungle Boys Loyalty Program',
@@ -23,9 +25,7 @@ export const metadata: Metadata = {
 
 export default function RewardsPage() {
   return (
-    <main className="bg-[#060606] pb-10 text-white">
-      {/* brand surface: page stays dark in both themes, incl. the footer gutter */}
-      <style>{`body { background: #060606; }`}</style>
+    <main className="bg-[var(--color-background)] pb-10 text-[var(--color-foreground)]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -38,6 +38,7 @@ export default function RewardsPage() {
           ]),
         }}
       />
+      <RewardsIntro />
       <RewardsHero />
       <ValueProps />
       <HowItWorks />

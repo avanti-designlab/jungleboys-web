@@ -1,22 +1,55 @@
+'use client'
+
 import Image from 'next/image'
+import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { APP_FEATURES } from '@/lib/rewards-content'
 import StoreBadges from './store-badges'
 import { Scrub, SplitHeading } from './motion'
 
-// "Only on the app": letter-reveal headline, phone scales in, feature pills
-// slide from their side. Download CTA repeats the pattern. All scrubbed.
+// "Only on the app" — oversized glowing phone; feature pills EMERGE FROM
+// BEHIND THE PHONE outward to their side (staggered), white text, big.
+// Then the download CTA. Matches the live Webflow behavior, elevated.
+
+gsap.registerPlugin(ScrollTrigger)
 
 export default function AppShowcase() {
+  const gridRef = useRef<HTMLDivElement>(null)
   const left = APP_FEATURES.slice(0, 3)
   const right = APP_FEATURES.slice(3)
 
-  const pill = (label: string, side: 'left' | 'right') => (
+  useEffect(() => {
+    const grid = gridRef.current
+    if (!grid) return
+    const mm = gsap.matchMedia()
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const phone = grid.querySelector('[data-app-phone]')
+      const leftPills = grid.querySelectorAll('[data-pill-left]')
+      const rightPills = grid.querySelectorAll('[data-pill-right]')
+      gsap.set(phone, { opacity: 0, scale: 0.72, transformOrigin: '50% 100%' })
+      gsap.set(leftPills, { opacity: 0, xPercent: 55 })
+      gsap.set(rightPills, { opacity: 0, xPercent: -55 })
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: grid, start: 'top 70%', end: 'bottom 80%', scrub: true },
+      })
+      tl.to(phone, { opacity: 1, scale: 1, duration: 0.5, ease: 'none' })
+      leftPills.forEach((p, i) => {
+        tl.to(p, { opacity: 1, xPercent: 0, duration: 0.3, ease: 'none' }, 0.35 + i * 0.18)
+        const rp = rightPills[i]
+        if (rp) tl.to(rp, { opacity: 1, xPercent: 0, duration: 0.3, ease: 'none' }, 0.44 + i * 0.18)
+      })
+    })
+    return () => mm.revert()
+  }, [])
+
+  const pill = (label: string, side: 'left' | 'right', i: number) => (
     <li
       key={label}
-      data-reveal={side}
-      className={`rounded-xl bg-[#3a3413]/90 px-5 py-3.5 text-xs font-bold uppercase tracking-wide text-[#f4e9b0] ${
+      {...{ [side === 'left' ? 'data-pill-left' : 'data-pill-right']: '' }}
+      className={`rounded-full bg-[#181818] px-7 py-4 text-sm font-extrabold uppercase tracking-wide text-white shadow-[0_0_24px_rgba(254,207,14,0.12)] ring-1 ring-white/15 will-change-transform md:text-base ${
         side === 'left' ? 'lg:text-right' : ''
-      }`}
+      } ${i === 1 ? (side === 'left' ? 'lg:-translate-x-6' : 'lg:translate-x-6') : ''}`}
       style={{ fontFamily: 'var(--font-brand)' }}
     >
       {label}
@@ -25,36 +58,34 @@ export default function AppShowcase() {
 
   return (
     <section className="px-6 py-16 md:px-12 md:py-24 lg:px-20">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-7xl">
         <SplitHeading
           mode="letters"
           start="top 60%"
-          className="text-center text-3xl font-extrabold uppercase tracking-tight text-white md:text-4xl xl:text-5xl"
+          className="text-center text-3xl font-extrabold uppercase tracking-tight text-[var(--color-foreground)] md:text-4xl xl:text-5xl"
           lines={[{ text: 'Only on' }, { text: 'the App', accent: true }]}
         />
 
-        <Scrub start="top 60%">
-          <div className="mt-10 grid items-center gap-6 lg:grid-cols-[1fr_auto_1fr]">
-            <ul className="grid gap-4">{left.map((f) => pill(f, 'left'))}</ul>
-            <div data-reveal="scale" className="order-first mx-auto w-full max-w-[380px] lg:order-none lg:max-w-[460px]">
-              <Image
-                src="/rewards/phone-glow.png"
-                alt="The Jungle Boys app glowing on a phone"
-                width={1005}
-                height={1004}
-                sizes="(max-width: 1024px) 70vw, 460px"
-                className="w-full"
-              />
-            </div>
-            <ul className="grid gap-4">{right.map((f) => pill(f, 'right'))}</ul>
+        <div ref={gridRef} className="mt-12 grid items-center gap-8 lg:grid-cols-[1fr_auto_1fr]">
+          <ul className="z-10 grid gap-5">{left.map((f, i) => pill(f, 'left', i))}</ul>
+          <div data-app-phone className="order-first mx-auto w-full max-w-[460px] lg:order-none lg:max-w-[620px]">
+            <Image
+              src="/rewards/phone-glow.png"
+              alt="The Jungle Boys app glowing on a phone"
+              width={1005}
+              height={1004}
+              sizes="(max-width: 1024px) 80vw, 620px"
+              className="w-full"
+            />
           </div>
-        </Scrub>
+          <ul className="z-10 grid gap-5">{right.map((f, i) => pill(f, 'right', i))}</ul>
+        </div>
 
-        <div className="mt-20 text-center">
+        <div className="mt-24 text-center">
           <SplitHeading
             mode="letters"
             start="top 70%"
-            className="text-3xl font-extrabold uppercase leading-[1.1] tracking-tight text-white md:text-4xl xl:text-5xl"
+            className="text-3xl font-extrabold uppercase leading-[1.1] tracking-tight text-[var(--color-foreground)] md:text-4xl xl:text-5xl"
             lines={[
               { text: 'Download the Jungle Boys App.' },
               { text: 'Start Earning Today.', accent: true, block: true },
@@ -63,7 +94,7 @@ export default function AppShowcase() {
           <Scrub start="top 85%">
             <p
               data-reveal="rise"
-              className="mt-4 text-sm font-bold uppercase tracking-wide text-white/90"
+              className="mt-4 text-sm font-bold uppercase tracking-wide text-[var(--color-muted)]"
               style={{ fontFamily: 'var(--font-brand)' }}
             >
               Rewards, access, and exclusive perks are waiting.
@@ -73,7 +104,7 @@ export default function AppShowcase() {
             </div>
             <p
               data-reveal="rise"
-              className="mt-4 text-[11px] font-semibold uppercase tracking-widest text-white/70"
+              className="mt-4 text-[11px] font-semibold uppercase tracking-widest text-[var(--color-muted)]"
               style={{ fontFamily: 'var(--font-brand)' }}
             >
               Get 100 bonus points just for downloading.
