@@ -60,7 +60,7 @@
 
   /* type roles — fonts injected by next/font in app/layout.tsx */
   --font-display: var(--font-bebas); /* Bebas Neue — the lead voice */
-  --font-brand: var(--font-brand-standin); /* Lemon Milk Pro when files land */
+  --font-brand: var(--font-lemon-milk); /* Lemon Milk Pro (licensed, app/fonts) */
   --font-body: var(--font-dm-sans); /* long-form + default text */
 }
 

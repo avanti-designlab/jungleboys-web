@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, DM_Sans, Montserrat } from "next/font/google";
+import { Bebas_Neue, DM_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import AgeGate from "@/components/age-gate";
 import LoadingScreen from "@/components/loading-screen";
 import CookieConsent from "@/components/cookie-consent";
@@ -10,8 +11,7 @@ import "./globals.css";
 
 // Type roles per the frozen tokens (design-system/MASTER.md):
 //   --font-display = Bebas Neue (lead voice, bold/dramatic headers)
-//   --font-brand   = Lemon Milk Pro via next/font/local when Avanti uploads the
-//                    licensed files; Montserrat is the geometric stand-in until then
+//   --font-brand   = Lemon Milk Pro (licensed webfont, app/fonts)
 //   --font-body    = DM Sans (long-form + default)
 const bebas = Bebas_Neue({
   variable: "--font-bebas",
@@ -19,10 +19,13 @@ const bebas = Bebas_Neue({
   subsets: ["latin"],
 });
 
-const brandStandin = Montserrat({
-  variable: "--font-brand-standin",
-  weight: ["300", "400", "500", "700"],
-  subsets: ["latin"],
+const lemonMilk = localFont({
+  variable: "--font-lemon-milk",
+  src: [
+    { path: "./fonts/lemon-milk-pro-regular.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/lemon-milk-pro-medium.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/lemon-milk-pro-bold.woff2", weight: "700", style: "normal" },
+  ],
 });
 
 const dmSans = DM_Sans({
@@ -48,7 +51,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${bebas.variable} ${brandStandin.variable} ${dmSans.variable} h-full antialiased`}
+      className={`${bebas.variable} ${lemonMilk.variable} ${dmSans.variable} h-full antialiased`}
     >
       <head>
         <script
