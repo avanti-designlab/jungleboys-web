@@ -407,3 +407,14 @@ body {
     animation: contact-letter-drop 0.75s cubic-bezier(0.34, 1.4, 0.5, 1) both;
   }
 }
+
+/* contact hero: subtle "alive" sway for the character (whole-body; true per-arm
+   motion needs the arm exported on its own layer) */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes contact-alive {
+    0%   { transform: translateY(3%) rotate(-0.9deg) scale(1); }
+    50%  { transform: translateY(1.4%) rotate(0.9deg) scale(1.012); }
+    100% { transform: translateY(3%) rotate(-0.9deg) scale(1); }
+  }
+  .contact-alive { animation: contact-alive 5.5s ease-in-out infinite; transform-origin: 50% 88%; }
+}

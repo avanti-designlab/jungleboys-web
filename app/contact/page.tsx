@@ -66,10 +66,10 @@ export default async function ContactPage() {
             style={{ background: 'radial-gradient(ellipse 90% 100% at 50% 60%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.72) 100%)' }}
           />
           {/* giant CONTACT wordmark — drops in letter-by-letter with the page,
-              centered + full-width behind the character */}
+              centered + full-width behind the character; sits below the header */}
           <span
             aria-hidden
-            className="font-display pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap uppercase leading-none text-white/90"
+            className="font-display pointer-events-none absolute left-1/2 top-[86px] z-0 -translate-x-1/2 whitespace-nowrap uppercase leading-none text-white/90 md:top-[104px]"
             style={{ fontSize: 'min(37vw, 900px)' }}
           >
             {'CONTACT'.split('').map((ch, i) => (
@@ -83,7 +83,7 @@ export default async function ContactPage() {
           <img
             src="/contact/contact-header.svg"
             alt="Contact Jungle Boys"
-            className="rw-breathe relative z-10 w-[min(104vw,900px)] translate-y-[4%] drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
+            className="contact-alive relative z-10 h-[118%] w-auto max-w-none drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
           />
         </div>
       </section>
