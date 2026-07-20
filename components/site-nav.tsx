@@ -47,24 +47,33 @@ export default function SiteNav() {
     let raf = 0
     const sample = () => {
       raf = 0
-      // probe at the logo's x, just below the top edge
+      // probe at the logo's x, just below the top edge. Look THROUGH full-screen
+      // overlays (loading screen, age gate) — otherwise a cold load samples the
+      // overlay instead of the page and the header color sticks wrong.
       const stack = document.elementsFromPoint(80, 42)
-      const el = stack.find((e) => !e.closest('header') && !e.closest('[data-nav-overlay]'))
+      const el = stack.find(
+        (e) => !e.closest('header') && !e.closest('[data-nav-overlay]') && !e.closest('[data-nav-ignore]')
+      )
       const region = el?.closest('[data-nav-theme]') as HTMLElement | null
       setHeaderDark(region?.dataset.navTheme === 'dark')
     }
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(sample)
     }
-    // let layout/images settle, then sample
-    const t = setTimeout(sample, 60)
+    // sample now + again as layout/images/overlays settle, and when the age gate
+    // or intro clears (the hero only becomes visible then)
+    const timers = [60, 250, 700, 1400].map((ms) => setTimeout(sample, ms))
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll)
+    window.addEventListener('jb:gate-passed', sample)
+    window.addEventListener('jb:intro-done', sample)
     return () => {
-      clearTimeout(t)
+      timers.forEach(clearTimeout)
       if (raf) cancelAnimationFrame(raf)
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
+      window.removeEventListener('jb:gate-passed', sample)
+      window.removeEventListener('jb:intro-done', sample)
     }
   }, [pathname])
 

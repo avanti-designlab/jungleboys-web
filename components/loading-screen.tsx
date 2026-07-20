@@ -75,7 +75,7 @@ export default function LoadingScreen() {
   if (!show) return null
 
   return (
-    <div ref={rootRef} className="fixed inset-0 z-[1200]" aria-hidden>
+    <div ref={rootRef} data-nav-ignore className="fixed inset-0 z-[1200]" aria-hidden>
       <div data-panel className="absolute inset-x-0 top-0 h-1/2 bg-[#050505]" />
       <div data-panel className="absolute inset-x-0 bottom-0 h-1/2 bg-[#050505]" />
       <div

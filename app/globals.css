@@ -322,3 +322,25 @@ body {
   }
   .media-hero-in { animation: media-hero-in 1.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
 }
+
+/* media: scroll-reveal for the headline + latest pill (CSS transition, so it
+   works without a JS animation loop; JS just toggles .is-in when in view). */
+.media-reveal {
+  opacity: 0;
+  transform: translateY(42px);
+  transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1), transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.media-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+[data-media-headline] > .media-reveal:nth-child(2) {
+  transition-delay: 0.1s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .media-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

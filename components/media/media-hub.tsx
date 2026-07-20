@@ -185,7 +185,7 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
         {/* Latest video — its own yellow pill so the section pops */}
         {featured && (
           <section className="mb-8 md:mb-10">
-            <div className="rounded-[1.6rem] bg-[var(--color-accent)] p-2.5 shadow-[0_20px_60px_-20px_rgba(254,207,14,0.6)] md:rounded-[2rem] md:p-3.5">
+            <div data-media-pill className="media-reveal rounded-[1.6rem] bg-[var(--color-accent)] p-2.5 shadow-[0_20px_60px_-20px_rgba(254,207,14,0.6)] md:rounded-[2rem] md:p-3.5">
               <div className="flex items-center justify-between px-2 pb-2.5 pt-1 md:px-3" style={{ fontFamily: 'var(--font-brand)' }}>
                 <span className="flex items-center gap-2 text-sm font-extrabold uppercase tracking-widest text-black md:text-base">
                   <span className="inline-block h-2.5 w-2.5 animate-pulse rounded-full bg-black" />

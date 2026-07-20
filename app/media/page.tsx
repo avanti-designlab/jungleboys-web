@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import MediaHub from '@/components/media/media-hub'
+import MediaScrollFx from '@/components/media/media-scroll-fx'
 import { getMediaVideos } from '@/lib/media'
 import { JB_CHANNEL_URL } from '@/lib/media/youtube'
 import { breadcrumbSchema, videoSchema } from '@/lib/schema'
@@ -52,7 +53,7 @@ export default async function MediaPage() {
           (spotlight, embers, film reels, jungle) behind the character, which
           stands in the light cone. Sits near the top; character pushed down to
           clear the sticky header. Dark in both themes. */}
-      <section className="px-2 pt-2 md:px-3">
+      <section data-media-banner className="px-2 pt-2 md:px-3">
         <div
           data-nav-theme="dark"
           className="media-hero-in relative flex items-end justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 pb-8 pt-24 md:min-h-[460px] md:rounded-[2.5rem] md:pt-24"
@@ -61,7 +62,8 @@ export default async function MediaPage() {
             src="/media/media-banner-bg.jpg"
             alt=""
             aria-hidden
-            className="absolute inset-0 h-full w-full object-cover object-center"
+            data-media-bg
+            className="absolute inset-0 h-full w-full scale-110 object-cover object-center will-change-transform"
           />
           {/* gentle darken + edge vignette for character separation */}
           <div
@@ -79,12 +81,12 @@ export default async function MediaPage() {
 
       {/* headline row: big header left, subtext right */}
       <section className="px-4 pt-10 md:px-8 lg:px-12">
-        <div className="mx-auto grid max-w-[1500px] items-center gap-4 md:grid-cols-[1.15fr_1fr] md:gap-10">
-          <h2 className="font-display text-5xl uppercase leading-[0.9] text-[var(--color-foreground)] md:text-7xl">
+        <div data-media-headline className="mx-auto grid max-w-[1500px] items-center gap-4 md:grid-cols-[1.15fr_1fr] md:gap-10">
+          <h2 className="media-reveal font-display text-5xl uppercase leading-[0.9] text-[var(--color-foreground)] md:text-7xl">
             The Culture Runs Deep
           </h2>
           <p
-            className="text-sm uppercase leading-relaxed tracking-wide text-[var(--color-muted)] md:text-base"
+            className="media-reveal text-sm uppercase leading-relaxed tracking-wide text-[var(--color-muted)] md:text-base"
             style={{ fontFamily: 'var(--font-brand)' }}
           >
             Documentaries, drops, and the hunt — straight from the jungle. New
@@ -103,6 +105,7 @@ export default async function MediaPage() {
       </section>
 
       <MediaHub videos={videos} />
+      <MediaScrollFx />
     </main>
   )
 }

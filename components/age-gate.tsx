@@ -83,6 +83,7 @@ export default function AgeGate() {
       role="dialog"
       aria-modal="true"
       aria-label="Age verification"
+      data-nav-ignore
       className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 backdrop-blur-md p-4"
     >
       <div
