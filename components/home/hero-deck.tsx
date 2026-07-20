@@ -117,18 +117,18 @@ export default function HeroDeck() {
             )}
             <div
               data-content={i}
-              className="absolute inset-0 flex flex-col items-start justify-end gap-4 p-8 pb-16 text-white md:p-16 md:pb-20"
+              className="absolute inset-0 flex flex-col items-start justify-end gap-3 p-8 pb-16 text-white md:p-16 md:pb-20"
             >
               <p
-                className="text-sm font-bold uppercase tracking-[0.2em] md:text-base"
+                className="inline-flex rounded-full bg-black/55 px-4 py-2 text-xs font-medium uppercase tracking-[0.22em] text-white backdrop-blur-sm md:text-sm"
                 style={{ fontFamily: 'var(--font-brand)' }}
               >
                 {s.kicker}
               </p>
-              <h1 className="font-display text-7xl uppercase md:text-9xl xl:text-[11rem]">
+              <h1 className="font-display text-7xl uppercase leading-[0.82] md:text-9xl xl:text-[11rem]">
                 {s.title}
               </h1>
-              <PillCta label={s.cta} href={s.href} className="mt-2" />
+              <PillCta label={s.cta} href={s.href} className="mt-3" />
             </div>
           </div>
         ))}
