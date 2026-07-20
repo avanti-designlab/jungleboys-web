@@ -16,14 +16,17 @@ const JARS = [
   { src: '/phenos/jar-4.png', left: '84%', top: '40%', w: 100, tilt: 7, dur: 6.1, del: 0.4, z: 4 },
 ]
 
-// nugs — resting scatter spots around the logo (they pop out from center to here)
+// nugs — they burst out from behind the logo (centre) and fade, on a loop, like
+// the rewards coins. The left/top here are only the reduced-motion resting spots.
 const NUGS = [
-  { src: '/phenos/nug-1.png', left: '13%', top: '20%', w: 92 },
-  { src: '/phenos/nug-2.png', left: '9%', top: '52%', w: 78 },
-  { src: '/phenos/nug-3.png', left: '19%', top: '78%', w: 84 },
-  { src: '/phenos/nug-4.png', left: '86%', top: '18%', w: 96 },
-  { src: '/phenos/nug-5.png', left: '90%', top: '50%', w: 74 },
-  { src: '/phenos/nug-6.png', left: '80%', top: '76%', w: 88 },
+  { src: '/phenos/nug-1.png', left: '15%', top: '22%', w: 90 },
+  { src: '/phenos/nug-4.png', left: '85%', top: '20%', w: 94 },
+  { src: '/phenos/nug-2.png', left: '10%', top: '54%', w: 76 },
+  { src: '/phenos/nug-5.png', left: '90%', top: '52%', w: 74 },
+  { src: '/phenos/nug-3.png', left: '20%', top: '80%', w: 82 },
+  { src: '/phenos/nug-6.png', left: '80%', top: '78%', w: 86 },
+  { src: '/phenos/nug-2.png', left: '50%', top: '14%', w: 70 },
+  { src: '/phenos/nug-4.png', left: '50%', top: '88%', w: 80 },
 ]
 
 export default function PhenosHero() {
@@ -35,38 +38,37 @@ export default function PhenosHero() {
     const mm = gsap.matchMedia()
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       const els = Array.from(box.querySelectorAll<HTMLElement>('[data-nug]'))
-      const pop = () => {
+      const R = gsap.utils.random
+      // one wave: every nug launches from the logo centre and arcs outward + fades
+      const burst = () => {
         const c = box.getBoundingClientRect()
         const cx = c.left + c.width / 2
         const cy = c.top + c.height / 2
         els.forEach((el, i) => {
-          const r = el.getBoundingClientRect()
-          // vector that would move this nug back to the logo centre
-          const fromX = cx - (r.left + r.width / 2)
-          const fromY = cy - (r.top + r.height / 2)
           gsap.killTweensOf(el)
-          gsap.set(el, { x: fromX, y: fromY, scale: 0.2, opacity: 0, rotation: gsap.utils.random(-40, 40) })
+          // reset to its CSS home, measure, derive the vector back to centre
+          gsap.set(el, { x: 0, y: 0, xPercent: -50, yPercent: -50, rotation: 0, scale: 1 })
+          const r = el.getBoundingClientRect()
+          const toCX = cx - (r.left + r.width / 2)
+          const toCY = cy - (r.top + r.height / 2)
+          const ang = R(0, Math.PI * 2)
+          const dist = R(300, 680)
+          const outX = toCX + Math.cos(ang) * dist
+          const outY = toCY + Math.sin(ang) * dist * 0.82
+          gsap.set(el, { x: toCX, y: toCY, xPercent: -50, yPercent: -50, scale: R(0.25, 0.5), opacity: 0, rotation: R(-40, 40) })
           gsap
-            .timeline({ delay: 0.35 + i * 0.09 })
-            .to(el, { opacity: 1, duration: 0.2 })
-            .to(el, { x: 0, y: 0, scale: 1, rotation: 0, duration: 0.85, ease: 'back.out(1.5)' }, '<')
-            .to(el, {
-              y: '+=14',
-              duration: 2.6 + i * 0.25,
-              ease: 'sine.inOut',
-              yoyo: true,
-              repeat: -1,
-            })
+            .timeline({ delay: i * 0.12 })
+            .to(el, { opacity: 1, duration: 0.22 })
+            .to(el, { x: outX, y: outY, scale: R(0.85, 1.2), rotation: `+=${R(-160, 160)}`, duration: R(1, 1.6), ease: 'power2.out' }, '<')
+            .to(el, { opacity: 0, duration: 0.5 }, '-=0.55')
         })
       }
-      pop()
-      // re-pop whenever the hero scrolls back into view
-      const io = new IntersectionObserver(
-        (entries) => entries.forEach((e) => e.isIntersecting && pop()),
-        { threshold: 0.4 }
-      )
-      io.observe(box)
-      return () => io.disconnect()
+      burst()
+      const loop = setInterval(burst, 2500)
+      return () => {
+        clearInterval(loop)
+        gsap.killTweensOf(els)
+      }
     })
     return () => mm.revert()
   }, [])
