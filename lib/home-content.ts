@@ -32,8 +32,19 @@ export const HERO_SLIDES = [
     image: '/hero/gold-mylar-skyline.jpg',
     imageMobile: undefined,
     alt: 'Gold Jungle Boys mylar bag towering over the LA skyline at sunset',
+    overlay: false, // art is bright + crisp on its own (Avanti)
   },
-] as { kicker: string; title: string; cta: string; href: string; image: string; imageMobile?: string; alt: string }[]
+] as {
+  kicker: string
+  title: string
+  cta: string
+  href: string
+  image: string
+  imageMobile?: string
+  alt: string
+  /** dark readability overlay — defaults to on */
+  overlay?: boolean
+}[]
 
 export const QUICK_CARDS = [
   {

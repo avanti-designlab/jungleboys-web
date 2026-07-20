@@ -77,7 +77,7 @@ export default function AppShowcase() {
     <li
       key={label}
       {...{ [side === 'left' ? 'data-pill-left' : 'data-pill-right']: '' }}
-      className={`w-fit rounded-full bg-[#181818] px-8 py-5 text-base font-extrabold uppercase tracking-wide text-white shadow-[0_0_24px_rgba(254,207,14,0.12)] ring-1 ring-white/15 will-change-transform md:text-lg lg:whitespace-nowrap ${
+      className={`w-fit rounded-full bg-[#181818] px-7 py-4.5 text-sm font-extrabold uppercase tracking-wide text-white shadow-[0_0_24px_rgba(254,207,14,0.12)] ring-1 ring-white/15 will-change-transform md:text-base ${
         side === 'left' ? 'lg:justify-self-end lg:text-right' : 'lg:justify-self-start'
       }`}
       style={{ fontFamily: 'var(--font-brand)' }}
@@ -87,8 +87,8 @@ export default function AppShowcase() {
   )
 
   return (
-    <section className="px-6 py-16 md:px-12 md:py-24 lg:px-20">
-      <div className="mx-auto max-w-7xl">
+    <section className="px-6 py-16 md:px-10 md:py-24">
+      <div className="mx-auto max-w-[1500px]">
         <SplitHeading
           mode="letters"
           start="top 60%"
@@ -96,22 +96,28 @@ export default function AppShowcase() {
           lines={[{ text: 'Only on' }, { text: 'the App', accent: true }]}
         />
 
+        {/* auto center column sized by the phone itself; flanking columns are
+            minmax(0,1fr) so they stay EXACTLY equal — the phone is always
+            dead-center regardless of pill lengths */}
         <div
           ref={gridRef}
-          className="mt-12 grid items-center gap-8 lg:grid-cols-[1fr_minmax(420px,560px)_1fr]"
+          className="mt-12 grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]"
         >
-          <ul className="z-0 grid gap-5 lg:-mr-10">{left.map((f, i) => pill(f, 'left', i))}</ul>
-          <div data-app-phone className="relative z-20 order-first mx-auto w-full max-w-[440px] lg:order-none lg:max-w-none">
+          <ul className="z-0 grid gap-5 lg:-mr-8">{left.map((f, i) => pill(f, 'left', i))}</ul>
+          <div
+            data-app-phone
+            className="relative z-20 order-first mx-auto w-full max-w-[440px] lg:order-none lg:w-[600px] lg:max-w-none xl:w-[680px]"
+          >
             <Image
               src="/rewards/phone-glow.png"
               alt="The Jungle Boys app glowing on a phone"
               width={608}
               height={731}
-              sizes="(max-width: 1024px) 70vw, 560px"
+              sizes="(max-width: 1024px) 70vw, 680px"
               className="w-full"
             />
           </div>
-          <ul className="z-0 grid gap-5 lg:-ml-10">{right.map((f, i) => pill(f, 'right', i))}</ul>
+          <ul className="z-0 grid gap-5 lg:-ml-8">{right.map((f, i) => pill(f, 'right', i))}</ul>
         </div>
 
         <div className="mt-24 text-center">
