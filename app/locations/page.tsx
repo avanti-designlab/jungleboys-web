@@ -81,10 +81,27 @@ export default function LocationsPage() {
       </section>
 
       {/* heading */}
-      <section className="px-4 pt-14 text-center md:px-8 md:pt-20 lg:px-12">
-        <h2 className="font-display text-5xl uppercase leading-[0.9] text-[var(--color-foreground)] md:text-7xl">
-          Visit the Jungle
+      <section className="px-4 pt-16 text-center md:px-8 md:pt-24 lg:px-12">
+        <span
+          className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-[var(--color-muted)]"
+          style={{ fontFamily: 'var(--font-brand)' }}
+        >
+          <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-[var(--color-accent)]" />
+          Come Through
+        </span>
+        <h2 className="mt-5 font-display text-6xl uppercase leading-[0.85] text-[var(--color-foreground)] md:text-8xl">
+          Visit the <span className="text-[var(--color-accent-ink)]">Jungle</span>
         </h2>
+        <div
+          className="mt-7 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm font-bold uppercase tracking-widest text-[var(--color-muted)] md:text-base"
+          style={{ fontFamily: 'var(--font-brand)' }}
+        >
+          <span className="text-[var(--color-foreground)]">{OWNED_STORES.length} Locations</span>
+          <span className="text-[var(--color-accent)]">◆</span>
+          <span>California &amp; Florida</span>
+          <span className="text-[var(--color-accent)]">◆</span>
+          <span>Doors Open Daily</span>
+        </div>
       </section>
 
       <LocationsDirectory />

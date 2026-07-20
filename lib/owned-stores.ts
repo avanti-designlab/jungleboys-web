@@ -13,6 +13,8 @@ export type OwnedStore = {
   state: 'CA' | 'FL'
   image: string
   menuUrl: string
+  external?: boolean // link opens off-site (e.g. the clothing store)
+  cta?: string // override the button label
 }
 
 const CA_HOURS_OC = '8AM – 8PM Mon–Thu · 8AM–9PM Fri–Sat · 9AM–8PM Sun'
@@ -37,6 +39,18 @@ export const OWNED_STORES: OwnedStore[] = [
   store('CA', 'orange-county', 'Orange County', '2911 Tech Center Dr, Santa Ana, CA 92705', '(714) 486-3831', CA_HOURS_OC),
   store('CA', 'pomona', 'Pomona', '196 University Pkwy, Pomona, CA 91768', '(909) 594-2627', '9AM – 9:45PM · Mon–Sun'),
   store('CA', 'san-diego', 'San Diego', '8160 Parkway Dr, La Mesa, CA 91942', '(619) 439-6457', '7AM – 9PM · Mon–Sun'),
+  {
+    slug: 'jungle-boys-clothing',
+    name: 'Jungle Boys Clothing',
+    address: '1530 S Alameda St #5, Los Angeles, CA 90021',
+    phone: '(213) 221-4043',
+    hours: '8:30AM – 8:30PM Mon–Sat · 10AM – 6PM Sun',
+    state: 'CA',
+    image: '/locations/stores/jungle-boys-clothing.png',
+    menuUrl: 'https://jungleboysclothing.com',
+    external: true,
+    cta: 'Shop Clothing →',
+  },
   // ── Florida ──
   store('FL', 'bonita-springs', 'Bonita Springs', '28751 S Tamiami Trl, Bonita Springs, FL 34134', '(239) 488-2007', FL_HOURS),
   store('FL', 'daytona-beach', 'Daytona Beach', '1392 W International Speedway Blvd, Daytona Beach, FL 32114', '(386) 610-6930', FL_HOURS),

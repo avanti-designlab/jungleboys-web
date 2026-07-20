@@ -11,29 +11,49 @@ import { CA_OWNED, FL_OWNED, type OwnedStore } from '@/lib/owned-stores'
 // that store's menu. SEPARATE from the Product Finder (two-map rule).
 
 function StoreCard({ s }: { s: OwnedStore }) {
+  const linkProps = s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {}
   return (
-    <div className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.6rem] border border-[var(--color-border)] bg-[var(--color-surface)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)] hover:shadow-[0_30px_80px_-30px_rgba(254,207,14,0.45)]">
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#0b0b0d]">
+    <div className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.6rem] border border-[var(--color-border)] bg-[var(--color-surface)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[var(--color-accent)] hover:shadow-[0_36px_90px_-32px_rgba(254,207,14,0.5)]">
+      {/* light "paper" canvas so the black line-art illustration reads */}
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#f4f3ee]">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          style={{ background: 'radial-gradient(circle at 50% 45%, rgba(254,207,14,0.18), transparent 62%)' }}
+        />
         <Image
           src={s.image}
           alt={`${s.name} — Jungle Boys`}
           fill
           sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          className="object-contain p-3 transition-transform duration-500 group-hover:scale-[1.06]"
         />
       </div>
       <div className="flex flex-1 flex-col p-5">
         <h3 className="font-display text-2xl uppercase leading-none text-[var(--color-foreground)] md:text-3xl">{s.name}</h3>
-        <p className="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{s.address}</p>
-        <p className="mt-1 text-xs uppercase tracking-wide text-[var(--color-muted)]">{s.hours}</p>
+        <p className="mt-3 flex items-start gap-2 text-sm leading-relaxed text-[var(--color-muted)]">
+          <svg viewBox="0 0 24 24" className="loc-pin mt-0.5 h-4 w-4 shrink-0 text-[var(--color-accent-ink)]" fill="currentColor" aria-hidden>
+            <path d="M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z" />
+          </svg>
+          {s.address}
+        </p>
+        <p className="mt-1.5 flex items-start gap-2 text-xs uppercase tracking-wide text-[var(--color-muted)]">
+          <svg viewBox="0 0 24 24" className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-accent-ink)]" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+            <circle cx="12" cy="12" r="9" />
+            <line className="loc-clock-hand" x1="12" y1="12" x2="12" y2="7.5" strokeLinecap="round" />
+            <line x1="12" y1="12" x2="15" y2="13.5" strokeLinecap="round" />
+          </svg>
+          {s.hours}
+        </p>
         <div className="mt-auto flex items-center gap-3 pt-5">
-          {/* stretched link: covers the whole card via ::after, so the card is clickable */}
+          {/* stretched link: ::after covers the whole card so it's fully clickable */}
           <Link
             href={s.menuUrl}
+            {...linkProps}
             className="flex-1 rounded-full bg-[var(--color-accent)] px-5 py-3 text-center text-xs font-extrabold uppercase tracking-widest text-black transition-transform duration-200 after:absolute after:inset-0 after:content-[''] group-hover:scale-[1.02]"
             style={{ fontFamily: 'var(--font-brand)' }}
           >
-            Shop Menu →
+            {s.cta ?? 'Shop Menu →'}
           </Link>
           <a
             href={`tel:${s.phone.replace(/[^\d+]/g, '')}`}

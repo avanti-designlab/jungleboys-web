@@ -485,3 +485,17 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .loc-postcard { opacity: 1; transform: none; transition: none; }
 }
+
+/* locations: animated card meta icons (pin bob + clock hand tick) */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes loc-pin-bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+  .group:hover .loc-pin { animation: loc-pin-bob 0.9s ease-in-out infinite; }
+  @keyframes loc-clock-hand {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .group:hover .loc-clock-hand { animation: loc-clock-hand 3s linear infinite; transform-origin: 12px 12px; }
+}
