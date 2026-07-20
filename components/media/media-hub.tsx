@@ -7,9 +7,10 @@ import { JB_CHANNEL_URL, youtubeThumb, type Video } from '@/lib/media/youtube'
 // Bento video gallery: varied tile sizes (big featured, tall 9:16 Shorts,
 // occasional wide accents) packed with a TRUE masonry grid — each tile spans a
 // computed number of fine rows and the grid dense-packs, so mixing shapes never
-// leaves the dead space a plain grid would. Tiles slide in on entry and autoplay
-// a muted looping clip while on screen; both run off one scroll handler
-// (getBoundingClientRect) rather than IntersectionObserver. Click = lightbox.
+// leaves the dead space a plain grid would. Tiles slide in on entry (one scroll
+// handler, getBoundingClientRect, not IntersectionObserver). Static thumbnails
+// with a subtle hover zoom — autoplay previews were dropped because many uploads
+// are age-restricted and refuse to embed/play inline. Click = lightbox.
 
 const ROW_UNIT = 4 // px — grid-auto-rows (fine so row-span rounding stays tight)
 const GAP = 16 // px — must match the grid gap class (gap-4)
@@ -30,23 +31,17 @@ function formatDate(iso: string) {
     : d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
 }
 
-function previewSrc(v: Video) {
-  return `${v.embedUrl}?autoplay=1&mute=1&controls=0&loop=1&playlist=${v.id}&modestbranding=1&playsinline=1&rel=0`
-}
-
 function VideoTile({
   v,
   big,
   short,
   revealed,
-  preview,
   onOpen,
 }: {
   v: Video
   big?: boolean
   short?: boolean
   revealed: boolean
-  preview: boolean
   onOpen: () => void
 }) {
   return (
@@ -69,20 +64,11 @@ function VideoTile({
           fill
           priority={big}
           sizes={short ? '(max-width:640px) 50vw, 25vw' : big ? '(max-width:1024px) 100vw, 66vw' : '(max-width:640px) 100vw, 33vw'}
-          className={`object-cover transition-opacity duration-500 ${preview ? 'opacity-0' : 'opacity-100'}`}
+          className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
         />
-        {preview && (
-          <iframe
-            src={previewSrc(v)}
-            title={`${v.title} preview`}
-            tabIndex={-1}
-            aria-hidden
-            className="pointer-events-none absolute inset-0 h-full w-full scale-[1.35]"
-          />
-        )}
 
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-        <span className={`pointer-events-none absolute right-3 top-3 flex items-center justify-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100 ${big ? 'h-12 w-12' : 'h-9 w-9'}`}>
+        <span className={`pointer-events-none absolute right-3 top-3 flex items-center justify-center rounded-full bg-black/45 text-white opacity-70 backdrop-blur-sm transition-all duration-300 group-hover:bg-[var(--color-accent)] group-hover:text-black group-hover:opacity-100 ${big ? 'h-12 w-12' : 'h-9 w-9'}`}>
           <PlayIcon className={`ml-0.5 ${big ? 'h-5 w-5' : 'h-4 w-4'}`} />
         </span>
         {big && (
@@ -105,7 +91,6 @@ function VideoTile({
 export default function MediaHub({ videos }: { videos: Video[] }) {
   const [active, setActive] = useState<Video | null>(null)
   const [revealedIds, setRevealedIds] = useState<Set<string>>(new Set())
-  const [previewIds, setPreviewIds] = useState<Set<string>>(new Set())
   const gridRef = useRef<HTMLDivElement>(null)
   const close = useCallback(() => setActive(null), [])
 
@@ -141,10 +126,9 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
     }
   }, [videos])
 
-  // One scroll pass handles reveal (tile slides in once its top crosses 92% of
-  // the viewport, sticky) and preview (clip autoplays while a tile is >50% on
-  // screen, settling after scroll so fast scroll doesn't thrash iframes).
-  // Reduced motion: reveal everything up front, never autoplay.
+  // Reveal: each tile slides in once its top crosses 92% of the viewport
+  // (sticky, scroll-driven via getBoundingClientRect). Reduced motion: reveal
+  // everything up front.
   useEffect(() => {
     const grid = gridRef.current
     if (!grid) return
@@ -157,9 +141,8 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
       return
     }
 
-    let settle: ReturnType<typeof setTimeout> | null = null
     let raf = 0
-    const revealOnly = () => {
+    const reveal = () => {
       raf = 0
       let changed = false
       grid.querySelectorAll<HTMLElement>('[data-tile]').forEach((el) => {
@@ -171,33 +154,14 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
       })
       if (changed) setRevealedIds(new Set(revealed))
     }
-    const compute = () => {
-      const nextPreview = new Set<string>()
-      grid.querySelectorAll<HTMLElement>('[data-tile]').forEach((el) => {
-        const id = el.dataset.vid
-        if (!id) return
-        const r = el.getBoundingClientRect()
-        if (!revealed.has(id) && r.top < window.innerHeight * 0.92) revealed.add(id)
-        const vis = Math.max(0, Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0))
-        if (r.height > 0 && vis / r.height > 0.5) nextPreview.add(id)
-      })
-      setRevealedIds(new Set(revealed))
-      setPreviewIds((prev) => {
-        if (prev.size === nextPreview.size && [...nextPreview].every((id) => prev.has(id))) return prev
-        return nextPreview
-      })
-    }
     const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(revealOnly)
-      if (settle) clearTimeout(settle)
-      settle = setTimeout(compute, 150)
+      if (!raf) raf = requestAnimationFrame(reveal)
     }
-    const t = setTimeout(compute, 250)
+    const t = setTimeout(reveal, 250)
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll)
     return () => {
       clearTimeout(t)
-      if (settle) clearTimeout(settle)
       if (raf) cancelAnimationFrame(raf)
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
@@ -247,7 +211,6 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
                   big={isFeatured}
                   short={short}
                   revealed={revealedIds.has(v.id)}
-                  preview={previewIds.has(v.id)}
                   onOpen={() => setActive(v)}
                 />
               </div>
