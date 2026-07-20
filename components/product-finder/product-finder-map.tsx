@@ -10,6 +10,21 @@ import { RETAILERS, type Retailer } from '@/lib/product-finder/retailers'
 // California only on the finder map (FL has its own site/team)
 const STORES = RETAILERS.filter((r) => r.state !== 'FL')
 
+const CITIES = [
+  'Los Angeles',
+  'San Diego',
+  'Oakland',
+  'San Francisco',
+  'Sacramento',
+  'San Jose',
+  'Fresno',
+  'Long Beach',
+  'Santa Ana',
+  'Palm Springs',
+  'Riverside',
+  'Santa Rosa',
+]
+
 // Product Finder map — 3rd-party stockists (SEPARATE data + component from the
 // owned-locations map, per the two-map rule). Gold pulsing JB pins clustered for
 // 100+ stores; address/zip search (OpenStreetMap geocoder) auto-suggests for
@@ -41,6 +56,26 @@ export default function ProductFinderMap() {
   const [suggests, setSuggests] = useState<Geo[]>([])
   const [nearest, setNearest] = useState<Retailer[]>([])
   const [locating, setLocating] = useState(false)
+  const [count, setCount] = useState(0)
+
+  // count the store total up on mount (rAF for the smooth count; a timeout
+  // failsafe guarantees the final number even where rAF is throttled)
+  useEffect(() => {
+    const target = STORES.length
+    const start = performance.now()
+    let raf = 0
+    const tick = (t: number) => {
+      const p = Math.min(1, (t - start) / 1100)
+      setCount(Math.round((1 - (1 - p) ** 3) * target))
+      if (p < 1) raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    const fs = setTimeout(() => setCount(target), 1300)
+    return () => {
+      cancelAnimationFrame(raf)
+      clearTimeout(fs)
+    }
+  }, [])
 
   // build map + clustered pins
   useEffect(() => {
@@ -169,14 +204,46 @@ export default function ProductFinderMap() {
   return (
     <section className="px-2 pb-16 md:px-3">
       <div className="mx-auto max-w-[1500px]">
-        {/* search controls */}
-        <div className="mb-6 flex flex-col gap-3 px-2 sm:flex-row md:px-4">
+        {/* bold stat + California-cities marquee band */}
+        <div className="mb-6 overflow-hidden rounded-[1.5rem] bg-[#0b0b0d] md:rounded-[2rem]" data-nav-theme="dark">
+          <div className="flex flex-col items-center gap-3 px-6 py-6 sm:flex-row sm:justify-between md:px-10 md:py-7">
+            <div className="flex items-baseline gap-3">
+              <span className="font-display text-6xl leading-none text-[var(--color-accent)] md:text-7xl">{count}</span>
+              <span className="font-display text-2xl uppercase leading-none text-white md:text-3xl">
+                Stockists
+                <br />
+                Across California
+              </span>
+            </div>
+            <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white/60" style={{ fontFamily: 'var(--font-brand)' }}>
+              <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-[var(--color-accent)]" />
+              Live stock map
+            </span>
+          </div>
+          <div className="relative flex overflow-hidden border-t border-white/10 py-3">
+            <div className="marquee-track flex shrink-0 items-center gap-8 whitespace-nowrap pr-8">
+              {[...CITIES, ...CITIES].map((c, i) => (
+                <span key={i} className="flex items-center gap-8 font-display text-2xl uppercase text-white/25 md:text-3xl">
+                  {c}
+                  <span className="text-[var(--color-accent)]">◆</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* bold search controls */}
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
+            <svg viewBox="0 0 24 24" className="pointer-events-none absolute left-6 top-1/2 h-6 w-6 -translate-y-1/2 text-[var(--color-muted)]" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden>
+              <circle cx="11" cy="11" r="7" />
+              <path d="M21 21l-4.3-4.3" strokeLinecap="round" />
+            </svg>
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Enter your address or ZIP…"
-              className="w-full rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-6 py-4 text-base text-[var(--color-foreground)] outline-none transition focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/30"
+              className="w-full rounded-full border-2 border-[var(--color-border)] bg-[var(--color-surface)] py-5 pl-16 pr-6 text-lg font-medium text-[var(--color-foreground)] shadow-lg outline-none transition focus:border-[var(--color-accent)] focus:shadow-[0_0_0_4px_rgba(254,207,14,0.2)]"
               autoComplete="off"
             />
             {suggests.length > 0 && (
@@ -196,7 +263,7 @@ export default function ProductFinderMap() {
           </div>
           <button
             onClick={useMyLocation}
-            className="flex shrink-0 items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-4 text-sm font-extrabold uppercase tracking-widest text-black transition-transform duration-200 hover:scale-[1.02]"
+            className="flex shrink-0 items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-8 py-5 text-sm font-extrabold uppercase tracking-widest text-black shadow-[0_12px_40px_-10px_rgba(254,207,14,0.7)] transition-transform duration-200 hover:scale-[1.03]"
             style={{ fontFamily: 'var(--font-brand)' }}
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>
@@ -209,9 +276,21 @@ export default function ProductFinderMap() {
         {/* full-width map with a floating results panel */}
         <div
           data-nav-theme="dark"
-          className="jb-map relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0b0b0d] md:rounded-[2.5rem]"
+          className="jb-map relative overflow-hidden rounded-[1.75rem] border-2 border-[var(--color-accent)]/20 bg-[#0b0b0d] shadow-[0_40px_120px_-30px_rgba(254,207,14,0.3)] md:rounded-[2.5rem]"
         >
           <div ref={mapEl} className="h-[68vh] min-h-[480px] w-full" style={{ background: '#0b0b0d' }} />
+
+          {/* bold idle-state CTA (clears once a search runs) */}
+          {nearest.length === 0 && (
+            <div className="pointer-events-none absolute inset-0 z-[400] flex items-end justify-center pb-10 md:items-center md:pb-0">
+              <div className="rounded-2xl border border-white/10 bg-black/55 px-7 py-5 text-center backdrop-blur-sm">
+                <p className="font-display text-3xl uppercase leading-none text-white md:text-5xl">Find your closest drop</p>
+                <p className="mt-2 text-xs uppercase tracking-widest text-white/70" style={{ fontFamily: 'var(--font-brand)' }}>
+                  Search your area or use your location
+                </p>
+              </div>
+            </div>
+          )}
 
           {nearest.length > 0 && (
             <div className="pointer-events-none absolute inset-x-3 bottom-3 z-[500] md:inset-y-4 md:left-auto md:right-4 md:w-[360px]">
