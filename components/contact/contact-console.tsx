@@ -20,11 +20,7 @@ const TOPICS: Topic[] = [
   { id: 'Feedback', label: 'Feedback', color: '#F472B6', hint: 'Tell us how we did' },
 ]
 
-const QUICK_LINKS = [
-  { label: 'California Locations', href: '/locations' },
-  { label: 'Wholesale Inquiries', href: '/wholesale' },
-  { label: 'PWF Rewards', href: '/rewards' },
-]
+const QUICK_LINKS = [{ label: 'California Locations', href: '/locations' }]
 
 const SOCIALS = [
   { label: 'Instagram', href: 'https://www.instagram.com/jungleboys', icon: SocialIcons.instagram },
@@ -107,19 +103,19 @@ export default function ContactConsole({ consentText }: { consentText: string })
 
   return (
     <div ref={rootRef} className="mx-auto grid max-w-[1300px] items-start gap-10 px-4 pb-20 md:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14">
-      {/* LEFT — big headline + tagline + quick links */}
-      <div className="lg:sticky lg:top-28">
-        <h1 className="media-reveal font-display text-7xl uppercase leading-[0.82] text-[var(--color-foreground)] md:text-8xl xl:text-9xl">
-          Get In <span className="text-[var(--color-accent-ink)]">Touch</span>
+      {/* LEFT — big headline + tagline in a soft content box */}
+      <div className="media-reveal rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface)] p-7 md:p-10 lg:sticky lg:top-28">
+        <h1 className="font-display text-7xl uppercase leading-[0.82] text-[var(--color-foreground)] md:text-8xl xl:text-9xl">
+          Get In Touch
         </h1>
         <p
-          className="media-reveal mt-6 max-w-sm text-sm uppercase leading-relaxed tracking-wide text-[var(--color-muted)] md:text-base"
+          className="mt-6 max-w-sm text-sm uppercase leading-relaxed tracking-wide text-[var(--color-muted)] md:text-base"
           style={{ fontFamily: 'var(--font-brand)' }}
         >
           Questions, collabs, or business? Pick a lane and tap in — we read every message.
         </p>
 
-        <div className="media-reveal mt-8 flex flex-wrap gap-3">
+        <div className="mt-8 flex flex-wrap gap-3">
           {QUICK_LINKS.map((l) => (
             <Link
               key={l.href}
@@ -131,7 +127,7 @@ export default function ContactConsole({ consentText }: { consentText: string })
             </Link>
           ))}
         </div>
-        <div className="media-reveal mt-4 flex items-center gap-3">
+        <div className="mt-6 flex items-center gap-4">
           {SOCIALS.map((s) => (
             <a
               key={s.label}
@@ -139,7 +135,7 @@ export default function ContactConsole({ consentText }: { consentText: string })
               target="_blank"
               rel="noopener noreferrer"
               aria-label={s.label}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-foreground)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent-ink)] [&_svg]:h-4 [&_svg]:w-4"
+              className="flex h-14 w-14 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-foreground)] transition hover:scale-105 hover:border-[var(--color-accent)] hover:text-[var(--color-accent-ink)] [&_svg]:h-6 [&_svg]:w-6"
             >
               {s.icon}
             </a>

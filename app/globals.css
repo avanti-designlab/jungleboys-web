@@ -344,3 +344,53 @@ body {
     transition: none;
   }
 }
+
+/* ===== Locations map (contact) — gold JB pins on a dark basemap ===== */
+.jb-pin {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  cursor: pointer;
+}
+.jb-pin-pulse {
+  position: absolute;
+  inset: 4px;
+  border-radius: 9999px;
+  background: rgba(254, 207, 14, 0.55);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .jb-pin-pulse { animation: jb-pin-pulse 1.9s ease-out infinite; }
+}
+@keyframes jb-pin-pulse {
+  0% { transform: scale(0.55); opacity: 0.85; }
+  100% { transform: scale(2.3); opacity: 0; }
+}
+.jb-pin-badge {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 9999px;
+  background: #fecf0e;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.55), 0 0 0 3px rgba(0, 0, 0, 0.28);
+  transition: transform 0.2s ease;
+}
+.jb-pin:hover .jb-pin-badge,
+.jb-pin.is-active .jb-pin-badge { transform: scale(1.15); }
+.jb-pin-badge img { width: 24px; height: 24px; object-fit: contain; }
+
+/* Leaflet chrome tuned for the charcoal theme */
+.jb-map .leaflet-control-attribution {
+  background: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.5);
+}
+.jb-map .leaflet-control-attribution a { color: rgba(255, 255, 255, 0.7); }
+.jb-map .leaflet-bar a {
+  background: #16161a;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.jb-map .leaflet-bar a:hover { background: #23232a; }
