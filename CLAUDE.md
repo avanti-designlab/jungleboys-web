@@ -79,8 +79,9 @@ lorem) — **Avanti reviews copy before cutover.** Remaining content templates +
 media hub, contact, wholesale, phenos, verify shell, terms/privacy. Lead pipeline LIVE end-to-end
 (Klaviyo forwarding verified). Known mobile-header nit: VERIFY PRODUCTS pill can crowd the theme
 toggle at 375px — global nav polish item, not page-specific.
-Open: LEAD_NOTIFY_EMAIL delivery mechanism (no email provider — Klaviyo flow vs Resend, Avanti decides);
-Lemon Milk Pro files pending purchase.
+Open: LEAD_NOTIFY_EMAIL delivery mechanism (no email provider — Klaviyo flow vs Resend, Avanti decides).
+**Lemon Milk Pro PURCHASED + WIRED (2026-07-19):** licensed OTFs → woff2 in `app/fonts/`, self-hosted
+via next/font/local (400/500/700), `--font-brand` → `--font-lemon-milk`. Stand-in retired.
 
 ## The one rule above all (06 §7)
 
