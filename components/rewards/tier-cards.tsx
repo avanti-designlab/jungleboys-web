@@ -59,7 +59,7 @@ export default function TierCards() {
 
                   {/* mascot pops out of the card top — heights tuned per art so the
                       CHARACTERS read the same size and the TIER plates align */}
-                  <div className="pointer-events-none relative h-36 md:h-32">
+                  <div className="pointer-events-none relative h-48 md:h-44">
                     <Image
                       src={t.mascot}
                       alt={`${t.tier} — ${t.color} ${t.name} mascot`}
