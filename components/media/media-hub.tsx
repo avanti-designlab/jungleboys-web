@@ -4,12 +4,11 @@ import Image from 'next/image'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { JB_CHANNEL_URL, youtubeThumb, type Video } from '@/lib/media/youtube'
 
-// Bento video gallery: varied tile sizes with vertical Shorts kept tall. Tiles
-// slide in as they enter the viewport, and clips autoplay (muted, looping)
-// while on screen — constant motion, no hover needed — pausing when scrolled
-// away. Both the reveal and the auto-preview run off one scroll handler
-// (getBoundingClientRect) rather than IntersectionObserver, so they're robust
-// everywhere. Click opens a lightbox.
+// Media gallery, organized by shape so every grid is uniform (no ragged bento
+// gaps): one featured hero, a row of vertical Shorts (all 9:16), then a grid of
+// episodes (all 16:9). Tiles slide in on entry and autoplay a muted looping
+// clip while on screen — both driven by one scroll handler (getBoundingClientRect)
+// rather than IntersectionObserver, so they're robust everywhere. Click = lightbox.
 
 function PlayIcon({ className }: { className?: string }) {
   return (
@@ -31,27 +30,21 @@ function previewSrc(v: Video) {
   return `${v.embedUrl}?autoplay=1&mute=1&controls=0&loop=1&playlist=${v.id}&modestbranding=1&playsinline=1&rel=0`
 }
 
-// col-span pattern → featured is wide, horizontals occasionally wide, verticals
-// stay one column (their 9:16 aspect makes them tall for a bento feel).
-function tileSpan(v: Video, i: number, isFeatured: boolean) {
-  if (isFeatured) return 'sm:col-span-2 lg:col-span-2'
-  if (v.vertical) return 'lg:col-span-1'
-  return i % 5 === 2 ? 'sm:col-span-2 lg:col-span-2' : 'lg:col-span-1'
-}
-
 function VideoTile({
   v,
-  big,
+  variant,
   revealed,
   preview,
   onOpen,
 }: {
   v: Video
-  big?: boolean
+  variant: 'featured' | 'episode' | 'short'
   revealed: boolean
   preview: boolean
   onOpen: () => void
 }) {
+  const big = variant === 'featured'
+  const aspect = variant === 'short' ? 'aspect-[9/16]' : 'aspect-video'
   return (
     <button
       data-tile
@@ -61,18 +54,18 @@ function VideoTile({
       className="group relative block w-full overflow-hidden rounded-2xl text-left"
       style={{
         opacity: revealed ? 1 : 0,
-        transform: revealed ? 'translateY(0)' : 'translateY(-28px)',
-        transition: 'opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1)',
+        transform: revealed ? 'translateY(0)' : 'translateY(-24px)',
+        transition: 'opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.6s cubic-bezier(0.22,1,0.36,1)',
       }}
     >
-      <div className={`relative w-full bg-[var(--color-surface)] ${v.vertical ? 'aspect-[9/16]' : 'aspect-video'}`}>
+      <div className={`relative w-full bg-[var(--color-surface)] ${aspect}`}>
         <Image
           src={big ? youtubeThumb(v.id, 'maxres') : v.thumbnail}
           alt={v.title}
           fill
           priority={big}
-          sizes={v.vertical ? '(max-width:640px) 50vw, 25vw' : big ? '(max-width:1024px) 100vw, 66vw' : '(max-width:640px) 100vw, 33vw'}
-          className={`object-cover transition-opacity duration-500 ${preview ? 'opacity-0' : 'opacity-100'}`}
+          sizes={variant === 'short' ? '(max-width:640px) 50vw, 18vw' : big ? '(max-width:1024px) 100vw, 900px' : '(max-width:640px) 100vw, 33vw'}
+          className={`object-cover transition-opacity duration-500 ${preview ? 'opacity-0' : 'opacity-100'} group-hover:scale-[1.03] group-hover:duration-700`}
         />
         {preview && (
           <iframe
@@ -84,9 +77,9 @@ function VideoTile({
           />
         )}
 
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-        <span className="pointer-events-none absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
-          <PlayIcon className="ml-0.5 h-4 w-4" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/5 to-transparent" />
+        <span className={`pointer-events-none absolute right-3 top-3 flex items-center justify-center rounded-full bg-black/50 text-white opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100 ${big ? 'h-12 w-12' : 'h-9 w-9'}`}>
+          <PlayIcon className={`ml-0.5 ${big ? 'h-5 w-5' : 'h-4 w-4'}`} />
         </span>
         {big && (
           <span className="absolute left-4 top-4 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-black" style={{ fontFamily: 'var(--font-brand)' }}>
@@ -94,14 +87,22 @@ function VideoTile({
           </span>
         )}
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4 md:p-5" style={{ fontFamily: 'var(--font-brand)' }}>
-          <h3 className={`line-clamp-2 font-extrabold uppercase leading-tight tracking-wide text-white ${big ? 'text-lg md:text-2xl' : 'text-xs md:text-sm'}`}>
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-3 md:p-4" style={{ fontFamily: 'var(--font-brand)' }}>
+          <h3 className={`line-clamp-2 font-extrabold uppercase leading-tight tracking-wide text-white ${big ? 'text-xl md:text-3xl' : 'text-xs md:text-sm'}`}>
             {v.title}
           </h3>
-          <p className="mt-1 text-[10px] uppercase tracking-wide text-white/60">{formatDate(v.publishedAt)}</p>
+          <p className={`mt-1 uppercase tracking-wide text-white/60 ${big ? 'text-xs' : 'text-[10px]'}`}>{formatDate(v.publishedAt)}</p>
         </div>
       </div>
     </button>
+  )
+}
+
+function SectionHeading({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="mb-5 font-display text-3xl uppercase leading-none tracking-wide text-[var(--color-foreground)] md:text-4xl">
+      {children}
+    </h2>
   )
 }
 
@@ -109,64 +110,36 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
   const [active, setActive] = useState<Video | null>(null)
   const [revealedIds, setRevealedIds] = useState<Set<string>>(new Set())
   const [previewIds, setPreviewIds] = useState<Set<string>>(new Set())
-  const gridRef = useRef<HTMLDivElement>(null)
+  const rootRef = useRef<HTMLDivElement>(null)
   const close = useCallback(() => setActive(null), [])
 
-  // put the latest horizontal video first as the big featured tile
+  // split by shape: featured = latest horizontal; shorts = verticals; episodes = the rest
   const featured = videos.find((v) => !v.vertical) ?? videos[0]
-  const rest = videos.filter((v) => v.id !== featured?.id)
-  const ordered = featured ? [featured, ...rest] : videos
+  const shorts = videos.filter((v) => v.vertical)
+  const episodes = videos.filter((v) => !v.vertical && v.id !== featured?.id)
 
-  // One scroll-driven pass handles BOTH concerns:
-  //  - reveal: once a tile's top crosses 92% of the viewport it slides in (sticky)
-  //  - preview: while a tile is >50% on screen its clip autoplays; settles after
-  //    scrolling stops so fast scroll doesn't thrash iframes.
+  // One scroll pass handles reveal (tile slides in once its top crosses 92% of
+  // the viewport, sticky) and preview (clip autoplays while a tile is >50% on
+  // screen, settling after scroll so fast scroll doesn't thrash iframes).
   // Reduced motion: reveal everything up front, never autoplay.
   useEffect(() => {
-    const grid = gridRef.current
-    if (!grid) return
+    const root = rootRef.current
+    if (!root) return
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const revealed = new Set<string>()
 
     if (reduce) {
-      grid.querySelectorAll<HTMLElement>('[data-tile]').forEach((el) => el.dataset.vid && revealed.add(el.dataset.vid))
+      root.querySelectorAll<HTMLElement>('[data-tile]').forEach((el) => el.dataset.vid && revealed.add(el.dataset.vid))
       setRevealedIds(revealed)
       return
     }
 
     let settle: ReturnType<typeof setTimeout> | null = null
     let raf = 0
-    const compute = () => {
-      raf = 0
-      const nextPreview = new Set<string>()
-      let revealChanged = false
-      grid.querySelectorAll<HTMLElement>('[data-tile]').forEach((el) => {
-        const id = el.dataset.vid
-        if (!id) return
-        const r = el.getBoundingClientRect()
-        if (!revealed.has(id) && r.top < window.innerHeight * 0.92) {
-          revealed.add(id)
-          revealChanged = true
-        }
-        const vis = Math.max(0, Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0))
-        if (r.height > 0 && vis / r.height > 0.5) nextPreview.add(id)
-      })
-      if (revealChanged) setRevealedIds(new Set(revealed))
-      setPreviewIds((prev) => {
-        if (prev.size === nextPreview.size && [...nextPreview].every((id) => prev.has(id))) return prev
-        return nextPreview
-      })
-    }
-    // reveal reacts instantly (rAF); preview settles after scrolling stops
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(revealOnly)
-      if (settle) clearTimeout(settle)
-      settle = setTimeout(compute, 160)
-    }
     const revealOnly = () => {
       raf = 0
       let changed = false
-      grid.querySelectorAll<HTMLElement>('[data-tile]').forEach((el) => {
+      root.querySelectorAll<HTMLElement>('[data-tile]').forEach((el) => {
         const id = el.dataset.vid
         if (id && !revealed.has(id) && el.getBoundingClientRect().top < window.innerHeight * 0.92) {
           revealed.add(id)
@@ -174,6 +147,27 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
         }
       })
       if (changed) setRevealedIds(new Set(revealed))
+    }
+    const compute = () => {
+      const nextPreview = new Set<string>()
+      root.querySelectorAll<HTMLElement>('[data-tile]').forEach((el) => {
+        const id = el.dataset.vid
+        if (!id) return
+        const r = el.getBoundingClientRect()
+        if (!revealed.has(id) && r.top < window.innerHeight * 0.92) revealed.add(id)
+        const vis = Math.max(0, Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0))
+        if (r.height > 0 && vis / r.height > 0.5) nextPreview.add(id)
+      })
+      setRevealedIds(new Set(revealed))
+      setPreviewIds((prev) => {
+        if (prev.size === nextPreview.size && [...nextPreview].every((id) => prev.has(id))) return prev
+        return nextPreview
+      })
+    }
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(revealOnly)
+      if (settle) clearTimeout(settle)
+      settle = setTimeout(compute, 150)
     }
     const t = setTimeout(compute, 250)
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -212,30 +206,46 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
     )
   }
 
+  const tileProps = (v: Video) => ({
+    revealed: revealedIds.has(v.id),
+    preview: previewIds.has(v.id),
+    onOpen: () => setActive(v),
+  })
+
   return (
     <>
-      <section className="px-4 py-10 md:px-8 md:py-14 lg:px-12">
-        <div
-          ref={gridRef}
-          className="grid grid-cols-2 items-start gap-4 lg:grid-cols-4 lg:gap-5"
-          style={{ gridAutoFlow: 'dense' }}
-        >
-          {ordered.map((v, i) => {
-            const isFeatured = v.id === featured?.id
-            return (
-              <div key={v.id} className={tileSpan(v, i, isFeatured)}>
-                <VideoTile
-                  v={v}
-                  big={isFeatured}
-                  revealed={revealedIds.has(v.id)}
-                  preview={previewIds.has(v.id)}
-                  onOpen={() => setActive(v)}
-                />
-              </div>
-            )
-          })}
-        </div>
-      </section>
+      <div ref={rootRef} className="mx-auto max-w-6xl px-4 pb-4 pt-10 md:px-8 md:pt-14 lg:px-12">
+        {/* Featured hero */}
+        {featured && (
+          <section className="mb-14">
+            <VideoTile v={featured} variant="featured" {...tileProps(featured)} />
+          </section>
+        )}
+
+        {/* Shorts — uniform 9:16 row */}
+        {shorts.length > 0 && (
+          <section className="mb-14">
+            <SectionHeading>Shorts</SectionHeading>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+              {shorts.map((v) => (
+                <VideoTile key={v.id} v={v} variant="short" {...tileProps(v)} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Episodes — uniform 16:9 grid */}
+        {episodes.length > 0 && (
+          <section className="mb-6">
+            <SectionHeading>Episodes</SectionHeading>
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {episodes.map((v) => (
+                <VideoTile key={v.id} v={v} variant="episode" {...tileProps(v)} />
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
 
       {active && (
         <div
