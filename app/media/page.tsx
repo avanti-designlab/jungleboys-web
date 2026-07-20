@@ -49,32 +49,47 @@ export default async function MediaPage() {
 
       <h1 className="sr-only">Media — Jungle Boys Films</h1>
 
-      {/* full-width rounded character banner — cinematic Higgsfield stage plate
-          (spotlight, embers, film reels, jungle) behind the character, which
-          stands in the light cone. Sits near the top; character pushed down to
-          clear the sticky header. Dark in both themes. */}
+      {/* full-width character banner — same treatment as /contact: graffiti mural,
+          a giant MEDIA wordmark that drops in letter-by-letter behind the character
+          (below the header), and the character bleeding out top + bottom with a
+          subtle sway. Dark in both themes. */}
       <section data-media-banner className="px-2 pt-2 md:px-3">
         <div
           data-nav-theme="dark"
-          className="media-hero-in relative flex items-end justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 pb-8 pt-24 md:min-h-[460px] md:rounded-[2.5rem] md:pt-24"
+          className="media-hero-in relative flex min-h-[400px] items-center justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 md:h-[520px] md:rounded-[2.5rem]"
         >
+          {/* graffiti mural background */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}
           <img
-            src="/media/media-banner-bg.jpg"
+            src="/contact/contact-bg.jpg"
             alt=""
             aria-hidden
             data-media-bg
             className="absolute inset-0 h-full w-full scale-110 object-cover object-center will-change-transform"
           />
-          {/* gentle darken + edge vignette for character separation */}
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
-            style={{ background: 'radial-gradient(ellipse 85% 95% at 50% 55%, transparent 45%, rgba(0,0,0,0.5) 100%)' }}
+            style={{ background: 'radial-gradient(ellipse 90% 100% at 50% 60%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.72) 100%)' }}
           />
+          {/* giant MEDIA wordmark — drops in letter-by-letter, below the header */}
+          <span
+            aria-hidden
+            className="font-display pointer-events-none absolute left-1/2 top-[86px] z-0 -translate-x-1/2 whitespace-nowrap uppercase leading-none text-white/90 md:top-[104px]"
+            style={{ fontSize: 'min(37vw, 900px)' }}
+          >
+            {'MEDIA'.split('').map((ch, i) => (
+              <span key={i} className="contact-letter" style={{ animationDelay: `${0.2 + i * 0.075}s` }}>
+                {ch}
+              </span>
+            ))}
+          </span>
+          {/* character */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- character art */}
           <img
-            src="/media/media-character.png"
+            src="/media/media-header.svg"
             alt="Jungle Boys Media"
-            className="rw-breathe relative w-[min(82vw,520px)] drop-shadow-[0_28px_70px_rgba(0,0,0,0.7)]"
+            className="contact-alive relative z-10 h-[118%] w-auto max-w-none drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
           />
         </div>
       </section>
