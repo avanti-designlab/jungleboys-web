@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { MENU_COLUMNS, BRAND_ASSETS } from '@/lib/site-config'
 import { SocialIcons } from './social-icons'
@@ -27,9 +28,15 @@ const OVERLAY_SOCIALS = [
   { label: 'Facebook', href: 'https://www.facebook.com/JungleBoysDrops/', icon: SocialIcons.facebook },
 ]
 
+// Routes that pin themselves dark regardless of theme — the condensed pill
+// inverts to white there so it stays visible.
+const DARK_PAGES = ['/rewards']
+
 export default function SiteNav() {
   const [open, setOpen] = useState(false)
   const [condensed, setCondensed] = useState(false)
+  const pathname = usePathname()
+  const onDarkPage = DARK_PAGES.some((p) => pathname?.startsWith(p))
 
   // condense into a pill once the hero region (or first viewport) is passed
   useEffect(() => {
@@ -182,21 +189,31 @@ export default function SiteNav() {
               : 'pointer-events-none -translate-y-10 opacity-0'
           }`}
         >
-          <div className="flex items-center gap-4 rounded-full border border-white/10 bg-[#0b0b0b]/90 py-2 pl-4 pr-3 text-white shadow-2xl backdrop-blur-md">
+          <div
+            className={`flex items-center gap-4 rounded-full border py-2 pl-4 pr-3 shadow-2xl backdrop-blur-md ${
+              onDarkPage
+                ? 'border-black/10 bg-white/95 text-black'
+                : 'border-white/10 bg-[#0b0b0b]/90 text-white'
+            }`}
+          >
             <button
               aria-label="Open menu"
               onClick={() => setOpen(true)}
               className="flex cursor-pointer flex-col items-start gap-[5px] p-1"
             >
-              <span className="block h-[2px] w-7 rounded bg-white" />
-              <span className="block h-[2px] w-5 rounded bg-white" />
-              <span className="block h-[2px] w-6 rounded bg-white" />
+              <span className="block h-[2px] w-7 rounded bg-current" />
+              <span className="block h-[2px] w-5 rounded bg-current" />
+              <span className="block h-[2px] w-6 rounded bg-current" />
             </button>
             <Link href="/" aria-label="Jungle Boys home" className="block h-10 w-14">
               {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset */}
-              <img src={BRAND_ASSETS.logoWhite} alt="Jungle Boys" className="h-full w-full object-contain" />
+              <img
+                src={onDarkPage ? BRAND_ASSETS.logoBlack : BRAND_ASSETS.logoWhite}
+                alt="Jungle Boys"
+                className="h-full w-full object-contain"
+              />
             </Link>
-            <span className="h-5 w-px bg-white/20" aria-hidden />
+            <span className={`h-5 w-px ${onDarkPage ? 'bg-black/20' : 'bg-white/20'}`} aria-hidden />
             <PillCta label="Verify Products" href="/verify" size="sm" className="hidden sm:inline-flex" />
             <div className="hidden items-center gap-3 sm:flex">
               {HEADER_SOCIALS.map((s) => (
@@ -212,7 +229,7 @@ export default function SiteNav() {
                 </a>
               ))}
             </div>
-            <ThemeToggle />
+            <ThemeToggle className={onDarkPage ? 'border-black text-black' : 'border-white text-white'} />
           </div>
         </div>
       </header>
