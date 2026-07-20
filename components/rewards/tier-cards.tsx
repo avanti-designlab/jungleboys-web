@@ -37,7 +37,7 @@ export default function TierCards() {
         <Scrub
           enter
           start="top 70%"
-          className="mt-36 grid items-stretch gap-y-36 md:mt-40 md:grid-cols-3 md:gap-x-6 md:gap-y-0 xl:gap-x-8"
+          className="mt-56 grid items-stretch gap-y-36 md:mt-64 md:grid-cols-3 md:gap-x-6 md:gap-y-0 xl:gap-x-8"
         >
           {TIER_CARDS.map((t, i) => {
             const isGold = t.theme === 'gold'
