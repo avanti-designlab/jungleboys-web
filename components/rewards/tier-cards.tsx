@@ -57,16 +57,21 @@ export default function TierCards() {
                   {/* base card surface above the ring */}
                   <span aria-hidden className={`absolute inset-0 rounded-3xl ${themes[t.theme].card}`} />
 
-                  {/* mascot pops out of the card top — same stage on all three, still */}
-                  <div className="pointer-events-none relative h-44 md:h-40">
+                  {/* mascot pops out of the card top — heights tuned per art so the
+                      CHARACTERS read the same size and the TIER plates align */}
+                  <div className="pointer-events-none relative h-36 md:h-32">
                     <Image
                       src={t.mascot}
                       alt={`${t.tier} — ${t.color} ${t.name} mascot`}
                       width={373}
                       height={464}
                       sizes="(max-width: 768px) 80vw, 380px"
-                      className="absolute -top-40 h-80 w-auto max-w-none -translate-x-1/2 object-contain drop-shadow-[0_16px_30px_rgba(0,0,0,0.5)] md:-top-44"
-                      style={{ left: ['58%', '55%', '54%'][i] }}
+                      className="absolute h-auto max-w-none -translate-x-1/2 object-contain drop-shadow-[0_16px_30px_rgba(0,0,0,0.5)]"
+                      style={{
+                        left: ['58%', '55%', '54%'][i],
+                        height: ['368px', '320px', '280px'][i],
+                        top: ['-246px', '-204px', '-168px'][i],
+                      }}
                     />
                     {/* living smoke rising off the character */}
                     {t.theme !== 'gold' ? (

@@ -72,44 +72,26 @@ export default function RewardsHero() {
   }, [])
 
   return (
-    <section className="relative overflow-hidden px-6 pt-20 text-center md:px-12 md:pt-28 lg:px-20">
-      <div className="relative mx-auto max-w-5xl">
-        <SplitHeading
-          as="h2"
-          mode="words"
-          className="text-[clamp(2rem,4vw,3.6rem)] font-extrabold uppercase leading-[1.1] tracking-tight text-[var(--color-foreground)]"
-          lines={[
-            { text: 'Download the Jungle Boys App.', block: true, nowrap: true },
-            { text: 'Unlock PWF Rewards.', accent: true, block: true, nowrap: true },
-          ]}
-        />
-        <p
-          className="mx-auto mt-5 max-w-xl text-sm uppercase leading-relaxed tracking-wide text-[var(--color-muted)] md:text-base"
-          style={{ fontFamily: 'var(--font-brand)' }}
-        >
-          Playing With Fire has its perks. Earn points, unlock exclusive drops,
-          and get rewarded every time you shop.
-        </p>
-
-        {/* phone runs to the section bottom; badges + bonus pill overlap it */}
-        <div ref={phoneWrapRef} className="relative mx-auto mt-6 w-full max-w-[560px] lg:max-w-[660px]">
-          <div ref={coinsRef} aria-hidden className="pointer-events-none absolute left-1/2 top-[16%] z-0">
-            {Array.from({ length: COIN_COUNT }).map((_, i) => (
-              <span key={i} data-coin className="absolute -left-7 -top-7 opacity-0">
-                <Coin className="h-14 w-14" />
-              </span>
-            ))}
-          </div>
-          <Image
-            src="/rewards/phone-hero.png"
-            alt="The Jungle Boys app on a phone"
-            width={833}
-            height={833}
-            priority
-            sizes="(max-width: 1024px) 560px, 660px"
-            className="relative z-10 w-full"
+    <section className="relative overflow-hidden px-6 py-14 md:px-12 md:py-20 lg:px-20">
+      <div className="relative mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.05fr_1fr]">
+        <div>
+          <SplitHeading
+            as="h2"
+            mode="words"
+            className="text-[clamp(1.9rem,3.2vw,3.2rem)] font-extrabold uppercase leading-[1.1] tracking-tight text-[var(--color-foreground)]"
+            lines={[
+              { text: 'Download the Jungle Boys App.', block: true },
+              { text: 'Unlock PWF Rewards.', accent: true, block: true, nowrap: true },
+            ]}
           />
-          <div className="absolute inset-x-0 bottom-6 z-20 flex flex-wrap items-center justify-center gap-3 md:bottom-10">
+          <p
+            className="mt-5 max-w-md text-sm uppercase leading-relaxed tracking-wide text-[var(--color-muted)] md:text-base"
+            style={{ fontFamily: 'var(--font-brand)' }}
+          >
+            Playing With Fire has its perks. Earn points, unlock exclusive
+            drops, and get rewarded every time you shop.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
             <StoreBadges />
             <span
               className="rw-shimmer relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-[var(--color-accent)] py-3 pl-3 pr-5 text-black shadow-[0_0_34px_rgba(254,207,14,0.4)]"
@@ -126,6 +108,26 @@ export default function RewardsHero() {
               </span>
             </span>
           </div>
+        </div>
+
+        {/* phone right, coins bursting from behind it on a loop */}
+        <div ref={phoneWrapRef} className="relative mx-auto w-full max-w-[440px] lg:max-w-[520px]">
+          <div ref={coinsRef} aria-hidden className="pointer-events-none absolute left-1/2 top-[18%] z-0">
+            {Array.from({ length: COIN_COUNT }).map((_, i) => (
+              <span key={i} data-coin className="absolute -left-7 -top-7 opacity-0">
+                <Coin className="h-14 w-14" />
+              </span>
+            ))}
+          </div>
+          <Image
+            src="/rewards/phone-hero.png"
+            alt="The Jungle Boys app on a phone"
+            width={833}
+            height={833}
+            priority
+            sizes="(max-width: 1024px) 440px, 520px"
+            className="relative z-10 w-full"
+          />
         </div>
       </div>
     </section>

@@ -36,16 +36,38 @@ export default function AppShowcase() {
         ease: 'power3.out',
         scrollTrigger: { trigger: grid, start: 'top 82%', once: true },
       })
-      // then the pills pop out from behind it as you scroll — slow + smooth
-      gsap.set(leftPills, { opacity: 0, xPercent: 55 })
-      gsap.set(rightPills, { opacity: 0, xPercent: -55 })
+      // then the pills slide OUT FROM BEHIND the phone as you scroll (live-site
+      // behavior): each starts at the phone's center, under it, and travels
+      // outward to its resting spot. Function-based start values recompute on
+      // ScrollTrigger refresh so late image layout can't stale the distance.
+      const phoneEl = grid.querySelector('[data-app-phone]')
+      const towardPhone = (el: Element, dir: 1 | -1) => () => {
+        const p = phoneEl?.getBoundingClientRect()
+        const e = el.getBoundingClientRect()
+        const d = p ? (p.left + p.width / 2 - (e.left + e.width / 2)) * 0.75 : 0
+        // degenerate measurement (pre-layout) → sensible fixed travel
+        return Math.abs(d) > 40 ? d : dir * 320
+      }
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: grid, start: 'top 55%', end: 'bottom 95%', scrub: 1.2 },
+        scrollTrigger: {
+          trigger: grid,
+          start: 'top 55%',
+          end: 'bottom 95%',
+          scrub: 1.2,
+          invalidateOnRefresh: true,
+        },
       })
+      const slideOut = (p: Element, dir: 1 | -1, at: number) =>
+        tl.fromTo(
+          p,
+          { opacity: 0, scale: 0.9, x: towardPhone(p, dir) },
+          { opacity: 1, scale: 1, x: 0, duration: 0.6, ease: 'power1.out', immediateRender: true },
+          at
+        )
       leftPills.forEach((p, i) => {
-        tl.to(p, { opacity: 1, xPercent: 0, duration: 0.6, ease: 'power1.out' }, i * 0.5)
+        slideOut(p, 1, i * 0.5)
         const rp = rightPills[i]
-        if (rp) tl.to(rp, { opacity: 1, xPercent: 0, duration: 0.6, ease: 'power1.out' }, i * 0.5 + 0.25)
+        if (rp) slideOut(rp, -1, i * 0.5 + 0.25)
       })
     })
     return () => mm.revert()
@@ -55,8 +77,8 @@ export default function AppShowcase() {
     <li
       key={label}
       {...{ [side === 'left' ? 'data-pill-left' : 'data-pill-right']: '' }}
-      className={`rounded-full bg-[#181818] px-8 py-5 text-base font-extrabold uppercase tracking-wide text-white shadow-[0_0_24px_rgba(254,207,14,0.12)] ring-1 ring-white/15 will-change-transform md:text-lg ${
-        side === 'left' ? 'lg:text-right' : ''
+      className={`w-fit rounded-full bg-[#181818] px-8 py-5 text-base font-extrabold uppercase tracking-wide text-white shadow-[0_0_24px_rgba(254,207,14,0.12)] ring-1 ring-white/15 will-change-transform md:text-lg lg:whitespace-nowrap ${
+        side === 'left' ? 'lg:justify-self-end lg:text-right' : 'lg:justify-self-start'
       } ${i === 1 ? (side === 'left' ? 'lg:-translate-x-8' : 'lg:translate-x-8') : ''}`}
       style={{ fontFamily: 'var(--font-brand)' }}
     >
@@ -78,8 +100,8 @@ export default function AppShowcase() {
           ref={gridRef}
           className="mt-12 grid items-center gap-8 lg:grid-cols-[1fr_minmax(420px,760px)_1fr]"
         >
-          <ul className="z-10 grid gap-5">{left.map((f, i) => pill(f, 'left', i))}</ul>
-          <div data-app-phone className="order-first mx-auto w-full max-w-[560px] lg:order-none lg:max-w-none">
+          <ul className="z-0 grid gap-5">{left.map((f, i) => pill(f, 'left', i))}</ul>
+          <div data-app-phone className="relative z-20 order-first mx-auto w-full max-w-[560px] lg:order-none lg:max-w-none">
             <Image
               src="/rewards/phone-glow.png"
               alt="The Jungle Boys app glowing on a phone"
@@ -89,7 +111,7 @@ export default function AppShowcase() {
               className="w-full"
             />
           </div>
-          <ul className="z-10 grid gap-5">{right.map((f, i) => pill(f, 'right', i))}</ul>
+          <ul className="z-0 grid gap-5">{right.map((f, i) => pill(f, 'right', i))}</ul>
         </div>
 
         <div className="mt-24 text-center">
