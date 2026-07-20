@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 
@@ -113,13 +112,11 @@ export default function PhenosHero() {
           ))}
         </div>
 
-        <Image
-          src="/phenos/pheno-logo.png"
+        {/* eslint-disable-next-line @next/next/no-img-element -- crisp vector lockup */}
+        <img
+          src="/phenos/pheno-logo.svg"
           alt="Pheno — Hunt With Us"
-          width={852}
-          height={372}
-          priority
-          sizes="(max-width: 768px) 92vw, 1000px"
+          fetchPriority="high"
           className="pheno-logo-in relative z-10 mx-auto w-[min(92vw,1000px)]"
         />
       </div>
