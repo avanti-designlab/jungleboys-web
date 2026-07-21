@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import AgeGate from "@/components/age-gate";
 import LoadingScreen from "@/components/loading-screen";
 import RevealGate from "@/components/reveal-gate";
+import NewsletterPopupMount from "@/components/newsletter-popup-mount";
 import CookieConsent from "@/components/cookie-consent";
 import MobileTabBar from "@/components/mobile-tab-bar";
 import SiteNav from "@/components/site-nav";
@@ -72,6 +73,7 @@ export default function RootLayout({
         <div className="flex-1">{children}</div>
         <SiteFooter />
         <MobileTabBar />
+        <NewsletterPopupMount />
       </body>
     </html>
   );

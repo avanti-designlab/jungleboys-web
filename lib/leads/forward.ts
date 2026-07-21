@@ -11,6 +11,7 @@ export type LeadPayload = {
   // isn't lost while a dedicated notification inbox (LEAD_NOTIFY_EMAIL) is TBD.
   message?: string
   topic?: string
+  location?: string // preferred store (newsletter popup) → Klaviyo property
 }
 
 export type ForwardResult = 'forwarded' | 'skipped-no-key' | 'failed'
@@ -20,8 +21,12 @@ export async function forwardLead(lead: LeadPayload): Promise<ForwardResult> {
   if (!key) return 'skipped-no-key' // Step 9 pending — activates when the key lands
 
   const properties =
-    lead.topic || lead.message
-      ? { jb_contact_topic: lead.topic || undefined, jb_contact_message: lead.message || undefined }
+    lead.topic || lead.message || lead.location
+      ? {
+          jb_contact_topic: lead.topic || undefined,
+          jb_contact_message: lead.message || undefined,
+          jb_location: lead.location || undefined,
+        }
       : undefined
 
   try {
