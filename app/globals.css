@@ -692,7 +692,9 @@ body {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  transform: scale(1.14); /* crop the video's white margin, enlarge the devices */
+  /* nudge down a touch so the devices clear the NEW pill, and scale up to crop the
+     video's white margin / enlarge the devices */
+  transform: translateY(6%) scale(1.14);
   pointer-events: none;
 }
 
