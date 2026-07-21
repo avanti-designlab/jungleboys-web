@@ -10,6 +10,7 @@ export type ProductLine = {
   blurb: string
   image: string
   isNew?: boolean
+  nugs?: [string, string] // two nugs that pop out each side of the product on hover
 }
 
 export const PRODUCT_LINES: ProductLine[] = [
@@ -50,6 +51,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     tag: 'Indoor Flower',
     blurb: 'Top-shelf, hand-trimmed indoor — sealed fresh in the gold pouch.',
     image: '/products/premium-flower.png',
+    nugs: ['/phenos/nug-1.png', '/phenos/nug-4.png'],
   },
   {
     slug: 'pre-rolls',

@@ -98,41 +98,69 @@ export default function ProductsCollection() {
             </p>
           </div>
 
-          {/* Figma product grid: light SHOP NOW cards, NEW! tags on the newest lines */}
+          {/* product grid — shorter cards, big product shots, pill tag + button.
+              Hover: product lifts, gold glow blooms, and (where set) two nugs pop
+              out each side of the product. */}
           <div className="grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-3">
             {PRODUCT_LINES.map((line) => (
               <Link
                 key={line.slug}
                 href={`/products/${line.slug}`}
-                className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.5rem] shadow-[0_30px_70px_-40px_rgba(0,0,0,0.6)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_44px_100px_-40px_rgba(254,207,14,0.5)]"
-                style={{ background: 'linear-gradient(180deg, #ffffff 0%, #e8e8eb 100%)' }}
+                className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.5rem] shadow-[0_30px_70px_-42px_rgba(0,0,0,0.55)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_48px_110px_-40px_rgba(254,207,14,0.55)]"
+                style={{ background: 'linear-gradient(180deg, #ffffff 0%, #e7e7ea 100%)' }}
               >
                 {line.isNew && (
                   <span
-                    className="absolute left-1/2 top-4 z-10 -translate-x-1/2 rounded-full bg-[var(--color-accent)] px-5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.2em] text-black shadow-md"
+                    className="absolute left-1/2 top-3.5 z-20 -translate-x-1/2 rounded-full bg-[var(--color-accent)] px-5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.2em] text-black shadow-md"
                     style={{ fontFamily: 'var(--font-brand)' }}
                   >
                     New!
                   </span>
                 )}
-                {/* product image */}
-                <div className="relative aspect-[5/6] w-full">
+
+                {/* image stage (shorter; bigger product) */}
+                <div className="relative aspect-[7/6] w-full">
+                  {/* gold glow blooms on hover */}
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                    style={{ background: 'radial-gradient(circle at 50% 46%, rgba(254,207,14,0.28), transparent 60%)' }}
+                  />
+                  {/* nugs pop out each side of the product on hover */}
+                  {line.nugs && (
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element -- transparent bud */}
+                      <img src={line.nugs[0]} alt="" aria-hidden className="prod-nug prod-nug--l" />
+                      {/* eslint-disable-next-line @next/next/no-img-element -- transparent bud */}
+                      <img src={line.nugs[1]} alt="" aria-hidden className="prod-nug prod-nug--r" />
+                    </>
+                  )}
                   <Image
                     src={line.image}
                     alt={`Jungle Boys ${line.name}`}
                     fill
                     sizes="(max-width:640px) 50vw, (max-width:1024px) 50vw, 33vw"
-                    className="object-contain p-6 transition-transform duration-500 group-hover:scale-[1.06] md:p-9"
+                    className="relative z-10 object-contain p-3.5 drop-shadow-[0_18px_26px_rgba(0,0,0,0.18)] transition-transform duration-500 group-hover:scale-[1.07] md:p-5"
                   />
                 </div>
-                {/* name + SHOP NOW */}
-                <div className="px-4 pb-5 text-center md:px-6 md:pb-6">
-                  <h3 className="font-display text-2xl uppercase leading-none text-black md:text-3xl">{line.name}</h3>
+
+                {/* footer: tag pill + name + SHOP NOW pill */}
+                <div className="relative z-10 flex flex-col items-center px-4 pb-5 text-center md:px-5">
                   <span
-                    className="mt-3 block rounded-full bg-black py-3 text-[11px] font-extrabold uppercase tracking-[0.2em] text-white transition-colors duration-200 group-hover:bg-[var(--color-accent)] group-hover:text-black md:text-xs"
+                    className="rounded-full border border-black/15 px-3.5 py-1 text-[9px] font-extrabold uppercase tracking-[0.2em] text-black/55 md:text-[10px]"
+                    style={{ fontFamily: 'var(--font-brand)' }}
+                  >
+                    {line.tag}
+                  </span>
+                  <h3 className="font-display mt-2.5 text-2xl uppercase leading-none text-black md:text-3xl">{line.name}</h3>
+                  <span
+                    className="mt-3.5 inline-flex items-center gap-2 rounded-full bg-black px-7 py-2.5 text-[11px] font-extrabold uppercase tracking-[0.2em] text-white transition-colors duration-200 group-hover:bg-[var(--color-accent)] group-hover:text-black md:text-xs"
                     style={{ fontFamily: 'var(--font-brand)' }}
                   >
                     Shop Now
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden>
+                      <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
                   </span>
                 </div>
               </Link>
