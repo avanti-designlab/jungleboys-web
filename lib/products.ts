@@ -23,6 +23,7 @@ export type ProductLine = {
   fan?: Fan // items that fan out from behind the product on hover (10-pack joints)
   popcorn?: string[] // images that burst up from the bottom, popcorn-style, on hover
   splash?: string // a splash/liquid overlay that pours over the product on hover
+  hoverVideo?: string // a muted looping video that plays over the product on hover
 }
 
 // Shared pop-out layouts, reused across products.
@@ -55,6 +56,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     blurb: 'Ready-to-go all-in-one devices — charged, filled, and done. No cart, no hassle.',
     image: '/products/v11/all-in-one.png',
     isNew: true,
+    hoverVideo: '/products/fx/gas-tank-hover.mp4',
   },
   {
     slug: 'hash-hole',

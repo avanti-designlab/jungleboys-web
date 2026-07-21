@@ -130,6 +130,17 @@ export default function ProductsCollection() {
                 href={`/products/${line.slug}`}
                 className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.6rem] shadow-[0_34px_80px_-46px_rgba(0,0,0,0.6)] ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-[0_52px_120px_-44px_rgba(254,207,14,0.6)]"
                 style={{ background: 'radial-gradient(120% 90% at 50% 12%, #ffffff 0%, #f2f2f4 55%, #e6e6e9 100%)' }}
+                onMouseEnter={(e) => {
+                  const v = e.currentTarget.querySelector('video')
+                  if (v) v.play().catch(() => {})
+                }}
+                onMouseLeave={(e) => {
+                  const v = e.currentTarget.querySelector('video')
+                  if (v) {
+                    v.pause()
+                    v.currentTime = 0
+                  }
+                }}
               >
                 {line.isNew && (
                   <span
@@ -201,6 +212,19 @@ export default function ProductsCollection() {
                     sizes="(max-width:640px) 50vw, (max-width:1024px) 45vw, 30vw"
                     className="relative z-10 object-contain p-2 drop-shadow-[0_16px_24px_rgba(0,0,0,0.22)] transition-transform duration-500 group-hover:scale-[1.06] md:p-3"
                   />
+                  {line.hoverVideo && (
+                    <video
+                      className="prod-hovervid"
+                      poster={line.image}
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      aria-hidden
+                    >
+                      <source src={line.hoverVideo} type="video/mp4" />
+                    </video>
+                  )}
                   {line.splash && (
                     /* eslint-disable-next-line @next/next/no-img-element -- transparent liquid overlay */
                     <img src={line.splash} alt="" aria-hidden className="prod-splash" />
