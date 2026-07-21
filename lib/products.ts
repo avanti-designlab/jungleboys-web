@@ -33,6 +33,12 @@ const TWO_EACH_SIDE: PopOut[] = [
   { src: PRE, x: 88, y: 42, rot: 22, w: 6.5 },
   { src: PRE, x: 77, y: 66, rot: 8, w: 6.5 },
 ]
+// The hash-hole infused pre-roll, popping from each side.
+const HASH = '/products/fx/hash-hole-joint.png'
+const HASH_EACH_SIDE: PopOut[] = [
+  { src: HASH, x: 16, y: 50, rot: -15, w: 13 },
+  { src: HASH, x: 84, y: 50, rot: 15, w: 13 },
+]
 const POPS_NUGS = [1, 2, 3, 4, 5, 6].map((n) => `/products/fx/pops-${n}.png`)
 
 export const PRODUCT_LINES: ProductLine[] = [
@@ -51,6 +57,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     blurb: 'Indoor flower wrapped around a molten hash-rosin core. The one that started the frenzy.',
     image: '/products/v11/hash-hole.png',
     isNew: true,
+    popOut: HASH_EACH_SIDE,
   },
   {
     slug: 'twins',
