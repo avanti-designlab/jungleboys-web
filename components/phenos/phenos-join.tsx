@@ -215,9 +215,9 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
 
                 <div>
                   {q.type === 'choice' && (
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-col gap-3">
                       {q.options!.map((opt) => (
-                        <Pill key={opt} active={value === opt} onClick={() => choose('pheno', opt)}>
+                        <Pill key={opt} block active={value === opt} onClick={() => choose('pheno', opt)}>
                           {opt}
                         </Pill>
                       ))}
@@ -349,24 +349,34 @@ function PitchPill({
 function Pill({
   active,
   wide,
+  block,
   onClick,
   children,
 }: {
   active: boolean
   wide?: boolean
+  block?: boolean
   onClick: () => void
   children: React.ReactNode
 }) {
+  const size = block ? 'w-full px-6 py-4' : wide ? 'px-10 py-3.5' : 'px-6 py-3'
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full border-2 text-sm font-extrabold uppercase tracking-wide transition ${wide ? 'px-10 py-3.5' : 'px-6 py-3'} ${
+      className={`rounded-full border-2 text-sm font-extrabold uppercase tracking-wide transition ${size} ${
         active ? 'border-black bg-black text-white' : 'border-black/20 text-black hover:border-black'
       }`}
       style={{ fontFamily: 'var(--font-brand)' }}
     >
-      {children}
+      {block ? (
+        <span className="flex w-full items-center justify-between gap-4 text-left">
+          <span>{children}</span>
+          <span className={`h-4 w-4 shrink-0 rounded-full border-2 ${active ? 'border-white bg-white' : 'border-black/30'}`} />
+        </span>
+      ) : (
+        children
+      )}
     </button>
   )
 }
