@@ -602,6 +602,34 @@ body {
   .prod-pop { transition: opacity 0.25s ease; }
 }
 
+/* ===== Products — 10-pack: mini joints fan out from behind the jar on hover ===== */
+.prod-fan {
+  position: absolute;
+  inset: 0;
+  z-index: 5; /* behind the product image (z-10) — joints emerge from behind the jar */
+  pointer-events: none;
+}
+.prod-fan-joint {
+  position: absolute;
+  left: 50%;
+  transform-origin: 50% 100%; /* pivot at the joint's base */
+  transform: translate(-50%, -100%) rotate(var(--a)) scale(0.2);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.34, 1.5, 0.5, 1), opacity 0.3s ease;
+  transition-delay: calc(var(--i) * 0.035s); /* fan unfolds one joint at a time */
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.3));
+}
+.group:hover .prod-fan-joint {
+  opacity: 1;
+  transform: translate(-50%, -100%) rotate(var(--a)) scale(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .prod-fan-joint {
+    transition: opacity 0.3s ease;
+    transform: translate(-50%, -100%) rotate(var(--a)) scale(1);
+  }
+}
+
 /* ===== Products — Pops: mini nugs burst up from the bottom, popcorn-style ===== */
 .prod-popcorn {
   position: absolute;

@@ -7,6 +7,11 @@
 // centre lands (as a % of the stage), rot its tilt, w its width as a % of the stage.
 export type PopOut = { src: string; x: number; y: number; rot: number; w: number }
 
+// A fan of items that unfold from a shared pivot behind the product on hover (the
+// 10-pack: mini joints fanning out of the jar). angles in deg (− left / + right),
+// w = item width % of stage, pivotY = pivot height as a % of the stage.
+export type Fan = { src: string; w: number; pivotY: number; angles: number[] }
+
 export type ProductLine = {
   slug: string
   name: string
@@ -15,6 +20,7 @@ export type ProductLine = {
   image: string
   isNew?: boolean
   popOut?: PopOut[] // items that pop out to the sides on hover (buds, pre-rolls…)
+  fan?: Fan // items that fan out from behind the product on hover (10-pack joints)
   popcorn?: string[] // images that burst up from the bottom, popcorn-style, on hover
   splash?: string // a splash/liquid overlay that pours over the product on hover
 }
@@ -101,6 +107,12 @@ export const PRODUCT_LINES: ProductLine[] = [
     tag: 'Multipack',
     blurb: 'Ten mini pre-rolls to a pack — the everyday carry for when one is never enough.',
     image: '/products/v11/10-pack-prerolls.png',
+    fan: {
+      src: '/products/fx/mini-preroll.png',
+      w: 6,
+      pivotY: 64,
+      angles: [-30, -45, -60, -75, -90, 30, 45, 60, 75, 90],
+    },
   },
   {
     slug: 'rosin',

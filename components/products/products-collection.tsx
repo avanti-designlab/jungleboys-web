@@ -158,6 +158,20 @@ export default function ProductsCollection() {
                       style={{ left: `${p.x}%`, top: `${p.y}%`, width: `${p.w}%`, ['--rot' as string]: `${p.rot}deg` }}
                     />
                   ))}
+                  {line.fan && (
+                    <div className="prod-fan" aria-hidden>
+                      {line.fan.angles.map((a, i) => (
+                        /* eslint-disable-next-line @next/next/no-img-element -- transparent mini joint */
+                        <img
+                          key={i}
+                          src={line.fan!.src}
+                          alt=""
+                          className="prod-fan-joint"
+                          style={{ top: `${line.fan!.pivotY}%`, width: `${line.fan!.w}%`, ['--a' as string]: `${a}deg`, ['--i' as string]: i }}
+                        />
+                      ))}
+                    </div>
+                  )}
                   {line.popcorn && (
                     <div className="prod-popcorn" aria-hidden>
                       {POPCORN_KERNELS.map((k, i) => (
