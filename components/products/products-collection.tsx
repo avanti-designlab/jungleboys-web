@@ -280,24 +280,44 @@ export default function ProductsCollection() {
                 <Link
                   key={c.title}
                   href={c.href}
-                  className="group relative flex aspect-[4/5] flex-col justify-end overflow-hidden rounded-[1.4rem] shadow-[0_30px_70px_-46px_rgba(0,0,0,0.6)] ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-[0_46px_110px_-44px_rgba(254,207,14,0.6)]"
+                  className="group relative flex aspect-[4/5] flex-col justify-between overflow-hidden rounded-[1.6rem] p-5 shadow-[0_34px_80px_-46px_rgba(0,0,0,0.65)] ring-1 ring-white/10 transition-all duration-300 hover:-translate-y-1.5 hover:ring-[var(--color-accent)]/50 hover:shadow-[0_54px_130px_-40px_rgba(254,207,14,0.55)] md:p-6"
                 >
                   {c.image ? (
-                    <Image src={c.image} alt="" fill sizes="(max-width:640px) 50vw, 25vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <Image src={c.image} alt="" fill sizes="(max-width:640px) 50vw, 25vw" className="object-cover transition-transform duration-500 group-hover:scale-[1.07]" />
                   ) : (
-                    <div aria-hidden className="absolute inset-0" style={{ background: `radial-gradient(120% 90% at 30% 12%, ${c.glow}, transparent 60%), #121216` }} />
+                    <div
+                      aria-hidden
+                      className="absolute inset-0 transition-opacity duration-300"
+                      style={{ background: `radial-gradient(95% 75% at 28% -5%, ${c.glow}, transparent 55%), linear-gradient(158deg, #1b1b21 0%, #0d0d11 62%)` }}
+                    />
                   )}
-                  <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  <div className="relative z-10 p-5">
-                    <span className="block text-[10px] font-bold uppercase tracking-[0.26em] text-white/60" style={{ fontFamily: 'var(--font-brand)' }}>
+                  {/* top light + readability scrim */}
+                  <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-white/10 to-transparent" />
+                  <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+
+                  {/* eyebrow chip */}
+                  <div className="relative z-10">
+                    <span
+                      className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/85 ring-1 ring-inset ring-white/15 backdrop-blur-sm"
+                      style={{ fontFamily: 'var(--font-brand)' }}
+                    >
                       {c.sub}
                     </span>
-                    <h4 className="font-display mt-1 text-2xl uppercase leading-[0.9] text-white md:text-[1.7rem]">{c.title}</h4>
-                    <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]" style={{ fontFamily: 'var(--font-brand)' }}>
+                  </div>
+
+                  {/* title + pill button */}
+                  <div className="relative z-10">
+                    <h4 className="font-display text-2xl uppercase leading-[0.88] text-white md:text-[2rem]">{c.title}</h4>
+                    <span
+                      className="mt-4 inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] py-2 pl-4 pr-2 text-[11px] font-extrabold uppercase tracking-widest text-black shadow-[0_8px_20px_-6px_rgba(254,207,14,0.7)] transition-transform duration-200 group-hover:scale-[1.04]"
+                      style={{ fontFamily: 'var(--font-brand)' }}
+                    >
                       Explore
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden>
-                        <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
+                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-[var(--color-accent)]">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden>
+                          <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </span>
                     </span>
                   </div>
                 </Link>
