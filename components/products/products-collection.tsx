@@ -140,6 +140,10 @@ export default function ProductsCollection() {
                     sizes="(max-width:640px) 50vw, (max-width:1024px) 45vw, 30vw"
                     className="relative z-10 object-contain p-2 drop-shadow-[0_16px_24px_rgba(0,0,0,0.22)] transition-transform duration-500 group-hover:scale-[1.06] md:p-3"
                   />
+                  {line.splash && (
+                    /* eslint-disable-next-line @next/next/no-img-element -- transparent liquid overlay */
+                    <img src={line.splash} alt="" aria-hidden className="prod-splash" />
+                  )}
                 </div>
 
                 {/* editorial footer: tag + big name (left), arrow disc (right) */}

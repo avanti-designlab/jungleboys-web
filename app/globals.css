@@ -602,6 +602,25 @@ body {
   .group:hover .prod-nug--r { transform: translate(14%, -34%) scale(1); }
 }
 
+/* ===== Products — realistic honey splash pours over the product on card hover ===== */
+.prod-splash {
+  position: absolute;
+  top: 47%;
+  left: 50%;
+  width: 98%; /* splash covers the whole device cluster */
+  z-index: 20; /* in front of the product */
+  opacity: 0;
+  transform: translate(-50%, -54%) scale(0.66); /* starts small, above — "drops" in */
+  transform-origin: center 40%;
+  transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
+  pointer-events: none;
+  filter: drop-shadow(0 12px 16px rgba(120, 70, 0, 0.4));
+}
+.group:hover .prod-splash { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+@media (prefers-reduced-motion: reduce) {
+  .prod-splash { transition: opacity 0.3s ease; transform: translate(-50%, -50%) scale(1); }
+}
+
 /* ===== Wholesale — JB plane flies across the hero on load, dropping parachutes ===== */
 @media (prefers-reduced-motion: no-preference) {
   @keyframes ws-plane-fly {

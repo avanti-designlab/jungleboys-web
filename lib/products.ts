@@ -11,6 +11,7 @@ export type ProductLine = {
   image: string
   isNew?: boolean
   nugs?: [string, string] // two nugs that pop out each side of the product on hover
+  splash?: string // a splash/liquid overlay that pours over the product on hover
 }
 
 export const PRODUCT_LINES: ProductLine[] = [
@@ -21,6 +22,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     blurb: 'Ready-to-go all-in-one devices — charged, filled, and done. No cart, no hassle.',
     image: '/products/v10/all-in-one.png',
     isNew: true,
+    splash: '/products/fx/honey-splash.png',
   },
   {
     slug: 'hash-hole',
