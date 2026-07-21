@@ -305,20 +305,22 @@ export default function ProductsCollection() {
                     </span>
                   </div>
 
-                  {/* title + pill button */}
+                  {/* big left-aligned title, then an Explore pill pushed to the right */}
                   <div className="relative z-10">
-                    <h4 className="font-display text-2xl uppercase leading-[0.88] text-white md:text-[2rem]">{c.title}</h4>
-                    <span
-                      className="mt-4 inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] py-2 pl-4 pr-2 text-[11px] font-extrabold uppercase tracking-widest text-black shadow-[0_8px_20px_-6px_rgba(254,207,14,0.7)] transition-transform duration-200 group-hover:scale-[1.04]"
-                      style={{ fontFamily: 'var(--font-brand)' }}
-                    >
-                      Explore
-                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-[var(--color-accent)]">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden>
-                          <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
+                    <h4 className="font-display text-left text-3xl uppercase leading-[0.85] text-white md:text-[2.7rem]">{c.title}</h4>
+                    <div className="mt-4 flex justify-end">
+                      <span
+                        className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] py-2 pl-4 pr-2 text-[11px] font-extrabold uppercase tracking-widest text-black shadow-[0_8px_20px_-8px_rgba(254,207,14,0.7)] transition-colors duration-200 group-hover:bg-black group-hover:text-[var(--color-accent)]"
+                        style={{ fontFamily: 'var(--font-brand)' }}
+                      >
+                        Explore
+                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-[var(--color-accent)] transition-colors duration-200 group-hover:bg-[var(--color-accent)] group-hover:text-black">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden>
+                            <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </span>
                       </span>
-                    </span>
+                    </div>
                   </div>
                 </Link>
               ))}
