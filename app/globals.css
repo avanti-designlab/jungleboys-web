@@ -584,9 +584,9 @@ body {
 /* ===== Products — nugs pop out each side of the product on card hover ===== */
 .prod-nug {
   position: absolute;
-  top: 44%;
+  top: 42%;
   left: 50%;
-  width: 34%;
+  width: 25%;
   z-index: 20; /* in front, so they read as bursting out over the product sides */
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.35);
@@ -594,10 +594,10 @@ body {
   pointer-events: none;
   filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.3));
 }
-.group:hover .prod-nug--l { opacity: 1; transform: translate(-138%, -42%) scale(1) rotate(-18deg); }
-.group:hover .prod-nug--r { opacity: 1; transform: translate(38%, -46%) scale(1) rotate(16deg); }
+.group:hover .prod-nug--l { opacity: 1; transform: translate(-165%, -46%) scale(1) rotate(-18deg); }
+.group:hover .prod-nug--r { opacity: 1; transform: translate(65%, -52%) scale(1) rotate(16deg); }
 @media (prefers-reduced-motion: reduce) {
   .prod-nug { transition: opacity 0.25s ease; }
-  .group:hover .prod-nug--l { transform: translate(-132%, -42%) scale(1); }
-  .group:hover .prod-nug--r { transform: translate(36%, -46%) scale(1); }
+  .group:hover .prod-nug--l { transform: translate(-160%, -46%) scale(1); }
+  .group:hover .prod-nug--r { transform: translate(62%, -52%) scale(1); }
 }
