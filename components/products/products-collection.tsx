@@ -155,7 +155,7 @@ export default function ProductsCollection() {
                       alt=""
                       aria-hidden
                       className="prod-pop"
-                      style={{ width: `${p.w}%`, ['--tx' as string]: p.tx, ['--ty' as string]: p.ty, ['--rot' as string]: `${p.rot}deg` }}
+                      style={{ left: `${p.x}%`, top: `${p.y}%`, width: `${p.w}%`, ['--rot' as string]: `${p.rot}deg` }}
                     />
                   ))}
                   {line.popcorn && (

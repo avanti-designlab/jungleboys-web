@@ -3,10 +3,9 @@
 // grid: nine lines, each links to /products/<slug>. Images are the exact card
 // cut-outs exported from the Figma product frames. No API — static collection.
 
-// One item that pops out from behind the product on hover. tx/ty are the resting
-// transform (relative to the item's own box, like the original nug pop), w is its
-// width as a % of the stage.
-export type PopOut = { src: string; tx: string; ty: string; rot: number; w: number }
+// One item that pops out from behind the product on hover. x/y is where the item's
+// centre lands (as a % of the stage), rot its tilt, w its width as a % of the stage.
+export type PopOut = { src: string; x: number; y: number; rot: number; w: number }
 
 export type ProductLine = {
   slug: string
@@ -24,15 +23,15 @@ export type ProductLine = {
 const PRE = '/products/fx/pre-roll.png'
 // A single pre-roll popping from each side (1G Pre-Rolls — same image both sides).
 const ONE_EACH_SIDE: PopOut[] = [
-  { src: PRE, tx: '-122%', ty: '-30%', rot: -15, w: 20 },
-  { src: PRE, tx: '22%', ty: '-30%', rot: 15, w: 20 },
+  { src: PRE, x: 15, y: 52, rot: -16, w: 7 },
+  { src: PRE, x: 85, y: 52, rot: 16, w: 7 },
 ]
 // Two pre-rolls fanned out each side (Twins — 2 per pack, shown as pairs).
 const TWO_EACH_SIDE: PopOut[] = [
-  { src: PRE, tx: '-150%', ty: '-46%', rot: -22, w: 18 },
-  { src: PRE, tx: '-120%', ty: '-2%', rot: -9, w: 18 },
-  { src: PRE, tx: '50%', ty: '-46%', rot: 22, w: 18 },
-  { src: PRE, tx: '20%', ty: '-2%', rot: 9, w: 18 },
+  { src: PRE, x: 12, y: 42, rot: -22, w: 6.5 },
+  { src: PRE, x: 23, y: 66, rot: -8, w: 6.5 },
+  { src: PRE, x: 88, y: 42, rot: 22, w: 6.5 },
+  { src: PRE, x: 77, y: 66, rot: 8, w: 6.5 },
 ]
 const POPS_NUGS = [1, 2, 3, 4, 5, 6].map((n) => `/products/fx/pops-${n}.png`)
 
@@ -78,8 +77,8 @@ export const PRODUCT_LINES: ProductLine[] = [
     blurb: 'Top-shelf, hand-trimmed indoor — sealed fresh in the gold pouch.',
     image: '/products/v10/premium-flower.png',
     popOut: [
-      { src: '/phenos/nug-1.png', tx: '-116%', ty: '-30%', rot: -16, w: 42 },
-      { src: '/phenos/nug-4.png', tx: '16%', ty: '-34%', rot: 15, w: 42 },
+      { src: '/phenos/nug-1.png', x: 9, y: 52, rot: -16, w: 40 },
+      { src: '/phenos/nug-4.png', x: 91, y: 46, rot: 15, w: 40 },
     ],
   },
   {

@@ -582,24 +582,24 @@ body {
 }
 
 /* ===== Products — items pop out each side of the product on card hover ===== */
+/* left/top (set inline) place each item's centre; it starts tucked + small behind
+   the product, then scales up into place on hover. */
 .prod-pop {
   position: absolute;
-  top: 45%;
-  left: 50%;
   z-index: 20; /* in front, so they read as bursting out over the product sides */
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0.5); /* start behind/inside the product */
-  transition: transform 0.6s cubic-bezier(0.34, 1.45, 0.5, 1), opacity 0.35s ease;
+  transform: translate(-50%, -50%) rotate(var(--rot)) scale(0.35);
+  transform-origin: center center;
+  transition: transform 0.55s cubic-bezier(0.34, 1.5, 0.5, 1), opacity 0.35s ease;
   pointer-events: none;
   filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.32));
 }
 .group:hover .prod-pop {
   opacity: 1;
-  transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(1);
+  transform: translate(-50%, -50%) rotate(var(--rot)) scale(1);
 }
 @media (prefers-reduced-motion: reduce) {
   .prod-pop { transition: opacity 0.25s ease; }
-  .group:hover .prod-pop { transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(1); }
 }
 
 /* ===== Products — Pops: mini nugs burst up from the bottom, popcorn-style ===== */
