@@ -127,9 +127,10 @@ export default function PhenosHero() {
         />
       </div>
 
-      {/* GET STARTED — smooth-scrolls down into the sign-up form */}
+      {/* scroll cue — "SCROLL" + a bobbing down arrow (scrolls to the survey on click) */}
       <button
         type="button"
+        aria-label="Scroll to the feedback form"
         onClick={() => {
           // scroll the window directly — scrollIntoView is unreliable here because
           // the overflow-hidden <main> (clips the texture) swallows it.
@@ -138,16 +139,14 @@ export default function PhenosHero() {
           const y = el.getBoundingClientRect().top + window.scrollY - 96
           window.scrollTo({ top: y, behavior: 'smooth' })
         }}
-        className="group absolute bottom-10 left-1/2 z-30 inline-flex -translate-x-1/2 items-center gap-3 rounded-full bg-[var(--color-accent)] py-2 pl-8 pr-2 text-black shadow-[0_18px_50px_-12px_rgba(254,207,14,0.7)] transition-transform duration-200 hover:scale-[1.04]"
+        className="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 cursor-pointer flex-col items-center gap-2.5 text-white/55 transition-colors duration-200 hover:text-white"
       >
-        <span className="text-sm font-extrabold uppercase tracking-widest" style={{ fontFamily: 'var(--font-brand)' }}>
-          Get Started
+        <span className="text-[11px] font-bold uppercase tracking-[0.45em]" style={{ fontFamily: 'var(--font-brand)' }}>
+          Scroll
         </span>
-        <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black text-white">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-5 w-5 transition-transform duration-200 group-hover:translate-y-0.5" aria-hidden>
-            <path d="M12 5v14M6 13l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="pheno-scroll-arrow h-5 w-5" aria-hidden>
+          <path d="M12 5v14M6 13l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </button>
     </section>
   )

@@ -557,6 +557,15 @@ body {
   .pheno-nug--extra { display: none; } /* keep the static fallback uncluttered */
 }
 
+/* scroll-cue arrow — gentle continuous bob */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes pheno-scroll-bob {
+    0%, 100% { transform: translateY(-3px); opacity: 0.55; }
+    50% { transform: translateY(5px); opacity: 1; }
+  }
+  .pheno-scroll-arrow { animation: pheno-scroll-bob 1.4s ease-in-out infinite; }
+}
+
 /* Logo drop-in on load */
 @keyframes pheno-logo-in {
   0% { opacity: 0; transform: translateY(40px) scale(0.94); }
