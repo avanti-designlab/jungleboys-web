@@ -174,46 +174,39 @@ export const APP_FEATURES = [
   'Track points and rewards',
 ] as const
 
+// Final answers provided by Avanti (2026-07-21), used verbatim.
 export const REWARDS_FAQ = [
   {
     question: 'How do I join PWF Rewards?',
-    answer:
-      'Download the Jungle Boys app, create your account, and you are enrolled instantly — you even get 50 bonus points just for downloading.',
+    answer: 'Download the Jungle Boys App and create an account.',
   },
   {
     question: 'How do I earn points?',
-    answer:
-      'You earn points on every qualifying purchase — for every $1 you spend in-store, in-app, or online at jungleboys.com. Higher tiers earn points faster, and bonus points are available for things like referring a friend, leaving a review, and Double Points Days.',
+    answer: 'Earn 1 point per $1 spent, with higher tiers earning more through multipliers.',
   },
   {
     question: 'How do I redeem points?',
-    answer:
-      'Redeem points at checkout — in-store, in-app, or online at jungleboys.com. Redemptions start at 100 points, with values up to $75 off at 1000 points. One reward can be applied per transaction.',
+    answer: 'Points can be redeemed at checkout in-store or online.',
   },
   {
     question: 'Do points expire?',
-    answer:
-      'Points expire after 12 months of inactivity. Any purchase or point activity keeps your account active.',
+    answer: 'Yes, points expire after 12 months of inactivity.',
   },
   {
     question: 'How do tiers work?',
-    answer:
-      'Tiers are based on your rolling 12-month spend: Trimmer (0–499 annual points), Grower (500–1,999), and Pheno Hunter (2,000+). Your tier is valid for 12 months from qualification, and you keep it by maintaining your spend.',
+    answer: 'Tiers are based on your total spend over a rolling 12-month period.',
   },
   {
     question: 'Can I use rewards with other promotions?',
-    answer:
-      'Rewards can be combined with most promotions unless a promotion is specifically restricted. Some discounts may not be stackable — see store for details.',
+    answer: 'Yes, in most cases unless otherwise stated.',
   },
   {
     question: 'Is there a limit to how many rewards I can use?',
-    answer:
-      'Yes — one reward per transaction, applied at the time of purchase.',
+    answer: 'Only one reward can be used per transaction.',
   },
   {
     question: 'How do I qualify for Connoisseur Club?',
-    answer:
-      'Connoisseur Club is invite-only, reserved for a select group of OG customers and brand loyalists. Keep shopping, stay engaged, and you may receive an invitation.',
+    answer: 'Connoisseur Club is invite-only and reserved for select top customers.',
   },
 ] as const
 
