@@ -166,10 +166,13 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
           </PitchPill>
         </div>
 
-        {/* ===== WHITE feedback pill on the bottom (GET STARTED scrolls here) ===== */}
+        {/* ===== WHITE feedback pill on the bottom (GET STARTED scrolls here).
+            The mt-* gap matches scroll-mt-* so landing shows black above the box,
+            not the cut-off bottoms of the yellow pills. No reveal-transform here —
+            it would offset the scroll target. ===== */}
         <div
           id="join"
-          className="pheno-reveal mt-5 flex min-h-[76vh] scroll-mt-24 flex-col justify-center rounded-[2.25rem] bg-white p-7 text-black shadow-[0_50px_140px_-40px_rgba(0,0,0,0.8)] md:mt-6 md:p-14"
+          className="mt-28 flex min-h-[600px] scroll-mt-28 flex-col justify-center rounded-[2.25rem] bg-white p-7 text-black shadow-[0_50px_140px_-40px_rgba(0,0,0,0.8)] md:min-h-[560px] md:p-14"
         >
           {state === 'done' ? (
             <div className="flex flex-col items-center gap-5 py-8 text-center">

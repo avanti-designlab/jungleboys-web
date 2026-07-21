@@ -130,7 +130,14 @@ export default function PhenosHero() {
       {/* GET STARTED — smooth-scrolls down into the sign-up form */}
       <button
         type="button"
-        onClick={() => document.getElementById('join')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+        onClick={() => {
+          // scroll the window directly — scrollIntoView is unreliable here because
+          // the overflow-hidden <main> (clips the texture) swallows it.
+          const el = document.getElementById('join')
+          if (!el) return
+          const y = el.getBoundingClientRect().top + window.scrollY - 96
+          window.scrollTo({ top: y, behavior: 'smooth' })
+        }}
         className="group absolute bottom-10 left-1/2 z-30 inline-flex -translate-x-1/2 items-center gap-3 rounded-full bg-[var(--color-accent)] py-2 pl-8 pr-2 text-black shadow-[0_18px_50px_-12px_rgba(254,207,14,0.7)] transition-transform duration-200 hover:scale-[1.04]"
       >
         <span className="text-sm font-extrabold uppercase tracking-widest" style={{ fontFamily: 'var(--font-brand)' }}>
