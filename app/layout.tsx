@@ -3,6 +3,7 @@ import { Bebas_Neue, DM_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import AgeGate from "@/components/age-gate";
 import LoadingScreen from "@/components/loading-screen";
+import RevealGate from "@/components/reveal-gate";
 import CookieConsent from "@/components/cookie-consent";
 import MobileTabBar from "@/components/mobile-tab-bar";
 import SiteNav from "@/components/site-nav";
@@ -65,6 +66,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <LoadingScreen />
         <AgeGate />
+        <RevealGate />
         <CookieConsent />
         <SiteNav />
         <div className="flex-1">{children}</div>

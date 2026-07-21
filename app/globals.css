@@ -329,7 +329,10 @@ body {
     from { transform: scale(1.14); opacity: 0.6; }
     to { transform: scale(1); opacity: 1; }
   }
-  .media-hero-in { animation: media-hero-in 1.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  /* paused until the loading intro + age gate clear (see RevealGate), so the
+     zoom is actually seen on a first visit instead of finishing behind them */
+  .media-hero-in { animation: media-hero-in 1.4s cubic-bezier(0.22, 1, 0.36, 1) both; animation-play-state: paused; }
+  html.jb-reveal .media-hero-in { animation-play-state: running; }
 }
 
 /* media: scroll-reveal for the headline + latest pill (CSS transition, so it
@@ -413,7 +416,9 @@ body {
   .contact-letter {
     display: inline-block;
     animation: contact-letter-drop 0.75s cubic-bezier(0.34, 1.4, 0.5, 1) both;
+    animation-play-state: paused; /* released by RevealGate once intro + gate clear */
   }
+  html.jb-reveal .contact-letter { animation-play-state: running; }
 }
 
 /* contact hero: subtle "alive" sway for the character (whole-body; true per-arm
