@@ -9,6 +9,28 @@ import { PRODUCT_LINES } from '@/lib/products'
 // grid of the JB product lines. Each card links to that line's page under
 // /products/<slug>. Reveal via the shared .media-reveal / .is-in scroll toggle.
 
+// Popcorn burst for the Pops card: many mini-nug kernels shoot up from the bottom
+// and arc back down, continuously while hovering — like a popcorn machine. Fixed
+// pseudo-random params so the layout is stable across renders. img cycles the set.
+const POPCORN_KERNELS = [
+  { img: 0, left: 46, w: 13, x: -8, h: 200, r: 220, d: 0.0, dur: 1.25 },
+  { img: 1, left: 52, w: 11, x: 40, h: 240, r: -180, d: 0.15, dur: 1.4 },
+  { img: 2, left: 40, w: 12, x: -55, h: 175, r: 160, d: 0.32, dur: 1.15 },
+  { img: 3, left: 55, w: 10, x: 70, h: 210, r: -240, d: 0.48, dur: 1.5 },
+  { img: 4, left: 48, w: 12, x: 12, h: 265, r: 200, d: 0.62, dur: 1.35 },
+  { img: 5, left: 44, w: 11, x: -80, h: 195, r: -150, d: 0.8, dur: 1.2 },
+  { img: 1, left: 58, w: 12, x: 95, h: 180, r: 190, d: 0.95, dur: 1.45 },
+  { img: 0, left: 50, w: 10, x: -30, h: 250, r: -210, d: 1.1, dur: 1.3 },
+  { img: 3, left: 42, w: 13, x: -100, h: 165, r: 170, d: 1.25, dur: 1.1 },
+  { img: 2, left: 54, w: 11, x: 58, h: 230, r: -190, d: 1.4, dur: 1.5 },
+  { img: 5, left: 47, w: 12, x: 20, h: 275, r: 230, d: 1.55, dur: 1.35 },
+  { img: 4, left: 38, w: 10, x: -68, h: 185, r: -160, d: 1.7, dur: 1.25 },
+  { img: 0, left: 60, w: 11, x: 110, h: 205, r: 180, d: 1.85, dur: 1.4 },
+  { img: 2, left: 51, w: 12, x: -18, h: 255, r: -220, d: 2.0, dur: 1.3 },
+  { img: 3, left: 45, w: 10, x: 48, h: 190, r: 150, d: 2.15, dur: 1.2 },
+  { img: 1, left: 49, w: 13, x: -45, h: 235, r: -200, d: 2.3, dur: 1.45 },
+] as const
+
 export default function ProductsCollection() {
   const rootRef = useRef<HTMLDivElement>(null)
 
@@ -125,13 +147,38 @@ export default function ProductsCollection() {
                     className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                     style={{ background: 'radial-gradient(circle at 50% 44%, rgba(254,207,14,0.32), transparent 58%)' }}
                   />
-                  {line.nugs && (
-                    <>
-                      {/* eslint-disable-next-line @next/next/no-img-element -- transparent bud */}
-                      <img src={line.nugs[0]} alt="" aria-hidden className="prod-nug prod-nug--l" />
-                      {/* eslint-disable-next-line @next/next/no-img-element -- transparent bud */}
-                      <img src={line.nugs[1]} alt="" aria-hidden className="prod-nug prod-nug--r" />
-                    </>
+                  {line.popOut?.map((p, i) => (
+                    /* eslint-disable-next-line @next/next/no-img-element -- transparent pop-out */
+                    <img
+                      key={i}
+                      src={p.src}
+                      alt=""
+                      aria-hidden
+                      className="prod-pop"
+                      style={{ width: `${p.w}%`, ['--tx' as string]: p.tx, ['--ty' as string]: p.ty, ['--rot' as string]: `${p.rot}deg` }}
+                    />
+                  ))}
+                  {line.popcorn && (
+                    <div className="prod-popcorn" aria-hidden>
+                      {POPCORN_KERNELS.map((k, i) => (
+                        /* eslint-disable-next-line @next/next/no-img-element -- transparent mini bud */
+                        <img
+                          key={i}
+                          src={line.popcorn![k.img % line.popcorn!.length]}
+                          alt=""
+                          className="pops-kernel"
+                          style={{
+                            left: `${k.left}%`,
+                            width: `${k.w}%`,
+                            ['--x' as string]: `${k.x}px`,
+                            ['--h' as string]: `${k.h}px`,
+                            ['--r' as string]: `${k.r}deg`,
+                            ['--d' as string]: `${k.d}s`,
+                            ['--dur' as string]: `${k.dur}s`,
+                          }}
+                        />
+                      ))}
+                    </div>
                   )}
                   <Image
                     src={line.image}

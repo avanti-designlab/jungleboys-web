@@ -581,25 +581,58 @@ body {
   .pheno-logo-in { animation: none; }
 }
 
-/* ===== Products — nugs pop out each side of the product on card hover ===== */
-.prod-nug {
+/* ===== Products — items pop out each side of the product on card hover ===== */
+.prod-pop {
   position: absolute;
   top: 45%;
   left: 50%;
-  width: 42%; /* big buds */
-  z-index: 20; /* in front, so they read as bursting out over the bag sides */
+  z-index: 20; /* in front, so they read as bursting out over the product sides */
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0.55); /* start behind/inside the bag */
+  transform: translate(-50%, -50%) scale(0.5); /* start behind/inside the product */
   transition: transform 0.6s cubic-bezier(0.34, 1.45, 0.5, 1), opacity 0.35s ease;
   pointer-events: none;
   filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.32));
 }
-.group:hover .prod-nug--l { opacity: 1; transform: translate(-116%, -30%) scale(1) rotate(-16deg); }
-.group:hover .prod-nug--r { opacity: 1; transform: translate(16%, -34%) scale(1) rotate(15deg); }
+.group:hover .prod-pop {
+  opacity: 1;
+  transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(1);
+}
 @media (prefers-reduced-motion: reduce) {
-  .prod-nug { transition: opacity 0.25s ease; }
-  .group:hover .prod-nug--l { transform: translate(-112%, -30%) scale(1); }
-  .group:hover .prod-nug--r { transform: translate(14%, -34%) scale(1); }
+  .prod-pop { transition: opacity 0.25s ease; }
+  .group:hover .prod-pop { transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(1); }
+}
+
+/* ===== Products — Pops: mini nugs burst up from the bottom, popcorn-style ===== */
+.prod-popcorn {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  overflow: visible;
+}
+.pops-kernel {
+  position: absolute;
+  bottom: 6%; /* pop up out of the jar */
+  opacity: 0;
+  transform: translate(0, 10%) scale(0.3);
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.28));
+}
+.group:hover .pops-kernel {
+  animation: popcorn var(--dur) ease-out var(--d) infinite;
+}
+@keyframes popcorn {
+  0% { opacity: 0; transform: translate(0, 10%) scale(0.3) rotate(0deg); }
+  12% { opacity: 1; }
+  45% { transform: translate(calc(var(--x) * 0.55), calc(var(--h) * -1)) scale(1) rotate(calc(var(--r) * 0.5)); }
+  78% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--x), 14%) scale(0.85) rotate(var(--r)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .pops-kernel {
+    animation: none;
+    opacity: 1;
+    transform: translate(calc(var(--x) * 0.5), calc(var(--h) * -0.5)) scale(1);
+  }
 }
 
 /* ===== Products — realistic honey splash pours over the product on card hover ===== */

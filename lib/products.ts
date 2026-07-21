@@ -3,6 +3,11 @@
 // grid: nine lines, each links to /products/<slug>. Images are the exact card
 // cut-outs exported from the Figma product frames. No API — static collection.
 
+// One item that pops out from behind the product on hover. tx/ty are the resting
+// transform (relative to the item's own box, like the original nug pop), w is its
+// width as a % of the stage.
+export type PopOut = { src: string; tx: string; ty: string; rot: number; w: number }
+
 export type ProductLine = {
   slug: string
   name: string
@@ -10,9 +15,26 @@ export type ProductLine = {
   blurb: string
   image: string
   isNew?: boolean
-  nugs?: [string, string] // two nugs that pop out each side of the product on hover
+  popOut?: PopOut[] // items that pop out to the sides on hover (buds, pre-rolls…)
+  popcorn?: string[] // images that burst up from the bottom, popcorn-style, on hover
   splash?: string // a splash/liquid overlay that pours over the product on hover
 }
+
+// Shared pop-out layouts, reused across products.
+const PRE = '/products/fx/pre-roll.png'
+// A single pre-roll popping from each side (1G Pre-Rolls — same image both sides).
+const ONE_EACH_SIDE: PopOut[] = [
+  { src: PRE, tx: '-122%', ty: '-30%', rot: -15, w: 20 },
+  { src: PRE, tx: '22%', ty: '-30%', rot: 15, w: 20 },
+]
+// Two pre-rolls fanned out each side (Twins — 2 per pack, shown as pairs).
+const TWO_EACH_SIDE: PopOut[] = [
+  { src: PRE, tx: '-150%', ty: '-46%', rot: -22, w: 18 },
+  { src: PRE, tx: '-120%', ty: '-2%', rot: -9, w: 18 },
+  { src: PRE, tx: '50%', ty: '-46%', rot: 22, w: 18 },
+  { src: PRE, tx: '20%', ty: '-2%', rot: 9, w: 18 },
+]
+const POPS_NUGS = [1, 2, 3, 4, 5, 6].map((n) => `/products/fx/pops-${n}.png`)
 
 export const PRODUCT_LINES: ProductLine[] = [
   {
@@ -39,6 +61,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     blurb: 'Double-infused, double trouble. Two-strain blends rolled for a heavier hit.',
     image: '/products/v10/twins.png',
     isNew: true,
+    popOut: TWO_EACH_SIDE,
   },
   {
     slug: 'pops',
@@ -46,6 +69,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     tag: 'Premium Indoor Smalls',
     blurb: 'Bite-size infused minis in the candy-striped jar. Small format, full send.',
     image: '/products/v10/pops.png',
+    popcorn: POPS_NUGS,
   },
   {
     slug: 'premium-flower',
@@ -53,7 +77,10 @@ export const PRODUCT_LINES: ProductLine[] = [
     tag: 'Premium Indoor Flower',
     blurb: 'Top-shelf, hand-trimmed indoor — sealed fresh in the gold pouch.',
     image: '/products/v10/premium-flower.png',
-    nugs: ['/phenos/nug-1.png', '/phenos/nug-4.png'],
+    popOut: [
+      { src: '/phenos/nug-1.png', tx: '-116%', ty: '-30%', rot: -16, w: 42 },
+      { src: '/phenos/nug-4.png', tx: '16%', ty: '-34%', rot: 15, w: 42 },
+    ],
   },
   {
     slug: 'pre-rolls',
@@ -61,6 +88,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     tag: '1G Pre-Rolls',
     blurb: 'Single-strain infused pre-rolls, packed with the same flower we jar. Spark and go.',
     image: '/products/v10/pre-rolls.png',
+    popOut: ONE_EACH_SIDE,
   },
   {
     slug: '10-pack-prerolls',
