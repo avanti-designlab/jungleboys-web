@@ -22,13 +22,33 @@ if (!TOKEN) {
   process.exit(1)
 }
 
-const api = async (method, url, body) => {
-  const res = await fetch(`${MAPI}/spaces/${SPACE}${url}`, {
+// Try the given management host, then other regions if it returns 401 (region
+// mismatch looks like Unauthorized). Cache whichever host authorizes.
+const HOSTS = [MAPI, 'https://api-us.storyblok.com/v1', 'https://api-ca.storyblok.com/v1', 'https://api-ap.storyblok.com/v1']
+let host = null
+
+const call = async (h, method, url, body) =>
+  fetch(`${h}/spaces/${SPACE}${url}`, {
     method,
     headers: { Authorization: TOKEN, 'Content-Type': 'application/json' },
     body: body ? JSON.stringify(body) : undefined,
   })
-  if (!res.ok) throw new Error(`${method} ${url} → ${res.status} ${await res.text()}`)
+
+const api = async (method, url, body) => {
+  const candidates = host ? [host] : HOSTS
+  let res
+  for (const h of candidates) {
+    res = await call(h, method, url, body)
+    if (res.status === 401 && !host && h !== candidates[candidates.length - 1]) continue // wrong region → try next
+    host = h
+    break
+  }
+  if (!res.ok) {
+    const txt = await res.text()
+    if (res.status === 401)
+      throw new Error(`401 Unauthorized. The token lacks access — regenerate it with "Full user permission" toggled ON (green).`)
+    throw new Error(`${method} ${url} → ${res.status} ${txt}`)
+  }
   return res.status === 204 ? null : res.json()
 }
 
