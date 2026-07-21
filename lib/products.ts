@@ -56,7 +56,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     blurb: 'Ready-to-go all-in-one devices — charged, filled, and done. No cart, no hassle.',
     image: '/products/fx/gas-tank-still.png', // = the hover video's first frame (poster)
     isNew: true,
-    hoverVideo: '/products/fx/gas-tank-hover.mp4',
+    hoverVideo: '/products/fx/gas-tank-hover-2.mp4',
   },
   {
     slug: 'hash-hole',
