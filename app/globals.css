@@ -601,3 +601,27 @@ body {
   .group:hover .prod-nug--l { transform: translate(-112%, -30%) scale(1); }
   .group:hover .prod-nug--r { transform: translate(14%, -34%) scale(1); }
 }
+
+/* ===== Wholesale — JB plane flies across the hero on load, dropping parachutes ===== */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes ws-plane-fly {
+    0%   { transform: translate(120vw, -3vh) rotate(-5deg); opacity: 0; }
+    7%   { opacity: 1; }
+    92%  { opacity: 1; }
+    100% { transform: translate(-75vw, 6vh) rotate(-5deg); opacity: 0; }
+  }
+  .ws-plane { animation: ws-plane-fly 4.4s cubic-bezier(0.45, 0.02, 0.5, 0.98) 0.3s both; will-change: transform; }
+
+  @keyframes ws-chute-fall {
+    0%   { transform: translate(-50%, -340%); opacity: 0; }
+    14%  { opacity: 1; }
+    100% { transform: translate(-50%, 0); opacity: 1; }
+  }
+  .ws-chute { opacity: 0; animation: ws-chute-fall 3s cubic-bezier(0.25, 0.55, 0.4, 1) var(--delay, 0s) forwards; will-change: transform; }
+  @keyframes ws-chute-sway { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
+  .ws-chute > img { transform-origin: 50% 8%; animation: ws-chute-sway 3.6s ease-in-out infinite; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ws-plane { display: none; }
+  .ws-chute { opacity: 1; }
+}
