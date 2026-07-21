@@ -31,7 +31,6 @@ export const MENU_COLUMNS: { label: string; href: string; external?: boolean }[]
     { label: 'Products', href: '/products' },
     { label: 'Clothing', href: 'https://jungleboysclothing.com/', external: true },
     { label: 'Rewards', href: '/rewards' },
-    { label: 'Profile', href: '/profile' },
   ],
   [
     { label: 'Locations', href: '/locations' },
