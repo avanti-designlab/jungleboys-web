@@ -1,11 +1,16 @@
-// YouTube uploads feed for the Media hub. The channel's public Atom feed lists
-// the ~15 most recent uploads with no API key required, so new videos appear
-// automatically. Parsed server-side and cached via ISR (see getMediaVideos).
+// YouTube uploads for the Media hub, no API key required. YouTube now 404s the
+// Atom feed from datacenter IPs (Vercel), so the primary source is the channel's
+// public /videos page — its embedded ytInitialData lists recent uploads. The RSS
+// feed is kept as a fast first-try in case it works. Parsed server-side, ISR-cached.
 // A full archive / view counts would need the YouTube Data API key (deferred).
 
 export const JB_CHANNEL_ID = 'UC3FkXgy37Xc5tRBl4ltHuDA'
 export const JB_CHANNEL_URL = 'https://www.youtube.com/@JungleBoysfilms'
 const FEED_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${JB_CHANNEL_ID}`
+const VIDEOS_URL = `${JB_CHANNEL_URL}/videos`
+// A desktop browser UA — YouTube serves the full ytInitialData payload for it.
+const UA =
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
 
 export type Video = {
   id: string // YouTube video id
@@ -60,18 +65,30 @@ export function toEmbed(id: string) {
   return `https://www.youtube-nocookie.com/embed/${id}`
 }
 
-// Fetch + parse the uploads feed. Returns [] on any failure so the page still
-// renders (Storyblok videos + a graceful empty state).
-export async function fetchYouTubeUploads(): Promise<Video[]> {
+function base(id: string, i: number): Omit<Video, 'title' | 'description'> {
+  return {
+    id,
+    source: 'youtube',
+    thumbnail: youtubeThumb(id),
+    // channel order is newest-first; synthesize a descending timestamp so the
+    // merge sort keeps that order (exact upload dates need the Data API).
+    publishedAt: new Date(Date.now() - i * 60_000).toISOString(),
+    watchUrl: `https://www.youtube.com/watch?v=${id}`,
+    embedUrl: toEmbed(id),
+  }
+}
+
+// ── Source 1: the RSS Atom feed (clean dates when it isn't blocked) ──────────
+async function fromFeed(): Promise<Video[]> {
   try {
     const res = await fetch(FEED_URL, {
-      // ISR: refresh hourly so new uploads surface without a rebuild
+      headers: { 'user-agent': UA },
       next: { revalidate: 3600, tags: ['media'] },
     })
     if (!res.ok) return []
     const xml = await res.text()
     const entries = xml.split('<entry>').slice(1)
-    const parsed = entries
+    return entries
       .map((block) => {
         const id = tag(block, 'yt:videoId')
         return {
@@ -86,12 +103,89 @@ export async function fetchYouTubeUploads(): Promise<Video[]> {
         }
       })
       .filter((v) => v.id)
-    // tag orientation + use the 9:16 thumbnail for verticals
-    const verticals = await Promise.all(parsed.map((v) => isVertical(v.id)))
-    return parsed.map((v, i) =>
-      verticals[i] ? { ...v, vertical: true, thumbnail: oarThumb(v.id) } : v
-    )
   } catch {
     return []
   }
+}
+
+// Pull the ytInitialData object out of a channel page (brace-balanced).
+function extractInitialData(html: string): unknown | null {
+  const marker = 'ytInitialData = '
+  const start = html.indexOf(marker)
+  if (start === -1) return null
+  let i = start + marker.length
+  if (html[i] !== '{') return null
+  let depth = 0
+  let inStr = false
+  let esc = false
+  for (let j = i; j < html.length; j++) {
+    const c = html[j]
+    if (inStr) {
+      if (esc) esc = false
+      else if (c === '\\') esc = true
+      else if (c === '"') inStr = false
+    } else if (c === '"') inStr = true
+    else if (c === '{') depth++
+    else if (c === '}') {
+      depth--
+      if (depth === 0) {
+        try {
+          return JSON.parse(html.slice(i, j + 1))
+        } catch {
+          return null
+        }
+      }
+    }
+  }
+  return null
+}
+
+// ── Source 2: scrape the channel /videos page (new lockupViewModel format) ───
+async function fromChannelPage(): Promise<Video[]> {
+  try {
+    const res = await fetch(VIDEOS_URL, {
+      headers: { 'user-agent': UA, 'accept-language': 'en-US,en;q=0.9' },
+      next: { revalidate: 3600, tags: ['media'] },
+    })
+    if (!res.ok) return []
+    const html = await res.text()
+    const data = extractInitialData(html)
+    if (!data) return []
+    const found: { id: string; title: string }[] = []
+    const seen = new Set<string>()
+    const walk = (o: unknown) => {
+      if (Array.isArray(o)) {
+        for (const v of o) walk(v)
+      } else if (o && typeof o === 'object') {
+        const rec = o as Record<string, unknown>
+        if (rec.contentType === 'LOCKUP_CONTENT_TYPE_VIDEO' && typeof rec.contentId === 'string') {
+          const id = rec.contentId
+          const meta = (rec.metadata as Record<string, unknown>)?.lockupMetadataViewModel as
+            | Record<string, unknown>
+            | undefined
+          const title = ((meta?.title as Record<string, unknown>)?.content as string) ?? ''
+          if (!seen.has(id)) {
+            seen.add(id)
+            found.push({ id, title })
+          }
+        }
+        for (const v of Object.values(rec)) walk(v)
+      }
+    }
+    walk(data)
+    return found.map((v, i) => ({ ...base(v.id, i), title: v.title, description: '' }))
+  } catch {
+    return []
+  }
+}
+
+// Try the feed first (cleanest), fall back to the channel page. Returns [] on
+// total failure so the page still renders (Storyblok videos + empty state).
+export async function fetchYouTubeUploads(): Promise<Video[]> {
+  let parsed = await fromFeed()
+  if (parsed.length === 0) parsed = await fromChannelPage()
+  if (parsed.length === 0) return []
+  // tag orientation + use the 9:16 thumbnail for verticals
+  const verticals = await Promise.all(parsed.map((v) => isVertical(v.id)))
+  return parsed.map((v, i) => (verticals[i] ? { ...v, vertical: true, thumbnail: oarThumb(v.id) } : v))
 }
