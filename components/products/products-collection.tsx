@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useRef } from 'react'
 import { PRODUCT_LINES } from '@/lib/products'
@@ -40,33 +41,50 @@ export default function ProductsCollection() {
 
   return (
     <div ref={rootRef}>
-      {/* ===== immersive collage hero ===== */}
+      {/* ===== character banner — same treatment as /contact /media /wholesale /phenos ===== */}
       <section className="px-2 pt-2 md:px-3">
         <div
           data-nav-theme="dark"
-          className="media-hero-in relative flex min-h-[78vh] items-center justify-center overflow-hidden rounded-[1.75rem] bg-[#0A0B0D] px-6 md:rounded-[2.5rem]"
+          className="media-hero-in relative flex min-h-[400px] items-center justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 md:h-[520px] md:rounded-[2.5rem]"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element -- full-bleed collage art */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- graffiti bg */}
           <img
-            src="/products/collage.jpg"
+            src="/contact/contact-bg.jpg"
             alt=""
             aria-hidden
-            className="absolute inset-0 h-full w-full scale-105 object-cover object-center"
+            className="absolute inset-0 h-full w-full scale-110 object-cover object-center"
           />
-          <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-black/85" />
-          <div className="relative z-10 flex flex-col items-center text-center">
-            <span className="text-xs font-bold uppercase tracking-[0.5em] text-white/70 md:text-sm" style={{ fontFamily: 'var(--font-brand)' }}>
-              The Collection
-            </span>
-            <h1 className="font-display mt-4 text-[clamp(4rem,17vw,16rem)] uppercase leading-[0.82] text-white drop-shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
-              Products
-            </h1>
-            <p className="mt-5 max-w-xl text-sm uppercase leading-relaxed tracking-wide text-white/70 md:text-base" style={{ fontFamily: 'var(--font-brand)' }}>
-              Every Jungle Boys line in one place — from Hash Holes to top-shelf flower. Playing with fire, in every format.
-            </p>
-          </div>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{ background: 'radial-gradient(ellipse 90% 100% at 50% 60%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.72) 100%)' }}
+          />
+          {/* giant PRODUCTS wordmark — drops in letter-by-letter, below the header */}
+          <span
+            aria-hidden
+            className="font-display pointer-events-none absolute left-1/2 top-[92px] z-0 -translate-x-1/2 whitespace-nowrap uppercase leading-none text-white/90 md:top-[112px]"
+            style={{ fontSize: 'min(26vw, 560px)' }}
+          >
+            {'PRODUCTS'.split('').map((ch, i) => (
+              <span key={i} className="contact-letter" style={{ animationDelay: `${0.18 + i * 0.06}s` }}>
+                {ch}
+              </span>
+            ))}
+          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element -- character art */}
+          <img
+            src="/products/products-header.svg"
+            alt="Jungle Boys Products"
+            className="contact-alive relative z-10 h-[108%] w-auto max-w-none translate-y-[4%] drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
+          />
         </div>
       </section>
+
+      {/* sr-only intro (the banner is decorative) */}
+      <h1 className="sr-only">Products — The Jungle Boys Collection</h1>
+      <p className="mx-auto max-w-2xl px-6 pt-14 text-center text-sm uppercase leading-relaxed tracking-wide text-[var(--color-muted)] md:pt-20 md:text-base" style={{ fontFamily: 'var(--font-brand)' }}>
+        Every Jungle Boys line in one place — from Hash Holes to top-shelf flower. Playing with fire, in every format.
+      </p>
 
       {/* ===== category grid ===== */}
       <section className="px-4 pt-16 md:px-8 md:pt-24 lg:px-12">
@@ -85,33 +103,39 @@ export default function ProductsCollection() {
               <Link
                 key={line.slug}
                 href={`/products/${line.slug}`}
-                className="media-reveal group relative flex min-h-[320px] flex-col justify-between overflow-hidden rounded-[1.75rem] border border-[var(--color-border)] bg-[var(--color-surface)] p-8 transition-all duration-300 hover:-translate-y-1.5 hover:border-[var(--color-accent)] hover:shadow-[0_40px_100px_-40px_rgba(254,207,14,0.55)]"
+                className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.75rem] border border-[var(--color-border)] bg-[var(--color-surface)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[var(--color-accent)] hover:shadow-[0_40px_100px_-40px_rgba(254,207,14,0.55)]"
               >
-                {/* hover glow */}
+                {/* product image well — light studio backdrop so the product reads in both themes */}
                 <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                  style={{ background: 'radial-gradient(circle at 50% 30%, rgba(254,207,14,0.14), transparent 62%)' }}
-                />
-                {/* oversized number watermark */}
-                <span aria-hidden className="font-display pointer-events-none absolute -right-1 -top-9 select-none text-[9rem] leading-none text-[var(--color-foreground)] opacity-[0.05]">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-
-                <span
-                  className="relative w-fit rounded-full border border-[var(--color-border)] px-4 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.18em] text-[var(--color-muted)]"
-                  style={{ fontFamily: 'var(--font-brand)' }}
+                  className="relative aspect-square w-full overflow-hidden"
+                  style={{ background: 'radial-gradient(circle at 50% 38%, #ffffff 0%, #ececef 78%)' }}
                 >
-                  {line.tag}
-                </span>
+                  <span aria-hidden className="font-display pointer-events-none absolute -left-1 -top-8 select-none text-[8rem] leading-none text-black opacity-[0.06]">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <Image
+                    src={line.image}
+                    alt={`Jungle Boys ${line.name}`}
+                    fill
+                    sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
+                    className="object-contain p-9 transition-transform duration-500 group-hover:scale-[1.06]"
+                  />
+                  <span
+                    className="absolute bottom-4 left-4 rounded-full bg-black px-3.5 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--color-accent)]"
+                    style={{ fontFamily: 'var(--font-brand)' }}
+                  >
+                    {line.tag}
+                  </span>
+                </div>
 
-                <div className="relative mt-auto pt-10">
-                  <h3 className="font-display text-4xl uppercase leading-[0.9] text-[var(--color-foreground)] md:text-5xl">
+                {/* body */}
+                <div className="flex flex-1 flex-col p-7">
+                  <h3 className="font-display text-3xl uppercase leading-[0.9] text-[var(--color-foreground)] md:text-4xl">
                     {line.name}
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-[var(--color-muted)]">{line.blurb}</p>
                   <span
-                    className="mt-6 inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-[var(--color-foreground)] transition-colors group-hover:text-[var(--color-accent-ink)]"
+                    className="mt-5 inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-[var(--color-foreground)] transition-colors group-hover:text-[var(--color-accent-ink)]"
                     style={{ fontFamily: 'var(--font-brand)' }}
                   >
                     View the line
