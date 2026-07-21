@@ -94,54 +94,45 @@ export default function ProductsCollection() {
               Shop the lineup
             </h2>
             <p className="max-w-sm text-sm uppercase tracking-wide text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
-              Six signature lines. Pick your format — full menus live at each store.
+              Every Jungle Boys line — pick your format. Full menus live at each store.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {PRODUCT_LINES.map((line, i) => (
+          {/* Figma product grid: light SHOP NOW cards, NEW! tags on the newest lines */}
+          <div className="grid grid-cols-2 gap-4 md:gap-5 lg:grid-cols-3">
+            {PRODUCT_LINES.map((line) => (
               <Link
                 key={line.slug}
                 href={`/products/${line.slug}`}
-                className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.75rem] border border-[var(--color-border)] bg-[var(--color-surface)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[var(--color-accent)] hover:shadow-[0_40px_100px_-40px_rgba(254,207,14,0.55)]"
+                className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.5rem] shadow-[0_30px_70px_-40px_rgba(0,0,0,0.6)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_44px_100px_-40px_rgba(254,207,14,0.5)]"
+                style={{ background: 'linear-gradient(180deg, #ffffff 0%, #e8e8eb 100%)' }}
               >
-                {/* product image well — light studio backdrop so the product reads in both themes */}
-                <div
-                  className="relative aspect-square w-full overflow-hidden"
-                  style={{ background: 'radial-gradient(circle at 50% 38%, #ffffff 0%, #ececef 78%)' }}
-                >
-                  <span aria-hidden className="font-display pointer-events-none absolute -left-1 -top-8 select-none text-[8rem] leading-none text-black opacity-[0.06]">
-                    {String(i + 1).padStart(2, '0')}
+                {line.isNew && (
+                  <span
+                    className="absolute left-1/2 top-4 z-10 -translate-x-1/2 rounded-full bg-[var(--color-accent)] px-5 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.2em] text-black shadow-md"
+                    style={{ fontFamily: 'var(--font-brand)' }}
+                  >
+                    New!
                   </span>
+                )}
+                {/* product image */}
+                <div className="relative aspect-[5/6] w-full">
                   <Image
                     src={line.image}
                     alt={`Jungle Boys ${line.name}`}
                     fill
-                    sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
-                    className="object-contain p-9 transition-transform duration-500 group-hover:scale-[1.06]"
+                    sizes="(max-width:640px) 50vw, (max-width:1024px) 50vw, 33vw"
+                    className="object-contain p-6 transition-transform duration-500 group-hover:scale-[1.06] md:p-9"
                   />
-                  <span
-                    className="absolute bottom-4 left-4 rounded-full bg-black px-3.5 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--color-accent)]"
-                    style={{ fontFamily: 'var(--font-brand)' }}
-                  >
-                    {line.tag}
-                  </span>
                 </div>
-
-                {/* body */}
-                <div className="flex flex-1 flex-col p-7">
-                  <h3 className="font-display text-3xl uppercase leading-[0.9] text-[var(--color-foreground)] md:text-4xl">
-                    {line.name}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-[var(--color-muted)]">{line.blurb}</p>
+                {/* name + SHOP NOW */}
+                <div className="px-4 pb-5 text-center md:px-6 md:pb-6">
+                  <h3 className="font-display text-2xl uppercase leading-none text-black md:text-3xl">{line.name}</h3>
                   <span
-                    className="mt-5 inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-[var(--color-foreground)] transition-colors group-hover:text-[var(--color-accent-ink)]"
+                    className="mt-3 block rounded-full bg-black py-3 text-[11px] font-extrabold uppercase tracking-[0.2em] text-white transition-colors duration-200 group-hover:bg-[var(--color-accent)] group-hover:text-black md:text-xs"
                     style={{ fontFamily: 'var(--font-brand)' }}
                   >
-                    View the line
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" aria-hidden>
-                      <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
+                    Shop Now
                   </span>
                 </div>
               </Link>
