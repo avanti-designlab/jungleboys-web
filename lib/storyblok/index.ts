@@ -15,8 +15,10 @@ export async function getStory(slug: string, version: StoryVersion = 'draft') {
   try {
     const res = await fetch(
       `${CDN_API}/stories/${slug}?version=${version}&token=${token}`,
-      // ISR: revalidated on-demand via /api/revalidate (Storyblok publish webhook)
-      { next: { tags: [`story:${slug}`] } }
+      // ISR: on-demand via /api/revalidate (Storyblok publish webhook) AND a 60s
+      // time-based fallback so published edits appear within a minute even before
+      // the webhook is configured.
+      { next: { revalidate: 60, tags: [`story:${slug}`] } }
     )
     if (!res.ok) return null
     const json = await res.json()
