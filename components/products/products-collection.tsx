@@ -118,8 +118,9 @@ export default function ProductsCollection() {
                   </span>
                 )}
 
-                {/* big product stage */}
-                <div className="relative flex-1" style={{ minHeight: '19rem' }}>
+                {/* big product stage — near-square so wide products (bags, dispos,
+                    top-down jars) get as much presence as the tall tube products */}
+                <div className="relative aspect-[7/6] w-full">
                   <div
                     aria-hidden
                     className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
@@ -144,7 +145,9 @@ export default function ProductsCollection() {
 
                 {/* editorial footer: tag + big name (left), arrow disc (right) */}
                 <div className="relative z-10 flex items-end justify-between gap-3 px-5 pb-5 pt-1 md:px-6 md:pb-6">
-                  <div className="min-w-0">
+                  {/* min-h reserves space for a 2-line name so every card is the
+                      same height (the stage is now aspect-locked, not flex-1) */}
+                  <div className="flex min-h-[3.4rem] flex-col justify-end min-w-0 md:min-h-[4rem]">
                     <span className="block text-[10px] font-bold uppercase tracking-[0.26em] text-black/40" style={{ fontFamily: 'var(--font-brand)' }}>
                       {line.tag}
                     </span>
