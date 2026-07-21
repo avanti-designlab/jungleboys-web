@@ -106,7 +106,7 @@ export default function ProductsCollection() {
               <Link
                 key={line.slug}
                 href={`/products/${line.slug}`}
-                className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.6rem] shadow-[0_34px_80px_-46px_rgba(0,0,0,0.6)] ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_52px_120px_-44px_rgba(254,207,14,0.6)]"
+                className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.6rem] shadow-[0_34px_80px_-46px_rgba(0,0,0,0.6)] ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-[0_52px_120px_-44px_rgba(254,207,14,0.6)]"
                 style={{ background: 'radial-gradient(120% 90% at 50% 12%, #ffffff 0%, #f2f2f4 55%, #e6e6e9 100%)' }}
               >
                 {line.isNew && (
@@ -148,7 +148,7 @@ export default function ProductsCollection() {
                     <span className="block text-[10px] font-bold uppercase tracking-[0.26em] text-black/40" style={{ fontFamily: 'var(--font-brand)' }}>
                       {line.tag}
                     </span>
-                    <h3 className="font-display mt-1 truncate text-[1.7rem] uppercase leading-[0.9] text-black md:text-4xl">{line.name}</h3>
+                    <h3 className="font-display mt-1 text-[1.5rem] uppercase leading-[0.88] text-black md:text-[1.9rem]">{line.name}</h3>
                   </div>
                   <span
                     aria-hidden

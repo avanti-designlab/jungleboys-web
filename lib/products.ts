@@ -16,8 +16,8 @@ export type ProductLine = {
 export const PRODUCT_LINES: ProductLine[] = [
   {
     slug: 'all-in-one',
-    name: 'All-In-One',
-    tag: 'Disposable',
+    name: 'All-In-One Gas Tanks',
+    tag: 'Vapes',
     blurb: 'Ready-to-go all-in-one devices — charged, filled, and done. No cart, no hassle.',
     image: '/products/all-in-one.png',
     isNew: true,
@@ -33,7 +33,7 @@ export const PRODUCT_LINES: ProductLine[] = [
   {
     slug: 'twins',
     name: 'Twins',
-    tag: 'Infused Pre-Roll',
+    tag: '2-PK Pre-Rolls',
     blurb: 'Double-infused, double trouble. Two-strain blends rolled for a heavier hit.',
     image: '/products/twins.png',
     isNew: true,
@@ -41,14 +41,14 @@ export const PRODUCT_LINES: ProductLine[] = [
   {
     slug: 'pops',
     name: 'Pops',
-    tag: 'Infused Mini',
+    tag: 'Premium Indoor Smalls',
     blurb: 'Bite-size infused minis in the candy-striped jar. Small format, full send.',
     image: '/products/pops.png',
   },
   {
     slug: 'premium-flower',
-    name: 'Flower',
-    tag: 'Indoor Flower',
+    name: 'Flower Gold Mylars',
+    tag: 'Premium Indoor Flower',
     blurb: 'Top-shelf, hand-trimmed indoor — sealed fresh in the gold pouch.',
     image: '/products/premium-flower.png',
     nugs: ['/phenos/nug-1.png', '/phenos/nug-4.png'],
@@ -56,7 +56,7 @@ export const PRODUCT_LINES: ProductLine[] = [
   {
     slug: 'pre-rolls',
     name: 'Pre-Rolls',
-    tag: 'Infused Pre-Roll',
+    tag: '1G Pre-Rolls',
     blurb: 'Single-strain infused pre-rolls, packed with the same flower we jar. Spark and go.',
     image: '/products/pre-rolls.png',
   },
@@ -70,14 +70,14 @@ export const PRODUCT_LINES: ProductLine[] = [
   {
     slug: 'rosin',
     name: 'Rosin',
-    tag: 'Solventless',
+    tag: 'Solventless Live Rosin',
     blurb: 'Solventless live rosin, pressed from fresh-frozen flower. Pure, full-spectrum flavor.',
     image: '/products/rosin.png',
   },
   {
     slug: 'orc',
-    name: 'ORC',
-    tag: 'Concentrate',
+    name: 'Oil Refinery Co.',
+    tag: 'Concentrates',
     blurb: 'Our concentrate line — potent, terp-forward extracts for the connoisseur.',
     image: '/products/orc.png',
   },

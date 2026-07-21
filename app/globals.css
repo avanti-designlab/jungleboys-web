@@ -584,20 +584,20 @@ body {
 /* ===== Products — nugs pop out each side of the product on card hover ===== */
 .prod-nug {
   position: absolute;
-  top: 42%;
+  top: 45%;
   left: 50%;
-  width: 25%;
-  z-index: 20; /* in front, so they read as bursting out over the product sides */
+  width: 42%; /* big buds */
+  z-index: 20; /* in front, so they read as bursting out over the bag sides */
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0.35);
-  transition: transform 0.55s cubic-bezier(0.34, 1.5, 0.5, 1), opacity 0.3s ease;
+  transform: translate(-50%, -50%) scale(0.55); /* start behind/inside the bag */
+  transition: transform 0.6s cubic-bezier(0.34, 1.45, 0.5, 1), opacity 0.35s ease;
   pointer-events: none;
-  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.32));
 }
-.group:hover .prod-nug--l { opacity: 1; transform: translate(-165%, -46%) scale(1) rotate(-18deg); }
-.group:hover .prod-nug--r { opacity: 1; transform: translate(65%, -52%) scale(1) rotate(16deg); }
+.group:hover .prod-nug--l { opacity: 1; transform: translate(-116%, -30%) scale(1) rotate(-16deg); }
+.group:hover .prod-nug--r { opacity: 1; transform: translate(16%, -34%) scale(1) rotate(15deg); }
 @media (prefers-reduced-motion: reduce) {
   .prod-nug { transition: opacity 0.25s ease; }
-  .group:hover .prod-nug--l { transform: translate(-160%, -46%) scale(1); }
-  .group:hover .prod-nug--r { transform: translate(62%, -52%) scale(1); }
+  .group:hover .prod-nug--l { transform: translate(-112%, -30%) scale(1); }
+  .group:hover .prod-nug--r { transform: translate(14%, -34%) scale(1); }
 }
