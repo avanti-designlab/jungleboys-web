@@ -77,8 +77,8 @@ export const PRODUCT_LINES: ProductLine[] = [
     blurb: 'Top-shelf, hand-trimmed indoor — sealed fresh in the gold pouch.',
     image: '/products/v10/premium-flower.png',
     popOut: [
-      { src: '/phenos/nug-1.png', x: 9, y: 52, rot: -16, w: 40 },
-      { src: '/phenos/nug-4.png', x: 91, y: 46, rot: 15, w: 40 },
+      { src: '/phenos/nug-1.png', x: 25, y: 50, rot: -15, w: 38 },
+      { src: '/phenos/nug-4.png', x: 75, y: 46, rot: 15, w: 38 },
     ],
   },
   {
