@@ -109,7 +109,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     image: '/products/v11/10-pack-prerolls.png',
     fan: {
       src: '/products/fx/mini-preroll.png',
-      w: 6,
+      w: 7.5,
       pivotY: 64,
       angles: [-30, -45, -60, -75, -90, 30, 45, 60, 75, 90],
     },

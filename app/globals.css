@@ -606,7 +606,7 @@ body {
 .prod-fan {
   position: absolute;
   inset: 0;
-  z-index: 5; /* behind the product image (z-10) — joints emerge from behind the jar */
+  z-index: 20; /* in front of the product — joints fan out over the jar, not hidden */
   pointer-events: none;
 }
 .prod-fan-joint {
