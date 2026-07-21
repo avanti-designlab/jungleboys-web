@@ -36,6 +36,9 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
+  // Absolute base for OG/Twitter image URLs. Staging for now — switch to
+  // https://www.jungleboys.com at cutover.
+  metadataBase: new URL("https://jungleboys-web.vercel.app"),
   title: {
     default: "Jungle Boys",
     template: "%s | Jungle Boys",
