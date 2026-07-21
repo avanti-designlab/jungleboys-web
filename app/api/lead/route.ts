@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { supabaseAdmin } from '@/lib/supabase/server'
 import { forwardLead } from '@/lib/leads/forward'
+import { notifyByEmail } from '@/lib/leads/email'
 
 // Lead capture (06 §5 lead-pipeline skill, 07 §4 TCPA):
 //   validate → write Supabase consent ledger (source of truth) → best-effort forward.
@@ -66,27 +67,37 @@ export async function POST(req: Request) {
     await readFile(path.join(process.cwd(), 'content/legal/tcpa-consent.txt'), 'utf-8')
   ).trim()
 
-  // 1) consent ledger first — if forwarding fails, the lead is safe
-  const { data: row, error } = await supabaseAdmin()
+  // 1) consent ledger first (source of truth). Store the full submission so the
+  //    team has one organized record; fall back to base columns if migration 0004
+  //    (message/topic/location) hasn't been applied to the DB yet — never break.
+  const base = {
+    name: name || null,
+    email: email || null,
+    phone: phone || null,
+    consent_text: consentText,
+    source_page: sourcePage,
+    forwarded_status: 'pending',
+  }
+  const db = supabaseAdmin()
+  let ins = await db
     .from('leads')
-    .insert({
-      name: name || null,
-      email: email || null,
-      phone: phone || null,
-      consent_text: consentText,
-      source_page: sourcePage,
-      forwarded_status: 'pending',
-    })
+    .insert({ ...base, message: message || null, topic: topic || null, location: location || null })
     .select('id')
     .single()
-
-  if (error) {
+  if (ins.error) {
+    ins = await db.from('leads').insert(base).select('id').single()
+  }
+  if (ins.error || !ins.data) {
     return Response.json({ error: 'Could not save signup — try again.' }, { status: 500 })
   }
 
-  // 2) best-effort forward; record outcome
-  const status = await forwardLead({ name, email, phone, message, topic, location })
-  await supabaseAdmin().from('leads').update({ forwarded_status: status }).eq('id', row.id)
+  // 2) route by form type (best-effort, outcome recorded):
+  //    newsletter = marketing opt-in → Klaviyo; inquiries → team email (Resend).
+  const isNewsletter = topic.trim().toLowerCase() === 'newsletter'
+  const status = isNewsletter
+    ? await forwardLead({ name, email, phone, topic, location })
+    : await notifyByEmail({ name, email, phone, topic, message, location, sourcePage })
+  await db.from('leads').update({ forwarded_status: status }).eq('id', ins.data.id)
 
   return Response.json({ ok: true })
 }
