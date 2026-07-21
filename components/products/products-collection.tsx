@@ -31,6 +31,17 @@ const POPCORN_KERNELS = [
   { img: 1, left: 49, w: 13, x: -45, h: 235, r: -200, d: 2.3, dur: 1.45 },
 ] as const
 
+// Link cards under the product grid — image tiles that route to other surfaces.
+// Drop a transparent/cover image at `image` (e.g. /products/links/deals.jpg) to
+// swap the placeholder glow for artwork. Some targets are Phase-3 pages (they'll
+// resolve once built); the links are wired now.
+const LINK_CARDS: { title: string; sub: string; href: string; glow: string; image?: string }[] = [
+  { title: 'Fresh Drops', sub: 'New this week', href: '/drops', glow: 'rgba(254,207,14,0.55)' },
+  { title: 'Deals', sub: 'Save more', href: '/710-deals', glow: 'rgba(120,224,140,0.5)' },
+  { title: 'Rewards', sub: 'PWF Rewards', href: '/rewards', glow: 'rgba(180,130,255,0.5)' },
+  { title: 'Locations', sub: 'Find a store', href: '/locations', glow: 'rgba(110,180,255,0.5)' },
+]
+
 export default function ProductsCollection() {
   const rootRef = useRef<HTMLDivElement>(null)
 
@@ -257,6 +268,41 @@ export default function ProductsCollection() {
                 </div>
               </Link>
             ))}
+          </div>
+
+          {/* explore-more link cards — image tiles routing to other surfaces */}
+          <div className="media-reveal mt-16 md:mt-24">
+            <h3 className="font-display mb-6 text-4xl uppercase leading-none text-[var(--color-foreground)] md:mb-8 md:text-5xl">
+              Explore more
+            </h3>
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+              {LINK_CARDS.map((c) => (
+                <Link
+                  key={c.title}
+                  href={c.href}
+                  className="group relative flex aspect-[4/5] flex-col justify-end overflow-hidden rounded-[1.4rem] shadow-[0_30px_70px_-46px_rgba(0,0,0,0.6)] ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-[0_46px_110px_-44px_rgba(254,207,14,0.6)]"
+                >
+                  {c.image ? (
+                    <Image src={c.image} alt="" fill sizes="(max-width:640px) 50vw, 25vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                  ) : (
+                    <div aria-hidden className="absolute inset-0" style={{ background: `radial-gradient(120% 90% at 30% 12%, ${c.glow}, transparent 60%), #121216` }} />
+                  )}
+                  <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  <div className="relative z-10 p-5">
+                    <span className="block text-[10px] font-bold uppercase tracking-[0.26em] text-white/60" style={{ fontFamily: 'var(--font-brand)' }}>
+                      {c.sub}
+                    </span>
+                    <h4 className="font-display mt-1 text-2xl uppercase leading-[0.9] text-white md:text-[1.7rem]">{c.title}</h4>
+                    <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]" style={{ fontFamily: 'var(--font-brand)' }}>
+                      Explore
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden>
+                        <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
 
           {/* shop CTA */}
