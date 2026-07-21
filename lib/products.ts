@@ -54,7 +54,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     name: 'All-In-One Gas Tanks',
     tag: 'Vapes',
     blurb: 'Ready-to-go all-in-one devices — charged, filled, and done. No cart, no hassle.',
-    image: '/products/v11/all-in-one.png',
+    image: '/products/fx/gas-tank-still.png', // = the hover video's first frame (poster)
     isNew: true,
     hoverVideo: '/products/fx/gas-tank-hover.mp4',
   },

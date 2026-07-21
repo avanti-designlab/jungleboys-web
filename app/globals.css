@@ -682,23 +682,19 @@ body {
   .prod-splash { transition: opacity 0.3s ease; transform: translate(-50%, -50%) scale(1); }
 }
 
-/* ===== Products — a product animation video that plays over the card on hover ===== */
+/* ===== Products — a product animation video: the card's product, plays on hover ===== */
+/* The video shows its first frame at rest and plays on hover, so rest and hover are
+   the same element (no static-image mismatch). Scaled up a touch to fill the card. */
 .prod-hovervid {
   position: absolute;
   inset: 0;
-  z-index: 12; /* above the static image (z-10), below the pop-outs (z-20) */
+  z-index: 10;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  padding: 0.5rem;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  transform: scale(1.14); /* crop the video's white margin, enlarge the devices */
   pointer-events: none;
 }
-@media (min-width: 768px) {
-  .prod-hovervid { padding: 0.75rem; }
-}
-.group:hover .prod-hovervid { opacity: 1; }
 
 /* ===== Wholesale — JB plane flies across the hero on load, dropping parachutes ===== */
 @media (prefers-reduced-motion: no-preference) {
