@@ -138,7 +138,7 @@ export default function ProductsCollection() {
                     alt={`Jungle Boys ${line.name}`}
                     fill
                     sizes="(max-width:640px) 50vw, (max-width:1024px) 45vw, 30vw"
-                    className="relative z-10 object-contain p-2 drop-shadow-[0_22px_30px_rgba(0,0,0,0.2)] transition-transform duration-500 group-hover:scale-[1.06] md:p-3"
+                    className="relative z-10 object-contain p-2 drop-shadow-[0_16px_24px_rgba(0,0,0,0.22)] transition-transform duration-500 group-hover:scale-[1.06] md:p-3"
                   />
                 </div>
 
