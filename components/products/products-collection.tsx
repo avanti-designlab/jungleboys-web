@@ -115,9 +115,6 @@ export default function ProductsCollection() {
 
       {/* sr-only intro (the banner is decorative) */}
       <h1 className="sr-only">Products — The Jungle Boys Collection</h1>
-      <p className="mx-auto max-w-2xl px-6 pt-14 text-center text-sm uppercase leading-relaxed tracking-wide text-[var(--color-muted)] md:pt-20 md:text-base" style={{ fontFamily: 'var(--font-brand)' }}>
-        Every Jungle Boys line in one place — from Hash Holes to top-shelf flower. Playing with fire, in every format.
-      </p>
 
       {/* ===== category grid ===== */}
       <section className="px-4 pt-16 md:px-8 md:pt-24 lg:px-12">
