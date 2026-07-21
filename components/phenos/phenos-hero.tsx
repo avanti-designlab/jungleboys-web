@@ -11,7 +11,7 @@ import gsap from 'gsap'
 // jars — framing the logo: big center peeks over the top, flanks left + right,
 // one accent upper-right. big center jar = jar-3.
 const JARS = [
-  { src: '/phenos/jar-3.png', left: '50%', top: '15%', w: 184, tilt: 0, dur: 7.2, del: 0, z: 5 },
+  { src: '/phenos/jar-3.png', left: '38%', top: '16%', w: 150, tilt: 0, dur: 7.2, del: 0, z: 5 },
   { src: '/phenos/jar-1.png', left: '12%', top: '44%', w: 132, tilt: -7, dur: 5.9, del: 0.5, z: 3 },
   { src: '/phenos/jar-4.png', left: '88%', top: '42%', w: 134, tilt: 7, dur: 6.3, del: 0.35, z: 4 },
   { src: '/phenos/jar-2.png', left: '73%', top: '12%', w: 122, tilt: 5, dur: 6.6, del: 0.2, z: 4 },
