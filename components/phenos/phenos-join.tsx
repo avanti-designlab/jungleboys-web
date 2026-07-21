@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-// Below the hero: two yellow pitch pills on top + a WHITE feedback pill on the
-// bottom that rebuilds the original "share your feedback WITH US!" pheno-tasting
-// survey as a one-question-at-a-time flow → /api/lead. GET STARTED (in the hero)
-// smooth-scrolls to the white pill, which is tall enough to fill the viewport.
+// Below the hero: two yellow pitch pills + a WHITE feedback pill that rebuilds
+// the original "share your feedback WITH US!" pheno-tasting survey (all 10
+// questions, pulled live from the batch survey) as a one-question-at-a-time
+// flow → /api/lead. GET STARTED (hero) scrolls here.
 
 // The pheno batches rotate per drop — these mirror the current jar labels and
 // should move to the CMS later.
@@ -20,22 +20,26 @@ type Q = {
   key: string
   label: string
   hint?: string
-  type: 'choice' | 'scale' | 'textarea' | 'yesno' | 'text' | 'email'
+  type: 'choice' | 'scale' | 'textarea' | 'yesno' | 'yesno_note' | 'text' | 'email'
   placeholder?: string
   required: boolean
   options?: string[]
 }
 
-// Original survey fields + name/email so the feedback is attributable (the live
-// form captured identity via the batch app login, which we don't have here).
+// The 10 live survey questions (verbatim) + a final email step so the feedback
+// is attributable → /api/lead (the live form used the app login for identity).
 const ALL_Q: Q[] = [
-  { key: 'pheno', label: 'Which pheno are you testing?', type: 'choice', options: PHENOS, required: true },
+  { key: 'pheno', label: 'What is the name of the pheno you are testing?', type: 'choice', options: PHENOS, required: true },
   { key: 'appeal', label: 'Rate the overall nug appeal', hint: '1 = low · 10 = fire', type: 'scale', required: true },
   { key: 'look', label: 'Describe the look of the nugs', hint: 'Talk nug density, color, trichome coverage, shape, etc.', type: 'textarea', placeholder: 'What are you seeing?', required: true },
-  { key: 'cut', label: 'Should this pheno make the cut?', type: 'yesno', required: true },
-  { key: 'why', label: 'If no — tell us why?', hint: 'What held it back?', type: 'textarea', placeholder: 'Your honest take…', required: false },
-  { key: 'name', label: "What's your name?", type: 'text', placeholder: 'Full name', required: true },
-  { key: 'email', label: 'Best email to reach you?', hint: 'So we can follow up on the hunt', type: 'email', placeholder: 'you@email.com', required: true },
+  { key: 'smell', label: 'Describe the smell of the flower', type: 'textarea', placeholder: 'What’s on the nose?', required: true },
+  { key: 'taste', label: 'Describe the taste of the flower', type: 'textarea', placeholder: 'How does it taste?', required: true },
+  { key: 'effects', label: 'Describe the effects or high you got from smoking this pheno', type: 'textarea', placeholder: 'How did it hit?', required: true },
+  { key: 'buyAgain', label: 'Would you buy it again?', type: 'yesno_note', required: true },
+  { key: 'recommend', label: 'Would you recommend this strain to a friend?', type: 'yesno', required: true },
+  { key: 'suggestName', label: 'Suggest a name for this pheno', type: 'text', placeholder: 'Your name idea…', required: false },
+  { key: 'logo', label: 'Describe what you think the logo should look like', hint: 'Optional — paint us a picture', type: 'textarea', placeholder: 'Your vision…', required: false },
+  { key: 'email', label: 'Last thing — where can we reach you?', hint: 'So we can follow up on the hunt', type: 'email', placeholder: 'you@email.com', required: true },
 ]
 
 export default function PhenosJoin({ consentText }: { consentText: string }) {
@@ -73,10 +77,8 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
     }
   }, [])
 
-  // "why" only appears when they answered No to the cut question
-  const questions = ALL_Q.filter((q) => q.key !== 'why' || answers.cut === 'No')
-  const q = questions[Math.min(step, questions.length - 1)]
-  const total = questions.length
+  const total = ALL_Q.length
+  const q = ALL_Q[step]
   const value = answers[q?.key] ?? ''
 
   function setValue(v: string) {
@@ -94,9 +96,9 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
     if (step < total - 1) setStep((s) => s + 1)
     else submit()
   }
-  // tap-to-pick fields set + auto-advance
-  function choose(key: string, opt: string) {
-    setAnswers((a) => ({ ...a, [key]: opt }))
+  // tap-to-pick fields (choice / scale / plain yes-no) set + auto-advance
+  function choose(opt: string) {
+    setAnswers((a) => ({ ...a, [q.key]: opt }))
     setTimeout(() => setStep((s) => (s < total - 1 ? s + 1 : s)), 240)
   }
 
@@ -108,7 +110,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: (answers.name ?? '').trim(),
+          name: answers.suggestName ? `Pheno hunter (${answers.suggestName})` : 'Pheno hunter',
           email: answers.email,
           phone: '',
           topic: 'Pheno Feedback',
@@ -116,11 +118,14 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
             `Pheno: ${answers.pheno ?? ''}`,
             `Nug appeal (1-10): ${answers.appeal ?? ''}`,
             `Look: ${answers.look ?? ''}`,
-            `Make the cut?: ${answers.cut ?? ''}`,
-            answers.cut === 'No' ? `Why not: ${answers.why || '—'}` : null,
-          ]
-            .filter(Boolean)
-            .join('\n'),
+            `Smell: ${answers.smell ?? ''}`,
+            `Taste: ${answers.taste ?? ''}`,
+            `Effects: ${answers.effects ?? ''}`,
+            `Buy again: ${answers.buyAgain ?? ''}${answers.buyAgainNote ? ` — ${answers.buyAgainNote}` : ''}`,
+            `Recommend: ${answers.recommend ?? ''}`,
+            `Suggested name: ${answers.suggestName || '—'}`,
+            `Logo idea: ${answers.logo || '—'}`,
+          ].join('\n'),
           sourcePage: '/phenos',
         }),
       })
@@ -136,40 +141,27 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
   }
 
   const yellowPill = 'rounded-[2.25rem] bg-[var(--color-accent)] text-black shadow-[0_40px_120px_-50px_rgba(254,207,14,0.6)]'
-  const field =
-    'w-full rounded-full border-2 border-black/10 bg-black/[0.04] px-6 py-4 text-lg text-black outline-none transition-colors placeholder:text-black/30 focus:border-black'
+  const autoAdvance = q?.type === 'choice' || q?.type === 'scale' || q?.type === 'yesno'
 
   return (
     <div ref={rootRef} className="relative z-10 px-4 pb-16 md:px-8 lg:px-12">
       <div className="mx-auto max-w-[1280px]">
         {/* ===== two yellow pitch pills on top ===== */}
         <div className="grid gap-5 md:grid-cols-2 md:gap-6">
-          <PitchPill
-            className={yellowPill}
-            num="01"
-            tag="Exclusive Access"
-            heading="Straight from the cultivation rooms"
-          >
+          <PitchPill className={yellowPill} num="01" tag="Exclusive Access" heading="Straight from the cultivation rooms">
             Small-batch drops of unnamed, unreleased genetics — pulled from our latest pheno hunts before they
             earn a name and a spot in the Jungle Boys genetics library. Each 3.5g jar is premium indoor flower:
             a first look and taste at what could become the next Jungle Boys strain.
           </PitchPill>
-          <PitchPill
-            className={yellowPill}
-            num="02"
-            tag="Your Call"
-            heading="You decide what makes the cut"
-          >
+          <PitchPill className={yellowPill} num="02" tag="Your Call" heading="You decide what makes the cut">
             Tell us how it looks, tastes, and smokes — and even help name it. Your feedback decides what makes the
             final cut, moves into full production, and lands in the hands of consumers. This is your chance to be a
             part of Jungle Boys history.
           </PitchPill>
         </div>
 
-        {/* ===== WHITE feedback pill on the bottom (GET STARTED scrolls here).
-            The mt-* gap matches scroll-mt-* so landing shows black above the box,
-            not the cut-off bottoms of the yellow pills. No reveal-transform here —
-            it would offset the scroll target. ===== */}
+        {/* ===== WHITE feedback pill (GET STARTED scrolls here). mt matches the
+            hero scroll offset so the landing shows black above, not cut-off pills. ===== */}
         <div
           id="join"
           className="mt-28 flex min-h-[600px] scroll-mt-28 flex-col justify-center rounded-[2.25rem] bg-white p-7 text-black shadow-[0_50px_140px_-40px_rgba(0,0,0,0.8)] md:min-h-[560px] md:p-14"
@@ -192,15 +184,13 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
                 <span className="text-xs font-extrabold uppercase tracking-[0.4em] text-black/50" style={{ fontFamily: 'var(--font-brand)' }}>
                   Pheno Hunt
                 </span>
-                <h3 className="font-display mt-2 text-5xl uppercase leading-[0.88] md:text-7xl">
-                  Share your feedback with us!
-                </h3>
+                <h3 className="font-display mt-2 text-5xl uppercase leading-[0.88] md:text-7xl">Share your feedback with us!</h3>
               </div>
 
               {/* progress */}
               <div className="mb-3 flex items-center justify-between">
                 <span className="text-xs font-extrabold uppercase tracking-widest text-black/60" style={{ fontFamily: 'var(--font-brand)' }}>
-                  {q.type === 'choice' || q.type === 'yesno' || q.type === 'scale' ? 'Tap to answer' : 'Your answer'}
+                  {autoAdvance ? 'Tap to answer' : 'Your answer'}
                 </span>
                 <span className="text-xs font-bold tabular-nums text-black/60" style={{ fontFamily: 'var(--font-brand)' }}>
                   {step + 1} / {total}
@@ -220,7 +210,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
                   {q.type === 'choice' && (
                     <div className="flex flex-col gap-3">
                       {q.options!.map((opt) => (
-                        <Pill key={opt} block active={value === opt} onClick={() => choose('pheno', opt)}>
+                        <Pill key={opt} block active={value === opt} onClick={() => choose(opt)}>
                           {opt}
                         </Pill>
                       ))}
@@ -228,16 +218,18 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
                   )}
 
                   {q.type === 'scale' && (
-                    <div className="flex flex-wrap gap-2.5">
+                    <div className="flex gap-1.5 md:gap-2">
                       {Array.from({ length: 10 }, (_, n) => String(n + 1)).map((n) => {
                         const active = value === n
                         return (
                           <button
                             key={n}
                             type="button"
-                            onClick={() => choose('appeal', n)}
-                            className={`h-12 w-12 rounded-full border-2 text-base font-extrabold tabular-nums transition ${
-                              active ? 'border-black bg-black text-white' : 'border-black/15 text-black hover:border-black'
+                            onClick={() => choose(n)}
+                            className={`flex aspect-square min-w-0 flex-1 items-center justify-center rounded-full border-2 text-xs font-extrabold tabular-nums transition md:text-sm ${
+                              active
+                                ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-black'
+                                : 'border-black/15 text-black hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-black'
                             }`}
                             style={{ fontFamily: 'var(--font-brand)' }}
                           >
@@ -251,10 +243,29 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
                   {q.type === 'yesno' && (
                     <div className="flex gap-3">
                       {['Yes', 'No'].map((opt) => (
-                        <Pill key={opt} active={value === opt} wide onClick={() => choose('cut', opt)}>
+                        <Pill key={opt} active={value === opt} wide onClick={() => choose(opt)}>
                           {opt}
                         </Pill>
                       ))}
+                    </div>
+                  )}
+
+                  {q.type === 'yesno_note' && (
+                    <div className="flex flex-col gap-4">
+                      <div className="flex gap-3">
+                        {['Yes', 'No'].map((opt) => (
+                          <Pill key={opt} active={value === opt} wide onClick={() => setValue(opt)}>
+                            {opt}
+                          </Pill>
+                        ))}
+                      </div>
+                      <textarea
+                        value={answers[`${q.key}Note`] ?? ''}
+                        onChange={(e) => setAnswers((a) => ({ ...a, [`${q.key}Note`]: e.target.value }))}
+                        placeholder="Add a comment (optional)"
+                        rows={2}
+                        className="min-h-[84px] w-full resize-none rounded-2xl border-2 border-black/10 bg-black/[0.04] px-5 py-3 text-base text-black outline-none transition-colors placeholder:text-black/30 focus:border-black"
+                      />
                     </div>
                   )}
 
@@ -277,11 +288,11 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
                       onChange={(e) => setValue(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && next()}
                       placeholder={q.placeholder}
-                      className={field}
+                      className="w-full rounded-full border-2 border-black/10 bg-black/[0.04] px-6 py-4 text-lg text-black outline-none transition-colors placeholder:text-black/30 focus:border-black"
                     />
                   )}
 
-                  {q.key === 'email' && <p className="mt-5 text-[11px] leading-relaxed text-black/45">{consentText}</p>}
+                  {q.type === 'email' && <p className="mt-5 text-[11px] leading-relaxed text-black/45">{consentText}</p>}
                   {state === 'error' && (
                     <p className="mt-4 text-sm font-semibold text-red-600" role="alert">
                       {error}
@@ -298,8 +309,8 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
                     >
                       ← Back
                     </button>
-                    {/* tap-to-pick fields auto-advance; hide Next until an answer exists */}
-                    {!((q.type === 'choice' || q.type === 'yesno' || q.type === 'scale') && !value) && (
+                    {/* auto-advance fields hide Next until answered; everything else shows it */}
+                    {!(autoAdvance && !value) && (
                       <button
                         type="button"
                         onClick={next}
@@ -336,7 +347,6 @@ function PitchPill({
 }) {
   return (
     <div className={`pheno-reveal relative flex flex-col overflow-hidden p-8 md:p-11 ${className}`}>
-      {/* oversized number watermark */}
       <span aria-hidden className="font-display pointer-events-none absolute -right-2 -top-10 select-none text-[11rem] leading-none text-black/10 md:text-[15rem]">
         {num}
       </span>
