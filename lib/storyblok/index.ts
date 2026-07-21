@@ -5,18 +5,32 @@ const CDN_API = 'https://api.storyblok.com/v2/cdn'
 
 type StoryVersion = 'draft' | 'published'
 
+// Fetch a Storyblok story. Storyblok is OPTIONAL by design: with no token (space
+// not connected yet) or on any error, returns null so callers fall back to the
+// code defaults — the site never depends on the CMS to render.
 export async function getStory(slug: string, version: StoryVersion = 'draft') {
   const token = process.env.STORYBLOK_TOKEN
-  if (!token) throw new Error('STORYBLOK_TOKEN is not set')
+  if (!token) return null
 
-  const res = await fetch(
-    `${CDN_API}/stories/${slug}?version=${version}&token=${token}`,
-    // ISR: revalidated on-demand via /api/revalidate (Storyblok publish webhook, Step 7)
-    { next: { tags: [`story:${slug}`] } }
-  )
-  if (!res.ok) {
-    throw new Error(`Storyblok ${res.status} for story "${slug}"`)
+  try {
+    const res = await fetch(
+      `${CDN_API}/stories/${slug}?version=${version}&token=${token}`,
+      // ISR: revalidated on-demand via /api/revalidate (Storyblok publish webhook)
+      { next: { tags: [`story:${slug}`] } }
+    )
+    if (!res.ok) return null
+    const json = await res.json()
+    return json.story ?? null
+  } catch {
+    return null
   }
-  const json = await res.json()
-  return json.story
+}
+
+// Storyblok asset field → URL string (falls back to a code default).
+export function assetUrl(asset: unknown, fallback = ''): string {
+  if (asset && typeof asset === 'object' && 'filename' in asset) {
+    const f = (asset as { filename?: unknown }).filename
+    if (typeof f === 'string' && f) return f
+  }
+  return fallback
 }

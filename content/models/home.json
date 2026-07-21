@@ -1,0 +1,9 @@
+{
+  "name": "home",
+  "display_name": "Home Page",
+  "is_root": true,
+  "schema": {
+    "body": { "type": "bloks", "restrict_components": true, "component_whitelist": ["hero_slide", "quick_card"], "description": "Hero banners (in order) + quick-link cards" },
+    "seo": { "type": "bloks", "restrict_components": true, "component_whitelist": ["seo"], "maximum": 1 }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "quick_card",
+  "display_name": "Quick-Link Card",
+  "is_nestable": true,
+  "schema": {
+    "title": { "type": "text" },
+    "href": { "type": "text", "description": "Link, e.g. /products" },
+    "image": { "type": "asset", "filetypes": ["images"] },
+    "alt": { "type": "text" },
+    "external": { "type": "boolean", "description": "Opens an external site in a new tab" }
+  }
+}

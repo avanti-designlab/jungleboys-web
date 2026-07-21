@@ -5,7 +5,7 @@ import PillCta from '@/components/pill-cta'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { HERO_SLIDES } from '@/lib/home-content'
+import { HERO_SLIDES, type HeroSlide } from '@/lib/home-content'
 import { isAgeVerified } from '@/components/age-gate'
 
 // Full-bleed pinned hero deck (reference: swissminimal.framer.website):
@@ -18,7 +18,7 @@ import { isAgeVerified } from '@/components/age-gate'
 
 gsap.registerPlugin(ScrollTrigger)
 
-export default function HeroDeck() {
+export default function HeroDeck({ slides = HERO_SLIDES }: { slides?: HeroSlide[] }) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
 
@@ -81,11 +81,11 @@ export default function HeroDeck() {
       data-hero
       data-nav-theme="dark"
       aria-label="Featured promotions"
-      style={{ height: `${HERO_SLIDES.length * 100}svh` }}
+      style={{ height: `${slides.length * 100}svh` }}
       className="relative"
     >
       <div ref={stageRef} className="sticky top-0 h-svh w-full overflow-hidden bg-[var(--color-background)]">
-        {HERO_SLIDES.map((s, i) => (
+        {slides.map((s, i) => (
           <div
             key={s.title}
             data-slide

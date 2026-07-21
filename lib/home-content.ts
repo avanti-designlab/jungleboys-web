@@ -1,5 +1,8 @@
 // Home page content config — mirrors the current Webflow home (source-of-truth
-// policy). Interim hardcode; moves to Storyblok when the home story is modeled.
+// policy). Hardcoded values are the DEFAULT/fallback; getHomeContent() overlays
+// the editable versions from Storyblok (the `home` story) when connected.
+
+import { getStory, assetUrl } from '@/lib/storyblok'
 
 const CDN = 'https://cdn.prod.website-files.com/6981ad8672f6252d7d7bb320'
 
@@ -104,4 +107,63 @@ export const MEDIA_BANNER = {
   href: '/media',
   image: `${CDN}/69e7ee53bc94e5cc8f331c78_JB%20April%20Deals%20BG%20Desktop.png`,
   alt: 'Jungle Boys media feature',
+}
+
+// ── Storyblok overlay ────────────────────────────────────────────────────────
+// Editable via the `home` story: a body of `hero_slide` + `quick_card` bloks.
+// Any missing field falls back to the hardcoded defaults above, and if the story
+// isn't there at all (no token / not created yet) the defaults are used wholesale.
+
+export type HeroSlide = (typeof HERO_SLIDES)[number]
+export type QuickCard = (typeof QUICK_CARDS)[number]
+
+type Blok = Record<string, unknown> & { component?: string }
+
+function toOverlay(v: unknown): boolean | 'scrim' {
+  if (v === 'scrim') return 'scrim'
+  if (v === 'none' || v === false || v === '') return false
+  return true
+}
+
+export async function getHomeContent(): Promise<{ heroSlides: HeroSlide[]; quickCards: QuickCard[] }> {
+  const story = await getStory('home', 'published')
+  const body = (story?.content as { body?: unknown } | undefined)?.body
+  if (!Array.isArray(body)) return { heroSlides: [...HERO_SLIDES], quickCards: [...QUICK_CARDS] }
+
+  const bloks = body as Blok[]
+  const str = (v: unknown, fb: string) => (typeof v === 'string' && v.trim() ? v : fb)
+
+  const heroSlides: HeroSlide[] = bloks
+    .filter((b) => b.component === 'hero_slide')
+    .map((b, i) => {
+      const d = HERO_SLIDES[i] ?? HERO_SLIDES[0]
+      return {
+        kicker: str(b.kicker, d.kicker),
+        title: str(b.title, d.title),
+        cta: str(b.cta, d.cta),
+        href: str(b.href, d.href),
+        image: assetUrl(b.image, d.image),
+        imageMobile: assetUrl(b.image_mobile, d.imageMobile ?? d.image),
+        alt: str(b.alt, d.alt),
+        overlay: b.overlay === undefined ? d.overlay : toOverlay(b.overlay),
+      }
+    })
+
+  const quickCards: QuickCard[] = bloks
+    .filter((b) => b.component === 'quick_card')
+    .map((b, i) => {
+      const d = QUICK_CARDS[i] ?? QUICK_CARDS[0]
+      return {
+        title: str(b.title, d.title),
+        href: str(b.href, d.href),
+        image: assetUrl(b.image, d.image),
+        alt: str(b.alt, d.alt),
+        external: typeof b.external === 'boolean' ? b.external : (d as QuickCard & { external?: boolean }).external,
+      } as QuickCard
+    })
+
+  return {
+    heroSlides: heroSlides.length ? heroSlides : [...HERO_SLIDES],
+    quickCards: quickCards.length ? quickCards : [...QUICK_CARDS],
+  }
 }

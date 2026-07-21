@@ -5,14 +5,14 @@ import Link from 'next/link'
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { QUICK_CARDS } from '@/lib/home-content'
+import { QUICK_CARDS, type QuickCard } from '@/lib/home-content'
 
 // Cards fall in from above as the row enters the viewport (staggered), then
 // each card's label/arrow drops in a beat behind. Label left, arrow right.
 
 gsap.registerPlugin(ScrollTrigger)
 
-export default function QuickCards() {
+export default function QuickCards({ cards = QUICK_CARDS }: { cards?: readonly QuickCard[] }) {
   const gridRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function QuickCards() {
   return (
     <section className="w-full px-2 py-10 md:px-3">
       <div ref={gridRef} className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {QUICK_CARDS.map((c) => {
+        {cards.map((c) => {
           const card = (
             <div
               data-card

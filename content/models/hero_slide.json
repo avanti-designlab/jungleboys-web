@@ -1,0 +1,15 @@
+{
+  "name": "hero_slide",
+  "display_name": "Hero Banner",
+  "is_nestable": true,
+  "schema": {
+    "kicker": { "type": "text", "description": "Small label above the title, e.g. JULY 13–31" },
+    "title": { "type": "text", "description": "Big headline, e.g. JULY DEALS" },
+    "cta": { "type": "text", "description": "Button label, e.g. Learn more" },
+    "href": { "type": "text", "description": "Button link, e.g. /710-deals" },
+    "image": { "type": "asset", "filetypes": ["images"], "description": "Desktop banner (16:9)" },
+    "image_mobile": { "type": "asset", "filetypes": ["images"], "description": "Mobile banner (9:16) — optional" },
+    "alt": { "type": "text", "description": "Image description (accessibility + SEO)" },
+    "overlay": { "type": "option", "use_uuid": false, "options": [{"name":"Full dark wash","value":"wash"},{"name":"Bottom scrim only","value":"scrim"},{"name":"None","value":"none"}], "default_value": "wash", "description": "Darkening behind the text for legibility" }
+  }
+}
