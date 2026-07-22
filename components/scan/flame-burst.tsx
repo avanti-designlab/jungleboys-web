@@ -2,31 +2,27 @@
 
 import { useEffect, useMemo, useState } from 'react'
 
-// One-shot gold confetti burst — fires when the authentic result mounts.
+// One-shot flame-emoji burst — fires when the authentic result mounts.
 // Pure CSS (per-piece custom props); the global reduced-motion rule hides it.
 // Client-only (randomised) to avoid an SSR/hydration mismatch.
 
-const GOLD = ['#FECF0E', '#FFE47A', '#C9A200', '#FFFFFF', '#F5B400']
-
-export default function Confetti({ count = 70 }: { count?: number }) {
+export default function FlameBurst({ count = 44 }: { count?: number }) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
+
   const pieces = useMemo(
     () =>
       Array.from({ length: count }, () => {
         const angle = Math.random() * Math.PI * 2
         const dist = 60 + Math.random() * 300
         return {
-          left: 42 + Math.random() * 16, // vw-ish start band, near the badge
+          left: 40 + Math.random() * 20,
           cx: `${Math.cos(angle) * dist}px`,
-          cy: `${Math.sin(angle) * dist * 0.6 + 120 + Math.random() * 320}px`, // gravity bias
-          cr: `${Math.random() * 720 - 360}deg`,
-          cd: `${1 + Math.random() * 1.1}s`,
-          cdelay: `${Math.random() * 0.25}s`,
-          w: 5 + Math.random() * 6,
-          h: 8 + Math.random() * 8,
-          color: GOLD[Math.floor(Math.random() * GOLD.length)],
-          round: Math.random() > 0.6,
+          cy: `${Math.sin(angle) * dist * 0.6 + 120 + Math.random() * 320}px`,
+          cr: `${Math.random() * 480 - 240}deg`,
+          cd: `${1.1 + Math.random() * 1.1}s`,
+          cdelay: `${Math.random() * 0.28}s`,
+          size: 18 + Math.random() * 20,
         }
       }),
     [count]
@@ -39,14 +35,11 @@ export default function Confetti({ count = 70 }: { count?: number }) {
       {pieces.map((p, i) => (
         <span
           key={i}
-          className="confetti-piece absolute top-[26%]"
+          className="confetti-piece absolute top-[24%] leading-none"
           style={
             {
               left: `${p.left}%`,
-              width: p.w,
-              height: p.h,
-              background: p.color,
-              borderRadius: p.round ? '50%' : '1px',
+              fontSize: p.size,
               '--cx': p.cx,
               '--cy': p.cy,
               '--cr': p.cr,
@@ -54,7 +47,9 @@ export default function Confetti({ count = 70 }: { count?: number }) {
               '--cdelay': p.cdelay,
             } as React.CSSProperties
           }
-        />
+        >
+          🔥
+        </span>
       ))}
     </div>
   )

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useScanner } from './scan-provider'
-import Confetti from './confetti'
+import FlameBurst from './flame-burst'
 import type { VerifyResult } from '@/lib/auth/verify'
 
 function FlameBadge() {
@@ -43,7 +43,7 @@ export default function AuthResult({ result }: { result: VerifyResult }) {
     <div className="relative mx-auto flex min-h-[70vh] max-w-xl flex-col items-center justify-center px-6 pb-24 pt-28 text-center md:pt-32">
       {status === 'authentic' ? (
         <>
-          <Confetti />
+          <FlameBurst />
           <FlameBadge />
           <p className="mt-6 text-xs font-bold uppercase tracking-[0.3em] text-[#15a34a]" style={{ fontFamily: 'var(--font-brand)' }}>
             Verified Genuine
