@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { verifyProduct } from '@/lib/auth/verify'
+import { verifyProduct, extractCode } from '@/lib/auth/verify'
 import AuthHub from '@/components/scan/auth-hub'
 import AuthResult from '@/components/scan/auth-result'
 
@@ -23,7 +23,7 @@ export default async function AuthPage({
 
   return (
     <main className="bg-[var(--color-background)] text-[var(--color-foreground)]">
-      {code ? <AuthResult result={await verifyProduct(code)} /> : <AuthHub />}
+      {code ? <AuthResult result={await verifyProduct(extractCode(code))} /> : <AuthHub />}
     </main>
   )
 }

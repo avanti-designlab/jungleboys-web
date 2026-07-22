@@ -51,19 +51,22 @@ export async function verifyProduct(rawCode: string): Promise<VerifyResult> {
   }
 }
 
-// Pull the code out of whatever the QR encodes: a full URL
-// (https://jungleboys.com/auth?code=XXXX) or a raw scratch code.
+// Pull the code out of whatever the QR encodes: a full URL with ?code=XXXX,
+// a path URL (jungleboys.com/auth/XXXX — the real sticker format, often with
+// no scheme), or a raw scratch code.
 export function extractCode(scanned: string): string {
   const s = (scanned || '').trim()
+  // QR stickers encode a bare URL with no scheme — give URL() one to parse.
+  const candidate = /^https?:\/\//i.test(s) ? s : `https://${s}`
   try {
-    const u = new URL(s)
+    const u = new URL(candidate)
     const c = u.searchParams.get('code')
     if (c) return c.trim()
-    // last path segment fallback, e.g. /auth/XXXX
+    // last path segment, e.g. /auth/XXXX
     const seg = u.pathname.split('/').filter(Boolean).pop()
     if (seg && seg.toLowerCase() !== 'auth') return decodeURIComponent(seg)
   } catch {
-    // not a URL — treat as a raw code
+    // not URL-like — treat as a raw code
   }
   return s
 }

@@ -110,8 +110,8 @@ export default function AuthResult({ result }: { result: VerifyResult }) {
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-4 border-b border-[var(--color-border)] py-2.5 last:border-0">
-      <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>{label}</span>
-      <span className="text-sm font-semibold uppercase tracking-wide text-[var(--color-foreground)]" style={{ fontFamily: 'var(--font-brand)' }}>{value}</span>
+      <span className="shrink-0 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>{label}</span>
+      <span className="min-w-0 break-all text-right text-sm font-semibold uppercase tracking-wide text-[var(--color-foreground)]" style={{ fontFamily: 'var(--font-brand)' }}>{value}</span>
     </div>
   )
 }
