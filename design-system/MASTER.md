@@ -94,110 +94,88 @@ that line's Figma frames + packaging art. They never leak into global components
 
 ## Component Specs
 
+> Reconciled 2026-07-22 to the patterns actually shipped in Phase 1. Reference
+> implementations: `components/pill-cta.tsx`, `components/newsletter-popup.tsx`,
+> `components/age-gate.tsx`, product/blog cards, the character-hero banners.
+> **Rule:** components use TOKENS only — never hard-code hex. Utilities shown are
+> Tailwind + CSS vars.
+
 ### Buttons
 
-```css
-/* Primary Button */
-.btn-primary {
-  background: #DC2626;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
-}
-
-.btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-/* Secondary Button */
-.btn-secondary {
-  background: transparent;
-  color: #1E293B;
-  border: 2px solid #1E293B;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 200ms ease;
-  cursor: pointer;
-}
-```
+- **Primary (accent pill):** `bg-[var(--color-accent)]` + black text (`--color-on-accent`),
+  `rounded-full`, uppercase Lemon Milk (`--font-brand`), tracking-wide. Often carries a black
+  circular arrow/cart disc on the right (`PillCta`). Hover → invert to
+  `bg-[var(--color-foreground)]` / `--color-background` text. Never a layout-shifting scale.
+- **Secondary (bordered pill):** transparent, `border-2 border-[var(--color-foreground)]`,
+  foreground text, `rounded-full`; hover fills to foreground bg / background text. On dark brand
+  surfaces the border/text is white.
+- **Accent-yellow TEXT is forbidden on light** — use `--color-accent-ink` for yellow-toned text.
 
 ### Cards
 
-```css
-.card {
-  background: #F8FAFC;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: var(--shadow-md);
-  transition: all 200ms ease;
-  cursor: pointer;
-}
-
-.card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-}
-```
+- **Light surface:** `rounded-[1.4rem–1.75rem]`, `bg-[var(--color-surface)]`,
+  `border border-[var(--color-border)]`, soft shadow; hover → lift (`-translate-y-1.5`) +
+  `border-[var(--color-accent)]`. No layout-shifting scale.
+- **Brand-dark "pill" panels** (footer, menu overlay, black content slabs, character banners,
+  modals): near-black, `rounded-[1.75rem–2.75rem]`, with `data-theme="dark"` on the wrapper so
+  tokenized children flip to their dark values automatically.
+  *(TODO: the near-blacks in use — `#050505` / `#0b0b0b` / `#0b0b0d` / `#111114` — should collapse
+  into one `--color-ink` token; pick one when the token is added.)*
 
 ### Inputs
 
-```css
-.input {
-  padding: 12px 16px;
-  border: 1px solid #E2E8F0;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 200ms ease;
-}
+- `rounded-full` (short fields) or `rounded-2xl` (textareas); token border; focus shows the global
+  keyboard ring (`:focus-visible` = 2px `--color-accent`) plus `focus:border-[var(--color-foreground)]`
+  where used. **Every field has an accessible name** (`aria-label` or a linked `<label>`) —
+  placeholder-only is not acceptable (AA).
 
-.input:focus {
-  border-color: #1E293B;
-  outline: none;
-  box-shadow: 0 0 0 3px #1E293B20;
-}
-```
+### Modals / overlays
 
-### Modals
+- **Dark by default** (brand surface): near-black bg, white text, `rounded-[1.5rem–2rem]`,
+  backdrop `bg-black/70` + blur. Focus-trapped, Esc-to-close, `role="dialog"` + `aria-modal`,
+  focus moved into the dialog on open. See `age-gate.tsx` (reference focus-trap) and
+  `newsletter-popup.tsx`.
 
-```css
-.modal-overlay {
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-}
+### Status colors (semantic — added at Phase 1 exit)
 
-.modal {
-  background: white;
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: var(--shadow-xl);
-  max-width: 500px;
-  width: 90%;
-}
-```
+- `--color-success` / `--color-danger` / `--color-warning` — theme-aware (AA-darkened on the light
+  bg, vivid in dark). Use these tokens for verify states, form errors, alerts — never hard-coded
+  green/red/amber.
 
 ---
 
 ## Style Guidelines
 
-**Style:** Modern Dark (Cinema Mobile)
+**Style:** Premium cannabis, bold editorial — **"Playing With Fire®"**. Streetwear-meets-magazine:
+oversized Bebas display, graffiti-mural energy, JB character mascots, dark brand surfaces
+punctuated by a single yellow accent. NOT a generic "dark UI" — no glassmorphism/indigo/fintech
+tropes.
 
-**Keywords:** dark mode, cinematic, ambient light, glassmorphism, deep black, indigo, glow, blur, atmospheric, reanimated, haptic, premium, layered, frosted glass, linear gradient
+**Keywords:** bold editorial, Bebas display, uppercase, graffiti, character mascots, dark brand
+surfaces, single yellow accent, scroll-driven motion, marquees, rounded "pill" panels.
 
-**Best For:** Developer tools, pro productivity apps, fintech/trading dashboards, media/streaming platforms, AI tool interfaces, high-end gaming companion apps
+**Brand anchors:** JB stacked logo, "PLAYING WITH FIRE®", "SINCE 2006"; charcoal/near-black +
+official JB yellow `#FECF0E`.
 
-**Key Effects:** Expo.out Bezier(0.16,1,0.3,1) easing; spring modals (damping:20 stiffness:90); haptic-linked press (Impact Light/Medium); animated ambient light blobs (Reanimated translateX/Y slow oscillation); BlurView glassmorphism headers/nav (intensity 20); scale press 0.97 → 1.0; avoid pure #000000 (OLED smear)
+**Key effects:** GSAP + ScrollTrigger, three motion tiers (Subtle / Standard / Complex);
+reveal-on-scroll (transform + opacity only); character-hero banners (bottom-anchored `.hero-alive`
+mascot + giant wordmark behind); counter-scrolling marquees. Every animation has a
+`prefers-reduced-motion` fallback; motion never blocks LCP; avoid pure `#000000` / `#FFFFFF`.
+
+**Theme:** ships **light by default** with a header dark toggle (persisted); tokens live at `:root`
+(light) + `[data-theme='dark']`. Brand surfaces (footer, menu overlay, age-gate panel, /rewards,
+/phenos) stay dark in BOTH themes by design.
+
+**Design-weight:** informational pages = clean, Subtle/Standard motion. The **10 product-line
+landing pages = the flagship** — immersive, 3D-heavy, Complex tier, carrying **scoped category
+accents layered on top of the frozen base tokens** (see Color Palette → Category accents; defined
+per line in `design-system/pages/<line>.md`). Base tokens stay law: `#FECF0E` + black/white never
+change globally.
 
 ### Page Pattern
 
-**Pattern Name:** Feature-Rich Showcase
-
-- **CTA Placement:** Above fold
-- **Section Order:** Hero > Features > CTA
+- Character-hero banner (where applicable) → content sections → CTA.
+- **One** primary CTA per hero — never two competing CTAs.
 
 ---
 
