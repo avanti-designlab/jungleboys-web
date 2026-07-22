@@ -23,7 +23,7 @@ const LEFT = [
     href: '/drops',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5" aria-hidden>
-        <path d="M12 3s6.5 6.8 6.5 11.2a6.5 6.5 0 0 1-13 0C5.5 9.8 12 3 12 3Z" strokeLinejoin="round" />
+        <path d="M12 3c.9 2.7-1.3 4-1.3 6.1 0 1.1.9 2 2 2 1.2 0 2-1 1.7-2.4 1.7 1.2 2.7 3 2.7 5a5.1 5.1 0 0 1-10.2 0C6.9 10.1 9.6 8 12 3Z" strokeLinejoin="round" />
       </svg>
     ),
   },
@@ -72,17 +72,19 @@ export default function MobileTabBar() {
   const pathname = usePathname()
   const { open } = useScanner()
   return (
-    <nav aria-label="Quick navigation" className="fixed inset-x-0 bottom-3 z-30 flex justify-center lg:hidden">
-      <div className="flex items-center gap-6 rounded-full border border-white/10 bg-[#0b0b0b]/95 px-6 py-3 text-white shadow-2xl backdrop-blur-md">
-        {LEFT.map((item) => (
-          <TabLink key={item.href} item={item} active={pathname === item.href} />
-        ))}
+    <nav aria-label="Quick navigation" className="fixed inset-x-0 bottom-3 z-30 flex justify-center px-3 lg:hidden">
+      <div className="flex w-[22rem] max-w-full items-center rounded-full border border-white/10 bg-[#0b0b0b]/95 px-3 py-3 text-white shadow-2xl backdrop-blur-md">
+        <div className="flex flex-1 items-center justify-around">
+          {LEFT.map((item) => (
+            <TabLink key={item.href} item={item} active={pathname === item.href} />
+          ))}
+        </div>
 
         {/* raised center VERIFY — opens the QR scanner */}
         <button
           onClick={open}
           aria-label="Verify a product — open scanner"
-          className="group -mt-8 flex flex-col items-center"
+          className="group -mt-8 flex shrink-0 flex-col items-center"
         >
           <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-accent)] text-black shadow-lg ring-4 ring-[#0b0b0b] transition-transform duration-200 group-hover:scale-105 group-active:scale-95">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-6 w-6" aria-hidden>
@@ -95,9 +97,11 @@ export default function MobileTabBar() {
           </span>
         </button>
 
-        {RIGHT.map((item) => (
-          <TabLink key={item.href} item={item} active={pathname === item.href} />
-        ))}
+        <div className="flex flex-1 items-center justify-around">
+          {RIGHT.map((item) => (
+            <TabLink key={item.href} item={item} active={pathname === item.href} />
+          ))}
+        </div>
       </div>
     </nav>
   )
