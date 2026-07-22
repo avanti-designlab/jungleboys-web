@@ -5,6 +5,7 @@ import FlowerHero from '@/components/products/flower/flower-hero'
 import FlowerJourney from '@/components/products/flower/flower-journey'
 import WhyPacks from '@/components/products/flower/why-packs'
 import StrainMarquee from '@/components/products/flower/strain-marquee'
+import AnnivReveal from '@/components/products/flower/anniv-reveal'
 import Anniversary from '@/components/products/flower/anniversary'
 import FlowerShop from '@/components/products/flower/flower-shop'
 import GrowMarquee from '@/components/products/flower/grow-marquee'
@@ -51,6 +52,7 @@ export default function PremiumFlowerPage() {
       <FlowerJourney />
       <WhyPacks />
       <StrainMarquee />
+      <AnnivReveal />
       <Anniversary />
       <FlowerShop />
       <GrowMarquee />

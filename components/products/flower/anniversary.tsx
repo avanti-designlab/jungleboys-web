@@ -6,12 +6,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// 20th Anniversary — the exclusive beat of the page. The seal SLAMS in from
-// above (blur → impact squash → elastic settle) over rotating gold rays with
-// expanding shockwave rings, then floats. Nug cutouts fountain up from the
-// bottom corners, hang, and fade (rewards-coin-burst technique). Gold type
-// carries a moving shine; copy staggers; pouches fan out over a breathing
-// glow. Reduced motion = static composition, no bursts.
+// 20th Anniversary — the exclusive beat of the page. Opens with Avanti's
+// scroll-scrubbed reveal animation (anniv-reveal.tsx, the section above);
+// here the mylars deal in like cards, nug cutouts fountain up from the
+// bottom corners (rewards-coin-burst technique), gold type carries a moving
+// shine, copy staggers. Reduced motion = static composition, no bursts.
 
 const FOUNTAIN_NUGS = [
   '/products/flower/nug-a.webp',
@@ -25,9 +24,6 @@ const FOUNTAIN_NUGS = [
 
 export default function Anniversary() {
   const rootRef = useRef<HTMLElement>(null)
-  const badgeRef = useRef<HTMLImageElement>(null)
-  const raysRef = useRef<HTMLDivElement>(null)
-  const ringsRef = useRef<HTMLDivElement>(null)
   const fountainRef = useRef<HTMLDivElement>(null)
   const bagsRef = useRef<HTMLDivElement>(null)
   const bag1Ref = useRef<HTMLImageElement>(null)
@@ -57,37 +53,14 @@ export default function Anniversary() {
     }
   }, [])
 
-  // badge slam + shockwaves + nug fountain (GSAP, motion-gated)
+  // mylar deal-in + nug fountain (GSAP, motion-gated)
   useEffect(() => {
     const root = rootRef.current
-    const badge = badgeRef.current
-    const rays = raysRef.current
-    const rings = ringsRef.current
     const fountain = fountainRef.current
-    if (!root || !badge || !rays || !rings || !fountain) return
+    if (!root || !fountain) return
 
     const mm = gsap.matchMedia()
     mm.add('(prefers-reduced-motion: no-preference)', () => {
-      // — the seal slams in
-      const tl = gsap.timeline({
-        scrollTrigger: { trigger: badge, start: 'top 82%', once: true },
-      })
-      tl.fromTo(
-        badge,
-        { y: '-46vh', scale: 2.3, rotation: -28, opacity: 0, filter: 'blur(10px)' },
-        { y: 0, scale: 1, rotation: 0, opacity: 1, filter: 'blur(0px)', duration: 0.85, ease: 'power4.in' }
-      )
-        .to(badge, { scale: 1.18, duration: 0.12, ease: 'power2.out' })
-        .to(badge, { scale: 1, duration: 0.7, ease: 'elastic.out(1, 0.4)' })
-        .fromTo(
-          rings.children,
-          { scale: 0.35, opacity: 0.95 },
-          { scale: 2.6, opacity: 0, duration: 1, stagger: 0.16, ease: 'power2.out' },
-          '-=0.85'
-        )
-        .fromTo(rays, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.9, ease: 'power2.out' }, '-=0.7')
-        .to(badge, { y: -12, duration: 3, yoyo: true, repeat: -1, ease: 'sine.inOut' })
-
       // — the mylars deal in like cards: swing up from below with rotation,
       //   overshoot into their resting tilt, then float on offset phases
       const bags = bagsRef.current
@@ -157,8 +130,6 @@ export default function Anniversary() {
       return () => {
         io.disconnect()
         if (interval) window.clearInterval(interval)
-        tl.scrollTrigger?.kill()
-        tl.kill()
         bagTl?.scrollTrigger?.kill()
         bagTl?.kill()
       }
@@ -175,18 +146,7 @@ export default function Anniversary() {
       <div ref={fountainRef} aria-hidden className="pointer-events-none absolute inset-0 z-20" />
 
       <div className="relative z-10 mx-auto max-w-[1100px] px-6 text-center">
-        {/* seal — slam entrance over rotating rays + shockwaves */}
-        <div className="relative mx-auto flex h-64 w-64 items-center justify-center md:h-80 md:w-80">
-          <div ref={raysRef} aria-hidden className="fl-rays absolute inset-[-40%] opacity-0" />
-          <div ref={ringsRef} aria-hidden className="pointer-events-none absolute inset-0">
-            <div className="absolute inset-[12%] rounded-full border-2 border-[var(--fl-gold,#e9c15a)]" />
-            <div className="absolute inset-[12%] rounded-full border border-[var(--fl-gold,#e9c15a)]/60" />
-          </div>
-          {/* eslint-disable-next-line @next/next/no-img-element -- gold seal */}
-          <img ref={badgeRef} src="/products/flower/badge-20th.webp" alt="Jungle Boys 20th anniversary seal" className="relative z-10 w-56 will-change-transform md:w-72" />
-        </div>
-
-        <h2 className="media-reveal fl-stag mt-8 font-display uppercase leading-[0.86]" style={{ fontSize: 'min(13vw, 9rem)' }}>
+        <h2 className="media-reveal fl-stag font-display uppercase leading-[0.86]" style={{ fontSize: 'min(13vw, 9rem)' }}>
           <span className="fl-gold-text block">20th Anniversary</span>
           <span className="mt-1 block text-white" style={{ fontSize: '0.42em', letterSpacing: '0.14em' }}>Gold Mylar</span>
         </h2>

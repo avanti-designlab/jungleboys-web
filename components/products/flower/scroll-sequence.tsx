@@ -24,6 +24,8 @@ import { useEffect, useRef, useState } from 'react'
 type Config = {
   frames: number
   heightVh?: number // section height (scrub length)
+  base?: string // frame directory; default has desktop/ + mobile/ subdirs
+  single?: boolean // one frame set for all viewports (cover-fit crops)
   onProgress?: (p: number) => void
   className?: string
   children?: React.ReactNode // overlay layers, composited above the canvas
@@ -31,7 +33,7 @@ type Config = {
 
 const BASE = '/products/flower/frames'
 
-export default function ScrollSequence({ frames, heightVh = 300, onProgress, className = '', children }: Config) {
+export default function ScrollSequence({ frames, heightVh = 300, base = BASE, single = false, onProgress, className = '', children }: Config) {
   const sectionRef = useRef<HTMLElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const imagesRef = useRef<HTMLImageElement[]>([])
@@ -48,7 +50,7 @@ export default function ScrollSequence({ frames, heightVh = 300, onProgress, cla
 
     // breakpoint + DPR chosen once, before preload (per brief)
     const mobile = window.innerWidth < 768
-    const dir = mobile ? `${BASE}/mobile` : `${BASE}/desktop`
+    const dir = single ? base : mobile ? `${base}/mobile` : `${base}/desktop`
     const src = (i: number) => `${dir}/${String(i + 1).padStart(4, '0')}.webp`
     stateRef.current.dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2)
 
@@ -145,7 +147,7 @@ export default function ScrollSequence({ frames, heightVh = 300, onProgress, cla
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
     }
-  }, [frames])
+  }, [frames, base, single])
 
   return (
     <section
