@@ -31,33 +31,57 @@ const locations: Location[] = [
   },
 ]
 
-const products: Product[] = [
-  {
-    id: 'prod-jungle-cake-8th',
-    slug: 'jungle-cake-premium-flower-8th',
-    name: 'Jungle Cake',
+// Premium-flower lineup — strain names/logos match the Figma flower frame. All
+// prices/THC/terps are PLACEHOLDER values; real data flows from Dutchie (Phase 3).
+// images[0] = pack shot, images[1] = strain logo (cards overlay it on the bag).
+function flower(
+  slug: string,
+  name: string,
+  logo: string,
+  strainType: 'indica' | 'sativa' | 'hybrid',
+  thc: number,
+  terp: string,
+  featured = false
+): Product {
+  return {
+    id: `prod-${slug}`,
+    slug: `${slug}-premium-flower-8th`,
+    name,
     brand: 'Jungle Boys',
     category: 'flower',
     subcategory: 'premium-flower',
-    strainType: 'hybrid',
-    strain: 'Jungle Cake',
-    description:
-      'Placeholder description — real copy flows from Dutchie in Phase 3.',
-    images: [{ url: '/products/placeholder-jar.png', alt: 'Jungle Cake 8th jar' }],
-    variants: [{ id: 'v-8th', option: '3.5g', price: 4500, quantityAvailable: 10 }],
+    strainType,
+    strain: name,
+    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    images: [
+      { url: '/products/flower/gold-mylar-bag.webp', alt: `${name} 3.5g gold mylar` },
+      { url: `/products/flower/${logo}.webp`, alt: `${name} strain art` },
+    ],
+    variants: [{ id: `v-${slug}-8th`, option: '3.5g', price: 5000, quantityAvailable: 10 }],
     labResult: {
       lab: 'Placeholder Labs',
       testedAt: '2026-07-01',
-      potency: { thc: { value: 29.4, unit: '%' } },
+      potency: { thc: { value: thc, unit: '%' } },
       terpenes: [
-        { name: 'Limonene', percentage: 0.9 },
+        { name: terp, percentage: 1.1 },
         { name: 'Caryophyllene', percentage: 0.7 },
       ],
     },
     effects: ['relaxed', 'euphoric'],
-    featured: true,
+    featured,
     retailerId: 'placeholder-dtla',
-  },
+  }
+}
+
+const products: Product[] = [
+  flower('motor-breath', 'Motor Breath', 'strain-motorbreath', 'indica', 31.2, 'Myrcene', true),
+  flower('06-og', '06 OG', 'strain-06og', 'indica', 29.8, 'Limonene'),
+  flower('zudz', 'Zudz', 'strain-zudz', 'hybrid', 28.4, 'Linalool'),
+  flower('blam', 'Blam!', 'strain-blam', 'hybrid', 30.1, 'Limonene'),
+  flower('blu-zerdz', 'Blu Zerdz', 'strain-bluzerdz', 'indica', 27.9, 'Myrcene'),
+  flower('la-gelato', 'LA Gelato', 'strain-lagelato', 'hybrid', 28.8, 'Caryophyllene'),
+  flower('rs1000', 'RS1000', 'strain-rs1000', 'hybrid', 32.6, 'Limonene'),
+  flower('zangria', 'Zangria', 'strain-zangria', 'sativa', 26.7, 'Terpinolene'),
 ]
 
 const categories: ProductCategory[] = [
