@@ -72,6 +72,30 @@ export default function ProductsCollection() {
     }
   }, [])
 
+  // Touch devices have no hover — autoplay the product video when it scrolls
+  // into view (paused otherwise). Desktop keeps hover-play (below).
+  useEffect(() => {
+    const root = rootRef.current
+    if (!root || !window.matchMedia('(hover: none)').matches) return
+    const vids = Array.from(root.querySelectorAll<HTMLVideoElement>('video.prod-hovervid'))
+    if (!vids.length) return
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          const v = e.target as HTMLVideoElement
+          if (e.isIntersecting) v.play().catch(() => {})
+          else v.pause()
+        })
+      },
+      { threshold: 0.55 }
+    )
+    vids.forEach((v) => {
+      v.load() // buffer ahead so there's no delay when it plays
+      io.observe(v)
+    })
+    return () => io.disconnect()
+  }, [])
+
   return (
     <div ref={rootRef}>
       {/* ===== character banner — same treatment as /contact /media /wholesale /phenos ===== */}
@@ -143,10 +167,12 @@ export default function ProductsCollection() {
                     : 'radial-gradient(120% 90% at 50% 12%, #ffffff 0%, #f2f2f4 55%, #e6e6e9 100%)',
                 }}
                 onMouseEnter={(e) => {
+                  if (window.matchMedia('(hover: none)').matches) return // touch = in-view autoplay
                   const v = e.currentTarget.querySelector('video')
                   if (v) v.play().catch(() => {})
                 }}
                 onMouseLeave={(e) => {
+                  if (window.matchMedia('(hover: none)').matches) return
                   const v = e.currentTarget.querySelector('video')
                   if (v) {
                     v.pause()
@@ -226,7 +252,7 @@ export default function ProductsCollection() {
                       muted
                       loop
                       playsInline
-                      preload="metadata"
+                      preload="auto"
                       aria-label={`Jungle Boys ${line.name}`}
                     >
                       <source src={line.hoverVideo} type="video/mp4" />
