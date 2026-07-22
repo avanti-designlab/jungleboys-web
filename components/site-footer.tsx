@@ -29,35 +29,28 @@ export default async function SiteFooter() {
   return (
     <footer className="bg-[var(--color-background)] px-2 pb-2 md:px-3 md:pb-3">
       <div className="overflow-hidden rounded-[1.75rem] bg-[#050505] text-white md:rounded-[2.5rem]">
-      {/* top row: signup + nav */}
-      <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-8 px-8 pt-14 lg:flex-row lg:items-center lg:justify-between">
+      {/* top row: signup + nav pills */}
+      <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-8 px-6 pt-12 md:px-8 md:pt-14 lg:flex-row lg:items-start lg:justify-between">
         <FooterSignup consentText={consentText.trim()} />
-        <nav>
-          <ul
-            className="flex flex-wrap gap-x-10 gap-y-3 text-sm font-bold uppercase tracking-wider"
-            style={{ fontFamily: 'var(--font-brand)' }}
-          >
-            {FOOTER_NAV.map((l) => (
-              <li key={l.label}>
-                {'external' in l && l.external ? (
-                  <a
-                    href={l.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="transition-colors duration-200 hover:text-[var(--color-accent)]"
-                  >
-                    {l.label}
-                  </a>
-                ) : (
-                  <Link
-                    href={l.href}
-                    className="transition-colors duration-200 hover:text-[var(--color-accent)]"
-                  >
-                    {l.label}
-                  </Link>
-                )}
-              </li>
-            ))}
+        <nav className="lg:pt-1">
+          <ul className="flex flex-wrap gap-2.5">
+            {FOOTER_NAV.map((l) => {
+              const cls =
+                'inline-flex items-center rounded-full border border-white/15 bg-white/[0.04] px-4 py-2 text-sm font-medium uppercase tracking-wide text-white/85 transition-colors duration-200 hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-black'
+              return (
+                <li key={l.label}>
+                  {'external' in l && l.external ? (
+                    <a href={l.href} target="_blank" rel="noopener noreferrer" className={cls} style={{ fontFamily: 'var(--font-brand)' }}>
+                      {l.label}
+                    </a>
+                  ) : (
+                    <Link href={l.href} className={cls} style={{ fontFamily: 'var(--font-brand)' }}>
+                      {l.label}
+                    </Link>
+                  )}
+                </li>
+              )
+            })}
           </ul>
         </nav>
       </div>
@@ -82,40 +75,46 @@ export default async function SiteFooter() {
       </div>
 
       {/* bottom rows */}
-      <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-5 px-8 pb-24 lg:pb-10">
-        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div
-            className="flex flex-wrap items-center gap-x-8 gap-y-2 text-xs font-bold uppercase tracking-wider"
-            style={{ fontFamily: 'var(--font-brand)' }}
-          >
-            <span>© {new Date().getFullYear()} Jungle Boys. All rights reserved.</span>
-            <Link href="/terms" className="transition-colors duration-200 hover:text-[var(--color-accent)]">
+      <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-6 px-6 pb-24 md:px-8 lg:pb-10">
+        {/* socials */}
+        <div className="flex items-center justify-center gap-7 md:justify-start">
+          {FOOTER_SOCIALS.map((s) => (
+            <a
+              key={s.label}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={s.label}
+              className="transition-transform duration-200 hover:scale-110 hover:text-[var(--color-accent)] [&_svg]:h-8 [&_svg]:w-8"
+            >
+              {s.icon}
+            </a>
+          ))}
+        </div>
+
+        {/* compliance */}
+        <div className="flex flex-col gap-3 text-center md:text-left">
+          <p className="text-[11px] tracking-wide text-white/50" style={{ fontFamily: 'var(--font-brand)' }}>
+            {LICENSE_NUMBERS.join(' | ')}
+          </p>
+          <p className="mx-auto max-w-4xl text-[10px] leading-relaxed text-white/30 md:mx-0">{warningText.trim()}</p>
+        </div>
+
+        {/* very bottom: legal + copyright */}
+        <div
+          className="mt-2 flex flex-col items-center gap-3 border-t border-white/10 pt-6 text-xs uppercase tracking-wider md:flex-row md:justify-between"
+          style={{ fontFamily: 'var(--font-brand)' }}
+        >
+          <div className="flex items-center gap-6">
+            <Link href="/terms" className="text-white/85 transition-colors duration-200 hover:text-[var(--color-accent)]">
               Terms
             </Link>
-            <Link href="/privacy" className="transition-colors duration-200 hover:text-[var(--color-accent)]">
+            <Link href="/privacy" className="text-white/85 transition-colors duration-200 hover:text-[var(--color-accent)]">
               Privacy
             </Link>
           </div>
-          <div className="flex items-center gap-6">
-            {FOOTER_SOCIALS.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={s.label}
-                className="transition-transform duration-200 hover:scale-110 hover:text-[var(--color-accent)] [&_svg]:h-9 [&_svg]:w-9"
-              >
-                {s.icon}
-              </a>
-            ))}
-          </div>
+          <span className="text-white/50">© {new Date().getFullYear()} Jungle Boys. All rights reserved.</span>
         </div>
-
-        <p className="text-[11px] tracking-wide text-white/50" style={{ fontFamily: 'var(--font-brand)' }}>
-          {LICENSE_NUMBERS.join(' | ')}
-        </p>
-        <p className="max-w-4xl text-[10px] leading-relaxed text-white/30">{warningText.trim()}</p>
       </div>
       </div>
     </footer>

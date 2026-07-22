@@ -17,5 +17,11 @@ export default function FooterSignup({ consentText }: { consentText: string }) {
     )
   }
 
-  return <PillCta label="Let's Stay In Touch" onClick={() => setOpen(true)} />
+  return (
+    <PillCta
+      label="Let's Stay In Touch"
+      onClick={() => setOpen(true)}
+      className="w-full justify-between lg:w-auto lg:justify-start"
+    />
+  )
 }
