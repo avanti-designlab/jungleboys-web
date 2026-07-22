@@ -15,7 +15,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  `connect-src 'self' https://api.storyblok.com https://nominatim.openstreetmap.org${isDev ? " ws:" : ""}`,
+  `connect-src 'self' https://api.storyblok.com https://api-us.storyblok.com https://nominatim.openstreetmap.org${isDev ? " ws:" : ""}`,
   "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com",
   "frame-ancestors 'self'",
   "base-uri 'self'",
@@ -41,7 +41,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "cdn.prod.website-files.com" },
       { protocol: "https", hostname: "i.ytimg.com" }, // YouTube thumbnails (Media hub)
-      { protocol: "https", hostname: "a.storyblok.com" }, // curated Storyblok media thumbnails
+      { protocol: "https", hostname: "a.storyblok.com" }, // Storyblok assets (EU)
+      { protocol: "https", hostname: "a-us.storyblok.com" }, // Storyblok assets (US — our space)
     ],
   },
   async headers() {

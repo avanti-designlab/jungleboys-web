@@ -1,7 +1,8 @@
 // Storyblok content client — SERVER ONLY (token is not NEXT_PUBLIC).
 // Component mapping for @storyblok/react is added as templates are built (Phase 1).
 
-const CDN_API = 'https://api.storyblok.com/v2/cdn'
+// Space is US-hosted (api-us). Override with STORYBLOK_API_BASE if it ever moves.
+const CDN_API = process.env.STORYBLOK_API_BASE || 'https://api-us.storyblok.com/v2/cdn'
 
 type StoryVersion = 'draft' | 'published'
 
