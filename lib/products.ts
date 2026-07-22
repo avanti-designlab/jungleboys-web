@@ -86,7 +86,7 @@ export const PRODUCT_LINES: ProductLine[] = [
   },
   {
     slug: 'premium-flower',
-    name: 'Flower Gold Mylars',
+    name: '3.5G Gold Mylars',
     tag: 'Premium Indoor Flower',
     blurb: 'Top-shelf, hand-trimmed indoor — sealed fresh in the gold pouch.',
     image: '/products/v11/premium-flower.png',
