@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import type { Metadata } from 'next'
 import LegalDoc from '@/components/legal/legal-doc'
-import { breadcrumbSchema } from '@/lib/schema'
+import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
 // Privacy Policy — ported verbatim from the live Webflow /privacy (content/legal/privacy.md).
 // NOTE: the live copy describes the old e-commerce flow (shopping cart, billing, order
@@ -22,7 +22,7 @@ export default async function PrivacyPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
+          __html: jsonLdHtml(
             breadcrumbSchema([
               { name: 'Home', path: '/' },
               { name: 'Privacy Policy', path: '/privacy' },

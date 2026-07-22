@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { getFaqItems } from '@/lib/faq'
 import { pageMetadata } from '@/lib/storyblok/seo'
-import { breadcrumbSchema } from '@/lib/schema'
+import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
 export const revalidate = 60
 
@@ -20,7 +20,7 @@ export default async function FaqPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbSchema([
+          __html: jsonLdHtml(breadcrumbSchema([
             { name: 'Home', path: '/' },
             { name: 'FAQ', path: '/faq' },
           ])),
@@ -30,7 +30,7 @@ export default async function FaqPage() {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: jsonLdHtml({
               '@context': 'https://schema.org',
               '@type': 'FAQPage',
               mainEntity: items.map((f) => ({

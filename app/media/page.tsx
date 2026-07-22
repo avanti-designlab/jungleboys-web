@@ -4,7 +4,7 @@ import MediaHub from '@/components/media/media-hub'
 import MediaScrollFx from '@/components/media/media-scroll-fx'
 import { getMediaVideos } from '@/lib/media'
 import { JB_CHANNEL_URL } from '@/lib/media/youtube'
-import { breadcrumbSchema, videoSchema } from '@/lib/schema'
+import { jsonLdHtml, breadcrumbSchema, videoSchema } from '@/lib/schema'
 
 // Media = video hub (Avanti, 2026-07-19). Documentaries + drops auto-pulled
 // from youtube.com/@JungleBoysfilms (ISR, hourly) and merged with any curated
@@ -30,7 +30,7 @@ export default async function MediaPage() {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify([
+            __html: jsonLdHtml([
               breadcrumbSchema([
                 { name: 'Home', path: '/' },
                 { name: 'Media', path: '/media' },

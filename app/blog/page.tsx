@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { getBlogPosts } from '@/lib/blog'
 import { pageMetadata } from '@/lib/storyblok/seo'
-import { breadcrumbSchema } from '@/lib/schema'
+import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 import BlogMarquee from '@/components/blog/blog-marquee'
 import BlogIndexList from '@/components/blog/blog-index'
 
@@ -22,7 +22,7 @@ export default async function BlogIndex() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbSchema([
+          __html: jsonLdHtml(breadcrumbSchema([
             { name: 'Home', path: '/' },
             { name: 'Blog', path: '/blog' },
           ])),

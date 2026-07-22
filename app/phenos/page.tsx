@@ -5,7 +5,7 @@ import { pageMetadata } from '@/lib/storyblok/seo'
 import HuntField from '@/components/phenos/hunt-field'
 import PhenosHero from '@/components/phenos/phenos-hero'
 import PhenosJoin from '@/components/phenos/phenos-join'
-import { breadcrumbSchema } from '@/lib/schema'
+import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
 // Pheno Hunt — a brand surface (forced dark). No character banner: the
 // "PHENO HUNT WITH US!" logo is the hero, with jars floating behind it and
@@ -50,7 +50,7 @@ export default async function PhenosPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
+          __html: jsonLdHtml(
             breadcrumbSchema([
               { name: 'Home', path: '/' },
               { name: 'Pheno Hunt', path: '/phenos' },

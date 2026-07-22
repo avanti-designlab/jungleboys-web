@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import ProductFinderMap from '@/components/product-finder/product-finder-map'
-import { breadcrumbSchema } from '@/lib/schema'
+import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
 // Product Finder — /find-jb-products. Where to buy Jungle Boys at 3rd-party
 // stockists (SEPARATE from owned /locations, two-map rule). Same banner
@@ -18,7 +18,7 @@ export default function ProductFinderPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
+          __html: jsonLdHtml(
             breadcrumbSchema([
               { name: 'Home', path: '/' },
               { name: 'Product Finder', path: '/find-jb-products' },

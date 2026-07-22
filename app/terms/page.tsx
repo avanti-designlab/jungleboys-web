@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import type { Metadata } from 'next'
 import LegalDoc from '@/components/legal/legal-doc'
-import { breadcrumbSchema } from '@/lib/schema'
+import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
 // Terms of Service — ported verbatim from the live Webflow /terms (content/legal/terms.md).
 // Legal copy is preserved word-for-word; counsel reviews before cutover.
@@ -20,7 +20,7 @@ export default async function TermsPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
+          __html: jsonLdHtml(
             breadcrumbSchema([
               { name: 'Home', path: '/' },
               { name: 'Terms of Service', path: '/terms' },

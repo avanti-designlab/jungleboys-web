@@ -8,6 +8,13 @@ import type { Location, Product } from '@/lib/dutchie'
 const SITE_URL = 'https://www.jungleboys.com'
 const BRAND = 'Jungle Boys'
 
+// Serialize a schema object for a <script type="application/ld+json"> block.
+// JSON.stringify does NOT escape `<`, so a CMS/SEO string containing `</script>`
+// could break out of the block; escaping `<` closes that injection path.
+export function jsonLdHtml(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, '\\u003c')
+}
+
 export function organizationSchema() {
   return {
     '@context': 'https://schema.org',

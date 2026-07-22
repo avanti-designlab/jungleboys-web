@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PRODUCT_LINES } from '@/lib/products'
-import { breadcrumbSchema } from '@/lib/schema'
+import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
 // Per-line landing pages. These are the flagship, design-heavy Phase 2 pages
 // (3D heroes, scroll-driven) — not built yet. For now a branded placeholder so
@@ -36,7 +36,7 @@ export default async function ProductLinePage({ params }: { params: Promise<{ li
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
+          __html: jsonLdHtml(
             breadcrumbSchema([
               { name: 'Home', path: '/' },
               { name: 'Products', path: '/products' },

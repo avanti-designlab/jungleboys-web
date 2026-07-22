@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import HeroDeck from '@/components/home/hero-deck'
 import QuickCards from '@/components/home/quick-cards'
 import { getHomeContent } from '@/lib/home-content'
-import { organizationSchema, websiteSchema } from '@/lib/schema'
+import { jsonLdHtml, organizationSchema, websiteSchema } from '@/lib/schema'
 import { pageMetadata } from '@/lib/storyblok/seo'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -20,7 +20,7 @@ export default async function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([organizationSchema(), websiteSchema()]),
+          __html: jsonLdHtml([organizationSchema(), websiteSchema()]),
         }}
       />
       <HeroDeck slides={heroSlides} />

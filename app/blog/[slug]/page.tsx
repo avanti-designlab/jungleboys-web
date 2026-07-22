@@ -1,3 +1,4 @@
+import { jsonLdHtml } from '@/lib/schema'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -63,7 +64,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: jsonLdHtml({
             '@context': 'https://schema.org',
             '@type': 'BlogPosting',
             headline: post.title,

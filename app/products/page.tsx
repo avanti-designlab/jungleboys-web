@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/storyblok/seo'
 import ProductsCollection from '@/components/products/products-collection'
 import { PRODUCT_LINES } from '@/lib/products'
-import { breadcrumbSchema } from '@/lib/schema'
+import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
 // Products — the curated Jungle Boys collection (JB-only lines), separate from
 // the Dutchie-powered Shop. Static: no API. Each line links to /products/<slug>.
@@ -33,7 +33,7 @@ export default function ProductsPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([
+          __html: jsonLdHtml([
             breadcrumbSchema([
               { name: 'Home', path: '/' },
               { name: 'Products', path: '/products' },

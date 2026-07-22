@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/storyblok/seo'
 import ContactConsole from '@/components/contact/contact-console'
 import LocationsMap from '@/components/contact/locations-map'
-import { breadcrumbSchema } from '@/lib/schema'
+import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
 // Contact — "GET IN TOUCH" (preserves the live /contact URL + copy intent).
 // Media-style character banner up top, then a dark "console": a colored topic
@@ -30,7 +30,7 @@ export default async function ContactPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([
+          __html: jsonLdHtml([
             breadcrumbSchema([
               { name: 'Home', path: '/' },
               { name: 'Contact', path: '/contact' },

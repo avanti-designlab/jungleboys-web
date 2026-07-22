@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import LocationsDirectory from '@/components/locations/locations-directory'
 import { OWNED_STORES } from '@/lib/owned-stores'
-import { breadcrumbSchema } from '@/lib/schema'
+import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
 // Locations — Jungle Boys owned dispensaries (/locations). Same banner treatment
 // as the other pages (LOCATIONS wordmark + the Product Finder character), then
@@ -22,7 +22,7 @@ export default function LocationsPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([
+          __html: jsonLdHtml([
             breadcrumbSchema([
               { name: 'Home', path: '/' },
               { name: 'Locations', path: '/locations' },

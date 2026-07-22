@@ -12,7 +12,7 @@ import TierCards from '@/components/rewards/tier-cards'
 import ValueProps from '@/components/rewards/value-props'
 import WaysToEarn from '@/components/rewards/ways-to-earn'
 import { REWARDS_FAQ } from '@/lib/rewards-content'
-import { breadcrumbSchema, faqSchema } from '@/lib/schema'
+import { jsonLdHtml, breadcrumbSchema, faqSchema } from '@/lib/schema'
 
 // PWF Rewards landing — /rewards (supersedes /loyalty; /app + /pwf-reward 301
 // here). DARK IN BOTH THEMES (Avanti: light version was hard to read) — the
@@ -55,7 +55,7 @@ export default function RewardsPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([
+          __html: jsonLdHtml([
             faqSchema([...REWARDS_FAQ]),
             breadcrumbSchema([
               { name: 'Home', path: '/' },

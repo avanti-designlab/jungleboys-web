@@ -3,7 +3,7 @@ import path from 'node:path'
 import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/storyblok/seo'
 import WholesaleBody from '@/components/wholesale/wholesale-body'
-import { breadcrumbSchema } from '@/lib/schema'
+import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
 // Wholesale — "Become a Retailer". Same banner treatment as /contact and /media
 // (graffiti mural + giant wordmark that drops in + character bleeding out), then
@@ -28,7 +28,7 @@ export default async function WholesalePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
+          __html: jsonLdHtml(
             breadcrumbSchema([
               { name: 'Home', path: '/' },
               { name: 'Wholesale', path: '/wholesale' },
