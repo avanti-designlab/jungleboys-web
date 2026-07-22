@@ -189,7 +189,7 @@ export default function SiteNav() {
         )}
         {/* expanded bar */}
         <div
-          className={`mx-auto flex w-full items-center justify-between px-8 pt-6 pb-3 transition-all duration-500 md:px-12 ${
+          className={`mx-auto flex w-full items-center justify-between px-4 pt-6 pb-3 transition-all duration-500 sm:px-8 md:px-12 ${
             condensed && !open
               ? 'pointer-events-none -translate-y-8 opacity-0'
               : 'translate-y-0 opacity-100'
@@ -210,7 +210,7 @@ export default function SiteNav() {
               href="/"
               aria-label="Jungle Boys home"
               onClick={() => setOpen(false)}
-              className="block h-14 w-20 transition-transform duration-200 hover:scale-105 md:h-16 md:w-24"
+              className="block h-12 w-16 transition-transform duration-200 hover:scale-105 sm:h-14 sm:w-20 md:h-16 md:w-24"
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- SVG asset */}
               <img
@@ -222,19 +222,19 @@ export default function SiteNav() {
           </div>
 
           {!open && (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <Link
                 href="/login"
                 aria-label="Log in to your account"
-                className={`flex h-12 w-12 items-center justify-center rounded-full border-2 transition-transform duration-200 hover:scale-105 ${
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-2 transition-transform duration-200 hover:scale-105 sm:h-12 sm:w-12 ${
                   headerDark ? 'border-white text-white' : 'border-black text-black'
                 }`}
               >
                 <UserIcon className="h-5 w-5" />
               </Link>
-              <PillCta label="Verify Products" href="/verify" />
+              <PillCta label="Shop" href="/products" icon="cart" className="shrink-0" />
               <div
-                className={`flex items-center gap-4 rounded-full border-2 px-5 py-3 transition-colors duration-300 ${
+                className={`hidden shrink-0 items-center gap-4 rounded-full border-2 px-5 py-3 transition-colors duration-300 md:flex ${
                   headerDark ? 'border-white text-white' : 'border-black text-black'
                 }`}
               >
@@ -251,7 +251,7 @@ export default function SiteNav() {
                   </a>
                 ))}
               </div>
-              <ThemeToggle className={headerDark ? 'border-white text-white' : 'border-black text-black'} />
+              <ThemeToggle className={`shrink-0 ${headerDark ? 'border-white text-white' : 'border-black text-black'}`} />
             </div>
           )}
         </div>
@@ -292,13 +292,13 @@ export default function SiteNav() {
             <Link
               href="/login"
               aria-label="Log in to your account"
-              className={`flex h-8 w-8 items-center justify-center rounded-full border transition-transform duration-200 hover:scale-110 ${
+              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-transform duration-200 hover:scale-110 ${
                 onDarkPage ? 'border-black text-black' : 'border-white text-white'
               }`}
             >
               <UserIcon className="h-4 w-4" />
             </Link>
-            <PillCta label="Verify Products" href="/verify" size="sm" className="hidden sm:inline-flex" />
+            <PillCta label="Shop" href="/products" icon="cart" size="sm" className="hidden sm:inline-flex" />
             <div className="hidden items-center gap-3 sm:flex">
               {HEADER_SOCIALS.map((s) => (
                 <a
@@ -313,7 +313,7 @@ export default function SiteNav() {
                 </a>
               ))}
             </div>
-            <ThemeToggle className={onDarkPage ? 'border-black text-black' : 'border-white text-white'} />
+            <ThemeToggle className={`shrink-0 ${onDarkPage ? 'border-black text-black' : 'border-white text-white'}`} />
           </div>
         </div>
       </header>

@@ -24,26 +24,39 @@ function Arrow({ className }: { className: string }) {
   )
 }
 
+function Cart({ className }: { className: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className} aria-hidden>
+      <circle cx="9.5" cy="20" r="1.4" />
+      <circle cx="17" cy="20" r="1.4" />
+      <path d="M3 4h2l2.15 11a1 1 0 0 0 1 .8h8.4a1 1 0 0 0 1-.78L20.2 8H6.3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 export default function PillCta({
   label,
   href,
   onClick,
   size = 'md',
+  icon = 'arrow',
   className = '',
 }: {
   label: string
   href?: string
   onClick?: () => void
   size?: keyof typeof sizes
+  icon?: 'arrow' | 'cart'
   className?: string
 }) {
   const s = sizes[size]
   const cls = `group inline-flex cursor-pointer items-center rounded-full bg-[var(--color-accent)] font-bold uppercase tracking-widest text-black transition-colors duration-300 hover:bg-white ${s.pill} ${className}`
+  const Icon = icon === 'cart' ? Cart : Arrow
   const inner = (
     <>
       <span style={{ fontFamily: 'var(--font-brand)' }}>{label}</span>
       <span className={`flex items-center justify-center rounded-full bg-black text-white ${s.circle}`}>
-        <Arrow className={s.arrow} />
+        <Icon className={s.arrow} />
       </span>
     </>
   )
