@@ -994,21 +994,6 @@ select:focus-visible,
   }
 }
 
-/* anniversary bags fan out from center inside their .media-reveal container
-   (--fl-cx = starting offset toward center, --fl-rot = resting tilt) */
-.fl-bag {
-  opacity: 0;
-  transform: translate(var(--fl-cx, 0), 70px) rotate(0deg) scale(0.9);
-  transition: opacity 1s var(--ease-out-cinematic), transform 1.15s var(--ease-out-cinematic);
-}
-.media-reveal.is-in .fl-bag { opacity: 1; transform: translate(0, 0) rotate(var(--fl-rot, 0deg)) scale(1); }
-@media (prefers-reduced-motion: no-preference) {
-  .media-reveal.is-in .fl-bag { animation: fl-drift 6s ease-in-out 1.3s infinite alternate; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .fl-bag { opacity: 1; transform: rotate(var(--fl-rot, 0deg)); transition: none; }
-}
-
 /* 20th seal support — rotating gold rays behind the slam (GSAP drives the
    badge itself) and the fountain nugs shot from the bottom corners */
 .fl-rays {

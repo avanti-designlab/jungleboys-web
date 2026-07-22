@@ -29,6 +29,9 @@ export default function Anniversary() {
   const raysRef = useRef<HTMLDivElement>(null)
   const ringsRef = useRef<HTMLDivElement>(null)
   const fountainRef = useRef<HTMLDivElement>(null)
+  const bagsRef = useRef<HTMLDivElement>(null)
+  const bag1Ref = useRef<HTMLImageElement>(null)
+  const bag2Ref = useRef<HTMLImageElement>(null)
 
   // shared .media-reveal handler (headline/copy/bags — CSS-driven)
   useEffect(() => {
@@ -85,6 +88,32 @@ export default function Anniversary() {
         .fromTo(rays, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.9, ease: 'power2.out' }, '-=0.7')
         .to(badge, { y: -12, duration: 3, yoyo: true, repeat: -1, ease: 'sine.inOut' })
 
+      // — the mylars deal in like cards: swing up from below with rotation,
+      //   overshoot into their resting tilt, then float on offset phases
+      const bags = bagsRef.current
+      const bag1 = bag1Ref.current
+      const bag2 = bag2Ref.current
+      let bagTl: gsap.core.Timeline | undefined
+      if (bags && bag1 && bag2) {
+        bagTl = gsap.timeline({
+          scrollTrigger: { trigger: bags, start: 'top 80%', once: true },
+        })
+        bagTl
+          .fromTo(
+            bag1,
+            { y: 320, x: -140, rotation: -55, scale: 0.7, opacity: 0 },
+            { y: 0, x: 0, rotation: -10, scale: 1, opacity: 1, duration: 1, ease: 'back.out(1.5)' }
+          )
+          .fromTo(
+            bag2,
+            { y: 340, x: 150, rotation: 48, scale: 0.7, opacity: 0 },
+            { y: 0, x: 0, rotation: 7, scale: 1, opacity: 1, duration: 1, ease: 'back.out(1.5)' },
+            '-=0.72'
+          )
+          .to(bag1, { y: -10, duration: 2.8, yoyo: true, repeat: -1, ease: 'sine.inOut' }, '>-0.1')
+          .to(bag2, { y: -14, duration: 3.3, yoyo: true, repeat: -1, ease: 'sine.inOut' }, '<0.4')
+      }
+
       // — nug fountain from the bottom corners while the section is on screen
       let interval = 0
       let side = 0
@@ -130,6 +159,8 @@ export default function Anniversary() {
         if (interval) window.clearInterval(interval)
         tl.scrollTrigger?.kill()
         tl.kill()
+        bagTl?.scrollTrigger?.kill()
+        bagTl?.kill()
       }
     })
     return () => mm.revert()
@@ -160,35 +191,38 @@ export default function Anniversary() {
           <span className="mt-1 block text-white" style={{ fontSize: '0.42em', letterSpacing: '0.14em' }}>Gold Mylar</span>
         </h2>
 
-        {/* the pouches — fan out from center over a breathing glow */}
-        <div className="media-reveal relative mx-auto mt-12 flex h-[380px] max-w-[760px] items-center justify-center md:h-[500px]">
-          <div aria-hidden className="fl-glow pointer-events-none absolute inset-[-10%]" style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 60%, rgba(233,193,90,0.3), transparent 68%)' }} />
-          {/* eslint-disable-next-line @next/next/no-img-element -- pack art */}
-          <img
-            src="/products/flower/anniv-bag-1.webp"
-            alt=""
-            aria-hidden
-            className="fl-bag absolute w-[64%] drop-shadow-[0_40px_60px_rgba(0,0,0,0.6)]"
-            style={{ left: '4%', ['--fl-cx' as string]: '42%', ['--fl-rot' as string]: '-10deg' }}
-          />
-          {/* eslint-disable-next-line @next/next/no-img-element -- pack art */}
-          <img
-            src="/products/flower/anniv-bag-2.webp"
-            alt="Jungle Boys 20th anniversary gold mylar bags"
-            className="fl-bag absolute w-[66%] drop-shadow-[0_40px_60px_rgba(0,0,0,0.65)]"
-            style={{ right: '2%', ['--fl-cx' as string]: '-42%', ['--fl-rot' as string]: '7deg', transitionDelay: '0.18s', animationDelay: '0.9s' }}
-          />
-        </div>
+        {/* pouches LEFT, story RIGHT — cuts the section height; bags get a
+            GSAP card-deal entrance (swing in from below, overshoot, float) */}
+        <div className="mt-12 grid items-center gap-10 lg:grid-cols-2 lg:gap-8">
+          <div ref={bagsRef} className="relative mx-auto flex h-[320px] w-full max-w-[560px] items-center justify-center md:h-[440px]">
+            <div aria-hidden className="fl-glow pointer-events-none absolute inset-[-10%]" style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 60%, rgba(233,193,90,0.3), transparent 68%)' }} />
+            {/* eslint-disable-next-line @next/next/no-img-element -- pack art */}
+            <img
+              ref={bag1Ref}
+              src="/products/flower/anniv-bag-1.webp"
+              alt=""
+              aria-hidden
+              className="absolute left-[2%] w-[62%] will-change-transform drop-shadow-[0_40px_60px_rgba(0,0,0,0.6)]"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element -- pack art */}
+            <img
+              ref={bag2Ref}
+              src="/products/flower/anniv-bag-2.webp"
+              alt="Jungle Boys 20th anniversary gold mylar bags"
+              className="absolute right-[2%] w-[64%] will-change-transform drop-shadow-[0_40px_60px_rgba(0,0,0,0.65)]"
+            />
+          </div>
 
-        {/* condensed story — brand voice, staggered rise */}
-        <div className="media-reveal fl-stag mx-auto mt-12 max-w-2xl space-y-5 text-[15px] leading-relaxed text-white/75 md:text-base" style={{ fontFamily: 'var(--font-brand)' }}>
-          <p className="uppercase tracking-wide">
-            Twenty years in, the foundation hasn&apos;t moved — same small, dedicated team, still led by the hunt.
-          </p>
-          <p className="uppercase tracking-wide">
-            From the iconic gold vials of our early days to today&apos;s 3.5g gold mylars: hand-trimmed, full, frosty
-            top nugs only. <span className="text-[var(--fl-gold,#e9c15a)]">Gold is the standard</span> — what&apos;s inside earns the bag.
-          </p>
+          {/* condensed story — brand voice, staggered rise */}
+          <div className="media-reveal fl-stag mx-auto max-w-xl space-y-5 text-left text-[15px] leading-relaxed text-white/75 md:text-base" style={{ fontFamily: 'var(--font-brand)' }}>
+            <p className="uppercase tracking-wide">
+              Twenty years in, the foundation hasn&apos;t moved — same small, dedicated team, still led by the hunt.
+            </p>
+            <p className="uppercase tracking-wide">
+              From the iconic gold vials of our early days to today&apos;s 3.5g gold mylars: hand-trimmed, full, frosty
+              top nugs only. <span className="text-[var(--fl-gold,#e9c15a)]">Gold is the standard</span> — what&apos;s inside earns the bag.
+            </p>
+          </div>
         </div>
 
         <p className="media-reveal fl-claim-r font-display mt-14 uppercase leading-[0.9]" style={{ fontSize: 'min(9vw, 5rem)' }}>
