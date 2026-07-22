@@ -5,8 +5,8 @@ import ScrollSequence from './scroll-sequence'
 
 // Act 2 — the grow. Canvas scrubs the plant-growth sequence (61 frames) while:
 //  • a giant outlined genetics statement holds the opening beats
-//  • an HD frost-nug cutout (black-keyed from the 4K Candy Bones macro) zooms
-//    up from center until it swallows the screen — crystals stay sharp at fill
+//  • the frosty purple nug cutout (native-res Figma fill, true alpha) zooms
+//    up from center until it swallows the screen
 // Overlays are driven off onProgress with direct style writes (no re-renders).
 
 export default function FlowerJourney() {
@@ -23,7 +23,7 @@ export default function FlowerJourney() {
     // nug: appears from 50%, blows up past the viewport by 100%
     if (nugRef.current) {
       const t = Math.min(1, Math.max(0, (p - 0.5) / 0.5))
-      const scale = 0.3 + t * t * 5.2 // ease-in blow-up
+      const scale = 0.3 + t * t * 4.5 // ease-in blow-up, capped to keep the native cutout crisp
       const op = t <= 0 ? 0 : t < 0.07 ? t / 0.07 : 1
       nugRef.current.style.opacity = String(op)
       nugRef.current.style.transform = `translate(-50%, -50%) scale(${scale}) rotate(${t * 12}deg)`
@@ -48,8 +48,8 @@ export default function FlowerJourney() {
         <span className="fl-stroke-accent block">From Seed to Fire</span>
       </div>
 
-      {/* HD frost nug cutout (keyed from the 4K macro) blows up to fill */}
-      {/* eslint-disable-next-line @next/next/no-img-element -- 4K-derived cutout */}
+      {/* frosty nug cutout blows up to fill */}
+      {/* eslint-disable-next-line @next/next/no-img-element -- native-res cutout */}
       <img
         ref={nugRef}
         src="/products/flower/nug-hd.webp"

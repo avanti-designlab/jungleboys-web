@@ -54,7 +54,7 @@ export default function FlowerHero() {
 
         {/* headline — near full-screen stack */}
         <h1 data-fl-words className="relative z-10 select-none text-center">
-          <span className="fl-zoom font-display block uppercase leading-[0.82] text-white" style={{ fontSize: 'min(23vw, 17rem)' }}>
+          <span className="fl-zoom font-display block uppercase leading-[0.72] text-white" style={{ fontSize: 'min(23vw, 17rem)' }}>
             {LINES.map((line, lineIdx) => (
               <span key={line} className="block">
                 {line.split('').map((ch) => (
@@ -77,7 +77,10 @@ export default function FlowerHero() {
           data-fl-plant
           src="/products/flower/plant-cutout.webp"
           alt="Frost-covered Jungle Boys live top"
-          className="absolute bottom-0 left-1/2 z-20 w-[min(135vw,1350px)] max-w-none -translate-x-1/2 translate-y-[72%] drop-shadow-[0_50px_90px_rgba(0,0,0,0.85)]"
+          className="absolute bottom-0 left-1/2 z-20 w-[min(135vw,1350px)] max-w-none -translate-x-1/2 drop-shadow-[0_50px_90px_rgba(0,0,0,0.85)]"
+          // vertical is GSAP-owned (yPercent 72 → 4); an inline transform would
+          // double-stack with it, and a translate-y class did exactly that
+          style={{ transform: 'translateY(72%)' }}
         />
 
         {/* scroll cue */}
