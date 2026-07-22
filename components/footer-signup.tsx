@@ -1,26 +1,15 @@
 'use client'
 
-import { useState } from 'react'
-import NewsletterForm from './newsletter-form'
 import PillCta from './pill-cta'
 
-// "LET'S STAY IN TOUCH" — expands into the TCPA phone-first signup form.
+// "LET'S STAY IN TOUCH" — opens the site-wide newsletter signup modal
+// (NewsletterPopup) via a custom event.
 
-export default function FooterSignup({ consentText }: { consentText: string }) {
-  const [open, setOpen] = useState(false)
-
-  if (open) {
-    return (
-      <div className="w-full max-w-xl">
-        <NewsletterForm consentText={consentText} />
-      </div>
-    )
-  }
-
+export default function FooterSignup() {
   return (
     <PillCta
       label="Let's Stay In Touch"
-      onClick={() => setOpen(true)}
+      onClick={() => window.dispatchEvent(new Event('jb:open-newsletter'))}
       className="w-full justify-between lg:w-auto lg:justify-start"
     />
   )

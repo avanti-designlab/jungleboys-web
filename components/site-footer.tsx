@@ -17,11 +17,10 @@ const FOOTER_SOCIALS = [
 ]
 
 export default async function SiteFooter() {
-  const legalDir = path.join(process.cwd(), 'content/legal')
-  const [consentText, warningText] = await Promise.all([
-    readFile(path.join(legalDir, 'tcpa-consent.txt'), 'utf-8'),
-    readFile(path.join(legalDir, 'cannabis-warning.txt'), 'utf-8'),
-  ])
+  const warningText = await readFile(
+    path.join(process.cwd(), 'content/legal/cannabis-warning.txt'),
+    'utf-8'
+  )
 
   const fire = Array(6).fill('PLAYING WITH FIRE')
   const since = Array(8).fill('SINCE 2006')
@@ -31,7 +30,7 @@ export default async function SiteFooter() {
       <div className="overflow-hidden rounded-[1.75rem] bg-[#050505] text-white md:rounded-[2.5rem]">
       {/* top row: signup + nav pills */}
       <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-8 px-6 pt-12 md:px-8 md:pt-14 lg:flex-row lg:items-start lg:justify-between">
-        <FooterSignup consentText={consentText.trim()} />
+        <FooterSignup />
         <nav className="lg:pt-1">
           <ul className="flex flex-wrap gap-2.5">
             {FOOTER_NAV.map((l) => {

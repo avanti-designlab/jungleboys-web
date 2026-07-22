@@ -54,6 +54,18 @@ export default function NewsletterPopup({ consentText }: { consentText: string }
     }
   }, [])
 
+  // ── explicit open (footer "Let's Stay In Touch") — ignores the once-per-visit rule ──
+  useEffect(() => {
+    const openNow = () => {
+      setState('idle')
+      setError('')
+      setOpen(true)
+      requestAnimationFrame(() => setMounted(true))
+    }
+    window.addEventListener('jb:open-newsletter', openNow)
+    return () => window.removeEventListener('jb:open-newsletter', openNow)
+  }, [])
+
   const dismiss = () => {
     try {
       localStorage.setItem(SEEN_KEY, '1')
