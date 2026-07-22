@@ -247,20 +247,25 @@ export default function ProductsCollection() {
                 </div>
 
                 {/* editorial footer: tag + big name (left), arrow disc (right) */}
-                <div className="relative z-10 flex items-end justify-between gap-3 px-5 pb-5 pt-1 md:px-6 md:pb-6">
+                <div className="relative z-10 flex flex-wrap items-end justify-between gap-x-3 gap-y-4 px-5 pb-5 pt-1 md:px-6 md:pb-6">
                   <div className="min-w-0">
                     <span className="block text-[10px] font-bold uppercase tracking-[0.26em] text-black/40" style={{ fontFamily: 'var(--font-brand)' }}>
                       {line.tag}
                     </span>
-                    <h3 className="font-display mt-1 text-[1.5rem] uppercase leading-[0.88] text-black md:text-[1.9rem]">{line.name}</h3>
+                    <h3 className="font-display mt-1 text-[2rem] uppercase leading-[0.9] text-black md:text-[2.5rem]">{line.name}</h3>
                   </div>
                   <span
                     aria-hidden
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-black text-white transition-all duration-200 group-hover:bg-[var(--color-accent)] group-hover:text-black md:h-12 md:w-12"
+                    className="inline-flex shrink-0 items-center gap-2 rounded-full bg-black py-2 pl-4 pr-2 text-white transition-colors duration-200 group-hover:bg-[var(--color-accent)] group-hover:text-black"
                   >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" className="h-5 w-5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden>
-                      <path d="M7 17 17 7M9 7h8v8" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
+                    <span className="text-[11px] font-extrabold uppercase tracking-widest" style={{ fontFamily: 'var(--font-brand)' }}>
+                      Shop Now
+                    </span>
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-black transition-colors duration-200 group-hover:bg-black group-hover:text-[var(--color-accent)]">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden>
+                        <path d="M7 17 17 7M9 7h8v8" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
                   </span>
                 </div>
               </Link>
