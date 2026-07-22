@@ -44,7 +44,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const post = await getBlogPost(slug)
   if (!post) notFound()
 
-  const html = post.body ? renderRichText(post.body as never) : ''
+  // Storyblok posts carry richtext; the temporary sample posts carry HTML strings.
+  const html = typeof post.body === 'string' ? post.body : post.body ? renderRichText(post.body as never) : ''
 
   return (
     <main className="bg-[var(--color-background)] pb-24 pt-28 text-[var(--color-foreground)] md:pt-32">
