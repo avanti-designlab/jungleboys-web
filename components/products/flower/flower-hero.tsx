@@ -41,7 +41,7 @@ export default function FlowerHero() {
 
   return (
     <section ref={sectionRef} className="relative h-[180vh] bg-black">
-      <div data-fl-stage className="sticky top-0 flex h-screen items-start justify-center overflow-hidden bg-[#050505] pt-[9vh]">
+      <div data-fl-stage className="sticky top-0 flex h-screen items-start justify-center overflow-hidden bg-[#050505] pt-[13vh]">
         {/* graffiti mural texture */}
         {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}
         <img
