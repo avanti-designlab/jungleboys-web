@@ -223,7 +223,6 @@ export default function ProductsCollection() {
                     <video
                       className="prod-hovervid"
                       poster={line.image}
-                      autoPlay
                       muted
                       loop
                       playsInline
