@@ -2,20 +2,35 @@
 
 import Link from 'next/link'
 import { useScanner } from './scan-provider'
+import Confetti from './confetti'
 import type { VerifyResult } from '@/lib/auth/verify'
 
-function CheckBadge() {
+function FlameBadge() {
   return (
-    <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-[var(--color-accent)] text-black">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" className="h-12 w-12" aria-hidden><path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+    <div className="relative mx-auto h-28 w-28">
+      <span className="ring-pulse absolute inset-0 rounded-full border-4 border-[#22c55e]" />
+      <span className="ring-pulse absolute inset-0 rounded-full border-4 border-[#22c55e]" style={{ animationDelay: '0.7s' }} />
+      <div className="badge-in relative flex h-28 w-28 items-center justify-center rounded-full bg-[#15a34a] text-white shadow-[0_0_45px_rgba(34,197,94,0.55)]">
+        <svg viewBox="0 0 24 24" fill="currentColor" className="flame-flicker h-14 w-14" aria-hidden>
+          <path d="M12 2c1.3 3.4-1.5 5-1.5 7.6 0 1.4 1 2.4 2.1 2.4 1.5 0 2.3-1.3 2-3 2 1.4 3.2 3.5 3.2 5.9 0 3.6-3 6.6-6.9 6.6S4 18.5 4 14.7c0-4.2 3.2-6.6 4.6-9.1C10 3.7 11.4 2.9 12 2Z" />
+        </svg>
+      </div>
     </div>
   )
 }
 
-function WarnBadge() {
+// Emergency alert badge — red (counterfeit/invalid) or amber (already claimed).
+function AlertBadge({ color }: { color: string }) {
   return (
-    <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-4 border-[var(--color-muted)] text-[var(--color-foreground)]">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-12 w-12" aria-hidden><path d="M12 8v5M12 16.5v.5" strokeLinecap="round" /><path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" strokeLinejoin="round" /></svg>
+    <div className="relative mx-auto h-28 w-28">
+      <span className="ring-pulse absolute inset-0 rounded-full border-4" style={{ borderColor: color }} />
+      <div className="badge-in flex h-28 w-28 items-center justify-center">
+        <svg viewBox="0 0 24 24" className="emergency-pulse h-24 w-24" style={{ color }} aria-hidden>
+          <path fill="currentColor" d="M10.3 3.3 1.7 18a2 2 0 0 0 1.7 3h16.9a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0Z" />
+          <path stroke="#fff" strokeWidth="2.2" strokeLinecap="round" d="M12 9.5v4.2" />
+          <circle cx="12" cy="17" r="1.3" fill="#fff" />
+        </svg>
+      </div>
     </div>
   )
 }
@@ -25,11 +40,12 @@ export default function AuthResult({ result }: { result: VerifyResult }) {
   const { status, code, product } = result
 
   return (
-    <div className="mx-auto flex min-h-[70vh] max-w-xl flex-col items-center justify-center px-6 pb-24 pt-28 text-center md:pt-32">
+    <div className="relative mx-auto flex min-h-[70vh] max-w-xl flex-col items-center justify-center px-6 pb-24 pt-28 text-center md:pt-32">
       {status === 'authentic' ? (
         <>
-          <CheckBadge />
-          <p className="mt-6 text-xs font-bold uppercase tracking-[0.3em] text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
+          <Confetti />
+          <FlameBadge />
+          <p className="mt-6 text-xs font-bold uppercase tracking-[0.3em] text-[#15a34a]" style={{ fontFamily: 'var(--font-brand)' }}>
             Verified Genuine
           </p>
           <h1 className="font-display mt-2 text-5xl uppercase leading-[0.92] text-[var(--color-foreground)] md:text-6xl">
@@ -58,8 +74,11 @@ export default function AuthResult({ result }: { result: VerifyResult }) {
         </>
       ) : (
         <>
-          <WarnBadge />
-          <h1 className="font-display mt-6 text-5xl uppercase leading-[0.92] text-[var(--color-foreground)] md:text-6xl">
+          <AlertBadge color={status === 'claimed' ? '#f59e0b' : '#ef4444'} />
+          <p className="mt-6 text-xs font-bold uppercase tracking-[0.3em]" style={{ fontFamily: 'var(--font-brand)', color: status === 'claimed' ? '#f59e0b' : '#ef4444' }}>
+            {status === 'claimed' ? 'Heads Up' : 'Not Authentic'}
+          </p>
+          <h1 className="font-display mt-2 text-5xl uppercase leading-[0.92] text-[var(--color-foreground)] md:text-6xl">
             {status === 'claimed' ? 'Already Claimed' : 'Authentication Failed'}
           </h1>
           <p className="mx-auto mt-5 max-w-md text-base leading-relaxed text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-body)' }}>
