@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import WholesalePlane from './wholesale-plane'
 
 // Everything below the wholesale banner: JB × Nabis intro, then a
 // one-question-at-a-time clickthrough form in a yellow pill, ending in a
@@ -128,9 +129,10 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
 
   return (
     <div ref={rootRef}>
-      {/* intro: info pill (left) + media pill (right) */}
-      <section className="px-4 pt-16 md:px-8 md:pt-24 lg:px-12">
-        <div className="mx-auto grid max-w-[1280px] items-stretch gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
+      {/* intro: info pill (left) + media pill (right) — plane flies across on scroll-in */}
+      <section className="relative px-4 pt-16 md:px-8 md:pt-24 lg:px-12">
+        <WholesalePlane />
+        <div className="relative mx-auto grid max-w-[1280px] items-stretch gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
           {/* LEFT — info pill */}
           <div className="media-reveal flex flex-col justify-center rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface)] p-8 md:p-12">
             <h2 className="font-display text-5xl uppercase leading-[0.9] text-[var(--color-foreground)] md:text-6xl xl:text-7xl">

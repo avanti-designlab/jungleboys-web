@@ -710,20 +710,22 @@ body {
     92%  { opacity: 1; }
     100% { transform: translate(-75vw, 6vh) rotate(-5deg); opacity: 0; }
   }
-  .ws-plane { animation: ws-plane-fly 4.4s cubic-bezier(0.45, 0.02, 0.5, 0.98) 0.3s both; will-change: transform; }
+  .ws-plane { opacity: 0; will-change: transform; }
+  .ws-flyzone.is-flying .ws-plane { animation: ws-plane-fly 4.8s cubic-bezier(0.45, 0.02, 0.5, 0.98) 0.15s both; }
 
   @keyframes ws-chute-fall {
-    0%   { transform: translate(-50%, -340%); opacity: 0; }
-    14%  { opacity: 1; }
-    100% { transform: translate(-50%, 0); opacity: 1; }
+    0%   { transform: translate(-50%, -280%); opacity: 0; }
+    16%  { opacity: 1; }
+    70%  { opacity: 1; }
+    100% { transform: translate(-50%, 420%); opacity: 0; }
   }
-  .ws-chute { opacity: 0; animation: ws-chute-fall 3s cubic-bezier(0.25, 0.55, 0.4, 1) var(--delay, 0s) forwards; will-change: transform; }
+  .ws-chute { opacity: 0; will-change: transform; }
+  .ws-flyzone.is-flying .ws-chute { animation: ws-chute-fall 3.4s cubic-bezier(0.3, 0.1, 0.5, 1) var(--delay, 0s) forwards; }
   @keyframes ws-chute-sway { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
   .ws-chute > img { transform-origin: 50% 8%; animation: ws-chute-sway 3.6s ease-in-out infinite; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ws-plane { display: none; }
-  .ws-chute { opacity: 1; }
+  .ws-plane, .ws-chute { display: none; }
 }
 
 /* ===== Blog — rich-text body (Storyblok renderRichText output) ===== */

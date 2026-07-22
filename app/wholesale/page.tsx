@@ -3,7 +3,6 @@ import path from 'node:path'
 import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/storyblok/seo'
 import WholesaleBody from '@/components/wholesale/wholesale-body'
-import WholesalePlane from '@/components/wholesale/wholesale-plane'
 import { breadcrumbSchema } from '@/lib/schema'
 
 // Wholesale — "Become a Retailer". Same banner treatment as /contact and /media
@@ -76,8 +75,6 @@ export default async function WholesalePage() {
             alt="Jungle Boys Wholesale"
             className="hero-alive relative z-10 drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
           />
-          {/* plane flies across + parachutes drop on load */}
-          <WholesalePlane />
         </div>
       </section>
 

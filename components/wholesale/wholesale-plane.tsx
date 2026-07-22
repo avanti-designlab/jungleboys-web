@@ -1,21 +1,49 @@
-// On load, the JB fighter plane (Nabis landing art) flies across the hero banner
-// right→left and "drops" parachutes that fall and scatter, then gently sway.
-// Pure CSS (see .ws-plane / .ws-chute in globals); reduced-motion stills it.
+'use client'
 
-// left = where each parachute lands; delay is staggered right→left so they drop
-// as the plane passes overhead. w = size in px.
+import { useEffect, useRef, useState } from 'react'
+
+// The JB fighter plane flies across the section right→left and drops parachutes
+// from its tail. Triggers when the section scrolls into view (not on the hero,
+// so it never covers the mascot). Pure CSS (.ws-plane / .ws-chute in globals),
+// gated on .is-flying; reduced-motion stills it.
+
+// left = where each parachute lands; delay is staggered so each drops as the
+// plane's tail passes that point (right→left). w = size in px.
 const CHUTES = [
-  { left: '85%', top: '28%', w: 52, delay: 0.6 },
-  { left: '71%', top: '58%', w: 78, delay: 1.0 },
-  { left: '55%', top: '36%', w: 56, delay: 1.5 },
-  { left: '41%', top: '66%', w: 48, delay: 1.9 },
-  { left: '24%', top: '44%', w: 68, delay: 2.3 },
-  { left: '13%', top: '68%', w: 44, delay: 2.6 },
+  { left: '84%', top: '34%', w: 60, delay: 0.5 },
+  { left: '69%', top: '62%', w: 90, delay: 0.95 },
+  { left: '53%', top: '40%', w: 64, delay: 1.45 },
+  { left: '38%', top: '66%', w: 52, delay: 1.9 },
+  { left: '22%', top: '46%', w: 78, delay: 2.35 },
+  { left: '10%', top: '70%', w: 48, delay: 2.75 },
 ]
 
 export default function WholesalePlane() {
+  const ref = useRef<HTMLDivElement>(null)
+  const [flying, setFlying] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setFlying(true)
+          io.disconnect()
+        }
+      },
+      { threshold: 0.3 }
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 z-20 overflow-hidden">
+    <div
+      ref={ref}
+      aria-hidden
+      className={`ws-flyzone pointer-events-none absolute inset-0 z-20 overflow-hidden ${flying ? 'is-flying' : ''}`}
+    >
       {CHUTES.map((c, i) => (
         <div
           key={i}
@@ -23,12 +51,12 @@ export default function WholesalePlane() {
           style={{ left: c.left, top: c.top, width: c.w, ['--delay' as string]: `${c.delay}s` }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element -- transparent art */}
-          <img src="/wholesale/parachute.png" alt="" className="h-auto w-full drop-shadow-[0_10px_16px_rgba(0,0,0,0.5)]" />
+          <img src="/wholesale/parachute.png" alt="" className="h-auto w-full drop-shadow-[0_10px_16px_rgba(0,0,0,0.4)]" />
         </div>
       ))}
-      <div className="ws-plane absolute left-0 top-[22%] z-30 w-[min(36vw,460px)]">
+      <div className="ws-plane absolute left-0 top-[4%] z-30 w-[min(58vw,660px)]">
         {/* eslint-disable-next-line @next/next/no-img-element -- transparent art */}
-        <img src="/wholesale/plane.png" alt="" className="h-auto w-full drop-shadow-[0_18px_34px_rgba(0,0,0,0.6)]" />
+        <img src="/wholesale/plane.png" alt="" className="h-auto w-full drop-shadow-[0_18px_34px_rgba(0,0,0,0.5)]" />
       </div>
     </div>
   )
