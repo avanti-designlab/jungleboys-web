@@ -599,7 +599,8 @@ body {
   pointer-events: none;
   filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.32));
 }
-.group:hover .prod-pop {
+.group:hover .prod-pop,
+.fx-active .prod-pop {
   opacity: 1;
   transform: translate(-50%, -50%) rotate(var(--rot)) scale(1);
 }
@@ -624,7 +625,8 @@ body {
   transition-delay: calc(var(--i) * 0.035s); /* fan unfolds one joint at a time */
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.3));
 }
-.group:hover .prod-fan-joint {
+.group:hover .prod-fan-joint,
+.fx-active .prod-fan-joint {
   opacity: 1;
   transform: translate(-50%, -100%) rotate(var(--a)) scale(1);
 }
@@ -650,7 +652,8 @@ body {
   transform: translate(0, 10%) scale(0.3);
   filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.28));
 }
-.group:hover .pops-kernel {
+.group:hover .pops-kernel,
+.fx-active .pops-kernel {
   animation: popcorn var(--dur) ease-out var(--d) infinite;
 }
 @keyframes popcorn {
@@ -661,7 +664,8 @@ body {
   100% { opacity: 0; transform: translate(var(--x), 14%) scale(0.85) rotate(var(--r)); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .group:hover .pops-kernel {
+  .group:hover .pops-kernel,
+.fx-active .pops-kernel {
     animation: none;
     opacity: 1;
     transform: translate(calc(var(--x) * 0.5), calc(var(--h) * -0.5)) scale(1);
@@ -682,7 +686,8 @@ body {
   pointer-events: none;
   filter: drop-shadow(0 12px 16px rgba(120, 70, 0, 0.4));
 }
-.group:hover .prod-splash { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.group:hover .prod-splash,
+.fx-active .prod-splash { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 @media (prefers-reduced-motion: reduce) {
   .prod-splash { transition: opacity 0.3s ease; transform: translate(-50%, -50%) scale(1); }
 }

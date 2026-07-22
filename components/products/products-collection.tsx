@@ -72,26 +72,34 @@ export default function ProductsCollection() {
     }
   }, [])
 
-  // Touch devices have no hover — autoplay the product video when it scrolls
-  // into view (paused otherwise). Desktop keeps hover-play (below).
+  // Touch devices have no hover — fire each card's effect (pop-outs / fan /
+  // popcorn / splash / video) when it scrolls into view, off when it leaves.
+  // Desktop keeps hover (below).
   useEffect(() => {
     const root = rootRef.current
     if (!root || !window.matchMedia('(hover: none)').matches) return
-    const vids = Array.from(root.querySelectorAll<HTMLVideoElement>('video.prod-hovervid'))
-    if (!vids.length) return
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-fx-card]'))
+    if (!cards.length) return
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
-          const v = e.target as HTMLVideoElement
-          if (e.isIntersecting) v.play().catch(() => {})
-          else v.pause()
+          const card = e.target as HTMLElement
+          const v = card.querySelector('video')
+          if (e.isIntersecting) {
+            card.classList.add('fx-active')
+            if (v) v.play().catch(() => {})
+          } else {
+            card.classList.remove('fx-active')
+            if (v) v.pause()
+          }
         })
       },
       { threshold: 0.55 }
     )
-    vids.forEach((v) => {
-      v.load() // buffer ahead so there's no delay when it plays
-      io.observe(v)
+    cards.forEach((c) => {
+      const v = c.querySelector('video')
+      if (v) v.load() // buffer ahead so there's no delay when it plays
+      io.observe(c)
     })
     return () => io.disconnect()
   }, [])
@@ -160,6 +168,7 @@ export default function ProductsCollection() {
               <Link
                 key={line.slug}
                 href={`/products/${line.slug}`}
+                data-fx-card
                 className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.6rem] shadow-[0_34px_80px_-46px_rgba(0,0,0,0.6)] ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-[0_52px_120px_-44px_rgba(254,207,14,0.6)]"
                 style={{
                   background: line.hoverVideo
