@@ -903,12 +903,12 @@ select:focus-visible,
   -webkit-text-stroke: 2px rgba(255, 255, 255, 0.92);
 }
 .fl-stroke-accent {
-  color: transparent;
-  -webkit-text-stroke: 2px var(--color-accent);
+  color: #fff;
+  -webkit-text-stroke: 1px var(--color-accent);
 }
 @media (min-width: 768px) {
   .fl-stroke { -webkit-text-stroke-width: 2.5px; }
-  .fl-stroke-accent { -webkit-text-stroke-width: 3px; }
+  .fl-stroke-accent { -webkit-text-stroke-width: 1.5px; }
 }
 
 /* gold gradient display text — carries a slow moving shine */
