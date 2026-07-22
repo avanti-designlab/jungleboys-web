@@ -122,7 +122,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       {/* ── Keep reading — black "pill" band (forced dark so cards flip) ──── */}
       {related.length > 0 && (
-        <section className="mt-16 px-2 md:mt-24 md:px-3">
+        <section className="mx-auto mt-16 max-w-5xl px-4 md:mt-24 md:px-6">
           <div
             data-theme="dark"
             data-nav-theme="dark"

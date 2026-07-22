@@ -67,6 +67,7 @@ export const LICENSE_NUMBERS = [
 // Footer nav row (matches live footer)
 export const FOOTER_NAV = [
   { label: 'Media', href: '/media' },
+  { label: 'Blog', href: '/blog' },
   { label: 'Phenos', href: '/phenos' },
   { label: 'Clothing', href: 'https://jungleboysclothing.com/', external: true },
   { label: 'Wholesale', href: '/wholesale' },
