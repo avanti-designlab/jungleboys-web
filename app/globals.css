@@ -124,7 +124,7 @@ body {
 }
 .menu-line > * {
   display: block;
-  animation: link-drop 0.72s cubic-bezier(0.34, 1.32, 0.5, 1) both;
+  animation: link-drop 0.5s cubic-bezier(0.34, 1.28, 0.5, 1) both;
 }
 .menu-socials {
   animation: fade-up 0.5s ease-out 0.6s both;

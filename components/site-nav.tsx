@@ -124,7 +124,7 @@ export default function SiteNav() {
             {MENU_COLUMNS.map((column, c) => (
               <ul key={c} className="flex flex-col">
                 {column.map((l) => {
-                  const delay = `${0.12 + linkIndex++ * 0.055}s`
+                  const delay = `${0.05 + linkIndex++ * 0.03}s`
                   const cls =
                     'font-display whitespace-nowrap text-6xl md:text-7xl xl:text-8xl uppercase text-white transition-colors duration-200 hover:text-[var(--color-accent)]'
                   return (
