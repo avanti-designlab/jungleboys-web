@@ -4,27 +4,26 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useScanner } from '@/components/scan/scan-provider'
 
-// Mobile-only sticky bottom pill: Shop / Locations · [VERIFY scan] · Wholesale / Contact.
+// Mobile-only sticky bottom pill: Deals / Drops · [VERIFY scan] · Locations / Contact.
 // The raised center button opens the QR scanner (→ /auth).
 
 const LEFT = [
   {
-    label: 'Shop',
-    href: '/products',
+    label: 'Deals',
+    href: '/710-deals',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5" aria-hidden>
-        <path d="M6 8h12l-1 12H7L6 8Z" />
-        <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+        <path d="M4 4h7l9 9-7 7-9-9V4Z" strokeLinejoin="round" />
+        <circle cx="8.5" cy="8.5" r="1.4" />
       </svg>
     ),
   },
   {
-    label: 'Locations',
-    href: '/locations',
+    label: 'Drops',
+    href: '/drops',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5" aria-hidden>
-        <path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11Z" />
-        <circle cx="12" cy="10" r="2.5" />
+        <path d="M12 3s6.5 6.8 6.5 11.2a6.5 6.5 0 0 1-13 0C5.5 9.8 12 3 12 3Z" strokeLinejoin="round" />
       </svg>
     ),
   },
@@ -32,12 +31,12 @@ const LEFT = [
 
 const RIGHT = [
   {
-    label: 'Wholesale',
-    href: '/wholesale',
+    label: 'Locations',
+    href: '/locations',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5" aria-hidden>
-        <path d="M3 8.2 12 4l9 4.2v7.6L12 20l-9-4.2V8.2Z" />
-        <path d="M12 12v8M3 8.2l9 3.8 9-3.8" />
+        <path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11Z" />
+        <circle cx="12" cy="10" r="2.5" />
       </svg>
     ),
   },
