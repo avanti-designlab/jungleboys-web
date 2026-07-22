@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger)
 // hero image as it scrolls. The <h1> text is rendered server-side (this
 // component is SSR'd) so it's fully present for SEO; JS only enhances.
 
-export function AnimatedHeading({ text }: { text: string }) {
+export function AnimatedHeading({ text, className = '' }: { text: string; className?: string }) {
   const ref = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export function AnimatedHeading({ text }: { text: string }) {
   return (
     <h1
       ref={ref}
-      className="font-display mt-4 text-5xl uppercase leading-[0.9] text-[var(--color-foreground)] md:text-7xl"
+      className={`font-display mt-4 text-5xl uppercase leading-[0.9] text-[var(--color-foreground)] md:text-7xl ${className}`}
     >
       {text.split(' ').map((word, i) => (
         <span key={i} data-word className="inline-block overflow-hidden pb-[0.08em] align-bottom">

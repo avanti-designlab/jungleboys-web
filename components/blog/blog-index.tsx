@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger)
 function fmtDate(iso: string) {
   if (!iso) return ''
   const d = new Date(iso)
-  return isNaN(d.getTime()) ? '' : d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+  return isNaN(d.getTime()) ? '' : d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
 }
 
 const ArrowIcon = ({ className = '' }: { className?: string }) => (
@@ -130,65 +130,72 @@ export default function BlogIndex({ posts }: { posts: BlogSummary[] }) {
         </section>
       )}
 
-      {/* ── Filter pills ─────────────────────────────────────────────────── */}
-      {categories.length > 0 && (
-        <div className="mt-12 flex flex-wrap items-center gap-2.5 md:mt-16">
-          {['All', ...categories].map((c) => (
-            <button
-              key={c}
-              onClick={() => setActive(c)}
-              className={`rounded-full border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition-colors duration-200 ${
-                active === c
-                  ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-black'
-                  : 'border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-foreground)] hover:text-[var(--color-foreground)]'
-              }`}
-              style={{ fontFamily: 'var(--font-brand)' }}
+      {/* ── Grid section — black "pill" (forced dark so pills + cards flip) ─ */}
+      <section
+        data-theme="dark"
+        data-nav-theme="dark"
+        className="mt-12 overflow-hidden rounded-[2rem] bg-[#0b0b0d] p-6 text-[var(--color-foreground)] md:mt-16 md:rounded-[2.75rem] md:p-10 lg:p-12"
+      >
+        {/* filter pills */}
+        {categories.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2.5">
+            {['All', ...categories].map((c) => (
+              <button
+                key={c}
+                onClick={() => setActive(c)}
+                className={`rounded-full border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] transition-colors duration-200 ${
+                  active === c
+                    ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-black'
+                    : 'border-[var(--color-border)] text-[var(--color-muted)] hover:border-[var(--color-foreground)] hover:text-[var(--color-foreground)]'
+                }`}
+                style={{ fontFamily: 'var(--font-brand)' }}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* grid */}
+        <div ref={gridRef} className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {visible.map((p, i) => (
+            <Link
+              key={p.slug}
+              data-card
+              href={`/blog/${p.slug}`}
+              className="group relative flex flex-col overflow-hidden rounded-[1.4rem] border border-[var(--color-border)] bg-[var(--color-surface)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[var(--color-accent)]"
             >
-              {c}
-            </button>
+              <div className="relative aspect-[16/10] overflow-hidden bg-black">
+                {p.image ? (
+                  <Image src={p.image} alt={p.imageAlt} fill sizes="(max-width:768px) 100vw, 33vw" className="object-cover transition-transform duration-[700ms] ease-out group-hover:scale-[1.08]" />
+                ) : (
+                  <div className="absolute inset-0" style={{ background: 'radial-gradient(90% 90% at 30% 10%, rgba(254,207,14,0.25), transparent 60%), #121216' }} />
+                )}
+                <span className="font-display absolute right-3 top-1 text-5xl leading-none text-white/20">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+              </div>
+              <div className="flex flex-1 flex-col p-6">
+                <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
+                  {p.category && <span className="text-[var(--color-accent)]">{p.category}</span>}
+                  {p.category && p.date && <span>·</span>}
+                  {p.date && <span>{fmtDate(p.date)}</span>}
+                </div>
+                <h3 className="font-display mt-2 text-2xl uppercase leading-[0.95] text-[var(--color-foreground)]">{p.title}</h3>
+                {p.excerpt && (
+                  <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-body)' }}>
+                    {p.excerpt}
+                  </p>
+                )}
+                <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--color-foreground)]" style={{ fontFamily: 'var(--font-brand)' }}>
+                  Read
+                  <ArrowIcon className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </div>
+            </Link>
           ))}
         </div>
-      )}
-
-      {/* ── Grid ─────────────────────────────────────────────────────────── */}
-      <div ref={gridRef} className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {visible.map((p, i) => (
-          <Link
-            key={p.slug}
-            data-card
-            href={`/blog/${p.slug}`}
-            className="group relative flex flex-col overflow-hidden rounded-[1.4rem] border border-[var(--color-border)] bg-[var(--color-surface)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[var(--color-accent)] hover:shadow-[0_40px_90px_-50px_rgba(0,0,0,0.6)]"
-          >
-            <div className="relative aspect-[16/10] overflow-hidden bg-[var(--color-background)]">
-              {p.image ? (
-                <Image src={p.image} alt={p.imageAlt} fill sizes="(max-width:768px) 100vw, 33vw" className="object-cover transition-transform duration-[700ms] ease-out group-hover:scale-[1.08]" />
-              ) : (
-                <div className="absolute inset-0" style={{ background: 'radial-gradient(90% 90% at 30% 10%, rgba(254,207,14,0.25), transparent 60%), #121216' }} />
-              )}
-              <span className="font-display absolute right-3 top-2 text-5xl leading-none text-white/25 mix-blend-overlay">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-            </div>
-            <div className="flex flex-1 flex-col p-6">
-              <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
-                {p.category && <span className="text-[var(--color-accent)]">{p.category}</span>}
-                {p.category && p.date && <span>·</span>}
-                {p.date && <span>{fmtDate(p.date)}</span>}
-              </div>
-              <h3 className="font-display mt-2 text-2xl uppercase leading-[0.95] text-[var(--color-foreground)]">{p.title}</h3>
-              {p.excerpt && (
-                <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-body)' }}>
-                  {p.excerpt}
-                </p>
-              )}
-              <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--color-foreground)]" style={{ fontFamily: 'var(--font-brand)' }}>
-                Read
-                <ArrowIcon className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-              </span>
-            </div>
-          </Link>
-        ))}
-      </div>
+      </section>
     </>
   )
 }
