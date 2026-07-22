@@ -13,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger)
 // On scroll the frosty live-top cutout rises to overlap the words, the type
 // recedes, then the act fades to black handing off to the grow sequence.
 
-const LINES = ['PREMIUM', 'CANNABIS', 'FLOWER']
+const LINES = ['PREMIUM', 'CANNABIS']
 
 export default function FlowerHero() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -54,7 +54,7 @@ export default function FlowerHero() {
 
         {/* headline — near full-screen stack */}
         <h1 data-fl-words className="relative z-10 select-none text-center">
-          <span className="fl-zoom font-display block uppercase text-white" style={{ fontSize: 'min(26vw, 38vh, 22rem)' }}>
+          <span className="fl-zoom font-display block uppercase text-white" style={{ fontSize: 'min(26vw, 48vh, 24rem)' }}>
             {LINES.map((line, lineIdx) => (
               <span key={line} className="block">
                 {line.split('').map((ch) => (

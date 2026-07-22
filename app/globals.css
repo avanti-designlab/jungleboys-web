@@ -952,8 +952,8 @@ select:focus-visible,
     opacity: 0;
     transform: translate(-50%, 85%);
     animation:
-      fl-plant-rise 1.35s var(--ease-out-cinematic) 0.85s both,
-      fl-drift 7s ease-in-out 2.4s infinite alternate;
+      fl-plant-rise 2.4s var(--ease-out-cinematic) 0.9s both,
+      fl-drift 7s ease-in-out 3.4s infinite alternate;
     animation-play-state: paused, paused;
   }
   html.jb-reveal .fl-plant { animation-play-state: running, running; }
