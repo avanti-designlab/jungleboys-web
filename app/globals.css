@@ -938,6 +938,30 @@ select:focus-visible,
   line-height: 0.78 !important;
 }
 
+/* hero plant — rises from below the fold on load (after the letters land)
+   into the lockup, then floats. Scroll only fades the stage; the rise no
+   longer depends on scrub length/speed. Static overlap for reduced motion. */
+.fl-plant {
+  opacity: 1;
+  transform: translate(-50%, 14%); /* x-centering lives here — the fl-drift
+    bob animates the separate `translate` property, which would clobber a
+    -translate-x-1/2 utility */
+}
+@media (prefers-reduced-motion: no-preference) {
+  .fl-plant {
+    opacity: 0;
+    transform: translate(-50%, 85%);
+    animation:
+      fl-plant-rise 1.35s var(--ease-out-cinematic) 0.85s both,
+      fl-drift 7s ease-in-out 2.4s infinite alternate;
+    animation-play-state: paused, paused;
+  }
+  html.jb-reveal .fl-plant { animation-play-state: running, running; }
+  @keyframes fl-plant-rise {
+    to { opacity: 1; transform: translate(-50%, 14%); }
+  }
+}
+
 /* hero letters sit visible by default; motion only when allowed.
    Entrance = the site banner language: letters drop in with overshoot
    (contact-banner family) inside a zoom-settling block (media-banner family).

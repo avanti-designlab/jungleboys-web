@@ -24,14 +24,14 @@ export default function FlowerHero() {
     const mm = gsap.matchMedia()
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       const words = section.querySelector('[data-fl-words]')
-      const plant = section.querySelector('[data-fl-plant]')
       const stage = section.querySelector('[data-fl-stage]')
+      // plant is NOT scrubbed — it rises on load via .fl-plant CSS; the scroll
+      // only recedes the words and fades the stage out
       const tl = gsap.timeline({
         scrollTrigger: { trigger: section, start: 'top top', end: 'bottom bottom', scrub: 0.6 },
       })
-      tl.fromTo(plant, { yPercent: 72, scale: 0.92 }, { yPercent: 4, scale: 1.08, ease: 'none', duration: 0.62 }, 0)
-        .to(words, { yPercent: -16, opacity: 0.22, scale: 0.96, ease: 'none', duration: 0.62 }, 0)
-        .to(stage, { opacity: 0, ease: 'power1.in', duration: 0.3 }, 0.7)
+      tl.to(words, { yPercent: -16, opacity: 0.22, scale: 0.96, ease: 'none', duration: 0.6 }, 0)
+        .to(stage, { opacity: 0, ease: 'power1.in', duration: 0.4 }, 0.6)
       return () => tl.scrollTrigger?.kill()
     })
     return () => mm.revert()
@@ -77,10 +77,7 @@ export default function FlowerHero() {
           data-fl-plant
           src="/products/flower/plant-cutout.webp"
           alt="Frost-covered Jungle Boys live top"
-          className="absolute bottom-0 left-1/2 z-20 w-[min(135vw,1350px)] max-w-none -translate-x-1/2 drop-shadow-[0_50px_90px_rgba(0,0,0,0.85)]"
-          // vertical is GSAP-owned (yPercent 72 → 4); an inline transform would
-          // double-stack with it, and a translate-y class did exactly that
-          style={{ transform: 'translateY(72%)' }}
+          className="fl-plant absolute bottom-0 left-1/2 z-20 w-[min(135vw,1350px)] max-w-none drop-shadow-[0_50px_90px_rgba(0,0,0,0.85)]"
         />
 
         {/* scroll cue */}
