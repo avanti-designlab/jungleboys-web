@@ -837,13 +837,13 @@ body {
    Sizing lives here (one place) so all pages stay in lockstep. */
 .hero-alive {
   align-self: flex-end;
-  width: 100%;
-  max-width: 420px;
+  width: 84%;
+  max-width: 340px;
   transform: translateY(6%);
   transform-origin: 50% 100%;
 }
 @media (min-width: 768px) {
-  .hero-alive { width: auto; max-width: none; height: 112%; }
+  .hero-alive { width: auto; max-width: none; height: 100%; }
 }
 @media (prefers-reduced-motion: no-preference) {
   @keyframes hero-alive {

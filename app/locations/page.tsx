@@ -45,7 +45,7 @@ export default function LocationsPage() {
       <section data-loc-banner className="px-2 pt-2 md:px-3">
         <div
           data-nav-theme="dark"
-          className="media-hero-in relative flex min-h-[400px] items-center justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 md:h-[520px] md:rounded-[2.5rem]"
+          className="media-hero-in relative flex h-[400px] items-end justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 md:h-[540px] md:rounded-[2.5rem]"
         >
           {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}
           <img
@@ -62,7 +62,7 @@ export default function LocationsPage() {
           {/* giant LOCATIONS wordmark — drops in letter-by-letter, at 65% like the others */}
           <span
             aria-hidden
-            className="font-display pointer-events-none absolute left-1/2 top-[65%] z-0 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap uppercase leading-none text-white/90"
+            className="font-display pointer-events-none absolute left-1/2 top-[86px] z-0 -translate-x-1/2 whitespace-nowrap uppercase leading-none text-white/90 md:top-[104px]"
             style={{ fontSize: 'min(25vw, 620px)' }}
           >
             {'LOCATIONS'.split('').map((ch, i) => (
@@ -75,7 +75,7 @@ export default function LocationsPage() {
           <img
             src="/product-finder/pf-header.svg"
             alt="Jungle Boys Locations"
-            className="contact-alive relative z-10 h-[104%] w-auto max-w-none translate-y-[5%] drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
+            className="hero-alive relative z-10 drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
           />
         </div>
       </section>

@@ -33,7 +33,7 @@ export default function ProductFinderPage() {
       <section data-pf-banner className="px-2 pt-2 md:px-3">
         <div
           data-nav-theme="dark"
-          className="media-hero-in relative flex min-h-[400px] items-center justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 md:h-[520px] md:rounded-[2.5rem]"
+          className="media-hero-in relative flex h-[400px] items-end justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 md:h-[540px] md:rounded-[2.5rem]"
         >
           {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}
           <img
@@ -47,23 +47,28 @@ export default function ProductFinderPage() {
             className="pointer-events-none absolute inset-0"
             style={{ background: 'radial-gradient(ellipse 90% 100% at 50% 60%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.72) 100%)' }}
           />
-          {/* giant wordmark — drops in letter-by-letter, below the header */}
+          {/* giant wordmark — stacked PRODUCT / FINDER, drops in letter-by-letter */}
           <span
             aria-hidden
-            className="font-display pointer-events-none absolute left-1/2 top-[65%] z-0 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap uppercase leading-none text-white/90"
-            style={{ fontSize: 'min(20.5vw, 500px)' }}
+            className="font-display pointer-events-none absolute left-1/2 top-[20px] z-0 flex -translate-x-1/2 flex-col items-center whitespace-nowrap uppercase leading-[0.8] text-white/90 md:top-[36px]"
+            style={{ fontSize: 'min(29vw, 460px)' }}
           >
-            {'PRODUCT FINDER'.split('').map((ch, i) => (
-              <span key={i} className={ch === ' ' ? '' : 'contact-letter'} style={{ animationDelay: `${0.15 + i * 0.05}s` }}>
-                {ch === ' ' ? ' ' : ch}
-              </span>
-            ))}
+            <span className="block">
+              {'PRODUCT'.split('').map((ch, i) => (
+                <span key={i} className="contact-letter" style={{ animationDelay: `${0.15 + i * 0.05}s` }}>{ch}</span>
+              ))}
+            </span>
+            <span className="block">
+              {'FINDER'.split('').map((ch, i) => (
+                <span key={i} className="contact-letter" style={{ animationDelay: `${0.5 + i * 0.05}s` }}>{ch}</span>
+              ))}
+            </span>
           </span>
           {/* eslint-disable-next-line @next/next/no-img-element -- character art */}
           <img
             src="/product-finder/pf-header.svg"
             alt="Find Jungle Boys products"
-            className="contact-alive relative z-10 h-[104%] w-auto max-w-none translate-y-[5%] drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
+            className="hero-alive relative z-10 drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
           />
         </div>
       </section>
