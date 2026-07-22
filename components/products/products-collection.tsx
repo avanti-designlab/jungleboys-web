@@ -78,7 +78,7 @@ export default function ProductsCollection() {
       <section className="px-2 pt-2 md:px-3">
         <div
           data-nav-theme="dark"
-          className="media-hero-in relative flex min-h-[400px] items-center justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 md:h-[520px] md:rounded-[2.5rem]"
+          className="media-hero-in relative flex h-[400px] items-end justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 md:h-[540px] md:rounded-[2.5rem]"
         >
           {/* eslint-disable-next-line @next/next/no-img-element -- graffiti bg */}
           <img
@@ -108,7 +108,7 @@ export default function ProductsCollection() {
           <img
             src="/products/products-header.svg"
             alt="Jungle Boys Products"
-            className="contact-alive relative z-10 h-[108%] w-auto max-w-none translate-y-[4%] drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
+            className="hero-alive relative z-10 drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
           />
         </div>
       </section>
@@ -131,7 +131,7 @@ export default function ProductsCollection() {
           {/* product grid — premium editorial cards: big product shot on a light
               studio stage, name left-aligned, an arrow disc for the shop action.
               Hover: product lifts, gold glow, and (where set) nugs pop out. */}
-          <div className="grid grid-cols-2 gap-4 md:gap-6 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-3">
             {PRODUCT_LINES.map((line) => (
               <Link
                 key={line.slug}
@@ -163,8 +163,8 @@ export default function ProductsCollection() {
                   </span>
                 )}
 
-                {/* big product stage */}
-                <div className="relative flex-1" style={{ minHeight: '19rem' }}>
+                {/* big product stage — fixed square so every card matches */}
+                <div className="relative aspect-square w-full">
                   <div
                     aria-hidden
                     className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
@@ -223,6 +223,7 @@ export default function ProductsCollection() {
                     <video
                       className="prod-hovervid"
                       poster={line.image}
+                      autoPlay
                       muted
                       loop
                       playsInline
