@@ -43,7 +43,7 @@ export const FOOTER_LINKS = [
   { label: 'Terms', href: '/terms' },
   { label: 'Privacy', href: '/privacy' },
   { label: 'FAQ', href: '/faq' },
-  { label: 'Verify Product', href: '/verify' },
+  { label: 'Verify Product', href: '/auth' },
 ] as const
 
 export const SOCIALS = [

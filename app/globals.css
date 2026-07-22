@@ -762,6 +762,21 @@ body {
   padding: 0.2em 0 0.2em 1.1em;
 }
 
+/* ===== Scan / verify — viewfinder sweep line ===== */
+@keyframes scan-line {
+  0% { top: 0; opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.scan-line {
+  animation: scan-line 2.2s ease-in-out infinite;
+  box-shadow: 0 0 14px 1px var(--color-accent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .scan-line { animation: none; top: 50%; }
+}
+
 /* ===== Blog — outlined marquee text ===== */
 .blog-stroke {
   color: transparent;

@@ -9,6 +9,7 @@ import CookieConsent from "@/components/cookie-consent";
 import MobileTabBar from "@/components/mobile-tab-bar";
 import SiteNav from "@/components/site-nav";
 import SiteFooter from "@/components/site-footer";
+import ScanProvider from "@/components/scan/scan-provider";
 import "./globals.css";
 
 // Type roles per the frozen tokens (design-system/MASTER.md):
@@ -68,15 +69,17 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
-        <LoadingScreen />
-        <AgeGate />
-        <RevealGate />
-        <CookieConsent />
-        <SiteNav />
-        <div className="flex-1">{children}</div>
-        <SiteFooter />
-        <MobileTabBar />
-        <NewsletterPopupMount />
+        <ScanProvider>
+          <LoadingScreen />
+          <AgeGate />
+          <RevealGate />
+          <CookieConsent />
+          <SiteNav />
+          <div className="flex-1">{children}</div>
+          <SiteFooter />
+          <MobileTabBar />
+          <NewsletterPopupMount />
+        </ScanProvider>
       </body>
     </html>
   );

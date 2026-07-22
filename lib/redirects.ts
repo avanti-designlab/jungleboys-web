@@ -56,6 +56,9 @@ export const redirects: Redirect[] = [
   { source: '/app', destination: '/rewards', permanent: true },
   { source: '/pwf-reward', destination: '/rewards', permanent: true },
 
+  // Product authentication moved to /auth (BatchSys verify + scan flow)
+  { source: '/verify', destination: '/auth', permanent: true },
+
   // Product-line landings nest under /products (Avanti decision)
   { source: '/hash-hole', destination: '/products/hash-hole', permanent: true },
   { source: '/pre-rolls', destination: '/products/pre-rolls', permanent: true },

@@ -2,10 +2,12 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useScanner } from '@/components/scan/scan-provider'
 
-// Mobile-only sticky bottom pill: Shop / Locations / Wholesale / Contact.
+// Mobile-only sticky bottom pill: Shop / Locations · [VERIFY scan] · Wholesale / Contact.
+// The raised center button opens the QR scanner (→ /auth).
 
-const ITEMS = [
+const LEFT = [
   {
     label: 'Shop',
     href: '/products',
@@ -26,6 +28,9 @@ const ITEMS = [
       </svg>
     ),
   },
+]
+
+const RIGHT = [
   {
     label: 'Wholesale',
     href: '/wholesale',
@@ -48,34 +53,52 @@ const ITEMS = [
   },
 ]
 
+function TabLink({ item, active }: { item: (typeof LEFT)[number]; active: boolean }) {
+  return (
+    <Link
+      href={item.href}
+      className={`flex flex-col items-center gap-1 transition-colors duration-200 ${
+        active ? 'text-[var(--color-accent)]' : 'hover:text-[var(--color-accent)]'
+      }`}
+    >
+      {item.icon}
+      <span className="text-[9px] font-bold uppercase tracking-wider" style={{ fontFamily: 'var(--font-brand)' }}>
+        {item.label}
+      </span>
+    </Link>
+  )
+}
+
 export default function MobileTabBar() {
   const pathname = usePathname()
+  const { open } = useScanner()
   return (
-    <nav
-      aria-label="Quick navigation"
-      className="fixed inset-x-0 bottom-3 z-30 flex justify-center lg:hidden"
-    >
-      <div className="flex items-center gap-7 rounded-full border border-white/10 bg-[#0b0b0b]/95 px-7 py-3 text-white shadow-2xl backdrop-blur-md">
-        {ITEMS.map((item) => {
-          const active = pathname === item.href
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex flex-col items-center gap-1 transition-colors duration-200 ${
-                active ? 'text-[var(--color-accent)]' : 'hover:text-[var(--color-accent)]'
-              }`}
-            >
-              {item.icon}
-              <span
-                className="text-[9px] font-bold uppercase tracking-wider"
-                style={{ fontFamily: 'var(--font-brand)' }}
-              >
-                {item.label}
-              </span>
-            </Link>
-          )
-        })}
+    <nav aria-label="Quick navigation" className="fixed inset-x-0 bottom-3 z-30 flex justify-center lg:hidden">
+      <div className="flex items-center gap-6 rounded-full border border-white/10 bg-[#0b0b0b]/95 px-6 py-3 text-white shadow-2xl backdrop-blur-md">
+        {LEFT.map((item) => (
+          <TabLink key={item.href} item={item} active={pathname === item.href} />
+        ))}
+
+        {/* raised center VERIFY — opens the QR scanner */}
+        <button
+          onClick={open}
+          aria-label="Verify a product — open scanner"
+          className="group -mt-8 flex flex-col items-center"
+        >
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-accent)] text-black shadow-lg ring-4 ring-[#0b0b0b] transition-transform duration-200 group-hover:scale-105 group-active:scale-95">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-6 w-6" aria-hidden>
+              <path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16" strokeLinecap="round" />
+              <rect x="8.5" y="8.5" width="7" height="7" rx="1.2" />
+            </svg>
+          </span>
+          <span className="mt-1 text-[9px] font-bold uppercase tracking-wider text-[var(--color-accent)]" style={{ fontFamily: 'var(--font-brand)' }}>
+            Verify
+          </span>
+        </button>
+
+        {RIGHT.map((item) => (
+          <TabLink key={item.href} item={item} active={pathname === item.href} />
+        ))}
       </div>
     </nav>
   )
