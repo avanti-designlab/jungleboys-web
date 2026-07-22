@@ -225,6 +225,7 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
                           autoFocus
                           type="tel"
                           inputMode="numeric"
+                          aria-label={q.label}
                           value={value}
                           onChange={(e) => setValue(e.target.value)}
                           onKeyDown={(e) => e.key === 'Enter' && next()}
@@ -236,6 +237,7 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
                       <input
                         autoFocus
                         type={q.type}
+                        aria-label={q.label}
                         value={value}
                         onChange={(e) => setValue(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && next()}

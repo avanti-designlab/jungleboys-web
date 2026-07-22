@@ -87,20 +87,16 @@ export default function ProductsCollection() {
           const v = card.querySelector('video')
           if (e.isIntersecting) {
             card.classList.add('fx-active')
-            if (v) v.play().catch(() => {})
+            if (v) v.play().catch(() => {}) // buffers just-in-time as the card nears view
           } else {
             card.classList.remove('fx-active')
             if (v) v.pause()
           }
         })
       },
-      { threshold: 0.55 }
+      { threshold: 0.2, rootMargin: '200px 0px' }
     )
-    cards.forEach((c) => {
-      const v = c.querySelector('video')
-      if (v) v.load() // buffer ahead so there's no delay when it plays
-      io.observe(c)
-    })
+    cards.forEach((c) => io.observe(c))
     return () => io.disconnect()
   }, [])
 
@@ -261,7 +257,7 @@ export default function ProductsCollection() {
                       muted
                       loop
                       playsInline
-                      preload="auto"
+                      preload="metadata"
                       aria-label={`Jungle Boys ${line.name}`}
                     >
                       <source src={line.hoverVideo} type="video/mp4" />

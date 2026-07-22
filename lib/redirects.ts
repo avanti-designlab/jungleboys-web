@@ -46,11 +46,13 @@ export const redirects: Redirect[] = [
   { source: '/menu/tlc-collective', destination: '/locations', permanent: true },
   { source: '/menu/tlc-collective/:path*', destination: '/locations', permanent: true },
 
-  // Deal-page rotations — flattened, single hop
-  { source: '/420-deals', destination: '/710-deals', permanent: true },
-  { source: '/april-deals', destination: '/710-deals', permanent: true },
-  { source: '/may-deals', destination: '/710-deals', permanent: true },
-  { source: '/june-deals', destination: '/710-deals', permanent: true },
+  // Deal-page rotations — flattened, single hop. INTERIM: /710-deals is a Phase-2
+  // (Dutchie) page that doesn't exist yet, so these point at /rewards (live) to
+  // avoid a soft-404. RESTORE destination to '/710-deals' once that page ships.
+  { source: '/420-deals', destination: '/rewards', permanent: false },
+  { source: '/april-deals', destination: '/rewards', permanent: false },
+  { source: '/may-deals', destination: '/rewards', permanent: false },
+  { source: '/june-deals', destination: '/rewards', permanent: false },
 
   // Rewards consolidation — /rewards is the loyalty landing (supersedes /loyalty)
   { source: '/app', destination: '/rewards', permanent: true },

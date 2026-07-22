@@ -184,9 +184,30 @@ body {
 /* accent-colored TEXT that passes AA in both themes (yellow-on-white forbidden) */
 :root {
   --color-accent-ink: #8a6a00;
+  /* semantic status colors — darkened for AA on the light bg, vivid in dark */
+  --color-success: #0c6e2f;
+  --color-danger: #c21f1f;
+  --color-warning: #8a5300;
 }
 [data-theme='dark'] {
   --color-accent-ink: #fecf0e;
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+}
+
+/* keyboard focus — visible ring on all interactive elements (unlayered, so it
+   wins over Tailwind's outline-none on the form inputs). Pointer clicks are
+   unaffected (:focus-visible only). */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 3px;
 }
 
 /* show/hide by theme (e.g. watermark logo variants) */

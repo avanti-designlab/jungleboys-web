@@ -116,7 +116,7 @@ export default function AgeGate() {
               <img src={MASCOT_YES} alt="" style={{ animationDelay: '0.35s' }} className="h-full w-full object-contain object-bottom" />
             </span>
             <span className="font-display block pl-16 text-5xl uppercase text-white transition-colors duration-200 group-hover:text-black md:pl-20 md:text-6xl">
-              Yes, im 21+
+              Yes, I&apos;m 21+
             </span>
           </button>
 

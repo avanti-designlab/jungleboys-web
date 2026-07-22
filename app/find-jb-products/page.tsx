@@ -50,8 +50,8 @@ export default function ProductFinderPage() {
           {/* giant wordmark — stacked PRODUCT / FINDER, drops in letter-by-letter */}
           <span
             aria-hidden
-            className="font-display pointer-events-none absolute left-1/2 top-[20px] z-0 flex -translate-x-1/2 flex-col items-center whitespace-nowrap uppercase leading-[0.8] text-white/90 md:top-[36px]"
-            style={{ fontSize: 'min(29vw, 460px)' }}
+            className="font-display pointer-events-none absolute left-1/2 top-[40px] z-0 flex -translate-x-1/2 flex-col items-center whitespace-nowrap uppercase leading-[0.82] text-white/90 md:top-[64px]"
+            style={{ fontSize: 'min(16.5vw, 290px)' }}
           >
             <span className="block">
               {'PRODUCT'.split('').map((ch, i) => (

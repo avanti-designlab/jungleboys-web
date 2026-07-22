@@ -260,6 +260,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
                         ))}
                       </div>
                       <textarea
+                        aria-label={`${q.label} — additional comment (optional)`}
                         value={answers[`${q.key}Note`] ?? ''}
                         onChange={(e) => setAnswers((a) => ({ ...a, [`${q.key}Note`]: e.target.value }))}
                         placeholder="Add a comment (optional)"
@@ -272,6 +273,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
                   {q.type === 'textarea' && (
                     <textarea
                       autoFocus
+                      aria-label={q.label}
                       value={value}
                       onChange={(e) => setValue(e.target.value)}
                       placeholder={q.placeholder}
@@ -284,6 +286,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
                     <input
                       autoFocus
                       type={q.type}
+                      aria-label={q.label}
                       value={value}
                       onChange={(e) => setValue(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && next()}

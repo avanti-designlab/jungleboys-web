@@ -12,9 +12,9 @@ const FLAME_PATH =
 function FlameBadge() {
   return (
     <div className="relative mx-auto h-28 w-28">
-      <span className="ring-pulse absolute inset-0 rounded-full border-4 border-[#22c55e]" />
-      <span className="ring-pulse absolute inset-0 rounded-full border-4 border-[#22c55e]" style={{ animationDelay: '0.7s' }} />
-      <div className="badge-in relative flex h-28 w-28 items-center justify-center rounded-full bg-[#15a34a] text-white shadow-[0_0_45px_rgba(34,197,94,0.55)]">
+      <span className="ring-pulse absolute inset-0 rounded-full border-4 border-[var(--color-success)]" />
+      <span className="ring-pulse absolute inset-0 rounded-full border-4 border-[var(--color-success)]" style={{ animationDelay: '0.7s' }} />
+      <div className="badge-in relative flex h-28 w-28 items-center justify-center rounded-full bg-[var(--color-success)] text-white shadow-[0_0_45px_rgba(34,197,94,0.55)]">
         <svg viewBox="0 0 24 24" fill="currentColor" className="flame-flicker h-14 w-14" aria-hidden>
           <path d={FLAME_PATH} />
         </svg>
@@ -49,7 +49,7 @@ export default function AuthResult({ result }: { result: VerifyResult }) {
         <>
           <FlameBurst />
           <FlameBadge />
-          <p className="mt-6 text-xs font-bold uppercase tracking-[0.3em] text-[#15a34a]" style={{ fontFamily: 'var(--font-brand)' }}>
+          <p className="mt-6 text-xs font-bold uppercase tracking-[0.3em] text-[var(--color-success)]" style={{ fontFamily: 'var(--font-brand)' }}>
             Verified Genuine
           </p>
           <h1 className="font-display mt-2 text-5xl uppercase leading-[0.92] text-[var(--color-foreground)] md:text-6xl">
@@ -78,8 +78,8 @@ export default function AuthResult({ result }: { result: VerifyResult }) {
         </>
       ) : (
         <>
-          <AlertBadge color={status === 'claimed' ? '#f59e0b' : '#ef4444'} />
-          <p className="mt-6 text-xs font-bold uppercase tracking-[0.3em]" style={{ fontFamily: 'var(--font-brand)', color: status === 'claimed' ? '#f59e0b' : '#ef4444' }}>
+          <AlertBadge color={status === 'claimed' ? 'var(--color-warning)' : 'var(--color-danger)'} />
+          <p className="mt-6 text-xs font-bold uppercase tracking-[0.3em]" style={{ fontFamily: 'var(--font-brand)', color: status === 'claimed' ? 'var(--color-warning)' : 'var(--color-danger)' }}>
             {status === 'claimed' ? 'Heads Up' : 'Not Authentic'}
           </p>
           <h1 className="font-display mt-2 text-5xl uppercase leading-[0.92] text-[var(--color-foreground)] md:text-6xl">

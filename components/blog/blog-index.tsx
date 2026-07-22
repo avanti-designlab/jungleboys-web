@@ -107,7 +107,7 @@ export default function BlogIndex({ posts }: { posts: BlogSummary[] }) {
             </div>
             <div className="flex flex-col justify-center gap-4 p-7 md:p-11">
               <div className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
-                {featured.category && <span className="text-[var(--color-accent)]">{featured.category}</span>}
+                {featured.category && <span className="text-[var(--color-accent-ink)]">{featured.category}</span>}
                 {featured.category && featured.date && <span>·</span>}
                 {featured.date && <span>{fmtDate(featured.date)}</span>}
               </div>
