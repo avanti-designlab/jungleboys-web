@@ -1009,25 +1009,29 @@ select:focus-visible,
   .fl-bag { opacity: 1; transform: rotate(var(--fl-rot, 0deg)); transition: none; }
 }
 
-/* 20th seal — circular-wipe logo reveal with overshoot, then a slow float */
-.fl-badge {
-  opacity: 0;
-  clip-path: circle(0% at 50% 50%);
-  transform: rotate(-45deg) scale(0.5);
+/* 20th seal support — rotating gold rays behind the slam (GSAP drives the
+   badge itself) and the fountain nugs shot from the bottom corners */
+.fl-rays {
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(233, 193, 90, 0.28) 0deg 7deg,
+    transparent 7deg 22deg
+  );
+  -webkit-mask-image: radial-gradient(circle, black 18%, transparent 68%);
+  mask-image: radial-gradient(circle, black 18%, transparent 68%);
 }
 @media (prefers-reduced-motion: no-preference) {
-  .media-reveal.is-in .fl-badge {
-    animation: fl-badge-reveal 1.4s var(--ease-out-cinematic) both, fl-drift 6s ease-in-out 1.5s infinite alternate;
-  }
-  @keyframes fl-badge-reveal {
-    0% { opacity: 0; clip-path: circle(0% at 50% 50%); transform: rotate(-45deg) scale(0.5); }
-    55% { opacity: 1; clip-path: circle(75% at 50% 50%); }
-    75% { transform: rotate(4deg) scale(1.12); }
-    100% { opacity: 1; clip-path: circle(75% at 50% 50%); transform: rotate(0deg) scale(1); }
+  .fl-rays { animation: fl-spin 26s linear infinite; }
+  @keyframes fl-spin {
+    to { rotate: 360deg; }
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .fl-badge { opacity: 1; clip-path: none; transform: none; }
+.fl-fnug {
+  position: absolute;
+  bottom: -90px;
+  pointer-events: none;
+  will-change: transform, opacity;
 }
 
 /* staggered child rise on reveal (headline lines, story paragraphs) */

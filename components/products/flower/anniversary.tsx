@@ -1,16 +1,36 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-// 20th Anniversary — all gold, all moving. The seal does a circular-wipe logo
-// reveal with overshoot then floats; gold gradient type carries a moving shine;
-// headline/copy stagger up line by line; the two mylar pouches fan out from
-// center, oversized, over a breathing gold glow. Copy condensed from the Figma
-// frame, brand voice kept.
+gsap.registerPlugin(ScrollTrigger)
+
+// 20th Anniversary — the exclusive beat of the page. The seal SLAMS in from
+// above (blur → impact squash → elastic settle) over rotating gold rays with
+// expanding shockwave rings, then floats. Nug cutouts fountain up from the
+// bottom corners, hang, and fade (rewards-coin-burst technique). Gold type
+// carries a moving shine; copy staggers; pouches fan out over a breathing
+// glow. Reduced motion = static composition, no bursts.
+
+const FOUNTAIN_NUGS = [
+  '/products/flower/nug-a.webp',
+  '/products/flower/nug-b.webp',
+  '/products/flower/nug-c.webp',
+  '/products/flower/nug-d.webp',
+  '/products/flower/anug-1.webp',
+  '/products/flower/anug-2.webp',
+  '/products/flower/anug-5.webp',
+]
 
 export default function Anniversary() {
   const rootRef = useRef<HTMLElement>(null)
+  const badgeRef = useRef<HTMLImageElement>(null)
+  const raysRef = useRef<HTMLDivElement>(null)
+  const ringsRef = useRef<HTMLDivElement>(null)
+  const fountainRef = useRef<HTMLDivElement>(null)
 
+  // shared .media-reveal handler (headline/copy/bags — CSS-driven)
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
@@ -34,16 +54,105 @@ export default function Anniversary() {
     }
   }, [])
 
+  // badge slam + shockwaves + nug fountain (GSAP, motion-gated)
+  useEffect(() => {
+    const root = rootRef.current
+    const badge = badgeRef.current
+    const rays = raysRef.current
+    const rings = ringsRef.current
+    const fountain = fountainRef.current
+    if (!root || !badge || !rays || !rings || !fountain) return
+
+    const mm = gsap.matchMedia()
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      // — the seal slams in
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: badge, start: 'top 82%', once: true },
+      })
+      tl.fromTo(
+        badge,
+        { y: '-46vh', scale: 2.3, rotation: -28, opacity: 0, filter: 'blur(10px)' },
+        { y: 0, scale: 1, rotation: 0, opacity: 1, filter: 'blur(0px)', duration: 0.85, ease: 'power4.in' }
+      )
+        .to(badge, { scale: 1.18, duration: 0.12, ease: 'power2.out' })
+        .to(badge, { scale: 1, duration: 0.7, ease: 'elastic.out(1, 0.4)' })
+        .fromTo(
+          rings.children,
+          { scale: 0.35, opacity: 0.95 },
+          { scale: 2.6, opacity: 0, duration: 1, stagger: 0.16, ease: 'power2.out' },
+          '-=0.85'
+        )
+        .fromTo(rays, { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.9, ease: 'power2.out' }, '-=0.7')
+        .to(badge, { y: -12, duration: 3, yoyo: true, repeat: -1, ease: 'sine.inOut' })
+
+      // — nug fountain from the bottom corners while the section is on screen
+      let interval = 0
+      let side = 0
+      const spawn = () => {
+        if (document.visibilityState !== 'visible' || fountain.childElementCount > 9) return
+        side ^= 1
+        const img = document.createElement('img')
+        img.src = FOUNTAIN_NUGS[Math.floor(Math.random() * FOUNTAIN_NUGS.length)]
+        img.alt = ''
+        img.className = 'fl-fnug'
+        img.style[side ? 'left' : 'right'] = `${-20 - Math.random() * 50}px`
+        img.style.width = `${72 + Math.random() * 84}px`
+        fountain.appendChild(img)
+        const dir = side ? 1 : -1
+        gsap
+          .timeline({ onComplete: () => img.remove() })
+          .to(img, {
+            x: dir * (70 + Math.random() * 280),
+            y: -window.innerHeight * (0.32 + Math.random() * 0.42),
+            rotation: Math.random() * 340 - 170,
+            duration: 1.8 + Math.random() * 0.5,
+            ease: 'power3.out', // shot out fast, hangs at the top
+          })
+          .to(img, { opacity: 0, duration: 0.55, ease: 'power1.in' }, '-=0.55')
+      }
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting) {
+            if (!interval) {
+              spawn()
+              interval = window.setInterval(spawn, 800)
+            }
+          } else if (interval) {
+            window.clearInterval(interval)
+            interval = 0
+          }
+        },
+        { threshold: 0.2 }
+      )
+      io.observe(root)
+      return () => {
+        io.disconnect()
+        if (interval) window.clearInterval(interval)
+        tl.scrollTrigger?.kill()
+        tl.kill()
+      }
+    })
+    return () => mm.revert()
+  }, [])
+
   return (
     <section ref={rootRef} className="relative overflow-hidden bg-[#070604] py-24 md:py-36">
       {/* gold ambience */}
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 30%, rgba(233,193,90,0.14), transparent 65%)' }} />
 
+      {/* nug fountain layer — rides above the content, never blocks it */}
+      <div ref={fountainRef} aria-hidden className="pointer-events-none absolute inset-0 z-20" />
+
       <div className="relative z-10 mx-auto max-w-[1100px] px-6 text-center">
-        {/* seal — circular-wipe logo reveal, then floats */}
-        <div className="media-reveal">
+        {/* seal — slam entrance over rotating rays + shockwaves */}
+        <div className="relative mx-auto flex h-64 w-64 items-center justify-center md:h-80 md:w-80">
+          <div ref={raysRef} aria-hidden className="fl-rays absolute inset-[-40%] opacity-0" />
+          <div ref={ringsRef} aria-hidden className="pointer-events-none absolute inset-0">
+            <div className="absolute inset-[12%] rounded-full border-2 border-[var(--fl-gold,#e9c15a)]" />
+            <div className="absolute inset-[12%] rounded-full border border-[var(--fl-gold,#e9c15a)]/60" />
+          </div>
           {/* eslint-disable-next-line @next/next/no-img-element -- gold seal */}
-          <img src="/products/flower/badge-20th.webp" alt="Jungle Boys 20th anniversary seal" className="fl-badge mx-auto w-40 md:w-56" />
+          <img ref={badgeRef} src="/products/flower/badge-20th.webp" alt="Jungle Boys 20th anniversary seal" className="relative z-10 w-56 will-change-transform md:w-72" />
         </div>
 
         <h2 className="media-reveal fl-stag mt-8 font-display uppercase leading-[0.86]" style={{ fontSize: 'min(13vw, 9rem)' }}>

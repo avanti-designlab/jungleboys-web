@@ -89,18 +89,20 @@ export default async function FlowerShop() {
                       </div>
                       <h3 className="font-display text-[2.5rem] uppercase leading-[0.9]">{p.name}</h3>
                       <div className="mt-auto flex items-end justify-between gap-3 pt-1">
+                        {/* struck price sits on its own line so deal cards keep
+                            the same row shape as the rest */}
                         <p className="leading-none">
-                          {deal ? (
-                            <>
-                              <span className="text-sm font-bold text-[#0b0b0d]/40 line-through" style={{ fontFamily: 'var(--font-brand)' }}>{dollars(v.price)}</span>{' '}
-                              <span className="font-display text-[2.1rem] leading-none text-[#c21f1f]">{dollars(deal)}</span>
-                            </>
-                          ) : (
-                            <span className="font-display text-[2.1rem] leading-none">{dollars(v.price)}</span>
+                          {deal && (
+                            <span className="mb-1 block text-xs font-bold text-[#0b0b0d]/40 line-through" style={{ fontFamily: 'var(--font-brand)' }}>
+                              {dollars(v.price)}
+                            </span>
                           )}
-                          <span className="ml-1 text-xs font-bold uppercase text-[#0b0b0d]/45" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
+                          <span className="whitespace-nowrap">
+                            <span className={`font-display text-[2.1rem] leading-none ${deal ? 'text-[#c21f1f]' : ''}`}>{dollars(deal ?? v.price)}</span>
+                            <span className="ml-1 text-xs font-bold uppercase text-[#0b0b0d]/45" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
+                          </span>
                         </p>
-                        <PillCta label="Add to Cart" size="sm" icon="cart" href="/locations" />
+                        <PillCta label="Add to Cart" size="sm" icon="cart" href="/locations" className="shrink-0 whitespace-nowrap" />
                       </div>
                     </div>
                   </article>
