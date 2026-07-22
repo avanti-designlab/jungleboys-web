@@ -28,10 +28,11 @@ export default function FlowerJourney() {
       nugRef.current.style.opacity = String(op)
       nugRef.current.style.transform = `translate(-50%, -50%) scale(${scale}) rotate(${t * 12}deg)`
     }
-    // partial dim at the very end — the macro stays visible while the next
-    // section slides over it (no dead black-only beat)
+    // full fade to black, compressed into the last beats — reaches 1 exactly
+    // when the stage un-pins, so the handoff into the next section is a
+    // seamless black-to-black cut (no visible seam, no long dead stretch)
     if (fadeRef.current) {
-      const f = Math.min(1, Math.max(0, (p - 0.93) / 0.07)) * 0.55
+      const f = Math.min(1, Math.max(0, (p - 0.9) / 0.1))
       fadeRef.current.style.opacity = String(f)
     }
   }

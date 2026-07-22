@@ -7,6 +7,7 @@ import WhyPacks from '@/components/products/flower/why-packs'
 import StrainMarquee from '@/components/products/flower/strain-marquee'
 import Anniversary from '@/components/products/flower/anniversary'
 import FlowerShop from '@/components/products/flower/flower-shop'
+import GrowMarquee from '@/components/products/flower/grow-marquee'
 
 // Premium Flower / 3.5G Gold Mylars — first Phase 2 flagship line page.
 // A scroll journey: letter-reveal intro → plant overlap → canvas grow sequence
@@ -45,6 +46,7 @@ export default function PremiumFlowerPage() {
       <StrainMarquee />
       <Anniversary />
       <FlowerShop />
+      <GrowMarquee />
     </main>
   )
 }
