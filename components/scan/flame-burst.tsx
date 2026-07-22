@@ -8,7 +8,12 @@ import { useEffect, useMemo, useState } from 'react'
 
 export default function FlameBurst({ count = 30 }: { count?: number }) {
   const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  useEffect(() => {
+    setMounted(true)
+    // play once, then remove the layer entirely (longest flame ≈ 5.2s + 3s delay)
+    const t = setTimeout(() => setMounted(false), 8600)
+    return () => clearTimeout(t)
+  }, [])
 
   const pieces = useMemo(
     () =>

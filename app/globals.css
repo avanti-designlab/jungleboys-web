@@ -811,7 +811,7 @@ body {
   75% { opacity: 0.9; }
   100% { transform: translate(var(--dx), var(--dy)) scale(var(--s1)) rotate(var(--rot)); opacity: 0; }
 }
-.flame-rise { animation: flame-rise var(--cd) cubic-bezier(0.36, 0.06, 0.42, 1) var(--cdelay) infinite; }
+.flame-rise { animation: flame-rise var(--cd) cubic-bezier(0.36, 0.06, 0.42, 1) var(--cdelay) forwards; }
 
 /* flame-shaped aura that pulses out from behind the authentic badge */
 @keyframes flame-pulse {
