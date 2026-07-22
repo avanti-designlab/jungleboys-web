@@ -771,11 +771,11 @@ body {
 /* blog character — bottom-anchored + a slight clockwise tilt so the thumbs-up
    hand shows. Rotate-only sway (no downward translate, unlike contact-alive,
    which would push the thumb below the banner edge). */
-.blog-alive { transform: translateY(-3%) rotate(4deg); transform-origin: 50% 92%; }
+.blog-alive { transform: translateY(10%) rotate(4deg); transform-origin: 50% 100%; }
 @media (prefers-reduced-motion: no-preference) {
   @keyframes blog-alive {
-    0%, 100% { transform: translateY(-3%) rotate(3.4deg) scale(1); }
-    50%      { transform: translateY(-3.6%) rotate(5deg) scale(1.012); }
+    0%, 100% { transform: translateY(10%) rotate(3.4deg) scale(1); }
+    50%      { transform: translateY(9.4%) rotate(5deg) scale(1.012); }
   }
   .blog-alive { animation: blog-alive 6s ease-in-out infinite; }
 }
