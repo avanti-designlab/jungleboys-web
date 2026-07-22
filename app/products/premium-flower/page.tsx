@@ -28,6 +28,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function PremiumFlowerPage() {
   return (
     <main data-nav-theme="dark" className="fl-page bg-black">
+      {/* brand surface: dark body + full-bleed footer, no light gutter seam
+          (same treatment as /rewards) */}
+      <style>{`
+        body { background: #000; }
+        footer { padding: 0; }
+        footer > div { border-radius: 0; background: #000; }
+      `}</style>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

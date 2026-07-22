@@ -24,7 +24,7 @@ function Row() {
 
 export default function GrowMarquee() {
   return (
-    <section aria-label="Inside the Jungle Boys grow" className="overflow-hidden bg-black pb-6 pt-2 md:pb-10">
+    <section aria-label="Inside the Jungle Boys grow" className="overflow-hidden bg-black pb-20 pt-2 md:pb-28">
       <p className="pb-6 text-center text-xs font-bold uppercase tracking-[0.4em] text-white/60 md:pb-8" style={{ fontFamily: 'var(--font-brand)' }}>
         Inside the grow
       </p>
