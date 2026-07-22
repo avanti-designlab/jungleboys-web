@@ -29,6 +29,24 @@ export async function getStory(slug: string, version: StoryVersion = 'draft') {
   }
 }
 
+// Fetch a LIST of stories (e.g. all blog posts). Same fallback-safe contract:
+// returns [] with no token or on error. `query` is a raw querystring, e.g.
+// "content_type=blog_post&sort_by=content.published_date:desc".
+export async function getStories(query: string, version: StoryVersion = 'published') {
+  const token = process.env.STORYBLOK_TOKEN
+  if (!token) return []
+  try {
+    const res = await fetch(`${CDN_API}/stories?${query}&version=${version}&token=${token}`, {
+      next: { revalidate: 60, tags: ['stories'] },
+    })
+    if (!res.ok) return []
+    const json = await res.json()
+    return Array.isArray(json.stories) ? json.stories : []
+  } catch {
+    return []
+  }
+}
+
 // Storyblok asset field → URL string (falls back to a code default).
 export function assetUrl(asset: unknown, fallback = ''): string {
   if (asset && typeof asset === 'object' && 'filename' in asset) {
