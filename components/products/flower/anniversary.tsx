@@ -2,9 +2,11 @@
 
 import { useEffect, useRef } from 'react'
 
-// 20th Anniversary — all gold. The two gold mylar pouches reveal with the
-// condensed anniversary story, the 20-year seal, and a THANK YOU send-off.
-// Copy condensed from the Figma frame, brand voice kept.
+// 20th Anniversary — all gold, all moving. The seal does a circular-wipe logo
+// reveal with overshoot then floats; gold gradient type carries a moving shine;
+// headline/copy stagger up line by line; the two mylar pouches fan out from
+// center, oversized, over a breathing gold glow. Copy condensed from the Figma
+// frame, brand voice kept.
 
 export default function Anniversary() {
   const rootRef = useRef<HTMLElement>(null)
@@ -38,35 +40,49 @@ export default function Anniversary() {
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 30%, rgba(233,193,90,0.14), transparent 65%)' }} />
 
       <div className="relative z-10 mx-auto max-w-[1100px] px-6 text-center">
-        {/* seal */}
-        {/* eslint-disable-next-line @next/next/no-img-element -- gold seal */}
-        <img src="/products/flower/badge-20th.webp" alt="Jungle Boys 20th anniversary seal" className="media-reveal fl-float mx-auto w-28 md:w-36" />
+        {/* seal — circular-wipe logo reveal, then floats */}
+        <div className="media-reveal">
+          {/* eslint-disable-next-line @next/next/no-img-element -- gold seal */}
+          <img src="/products/flower/badge-20th.webp" alt="Jungle Boys 20th anniversary seal" className="fl-badge mx-auto w-40 md:w-56" />
+        </div>
 
-        <h2 className="media-reveal font-display mt-6 uppercase leading-[0.86]" style={{ fontSize: 'min(13vw, 9rem)' }}>
-          <span className="fl-gold-text">20th Anniversary</span>
+        <h2 className="media-reveal fl-stag mt-8 font-display uppercase leading-[0.86]" style={{ fontSize: 'min(13vw, 9rem)' }}>
+          <span className="fl-gold-text block">20th Anniversary</span>
           <span className="mt-1 block text-white" style={{ fontSize: '0.42em', letterSpacing: '0.14em' }}>Gold Mylar</span>
         </h2>
 
-        {/* the pouches */}
-        <div className="media-reveal relative mx-auto mt-12 flex h-[300px] max-w-[640px] items-center justify-center md:h-[380px]">
+        {/* the pouches — fan out from center over a breathing glow */}
+        <div className="media-reveal relative mx-auto mt-12 flex h-[380px] max-w-[760px] items-center justify-center md:h-[500px]">
+          <div aria-hidden className="fl-glow pointer-events-none absolute inset-[-10%]" style={{ background: 'radial-gradient(ellipse 60% 55% at 50% 60%, rgba(233,193,90,0.3), transparent 68%)' }} />
           {/* eslint-disable-next-line @next/next/no-img-element -- pack art */}
-          <img src="/products/flower/anniv-bag-1.webp" alt="" aria-hidden className="fl-bag absolute w-[52%] -rotate-[10deg] drop-shadow-[0_40px_60px_rgba(0,0,0,0.6)]" style={{ left: '8%' }} />
+          <img
+            src="/products/flower/anniv-bag-1.webp"
+            alt=""
+            aria-hidden
+            className="fl-bag absolute w-[64%] drop-shadow-[0_40px_60px_rgba(0,0,0,0.6)]"
+            style={{ left: '4%', ['--fl-cx' as string]: '42%', ['--fl-rot' as string]: '-10deg' }}
+          />
           {/* eslint-disable-next-line @next/next/no-img-element -- pack art */}
-          <img src="/products/flower/anniv-bag-2.webp" alt="Jungle Boys 20th anniversary gold mylar bags" className="fl-bag absolute w-[56%] rotate-[7deg] drop-shadow-[0_40px_60px_rgba(0,0,0,0.65)]" style={{ right: '6%', animationDelay: '0.7s' }} />
+          <img
+            src="/products/flower/anniv-bag-2.webp"
+            alt="Jungle Boys 20th anniversary gold mylar bags"
+            className="fl-bag absolute w-[66%] drop-shadow-[0_40px_60px_rgba(0,0,0,0.65)]"
+            style={{ right: '2%', ['--fl-cx' as string]: '-42%', ['--fl-rot' as string]: '7deg', transitionDelay: '0.18s', animationDelay: '0.9s' }}
+          />
         </div>
 
-        {/* condensed story — brand voice */}
-        <div className="mx-auto mt-12 max-w-2xl space-y-5 text-[15px] leading-relaxed text-white/75 md:text-base" style={{ fontFamily: 'var(--font-brand)' }}>
-          <p className="media-reveal uppercase tracking-wide">
+        {/* condensed story — brand voice, staggered rise */}
+        <div className="media-reveal fl-stag mx-auto mt-12 max-w-2xl space-y-5 text-[15px] leading-relaxed text-white/75 md:text-base" style={{ fontFamily: 'var(--font-brand)' }}>
+          <p className="uppercase tracking-wide">
             Twenty years in, the foundation hasn&apos;t moved — same small, dedicated team, still led by the hunt.
           </p>
-          <p className="media-reveal uppercase tracking-wide">
+          <p className="uppercase tracking-wide">
             From the iconic gold vials of our early days to today&apos;s 3.5g gold mylars: hand-trimmed, full, frosty
             top nugs only. <span className="text-[var(--fl-gold,#e9c15a)]">Gold is the standard</span> — what&apos;s inside earns the bag.
           </p>
         </div>
 
-        <p className="media-reveal font-display mt-14 uppercase leading-[0.9]" style={{ fontSize: 'min(9vw, 5rem)' }}>
+        <p className="media-reveal fl-claim-r font-display mt-14 uppercase leading-[0.9]" style={{ fontSize: 'min(9vw, 5rem)' }}>
           <span className="text-white">Thank you for</span>{' '}
           <span className="fl-gold-text">growing with us</span>
         </p>

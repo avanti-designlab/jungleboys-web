@@ -6,17 +6,14 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// Act 1 — pinned intro. The PREMIUM / CANNABIS FLOWER lockup converges in
-// film-title style (letters pan in from the sides, blur settling to sharp,
-// line by line); on scroll the frosty live-top cutout rises to overlap the
-// words, the type recedes, then the act fades to black handing off to the
-// grow sequence. Scrub-driven; reduced-motion gets the static composition.
+// Act 1 — pinned intro. PREMIUM / CANNABIS / FLOWER stacked huge (near
+// full-screen), entering with the site's banner language: letters drop in
+// with overshoot while the block zoom-settles (same keyframes family as the
+// contact/media banners, released by RevealGate so it's seen on first visit).
+// On scroll the frosty live-top cutout rises to overlap the words, the type
+// recedes, then the act fades to black handing off to the grow sequence.
 
-// Equal-width lockup: PREMIUM huge, CANNABIS FLOWER sized to match its width.
-const LINES = [
-  { text: 'PREMIUM', size: 'min(19vw, 15.5rem)', delay: 0.2 },
-  { text: 'CANNABIS FLOWER', size: 'min(9vw, 7.35rem)', delay: 0.55 },
-]
+const LINES = ['PREMIUM', 'CANNABIS', 'FLOWER']
 
 export default function FlowerHero() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -40,9 +37,11 @@ export default function FlowerHero() {
     return () => mm.revert()
   }, [])
 
+  let li = 0 // running letter index for the drop stagger
+
   return (
     <section ref={sectionRef} className="relative h-[230vh] bg-black">
-      <div data-fl-stage className="sticky top-0 flex h-screen items-center justify-center overflow-hidden bg-[#050505]">
+      <div data-fl-stage className="sticky top-0 flex h-screen items-start justify-center overflow-hidden bg-[#050505] pt-[5vh]">
         {/* graffiti mural texture */}
         {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}
         <img
@@ -53,32 +52,23 @@ export default function FlowerHero() {
         />
         <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_50%_45%,transparent_0%,rgba(0,0,0,0.82)_100%)]" />
 
-        {/* headline lockup */}
-        <h1
-          data-fl-words
-          className="font-display relative z-10 select-none text-center uppercase text-white"
-        >
-          {LINES.map((line) => {
-            const chars = line.text.split('')
-            const mid = (chars.length - 1) / 2
-            return (
-              <span key={line.text} className="block leading-[0.82]" style={{ fontSize: line.size }}>
-                {chars.map((ch, i) => (
+        {/* headline — near full-screen stack */}
+        <h1 data-fl-words className="relative z-10 select-none text-center">
+          <span className="fl-zoom font-display block uppercase leading-[0.82] text-white" style={{ fontSize: 'min(23vw, 17rem)' }}>
+            {LINES.map((line, lineIdx) => (
+              <span key={line} className="block">
+                {line.split('').map((ch) => (
                   <span
-                    key={i}
-                    className="fl-letter inline-block"
-                    style={{
-                      // converge: each letter pans in from its side of center
-                      ['--fl-tx' as string]: `${((i - mid) * 0.55).toFixed(2)}em`,
-                      animationDelay: `${line.delay}s`,
-                    }}
+                    key={li}
+                    className="fl-letter"
+                    style={{ animationDelay: `${0.1 + lineIdx * 0.2 + li++ * 0.028}s` }}
                   >
-                    {ch === ' ' ? ' ' : ch}
+                    {ch}
                   </span>
                 ))}
               </span>
-            )
-          })}
+            ))}
+          </span>
         </h1>
 
         {/* the frosty live-top rises to overlap the words */}

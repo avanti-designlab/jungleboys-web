@@ -41,7 +41,8 @@ function flower(
   strainType: 'indica' | 'sativa' | 'hybrid',
   thc: number,
   terp: string,
-  featured = false
+  featured = false,
+  deal?: number // specialPrice in cents — Dutchie deals populate this in Phase 3
 ): Product {
   return {
     id: `prod-${slug}`,
@@ -57,7 +58,7 @@ function flower(
       { url: '/products/flower/gold-mylar-bag.webp', alt: `${name} 3.5g gold mylar` },
       { url: `/products/flower/${logo}.webp`, alt: `${name} strain art` },
     ],
-    variants: [{ id: `v-${slug}-8th`, option: '3.5g', price: 5000, quantityAvailable: 10 }],
+    variants: [{ id: `v-${slug}-8th`, option: '3.5g', price: 5000, ...(deal ? { specialPrice: deal } : {}), quantityAvailable: 10 }],
     labResult: {
       lab: 'Placeholder Labs',
       testedAt: '2026-07-01',
@@ -74,10 +75,10 @@ function flower(
 }
 
 const products: Product[] = [
-  flower('motor-breath', 'Motor Breath', 'strain-motorbreath', 'indica', 31.2, 'Myrcene', true),
+  flower('motor-breath', 'Motor Breath', 'strain-motorbreath', 'indica', 31.2, 'Myrcene', true, 3999),
   flower('06-og', '06 OG', 'strain-06og', 'indica', 29.8, 'Limonene'),
   flower('zudz', 'Zudz', 'strain-zudz', 'hybrid', 28.4, 'Linalool'),
-  flower('blam', 'Blam!', 'strain-blam', 'hybrid', 30.1, 'Limonene'),
+  flower('blam', 'Blam!', 'strain-blam', 'hybrid', 30.1, 'Limonene', false, 3500),
   flower('blu-zerdz', 'Blu Zerdz', 'strain-bluzerdz', 'indica', 27.9, 'Myrcene'),
   flower('la-gelato', 'LA Gelato', 'strain-lagelato', 'hybrid', 28.8, 'Caryophyllene'),
   flower('rs1000', 'RS1000', 'strain-rs1000', 'hybrid', 32.6, 'Limonene'),

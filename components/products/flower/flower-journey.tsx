@@ -30,9 +30,10 @@ export default function FlowerJourney() {
       portholeRef.current.style.transform = `translate(-50%, -50%) scale(${scale})`
       if (macroRef.current) macroRef.current.style.transform = `scale(1.15) rotate(${t * 10}deg)`
     }
-    // fade to black at the very end for a seamless handoff
+    // partial dim at the very end — the macro stays visible while the next
+    // section slides over it (no dead black-only beat)
     if (fadeRef.current) {
-      const f = Math.min(1, Math.max(0, (p - 0.9) / 0.1))
+      const f = Math.min(1, Math.max(0, (p - 0.93) / 0.07)) * 0.55
       fadeRef.current.style.opacity = String(f)
     }
   }

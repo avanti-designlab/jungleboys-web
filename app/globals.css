@@ -900,38 +900,56 @@ select:focus-visible,
 /* outlined display text */
 .fl-stroke {
   color: transparent;
-  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.8);
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.92);
 }
 .fl-stroke-accent {
   color: transparent;
   -webkit-text-stroke: 2px var(--color-accent);
 }
 @media (min-width: 768px) {
+  .fl-stroke { -webkit-text-stroke-width: 2.5px; }
   .fl-stroke-accent { -webkit-text-stroke-width: 3px; }
 }
 
-/* gold gradient display text */
+/* gold gradient display text — carries a slow moving shine */
 .fl-gold-text {
-  background: linear-gradient(175deg, #f6e27a 8%, #e9c15a 45%, #b9882e 92%);
+  background: linear-gradient(100deg, #b9882e 0%, #f6e27a 28%, #e9c15a 50%, #f6e27a 72%, #b9882e 100%);
+  background-size: 220% 100%;
+  background-position: 0% 0;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
+@media (prefers-reduced-motion: no-preference) {
+  .fl-gold-text { animation: fl-shine 5.5s ease-in-out infinite; }
+  @keyframes fl-shine {
+    0%, 100% { background-position: 0% 0; }
+    50% { background-position: 100% 0; }
+  }
+}
 
 /* hero letters sit visible by default; motion only when allowed.
-   Entrance = film-title converge: letters pan in from their side of center
-   (--fl-tx set inline per letter) while blur settles to sharp. */
+   Entrance = the site banner language: letters drop in with overshoot
+   (contact-banner family) inside a zoom-settling block (media-banner family).
+   Both paused until RevealGate lifts the intro/gate (html.jb-reveal), so the
+   entrance is seen on a first direct visit instead of finishing behind them. */
 @media (prefers-reduced-motion: no-preference) {
   .fl-letter {
+    display: inline-block;
     opacity: 0;
-    transform: translateX(var(--fl-tx, 0));
-    filter: blur(16px);
-    animation: fl-letter-in 1.1s var(--ease-out-cinematic) forwards;
+    animation: fl-letter-drop 0.75s cubic-bezier(0.34, 1.4, 0.5, 1) both;
+    animation-play-state: paused;
   }
-  @keyframes fl-letter-in {
-    55% { filter: blur(3px); }
-    to { opacity: 1; transform: none; filter: blur(0); }
+  html.jb-reveal .fl-letter { animation-play-state: running; }
+  @keyframes fl-letter-drop {
+    from { opacity: 0; transform: translateY(-75%); }
+    to { opacity: 1; transform: translateY(0); }
   }
+  .fl-zoom {
+    animation: media-hero-in 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-play-state: paused;
+  }
+  html.jb-reveal .fl-zoom { animation-play-state: running; }
 
   /* slow drift for nug cutouts + the 20th seal ('translate' composes with
      .media-reveal's transform instead of clobbering it) */
@@ -942,18 +960,62 @@ select:focus-visible,
   }
 }
 
-/* anniversary bags rise inside their .media-reveal container */
+/* anniversary bags fan out from center inside their .media-reveal container
+   (--fl-cx = starting offset toward center, --fl-rot = resting tilt) */
 .fl-bag {
   opacity: 0;
-  transform: translateY(64px) scale(0.94);
-  transition: opacity 0.9s var(--ease-out-cinematic), transform 0.9s var(--ease-out-cinematic);
+  transform: translate(var(--fl-cx, 0), 70px) rotate(0deg) scale(0.9);
+  transition: opacity 1s var(--ease-out-cinematic), transform 1.15s var(--ease-out-cinematic);
 }
-.media-reveal.is-in .fl-bag { opacity: 1; transform: none; }
+.media-reveal.is-in .fl-bag { opacity: 1; transform: translate(0, 0) rotate(var(--fl-rot, 0deg)) scale(1); }
 @media (prefers-reduced-motion: no-preference) {
-  .media-reveal.is-in .fl-bag { animation: fl-drift 6s ease-in-out 1.1s infinite alternate; }
+  .media-reveal.is-in .fl-bag { animation: fl-drift 6s ease-in-out 1.3s infinite alternate; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .fl-bag { opacity: 1; transform: none; transition: none; }
+  .fl-bag { opacity: 1; transform: rotate(var(--fl-rot, 0deg)); transition: none; }
+}
+
+/* 20th seal — circular-wipe logo reveal with overshoot, then a slow float */
+.fl-badge {
+  opacity: 0;
+  clip-path: circle(0% at 50% 50%);
+  transform: rotate(-45deg) scale(0.5);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .media-reveal.is-in .fl-badge {
+    animation: fl-badge-reveal 1.4s var(--ease-out-cinematic) both, fl-drift 6s ease-in-out 1.5s infinite alternate;
+  }
+  @keyframes fl-badge-reveal {
+    0% { opacity: 0; clip-path: circle(0% at 50% 50%); transform: rotate(-45deg) scale(0.5); }
+    55% { opacity: 1; clip-path: circle(75% at 50% 50%); }
+    75% { transform: rotate(4deg) scale(1.12); }
+    100% { opacity: 1; clip-path: circle(75% at 50% 50%); transform: rotate(0deg) scale(1); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fl-badge { opacity: 1; clip-path: none; transform: none; }
+}
+
+/* staggered child rise on reveal (headline lines, story paragraphs) */
+.fl-stag > * {
+  opacity: 0;
+  transform: translateY(34px);
+  transition: opacity 0.8s var(--ease-out-cinematic), transform 0.8s var(--ease-out-cinematic);
+}
+.fl-stag.is-in > * { opacity: 1; transform: none; }
+.fl-stag.is-in > *:nth-child(2) { transition-delay: 0.15s; }
+.fl-stag.is-in > *:nth-child(3) { transition-delay: 0.3s; }
+@media (prefers-reduced-motion: reduce) {
+  .fl-stag > * { opacity: 1; transform: none; transition: none; }
+}
+
+/* breathing gold glow behind the pouches */
+@media (prefers-reduced-motion: no-preference) {
+  .fl-glow { animation: fl-glow-breathe 5s ease-in-out infinite alternate; }
+  @keyframes fl-glow-breathe {
+    from { opacity: 0.55; scale: 0.94; }
+    to { opacity: 1; scale: 1.05; }
+  }
 }
 
 /* "hit different" claims slide in from their side (overrides .media-reveal's
