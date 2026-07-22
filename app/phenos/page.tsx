@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/storyblok/seo'
 import HuntField from '@/components/phenos/hunt-field'
 import PhenosHero from '@/components/phenos/phenos-hero'
 import PhenosJoin from '@/components/phenos/phenos-join'
@@ -12,10 +13,12 @@ import { breadcrumbSchema } from '@/lib/schema'
 // under a top gradient; scroll into a yellow pill that pitches the hunt and
 // launches a question-by-question sign-up form.
 
-export const metadata: Metadata = {
-  title: 'Pheno Hunt — Hunt With Us',
-  description:
-    'Hunt with us. Small-batch drops of unnamed, unreleased Jungle Boys genetics straight from our cultivation rooms — first look, first taste, and a say in what becomes the next strain. Join the pheno hunt.',
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata('phenos', {
+    title: 'Pheno Hunt — Hunt With Us',
+    description:
+      'Hunt with us. Small-batch drops of unnamed, unreleased Jungle Boys genetics straight from our cultivation rooms — first look, first taste, and a say in what becomes the next strain. Join the pheno hunt.',
+  })
 }
 
 export default async function PhenosPage() {

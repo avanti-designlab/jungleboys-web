@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/storyblok/seo'
 import ContactConsole from '@/components/contact/contact-console'
 import LocationsMap from '@/components/contact/locations-map'
 import { breadcrumbSchema } from '@/lib/schema'
@@ -9,10 +10,12 @@ import { breadcrumbSchema } from '@/lib/schema'
 // Media-style character banner up top, then a dark "console": a colored topic
 // pill grid + modern form posting to the lead pipeline (consent ledger + forward).
 
-export const metadata: Metadata = {
-  title: 'Contact — Get in Touch',
-  description:
-    'Questions, collabs, wholesale, press or feedback? Get in touch with Jungle Boys — pick a lane and send a message. Playing With Fire® since 2006.',
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata('contact', {
+    title: 'Contact — Get in Touch',
+    description:
+      'Questions, collabs, wholesale, press or feedback? Get in touch with Jungle Boys — pick a lane and send a message. Playing With Fire® since 2006.',
+  })
 }
 
 const SITE_URL = 'https://www.jungleboys.com'

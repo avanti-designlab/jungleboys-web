@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/storyblok/seo'
 import WholesaleBody from '@/components/wholesale/wholesale-body'
 import WholesalePlane from '@/components/wholesale/wholesale-plane'
 import { breadcrumbSchema } from '@/lib/schema'
@@ -10,10 +11,12 @@ import { breadcrumbSchema } from '@/lib/schema'
 // a JB × Nabis intro and a one-question-at-a-time clickthrough form in a yellow
 // pill, ending in a Next Steps → Nabis portal handoff.
 
-export const metadata: Metadata = {
-  title: 'Wholesale — Carry Jungle Boys',
-  description:
-    'Carry Jungle Boys products at your dispensary. From exclusive genetics to top-shelf flower, our products move fast and speak for themselves. Become a retailer — order through Nabis.',
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata('wholesale', {
+    title: 'Wholesale — Carry Jungle Boys',
+    description:
+      'Carry Jungle Boys products at your dispensary. From exclusive genetics to top-shelf flower, our products move fast and speak for themselves. Become a retailer — order through Nabis.',
+  })
 }
 
 export default async function WholesalePage() {

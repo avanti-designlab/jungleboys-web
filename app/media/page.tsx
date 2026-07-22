@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/storyblok/seo'
 import MediaHub from '@/components/media/media-hub'
 import MediaScrollFx from '@/components/media/media-scroll-fx'
 import { getMediaVideos } from '@/lib/media'
@@ -9,10 +10,12 @@ import { breadcrumbSchema, videoSchema } from '@/lib/schema'
 // from youtube.com/@JungleBoysfilms (ISR, hourly) and merged with any curated
 // Storyblok `media_video` entries. Preserved /media URL. Theme-aware.
 
-export const metadata: Metadata = {
-  title: 'Media — Jungle Boys Films & Documentaries',
-  description:
-    'Watch Jungle Boys documentaries, pheno-hunt series, and drops — two decades of the hunt, straight from the jungle. New episodes from @JungleBoysfilms.',
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata('media', {
+    title: 'Media — Jungle Boys Films & Documentaries',
+    description:
+      'Watch Jungle Boys documentaries, pheno-hunt series, and drops — two decades of the hunt, straight from the jungle. New episodes from @JungleBoysfilms.',
+  })
 }
 
 // Revalidate hourly at the route level too (belt + suspenders with the fetch).

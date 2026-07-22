@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/storyblok/seo'
 import ProductsCollection from '@/components/products/products-collection'
 import { PRODUCT_LINES } from '@/lib/products'
 import { breadcrumbSchema } from '@/lib/schema'
@@ -6,10 +7,12 @@ import { breadcrumbSchema } from '@/lib/schema'
 // Products — the curated Jungle Boys collection (JB-only lines), separate from
 // the Dutchie-powered Shop. Static: no API. Each line links to /products/<slug>.
 
-export const metadata: Metadata = {
-  title: 'Products — The Jungle Boys Collection',
-  description:
-    'Every Jungle Boys product line in one place — Hash Holes, premium indoor flower, pre-rolls, 10-packs, Twins and Pops. Playing with fire, in every format.',
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata('products', {
+    title: 'Products — The Jungle Boys Collection',
+    description:
+      'Every Jungle Boys product line in one place — Hash Holes, premium indoor flower, pre-rolls, 10-packs, Twins and Pops. Playing with fire, in every format.',
+  })
 }
 
 export default function ProductsPage() {

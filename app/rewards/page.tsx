@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/storyblok/seo'
 import AppShowcase from '@/components/rewards/app-showcase'
 import ConnoisseurClub from '@/components/rewards/connoisseur-club'
 import EarnMore from '@/components/rewards/earn-more'
@@ -17,10 +18,12 @@ import { breadcrumbSchema, faqSchema } from '@/lib/schema'
 // here). DARK IN BOTH THEMES (Avanti: light version was hard to read) — the
 // page pins the theme tokens to their dark values so the toggle is a no-op here.
 
-export const metadata: Metadata = {
-  title: 'PWF Rewards — Jungle Boys Loyalty Program',
-  description:
-    'Playing With Fire Rewards: earn points on every Jungle Boys purchase, climb tiers from Trimmer to Pheno Hunter, and unlock exclusive drops, discounts and perks. Download the app to start earning.',
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata('rewards', {
+    title: 'PWF Rewards — Jungle Boys Loyalty Program',
+    description:
+      'Playing With Fire Rewards: earn points on every Jungle Boys purchase, climb tiers from Trimmer to Pheno Hunter, and unlock exclusive drops, discounts and perks. Download the app to start earning.',
+  })
 }
 
 export default function RewardsPage() {
