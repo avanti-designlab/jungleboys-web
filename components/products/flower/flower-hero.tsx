@@ -41,7 +41,7 @@ export default function FlowerHero() {
 
   return (
     <section ref={sectionRef} className="relative h-[180vh] bg-black">
-      <div data-fl-stage className="sticky top-0 flex h-screen items-start justify-center overflow-hidden bg-[#050505] pt-[3vh]">
+      <div data-fl-stage className="sticky top-0 flex h-screen items-start justify-center overflow-hidden bg-[#050505] pt-[9vh]">
         {/* graffiti mural texture */}
         {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}
         <img
@@ -54,7 +54,7 @@ export default function FlowerHero() {
 
         {/* headline — near full-screen stack */}
         <h1 data-fl-words className="relative z-10 select-none text-center">
-          <span className="fl-zoom font-display block uppercase text-white" style={{ fontSize: 'min(26vw, 22rem)' }}>
+          <span className="fl-zoom font-display block uppercase text-white" style={{ fontSize: 'min(26vw, 38vh, 22rem)' }}>
             {LINES.map((line, lineIdx) => (
               <span key={line} className="block">
                 {line.split('').map((ch) => (

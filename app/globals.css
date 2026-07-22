@@ -935,7 +935,7 @@ select:focus-visible,
    just kiss. */
 .fl-zoom,
 .fl-zoom span {
-  line-height: 0.7 !important;
+  line-height: 0.78 !important;
 }
 
 /* hero letters sit visible by default; motion only when allowed.
