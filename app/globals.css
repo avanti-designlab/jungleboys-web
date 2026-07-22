@@ -804,16 +804,27 @@ body {
 }
 .emergency-pulse { animation: emergency-pulse 0.95s ease-in-out infinite; }
 
-@keyframes confetti-burst {
-  0% { transform: translate(0, 0) rotate(0) scale(1); opacity: 1; }
-  100% { transform: translate(var(--cx), var(--cy)) rotate(var(--cr)) scale(0.5); opacity: 0; }
+/* rising flames — climb up the screen and fade (authentic verify) */
+@keyframes flame-rise {
+  0% { transform: translate(0, 0) scale(var(--s0)) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  75% { opacity: 0.9; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(var(--s1)) rotate(var(--rot)); opacity: 0; }
 }
-.confetti-piece { animation: confetti-burst var(--cd) cubic-bezier(0.18, 0.7, 0.3, 1) var(--cdelay) forwards; }
+.flame-rise { animation: flame-rise var(--cd) cubic-bezier(0.36, 0.06, 0.42, 1) var(--cdelay) infinite; }
+
+/* flame-shaped aura that pulses out from behind the authentic badge */
+@keyframes flame-pulse {
+  0% { transform: scale(1); opacity: 0.55; }
+  70% { opacity: 0; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+.flame-pulse { animation: flame-pulse 1.9s ease-out infinite; transform-origin: 50% 92%; }
 
 @media (prefers-reduced-motion: reduce) {
   .badge-in { animation: none; }
-  .ring-pulse, .flame-flicker, .emergency-pulse { animation: none; }
-  .confetti-piece { display: none; }
+  .ring-pulse, .flame-flicker, .emergency-pulse, .flame-pulse { animation: none; }
+  .flame-rise { display: none; }
 }
 
 /* ===== Blog — outlined marquee text ===== */

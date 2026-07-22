@@ -2,29 +2,27 @@
 
 import { useEffect, useMemo, useState } from 'react'
 
-// One-shot flame-emoji burst — fires when the authentic result mounts.
-// Pure CSS (per-piece custom props); the global reduced-motion rule hides it.
-// Client-only (randomised) to avoid an SSR/hydration mismatch.
+// Flames rising up the screen — fills the authentic-verify screen with fire
+// that climbs and fades. Pure CSS (per-piece custom props); client-only to
+// avoid a hydration mismatch; the global reduced-motion rule hides it.
 
-export default function FlameBurst({ count = 44 }: { count?: number }) {
+export default function FlameBurst({ count = 30 }: { count?: number }) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
 
   const pieces = useMemo(
     () =>
-      Array.from({ length: count }, () => {
-        const angle = Math.random() * Math.PI * 2
-        const dist = 60 + Math.random() * 300
-        return {
-          left: 40 + Math.random() * 20,
-          cx: `${Math.cos(angle) * dist}px`,
-          cy: `${Math.sin(angle) * dist * 0.6 + 120 + Math.random() * 320}px`,
-          cr: `${Math.random() * 480 - 240}deg`,
-          cd: `${1.1 + Math.random() * 1.1}s`,
-          cdelay: `${Math.random() * 0.28}s`,
-          size: 18 + Math.random() * 20,
-        }
-      }),
+      Array.from({ length: count }, () => ({
+        left: Math.random() * 100,
+        dx: `${Math.random() * 60 - 30}px`,
+        dy: `${-(68 + Math.random() * 34)}vh`,
+        s0: (0.45 + Math.random() * 0.4).toFixed(2),
+        s1: (0.9 + Math.random() * 0.7).toFixed(2),
+        rot: `${Math.random() * 40 - 20}deg`,
+        cd: `${2.6 + Math.random() * 2.6}s`,
+        cdelay: `${Math.random() * 3}s`,
+        size: 18 + Math.random() * 24,
+      })),
     [count]
   )
 
@@ -35,14 +33,16 @@ export default function FlameBurst({ count = 44 }: { count?: number }) {
       {pieces.map((p, i) => (
         <span
           key={i}
-          className="confetti-piece absolute top-[24%] leading-none"
+          className="flame-rise absolute bottom-[-4%] leading-none will-change-transform"
           style={
             {
               left: `${p.left}%`,
               fontSize: p.size,
-              '--cx': p.cx,
-              '--cy': p.cy,
-              '--cr': p.cr,
+              '--dx': p.dx,
+              '--dy': p.dy,
+              '--s0': p.s0,
+              '--s1': p.s1,
+              '--rot': p.rot,
               '--cd': p.cd,
               '--cdelay': p.cdelay,
             } as React.CSSProperties

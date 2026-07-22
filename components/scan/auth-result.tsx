@@ -5,16 +5,20 @@ import { useScanner } from './scan-provider'
 import FlameBurst from './flame-burst'
 import type { VerifyResult } from '@/lib/auth/verify'
 
+const FLAME_PATH =
+  'M12 2c1.3 3.4-1.5 5-1.5 7.6 0 1.4 1 2.4 2.1 2.4 1.5 0 2.3-1.3 2-3 2 1.4 3.2 3.5 3.2 5.9 0 3.6-3 6.6-6.9 6.6S4 18.5 4 14.7c0-4.2 3.2-6.6 4.6-9.1C10 3.7 11.4 2.9 12 2Z'
+
+// Custom flame-shaped badge (no circle): a green flame with a flame-shaped
+// pulse aura behind it, plus a live flicker + spring pop-in.
 function FlameBadge() {
   return (
-    <div className="relative mx-auto h-28 w-28">
-      <span className="ring-pulse absolute inset-0 rounded-full border-4 border-[#22c55e]" />
-      <span className="ring-pulse absolute inset-0 rounded-full border-4 border-[#22c55e]" style={{ animationDelay: '0.7s' }} />
-      <div className="badge-in relative flex h-28 w-28 items-center justify-center rounded-full bg-[#15a34a] text-white shadow-[0_0_45px_rgba(34,197,94,0.55)]">
-        <svg viewBox="0 0 24 24" fill="currentColor" className="flame-flicker h-14 w-14" aria-hidden>
-          <path d="M12 2c1.3 3.4-1.5 5-1.5 7.6 0 1.4 1 2.4 2.1 2.4 1.5 0 2.3-1.3 2-3 2 1.4 3.2 3.5 3.2 5.9 0 3.6-3 6.6-6.9 6.6S4 18.5 4 14.7c0-4.2 3.2-6.6 4.6-9.1C10 3.7 11.4 2.9 12 2Z" />
-        </svg>
-      </div>
+    <div className="badge-in relative mx-auto flex h-32 w-28 items-end justify-center">
+      <svg viewBox="0 0 24 24" fill="#22c55e" className="flame-pulse absolute inset-0 m-auto h-full w-auto" aria-hidden>
+        <path d={FLAME_PATH} />
+      </svg>
+      <svg viewBox="0 0 24 24" fill="#15a34a" className="flame-flicker relative h-full w-auto drop-shadow-[0_0_28px_rgba(34,197,94,0.7)]" aria-hidden>
+        <path d={FLAME_PATH} />
+      </svg>
     </div>
   )
 }
