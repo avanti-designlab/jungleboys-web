@@ -30,12 +30,9 @@ export default async function FlowerShop() {
             <p className="text-xs font-bold uppercase tracking-[0.4em] text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
               The lineup
             </p>
-            <h2 className="font-display mt-2 uppercase leading-[0.88]" style={{ fontSize: 'min(11vw, 6.5rem)' }}>
-              Shop the gold
+            <h2 className="font-display mt-2 uppercase leading-[0.88]" style={{ fontSize: 'min(9.5vw, 6.5rem)' }}>
+              Shop 3.5G Gold Mylars
             </h2>
-            <p className="mx-auto mt-4 max-w-md text-sm uppercase tracking-wide text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
-              3.5g of top-shelf indoor, sealed fresh in the gold mylar.
-            </p>
           </Reveal>
 
           <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 md:mt-16 lg:grid-cols-4">
@@ -90,7 +87,7 @@ export default async function FlowerShop() {
                           </span>
                         ) : null}
                       </div>
-                      <h3 className="font-display text-[1.9rem] uppercase leading-[0.9]">{p.name}</h3>
+                      <h3 className="font-display text-[2.5rem] uppercase leading-[0.9]">{p.name}</h3>
                       <div className="mt-auto flex items-end justify-between gap-3 pt-1">
                         <p className="leading-none">
                           {deal ? (
