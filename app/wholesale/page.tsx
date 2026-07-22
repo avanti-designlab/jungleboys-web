@@ -44,7 +44,7 @@ export default async function WholesalePage() {
       <section data-wholesale-banner className="px-2 pt-2 md:px-3">
         <div
           data-nav-theme="dark"
-          className="media-hero-in relative flex min-h-[400px] items-center justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 md:h-[520px] md:rounded-[2.5rem]"
+          className="media-hero-in relative flex h-[400px] items-end justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 md:h-[540px] md:rounded-[2.5rem]"
         >
           {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}
           <img
@@ -74,7 +74,7 @@ export default async function WholesalePage() {
           <img
             src="/wholesale/wholesale-header.svg"
             alt="Jungle Boys Wholesale"
-            className="contact-alive relative z-10 h-[116%] w-auto max-w-none drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
+            className="hero-alive relative z-10 drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
           />
           {/* plane flies across + parachutes drop on load */}
           <WholesalePlane />

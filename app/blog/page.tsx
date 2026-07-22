@@ -67,7 +67,7 @@ export default async function BlogIndex() {
           <img
             src="/blog/blog-header.svg"
             alt="Jungle Boys Blog"
-            className="blog-alive relative z-10 w-[90%] max-w-[380px] self-end drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)] md:h-[103%] md:w-auto md:max-w-none"
+            className="hero-alive relative z-10 drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
           />
         </div>
       </section>

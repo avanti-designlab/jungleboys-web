@@ -822,6 +822,27 @@ body {
   -webkit-text-stroke: 1.5px color-mix(in srgb, var(--color-foreground) 50%, transparent);
 }
 
+/* Uniform character-hero mascot — bottom-anchored, upright, gentle sway. Shared
+   by contact / media / wholesale / blog so every hero sits the same way.
+   Sizing lives here (one place) so all pages stay in lockstep. */
+.hero-alive {
+  align-self: flex-end;
+  width: 100%;
+  max-width: 420px;
+  transform: translateY(6%);
+  transform-origin: 50% 100%;
+}
+@media (min-width: 768px) {
+  .hero-alive { width: auto; max-width: none; height: 112%; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes hero-alive {
+    0%, 100% { transform: translateY(6%) rotate(-0.7deg) scale(1); }
+    50% { transform: translateY(5.2%) rotate(0.7deg) scale(1.008); }
+  }
+  .hero-alive { animation: hero-alive 6s ease-in-out infinite; }
+}
+
 /* blog character — bottom-anchored + a slight clockwise tilt so the thumbs-up
    hand shows. Rotate-only sway (no downward translate, unlike contact-alive,
    which would push the thumb below the banner edge). */
