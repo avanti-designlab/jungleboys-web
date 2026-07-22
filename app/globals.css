@@ -928,6 +928,16 @@ select:focus-visible,
   }
 }
 
+/* hero lockup packs edge-to-edge: .font-display (line-height 0.9, unlayered)
+   beats leading-* utilities, and the inline-block letters' natural boxes
+   (Bebas ascent+descent = 1.026em) inflate the line boxes past any leading —
+   so pin BOTH to a hard 0.7 advance. All-caps Bebas has no descenders; caps
+   just kiss. */
+.fl-zoom,
+.fl-zoom span {
+  line-height: 0.7 !important;
+}
+
 /* hero letters sit visible by default; motion only when allowed.
    Entrance = the site banner language: letters drop in with overshoot
    (contact-banner family) inside a zoom-settling block (media-banner family).
