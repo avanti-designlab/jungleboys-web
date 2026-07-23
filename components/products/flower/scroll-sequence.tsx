@@ -37,7 +37,7 @@ export default function ScrollSequence({ frames, heightVh = 300, base = BASE, si
   const sectionRef = useRef<HTMLElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const imagesRef = useRef<HTMLImageElement[]>([])
-  const stateRef = useRef({ frame: -1, target: 0, raf: 0, ready: false, dpr: 2 })
+  const stateRef = useRef({ frame: -1, target: 0, current: 0, raf: 0, loop: 0, ready: false, dpr: 2 })
   const onProgressRef = useRef(onProgress)
   onProgressRef.current = onProgress
   const [poster, setPoster] = useState<string | null>(null)
@@ -76,7 +76,7 @@ export default function ScrollSequence({ frames, heightVh = 300, base = BASE, si
     const draw = () => {
       const st = stateRef.current
       if (!st.ready) return
-      const idx = Math.round(st.target * (frames - 1))
+      const idx = Math.round(st.current * (frames - 1))
       if (idx === st.frame) return
       st.frame = idx
       const img = imagesRef.current[idx]
@@ -91,13 +91,40 @@ export default function ScrollSequence({ frames, heightVh = 300, base = BASE, si
       ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h)
     }
 
-    const measure = () => {
+    // scrub smoothing: `current` glides toward `target` each frame (GSAP-scrub
+    // feel) so fast flicks sweep through frames instead of jumping, and the
+    // overlays ride the same eased progress
+    const tick = () => {
+      const st = stateRef.current
+      const diff = st.target - st.current
+      if (Math.abs(diff) < 0.0004) {
+        st.current = st.target
+        st.loop = 0
+      } else {
+        st.current += diff * 0.16
+        st.loop = requestAnimationFrame(tick)
+      }
+      draw()
+      onProgressRef.current?.(st.current)
+    }
+    const ensureLoop = () => {
+      const st = stateRef.current
+      if (!st.loop) st.loop = requestAnimationFrame(tick)
+    }
+
+    const measure = (snap = false) => {
       const rect = section.getBoundingClientRect()
       const total = rect.height - window.innerHeight
       const p = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0
-      stateRef.current.target = p
-      onProgressRef.current?.(p)
-      draw()
+      const st = stateRef.current
+      st.target = p
+      if (snap) {
+        st.current = p
+        draw()
+        onProgressRef.current?.(p)
+      } else {
+        ensureLoop()
+      }
     }
 
     const onScroll = () => {
@@ -131,7 +158,7 @@ export default function ScrollSequence({ frames, heightVh = 300, base = BASE, si
           if (cancelled) return
           stateRef.current.ready = true
           size()
-          measure()
+          measure(true) // first paint snaps straight to the scroll position
           window.addEventListener('scroll', onScroll, { passive: true })
           window.addEventListener('resize', onResize)
         })
@@ -144,6 +171,7 @@ export default function ScrollSequence({ frames, heightVh = 300, base = BASE, si
       cancelled = true
       io.disconnect()
       if (stateRef.current.raf) cancelAnimationFrame(stateRef.current.raf)
+      if (stateRef.current.loop) cancelAnimationFrame(stateRef.current.loop)
       window.clearTimeout(resizeT)
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
