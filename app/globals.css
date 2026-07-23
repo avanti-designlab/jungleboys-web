@@ -1046,6 +1046,14 @@ select:focus-visible,
 .fl-claim-l { transform: translateX(-56px); }
 .fl-claim-r { transform: translateX(56px); }
 
+/* The hash-hole fixed sky sits at z-0; lift the footer above it so it isn't
+   painted over (the footer is a static sibling after <main>). Scoped to pages
+   that actually render the sky. */
+body:has(.hh-page) footer {
+  position: relative;
+  z-index: 1;
+}
+
 /* ===== Hash Hole (/products/hash-hole) — sky-day scoped palette ===== */
 /* Bright blue sky, moving clouds + birds, gold HASH HOLE, green accents.
    A light, playful surface — the opposite of the flower page's dark gold. */
