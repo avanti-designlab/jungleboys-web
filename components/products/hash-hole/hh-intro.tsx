@@ -13,12 +13,14 @@ const STAGE_W = 1440
 const STAGE_H = 610 // logo top (185) → logo bottom (795)
 const ORIGIN_Y = 185
 
-type Box = { big: string; small: string; x: number; y: number }
+type Box = { big: string; small: string; x: number; y: number; bigVw: number }
+// bigVw tuned per label so the longest ones still sit on a single line in the
+// 214px Figma box (Bebas is condensed, so short labels can run much larger)
 const BOXES: Box[] = [
-  { big: '2G', small: 'Indoor Flower', x: 177, y: 358 },
-  { big: '.5G', small: 'Hash Rosin', x: 180, y: 533 },
-  { big: 'Organic', small: 'Wood Tip', x: 1050, y: 358 },
-  { big: 'All Natural', small: 'Unrefined Paper', x: 1050, y: 533 },
+  { big: '2G', small: 'Indoor Flower', x: 177, y: 358, bigVw: 3.05 },
+  { big: '.5G', small: 'Hash Rosin', x: 180, y: 533, bigVw: 3.05 },
+  { big: 'Organic', small: 'Wood Tip', x: 1050, y: 358, bigVw: 2.35 },
+  { big: 'All Natural', small: 'Unrefined Paper', x: 1050, y: 533, bigVw: 2.15 },
 ]
 const BOX_W = 214
 const BOX_H = 121
@@ -27,15 +29,15 @@ function pct(v: number, total: number) {
   return `${(v / total) * 100}%`
 }
 
-function BoxInner({ big, small }: { big: string; small: string }) {
+function BoxInner({ big, small, bigVw }: { big: string; small: string; bigVw: number }) {
   return (
     <>
-      <span className="font-display uppercase leading-none" style={{ fontSize: 'min(3.05vw, 44px)' }}>
+      <span className="font-display whitespace-nowrap uppercase leading-none" style={{ fontSize: `min(${bigVw}vw, ${Math.round(bigVw * 14.4)}px)` }}>
         {big}
       </span>
       <span
-        className="font-extrabold uppercase leading-tight tracking-wide"
-        style={{ fontFamily: 'var(--font-brand)', fontSize: 'min(1.45vw, 21px)' }}
+        className="whitespace-nowrap font-extrabold uppercase leading-tight tracking-tight"
+        style={{ fontFamily: 'var(--font-brand)', fontSize: 'min(1.15vw, 16px)' }}
       >
         {small}
       </span>
@@ -69,7 +71,7 @@ export default function HhIntro() {
           <div
             key={b.big}
             data-hh-plx={b.y === 358 ? -0.04 : 0.04}
-            className="hh-spec media-reveal absolute flex flex-col justify-center px-[1.6%] text-white"
+            className="hh-spec media-reveal absolute flex flex-col justify-center overflow-hidden px-[1.1%] text-white"
             style={{
               left: pct(b.x, STAGE_W),
               top: pct(b.y - ORIGIN_Y, STAGE_H),
@@ -77,7 +79,7 @@ export default function HhIntro() {
               height: pct(BOX_H, STAGE_H),
             }}
           >
-            <BoxInner big={b.big} small={b.small} />
+            <BoxInner big={b.big} small={b.small} bigVw={b.bigVw} />
           </div>
         ))}
       </div>
