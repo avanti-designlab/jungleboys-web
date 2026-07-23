@@ -38,7 +38,7 @@ export default function FlowerJourney() {
   }
 
   return (
-    <ScrollSequence frames={61} heightVh={330} onProgress={onProgress}>
+    <ScrollSequence frames={80} heightVh={330} onProgress={onProgress}>
       {/* genetics statement — outlined in JB yellow, owns the frame */}
       <div
         ref={statementRef}
