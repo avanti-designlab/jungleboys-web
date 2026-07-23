@@ -1086,6 +1086,15 @@ select:focus-visible,
   .hh-letter-hold { transition: none; }
 }
 
+/* SCROLL button arrow — gentle continuous down-bounce */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes hh-arrow-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+  }
+  .hh-arrow-bounce { animation: hh-arrow-bounce 1.2s ease-in-out infinite; }
+}
+
 /* gold graffiti-style headline (HASH HOLE gold with dark keyline) */
 .hh-gold-head {
   color: var(--hh-gold);
