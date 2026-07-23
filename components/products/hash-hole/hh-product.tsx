@@ -39,9 +39,6 @@ export default function HhProduct() {
     <section ref={rootRef} className="relative h-[240vh]">
       <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden">
         {/* flanking copy fades through */}
-        <p data-hh-copy className="font-display absolute left-[4vw] top-[16vh] max-w-[26vw] text-left uppercase leading-[0.9] text-[var(--hh-green-deep)]" style={{ fontSize: 'min(6vw, 4rem)' }}>
-          One <span className="hh-gold-head">Perfect</span> Hole
-        </p>
         <p data-hh-copy className="absolute bottom-[14vh] right-[4vw] max-w-[30vw] text-right text-sm font-bold uppercase leading-relaxed tracking-wide text-[var(--hh-ink)]/80 md:text-base" style={{ fontFamily: 'var(--font-brand)' }}>
           2g indoor flower, a .5g rope of live hash rosin, an organic wood tip —
           all-natural paper. One clean burn, start to finish.

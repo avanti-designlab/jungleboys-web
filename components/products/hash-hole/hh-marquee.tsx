@@ -1,7 +1,7 @@
 // Scrolling text band — big bold movement between sections. Reuses the frozen
 // .marquee-track keyframes (GPU transform, pauses on hover).
 
-const WORDS = ['Hash Hole', '2G Indoor Flower', '.5G Live Rosin', 'Organic Wood Tip', 'One Perfect Hole']
+const WORDS = ['Hash Hole', '2G Indoor Flower', '.5G Live Rosin', 'Organic Wood Tip', 'Playing With Fire']
 
 function Row() {
   return (
@@ -22,7 +22,7 @@ function Row() {
 
 export default function HhMarquee({ reverse = false }: { reverse?: boolean }) {
   return (
-    <section aria-hidden className="overflow-hidden bg-[var(--hh-green)] py-4 md:py-6">
+    <section aria-hidden className="mt-8 overflow-hidden bg-[var(--hh-green)] py-4 md:mt-12 md:py-6">
       <div className="marquee-pause flex">
         <div className={`${reverse ? 'marquee-track-reverse' : 'marquee-track'} flex`}>
           <Row />
