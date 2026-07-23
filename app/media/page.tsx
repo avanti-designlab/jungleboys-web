@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/storyblok/seo'
 import MediaHub from '@/components/media/media-hub'
+import MediaLottie from '@/components/media/media-lottie'
 import MediaScrollFx from '@/components/media/media-scroll-fx'
 import { getMediaVideos } from '@/lib/media'
 import { JB_CHANNEL_URL } from '@/lib/media/youtube'
@@ -87,10 +88,11 @@ export default async function MediaPage() {
               </span>
             ))}
           </span>
-          {/* character */}
-          {/* eslint-disable-next-line @next/next/no-img-element -- character art */}
-          <img
-            src="/media/media-header.svg"
+          {/* character — designer's Lottie (embedded assets), static SVG until
+              ready and for reduced motion */}
+          <MediaLottie
+            src="/media/jb-media-banner.lottie.json"
+            fallback="/media/media-header.svg"
             alt="Jungle Boys Media"
             className="hero-alive relative z-10 drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
           />
