@@ -1045,3 +1045,74 @@ select:focus-visible,
    base translateY; .is-in resolves both to none) */
 .fl-claim-l { transform: translateX(-56px); }
 .fl-claim-r { transform: translateX(56px); }
+
+/* ===== Hash Hole (/products/hash-hole) — sky-day scoped palette ===== */
+/* Bright blue sky, moving clouds + birds, gold HASH HOLE, green accents.
+   A light, playful surface — the opposite of the flower page's dark gold. */
+.hh-page {
+  --hh-sky-top: #6fc9f5;
+  --hh-sky-mid: #4db2ef;
+  --hh-green: #1f7a3d;
+  --hh-green-deep: #135c2b;
+  --hh-gold: #f5c21a;
+  --hh-brown: #7a4a1f;
+  --hh-ink: #0e2a17;
+  background: var(--hh-sky-mid);
+}
+
+/* moving cloud band + drifting birds (GPU transforms only) */
+@keyframes hh-cloud-drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes hh-cloud-drift-slow { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.hh-clouds { animation: hh-cloud-drift 60s linear infinite; }
+.hh-clouds-slow { animation: hh-cloud-drift-slow 110s linear infinite; }
+@keyframes hh-bird {
+  0% { transform: translate(-10vw, 0) scale(var(--s,1)); }
+  100% { transform: translate(110vw, -6vh) scale(var(--s,1)); }
+}
+.hh-bird { animation: hh-bird linear infinite; }
+@keyframes hh-flap { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(0.55); } }
+.hh-bird svg { animation: hh-flap 0.5s ease-in-out infinite; transform-origin: center; }
+
+/* HASH HOLE hero letters — same drop-in family as the flower/contact banners,
+   gated so a direct visit sees it (RevealGate → html.jb-reveal) */
+@media (prefers-reduced-motion: no-preference) {
+  .hh-letter {
+    display: inline-block;
+    opacity: 0;
+    animation: fl-letter-drop 0.72s cubic-bezier(0.34, 1.5, 0.5, 1) both;
+    animation-play-state: paused;
+  }
+  html.jb-reveal .hh-letter { animation-play-state: running; }
+  .hh-scrollbtn { opacity: 0; animation: fade-up 0.7s ease-out 1.1s both; animation-play-state: paused; }
+  html.jb-reveal .hh-scrollbtn { animation-play-state: running; }
+}
+
+/* gold graffiti-style headline (HASH HOLE gold with dark keyline) */
+.hh-gold-head {
+  color: var(--hh-gold);
+  -webkit-text-stroke: 2px var(--hh-ink);
+  paint-order: stroke fill;
+  text-shadow: 0 6px 0 rgba(14,42,23,0.25);
+}
+@media (min-width: 768px) { .hh-gold-head { -webkit-text-stroke-width: 3px; } }
+
+/* spec box — green rounded card w/ big number + label (2G INDOOR FLOWER etc) */
+.hh-spec {
+  background: var(--hh-green);
+  border: 3px solid #fff;
+  border-radius: 1rem;
+  box-shadow: 0 10px 24px rgba(19,92,43,0.28);
+}
+
+/* pointer line reveal (inside-the-joint breakdown) — grows from the label */
+.hh-pointer { opacity: 0; transform: translateY(16px); transition: opacity .7s var(--ease-out-cinematic), transform .7s var(--ease-out-cinematic); }
+.media-reveal.is-in .hh-pointer, .hh-pointer.is-in { opacity: 1; transform: none; }
+
+/* soft float for product mockups when at rest */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes hh-float { from { translate: 0 0; } to { translate: 0 -16px; } }
+  .hh-float { animation: hh-float 5s ease-in-out infinite alternate; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hh-letter, .hh-scrollbtn { opacity: 1; }
+}

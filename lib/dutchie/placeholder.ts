@@ -74,7 +74,48 @@ function flower(
   }
 }
 
+// Hash Hole lineup — infused pre-roll (2g indoor flower + .5g live hash rosin).
+// Each card pairs a flower strain with a rosin strain. Placeholder values until
+// Dutchie (Phase 3); the tube shot is shared until real per-strain photos flow.
+function hashHole(
+  slug: string,
+  flowerStrain: string,
+  rosinStrain: string,
+  thc: number,
+  featured = false,
+  deal?: number
+): Product {
+  return {
+    id: `prod-hh-${slug}`,
+    slug: `${slug}-hash-hole`,
+    name: flowerStrain,
+    brand: 'Jungle Boys',
+    category: 'pre-rolls',
+    subcategory: 'hash-hole',
+    strainType: 'hybrid',
+    strain: rosinStrain, // the live hash rosin pairing (shown on the card)
+    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    images: [{ url: '/products/hash-hole/product.webp', alt: `${flowerStrain} Hash Hole` }],
+    variants: [{ id: `v-hh-${slug}`, option: '2.5g', price: 4000, ...(deal ? { specialPrice: deal } : {}), quantityAvailable: 10 }],
+    labResult: {
+      lab: 'Placeholder Labs',
+      testedAt: '2026-07-01',
+      potency: { thc: { value: thc, unit: '%' } },
+      terpenes: [
+        { name: 'Caryophyllene', percentage: 1.4 },
+        { name: 'Limonene', percentage: 0.9 },
+      ],
+    },
+    effects: ['relaxed', 'euphoric'],
+    featured,
+    retailerId: 'placeholder-dtla',
+  }
+}
+
 const products: Product[] = [
+  hashHole('gelato-z', 'Gelato Z', 'Gator Breath', 40.9, false, 3200),
+  hashHole('private-reserve', 'Private Reserve', 'Rainbow Belts', 45.7, true),
+  hashHole('blu-frootz', 'Blu Frootz', 'G-Ride', 29.7),
   flower('motor-breath', 'Motor Breath', 'strain-motorbreath', 'indica', 31.2, 'Myrcene', true, 3999),
   flower('06-og', '06 OG', 'strain-06og', 'indica', 29.8, 'Limonene'),
   flower('zudz', 'Zudz', 'strain-zudz', 'hybrid', 28.4, 'Linalool'),
