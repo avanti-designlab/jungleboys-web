@@ -40,6 +40,7 @@ export default function PillCta({
   onClick,
   size = 'md',
   icon = 'arrow',
+  hover = 'white',
   className = '',
 }: {
   label: string
@@ -47,15 +48,18 @@ export default function PillCta({
   onClick?: () => void
   size?: keyof typeof sizes
   icon?: 'arrow' | 'cart'
+  hover?: 'white' | 'black'
   className?: string
 }) {
   const s = sizes[size]
-  const cls = `group inline-flex cursor-pointer items-center rounded-full bg-[var(--color-accent)] font-bold uppercase tracking-widest text-black transition-colors duration-300 hover:bg-white ${s.pill} ${className}`
+  const hoverPill = hover === 'black' ? 'hover:bg-black hover:text-white' : 'hover:bg-white'
+  const hoverCircle = hover === 'black' ? 'group-hover:bg-white group-hover:text-black' : ''
+  const cls = `group inline-flex cursor-pointer items-center rounded-full bg-[var(--color-accent)] font-bold uppercase tracking-widest text-black transition-colors duration-300 ${hoverPill} ${s.pill} ${className}`
   const Icon = icon === 'cart' ? Cart : Arrow
   const inner = (
     <>
       <span style={{ fontFamily: 'var(--font-brand)' }}>{label}</span>
-      <span className={`flex items-center justify-center rounded-full bg-black text-white ${s.circle}`}>
+      <span className={`flex items-center justify-center rounded-full bg-black text-white transition-colors duration-300 ${hoverCircle} ${s.circle}`}>
         <Icon className={s.arrow} />
       </span>
     </>

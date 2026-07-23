@@ -76,7 +76,7 @@ function Step({ step, i }: { step: (typeof STEPS)[number]; i: number }) {
         </span>
       </div>
       <div className="flex flex-1 flex-col gap-2 p-4">
-        <h3 className="font-display text-xl uppercase leading-none text-[var(--hh-green-deep)]">{step.title}</h3>
+        <h3 className="font-display text-3xl uppercase leading-[0.9] text-[var(--hh-green-deep)] md:text-4xl">{step.title}</h3>
         <p className="text-[12px] font-medium leading-relaxed text-[var(--hh-ink)]/75" style={{ fontFamily: 'var(--font-brand)' }}>
           {step.body}
         </p>

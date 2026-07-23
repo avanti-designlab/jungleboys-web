@@ -85,7 +85,7 @@ export default async function HhShop() {
                             </span>
                           )}
                         </p>
-                        <PillCta label="Add to Cart" size="sm" icon="cart" href="/locations" className="shrink-0 whitespace-nowrap" />
+                        <PillCta label="Add to Cart" size="sm" icon="cart" hover="black" href="/locations" className="shrink-0 whitespace-nowrap" />
                       </div>
                     </div>
                   </article>
