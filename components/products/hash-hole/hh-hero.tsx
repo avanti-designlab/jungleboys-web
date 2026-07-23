@@ -5,7 +5,8 @@
 export default function HhHero() {
   return (
     <section className="relative px-2 pt-2 md:px-3">
-      <div className="relative h-[92vh] min-h-[560px] overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] md:rounded-[2.5rem]">
+      {/* the header samples this region: dark video → dark header pill */}
+      <div data-nav-theme="dark" className="relative h-[92vh] min-h-[560px] overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] md:rounded-[2.5rem]">
         <video
           className="absolute inset-0 h-full w-full object-cover"
           autoPlay
