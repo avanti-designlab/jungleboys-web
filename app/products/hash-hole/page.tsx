@@ -28,7 +28,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function HashHolePage() {
   return (
-    <main className="hh-page relative overflow-hidden">
+    // overflow-x-clip, never overflow-hidden: hidden makes this a scroll
+    // container and every ScrollTrigger inside freezes at a fixed progress
+    <main className="hh-page relative overflow-x-clip">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

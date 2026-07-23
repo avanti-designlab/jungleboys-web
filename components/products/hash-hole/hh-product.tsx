@@ -6,10 +6,16 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// Built to Hit — ONE compact screen, no pinning. The tube sweeps in from the
-// right and the joint from the left underneath; they settle together in the
-// centre and stay. Headline above, spec line below. Everything is on screen at
-// once — no scrubbed dead space. Reduced-motion: settled, still.
+// The crossing. Nothing but product: a massive horizontal tube sweeps in from
+// the right and travels all the way off the left edge, while the joint runs the
+// opposite way underneath it. Both are scrubbed to the section's own pass
+// through the viewport — continuously scroll-driven with no pin, so the page
+// never stops moving. Reduced-motion: both sit still, centred.
+
+// Assets are vertical (tube 243×1080, joint 140×1080) — rotating 90° makes the
+// pre-rotation HEIGHT the on-screen width, hence the vw heights below.
+const TUBE_LEN = 96 // vw of horizontal reach
+const JOINT_LEN = 104
 
 export default function HhProduct() {
   const rootRef = useRef<HTMLElement>(null)
@@ -17,55 +23,62 @@ export default function HhProduct() {
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
-    const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      const tl = gsap.timeline({ scrollTrigger: { trigger: root, start: 'top 75%', once: true } })
-      tl.from('[data-head]', { opacity: 0, y: 40, duration: 0.5, ease: 'power3.out' }, 0)
-        .from('[data-tube]', { opacity: 0, xPercent: 90, rotate: 20, duration: 0.85, ease: 'power3.out' }, 0.05)
-        .from('[data-joint]', { opacity: 0, xPercent: -110, rotate: -26, duration: 0.85, ease: 'power3.out' }, 0.12)
-        .from('[data-copy]', { opacity: 0, y: 26, duration: 0.5, ease: 'power2.out' }, 0.5)
-      return () => tl.scrollTrigger?.kill()
-    })
-    return () => mm.revert()
+    const ctx = gsap.context(() => {
+      // GSAP writes transform wholesale, so centring + rotation live here rather
+      // than in Tailwind classes it would overwrite. Runs unconditionally so the
+      // reduced-motion path still lands centred.
+      gsap.set(['[data-tube]', '[data-joint]'], { xPercent: -50, yPercent: -50, rotate: 90 })
+
+      const mm = gsap.matchMedia()
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        // never read a 0 width — a stale reach() bakes in a zero-length tween
+        const reach = () => (window.innerWidth || document.documentElement.clientWidth || 1440) * 1.15
+
+        // ONE timeline / ONE trigger. Two tweens sharing a single scrollTrigger
+        // config object silently clobber each other — ScrollTrigger mutates it.
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: root,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 0.5,
+            invalidateOnRefresh: true, // re-evaluate reach() on every resize
+          },
+        })
+        tl.fromTo('[data-tube]', { x: reach }, { x: () => -reach(), ease: 'none' }, 0)
+          .fromTo('[data-joint]', { x: () => -reach() }, { x: reach, ease: 'none' }, 0)
+
+        // the art is heavy; its late layout shift leaves trigger positions stale
+        const refresh = () => ScrollTrigger.refresh()
+        window.addEventListener('load', refresh)
+        return () => window.removeEventListener('load', refresh)
+      })
+      return () => mm.revert()
+    }, root)
+    return () => ctx.revert()
   }, [])
 
   return (
-    <section ref={rootRef} className="relative overflow-hidden px-6 py-16 md:py-20">
-      <h2
-        data-head
-        className="font-display text-center uppercase leading-[0.85] text-[var(--hh-green-deep)]"
-        style={{ fontSize: 'min(13vw, 7rem)' }}
-      >
-        Built to <span className="hh-gold-head">Hit</span>
-      </h2>
-
-      {/* tube + joint, big, meeting in the middle */}
-      <div className="relative mx-auto mt-8 flex h-[52vh] min-h-[340px] max-w-[900px] items-center justify-center">
-        {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-        <img
-          data-joint
-          src="/products/hash-hole/joint.webp"
-          alt=""
-          aria-hidden
-          className="absolute left-1/2 z-10 h-[78%] w-auto -translate-x-[92%] -rotate-[9deg] drop-shadow-[0_24px_44px_rgba(0,0,0,0.32)]"
-        />
-        {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-        <img
-          data-tube
-          src="/products/hash-hole/tube.webp"
-          alt="Jungle Boys Hash Hole tube"
-          className="absolute left-1/2 z-20 h-full w-auto -translate-x-[8%] rotate-[5deg] drop-shadow-[0_30px_60px_rgba(0,0,0,0.38)]"
-        />
-      </div>
-
-      <p
-        data-copy
-        className="mx-auto mt-8 max-w-3xl text-center text-base font-bold uppercase leading-relaxed tracking-wide text-[var(--hh-ink)]/85 md:text-xl"
-        style={{ fontFamily: 'var(--font-brand)' }}
-      >
-        2g premium indoor flower · .5g live hash rosin · organic wood tip ·
-        all-natural paper
-      </p>
+    <section ref={rootRef} className="relative h-[92vh] min-h-[560px] overflow-hidden">
+      {/* joint — runs left → right, sitting under the tube */}
+      {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
+      <img
+        data-joint
+        src="/products/hash-hole/joint.webp"
+        alt=""
+        aria-hidden
+        className="absolute left-1/2 top-[63%] z-10 w-auto will-change-transform drop-shadow-[0_30px_50px_rgba(0,0,0,0.30)]"
+        style={{ height: `${JOINT_LEN}vw` }}
+      />
+      {/* tube — runs right → left, on top */}
+      {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
+      <img
+        data-tube
+        src="/products/hash-hole/tube.webp"
+        alt="Jungle Boys Hash Hole tube"
+        className="absolute left-1/2 top-[36%] z-20 w-auto will-change-transform drop-shadow-[0_36px_64px_rgba(0,0,0,0.38)]"
+        style={{ height: `${TUBE_LEN}vw` }}
+      />
     </section>
   )
 }

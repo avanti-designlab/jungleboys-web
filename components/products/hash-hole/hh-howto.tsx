@@ -9,23 +9,27 @@ gsap.registerPlugin(ScrollTrigger)
 // How to Smoke — the four steps, each a looping video (Avanti's clips) + copy,
 // revealing in sequence under the "HOW TO SMOKE" wordmark. Videos autoplay
 // muted and loop; an observer pauses them off-screen for battery/perf.
+//
+// Clip order is NOT source order: the delivered files are 1=inhale, 2=rotate,
+// 3=lighter, 4=ashtray, so each step pulls the clip that matches its action
+// (Avanti's mapping — step1←3, step2←1, step3←2, step4←4).
 
 const STEPS = [
   {
-    video: '/products/hash-hole/howto-1.mp4',
-    poster: '/products/hash-hole/howto-1-poster.webp',
+    video: '/products/hash-hole/howto-3.mp4',
+    poster: '/products/hash-hole/howto-3-poster.webp',
     title: 'Light the Tip Properly',
     body: 'Use a lighter or hemp wick. Toast the end evenly (like lighting a cigar) instead of torching one side. Once it’s evenly lit, take a slow first pull.',
   },
   {
-    video: '/products/hash-hole/howto-2.mp4',
-    poster: '/products/hash-hole/howto-2-poster.webp',
+    video: '/products/hash-hole/howto-1.mp4',
+    poster: '/products/hash-hole/howto-1-poster.webp',
     title: 'Pace Your Hits',
     body: 'Take slow, steady inhales instead of big rips. Hash burns hotter and stronger than flower. Exhale fully and wait a moment before your next hit.',
   },
   {
-    video: '/products/hash-hole/howto-3.mp4',
-    poster: '/products/hash-hole/howto-3-poster.webp',
+    video: '/products/hash-hole/howto-2.mp4',
+    poster: '/products/hash-hole/howto-2-poster.webp',
     title: 'Rotate as You Smoke',
     body: 'Rotate the joint as you puff so the cherry burns evenly. If the flower starts to canoe, gently touch it up with your lighter.',
   },

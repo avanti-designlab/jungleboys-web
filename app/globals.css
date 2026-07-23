@@ -1120,6 +1120,22 @@ body:has(.hh-page) footer {
   box-shadow: 0 10px 24px rgba(19,92,43,0.28);
 }
 
+/* course-signage plaque: green face, white keyline, hand-placed tilt, and a
+   soft cast shadow so it reads planted on the green rather than pasted on */
+.hh-plaque {
+  background: var(--hh-green);
+  border: 0.07em solid #fff;
+  border-radius: 0.24em;
+  rotate: var(--rot, 0deg);
+  box-shadow: 0 0.16em 0 rgba(11,58,27,0.55), 0 0.34em 0.6em rgba(11,58,27,0.32);
+  transition: rotate 0.45s var(--ease-out-cinematic), translate 0.45s var(--ease-out-cinematic);
+  will-change: transform;
+}
+.hh-plaque:hover {
+  rotate: 0deg;
+  translate: 0 -0.1em;
+}
+
 /* pointer line reveal (inside-the-joint breakdown) — grows from the label */
 .hh-pointer { opacity: 0; transform: translateY(16px); transition: opacity .7s var(--ease-out-cinematic), transform .7s var(--ease-out-cinematic); }
 .media-reveal.is-in .hh-pointer, .hh-pointer.is-in { opacity: 1; transform: none; }

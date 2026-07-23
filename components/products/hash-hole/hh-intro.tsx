@@ -1,100 +1,126 @@
-// Intro — laid out to match the Figma frame exactly (1440-wide artboard).
-// Measured positions, relative to the composition box (x:0-1440, y:185-795):
-//   logo          x 456  y 185  549×610
-//   2G            x 177  y 358  214×121
-//   .5G           x 180  y 533  214×121
-//   ORGANIC       x 1050 y 358  214×121
-//   ALL NATURAL   x 1050 y 533  214×121
-// The desktop stage keeps that aspect ratio and positions each box by percent,
-// so it scales but never drifts from the design. Mobile stacks (logo, then a
-// 2×2 grid) since the artboard proportions would be unreadable at phone width.
+'use client'
 
-const STAGE_W = 1440
-const STAGE_H = 610 // logo top (185) → logo bottom (795)
-const ORIGIN_Y = 185
+import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-type Box = { big: string; small: string; x: number; y: number; bigVw: number }
-// bigVw tuned per label so the longest ones still sit on a single line in the
-// 214px Figma box (Bebas is condensed, so short labels can run much larger)
-const BOXES: Box[] = [
-  { big: '2G', small: 'Indoor Flower', x: 177, y: 358, bigVw: 3.05 },
-  { big: '.5G', small: 'Hash Rosin', x: 180, y: 533, bigVw: 3.05 },
-  { big: 'Organic', small: 'Wood Tip', x: 1050, y: 358, bigVw: 2.35 },
-  { big: 'All Natural', small: 'Unrefined Paper', x: 1050, y: 533, bigVw: 2.15 },
-]
-const BOX_W = 214
-const BOX_H = 121
+gsap.registerPlugin(ScrollTrigger)
 
-function pct(v: number, total: number) {
-  return `${(v / total) * 100}%`
+// Intro — "The Tee Box". The HASH HOLE flag plants in the middle of the green
+// and four course-signage plaques swing down around it on staggered arcs, each
+// hand-tilted so it reads placed rather than gridded. Number and label sit
+// inline when the number is short (2G / .5G) and stack when the word is long
+// (ORGANIC / ALL NATURAL) — matching the pack design. One compact screen, no
+// pinning. Reduced-motion: everything settled, still.
+
+type Plaque = {
+  big: string
+  small: string
+  layout: 'inline' | 'stacked'
+  // desktop placement on the stage (%) + resting tilt
+  left: number
+  top: number
+  rot: number
+  from: number // swing-in direction
 }
 
-function BoxInner({ big, small, bigVw }: { big: string; small: string; bigVw: number }) {
+const PLAQUES: Plaque[] = [
+  { big: '2G', small: 'Indoor\nFlower', layout: 'inline', left: 1, top: 20, rot: -4, from: -70 },
+  { big: '.5G', small: 'Hash\nRosin', layout: 'inline', left: 5, top: 57, rot: 3, from: -70 },
+  { big: 'Organic', small: 'Wood Tip', layout: 'stacked', left: 74, top: 20, rot: 4, from: 70 },
+  { big: 'All Natural', small: 'Unrefined Paper', layout: 'stacked', left: 70, top: 57, rot: -3, from: 70 },
+]
+
+function PlaqueCard({ p }: { p: Plaque }) {
   return (
-    <>
-      <span className="font-display whitespace-nowrap uppercase leading-none" style={{ fontSize: `min(${bigVw}vw, ${Math.round(bigVw * 14.4)}px)` }}>
-        {big}
-      </span>
-      <span
-        className="whitespace-nowrap font-extrabold uppercase leading-tight tracking-tight"
-        style={{ fontFamily: 'var(--font-brand)', fontSize: 'min(1.15vw, 16px)' }}
-      >
-        {small}
-      </span>
-    </>
+    <div
+      className="hh-plaque flex items-center justify-center text-white"
+      style={{ ['--rot' as string]: `${p.rot}deg` }}
+    >
+      {p.layout === 'inline' ? (
+        <span className="flex items-center gap-[0.35em] px-[0.7em] py-[0.45em]">
+          <span className="font-display whitespace-nowrap leading-none" style={{ fontSize: '1em' }}>{p.big}</span>
+          <span className="font-extrabold uppercase leading-[1.05] tracking-tight" style={{ fontFamily: 'var(--font-brand)', fontSize: '0.4em' }}>
+            {p.small.split('\n').map((l) => <span key={l} className="block">{l}</span>)}
+          </span>
+        </span>
+      ) : (
+        <span className="flex flex-col items-center px-[0.7em] py-[0.4em] text-center">
+          <span className="font-display whitespace-nowrap leading-none" style={{ fontSize: '0.62em' }}>{p.big}</span>
+          <span className="whitespace-nowrap font-extrabold uppercase leading-none tracking-tight" style={{ fontFamily: 'var(--font-brand)', fontSize: '0.34em' }}>
+            {p.small}
+          </span>
+        </span>
+      )}
+    </div>
   )
 }
 
 export default function HhIntro() {
+  const rootRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const root = rootRef.current
+    if (!root) return
+    // scoped: unscoped selector strings leak into sibling sections sharing attr names
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia()
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        const tl = gsap.timeline({ scrollTrigger: { trigger: root, start: 'top 80%', once: true } })
+        tl.from('[data-kicker]', { opacity: 0, y: -24, duration: 0.5, ease: 'power3.out' }, 0)
+          .from('[data-logo]', { opacity: 0, y: -70, scale: 0.86, duration: 0.75, ease: 'back.out(1.5)' }, 0.1)
+        // plaques swing down from their own side, one after another (desktop and
+        // mobile stages both render, so stagger on i % 4 not raw index)
+        root.querySelectorAll<HTMLElement>('[data-plaque]').forEach((el, i) => {
+          const from = Number(el.dataset.from)
+          tl.from(el, { opacity: 0, y: -90, x: from, rotate: from > 0 ? 16 : -16, duration: 0.6, ease: 'back.out(1.6)' }, 0.35 + (i % 4) * 0.11)
+        })
+      })
+      return () => mm.revert()
+    }, root)
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <section id="hh-intro" className="relative px-6 pb-14 pt-20 md:pt-24">
+    <section id="hh-intro" ref={rootRef} className="relative px-6 pb-14 pt-20 md:pt-24">
       <p
-        className="media-reveal text-center font-extrabold uppercase tracking-[0.3em] text-[var(--hh-green-deep)]"
-        style={{ fontFamily: 'var(--font-brand)', fontSize: 'min(3.2vw, 42px)' }}
+        data-kicker
+        className="text-center font-extrabold uppercase tracking-[0.3em] text-[var(--hh-green-deep)]"
+        style={{ fontFamily: 'var(--font-brand)', fontSize: 'min(3.4vw, 44px)' }}
       >
         Introducing the all new
       </p>
 
-      {/* ── desktop: exact Figma stage ── */}
-      <div
-        className="relative mx-auto mt-6 hidden w-full max-w-[1440px] md:block"
-        style={{ aspectRatio: `${STAGE_W} / ${STAGE_H}` }}
-      >
+      {/* ── desktop stage: flag centre, plaques planted around it ── */}
+      <div className="relative mx-auto mt-4 hidden w-full max-w-[1400px] md:block" style={{ aspectRatio: '1400 / 720' }}>
         {/* eslint-disable-next-line @next/next/no-img-element -- hero logo */}
         <img
+          data-logo
           src="/products/hash-hole/hashhole-logo.webp"
           alt="Jungle Boys Hash Hole"
-          className="hh-float absolute"
-          style={{ left: pct(456, STAGE_W), top: 0, width: pct(549, STAGE_W), height: '100%', objectFit: 'contain' }}
+          className="hh-float absolute left-1/2 top-0 h-full w-auto -translate-x-1/2"
         />
-        {BOXES.map((b) => (
+        {PLAQUES.map((p) => (
           <div
-            key={b.big}
-            data-hh-plx={b.y === 358 ? -0.04 : 0.04}
-            className="hh-spec media-reveal absolute flex flex-col justify-center overflow-hidden px-[1.1%] text-white"
-            style={{
-              left: pct(b.x, STAGE_W),
-              top: pct(b.y - ORIGIN_Y, STAGE_H),
-              width: pct(BOX_W, STAGE_W),
-              height: pct(BOX_H, STAGE_H),
-            }}
+            key={p.big}
+            data-plaque
+            data-from={p.from}
+            className="absolute"
+            style={{ left: `${p.left}%`, top: `${p.top}%`, fontSize: 'min(4.4vw, 62px)' }}
           >
-            <BoxInner big={b.big} small={b.small} bigVw={b.bigVw} />
+            <PlaqueCard p={p} />
           </div>
         ))}
       </div>
 
-      {/* ── mobile: logo then a 2×2 grid in the same reading order ── */}
-      <div className="mt-6 md:hidden">
+      {/* ── mobile: flag, then plaques 2×2 ── */}
+      <div className="mt-4 md:hidden">
         {/* eslint-disable-next-line @next/next/no-img-element -- hero logo */}
-        <img src="/products/hash-hole/hashhole-logo.webp" alt="Jungle Boys Hash Hole" className="hh-float mx-auto w-[78vw]" />
-        <div className="mx-auto mt-8 grid max-w-[520px] grid-cols-2 gap-4">
-          {[BOXES[0], BOXES[2], BOXES[1], BOXES[3]].map((b) => (
-            <div key={b.big} className="hh-spec media-reveal flex aspect-[214/121] flex-col justify-center px-4 text-white">
-              <span className="font-display text-3xl uppercase leading-none">{b.big}</span>
-              <span className="text-xs font-extrabold uppercase leading-tight tracking-wide" style={{ fontFamily: 'var(--font-brand)' }}>
-                {b.small}
-              </span>
+        <img src="/products/hash-hole/hashhole-logo.webp" alt="Jungle Boys Hash Hole" className="hh-float mx-auto w-[76vw]" />
+        <div className="mx-auto mt-8 grid max-w-[520px] grid-cols-2 gap-4" style={{ fontSize: '8.5vw' }}>
+          {PLAQUES.map((p) => (
+            <div key={p.big} data-plaque data-from={p.from}>
+              <PlaqueCard p={p} />
             </div>
           ))}
         </div>

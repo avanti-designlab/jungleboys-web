@@ -6,11 +6,15 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// What's Inside the Roll — ONE compact screen, no pinning. Headline left, the
-// roll on the right. When the section enters view the pieces assemble in order
-// (paper → flower → rosin → tip), each followed by its line then its pill —
-// the whole build plays in a couple of seconds instead of eating screens of
-// scroll. Placements come from Avanti's SVG so nothing drifts.
+// What's Inside the Roll — the build is SCRUBBED to scroll position, so the
+// roll assembles under your thumb: paper → its line → its pill, then flower,
+// rosin, tip. Scroll back and it comes apart again. No pin, so the page keeps
+// moving the whole time and nothing sits parked on a dead screen. Placements
+// come from Avanti's SVG so nothing drifts.
+//
+// Every selector runs inside gsap.context(root) — unscoped strings leak across
+// sibling sections that share attribute names and silently poison each other's
+// from()-state.
 
 const STAGE = { w: 1074.75, h: 1245.76 }
 
@@ -43,24 +47,28 @@ export default function HhBreakdown() {
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
-    const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      const tl = gsap.timeline({ scrollTrigger: { trigger: root, start: 'top 72%', once: true } })
-      tl.from('[data-head]', { opacity: 0, x: -50, duration: 0.5, ease: 'power3.out' }, 0)
-      PARTS.forEach((p, i) => {
-        const at = 0.35 + i * 0.42
-        tl.from(`[data-piece="${p.key}"]`,
-          { opacity: 0, xPercent: p.from.x, yPercent: p.from.y, rotate: p.from.r, duration: 0.5, ease: 'power3.out' }, at)
-          .from(`[data-line="${p.key}"]`, { scaleX: 0, scaleY: 0, opacity: 0, duration: 0.22, ease: 'power2.out' }, at + 0.3)
-          .from(`[data-pill="${p.key}"]`, { opacity: 0, scale: 0.75, duration: 0.28, ease: 'back.out(2)' }, at + 0.4)
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia()
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: root, start: 'top 88%', end: 'bottom 55%', scrub: 0.6 },
+        })
+        tl.from('[data-head]', { opacity: 0, x: -70, duration: 0.8, ease: 'power2.out' }, 0)
+        PARTS.forEach((p, i) => {
+          const at = 0.6 + i * 0.9
+          tl.from(`[data-piece="${p.key}"]`,
+            { opacity: 0, xPercent: p.from.x, yPercent: p.from.y, rotate: p.from.r, duration: 0.7, ease: 'power2.out' }, at)
+            .from(`[data-line="${p.key}"]`, { scaleX: 0, scaleY: 0, opacity: 0, duration: 0.28, ease: 'power1.out' }, at + 0.5)
+            .from(`[data-pill="${p.key}"]`, { opacity: 0, scale: 0.7, duration: 0.32, ease: 'back.out(2)' }, at + 0.64)
+        })
       })
-      return () => tl.scrollTrigger?.kill()
-    })
-    return () => mm.revert()
+      return () => mm.revert()
+    }, root)
+    return () => ctx.revert()
   }, [])
 
   return (
-    <section ref={rootRef} className="relative overflow-hidden px-6 py-16 md:py-20">
+    <section ref={rootRef} className="relative overflow-hidden px-6 py-16 md:py-24">
       <div className="mx-auto grid w-full max-w-[1250px] items-center gap-8 lg:grid-cols-[0.85fr_1.15fr]">
         <h2 data-head className="font-display text-center uppercase leading-[0.82] text-[var(--hh-green-deep)] lg:text-left" style={{ fontSize: 'min(12vw, 6.5rem)' }}>
           What&apos;s <br className="hidden lg:block" /> Inside <br className="hidden lg:block" /> the <span className="hh-gold-head">Roll</span>
@@ -68,6 +76,7 @@ export default function HhBreakdown() {
 
         <div className="relative mx-auto w-full max-w-[520px]" style={{ aspectRatio: `${STAGE.w} / ${STAGE.h}` }}>
           {PARTS.map((p) => (
+            // eslint-disable-next-line @next/next/no-img-element -- positioned SVG-derived pieces
             <img key={p.key} data-piece={p.key} src={p.img} alt={p.label}
               className="absolute will-change-transform"
               style={{ left: `${p.left}%`, top: `${p.top}%`, width: `${p.width}%` }} />
