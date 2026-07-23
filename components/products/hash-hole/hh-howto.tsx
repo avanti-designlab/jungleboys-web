@@ -1,6 +1,10 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 // How to Smoke — the four steps, each a looping video (Avanti's clips) + copy,
 // revealing in sequence under the "HOW TO SMOKE" wordmark. Videos autoplay
@@ -55,8 +59,7 @@ function Step({ step, i }: { step: (typeof STEPS)[number]; i: number }) {
   return (
     <div
       ref={wrapRef}
-      className="media-reveal flex flex-col overflow-hidden rounded-[1.5rem] border-4 border-white bg-white/85 shadow-[0_14px_40px_rgba(19,92,43,0.18)] backdrop-blur"
-      style={{ transitionDelay: `${Math.min(i, 3) * 0.08}s` }}
+      className="flex flex-col overflow-hidden rounded-[1.5rem] border-4 border-white bg-white/85 shadow-[0_14px_40px_rgba(19,92,43,0.18)] backdrop-blur"
     >
       <div className="relative m-3 aspect-square overflow-hidden rounded-2xl bg-[color-mix(in_srgb,var(--hh-sky-top)_55%,white)]">
         <video
@@ -76,7 +79,7 @@ function Step({ step, i }: { step: (typeof STEPS)[number]; i: number }) {
         </span>
       </div>
       <div className="flex flex-1 flex-col gap-2 p-4">
-        <h3 className="font-display text-3xl uppercase leading-[0.9] text-[var(--hh-green-deep)] md:text-4xl">{step.title}</h3>
+        <h3 className="font-display whitespace-nowrap uppercase leading-[0.9] text-[var(--hh-green-deep)]" style={{ fontSize: 'clamp(1.15rem, 2.05vw, 1.9rem)' }}>{step.title}</h3>
         <p className="text-[12px] font-medium leading-relaxed text-[var(--hh-ink)]/75" style={{ fontFamily: 'var(--font-brand)' }}>
           {step.body}
         </p>
@@ -86,12 +89,35 @@ function Step({ step, i }: { step: (typeof STEPS)[number]; i: number }) {
 }
 
 export default function HhHowTo() {
+  const gridRef = useRef<HTMLDivElement>(null)
+
+  // cards fall in from above, one after another, as the row scrolls into view
+  useEffect(() => {
+    const grid = gridRef.current
+    if (!grid) return
+    const mm = gsap.matchMedia()
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const cards = grid.children
+      const tw = gsap.fromTo(
+        cards,
+        { y: -140, opacity: 0, rotate: -3 },
+        {
+          y: 0, opacity: 1, rotate: 0, duration: 0.75, ease: 'back.out(1.4)',
+          stagger: 0.18,
+          scrollTrigger: { trigger: grid, start: 'top 82%', once: true },
+        }
+      )
+      return () => { tw.scrollTrigger?.kill(); tw.kill() }
+    })
+    return () => mm.revert()
+  }, [])
+
   return (
     <section className="relative px-6 py-16 md:py-24">
       {/* eslint-disable-next-line @next/next/no-img-element -- section wordmark */}
       <img src="/products/hash-hole/wm-howtosmoke.webp" alt="How to Smoke" className="media-reveal mx-auto w-[min(80vw,620px)]" />
 
-      <div className="mx-auto mt-14 grid max-w-[1240px] gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div ref={gridRef} className="mx-auto mt-14 grid max-w-[1240px] gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {STEPS.map((s, i) => (
           <Step key={s.title} step={s} i={i} />
         ))}
