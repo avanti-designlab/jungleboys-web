@@ -10,6 +10,7 @@ import HhBreakdown from '@/components/products/hash-hole/hh-breakdown'
 import HhHowTo from '@/components/products/hash-hole/hh-howto'
 import HhVideos from '@/components/products/hash-hole/hh-videos'
 import HhShop from '@/components/products/hash-hole/hh-shop'
+import HhMarquee from '@/components/products/hash-hole/hh-marquee'
 import HhFinale from '@/components/products/hash-hole/hh-finale'
 
 // Hash Hole — second Phase 2 flagship. A sky-day journey: video hero → intro
@@ -45,9 +46,11 @@ export default function HashHolePage() {
       {/* all content rides above the fixed sky (z-0) */}
       <div className="relative z-10">
         <HhHero />
+        <HhMarquee />
         <HhIntro />
         <HhProduct />
         <HhBreakdown />
+        <HhMarquee reverse />
         <HhHowTo />
         <HhVideos />
         <HhShop />

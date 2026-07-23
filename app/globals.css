@@ -1073,18 +1073,17 @@ select:focus-visible,
 @keyframes hh-flap { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(0.55); } }
 .hh-bird svg { animation: hh-flap 0.5s ease-in-out infinite; transform-origin: center; }
 
-/* HASH HOLE hero letters — same drop-in family as the flower/contact banners,
-   gated so a direct visit sees it (RevealGate → html.jb-reveal) */
-@media (prefers-reduced-motion: no-preference) {
-  .hh-letter {
-    display: inline-block;
-    opacity: 0;
-    animation: fl-letter-drop 0.72s cubic-bezier(0.34, 1.5, 0.5, 1) both;
-    animation-play-state: paused;
-  }
-  html.jb-reveal .hh-letter { animation-play-state: running; }
-  .hh-scrollbtn { opacity: 0; animation: fade-up 0.7s ease-out 1.1s both; animation-play-state: paused; }
-  html.jb-reveal .hh-scrollbtn { animation-play-state: running; }
+/* HASH HOLE hero letters — held hidden while the film plays, then each letter
+   rises on the parent's .hh-reveal-on (fired by first scroll or a 30s timer).
+   Transition-driven so the per-letter stagger comes from inline transitionDelay. */
+.hh-letter-hold {
+  opacity: 0;
+  transform: translateY(0.9em) scale(0.9);
+  transition: opacity 0.7s cubic-bezier(0.34, 1.4, 0.5, 1), transform 0.7s cubic-bezier(0.34, 1.4, 0.5, 1);
+}
+.hh-reveal-on .hh-letter-hold { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .hh-letter-hold { transition: none; }
 }
 
 /* gold graffiti-style headline (HASH HOLE gold with dark keyline) */

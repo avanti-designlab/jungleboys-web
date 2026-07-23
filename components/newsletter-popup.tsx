@@ -21,6 +21,8 @@ export default function NewsletterPopup({ consentText }: { consentText: string }
 
   // ── trigger: once per visitor, after the age gate, on scroll or a delay ──
   useEffect(() => {
+    // never interrupt an immersive product-line landing page
+    if (window.location.pathname.startsWith('/products/')) return
     try {
       if (localStorage.getItem(SEEN_KEY)) return
     } catch {}

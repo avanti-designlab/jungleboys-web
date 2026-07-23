@@ -2,31 +2,28 @@
 
 import { useEffect, useRef } from 'react'
 
-// Fixed sky behind the whole page: a day-blue gradient that warms slightly as
-// you scroll toward the golf-course finale, two drifting cloud bands, and a few
-// birds crossing on loops. Pure transform/opacity; reduced-motion stills it.
+// Fixed sky behind the whole page: a day-blue gradient that warms toward the
+// golf-course finale, the real Figma clouds drifting in two bands, and birds
+// crossing on loops. Pure transform/opacity; reduced-motion stills it.
 
-function Cloud({ className, style }: { className?: string; style?: React.CSSProperties }) {
-  return (
-    <svg viewBox="0 0 220 90" className={className} style={style} aria-hidden fill="#ffffff">
-      <ellipse cx="60" cy="60" rx="60" ry="28" />
-      <ellipse cx="110" cy="46" rx="50" ry="34" />
-      <ellipse cx="160" cy="60" rx="55" ry="26" />
-      <rect x="30" y="58" width="160" height="26" rx="13" />
-    </svg>
-  )
-}
+const CLOUDS = ['cloud-a', 'cloud-b', 'cloud-c', 'cloud-d']
 
-function CloudRow({ cls, opacity }: { cls: string; opacity: number }) {
-  // two copies for a seamless -50% loop
+function CloudRow({ cls, opacity, sizes }: { cls: string; opacity: number; sizes: number[] }) {
   return (
     <div className={`absolute flex w-[200%] ${cls}`} style={{ opacity }}>
       {[0, 1].map((k) => (
         <div key={k} className="flex w-1/2 shrink-0 items-start justify-around">
-          <Cloud className="w-[16vw] min-w-[130px]" />
-          <Cloud className="w-[22vw] min-w-[180px] -translate-y-6" />
-          <Cloud className="w-[13vw] min-w-[110px] translate-y-10" />
-          <Cloud className="w-[19vw] min-w-[150px] -translate-y-2" />
+          {sizes.map((w, i) => (
+            // eslint-disable-next-line @next/next/no-img-element -- decorative cloud
+            <img
+              key={i}
+              src={`/products/hash-hole/${CLOUDS[(i + k) % CLOUDS.length]}.webp`}
+              alt=""
+              aria-hidden
+              className="shrink-0"
+              style={{ width: `${w}vw`, minWidth: w * 3, transform: `translateY(${(i % 3) * 26 - 14}px)` }}
+            />
+          ))}
         </div>
       ))}
     </div>
@@ -36,7 +33,7 @@ function CloudRow({ cls, opacity }: { cls: string; opacity: number }) {
 function Bird({ style }: { style: React.CSSProperties }) {
   return (
     <span className="hh-bird absolute" style={style} aria-hidden>
-      <svg viewBox="0 0 40 16" width="40" height="16" fill="none" stroke="rgba(14,42,23,0.55)" strokeWidth="2.4" strokeLinecap="round">
+      <svg viewBox="0 0 40 16" width="40" height="16" fill="none" stroke="rgba(14,42,23,0.5)" strokeWidth="2.4" strokeLinecap="round">
         <path d="M2 12 Q11 2 20 11 Q29 2 38 12" />
       </svg>
     </span>
@@ -55,7 +52,7 @@ export default function HhSky() {
       raf = requestAnimationFrame(() => {
         raf = 0
         const p = Math.min(1, window.scrollY / (document.body.scrollHeight - window.innerHeight || 1))
-        warm.style.opacity = String(Math.max(0, (p - 0.4) / 0.6)) // warm haze fades in lower down
+        warm.style.opacity = String(Math.max(0, (p - 0.55) / 0.45))
       })
     }
     onScroll()
@@ -68,19 +65,17 @@ export default function HhSky() {
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      {/* base day gradient */}
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, var(--hh-sky-top) 0%, var(--hh-sky-mid) 55%, #7fd0f7 100%)' }} />
-      {/* warm haze that grows toward the finale */}
-      <div ref={warmRef} className="absolute inset-0 opacity-0" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(255,214,120,0.25) 70%, rgba(150,210,120,0.4) 100%)' }} />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #7fd0f7 0%, #4db2ef 55%, #63c3f5 100%)' }} />
+      <div ref={warmRef} className="absolute inset-0 opacity-0" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(255,220,130,0.22) 72%, rgba(150,210,120,0.35) 100%)' }} />
       {/* cloud bands */}
-      <div className="absolute inset-x-0 top-[8vh] h-[40vh]">
-        <CloudRow cls="hh-clouds-slow top-0" opacity={0.55} />
-        <CloudRow cls="hh-clouds top-[22vh]" opacity={0.85} />
+      <div className="absolute inset-x-0 top-[6vh] h-[46vh]">
+        <CloudRow cls="hh-clouds-slow top-0" opacity={0.9} sizes={[15, 22, 13]} />
+        <CloudRow cls="hh-clouds top-[24vh]" opacity={1} sizes={[19, 12, 24]} />
       </div>
       {/* birds */}
-      <Bird style={{ top: '18vh', ['--s' as string]: 0.8, animationDuration: '26s', animationDelay: '0s' }} />
-      <Bird style={{ top: '30vh', ['--s' as string]: 1.1, animationDuration: '34s', animationDelay: '8s' }} />
-      <Bird style={{ top: '12vh', ['--s' as string]: 0.6, animationDuration: '40s', animationDelay: '18s' }} />
+      <Bird style={{ top: '16vh', ['--s' as string]: 0.8, animationDuration: '30s', animationDelay: '0s' }} />
+      <Bird style={{ top: '28vh', ['--s' as string]: 1.1, animationDuration: '38s', animationDelay: '10s' }} />
+      <Bird style={{ top: '11vh', ['--s' as string]: 0.6, animationDuration: '46s', animationDelay: '22s' }} />
     </div>
   )
 }

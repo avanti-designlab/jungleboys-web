@@ -58,10 +58,10 @@ function Step({ step, i }: { step: (typeof STEPS)[number]; i: number }) {
       className="media-reveal flex flex-col overflow-hidden rounded-[1.5rem] border-4 border-white bg-white/85 shadow-[0_14px_40px_rgba(19,92,43,0.18)] backdrop-blur"
       style={{ transitionDelay: `${Math.min(i, 3) * 0.08}s` }}
     >
-      <div className="relative aspect-square overflow-hidden bg-[color-mix(in_srgb,var(--hh-sky-top)_55%,white)]">
+      <div className="relative m-3 aspect-square overflow-hidden rounded-2xl bg-[color-mix(in_srgb,var(--hh-sky-top)_55%,white)]">
         <video
           ref={vidRef}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full rounded-2xl object-cover"
           autoPlay
           loop
           muted

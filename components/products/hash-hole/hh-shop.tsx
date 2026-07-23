@@ -19,10 +19,7 @@ export default async function HhShop() {
         <div className="mx-auto max-w-[1240px]">
           <Reveal className="text-center">
             {/* eslint-disable-next-line @next/next/no-img-element -- section wordmark */}
-            <img src="/products/hash-hole/wm-strains.webp" alt="Available Strains" className="mx-auto w-[min(72vw,520px)]" />
-            <h2 className="font-display mt-4 uppercase leading-[0.9] text-[var(--hh-green-deep)]" style={{ fontSize: 'min(9vw, 4.5rem)' }}>
-              Shop Hash Holes
-            </h2>
+            <img src="/products/hash-hole/wm-strains.webp" alt="Available Strains" className="mx-auto w-[min(82vw,640px)]" />
           </Reveal>
 
           <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 md:mt-16 lg:grid-cols-3">
@@ -34,7 +31,7 @@ export default async function HhShop() {
               return (
                 <Reveal key={p.id} delay={Math.min(i, 2) * 0.08}>
                   <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white text-[#0b0b0d] shadow-[0_10px_40px_rgba(0,0,0,0.1)]">
-                    <div className="relative aspect-[4/5] overflow-hidden bg-[linear-gradient(180deg,#8fd4f7_0%,#bfe8fb_100%)]">
+                    <div className="relative aspect-square overflow-hidden bg-[linear-gradient(180deg,#8fd4f7_0%,#bfe8fb_100%)]">
                       {deal ? (
                         <span className="absolute left-4 top-4 z-20 rounded-full bg-[var(--hh-gold)] px-3 py-1 text-[11px] font-extrabold uppercase tracking-widest text-[var(--hh-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
                           {pctOff}% off
@@ -45,12 +42,13 @@ export default async function HhShop() {
                           Featured
                         </span>
                       )}
+                      {/* pack shot fills the stage — bigger, no dead space up top */}
                       {/* eslint-disable-next-line @next/next/no-img-element -- pack shot */}
                       <img
                         src={p.images[0].url}
                         alt={p.images[0].alt}
                         loading="lazy"
-                        className="absolute bottom-[-2%] left-1/2 w-[80%] -translate-x-1/2 drop-shadow-[0_24px_36px_rgba(0,0,0,0.25)] transition-transform duration-500 ease-out group-hover:-translate-y-2 group-hover:scale-[1.03]"
+                        className="absolute inset-0 h-full w-full object-contain p-3 drop-shadow-[0_24px_36px_rgba(0,0,0,0.25)] transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-[1.04]"
                       />
                     </div>
                     <div className="flex flex-1 flex-col gap-2 p-5">
