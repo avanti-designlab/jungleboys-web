@@ -102,64 +102,68 @@ await wait(1200)
 const result = await evaluate(`(async () => {
   const wait = ms => new Promise(r => setTimeout(r, ms));
   const go = async y => { window.scrollTo(0, y); await wait(900); };
+  const xOf = e => Math.round(new DOMMatrixReadOnly(getComputedStyle(e).transform).m41);
   const out = { vw: innerWidth, vh: innerHeight };
 
-  // intro revamp: kicker gone, all-Bebas, hills present, logo centred, no overlap
-  out.kickerGone = !/INTRODUCING THE ALL NEW/i.test(document.body.innerText);
+  // one marquee only (the reverse one lower on the page)
+  out.marquees = [...document.querySelectorAll('section')].filter(s => /PLAYING WITH|HASH ROSIN/.test(s.textContent) && s.className.includes('overflow-hidden') && s.querySelector('.marquee-pause')).length;
+
+  // intro signs: rows optically centred (text block centre vs face centre)
   const intro = document.querySelector('#hh-intro');
   const stage = intro.querySelector('[data-logo]').parentElement;
   await go(stage.getBoundingClientRect().top + scrollY - innerHeight * 0.25);
   await wait(1600);
-  const logo = intro.querySelector('[data-logo]');
-  const lb = logo.getBoundingClientRect(), sb = stage.getBoundingClientRect();
-  out.logoCentredPx = Math.round((lb.left + lb.right) / 2 - (sb.left + sb.right) / 2);
-  const signs = [...stage.querySelectorAll('[data-sign]')];
-  out.signOverlaps = signs.filter(p => {
-    const b = p.getBoundingClientRect();
-    return b.right > lb.left + 10 && b.left < lb.right - 10 && b.bottom > lb.top && b.top < lb.bottom;
-  }).length;
-  out.hills = stage.querySelectorAll('[data-hill]').length;
-  // every text node inside signs must resolve to Bebas
-  const fams = new Set(signs.flatMap(p => [...p.querySelectorAll('span')]
-    .filter(e => e.textContent.trim() && !e.children.length)
-    .map(e => getComputedStyle(e).fontFamily.split(',')[0].replace(/["']/g,''))));
-  out.signFonts = [...fams];
-  out.signBoxes = signs.map(p => { const b = p.getBoundingClientRect();
-    return { t: p.innerText.replace(/\\s+/g,' ').slice(0,14), x: Math.round(b.left - sb.left), fits: p.scrollWidth <= p.clientWidth + 1 }; });
+  out.signCentring = [...stage.querySelectorAll('.hh-plaque')].map(f => {
+    const fb = f.getBoundingClientRect();
+    const tb = f.firstElementChild.getBoundingClientRect();
+    return { dx: Math.round((tb.left + tb.right) / 2 - (fb.left + fb.right) / 2),
+             dy: Math.round((tb.top + tb.bottom) / 2 - (fb.top + fb.bottom) / 2) };
+  });
+  out.thinApplied = !!stage.querySelector('.hh-sign-thin') &&
+    getComputedStyle(stage.querySelector('.hh-sign-thin')).webkitTextStrokeWidth !== '0px';
 
-  // crossing: shorter section, still full travel both ways
-  const tube = document.querySelector('[data-tube]');
-  const psec = tube.closest('section');
-  out.crossingH = Math.round(psec.offsetHeight);
-  const xOf = e => Math.round(new DOMMatrixReadOnly(getComputedStyle(e).transform).m41);
-  const joint = document.querySelector('[data-joint]');
+  // flyover: horizon caps, trails, ball, both pieces crossing
+  const psec = document.querySelector('[data-fly="tube"]').closest('section');
+  out.horizonCaps = psec.querySelectorAll('[class*="rounded-b-"]').length;
+  out.trailStrokes = psec.querySelectorAll('span span').length;
   const ptop = psec.getBoundingClientRect().top + scrollY;
+  const tubeW = document.querySelector('[data-fly="tube"]');
+  const jointW = document.querySelector('[data-fly="joint"]');
+  const ball = document.querySelector('[data-ball]');
   const cross = [];
-  for (const f of [0, 1]) {
+  for (const f of [0, 0.5, 1]) {
     await go(ptop - innerHeight + f * (psec.offsetHeight + innerHeight));
-    cross.push({ tubeX: xOf(tube), jointX: xOf(joint) });
+    cross.push({ tubeX: xOf(tubeW), jointX: xOf(jointW), ballX: xOf(ball) });
   }
-  out.crossing = { tubeRightToLeft: cross[0].tubeX > cross[1].tubeX, jointLeftToRight: cross[0].jointX < cross[1].jointX };
+  out.fly = { tubeRightToLeft: cross[0].tubeX > cross[2].tubeX,
+    jointLeftToRight: cross[0].jointX < cross[2].jointX,
+    ballOpposesTube: (cross[2].ballX - cross[0].ballX) > 0,
+    tubeTravel: cross[0].tubeX - cross[2].tubeX };
+  // grass clearance: at mid-pass the tube's top edge stays below the horizon cap
+  await go(ptop - innerHeight + 0.5 * (psec.offsetHeight + innerHeight));
+  const tubeBox = document.querySelector('[data-tube]').getBoundingClientRect();
+  const capBox = psec.querySelector('[class*="rounded-b-"]').getBoundingClientRect();
+  out.grassClearPx = Math.round(tubeBox.top - capBox.bottom);
 
-  // breakdown: still pinned + sequential; headline bigger
+  // breakdown still pinned + sequential
   const paper = document.querySelector('[data-piece="paper"]');
   const bsec = paper.closest('section');
-  const head = bsec.querySelector('[data-head]');
-  out.headPx = Math.round(parseFloat(getComputedStyle(head).fontSize));
   const pinStart = bsec.getBoundingClientRect().top + scrollY;
   const op = e => Number(getComputedStyle(e).opacity);
   const bd = [];
-  for (const f of [0.2, 0.6, 0.95]) {
+  for (const f of [0.2, 0.95]) {
     await go(pinStart + f * innerHeight * 2.4);
-    bd.push({ secTop: Math.round(bsec.getBoundingClientRect().top),
-      paper: op(paper), tip: op(document.querySelector('[data-piece="tip"]')) });
+    bd.push({ secTop: Math.round(bsec.getBoundingClientRect().top), paper: op(paper),
+      tip: op(document.querySelector('[data-piece="tip"]')) });
   }
-  out.breakdown = { pinned: bd.every(s => Math.abs(s.secTop) < 6),
-    sequential: bd[0].paper > bd[0].tip, endsBuilt: bd[2].tip > 0.9 };
+  out.breakdown = { pinned: bd.every(s => Math.abs(s.secTop) < 6), sequential: bd[0].paper > bd[0].tip, endsBuilt: bd[1].tip > 0.9 };
 
-  out.footer = !!document.querySelector('footer');
+  // footer gutter: the footer element no longer paints its own background
+  const foot = document.querySelector('footer');
+  out.footerBg = getComputedStyle(foot).backgroundColor;
+  out.bodyBg = getComputedStyle(document.body).backgroundColor;
+  out.footer = !!foot;
   out.horizScroll = document.documentElement.scrollWidth > innerWidth;
-  out.totalScreens = (document.documentElement.scrollHeight / innerHeight).toFixed(1);
   return out;
 })()`)
 

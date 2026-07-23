@@ -1054,6 +1054,7 @@ body:has(.hh-page) {
   background: #63c3f5; /* matches the sky gradient's bottom stop */
 }
 body:has(.hh-page) footer {
+  background: transparent; /* gutter shows the body's sky blue, not the theme bg */
   position: relative;
   z-index: 1;
 }
@@ -1149,6 +1150,8 @@ body:has(.hh-page) footer {
   @keyframes hh-float { from { translate: 0 0; } to { translate: 0 -16px; } }
   .hh-float { animation: hh-float 5s ease-in-out infinite alternate; }
   /* staked signs idle on desynced clocks so the tee box feels alive, not looped */
+  /* optically thinner Bebas: stroke glyph edges with the sign green */
+  .hh-sign-thin { -webkit-text-stroke: 0.55px var(--hh-green); paint-order: stroke fill; }
   @keyframes hh-sway { from { rotate: calc(var(--rot) - 1.1deg); } to { rotate: calc(var(--rot) + 1.1deg); } }
   .hh-sway { rotate: var(--rot); animation: hh-sway 4.6s ease-in-out infinite alternate; }
   .hh-sway:nth-of-type(2) { animation-duration: 5.4s; animation-delay: -1.2s; }

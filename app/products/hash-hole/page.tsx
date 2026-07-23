@@ -48,7 +48,6 @@ export default function HashHolePage() {
       {/* all content rides above the fixed sky (z-0) */}
       <div className="relative z-10">
         <HhHero />
-        <HhMarquee />
         <HhIntro />
         <HhProduct />
         <HhBreakdown />

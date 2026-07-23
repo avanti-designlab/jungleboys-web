@@ -31,20 +31,24 @@ const SIGNS: Sign[] = [
   { big: 'All Natural', small: 'Unrefined Paper', layout: 'stacked', side: 'right', inset: 4, bottom: 28, post: 14, rot: -2.5 },
 ]
 
+// Bebas ships a single weight, so the small labels are optically thinned by
+// stroking the glyph edges with the sign's own green (hh-sign-thin) — the big
+// values keep the full bold cut. Rows are flex-centred, not baseline-aligned:
+// Bebas sits low in its em box and baseline alignment reads off-centre.
 function SignFace({ s }: { s: Sign }) {
   return (
     <div className="hh-plaque font-display flex items-center justify-center text-white" style={{ ['--rot' as string]: '0deg' }}>
       {s.layout === 'inline' ? (
-        <span className="flex items-baseline gap-[0.3em] px-[0.7em] py-[0.4em]">
-          <span className="font-display whitespace-nowrap leading-none" style={{ fontSize: '1em' }}>{s.big}</span>
-          <span className="font-display whitespace-nowrap uppercase leading-[0.95]" style={{ fontSize: '0.52em', letterSpacing: '0.02em' }}>
+        <span className="flex items-center gap-[0.32em] px-[0.72em] py-[0.5em]">
+          <span className="whitespace-nowrap leading-[0.85]" style={{ fontSize: '1em' }}>{s.big}</span>
+          <span className="hh-sign-thin whitespace-nowrap uppercase leading-[0.85]" style={{ fontSize: '0.5em', letterSpacing: '0.045em' }}>
             {s.small.replace('\n', ' ')}
           </span>
         </span>
       ) : (
-        <span className="flex flex-col items-center px-[0.7em] py-[0.35em] text-center">
-          <span className="font-display whitespace-nowrap leading-none" style={{ fontSize: '0.72em' }}>{s.big}</span>
-          <span className="font-display whitespace-nowrap uppercase leading-none" style={{ fontSize: '0.44em', letterSpacing: '0.03em' }}>
+        <span className="flex flex-col items-center gap-[0.06em] px-[0.72em] py-[0.42em] text-center">
+          <span className="whitespace-nowrap leading-[0.85]" style={{ fontSize: '0.72em' }}>{s.big}</span>
+          <span className="hh-sign-thin whitespace-nowrap uppercase leading-[0.85]" style={{ fontSize: '0.42em', letterSpacing: '0.05em' }}>
             {s.small}
           </span>
         </span>
