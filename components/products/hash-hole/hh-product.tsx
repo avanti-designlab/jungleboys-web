@@ -60,7 +60,7 @@ export default function HhProduct() {
   }, [])
 
   return (
-    <section ref={rootRef} className="relative h-[92vh] min-h-[560px] overflow-hidden">
+    <section ref={rootRef} className="relative h-[64vh] min-h-[440px] overflow-hidden">
       {/* joint — runs left → right, sitting under the tube */}
       {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
       <img

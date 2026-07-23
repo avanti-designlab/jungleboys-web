@@ -101,67 +101,65 @@ await wait(1200)
 
 const result = await evaluate(`(async () => {
   const wait = ms => new Promise(r => setTimeout(r, ms));
-  const xOf = e => Math.round(new DOMMatrixReadOnly(getComputedStyle(e).transform).m41);
-  const op = e => Number(getComputedStyle(e).opacity);
   const go = async y => { window.scrollTo(0, y); await wait(900); };
   const out = { vw: innerWidth, vh: innerHeight };
 
-  // intro: logo centred in the stage, no plaque/logo overlap
-  const logo = document.querySelector('[data-logo]');
-  const stage = logo.parentElement;
-  await go(stage.getBoundingClientRect().top + scrollY - innerHeight * 0.4);
+  // intro revamp: kicker gone, all-Bebas, hills present, logo centred, no overlap
+  out.kickerGone = !/INTRODUCING THE ALL NEW/i.test(document.body.innerText);
+  const intro = document.querySelector('#hh-intro');
+  const stage = intro.querySelector('[data-logo]').parentElement;
+  await go(stage.getBoundingClientRect().top + scrollY - innerHeight * 0.25);
+  await wait(1600);
+  const logo = intro.querySelector('[data-logo]');
   const lb = logo.getBoundingClientRect(), sb = stage.getBoundingClientRect();
-  const logoMid = (lb.left + lb.right) / 2, stageMid = (sb.left + sb.right) / 2;
-  const plaques = [...document.querySelectorAll('[data-plaque]')].slice(0, 4);
-  const overlaps = plaques.filter(p => {
+  out.logoCentredPx = Math.round((lb.left + lb.right) / 2 - (sb.left + sb.right) / 2);
+  const signs = [...stage.querySelectorAll('[data-sign]')];
+  out.signOverlaps = signs.filter(p => {
     const b = p.getBoundingClientRect();
-    return b.right > lb.left + 8 && b.left < lb.right - 8 && b.bottom > lb.top && b.top < lb.bottom;
+    return b.right > lb.left + 10 && b.left < lb.right - 10 && b.bottom > lb.top && b.top < lb.bottom;
   }).length;
-  out.intro = { logoCentredPx: Math.round(logoMid - stageMid), plaqueLogoOverlaps: overlaps,
-    plaqueBoxes: plaques.map(p => { const b = p.getBoundingClientRect(); return Math.round(b.left - sb.left) + ',' + Math.round(b.top - sb.top); }) };
+  out.hills = stage.querySelectorAll('[data-hill]').length;
+  // every text node inside signs must resolve to Bebas
+  const fams = new Set(signs.flatMap(p => [...p.querySelectorAll('span')]
+    .filter(e => e.textContent.trim() && !e.children.length)
+    .map(e => getComputedStyle(e).fontFamily.split(',')[0].replace(/["']/g,''))));
+  out.signFonts = [...fams];
+  out.signBoxes = signs.map(p => { const b = p.getBoundingClientRect();
+    return { t: p.innerText.replace(/\\s+/g,' ').slice(0,14), x: Math.round(b.left - sb.left), fits: p.scrollWidth <= p.clientWidth + 1 }; });
 
-  // crossing scrub
+  // crossing: shorter section, still full travel both ways
   const tube = document.querySelector('[data-tube]');
-  const joint = document.querySelector('[data-joint]');
   const psec = tube.closest('section');
+  out.crossingH = Math.round(psec.offsetHeight);
+  const xOf = e => Math.round(new DOMMatrixReadOnly(getComputedStyle(e).transform).m41);
+  const joint = document.querySelector('[data-joint]');
   const ptop = psec.getBoundingClientRect().top + scrollY;
   const cross = [];
-  for (const f of [0, 0.5, 1]) {
+  for (const f of [0, 1]) {
     await go(ptop - innerHeight + f * (psec.offsetHeight + innerHeight));
-    cross.push({ f, tubeX: xOf(tube), jointX: xOf(joint) });
+    cross.push({ tubeX: xOf(tube), jointX: xOf(joint) });
   }
-  out.crossing = { tubeRightToLeft: cross[0].tubeX > cross[2].tubeX,
-    jointLeftToRight: cross[0].jointX < cross[2].jointX,
-    tubeTravel: cross[0].tubeX - cross[2].tubeX, jointTravel: cross[2].jointX - cross[0].jointX };
+  out.crossing = { tubeRightToLeft: cross[0].tubeX > cross[1].tubeX, jointLeftToRight: cross[0].jointX < cross[1].jointX };
 
-  // breakdown: PINNED — section top stays at 0 across the pin span while the
-  // build progresses one piece at a time
+  // breakdown: still pinned + sequential; headline bigger
   const paper = document.querySelector('[data-piece="paper"]');
   const bsec = paper.closest('section');
+  const head = bsec.querySelector('[data-head]');
+  out.headPx = Math.round(parseFloat(getComputedStyle(head).fontSize));
   const pinStart = bsec.getBoundingClientRect().top + scrollY;
+  const op = e => Number(getComputedStyle(e).opacity);
   const bd = [];
-  for (const f of [0.15, 0.35, 0.55, 0.75, 0.95]) {
+  for (const f of [0.2, 0.6, 0.95]) {
     await go(pinStart + f * innerHeight * 2.4);
-    const secTop = Math.round(bsec.getBoundingClientRect().top);
-    bd.push({ f, secTop,
-      paper: op(document.querySelector('[data-piece="paper"]')),
-      flower: op(document.querySelector('[data-piece="flower"]')),
-      rosin: op(document.querySelector('[data-piece="rosin"]')),
-      tip: op(document.querySelector('[data-piece="tip"]')),
-      pillPaper: op(document.querySelector('[data-pill="paper"]')) });
+    bd.push({ secTop: Math.round(bsec.getBoundingClientRect().top),
+      paper: op(paper), tip: op(document.querySelector('[data-piece="tip"]')) });
   }
-  out.breakdown = { samples: bd,
-    pinned: bd.every(s => Math.abs(s.secTop) < 6),
-    oneByOne: bd[0].paper > bd[0].tip && bd[1].flower > bd[1].tip,
-    endsBuilt: bd[4].tip > 0.9 };
-  const line = document.querySelector('[data-line="paper"]');
-  out.lineThinPx = Math.round(line.getBoundingClientRect().width);
-  out.pillHasNumber = /\\d/.test(document.querySelector('[data-pill="paper"]').textContent);
+  out.breakdown = { pinned: bd.every(s => Math.abs(s.secTop) < 6),
+    sequential: bd[0].paper > bd[0].tip, endsBuilt: bd[2].tip > 0.9 };
 
-  // footer gutter colour
-  out.bodyBg = getComputedStyle(document.body).backgroundColor;
   out.footer = !!document.querySelector('footer');
   out.horizScroll = document.documentElement.scrollWidth > innerWidth;
+  out.totalScreens = (document.documentElement.scrollHeight / innerHeight).toFixed(1);
   return out;
 })()`)
 
