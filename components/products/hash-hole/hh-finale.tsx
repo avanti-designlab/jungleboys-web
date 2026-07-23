@@ -4,7 +4,12 @@
 
 export default function HhFinale() {
   return (
-    <section className="relative h-[85vh] min-h-[520px] w-full overflow-hidden">
+    <section
+      className="relative h-[85vh] min-h-[520px] w-full overflow-hidden"
+      // bottom edge arcs down into the sky — same horizon language as the
+      // fairway caps, so the scene rolls out instead of hard-cutting
+      style={{ borderRadius: '0 0 50% 50% / 0 0 5.5vw 5.5vw' }}
+    >
       {/* eslint-disable-next-line @next/next/no-img-element -- finale scene */}
       <img
         src="/products/hash-hole/golf-scene.webp"
