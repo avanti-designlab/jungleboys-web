@@ -81,6 +81,7 @@ export default function ScrollSequence({ frames, heightVh = 300, base = BASE, si
       st.frame = idx
       const img = imagesRef.current[idx]
       if (!img) return
+      ctx.imageSmoothingQuality = 'high'
       // cover-fit
       const cw = canvas.width
       const ch = canvas.height

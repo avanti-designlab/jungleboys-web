@@ -24,7 +24,7 @@ export default function AnnivReveal() {
   }
 
   return (
-    <ScrollSequence frames={61} heightVh={260} base="/products/flower/frames/anniv" single onProgress={onProgress}>
+    <ScrollSequence frames={61} heightVh={260} base="/products/flower/frames/anniv" onProgress={onProgress}>
       <div
         ref={kickerRef}
         className="pointer-events-none absolute inset-x-0 top-[14vh] z-10 text-center text-[11px] font-bold uppercase tracking-[0.4em] text-[var(--fl-gold,#e9c15a)]"
