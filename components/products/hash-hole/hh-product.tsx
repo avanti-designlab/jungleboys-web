@@ -34,7 +34,7 @@ export default function HhProduct() {
   }, [])
 
   return (
-    <section ref={rootRef} className="relative px-6 py-24 md:py-32">
+    <section ref={rootRef} className="relative px-6 py-16 md:py-20">
       <div className="mx-auto grid max-w-[1150px] items-center gap-8 md:grid-cols-2">
         <div className="order-2 text-center md:order-1 md:text-left">
           <h2 className="font-display uppercase leading-[0.85] text-[var(--hh-green-deep)]" style={{ fontSize: 'min(16vw, 8rem)' }}>
@@ -46,7 +46,7 @@ export default function HhProduct() {
           </p>
         </div>
 
-        <div className="relative order-1 flex h-[58vh] min-h-[420px] items-center justify-center md:order-2">
+        <div className="relative order-1 flex h-[64vh] min-h-[440px] items-center justify-center md:order-2">
           {/* joint — left, its own motion */}
           {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
           <img
@@ -54,7 +54,7 @@ export default function HhProduct() {
             src="/products/hash-hole/joint.webp"
             alt=""
             aria-hidden
-            className="absolute left-[12%] z-10 h-[86%] w-auto drop-shadow-[0_20px_36px_rgba(0,0,0,0.3)] will-change-transform"
+            className="absolute left-[6%] z-10 h-[80%] w-auto drop-shadow-[0_20px_36px_rgba(0,0,0,0.3)] will-change-transform"
           />
           {/* tube — right, larger */}
           {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
@@ -62,7 +62,7 @@ export default function HhProduct() {
             data-tube
             src="/products/hash-hole/tube.webp"
             alt="Jungle Boys Hash Hole tube"
-            className="absolute right-[6%] z-20 h-full w-auto drop-shadow-[0_30px_50px_rgba(0,0,0,0.35)] will-change-transform"
+            className="absolute right-[2%] z-20 h-[104%] w-auto drop-shadow-[0_30px_50px_rgba(0,0,0,0.35)] will-change-transform"
           />
         </div>
       </div>

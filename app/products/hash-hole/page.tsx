@@ -55,6 +55,8 @@ export default function HashHolePage() {
         <HhVideos />
         <HhShop />
         <HhFinale />
+        {/* sky breathing room so the green scene never touches the footer */}
+        <div aria-hidden className="h-[16vh] min-h-[110px]" />
       </div>
     </main>
   )
