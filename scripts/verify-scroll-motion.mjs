@@ -104,65 +104,27 @@ const result = await evaluate(`(async () => {
   const go = async y => { window.scrollTo(0, y); await wait(900); };
   const xOf = e => Math.round(new DOMMatrixReadOnly(getComputedStyle(e).transform).m41);
   const out = { vw: innerWidth, vh: innerHeight };
-
-  // one marquee only (the reverse one lower on the page)
-  out.marquees = [...document.querySelectorAll('section')].filter(s => /PLAYING WITH|HASH ROSIN/.test(s.textContent) && s.className.includes('overflow-hidden') && s.querySelector('.marquee-pause')).length;
-
-  // intro signs: rows optically centred (text block centre vs face centre)
-  const intro = document.querySelector('#hh-intro');
-  const stage = intro.querySelector('[data-logo]').parentElement;
-  await go(stage.getBoundingClientRect().top + scrollY - innerHeight * 0.25);
-  await wait(1600);
-  out.signCentring = [...stage.querySelectorAll('.hh-plaque')].map(f => {
-    const fb = f.getBoundingClientRect();
-    const tb = f.firstElementChild.getBoundingClientRect();
-    return { dx: Math.round((tb.left + tb.right) / 2 - (fb.left + fb.right) / 2),
-             dy: Math.round((tb.top + tb.bottom) / 2 - (fb.top + fb.bottom) / 2) };
-  });
-  out.thinApplied = !!stage.querySelector('.hh-sign-thin') &&
-    getComputedStyle(stage.querySelector('.hh-sign-thin')).webkitTextStrokeWidth !== '0px';
-
-  // flyover: horizon caps, trails, ball, both pieces crossing
   const psec = document.querySelector('[data-fly="tube"]').closest('section');
-  out.horizonCaps = psec.querySelectorAll('[class*="rounded-b-"]').length;
-  out.trailStrokes = psec.querySelectorAll('span span').length;
   const ptop = psec.getBoundingClientRect().top + scrollY;
-  const tubeW = document.querySelector('[data-fly="tube"]');
-  const jointW = document.querySelector('[data-fly="joint"]');
-  const ball = document.querySelector('[data-ball]');
-  const cross = [];
-  for (const f of [0, 0.5, 1]) {
-    await go(ptop - innerHeight + f * (psec.offsetHeight + innerHeight));
-    cross.push({ tubeX: xOf(tubeW), jointX: xOf(jointW), ballX: xOf(ball) });
-  }
-  out.fly = { tubeRightToLeft: cross[0].tubeX > cross[2].tubeX,
-    jointLeftToRight: cross[0].jointX < cross[2].jointX,
-    ballOpposesTube: (cross[2].ballX - cross[0].ballX) > 0,
-    tubeTravel: cross[0].tubeX - cross[2].tubeX };
-  // grass clearance: at mid-pass the tube's top edge stays below the horizon cap
+  // mid-pass: measure the pair's composition
   await go(ptop - innerHeight + 0.5 * (psec.offsetHeight + innerHeight));
-  const tubeBox = document.querySelector('[data-tube]').getBoundingClientRect();
-  const capBox = psec.querySelector('[class*="rounded-b-"]').getBoundingClientRect();
-  out.grassClearPx = Math.round(tubeBox.top - capBox.bottom);
-
-  // breakdown still pinned + sequential
-  const paper = document.querySelector('[data-piece="paper"]');
-  const bsec = paper.closest('section');
-  const pinStart = bsec.getBoundingClientRect().top + scrollY;
-  const op = e => Number(getComputedStyle(e).opacity);
-  const bd = [];
-  for (const f of [0.2, 0.95]) {
-    await go(pinStart + f * innerHeight * 2.4);
-    bd.push({ secTop: Math.round(bsec.getBoundingClientRect().top), paper: op(paper),
-      tip: op(document.querySelector('[data-piece="tip"]')) });
+  const tb = document.querySelector('[data-tube]').getBoundingClientRect();
+  const jb = document.querySelector('[data-joint]').getBoundingClientRect();
+  const sb = psec.getBoundingClientRect();
+  out.tubeBand = [Math.round((tb.top - sb.top) / sb.height * 100), Math.round((tb.bottom - sb.top) / sb.height * 100)];
+  out.jointBand = [Math.round((jb.top - sb.top) / sb.height * 100), Math.round((jb.bottom - sb.top) / sb.height * 100)];
+  out.overlapPct = Math.max(0, Math.round((tb.bottom - jb.top) / sb.height * 100));
+  out.pairCentre = Math.round(((tb.top + jb.bottom) / 2 - sb.top) / sb.height * 100);
+  out.balls = [...document.querySelectorAll('[data-ball]')].length;
+  // travel directions incl. all balls
+  const cross = [];
+  for (const f of [0, 1]) {
+    await go(ptop - innerHeight + f * (psec.offsetHeight + innerHeight));
+    cross.push({ t: xOf(document.querySelector('[data-fly="tube"]')), j: xOf(document.querySelector('[data-fly="joint"]')),
+      a: xOf(document.querySelector('[data-ball="a"]')), b: xOf(document.querySelector('[data-ball="b"]')), c: xOf(document.querySelector('[data-ball="c"]')) });
   }
-  out.breakdown = { pinned: bd.every(s => Math.abs(s.secTop) < 6), sequential: bd[0].paper > bd[0].tip, endsBuilt: bd[1].tip > 0.9 };
-
-  // footer gutter: the footer element no longer paints its own background
-  const foot = document.querySelector('footer');
-  out.footerBg = getComputedStyle(foot).backgroundColor;
-  out.bodyBg = getComputedStyle(document.body).backgroundColor;
-  out.footer = !!foot;
+  out.dirs = { tube: cross[0].t > cross[1].t ? 'R->L' : 'wrong', joint: cross[0].j < cross[1].j ? 'L->R' : 'wrong',
+    ballA: cross[1].a - cross[0].a > 0 ? 'L->R' : 'R->L', ballB: cross[1].b - cross[0].b > 0 ? 'L->R' : 'R->L', ballC: cross[1].c - cross[0].c > 0 ? 'L->R' : 'R->L' };
   out.horizScroll = document.documentElement.scrollWidth > innerWidth;
   return out;
 })()`)

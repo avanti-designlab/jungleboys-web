@@ -14,9 +14,19 @@ gsap.registerPlugin(ScrollTrigger)
 // pass — no pin, the page never stops. Reduced-motion: pieces centred, still.
 
 // Assets are vertical (tube 220×932, joint 179×692) — rotating 90° makes the
-// pre-rotation HEIGHT the on-screen width.
-const TUBE_LEN = 96
-const JOINT_LEN = 96
+// pre-rotation HEIGHT the on-screen width. Sized so the pair reads massive but
+// never collides: tube ~18vw thick on the upper track, joint ~21vw on the
+// lower, the two tracks centred together in the frame.
+const TUBE_LEN = 72
+const JOINT_LEN = 74
+
+// a flight of golf balls at different depths: size + speed + direction vary so
+// they read as a driving range mid-volley, not one lost ball
+const BALLS = [
+  { key: 'a', size: 'h-[40px] w-[40px] md:h-[58px] md:w-[58px]', top: '10%', dir: 1, speed: 0.75, y0: '3vh', y1: '-7vh', spin: 540 },
+  { key: 'b', size: 'h-[22px] w-[22px] md:h-[30px] md:w-[30px]', top: '24%', dir: -1, speed: 0.55, y0: '-2vh', y1: '3vh', spin: -720, dim: true },
+  { key: 'c', size: 'h-[30px] w-[30px] md:h-[42px] md:w-[42px]', top: '89%', dir: 1, speed: 0.62, y0: '2vh', y1: '-4vh', spin: 640 },
+]
 
 // cartoon speed trails: staggered dashes hanging off the piece's tail edge
 // (the fly wrapper is a zero-height track line — the block sizes itself and
@@ -32,7 +42,7 @@ function Trails({ dir }: { dir: 'left' | 'right' }) {
     <span
       aria-hidden
       className="pointer-events-none absolute top-0 h-[14vw] w-[24vw] -translate-y-1/2"
-      style={{ [tail]: 'calc(50% + 40vw)' }}
+      style={{ [tail]: 'calc(50% + 30vw)' }}
     >
       {strokes.map((s, i) => (
         <span
@@ -75,9 +85,13 @@ export default function HhProduct() {
           .fromTo('[data-joint]', { y: '-3vh' }, { y: '4vh', ease: 'sine.inOut' }, 0)
           .fromTo('[data-tube]', { rotate: 93 }, { rotate: 85, ease: 'none' }, 0)
           .fromTo('[data-joint]', { rotate: 87 }, { rotate: 95, ease: 'none' }, 0)
-          // the wink: a golf ball counter-arcs high across with spin
-          .fromTo('[data-ball]', { x: () => -reach() * 0.7, y: '2vh' }, { x: () => reach() * 0.7, y: '-6vh', ease: 'none' }, 0)
-          .fromTo('[data-ball-spin]', { rotate: 0 }, { rotate: 720, ease: 'none' }, 0)
+        // the volley: each ball on its own depth, speed and direction
+        BALLS.forEach((b) => {
+          tl.fromTo(`[data-ball="${b.key}"]`,
+            { x: () => -b.dir * reach() * b.speed, y: b.y0 },
+            { x: () => b.dir * reach() * b.speed, y: b.y1, ease: 'none' }, 0)
+            .fromTo(`[data-ball="${b.key}"] [data-ball-spin]`, { rotate: 0 }, { rotate: b.spin, ease: 'none' }, 0)
+        })
 
         const refresh = () => ScrollTrigger.refresh()
         window.addEventListener('load', refresh)
@@ -94,14 +108,16 @@ export default function HhProduct() {
       <div aria-hidden className="absolute left-[-15%] top-0 z-0 h-[11%] w-[130%] rounded-b-[100%_100%] bg-[var(--hh-green-deep)]" />
       <div aria-hidden className="absolute left-[-10%] top-0 z-0 h-[7%] w-[120%] rounded-b-[100%_100%] bg-[var(--hh-green)]" />
 
-      {/* golf ball, high path */}
-      <div data-ball className="absolute left-1/2 top-[15%] z-10 will-change-transform">
-        <div data-ball-spin className="relative h-[46px] w-[46px] rounded-full bg-white shadow-[inset_-6px_-6px_10px_rgba(0,0,0,0.18),0_10px_20px_rgba(0,0,0,0.22)] md:h-[60px] md:w-[60px]">
-          <span aria-hidden className="absolute left-[30%] top-[36%] h-[8%] w-[8%] rounded-full bg-black/12" />
-          <span aria-hidden className="absolute left-[54%] top-[26%] h-[8%] w-[8%] rounded-full bg-black/12" />
-          <span aria-hidden className="absolute left-[46%] top-[54%] h-[8%] w-[8%] rounded-full bg-black/12" />
+      {/* the volley — three balls at different depths and directions */}
+      {BALLS.map((b) => (
+        <div key={b.key} data-ball={b.key} className="absolute left-1/2 z-10 will-change-transform" style={{ top: b.top, opacity: b.dim ? 0.82 : 1 }}>
+          <div data-ball-spin className={`relative rounded-full bg-white shadow-[inset_-5px_-5px_9px_rgba(0,0,0,0.18),0_8px_16px_rgba(0,0,0,0.2)] ${b.size}`}>
+            <span aria-hidden className="absolute left-[30%] top-[36%] h-[9%] w-[9%] rounded-full bg-black/12" />
+            <span aria-hidden className="absolute left-[54%] top-[26%] h-[9%] w-[9%] rounded-full bg-black/12" />
+            <span aria-hidden className="absolute left-[46%] top-[54%] h-[9%] w-[9%] rounded-full bg-black/12" />
+          </div>
         </div>
-      </div>
+      ))}
 
       {/* joint — flies left → right beneath the tube */}
       <div data-fly="joint" className="absolute inset-x-0 top-[72%] z-10 will-change-transform">
@@ -118,7 +134,7 @@ export default function HhProduct() {
       </div>
 
       {/* tube — flies right → left, on top */}
-      <div data-fly="tube" className="absolute inset-x-0 top-[46%] z-20 will-change-transform">
+      <div data-fly="tube" className="absolute inset-x-0 top-[30%] z-20 will-change-transform">
         <Trails dir="left" />
         {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
         <img
