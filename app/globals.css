@@ -1049,6 +1049,10 @@ select:focus-visible,
 /* The hash-hole fixed sky sits at z-0; lift the footer above it so it isn't
    painted over (the footer is a static sibling after <main>). Scoped to pages
    that actually render the sky. */
+/* sky, not white, in the gutter around the rounded footer card */
+body:has(.hh-page) {
+  background: #63c3f5; /* matches the sky gradient's bottom stop */
+}
 body:has(.hh-page) footer {
   position: relative;
   z-index: 1;

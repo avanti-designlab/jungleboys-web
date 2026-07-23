@@ -12,10 +12,11 @@ gsap.registerPlugin(ScrollTrigger)
 // through the viewport — continuously scroll-driven with no pin, so the page
 // never stops moving. Reduced-motion: both sit still, centred.
 
-// Assets are vertical (tube 243×1080, joint 140×1080) — rotating 90° makes the
-// pre-rotation HEIGHT the on-screen width, hence the vw heights below.
+// Assets are vertical (tube 220×932, joint 179×692 — alpha-split from the raw
+// Figma fill, complete tip to filter) — rotating 90° makes the pre-rotation
+// HEIGHT the on-screen width, hence the vw heights below.
 const TUBE_LEN = 96 // vw of horizontal reach
-const JOINT_LEN = 104
+const JOINT_LEN = 96
 
 export default function HhProduct() {
   const rootRef = useRef<HTMLElement>(null)

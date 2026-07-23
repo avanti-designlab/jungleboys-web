@@ -17,18 +17,19 @@ type Plaque = {
   big: string
   small: string
   layout: 'inline' | 'stacked'
-  // desktop placement on the stage (%) + resting tilt
-  left: number
+  // reference geometry: left column shares a LEFT edge, right column shares a
+  // RIGHT edge, rows sit at 26% / 58% — signs never enter the logo's band
+  side: 'left' | 'right'
   top: number
   rot: number
   from: number // swing-in direction
 }
 
 const PLAQUES: Plaque[] = [
-  { big: '2G', small: 'Indoor\nFlower', layout: 'inline', left: 1, top: 20, rot: -4, from: -70 },
-  { big: '.5G', small: 'Hash\nRosin', layout: 'inline', left: 5, top: 57, rot: 3, from: -70 },
-  { big: 'Organic', small: 'Wood Tip', layout: 'stacked', left: 74, top: 20, rot: 4, from: 70 },
-  { big: 'All Natural', small: 'Unrefined Paper', layout: 'stacked', left: 70, top: 57, rot: -3, from: 70 },
+  { big: '2G', small: 'Indoor\nFlower', layout: 'inline', side: 'left', top: 26, rot: -4, from: -70 },
+  { big: '.5G', small: 'Hash\nRosin', layout: 'inline', side: 'left', top: 58, rot: 3, from: -70 },
+  { big: 'Organic', small: 'Wood Tip', layout: 'stacked', side: 'right', top: 26, rot: 4, from: 70 },
+  { big: 'All Natural', small: 'Unrefined Paper', layout: 'stacked', side: 'right', top: 58, rot: -3, from: 70 },
 ]
 
 function PlaqueCard({ p }: { p: Plaque }) {
@@ -66,6 +67,9 @@ export default function HhIntro() {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
       mm.add('(prefers-reduced-motion: no-preference)', () => {
+        // xPercent centring set OUTSIDE the timeline: from() tweens write the
+        // whole transform, which is exactly how the logo lost its -50% shift
+        gsap.set('[data-logo]', { xPercent: -50 })
         const tl = gsap.timeline({ scrollTrigger: { trigger: root, start: 'top 80%', once: true } })
         tl.from('[data-kicker]', { opacity: 0, y: -24, duration: 0.5, ease: 'power3.out' }, 0)
           .from('[data-logo]', { opacity: 0, y: -70, scale: 0.86, duration: 0.75, ease: 'back.out(1.5)' }, 0.1)
@@ -92,13 +96,14 @@ export default function HhIntro() {
       </p>
 
       {/* ── desktop stage: flag centre, plaques planted around it ── */}
-      <div className="relative mx-auto mt-4 hidden w-full max-w-[1400px] md:block" style={{ aspectRatio: '1400 / 720' }}>
+      <div className="relative mx-auto mt-4 hidden w-full max-w-[1400px] md:block" style={{ aspectRatio: '1746 / 797' }}>
         {/* eslint-disable-next-line @next/next/no-img-element -- hero logo */}
         <img
           data-logo
           src="/products/hash-hole/hashhole-logo.webp"
           alt="Jungle Boys Hash Hole"
-          className="hh-float absolute left-1/2 top-0 h-full w-auto -translate-x-1/2"
+          className="hh-float absolute left-1/2 top-0 h-full w-auto"
+          style={{ transform: 'translateX(-50%)' }}
         />
         {PLAQUES.map((p) => (
           <div
@@ -106,7 +111,11 @@ export default function HhIntro() {
             data-plaque
             data-from={p.from}
             className="absolute"
-            style={{ left: `${p.left}%`, top: `${p.top}%`, fontSize: 'min(4.4vw, 62px)' }}
+            style={{
+              [p.side]: '5%',
+              top: `${p.top}%`,
+              fontSize: 'min(4.4vw, 62px)',
+            }}
           >
             <PlaqueCard p={p} />
           </div>

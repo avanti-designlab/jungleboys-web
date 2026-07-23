@@ -104,10 +104,23 @@ const result = await evaluate(`(async () => {
   const xOf = e => Math.round(new DOMMatrixReadOnly(getComputedStyle(e).transform).m41);
   const op = e => Number(getComputedStyle(e).opacity);
   const go = async y => { window.scrollTo(0, y); await wait(900); };
-
   const out = { vw: innerWidth, vh: innerHeight };
 
-  // crossing
+  // intro: logo centred in the stage, no plaque/logo overlap
+  const logo = document.querySelector('[data-logo]');
+  const stage = logo.parentElement;
+  await go(stage.getBoundingClientRect().top + scrollY - innerHeight * 0.4);
+  const lb = logo.getBoundingClientRect(), sb = stage.getBoundingClientRect();
+  const logoMid = (lb.left + lb.right) / 2, stageMid = (sb.left + sb.right) / 2;
+  const plaques = [...document.querySelectorAll('[data-plaque]')].slice(0, 4);
+  const overlaps = plaques.filter(p => {
+    const b = p.getBoundingClientRect();
+    return b.right > lb.left + 8 && b.left < lb.right - 8 && b.bottom > lb.top && b.top < lb.bottom;
+  }).length;
+  out.intro = { logoCentredPx: Math.round(logoMid - stageMid), plaqueLogoOverlaps: overlaps,
+    plaqueBoxes: plaques.map(p => { const b = p.getBoundingClientRect(); return Math.round(b.left - sb.left) + ',' + Math.round(b.top - sb.top); }) };
+
+  // crossing scrub
   const tube = document.querySelector('[data-tube]');
   const joint = document.querySelector('[data-joint]');
   const psec = tube.closest('section');
@@ -117,35 +130,38 @@ const result = await evaluate(`(async () => {
     await go(ptop - innerHeight + f * (psec.offsetHeight + innerHeight));
     cross.push({ f, tubeX: xOf(tube), jointX: xOf(joint) });
   }
-  out.crossing = { samples: cross,
-    tubeRightToLeft: cross[0].tubeX > cross[2].tubeX,
+  out.crossing = { tubeRightToLeft: cross[0].tubeX > cross[2].tubeX,
     jointLeftToRight: cross[0].jointX < cross[2].jointX,
-    tubeTravel: cross[0].tubeX - cross[2].tubeX,
-    jointTravel: cross[2].jointX - cross[0].jointX };
+    tubeTravel: cross[0].tubeX - cross[2].tubeX, jointTravel: cross[2].jointX - cross[0].jointX };
 
-  // breakdown
+  // breakdown: PINNED — section top stays at 0 across the pin span while the
+  // build progresses one piece at a time
   const paper = document.querySelector('[data-piece="paper"]');
-  const tip = document.querySelector('[data-piece="tip"]');
-  const head = [...document.querySelectorAll('h2')].find(e => /INSIDE/i.test(e.textContent));
   const bsec = paper.closest('section');
-  const btop = bsec.getBoundingClientRect().top + scrollY;
+  const pinStart = bsec.getBoundingClientRect().top + scrollY;
   const bd = [];
-  for (const f of [0.02, 0.35, 0.7, 1.05]) {
-    await go(btop - innerHeight + f * (bsec.offsetHeight + innerHeight));
-    bd.push({ f, paper: op(paper), tip: op(tip), head: op(head) });
+  for (const f of [0.15, 0.35, 0.55, 0.75, 0.95]) {
+    await go(pinStart + f * innerHeight * 2.4);
+    const secTop = Math.round(bsec.getBoundingClientRect().top);
+    bd.push({ f, secTop,
+      paper: op(document.querySelector('[data-piece="paper"]')),
+      flower: op(document.querySelector('[data-piece="flower"]')),
+      rosin: op(document.querySelector('[data-piece="rosin"]')),
+      tip: op(document.querySelector('[data-piece="tip"]')),
+      pillPaper: op(document.querySelector('[data-pill="paper"]')) });
   }
   out.breakdown = { samples: bd,
-    headEndsVisible: bd[3].head > 0.9,
-    buildsProgressively: bd[0].paper < 0.6 && bd[3].paper > 0.9 && bd[0].tip < 0.1 && bd[3].tip > 0.9,
-    paperBeforeTip: bd[1].paper > bd[1].tip };
+    pinned: bd.every(s => Math.abs(s.secTop) < 6),
+    oneByOne: bd[0].paper > bd[0].tip && bd[1].flower > bd[1].tip,
+    endsBuilt: bd[4].tip > 0.9 };
+  const line = document.querySelector('[data-line="paper"]');
+  out.lineThinPx = Math.round(line.getBoundingClientRect().width);
+  out.pillHasNumber = /\\d/.test(document.querySelector('[data-pill="paper"]').textContent);
 
-  // full-page checks
+  // footer gutter colour
+  out.bodyBg = getComputedStyle(document.body).backgroundColor;
   out.footer = !!document.querySelector('footer');
   out.horizScroll = document.documentElement.scrollWidth > innerWidth;
-  out.videoSlots = [...document.querySelectorAll('video source')].map(s => s.getAttribute('src')).filter(s => /howto/.test(s));
-  out.plaques = [...document.querySelectorAll('.hh-plaque')].slice(0,4).map(e => ({
-    t: e.innerText.replace(/\\s+/g,' ').trim().slice(0,24),
-    overflow: e.scrollWidth > e.clientWidth + 1 }));
   return out;
 })()`)
 
