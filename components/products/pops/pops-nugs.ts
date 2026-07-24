@@ -62,3 +62,24 @@ export function buildNugField(count: number, seed = 20260724): Nug[] {
   }
   return out
 }
+
+
+export type SprayNug = { src: string; x: number; y: number; size: number; delay: number; dur: number }
+
+// Ambient popping field for the whole page — random-looking spots, sizes and
+// pop clocks, seeded so SSR/client match.
+export function buildSpray(count: number, seed = 77123): SprayNug[] {
+  const r = lcg(seed)
+  const out: SprayNug[] = []
+  for (let i = 0; i < count; i++) {
+    out.push({
+      src: NUG_SRC[i % NUG_SRC.length],
+      x: 4 + r() * 92,
+      y: 6 + r() * 88,
+      size: 26 + r() * 34,
+      delay: r() * 9,
+      dur: 5.5 + r() * 4,
+    })
+  }
+  return out
+}

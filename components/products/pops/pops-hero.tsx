@@ -105,42 +105,50 @@ export default function PopsHero() {
         data-word
         className="pointer-events-none absolute inset-x-0 top-[22%] z-[25] text-center will-change-transform md:top-[24%]"
       >
-        <div className="relative inline-block">
-        <h1
-          aria-label="5G Pops"
-          className="font-display whitespace-nowrap uppercase leading-[0.8] text-[var(--pops-ink)]"
-          style={{ fontSize: 'min(33vw, 30rem)' }}
-        >
-          {WORD.split('').map((ch, i) => (
-            <span
-              key={i}
-              aria-hidden
-              className="contact-letter"
-              style={{ animationDelay: `${0.25 + i * 0.07}s`, color: i < 2 ? 'var(--pops-red)' : undefined }}
-            >
-              {ch === ' ' ? ' ' : ch}
-            </span>
-          ))}
-        </h1>
-
-          {/* stroke-only twin, masked by a travelling band — the outline is the
-              OPPOSITE colour to what it traces (dark on the red 5G, red on the
-              black POPS). Rides the same letter-drop delays so it stays welded
-              to the fill while the letters land. */}
-          <span
-            aria-hidden
-            className="pops-trace font-display absolute inset-0 whitespace-nowrap uppercase leading-[0.8]"
+        {/* fill + outline stacked in ONE grid cell so they can never drift
+            apart. The fill drops in letter-by-letter; the outline is a static
+            twin (same glyphs, transparent fill, opposite-colour stroke) that
+            fades in AFTER the letters land — animating a second copy alongside
+            the drop is what made the old outline glitch and go off-centre. */}
+        <div className="pops-word grid">
+          <h1
+            aria-label="5G Pops"
+            className="pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8] text-[var(--pops-ink)]"
             style={{ fontSize: 'min(33vw, 30rem)' }}
           >
             {WORD.split('').map((ch, i) => (
               <span
                 key={i}
-                className="contact-letter pops-trace-letter"
-                style={{
-                  animationDelay: `${0.25 + i * 0.07}s`,
-                  WebkitTextStrokeColor: i < 2 ? 'var(--pops-ink)' : 'var(--pops-red)',
-                }}
+                aria-hidden
+                className="contact-letter"
+                style={{ animationDelay: `${0.25 + i * 0.07}s`, color: i < 2 ? 'var(--pops-red)' : undefined }}
               >
+                {ch === ' ' ? ch : ch}
+              </span>
+            ))}
+          </h1>
+
+          <span
+            aria-hidden
+            className="pops-trace pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8]"
+            style={{ fontSize: 'min(33vw, 30rem)' }}
+          >
+            {WORD.split('').map((ch, i) => (
+              <span key={i} className="pops-glyph" style={{ WebkitTextStrokeColor: i < 2 ? 'var(--pops-ink)' : 'var(--pops-red)' }}>
+                {ch === ' ' ? ch : ch}
+              </span>
+            ))}
+          </span>
+
+          {/* the moving highlight: a brighter copy of the outline, masked by a
+              band that sweeps across — the visible bit "travels" around the type */}
+          <span
+            aria-hidden
+            className="pops-shine pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8]"
+            style={{ fontSize: 'min(33vw, 30rem)' }}
+          >
+            {WORD.split('').map((ch, i) => (
+              <span key={i} className="pops-glyph" style={{ WebkitTextStrokeColor: i < 2 ? 'var(--pops-ink)' : 'var(--pops-red)' }}>
                 {ch === ' ' ? ch : ch}
               </span>
             ))}

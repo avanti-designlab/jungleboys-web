@@ -1165,50 +1165,73 @@ body:has(.hh-page) footer {
     );
     animation: pops-stripe-drift 9s linear infinite;
   }
-  /* Tracing outline on the POPS wordmark. A stroke-only duplicate sits exactly
-     over the filled type; a narrow band sweeps across it, so what you see is
-     the letterform's own outline travelling around the words. Masking the
-     duplicate (rather than drawing a path) means it always matches the glyphs
-     at any size, with no font-metric guesswork. */
-  @keyframes pops-trace-sweep {
-    from { -webkit-mask-position: 240% 0; mask-position: 240% 0; }
-    to   { -webkit-mask-position: -140% 0; mask-position: -140% 0; }
+  /* Tracing outline on the 5G POPS wordmark. Fill + outline are stacked in the
+     SAME grid cell so they are pixel-identical — no absolute-positioning drift.
+     The outline is a stroke-only twin (transparent fill) that fades in AFTER
+     the letters have dropped, then a bright segment sweeps across it so the
+     outline reads as "tracing" around the words. Animating a SECOND letter-drop
+     is what made the previous version glitch and sit off-centre. */
+  .pops-word > .pops-word-cell { grid-area: 1 / 1; justify-self: center; }
+  /* outline glyphs must be inline-block like the fill's .contact-letter, or the
+     two runs space letters differently and the outline drifts across the word */
+  .pops-glyph { display: inline-block; }
+
+  .pops-trace, .pops-shine {
+    color: transparent;
+    -webkit-text-stroke-width: 3px;
+    opacity: 0;
+    pointer-events: none;
   }
-  .pops-trace {
-    -webkit-mask-image: linear-gradient(105deg, transparent 40%, #000 47%, #000 54%, transparent 61%);
-    mask-image: linear-gradient(105deg, transparent 40%, #000 47%, #000 54%, transparent 61%);
-    -webkit-mask-size: 300% 100%;
-    mask-size: 300% 100%;
+  @media (min-width: 768px) {
+    .pops-trace, .pops-shine { -webkit-text-stroke-width: 4px; }
+  }
+
+  @keyframes pops-trace-in { to { opacity: 0.45; } }
+  @keyframes pops-shine-sweep {
+    0%   { -webkit-mask-position: 135% 0; mask-position: 135% 0; }
+    100% { -webkit-mask-position: -35% 0; mask-position: -35% 0; }
+  }
+  html.jb-reveal .pops-trace {
+    animation: pops-trace-in 0.5s ease-out 1.35s forwards; /* welds on after the letter drop */
+  }
+  .pops-shine {
+    /* a narrow bright band travels across the outline */
+    -webkit-mask-image: linear-gradient(100deg, transparent 44%, #000 49%, #000 51%, transparent 56%);
+    mask-image: linear-gradient(100deg, transparent 44%, #000 49%, #000 51%, transparent 56%);
+    -webkit-mask-size: 260% 100%;
+    mask-size: 260% 100%;
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
-    animation: pops-trace-sweep 2.8s linear infinite;
-    animation-play-state: paused; /* released with the letter drop */
   }
-  html.jb-reveal .pops-trace { animation-play-state: running; }
-  .pops-trace-letter {
-    color: transparent;
-    -webkit-text-stroke-width: 2px;
+  @keyframes pops-shine-in { to { opacity: 1; } }
+  html.jb-reveal .pops-shine {
+    animation:
+      pops-shine-in 0.01s linear 1.5s forwards,
+      pops-shine-sweep 3s linear 1.5s infinite;
   }
-  @media (min-width: 768px) { .pops-trace-letter { -webkit-text-stroke-width: 3px; } }
-  @media (prefers-reduced-motion: reduce) { .pops-trace { display: none; } }
 
-  /* Sections slide DOWN into place as you reach them (like the home hero
-     banners) — the inner pill/content starts lifted and drops in. Transform +
-     opacity only; decoupled from the GSAP pins, which act on the section, not
-     this inner wrapper. */
-  .pops-reveal {
+    @media (prefers-reduced-motion: reduce) {
+    .pops-trace { opacity: 0.45; animation: none; }
+    .pops-shine { display: none; }
+  }
+
+  /* ambient mini-nug pop: fade/scale in, hold briefly, pop away — looped */
+  @keyframes pops-blip {
+    0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+    8%       { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+    14%      { transform: translate(-50%, -50%) scale(1); }
+    40%      { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    52%      { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(30deg); }
+  }
+  .pops-blip {
     opacity: 0;
-    transform: translateY(-9%) scale(0.985);
-    transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: pops-blip 7s ease-in-out infinite;
     will-change: transform, opacity;
+    filter: drop-shadow(0 6px 10px rgba(0,0,0,0.18));
   }
-  .pops-reveal.is-in { opacity: 1; transform: none; }
-  @media (prefers-reduced-motion: reduce) {
-    .pops-reveal { opacity: 1; transform: none; transition: none; }
-  }
+  @media (prefers-reduced-motion: reduce) { .pops-blip { display: none; } }
 
-  /* per-section stripe tones — the page changes ground as you scroll */
+  /* per-section stripe tones  /* per-section stripe tones — the page changes ground as you scroll */
   .pops-stripes-dark {
     background-image: repeating-linear-gradient(104deg, #1b1b1f 0 34px, #0b0b0d 34px 80px);
     animation: pops-stripe-drift 9s linear infinite;
