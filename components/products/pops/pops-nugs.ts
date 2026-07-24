@@ -66,19 +66,22 @@ export function buildNugField(count: number, seed = 20260724): Nug[] {
 
 export type SprayNug = { src: string; x: number; y: number; size: number; delay: number; dur: number }
 
-// Ambient popping field for the whole page — random-looking spots, sizes and
-// pop clocks, seeded so SSR/client match.
-export function buildSpray(count: number, seed = 77123): SprayNug[] {
+// Ambient popping field CONFINED to a section's empty top and bottom margin
+// bands (content is vertically centred, so these stay clear of text/cards).
+// Seeded so SSR/client match.
+export function buildSectionSpray(count: number, seed = 4242): SprayNug[] {
   const r = lcg(seed)
   const out: SprayNug[] = []
   for (let i = 0; i < count; i++) {
+    const top = r() < 0.5
     out.push({
       src: NUG_SRC[i % NUG_SRC.length],
-      x: 4 + r() * 92,
-      y: 6 + r() * 88,
-      size: 26 + r() * 34,
-      delay: r() * 9,
-      dur: 5.5 + r() * 4,
+      x: 3 + r() * 94,
+      // top band 2–11% or bottom band 89–98% — never the centred content
+      y: top ? 2 + r() * 9 : 89 + r() * 9,
+      size: 24 + r() * 26,
+      delay: r() * 8,
+      dur: 5.5 + r() * 3.5,
     })
   }
   return out

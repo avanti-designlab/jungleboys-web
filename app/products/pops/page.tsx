@@ -8,7 +8,6 @@ import PopsMarquee from '@/components/products/pops/pops-marquee'
 import PopsLineup from '@/components/products/pops/pops-lineup'
 import PopsShop from '@/components/products/pops/pops-shop'
 import PopsReveal from '@/components/products/pops/pops-reveal'
-import PopsSpray from '@/components/products/pops/pops-spray'
 import { getProducts } from '@/lib/dutchie'
 import type { LineupItem } from '@/components/products/pops/pops-lineup'
 
@@ -69,7 +68,6 @@ export default async function PopsPage() {
         }}
       />
       <PopsStripes />
-      <PopsSpray />
 
       {/* all content rides above the fixed stripe field (z-0) */}
       <PopsReveal />

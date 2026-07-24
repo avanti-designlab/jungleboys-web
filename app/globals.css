@@ -1176,43 +1176,43 @@ body:has(.hh-page) footer {
      two runs space letters differently and the outline drifts across the word */
   .pops-glyph { display: inline-block; }
 
-  .pops-trace, .pops-shine {
+  .pops-trace {
     color: transparent;
     -webkit-text-stroke-width: 3px;
-    opacity: 0;
+    /* hidden until the draw-on wipe reveals it */
+    opacity: 1;
     pointer-events: none;
-  }
-  @media (min-width: 768px) {
-    .pops-trace, .pops-shine { -webkit-text-stroke-width: 4px; }
-  }
-
-  @keyframes pops-trace-in { to { opacity: 0.45; } }
-  @keyframes pops-shine-sweep {
-    0%   { -webkit-mask-position: 135% 0; mask-position: 135% 0; }
-    100% { -webkit-mask-position: -35% 0; mask-position: -35% 0; }
-  }
-  html.jb-reveal .pops-trace {
-    animation: pops-trace-in 0.5s ease-out 1.35s forwards; /* welds on after the letter drop */
-  }
-  .pops-shine {
-    /* a narrow bright band travels across the outline */
-    -webkit-mask-image: linear-gradient(100deg, transparent 44%, #000 49%, #000 51%, transparent 56%);
-    mask-image: linear-gradient(100deg, transparent 44%, #000 49%, #000 51%, transparent 56%);
-    -webkit-mask-size: 260% 100%;
-    mask-size: 260% 100%;
+    /* the wipe: a hard-edged mask sweeps once, left→right, revealing the
+       outline as it goes, then holds fully revealed (forwards) = "draws around
+       then stays solid". */
+    -webkit-mask-image: linear-gradient(to right, #000 0 47%, transparent 53% 100%);
+    mask-image: linear-gradient(to right, #000 0 47%, transparent 53% 100%);
+    -webkit-mask-size: 210% 100%;
+    mask-size: 210% 100%;
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
   }
-  @keyframes pops-shine-in { to { opacity: 1; } }
-  html.jb-reveal .pops-shine {
-    animation:
-      pops-shine-in 0.01s linear 1.5s forwards,
-      pops-shine-sweep 3s linear 1.5s infinite;
+  @media (min-width: 768px) { .pops-trace { -webkit-text-stroke-width: 4px; } }
+  /* each outline glyph is scaled up about its own centre → the outline sits
+     OUTSIDE the fill with a transparent gap between them */
+  .pops-trace .pops-glyph { transform: scale(1.08); transform-origin: 50% 54%; }
+
+  @keyframes pops-draw {
+    from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+    to   { -webkit-mask-position: 0% 0; mask-position: 0% 0; }
+  }
+  html.jb-reveal .pops-trace {
+    /* starts with the letter drop, finishes tracing ~2.4s later, then holds */
+    animation: pops-draw 2.1s cubic-bezier(0.5, 0, 0.2, 1) 0.35s forwards;
   }
 
-    @media (prefers-reduced-motion: reduce) {
-    .pops-trace { opacity: 0.45; animation: none; }
-    .pops-shine { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .pops-trace {
+      animation: none;
+      -webkit-mask-position: 0% 0; mask-position: 0% 0; /* fully revealed, no draw */
+    }
   }
 
   /* ambient mini-nug pop: fade/scale in, hold briefly, pop away — looped */

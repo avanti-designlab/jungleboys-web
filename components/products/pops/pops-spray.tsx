@@ -1,19 +1,19 @@
 'use client'
 
-import { buildSpray } from './pops-nugs'
+import { buildSectionSpray } from './pops-nugs'
 
-// Ambient mini-nugs that pop in and out at random spots while you're on the
-// page — a fixed, pointer-transparent layer sitting above the stripes but below
-// the content pills, so the pops read as playful background life without
-// cluttering the type. CSS-only loop (`pops-blip`), staggered per kernel.
-// Positions come from a seeded RNG so SSR and client agree.
+// Ambient mini-nugs that pop in and out WITHIN a section (not a fixed screen
+// overlay) — so they scroll with the section and only show while you're in it.
+// Rendered as the FIRST child of a section's content pill, so it sits BEHIND
+// the text/cards (content always covers it), and positions are confined to the
+// empty top/bottom margin bands so they never land on the centred content.
+// Seeded RNG → SSR and client agree. None of these on the hero.
 
-const SPRAY = buildSpray(22)
-
-export default function PopsSpray() {
+export default function PopsSectionSpray({ seed = 4242 }: { seed?: number }) {
+  const nugs = buildSectionSpray(9, seed)
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-[35] overflow-hidden">
-      {SPRAY.map((n, i) => (
+    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+      {nugs.map((n, i) => (
         // eslint-disable-next-line @next/next/no-img-element -- ambient kernel
         <img
           key={i}

@@ -128,23 +128,12 @@ export default function PopsHero() {
             ))}
           </h1>
 
+          {/* offset outline: a stroke-only twin scaled slightly larger than the
+              fill so a transparent gap sits between the letter and its outline;
+              a wipe draws it on once as the letters drop, then it stays solid */}
           <span
             aria-hidden
             className="pops-trace pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8]"
-            style={{ fontSize: 'min(33vw, 30rem)' }}
-          >
-            {WORD.split('').map((ch, i) => (
-              <span key={i} className="pops-glyph" style={{ WebkitTextStrokeColor: i < 2 ? 'var(--pops-ink)' : 'var(--pops-red)' }}>
-                {ch === ' ' ? ch : ch}
-              </span>
-            ))}
-          </span>
-
-          {/* the moving highlight: a brighter copy of the outline, masked by a
-              band that sweeps across — the visible bit "travels" around the type */}
-          <span
-            aria-hidden
-            className="pops-shine pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8]"
             style={{ fontSize: 'min(33vw, 30rem)' }}
           >
             {WORD.split('').map((ch, i) => (

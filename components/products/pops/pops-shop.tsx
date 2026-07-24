@@ -1,6 +1,7 @@
 import { getProducts } from '@/lib/dutchie'
 import PillCta from '@/components/pill-cta'
 import Reveal from '@/components/reveal'
+import PopsSectionSpray from './pops-spray'
 
 // Shop 5G Pops — the SAME card structure as the flower and hash-hole shops on
 // the frozen lib/dutchie interface, so all three stay in sync when Phase 3
@@ -24,7 +25,8 @@ export default async function PopsShop() {
 
   return (
     <section id="pops-shop" className="pops-slide scroll-mt-24 px-3 pb-16 md:px-4 md:pb-24">
-      <div data-reveal className="pops-reveal rounded-[2rem] border-4 border-[#101012] bg-[#0b0b0d] px-4 py-16 text-white shadow-[0_26px_70px_rgba(0,0,0,0.4)] md:rounded-[3rem] md:px-10 md:py-24">
+      <div data-reveal className="pops-reveal relative overflow-hidden rounded-[2rem] border-4 border-[#101012] bg-[#0b0b0d] px-4 py-16 text-white shadow-[0_26px_70px_rgba(0,0,0,0.4)] md:rounded-[3rem] md:px-10 md:py-24">
+        <PopsSectionSpray seed={53} />
         <div className="mx-auto max-w-[1240px]">
           <Reveal className="text-center">
             <h2 className="font-display uppercase leading-[0.82] text-white" style={{ fontSize: 'min(13vw, 6.5rem)' }}>

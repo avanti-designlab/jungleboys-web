@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import PillCta from '@/components/pill-cta'
+import PopsSectionSpray from './pops-spray'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -119,7 +120,8 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
   return (
     // solid pill on the striped page — the stripes show only in the gutter
     <section ref={rootRef} className="pops-slide relative z-10 p-2 md:h-screen md:min-h-[680px] md:p-3">
-      <div data-reveal className="pops-reveal overflow-hidden rounded-[2rem] bg-[var(--pops-red)] py-14 text-white md:flex md:h-full md:items-center md:rounded-[3rem] md:py-0">
+      <div data-reveal className="pops-reveal relative overflow-hidden rounded-[2rem] bg-[var(--pops-red)] py-14 text-white md:flex md:h-full md:items-center md:rounded-[3rem] md:py-0">
+        <PopsSectionSpray seed={29} />
       <div className="relative w-full">
         <h2
           className="font-display px-6 pt-2 text-center uppercase leading-[0.82] text-white"
