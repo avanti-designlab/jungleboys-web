@@ -15,7 +15,10 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  `connect-src 'self' https://api.storyblok.com https://api-us.storyblok.com https://nominatim.openstreetmap.org${isDev ? " ws:" : ""}`,
+  // blob: — three.js GLTFLoader creates ephemeral same-origin blob URLs for the
+  // embedded 3D-model textures (Pops jar viewer); worker-src for its decoders.
+  `connect-src 'self' blob: https://api.storyblok.com https://api-us.storyblok.com https://nominatim.openstreetmap.org${isDev ? " ws:" : ""}`,
+  "worker-src 'self' blob:",
   "frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com",
   "frame-ancestors 'self'",
   "base-uri 'self'",
