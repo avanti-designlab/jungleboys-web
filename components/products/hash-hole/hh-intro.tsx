@@ -22,13 +22,17 @@ type Sign = {
   bottom: number // % where the SIGN base sits (post runs from here into the hill)
   post: number // post height as % of stage height
   rot: number // resting tilt
+  // wind: own period/phase/amplitude — shared values make signs move in lockstep
+  dur: number
+  delay: number
+  amp: number
 }
 
 const SIGNS: Sign[] = [
-  { big: '2G', small: 'Indoor\nFlower', layout: 'inline', side: 'left', inset: 4, bottom: 46, post: 30, rot: -3 },
-  { big: '.5G', small: 'Hash\nRosin', layout: 'inline', side: 'left', inset: 11, bottom: 28, post: 14, rot: 2.5 },
-  { big: 'Organic', small: 'Wood Tip', layout: 'stacked', side: 'right', inset: 11, bottom: 46, post: 30, rot: 3 },
-  { big: 'All Natural', small: 'Unrefined Paper', layout: 'stacked', side: 'right', inset: 4, bottom: 28, post: 14, rot: -2.5 },
+  { big: '2G', small: 'Indoor\nFlower', layout: 'inline', side: 'left', inset: 4, bottom: 46, post: 30, rot: -3, dur: 4.9, delay: -1.3, amp: 2.3 },
+  { big: '.5G', small: 'Hash\nRosin', layout: 'inline', side: 'left', inset: 11, bottom: 28, post: 14, rot: 2.5, dur: 5.7, delay: -0.4, amp: 2.7 },
+  { big: 'Organic', small: 'Wood Tip', layout: 'stacked', side: 'right', inset: 11, bottom: 46, post: 30, rot: 3, dur: 5.2, delay: -2.2, amp: 2.1 },
+  { big: 'All Natural', small: 'Unrefined Paper', layout: 'stacked', side: 'right', inset: 4, bottom: 28, post: 14, rot: -2.5, dur: 6.1, delay: -3.1, amp: 2.5 },
 ]
 
 // Bebas ships a single weight, so the small labels are optically thinned by
@@ -112,23 +116,31 @@ export default function HhIntro() {
 
         {/* staked signage — posts run from each sign into the turf */}
         {SIGNS.map((s) => (
+          // outer = the wind (pivots where the post meets the turf); inner =
+          // the GSAP entrance. Separate elements because transform-origin is
+          // shared between `transform` and the `rotate` property.
           <div
             key={s.big}
-            data-sign
-            className="hh-sway absolute origin-bottom"
+            className="hh-sway absolute"
             style={{
               [s.side]: `${s.inset}%`,
               bottom: `${s.bottom}%`,
               fontSize: 'min(4.2vw, 58px)',
+              transformOrigin: `50% calc(100% + ${s.post}vh)`,
               ['--rot' as string]: `${s.rot}deg`,
+              ['--sway-dur' as string]: `${s.dur}s`,
+              ['--sway-delay' as string]: `${s.delay}s`,
+              ['--sway-amp' as string]: `${s.amp}deg`,
             }}
           >
-            <SignFace s={s} />
-            <span
-              aria-hidden
-              className="absolute left-1/2 top-[96%] -z-10 w-[10px] -translate-x-1/2 rounded-b-full bg-white shadow-[0_10px_18px_rgba(19,92,43,0.3)]"
-              style={{ height: `calc(${s.post}vh)` }}
-            />
+            <div data-sign className="origin-bottom">
+              <SignFace s={s} />
+              <span
+                aria-hidden
+                className="absolute left-1/2 top-[96%] -z-10 w-[10px] -translate-x-1/2 rounded-b-full bg-white shadow-[0_10px_18px_rgba(19,92,43,0.3)]"
+                style={{ height: `calc(${s.post}vh)` }}
+              />
+            </div>
           </div>
         ))}
       </div>
@@ -139,8 +151,19 @@ export default function HhIntro() {
         <img src="/products/hash-hole/hashhole-logo.webp" alt="Jungle Boys Hash Hole" className="hh-float relative z-10 mx-auto w-[72vw]" />
         <div className="relative z-10 mx-auto mt-8 grid max-w-[520px] grid-cols-2 gap-4 px-6" style={{ fontSize: '8vw' }}>
           {SIGNS.map((s) => (
-            <div key={s.big} data-sign>
-              <SignFace s={s} />
+            <div
+              key={s.big}
+              className="hh-sway origin-bottom"
+              style={{
+                ['--rot' as string]: `${s.rot}deg`,
+                ['--sway-dur' as string]: `${s.dur}s`,
+                ['--sway-delay' as string]: `${s.delay}s`,
+                ['--sway-amp' as string]: `${s.amp}deg`,
+              }}
+            >
+              <div data-sign>
+                <SignFace s={s} />
+              </div>
             </div>
           ))}
         </div>

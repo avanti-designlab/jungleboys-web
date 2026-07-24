@@ -36,7 +36,9 @@ const F = {
   bodyH: 0.8543, bodyTop: -0.3543, // body top edge = the open mouth
   jointW: 0.1904, jointH: 0.7425, jointTop: -0.25, // starts fully inside the body
   slide: -0.90, // travel that clears the joint completely of the mouth
-  finalRot: 82,
+  // the tube rises from the lower left and points up-right; art-up maps to
+  // screen direction (sin θ, −cos θ), so 58° = pointing up at ~32° above level
+  entryRot: 74, restRot: 58, finalRot: 68,
 }
 const cl = (f: number) => `calc(var(--hh-L) * ${f})`
 
@@ -58,7 +60,8 @@ export default function HhProduct() {
         (mmCtx) => {
           const c = mmCtx.conditions as Record<string, boolean>
           const L = c.isMobile ? 68 : 52 // tube length in vw — mirrors --hh-L
-          const startX = c.isMobile ? -8 : -16 // left-of-centre so nothing clips
+          const restX = c.isMobile ? -12 : -18 // sits left of centre
+          const restY = c.isMobile ? 6 : 5 // …and low, so it reads as rising from the corner
           const zoom = c.isMobile ? 1.3 : 1.45
           const v = (f: number) => `${(f * L).toFixed(2)}vw`
 
@@ -80,12 +83,12 @@ export default function HhProduct() {
             return
           }
 
-          gsap.set('[data-grp]', { rotate: 92 })
+          gsap.set('[data-grp]', { rotate: F.restRot })
           gsap.set('[data-burst]', { opacity: 0 })
 
           const tl = gsap.timeline({
             scrollTrigger: {
-              trigger: root, start: 'top top', end: '+=195%',
+              trigger: root, start: 'top top', end: '+=145%',
               pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true,
             },
           })
@@ -98,9 +101,10 @@ export default function HhProduct() {
               .fromTo(`[data-ball="${b.key}"] [data-ball-spin]`, { rotate: 0 }, { rotate: b.spin, ease: 'none', duration: 1 }, 0)
           })
 
-          // the closed tube swings up and levels out, left of centre
-          tl.fromTo('[data-grp]', { x: `${startX}vw`, y: '70vh', rotate: 116 },
-            { x: `${startX}vw`, y: 0, rotate: 92, ease: 'power2.out', duration: 0.16 }, 0.18)
+          // the closed tube rises out of the bottom-left corner, angled up
+          tl.fromTo('[data-grp]',
+            { x: `${restX - 14}vw`, y: '58vw', rotate: F.entryRot },
+            { x: `${restX}vw`, y: `${restY}vw`, rotate: F.restRot, ease: 'power2.out', duration: 0.18 }, 0.16)
 
           // cap works itself loose…
           tl.to('[data-cap]', { rotate: 7, duration: 0.022, ease: 'power1.inOut' }, 0.38)

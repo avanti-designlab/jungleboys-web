@@ -22,7 +22,7 @@ function Row() {
 
 export default function HhMarquee({ reverse = false }: { reverse?: boolean }) {
   return (
-    <section aria-hidden className="mt-8 overflow-hidden bg-[var(--hh-green)] py-4 md:mt-12 md:py-6">
+    <section aria-hidden className="my-14 overflow-hidden bg-[var(--hh-green)] py-4 md:my-20 md:py-6">
       <div className="marquee-pause flex">
         <div className={`${reverse ? 'marquee-track-reverse' : 'marquee-track'} flex`}>
           <Row />

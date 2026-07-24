@@ -103,39 +103,56 @@ const result = await evaluate(`(async () => {
   const wait = ms => new Promise(r => setTimeout(r, ms));
   const go = async y => { window.scrollTo(0, y); await wait(950); };
   const mat = e => new DOMMatrixReadOnly(getComputedStyle(e).transform);
+  const rotOf = e => Math.round(Math.atan2(mat(e).b, mat(e).a) * 180 / Math.PI);
   const out = { vw: innerWidth, vh: innerHeight };
-  window.scrollTo(0, 0); await wait(800);
+  window.scrollTo(0, 0); await wait(900);
+
+  // ── signs: four distinct wind clocks, pivoting from the post base
+  const sways = [...document.querySelectorAll('#hh-intro .hh-sway')].slice(0, 4);
+  out.sway = sways.map(e => { const cs = getComputedStyle(e);
+    return { dur: cs.animationDuration, delay: cs.animationDelay, origin: cs.transformOrigin, name: cs.animationName }; });
+  out.swayAllDistinct = new Set(out.sway.map(s => s.dur + s.delay)).size === 4;
+  // sample rotation twice — a running animation must change it
+  const r1 = sways.map(e => Number(getComputedStyle(e).rotate.replace('deg','')) || 0);
+  await wait(1400);
+  const r2 = sways.map(e => Number(getComputedStyle(e).rotate.replace('deg','')) || 0);
+  out.swayMoving = r1.some((v, i) => Math.abs(v - r2[i]) > 0.15);
+
+  // ── unbox: rises from lower-left at an angle, shorter span
   const grp = document.querySelector('[data-grp]');
   const sec = grp.closest('section');
   const top = sec.getBoundingClientRect().top + scrollY;
-  const span = innerHeight * 1.95;
-  const cap = document.querySelector('[data-cap]');
-  const body = document.querySelector('[data-body]');
-  const jimg = document.querySelector('[data-jzoom]');
+  const span = innerHeight * 1.45;
+  out.pinSpanVh = 145;
   const S = [];
-  for (const f of [0.1, 0.3, 0.5, 0.68, 0.82, 0.97]) {
+  for (const f of [0.30, 0.52, 0.97]) {
     await go(top + f * span);
-    const jb = jimg.getBoundingClientRect(), bb = body.getBoundingClientRect();
-    S.push({ f, secTop: Math.round(sec.getBoundingClientRect().top),
-      capOp: +Number(getComputedStyle(cap).opacity).toFixed(2),
-      bodyOp: +Number(getComputedStyle(body).opacity).toFixed(2),
-      jointW: Math.round(jb.width), jointH: Math.round(jb.height),
-      jointCx: Math.round(jb.left + jb.width / 2), jointCy: Math.round(jb.top + jb.height / 2),
-      jointL: Math.round(jb.left), jointR: Math.round(jb.right),
-      // fully out = joint's trailing edge clears the body's mouth entirely
-      clearOfBody: bb.width < 2 || jb.left > bb.right - 4 || jb.right < bb.left + 4 || bb.bottom < jb.top || bb.top > jb.bottom,
-      bodyL: Math.round(bb.left), bodyR: Math.round(bb.right) });
+    const jb = document.querySelector('[data-jzoom]').getBoundingClientRect();
+    S.push({ f, x: Math.round(mat(grp).m41), y: Math.round(mat(grp).m42), rot: rotOf(grp),
+      jl: Math.round(jb.left), jr: Math.round(jb.right), jw: Math.round(jb.width),
+      bodyOp: +Number(getComputedStyle(document.querySelector('[data-body]')).opacity).toFixed(2) });
   }
-  out.samples = S;
-  out.pinned = S.every(s => Math.abs(s.secTop) < 6);
-  out.capGone = S[5].capOp < 0.05 && S[1].capOp === 1;
-  out.tubeRemoved = S[5].bodyOp < 0.05 && S[1].bodyOp === 1;
-  out.jointFullyOut = S[4].clearOfBody || S[5].clearOfBody;
-  out.jointZoomed = S[5].jointW > S[1].jointW * 1.25;
-  const cxErr = Math.abs(S[5].jointCx - innerWidth / 2), cyErr = Math.abs(S[5].jointCy - innerHeight / 2);
-  out.finalCentred = { cxErr, cyErr, ok: cxErr < 60 && cyErr < 90 };
-  out.neverClipped = S.every(s => s.jointL > -40 && s.jointR < innerWidth + 40);
-  out.tubeInFrameEarly = S[1].bodyL > -30 && S[1].bodyR < innerWidth + 30;
+  out.unbox = S;
+  out.restAngled = S[0].rot > 45 && S[0].rot < 70;           // diagonal, not level
+  out.restLowerLeft = S[0].x < -80 && S[0].y > 20;            // left of centre and low
+  out.tubeRemoved = S[2].bodyOp < 0.05;
+  out.jointZoomed = S[2].jw > S[0].jw * 1.25;
+  out.neverClipped = S.every(s => s.jl > -40 && s.jr < innerWidth + 40);
+
+  // ── even gaps around the marquee band
+  const mq = [...document.querySelectorAll('section')].find(s => s.querySelector('.marquee-pause'));
+  const prev = mq.previousElementSibling, next = mq.nextElementSibling;
+  const mqR = mq.getBoundingClientRect();
+  out.gapAbove = Math.round(mqR.top - prev.getBoundingClientRect().bottom);
+  out.gapBelow = Math.round(next.getBoundingClientRect().top - mqR.bottom);
+  out.gapsEven = Math.abs(out.gapAbove - out.gapBelow) <= 8;
+
+  // ── logo resolution actually served
+  const logo = document.querySelector('#hh-intro [data-logo]');
+  out.logo = { natural: logo.naturalWidth + 'x' + logo.naturalHeight,
+    cssW: Math.round(logo.getBoundingClientRect().width),
+    ratio: +(logo.naturalWidth / logo.getBoundingClientRect().width).toFixed(2) };
+  out.logoRetinaOk = out.logo.ratio >= 2;
   out.horizScroll = document.documentElement.scrollWidth > innerWidth;
   return out;
 })()`)

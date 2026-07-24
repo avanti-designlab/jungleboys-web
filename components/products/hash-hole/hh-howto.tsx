@@ -117,7 +117,7 @@ export default function HhHowTo() {
   }, [])
 
   return (
-    <section className="relative px-6 py-16 md:py-24">
+    <section className="relative px-6 pb-16 pt-0 md:pb-24">
       {/* eslint-disable-next-line @next/next/no-img-element -- section wordmark */}
       <img src="/products/hash-hole/wm-howtosmoke.webp" alt="How to Smoke" className="media-reveal mx-auto w-[min(80vw,620px)]" />
 
