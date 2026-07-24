@@ -101,31 +101,35 @@ await wait(1200)
 
 const result = await evaluate(`(async () => {
   const wait = ms => new Promise(r => setTimeout(r, ms));
-  const go = async y => { window.scrollTo(0, y); await wait(900); };
-  const xOf = e => Math.round(new DOMMatrixReadOnly(getComputedStyle(e).transform).m41);
+  const go = async y => { window.scrollTo(0, y); await wait(950); };
+  const mat = e => new DOMMatrixReadOnly(getComputedStyle(e).transform);
   const out = { vw: innerWidth, vh: innerHeight };
-  const psec = document.querySelector('[data-fly="tube"]').closest('section');
-  const ptop = psec.getBoundingClientRect().top + scrollY;
-  // mid-pass: measure the pair's composition
-  await go(ptop - innerHeight + 0.5 * (psec.offsetHeight + innerHeight));
-  const tb = document.querySelector('[data-tube]').getBoundingClientRect();
-  const jb = document.querySelector('[data-joint]').getBoundingClientRect();
-  const sb = psec.getBoundingClientRect();
-  out.tubeBand = [Math.round((tb.top - sb.top) / sb.height * 100), Math.round((tb.bottom - sb.top) / sb.height * 100)];
-  out.jointBand = [Math.round((jb.top - sb.top) / sb.height * 100), Math.round((jb.bottom - sb.top) / sb.height * 100)];
-  out.overlapPct = Math.max(0, Math.round((tb.bottom - jb.top) / sb.height * 100));
-  out.pairCentre = Math.round(((tb.top + jb.bottom) / 2 - sb.top) / sb.height * 100);
-  out.balls = [...document.querySelectorAll('[data-ball]')].length;
-  // travel directions incl. all balls
-  const cross = [];
-  for (const f of [0, 1]) {
-    await go(ptop - innerHeight + f * (psec.offsetHeight + innerHeight));
-    cross.push({ t: xOf(document.querySelector('[data-fly="tube"]')), j: xOf(document.querySelector('[data-fly="joint"]')),
-      a: xOf(document.querySelector('[data-ball="a"]')), b: xOf(document.querySelector('[data-ball="b"]')), c: xOf(document.querySelector('[data-ball="c"]')) });
+  const sec = document.querySelector('[data-tflight]').closest('section');
+  const top = sec.getBoundingClientRect().top + scrollY;
+  const span = innerHeight * 1.75;
+  const jf = document.querySelector('[data-jflight]');
+  const tf = document.querySelector('[data-tflight]');
+  const samples = [];
+  for (const f of [0.1, 0.35, 0.55, 0.8, 0.97]) {
+    await go(top + f * span);
+    samples.push({ f, secTop: Math.round(sec.getBoundingClientRect().top),
+      jx: Math.round(mat(jf).m41), tx: Math.round(mat(tf).m41),
+      ty: Math.round(mat(tf).m42), tScale: Number(mat(tf).a.toFixed(2)),
+      jointVisible: (() => { const b = document.querySelector('[data-jimg]').getBoundingClientRect();
+        const clipEdge = innerWidth / 2 - innerWidth * 0.20;
+        return b.left < clipEdge - 8; })() });
   }
-  out.dirs = { tube: cross[0].t > cross[1].t ? 'R->L' : 'wrong', joint: cross[0].j < cross[1].j ? 'L->R' : 'wrong',
-    ballA: cross[1].a - cross[0].a > 0 ? 'L->R' : 'R->L', ballB: cross[1].b - cross[0].b > 0 ? 'L->R' : 'R->L', ballC: cross[1].c - cross[0].c > 0 ? 'L->R' : 'R->L' };
+  out.samples = samples;
+  out.pinned = samples.every(s => Math.abs(s.secTop) < 6);
+  out.breatheBeat = samples[0].jx < -innerWidth * 0.4 && samples[0].ty > innerHeight * 0.3;
+  out.jointArrives = samples[2].jx > samples[1].jx;
+  out.jointSwallowed = !samples[4].jointVisible && samples[1].jointVisible;
+  out.tubeEndsCentred = Math.abs(samples[4].tx) < 20 && samples[4].tScale > 1.05;
+  out.balls = document.querySelectorAll('[data-ball]').length;
   out.horizScroll = document.documentElement.scrollWidth > innerWidth;
+  // flower mobile frames reachable
+  const r = await fetch('/products/flower/frames/mobile/0060.webp');
+  out.flowerMobileFrame = r.status;
   return out;
 })()`)
 
