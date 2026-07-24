@@ -62,7 +62,7 @@ export default function HhHero() {
 
         <a
           href="#hh-intro"
-          className="absolute bottom-8 left-1/2 z-10 inline-flex -translate-x-1/2 items-center gap-2 rounded-full bg-white px-6 py-3 text-xs font-extrabold uppercase tracking-[0.25em] text-[var(--hh-ink)] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-transform hover:scale-105"
+          className="absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 items-center gap-2 rounded-full bg-white px-6 py-3 md:inline-flex text-xs font-extrabold uppercase tracking-[0.25em] text-[var(--hh-ink)] shadow-[0_10px_30px_rgba(0,0,0,0.35)] transition-transform hover:scale-105"
           style={{ fontFamily: 'var(--font-brand)' }}
         >
           Scroll

@@ -85,7 +85,7 @@ export default function HhBreakdown() {
   }, [])
 
   return (
-    <section ref={rootRef} className="relative overflow-hidden px-6 py-16 md:flex md:min-h-screen md:items-center md:py-0">
+    <section ref={rootRef} className="relative overflow-hidden px-6 pb-14 pt-2 md:flex md:min-h-screen md:items-center md:py-0">
       <div className="mx-auto grid w-full max-w-[1250px] items-center gap-8 lg:grid-cols-[0.85fr_1.15fr]">
         <h2 data-head className="font-display text-center uppercase leading-[0.82] text-[var(--hh-green-deep)] lg:text-left" style={{ fontSize: 'min(13vw, 8.75rem)' }}>
           What&apos;s <br className="hidden lg:block" /> Inside <br className="hidden lg:block" /> the <span className="hh-gold-head">Roll</span>

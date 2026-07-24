@@ -29,10 +29,10 @@ type Sign = {
 }
 
 const SIGNS: Sign[] = [
-  { big: '2G', small: 'Indoor\nFlower', layout: 'inline', side: 'left', inset: 4, bottom: 46, post: 30, rot: -3, dur: 4.9, delay: -1.3, amp: 2.3 },
-  { big: '.5G', small: 'Hash\nRosin', layout: 'inline', side: 'left', inset: 11, bottom: 28, post: 14, rot: 2.5, dur: 5.7, delay: -0.4, amp: 2.7 },
-  { big: 'Organic', small: 'Wood Tip', layout: 'stacked', side: 'right', inset: 11, bottom: 46, post: 30, rot: 3, dur: 5.2, delay: -2.2, amp: 2.1 },
-  { big: 'All Natural', small: 'Unrefined Paper', layout: 'stacked', side: 'right', inset: 4, bottom: 28, post: 14, rot: -2.5, dur: 6.1, delay: -3.1, amp: 2.5 },
+  { big: '2G', small: 'Indoor\nFlower', layout: 'inline', side: 'left', inset: 4, bottom: 46, post: 30, rot: -3, dur: 4.9, delay: -1.3, amp: 4.4 },
+  { big: '.5G', small: 'Hash\nRosin', layout: 'inline', side: 'left', inset: 11, bottom: 28, post: 14, rot: 2.5, dur: 5.7, delay: -0.4, amp: 5.2 },
+  { big: 'Organic', small: 'Wood Tip', layout: 'stacked', side: 'right', inset: 11, bottom: 46, post: 30, rot: 3, dur: 5.2, delay: -2.2, amp: 4.0 },
+  { big: 'All Natural', small: 'Unrefined Paper', layout: 'stacked', side: 'right', inset: 4, bottom: 28, post: 14, rot: -2.5, dur: 6.1, delay: -3.1, amp: 4.8 },
 ]
 
 // Bebas ships a single weight, so the small labels are optically thinned by
@@ -150,10 +150,10 @@ export default function HhIntro() {
         {/* eslint-disable-next-line @next/next/no-img-element -- hero logo */}
         <img src="/products/hash-hole/hashhole-logo.webp" alt="Jungle Boys Hash Hole" className="hh-float relative z-10 mx-auto w-[72vw]" />
         <div className="relative z-10 mx-auto mt-8 grid max-w-[520px] grid-cols-2 gap-4 px-6" style={{ fontSize: '8vw' }}>
-          {SIGNS.map((s) => (
+          {SIGNS.map((s, i) => (
             <div
               key={s.big}
-              className="hh-sway origin-bottom"
+              className="hh-sway relative origin-bottom"
               style={{
                 ['--rot' as string]: `${s.rot}deg`,
                 ['--sway-dur' as string]: `${s.dur}s`,
@@ -161,8 +161,19 @@ export default function HhIntro() {
                 ['--sway-amp' as string]: `${s.amp}deg`,
               }}
             >
-              <div data-sign>
+              <div data-sign className="relative">
                 <SignFace s={s} />
+                {/* top row stakes run past the row below and into the turf */}
+                <span
+                  aria-hidden
+                  className="absolute top-[94%] -z-10 w-[7px] rounded-b-full bg-white shadow-[0_8px_14px_rgba(19,92,43,0.3)]"
+                  style={{
+                    height: i < 2 ? '30vw' : '11vw',
+                    // top-row stakes sit off-centre so they don't double up
+                    // with the stake of the sign directly beneath them
+                    left: i < 2 ? '32%' : '58%',
+                  }}
+                />
               </div>
             </div>
           ))}

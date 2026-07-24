@@ -1152,6 +1152,13 @@ body:has(.hh-page) footer {
   /* staked signs idle on desynced clocks so the tee box feels alive, not looped */
   /* the Unboxing: --hh-L = tube length; all product-group children derive
      their art-frame geometry from it */
+  /* the hash-hole band runs faster than the shared 40s footer marquee */
+  .hh-band .marquee-track { animation-duration: 16s; }
+  .hh-band .marquee-track-reverse { animation-duration: 16s; }
+  @media (min-width: 768px) {
+    .hh-band .marquee-track { animation-duration: 26s; }
+    .hh-band .marquee-track-reverse { animation-duration: 26s; }
+  }
   .hh-unbox { --hh-L: 68vw; }
   @media (min-width: 768px) {
     .hh-unbox { --hh-L: 52vw; }

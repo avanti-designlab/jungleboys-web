@@ -14,13 +14,13 @@ export default function HhFinale() {
       <img
         src="/products/hash-hole/golf-scene.webp"
         alt="Jungle Boys — Hash Hole on the course"
-        className="absolute inset-0 h-full w-full select-none object-cover object-top"
+        className="absolute inset-x-0 bottom-0 top-[22vh] w-full select-none object-cover object-top md:top-0"
       />
-      <div className="absolute inset-x-0 top-[8vh] z-10 text-center">
+      <div className="absolute inset-x-0 top-[11vh] z-10 text-center md:top-[8vh]">
         <p className="text-sm font-extrabold uppercase tracking-[0.4em] text-white drop-shadow-[0_3px_10px_rgba(0,0,0,0.5)]" style={{ fontFamily: 'var(--font-brand)' }}>
           Playing with fire since 2006
         </p>
-        <h2 className="hh-gold-head font-display mt-2 uppercase leading-[0.85]" style={{ fontSize: 'min(13vw, 7rem)' }}>
+        <h2 className="hh-gold-head font-display mt-2 uppercase leading-[0.85]" style={{ fontSize: 'min(11vw, 7rem)' }}>
           See You on the Course
         </h2>
       </div>
