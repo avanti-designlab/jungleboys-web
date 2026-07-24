@@ -108,30 +108,34 @@ const result = await evaluate(`(async () => {
   const grp = document.querySelector('[data-grp]');
   const sec = grp.closest('section');
   const top = sec.getBoundingClientRect().top + scrollY;
-  const span = innerHeight * 1.85;
+  const span = innerHeight * 1.95;
   const cap = document.querySelector('[data-cap]');
-  const jnt = document.querySelector('[data-jnt]');
-  const body = sec.querySelector('img[src*="tube-body"]');
-  const samples = [];
-  for (const f of [0.1, 0.3, 0.45, 0.56, 0.75, 0.97]) {
+  const body = document.querySelector('[data-body]');
+  const jimg = document.querySelector('[data-jzoom]');
+  const S = [];
+  for (const f of [0.1, 0.3, 0.5, 0.68, 0.82, 0.97]) {
     await go(top + f * span);
-    const jb = jnt.getBoundingClientRect(), bb = body.getBoundingClientRect();
-    samples.push({ f, secTop: Math.round(sec.getBoundingClientRect().top),
-      grpY: Math.round(mat(grp).m42), grpX: Math.round(mat(grp).m41),
-      capOp: Number(getComputedStyle(cap).opacity).toFixed(2),
-      capRot: Math.round(Math.atan2(mat(cap).b, mat(cap).a) * 180 / Math.PI),
-      jntEmergedPx: Math.round(jb.right - bb.right),
-      bodyOnScreen: bb.width > 100 && bb.left < innerWidth && bb.right > 0 });
+    const jb = jimg.getBoundingClientRect(), bb = body.getBoundingClientRect();
+    S.push({ f, secTop: Math.round(sec.getBoundingClientRect().top),
+      capOp: +Number(getComputedStyle(cap).opacity).toFixed(2),
+      bodyOp: +Number(getComputedStyle(body).opacity).toFixed(2),
+      jointW: Math.round(jb.width), jointH: Math.round(jb.height),
+      jointCx: Math.round(jb.left + jb.width / 2), jointCy: Math.round(jb.top + jb.height / 2),
+      jointL: Math.round(jb.left), jointR: Math.round(jb.right),
+      // fully out = joint's trailing edge clears the body's mouth entirely
+      clearOfBody: bb.width < 2 || jb.left > bb.right - 4 || jb.right < bb.left + 4 || bb.bottom < jb.top || bb.top > jb.bottom,
+      bodyL: Math.round(bb.left), bodyR: Math.round(bb.right) });
   }
-  out.samples = samples;
-  out.pinned = samples.every(s => Math.abs(s.secTop) < 6);
-  out.breathe = samples[0].grpY > innerHeight * 0.4;
-  out.arrived = samples[1].grpY === 0 && samples[1].bodyOnScreen;
-  out.capWasOn = Number(samples[1].capOp) === 1;
-  out.capGone = Number(samples[5].capOp) < 0.05;
-  out.jointEmerges = samples[5].jntEmergedPx > samples[2].jntEmergedPx && samples[5].jntEmergedPx > innerWidth * 0.1;
-  out.settledCentred = Math.abs(samples[5].grpX) < 20;
-  out.balls = document.querySelectorAll('[data-ball]').length;
+  out.samples = S;
+  out.pinned = S.every(s => Math.abs(s.secTop) < 6);
+  out.capGone = S[5].capOp < 0.05 && S[1].capOp === 1;
+  out.tubeRemoved = S[5].bodyOp < 0.05 && S[1].bodyOp === 1;
+  out.jointFullyOut = S[4].clearOfBody || S[5].clearOfBody;
+  out.jointZoomed = S[5].jointW > S[1].jointW * 1.25;
+  const cxErr = Math.abs(S[5].jointCx - innerWidth / 2), cyErr = Math.abs(S[5].jointCy - innerHeight / 2);
+  out.finalCentred = { cxErr, cyErr, ok: cxErr < 60 && cyErr < 90 };
+  out.neverClipped = S.every(s => s.jointL > -40 && s.jointR < innerWidth + 40);
+  out.tubeInFrameEarly = S[1].bodyL > -30 && S[1].bodyR < innerWidth + 30;
   out.horizScroll = document.documentElement.scrollWidth > innerWidth;
   return out;
 })()`)

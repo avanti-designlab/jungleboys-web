@@ -1152,9 +1152,9 @@ body:has(.hh-page) footer {
   /* staked signs idle on desynced clocks so the tee box feels alive, not looped */
   /* the Unboxing: --hh-L = tube length; all product-group children derive
      their art-frame geometry from it */
-  .hh-unbox { --hh-L: 88vw; }
+  .hh-unbox { --hh-L: 68vw; }
   @media (min-width: 768px) {
-    .hh-unbox { --hh-L: 70vw; }
+    .hh-unbox { --hh-L: 52vw; }
   }
   /* optically thinner Bebas: stroke glyph edges with the sign green */
   .hh-sign-thin { -webkit-text-stroke: 0.55px var(--hh-green); paint-order: stroke fill; }
