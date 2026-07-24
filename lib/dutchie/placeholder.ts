@@ -112,6 +112,45 @@ function hashHole(
   }
 }
 
+// Pops — 5g jars of small-nug indoor flower. Each jar has its own mockup shot;
+// placeholder values until Dutchie (Phase 3).
+function pops(
+  slug: string,
+  strain: string,
+  jar: string,
+  strainType: Product['strainType'],
+  thc: number,
+  topTerp: string,
+  featured = false,
+  deal?: number
+): Product {
+  return {
+    id: `prod-pops-${slug}`,
+    slug: `${slug}-pops`,
+    name: strain,
+    brand: 'Jungle Boys',
+    category: 'pops',
+    subcategory: '5g-pops',
+    strainType,
+    strain,
+    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    images: [{ url: `/products/pops/jar-${jar}.webp`, alt: `${strain} Pops 5g jar` }],
+    variants: [{ id: `v-pops-${slug}`, option: '5g', price: 4500, ...(deal ? { specialPrice: deal } : {}), quantityAvailable: 12 }],
+    labResult: {
+      lab: 'Placeholder Labs',
+      testedAt: '2026-07-01',
+      potency: { thc: { value: thc, unit: '%' } },
+      terpenes: [
+        { name: topTerp, percentage: 1.6 },
+        { name: 'Caryophyllene', percentage: 0.8 },
+      ],
+    },
+    effects: ['relaxed', 'euphoric'],
+    featured,
+    retailerId: 'placeholder-dtla',
+  }
+}
+
 const products: Product[] = [
   hashHole('gelato-z', 'Gelato Z', 'Gator Breath', 40.9, false, 3200),
   hashHole('private-reserve', 'Private Reserve', 'Rainbow Belts', 45.7, true),
@@ -124,6 +163,15 @@ const products: Product[] = [
   flower('la-gelato', 'LA Gelato', 'strain-lagelato', 'hybrid', 28.8, 'Caryophyllene'),
   flower('rs1000', 'RS1000', 'strain-rs1000', 'hybrid', 32.6, 'Limonene'),
   flower('zangria', 'Zangria', 'strain-zangria', 'sativa', 26.7, 'Terpinolene'),
+  pops('blu-og', 'Blu OG', 'bluog', 'indica', 27.4, 'Myrcene', true),
+  pops('blu-zerdz', 'Blu Zerdz', 'bluzerdz', 'indica', 26.8, 'Myrcene', false, 3600),
+  pops('all-cherriez', 'All Cherriez', 'cherriez', 'hybrid', 28.1, 'Limonene'),
+  pops('la-gelato', 'La Gelato', 'lagelato', 'hybrid', 27.9, 'Caryophyllene'),
+  pops('cherry-gelato', 'Cherry Gelato', 'cherrygelato', 'hybrid', 28.6, 'Limonene'),
+  pops('do-si-dos', 'Do-Si-Dos', 'dosidos', 'indica', 29.2, 'Linalool'),
+  pops('gator-breath', 'Gator Breath', 'gatorbreath', 'indica', 30.4, 'Caryophyllene', false, 3600),
+  pops('jungle-cake', 'Jungle Cake', 'junglecake', 'hybrid', 29.7, 'Limonene'),
+  pops('cochino', 'Cochino', 'cochino', 'sativa', 26.3, 'Terpinolene'),
 ]
 
 const categories: ProductCategory[] = [

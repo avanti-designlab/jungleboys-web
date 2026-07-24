@@ -1152,6 +1152,41 @@ body:has(.hh-page) footer {
   /* staked signs idle on desynced clocks so the tee box feels alive, not looped */
   /* the Unboxing: --hh-L = tube length; all product-group children derive
      their art-frame geometry from it */
+  /* ── POPS: candy-stripe surface ───────────────────────────────────────
+     Palette sampled off the pack art (red #c80000 on white). The stripe field
+     is one fixed layer behind everything; content sits in `relative z-10`. */
+  .pops-page { --pops-red: #c80000; --pops-red-deep: #9c0000; --pops-ink: #16090a; }
+  @keyframes pops-stripe-drift { to { background-position: 240px 0; } }
+  .pops-stripes {
+    background-image: repeating-linear-gradient(
+      104deg,
+      var(--pops-red) 0 34px,
+      #ffffff 34px 80px
+    );
+    animation: pops-stripe-drift 9s linear infinite;
+  }
+  /* white bloom so type stays readable over the stripes */
+  .pops-veil {
+    background:
+      radial-gradient(120% 78% at 50% 44%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.72) 42%, rgba(255,255,255,0.14) 78%, rgba(255,255,255,0) 100%);
+  }
+  .pops-page { background: #fff; }
+  body:has(.pops-page) { background: #ffffff; }
+  /* the fixed stripe layer would paint over the static footer otherwise */
+  body:has(.pops-page) footer { position: relative; z-index: 1; }
+
+  /* 3D scaffolding — first use of real perspective on the site */
+  .pops-scene { perspective: 1200px; perspective-origin: 50% 50%; }
+  .pops-3d { transform-style: preserve-3d; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pops-stripes { animation: none; }
+  }
+
+  .pops-band .marquee-track, .pops-band .marquee-track-reverse { animation-duration: 18s; }
+  @media (min-width: 768px) {
+    .pops-band .marquee-track, .pops-band .marquee-track-reverse { animation-duration: 28s; }
+  }
   /* the hash-hole band runs faster than the shared 40s footer marquee */
   .hh-band .marquee-track { animation-duration: 16s; }
   .hh-band .marquee-track-reverse { animation-duration: 16s; }
