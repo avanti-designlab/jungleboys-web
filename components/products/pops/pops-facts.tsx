@@ -41,25 +41,45 @@ export default function PopsFacts() {
           const c = mmCtx.conditions as Record<string, boolean>
           if (c.reduce) return
 
+          // STRICT SEQUENTIAL HANDOVER. Any symmetric fade leaves the outgoing
+          // and incoming cards both part-visible and stacked — measured at two
+          // cards on screen for 85% of the scroll, which is the bleed-through
+          // that read as glitching. So: the current card flips away and is
+          // fully gone BEFORE the next one starts flipping in.
+          // kept tight: a longer handover means a longer stretch with an EMPTY
+          // slot, which flickers just as badly as the overlap did
+          const OUT_FROM = 0.76 // frac of a step where the current starts leaving
+          const OUT_TO = 0.88 //                     …and is fully gone
           const state = { i: 0 }
           const paint = () => {
+            const base = Math.min(FACTS.length - 1, Math.floor(state.i))
+            const frac = state.i - base
             FACTS.forEach((_, i) => {
               const card = root.querySelector<HTMLElement>(`[data-fact="${i}"]`)
               const dot = root.querySelector<HTMLElement>(`[data-dot="${i}"]`)
               if (!card) return
-              const d = i - state.i // <0 = already gone, >0 = still to come
-              const ad = Math.abs(d)
-              // t stays 0 through the dwell, then ramps hard over the handover
-              const t = Math.max(0, Math.min(1, (ad - 0.62) / 0.38))
-              const sign = d < 0 ? -1 : 1
-              gsap.set(card, {
-                rotateX: -sign * t * 85,
-                yPercent: sign * t * 26,
-                opacity: 1 - t, // opaque while it dwells; the top card occludes
-                zIndex: Math.max(0, Math.round((1 - ad) * 10)),
-              })
-              const near = Math.max(0, 1 - ad)
-              if (dot) gsap.set(dot, { scaleX: 0.25 + near * 0.75, opacity: 0.3 + near * 0.7 })
+
+              let rot = 0
+              let op = 0
+              let y = 0
+              if (i === base) {
+                if (frac < OUT_FROM) { rot = 0; op = 1; y = 0 }
+                else if (frac < OUT_TO) {
+                  const u = (frac - OUT_FROM) / (OUT_TO - OUT_FROM)
+                  rot = -u * 85; op = 1 - u; y = -u * 26
+                }
+              } else if (i === base + 1 && frac >= OUT_TO) {
+                const v = (frac - OUT_TO) / (1 - OUT_TO)
+                rot = (1 - v) * 85; op = v; y = (1 - v) * 26
+              }
+
+              gsap.set(card, { rotateX: rot, yPercent: y, opacity: op, zIndex: op > 0.5 ? 10 : 1 })
+
+              const activeDot = frac >= OUT_TO ? base + 1 : base
+              if (dot) {
+                const on = i === activeDot
+                gsap.set(dot, { scaleX: on ? 1 : 0.25, opacity: on ? 1 : 0.3 })
+              }
             })
           }
           paint()
