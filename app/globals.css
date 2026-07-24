@@ -1171,20 +1171,20 @@ body:has(.hh-page) footer {
      the letters have dropped, then a bright segment sweeps across it so the
      outline reads as "tracing" around the words. Animating a SECOND letter-drop
      is what made the previous version glitch and sit off-centre. */
-  .pops-word > .pops-word-cell { grid-area: 1 / 1; justify-self: center; }
+  .pops-word > .pops-word-cell { grid-area: 1 / 1; justify-self: center; letter-spacing: 0.012em; }
   /* outline glyphs must be inline-block like the fill's .contact-letter, or the
      two runs space letters differently and the outline drifts across the word */
   .pops-glyph { display: inline-block; }
+  .pops-gap { display: inline-block; width: 0.34em; }
 
-  .pops-trace {
+  /* two concentric rings: fill → white → thin colour. Each ring is a stacked
+     text copy with transparent fill and a centred stroke; the wider colour
+     stroke sits under the narrower white one, so from the glyph edge outward we
+     get white then a thin colour ring. */
+  .pops-outline {
     color: transparent;
-    -webkit-text-stroke-width: 3px;
-    /* hidden until the draw-on wipe reveals it */
-    opacity: 1;
     pointer-events: none;
-    /* the wipe: a hard-edged mask sweeps once, left→right, revealing the
-       outline as it goes, then holds fully revealed (forwards) = "draws around
-       then stays solid". */
+    /* the wipe: reveal left→right once, then hold (forwards) */
     -webkit-mask-image: linear-gradient(to right, #000 0 47%, transparent 53% 100%);
     mask-image: linear-gradient(to right, #000 0 47%, transparent 53% 100%);
     -webkit-mask-size: 210% 100%;
@@ -1194,26 +1194,32 @@ body:has(.hh-page) footer {
     -webkit-mask-position: 100% 0;
     mask-position: 100% 0;
   }
-  @media (min-width: 768px) { .pops-trace { -webkit-text-stroke-width: 4px; } }
-  /* each outline glyph is scaled up about its own centre → the outline sits
-     OUTSIDE the fill with a transparent gap between them */
-  .pops-trace .pops-glyph { transform: scale(1.08); transform-origin: 50% 54%; }
+  .pops-outline-white { -webkit-text-stroke: 9px #ffffff; }
+  .pops-outline-color, .pops-outline-color .pops-glyph { -webkit-text-stroke-width: 14px; }
+  @media (min-width: 768px) {
+    .pops-outline-white { -webkit-text-stroke-width: 12px; }
+    .pops-outline-color, .pops-outline-color .pops-glyph { -webkit-text-stroke-width: 18px; }
+  }
 
   @keyframes pops-draw {
     from { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
     to   { -webkit-mask-position: 0% 0; mask-position: 0% 0; }
   }
-  html.jb-reveal .pops-trace {
-    /* starts with the letter drop, finishes tracing ~2.4s later, then holds */
+  html.jb-reveal .pops-outline {
     animation: pops-draw 2.1s cubic-bezier(0.5, 0, 0.2, 1) 0.35s forwards;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .pops-trace {
+    .pops-outline {
       animation: none;
       -webkit-mask-position: 0% 0; mask-position: 0% 0; /* fully revealed, no draw */
     }
   }
+
+  /* down-arrow bounce for the SCROLL button */
+  @keyframes pops-arrow-bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+  .pops-arrow-bounce { animation: pops-arrow-bounce 1.2s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .pops-arrow-bounce { animation: none; } }
 
   /* ambient mini-nug pop: fade/scale in, hold briefly, pop away — looped */
   @keyframes pops-blip {

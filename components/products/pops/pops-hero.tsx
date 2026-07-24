@@ -5,7 +5,6 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { buildNugField } from './pops-nugs'
 import PopsMarquee from './pops-marquee'
-import PillCta from '@/components/pill-cta'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -105,43 +104,50 @@ export default function PopsHero() {
         data-word
         className="pointer-events-none absolute inset-x-0 top-[22%] z-[25] text-center will-change-transform md:top-[24%]"
       >
-        {/* fill + outline stacked in ONE grid cell so they can never drift
-            apart. The fill drops in letter-by-letter; the outline is a static
-            twin (same glyphs, transparent fill, opposite-colour stroke) that
-            fades in AFTER the letters land — animating a second copy alongside
-            the drop is what made the old outline glitch and go off-centre. */}
+        {/* Layered outline: colour ring (bottom) → white ring → fill (top),
+            all stacked in one grid cell so they're concentric and uniform. The
+            two rings wipe on left→right as the letters drop, then hold solid.
+            Letter-spacing keeps the fat strokes from overlapping neighbours. */}
         <div className="pops-word grid">
+          {/* outer coloured ring — thickest stroke, painted lowest */}
+          <span aria-hidden className="pops-outline pops-outline-color pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8]" style={{ fontSize: 'min(33vw, 30rem)' }}>
+            {WORD.split('').map((ch, i) =>
+              ch === ' ' ? (
+                <span key={i} className="pops-gap" aria-hidden />
+              ) : (
+                <span key={i} className="pops-glyph" style={{ WebkitTextStrokeColor: i < 2 ? 'var(--pops-ink)' : 'var(--pops-red)' }}>
+                  {ch}
+                </span>
+              )
+            )}
+          </span>
+          {/* white ring — narrower stroke, painted over the colour's inner part */}
+          <span aria-hidden className="pops-outline pops-outline-white pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8]" style={{ fontSize: 'min(33vw, 30rem)' }}>
+            {WORD.split('').map((ch, i) =>
+              ch === ' ' ? <span key={i} className="pops-gap" aria-hidden /> : <span key={i} className="pops-glyph">{ch}</span>
+            )}
+          </span>
+          {/* the fill — on top */}
           <h1
             aria-label="5G Pops"
             className="pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8] text-[var(--pops-ink)]"
             style={{ fontSize: 'min(33vw, 30rem)' }}
           >
-            {WORD.split('').map((ch, i) => (
-              <span
-                key={i}
-                aria-hidden
-                className="contact-letter"
-                style={{ animationDelay: `${0.25 + i * 0.07}s`, color: i < 2 ? 'var(--pops-red)' : undefined }}
-              >
-                {ch === ' ' ? ch : ch}
-              </span>
-            ))}
+            {WORD.split('').map((ch, i) =>
+              ch === ' ' ? (
+                <span key={i} className="pops-gap" aria-hidden />
+              ) : (
+                <span
+                  key={i}
+                  aria-hidden
+                  className="contact-letter"
+                  style={{ animationDelay: `${0.25 + i * 0.07}s`, color: i < 2 ? 'var(--pops-red)' : undefined }}
+                >
+                  {ch}
+                </span>
+              )
+            )}
           </h1>
-
-          {/* offset outline: a stroke-only twin scaled slightly larger than the
-              fill so a transparent gap sits between the letter and its outline;
-              a wipe draws it on once as the letters drop, then it stays solid */}
-          <span
-            aria-hidden
-            className="pops-trace pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8]"
-            style={{ fontSize: 'min(33vw, 30rem)' }}
-          >
-            {WORD.split('').map((ch, i) => (
-              <span key={i} className="pops-glyph" style={{ WebkitTextStrokeColor: i < 2 ? 'var(--pops-ink)' : 'var(--pops-red)' }}>
-                {ch === ' ' ? ch : ch}
-              </span>
-            ))}
-          </span>
         </div>
       </div>
 
@@ -185,12 +191,22 @@ export default function PopsHero() {
       {/* the line the jars frame — the hero had no CTA at all before */}
       <div data-cta className="absolute inset-x-0 bottom-[15%] z-[26] flex flex-col items-center gap-4 px-6 text-center will-change-transform">
         <p
-          className="max-w-[30ch] text-sm font-extrabold uppercase leading-snug tracking-[0.18em] text-[var(--pops-ink)]/75 md:text-base"
+          className="max-w-[30ch] text-sm font-extrabold uppercase leading-snug tracking-[0.18em] text-black md:text-base"
           style={{ fontFamily: 'var(--font-brand)' }}
         >
           Small nug indoor flower · Same exotic strains
         </p>
-        <PillCta label="Shop 5G Pops" icon="cart" hover="black" href="#pops-facts" />
+        {/* black-and-white SCROLL button with a bouncing down arrow → next section */}
+        <a
+          href="#pops-facts"
+          className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-[var(--pops-ink)] px-7 py-3.5 text-xs font-extrabold uppercase tracking-[0.28em] text-white shadow-[0_10px_30px_rgba(0,0,0,0.28)] transition-transform hover:scale-105"
+          style={{ fontFamily: 'var(--font-brand)' }}
+        >
+          Scroll
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" className="pops-arrow-bounce" aria-hidden>
+            <path d="M12 5v14M6 13l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </a>
       </div>
 
       {/* the band rides inside the hero, above the fold — kernels fall behind it */}
