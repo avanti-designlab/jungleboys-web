@@ -7,7 +7,6 @@ import PopsFacts from '@/components/products/pops/pops-facts'
 import PopsMarquee from '@/components/products/pops/pops-marquee'
 import PopsLineup from '@/components/products/pops/pops-lineup'
 import PopsShop from '@/components/products/pops/pops-shop'
-import PopsJar3D from '@/components/products/pops/pops-jar3d'
 import PopsReveal from '@/components/products/pops/pops-reveal'
 import { getProducts } from '@/lib/dutchie'
 import type { LineupItem } from '@/components/products/pops/pops-lineup'
@@ -74,13 +73,6 @@ export default async function PopsPage() {
       <PopsReveal />
       <div className="relative z-10">
         <PopsHero />
-        {/* TEST: live 3D jar (auto-spin + drag) — placement TBD */}
-        <section className="relative z-10 flex min-h-[70vh] flex-col items-center justify-center gap-4 px-6 py-16">
-          <PopsJar3D className="h-[52vh] max-h-[560px] w-full max-w-[420px]" />
-          <p className="text-xs font-extrabold uppercase tracking-[0.3em] text-[var(--pops-ink)]/60" style={{ fontFamily: 'var(--font-brand)' }}>
-            Drag to spin
-          </p>
-        </section>
         <PopsFacts />
         <PopsLineup items={items} />
         <PopsMarquee reverse />
