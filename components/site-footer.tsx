@@ -75,6 +75,14 @@ export default async function SiteFooter() {
 
       {/* bottom rows */}
       <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-6 px-6 pb-24 md:px-8 lg:pb-10">
+        {/* compliance */}
+        <div className="flex flex-col gap-3 text-center md:text-left">
+          <p className="text-[11px] tracking-wide text-white/50" style={{ fontFamily: 'var(--font-brand)' }}>
+            {LICENSE_NUMBERS.join(' | ')}
+          </p>
+          <p className="mx-auto max-w-4xl text-[10px] leading-relaxed text-white/30 md:mx-0">{warningText.trim()}</p>
+        </div>
+
         {/* socials */}
         <div className="flex items-center justify-center gap-7 md:justify-start">
           {FOOTER_SOCIALS.map((s) => (
@@ -89,14 +97,6 @@ export default async function SiteFooter() {
               {s.icon}
             </a>
           ))}
-        </div>
-
-        {/* compliance */}
-        <div className="flex flex-col gap-3 text-center md:text-left">
-          <p className="text-[11px] tracking-wide text-white/50" style={{ fontFamily: 'var(--font-brand)' }}>
-            {LICENSE_NUMBERS.join(' | ')}
-          </p>
-          <p className="mx-auto max-w-4xl text-[10px] leading-relaxed text-white/30 md:mx-0">{warningText.trim()}</p>
         </div>
 
         {/* very bottom: legal + copyright */}

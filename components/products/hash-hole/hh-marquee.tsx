@@ -1,15 +1,24 @@
 // Scrolling text band — big bold movement between sections. Reuses the frozen
 // .marquee-track keyframes (GPU transform, pauses on hover).
 
-const WORDS = ['Hash Hole', '2G Indoor Flower', '.5G Live Rosin', 'Organic Wood Tip', 'Playing With Fire']
+const WORDS: { t: string; mark?: boolean }[] = [
+  { t: 'Hash Hole' },
+  { t: '2G Indoor Flower' },
+  { t: '.5G Live Rosin' },
+  { t: 'Organic Wood Tip' },
+  { t: 'Playing With Fire', mark: true }, // registered — same superscript as the footer
+]
 
 function Row() {
   return (
     <div className="flex shrink-0 items-center">
       {WORDS.map((w) => (
-        <span key={w} className="flex items-center">
+        <span key={w.t} className="flex items-center">
           <span className="font-display whitespace-nowrap px-6 uppercase leading-none text-white" style={{ fontSize: 'min(9vw, 5.5rem)' }}>
-            {w}
+            {w.t}
+            {w.mark && (
+              <span className="relative inline-block top-[0.16em] align-top text-[0.28em] leading-none">®</span>
+            )}
           </span>
           <span aria-hidden className="font-display leading-none text-[var(--hh-gold)]" style={{ fontSize: 'min(9vw, 5.5rem)' }}>
             ⛳

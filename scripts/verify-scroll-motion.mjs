@@ -101,32 +101,23 @@ await wait(1200)
 
 const result = await evaluate(`(async () => {
   const wait = ms => new Promise(r => setTimeout(r, ms));
-  const go = async y => { window.scrollTo(0, y); await wait(950); };
+  window.scrollTo(0, document.body.scrollHeight); await wait(1400);
   const out = {};
-  window.scrollTo(0, 0); await wait(900);
-  const grp = document.querySelector('[data-grp]');
-  const sec = grp.closest('section');
-  const top = sec.getBoundingClientRect().top + scrollY;
-  const span = innerHeight * 1.45;
-  const S = [];
-  for (const f of [0.30, 0.50, 0.97]) {
-    await go(top + f * span);
-    const jb = document.querySelector('[data-jzoom]').getBoundingClientRect();
-    const bb = document.querySelector('[data-body]').getBoundingClientRect();
-    // overlap area between joint bbox and body bbox (proxy for "hidden inside")
-    const ox = Math.max(0, Math.min(jb.right, bb.right) - Math.max(jb.left, bb.left));
-    const oy = Math.max(0, Math.min(jb.bottom, bb.bottom) - Math.max(jb.top, bb.top));
-    S.push({ f, jw: Math.round(jb.width), jl: Math.round(jb.left), jr: Math.round(jb.right),
-      overlapFrac: +( (ox*oy) / (jb.width*jb.height) ).toFixed(2),
-      bodyOp: +Number(getComputedStyle(document.querySelector('[data-body]')).opacity).toFixed(2) });
-  }
-  out.samples = S;
-  out.hiddenAtStart = S[0].overlapFrac > 0.75;      // tucked inside the tube
-  out.clearAtEnd = S[2].overlapFrac < 0.35;          // fully out
-  out.tubeRemoved = S[2].bodyOp < 0.05;
-  out.zoomed = S[2].jw > S[0].jw * 1.3;
-  out.neverClipped = S.every(s => s.jl > -40 && s.jr < innerWidth + 40);
-  out.horizScroll = document.documentElement.scrollWidth > innerWidth;
+  // registered mark on the hash-hole band
+  const band = [...document.querySelectorAll('section')].find(s => s.querySelector('.marquee-pause'));
+  const fireSpan = [...band.querySelectorAll('span')].find(e => /PLAYING WITH FIRE/i.test(e.textContent) && !e.children.length === false);
+  out.bandFireText = [...band.querySelectorAll('span')].map(e => e.textContent).find(t => /PLAYING WITH FIRE/i.test(t)) || null;
+  out.bandHasMark = /®/.test(band.textContent);
+  // footer order: socials must sit BELOW the compliance text and ABOVE the copyright
+  const foot = document.querySelector('footer');
+  const socials = foot.querySelector('a[aria-label="Instagram"]')?.closest('div');
+  const copy = [...foot.querySelectorAll('span')].find(e => /all rights reserved/i.test(e.textContent));
+  const licence = [...foot.querySelectorAll('p')].find(e => /LIC/.test(e.textContent));
+  const sb = socials.getBoundingClientRect(), cb = copy.getBoundingClientRect(), lb = licence.getBoundingClientRect();
+  out.socialsTop = Math.round(sb.top); out.licenceTop = Math.round(lb.top); out.copyTop = Math.round(cb.top);
+  out.socialsBelowLicence = sb.top > lb.top;
+  out.socialsAboveCopyright = sb.bottom <= cb.top + 2;
+  out.footerMarqueeHasMark = /®/.test(foot.textContent);
   return out;
 })()`)
 
