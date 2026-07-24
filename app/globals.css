@@ -1216,13 +1216,20 @@ body:has(.hh-page) footer {
     }
   }
 
-  /* headline word pulses — SMALL keeps shrinking, BIG keeps expanding (opposite
-     phase). transform-origin keeps each anchored to its line so it pulses in
-     place. */
-  @keyframes pops-shrink { 0%, 100% { transform: scale(1); } 50% { transform: scale(0.72); } }
-  @keyframes pops-grow   { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.22); } }
-  .pops-shrink { transform-origin: center bottom; animation: pops-shrink 2.4s ease-in-out infinite; }
-  .pops-grow   { transform-origin: center bottom; animation: pops-grow 2.4s ease-in-out infinite; }
+  /* headline word pulses — SMALL keeps shrinking (and its letters tighten),
+     BIG keeps expanding (and its letters spread). Opposite phase (BIG offset by
+     half the cycle) so when SMALL is smallest, BIG is biggest — a seesaw. The
+     letter-spacing shift makes it read designed, not like a jitter. */
+  @keyframes pops-shrink {
+    0%, 100% { transform: scale(1);    letter-spacing: 0.01em; }
+    50%      { transform: scale(0.52); letter-spacing: -0.04em; }
+  }
+  @keyframes pops-grow {
+    0%, 100% { transform: scale(1);    letter-spacing: 0.01em; }
+    50%      { transform: scale(1.42); letter-spacing: 0.05em; }
+  }
+  .pops-shrink { animation: pops-shrink 3s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+  .pops-grow   { animation: pops-grow 3s cubic-bezier(0.45, 0, 0.55, 1) infinite; animation-delay: -1.5s; }
   @media (prefers-reduced-motion: reduce) { .pops-shrink, .pops-grow { animation: none; } }
 
   /* down-arrow bounce for the SCROLL button */
