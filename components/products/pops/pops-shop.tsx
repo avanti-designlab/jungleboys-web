@@ -23,7 +23,7 @@ export default async function PopsShop() {
   const products = await getProducts({ category: 'pops', subcategory: '5g-pops' })
 
   return (
-    <section className="px-3 pb-16 md:px-4 md:pb-24">
+    <section id="pops-shop" className="scroll-mt-24 px-3 pb-16 md:px-4 md:pb-24">
       <div className="rounded-[2rem] border-4 border-[#101012] bg-[#0b0b0d] px-4 py-16 text-white shadow-[0_26px_70px_rgba(0,0,0,0.4)] md:rounded-[3rem] md:px-10 md:py-24">
         <div className="mx-auto max-w-[1240px]">
           <Reveal className="text-center">

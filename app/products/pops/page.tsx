@@ -71,7 +71,6 @@ export default async function PopsPage() {
       {/* all content rides above the fixed stripe field (z-0) */}
       <div className="relative z-10">
         <PopsHero />
-        <PopsMarquee />
         <PopsFacts />
         <PopsLineup items={items} />
         <PopsMarquee reverse />

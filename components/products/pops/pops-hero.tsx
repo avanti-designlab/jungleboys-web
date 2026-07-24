@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { buildNugField } from './pops-nugs'
+import PopsMarquee from './pops-marquee'
+import PillCta from '@/components/pill-cta'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -41,11 +43,13 @@ export default function PopsHero() {
           if (c.reduce) {
             gsap.set('[data-nug]', { opacity: 0 })
             gsap.set('[data-herojar]', { opacity: 1, rotate: 0 })
+            gsap.set('[data-cta]', { opacity: 1, y: 0 })
             return
           }
 
           gsap.set('[data-herojar="l"]', { opacity: 0, xPercent: -150, rotate: -60 })
           gsap.set('[data-herojar="r"]', { opacity: 0, xPercent: 150, rotate: 60 })
+          gsap.set('[data-cta]', { opacity: 0, y: 26 })
 
           const tl = gsap.timeline({
             scrollTrigger: {
@@ -81,6 +85,8 @@ export default function PopsHero() {
             .to('[data-herojar="r"]', { opacity: 1, xPercent: 0, rotate: 9, duration: 0.16, ease: 'back.out(1.35)' }, 0.84)
             .to('[data-herojar="l"]', { rotate: -4, duration: 0.08, ease: 'power2.inOut' }, 0.93)
             .to('[data-herojar="r"]', { rotate: 4, duration: 0.08, ease: 'power2.inOut' }, 0.93)
+            // the line + CTA land last, so the jars have something to frame
+            .to('[data-cta]', { opacity: 1, y: 0, duration: 0.12, ease: 'power2.out' }, 0.88)
 
           tl.to({}, { duration: 0.04 })
         }
@@ -97,7 +103,7 @@ export default function PopsHero() {
       {/* giant wordmark — present from load, same treatment as /media + /products */}
       <div
         data-word
-        className="pointer-events-none absolute inset-x-0 top-[13%] z-10 text-center will-change-transform"
+        className="pointer-events-none absolute inset-x-0 top-[22%] z-[25] text-center will-change-transform md:top-[24%]"
       >
         <h1
           aria-label="5G Pops"
@@ -118,7 +124,7 @@ export default function PopsHero() {
       </div>
 
       {/* kernel field — clipped on its own, over the type so it buries it */}
-      <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 z-30 overflow-hidden">
         {NUGS.map((n, i) => (
           // eslint-disable-next-line @next/next/no-img-element -- kernel cutouts
           <img
@@ -138,22 +144,37 @@ export default function PopsHero() {
         ))}
       </div>
 
-      {/* two jars flank the wordmark */}
+      {/* two jars flank the wordmark, sitting on the band */}
       {/* eslint-disable-next-line @next/next/no-img-element -- product jar */}
       <img
         data-herojar="l"
         src="/products/pops/jar-bluog.webp"
         alt="Blu OG 5G Pops jar"
-        className="absolute bottom-[7%] left-[3%] z-30 w-[min(23vw,205px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:left-[8%]"
+        className="absolute bottom-[11%] left-[1%] z-20 w-[min(24vw,225px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:left-[7%]"
       />
       {/* eslint-disable-next-line @next/next/no-img-element -- product jar */}
       <img
         data-herojar="r"
         src="/products/pops/jar-cherriez.webp"
         alt="All Cherriez 5G Pops jar"
-        className="absolute bottom-[7%] right-[3%] z-30 w-[min(23vw,205px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:right-[8%]"
+        className="absolute bottom-[11%] right-[1%] z-20 w-[min(24vw,225px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:right-[7%]"
       />
 
+      {/* the line the jars frame — the hero had no CTA at all before */}
+      <div data-cta className="absolute inset-x-0 bottom-[15%] z-[26] flex flex-col items-center gap-4 px-6 text-center will-change-transform">
+        <p
+          className="max-w-[30ch] text-sm font-extrabold uppercase leading-snug tracking-[0.18em] text-[var(--pops-ink)]/75 md:text-base"
+          style={{ fontFamily: 'var(--font-brand)' }}
+        >
+          Small nug indoor flower · Same exotic strains
+        </p>
+        <PillCta label="Shop 5G Pops" icon="cart" hover="black" href="#pops-shop" />
+      </div>
+
+      {/* the band rides inside the hero, above the fold — kernels fall behind it */}
+      <div className="absolute inset-x-0 bottom-0 z-40">
+        <PopsMarquee bare />
+      </div>
     </section>
   )
 }

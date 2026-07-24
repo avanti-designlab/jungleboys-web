@@ -129,7 +129,7 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
 
         {/* desktop: 3D coverflow rail */}
         <div className="pops-scene relative mt-10 hidden h-[38vh] min-h-[230px] md:block lg:mt-12">
-          <div data-rail className="pops-3d absolute inset-0">
+          <div data-rail className="pops-3d pointer-events-none absolute inset-0">
             {items.map((j, i) => (
               <button
                 key={j.id}
@@ -137,7 +137,7 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
                 type="button"
                 onClick={() => setOpen(j)}
                 aria-label={`${j.name} — quick facts`}
-                className="absolute left-1/2 top-1/2 h-full -translate-y-1/2 cursor-pointer border-0 bg-transparent p-0 will-change-transform"
+                className="pointer-events-auto absolute left-1/2 top-1/2 h-full -translate-y-1/2 cursor-pointer border-0 bg-transparent p-0 will-change-transform"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element -- jar art */}
                 <img src={j.image} alt={`${j.name} 5G Pops jar`} className="h-full w-auto max-w-none drop-shadow-[0_30px_50px_rgba(0,0,0,0.34)]" />

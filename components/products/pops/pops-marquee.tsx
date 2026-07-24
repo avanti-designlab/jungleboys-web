@@ -27,9 +27,14 @@ function Row() {
   )
 }
 
-export default function PopsMarquee({ reverse = false }: { reverse?: boolean }) {
+export default function PopsMarquee({ reverse = false, bare = false }: { reverse?: boolean; bare?: boolean }) {
   return (
-    <section aria-hidden className="pops-band relative z-10 my-12 overflow-hidden bg-[var(--pops-red)] py-3 md:my-20 md:py-5">
+    // `bare` drops the vertical rhythm so the band can sit flush inside the
+    // hero rather than as a standalone rule between sections
+    <section
+      aria-hidden
+      className={`pops-band relative z-10 overflow-hidden bg-[var(--pops-red)] py-3 md:py-5 ${bare ? '' : 'my-12 md:my-20'}`}
+    >
       <div className="marquee-pause flex">
         <div className={`${reverse ? 'marquee-track-reverse' : 'marquee-track'} flex`}>
           <Row />
