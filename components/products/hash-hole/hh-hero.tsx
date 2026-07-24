@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 // Hero — the intro film plays full-bleed in a wide rounded pill that zooms in
 // on entry (media-hero-in, released by RevealGate once the loading intro + age
@@ -10,6 +10,13 @@ import { useEffect, useRef } from 'react'
 
 export default function HhHero() {
   const videoRef = useRef<HTMLVideoElement>(null)
+  // null until mounted: render no <source> on the server so neither file is
+  // fetched before we know the viewport, then attach the right one
+  const [mobile, setMobile] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    setMobile(window.matchMedia('(max-width: 767px)').matches)
+  }, [])
 
   useEffect(() => {
     const v = videoRef.current
@@ -31,22 +38,26 @@ export default function HhHero() {
       window.removeEventListener('jb:intro-done', start)
       window.removeEventListener('jb:gate-passed', start)
     }
-  }, [])
+    // re-bind on remount: the source attaches once the viewport is known
+  }, [mobile])
 
   return (
     <section className="relative px-2 pt-2 md:px-3">
       {/* the header samples this region: dark video → dark header pill */}
       <div data-nav-theme="dark" className="media-hero-in relative h-[92vh] min-h-[560px] overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] md:rounded-[2.5rem]">
         <video
+          key={String(mobile)}
           ref={videoRef}
           className="absolute inset-0 h-full w-full object-cover"
           loop
           muted
           playsInline
           preload="auto"
-          poster="/products/hash-hole/hero-poster.webp"
+          poster={mobile ? '/products/hash-hole/hero-mobile-poster.webp' : '/products/hash-hole/hero-poster.webp'}
         >
-          <source src="/products/hash-hole/hero.mp4" type="video/mp4" />
+          {mobile !== null && (
+            <source src={mobile ? '/products/hash-hole/hero-mobile.mp4' : '/products/hash-hole/hero.mp4'} type="video/mp4" />
+          )}
         </video>
 
         <a
