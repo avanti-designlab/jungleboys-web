@@ -21,8 +21,8 @@ gsap.registerPlugin(ScrollTrigger)
 
 const FACTS = [
   { icon: 'jar', ar: 41 / 87, head: '5G Jar', body: 'A full five grams in the candy-striped jar — the format built for sharing.' },
-  { icon: 'nug', ar: 81 / 61, head: 'Small Nug Flower', body: 'The same indoor cannabis flower, just in bite-size pops.' },
-  { icon: 'strains', ar: 73 / 74, head: 'Same Exotic Strains', body: 'Pulled from the identical premium exotic genetics as our top-shelf jars.' },
+  { icon: 'nug', ar: 81 / 61, head: 'Small Nug Flower', body: 'The same indoor cannabis flower, just in small-size pops.' },
+  { icon: 'strains', ar: 73 / 74, head: 'Same Exotic Strains', body: 'Pulled from the identical premium exotic genetics as our top-shelf mylars.' },
   { icon: 'value', ar: 64 / 66, head: 'Better Value', body: 'A friendlier price per gram without giving up an ounce of quality.' },
   { icon: 'terps', ar: 65 / 67, head: 'Terpene-Rich', body: 'Full flavor profiles — the nose and the taste come through exactly the same.' },
   { icon: 'hand', ar: 67 / 68, head: 'Hand-Selected', body: 'Every pop is picked by hand from the top of each harvest.' },
