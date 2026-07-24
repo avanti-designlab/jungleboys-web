@@ -73,7 +73,8 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
                 x: `${d * 19}vw`,
                 rotateY: Math.max(-58, Math.min(58, -d * 34)),
                 z: -Math.abs(d) * 210,
-                scale: 0.66 + near * 0.58,
+                // max 1.0: anything over overflows the rail and crowds the type
+                scale: 0.56 + near * 0.44,
                 opacity: Math.abs(d) > 3.4 ? 0 : Math.min(1, 0.82 + near * 0.18),
                 zIndex: 100 - Math.round(Math.abs(d) * 10),
               })
@@ -120,14 +121,14 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
       <div className="overflow-hidden rounded-[2rem] bg-[var(--pops-red)] py-14 text-white md:flex md:h-full md:items-center md:rounded-[3rem] md:py-0">
       <div className="relative w-full">
         <h2
-          className="font-display px-6 text-center uppercase leading-[0.82] text-white"
-          style={{ fontSize: 'min(11vw, 6rem)' }}
+          className="font-display px-6 pt-2 text-center uppercase leading-[0.82] text-white"
+          style={{ fontSize: 'min(10vw, 5.5rem)' }}
         >
           More Variety. <span className="text-[var(--pops-ink)]">Same Value.</span>
         </h2>
 
         {/* desktop: 3D coverflow rail */}
-        <div className="pops-scene relative mt-8 hidden h-[42vh] min-h-[280px] md:block">
+        <div className="pops-scene relative mt-10 hidden h-[38vh] min-h-[230px] md:block lg:mt-12">
           <div data-rail className="pops-3d absolute inset-0">
             {items.map((j, i) => (
               <button
@@ -146,7 +147,7 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
         </div>
 
         {/* the jar crossing centre names itself — bigger, lower */}
-        <div className="mt-10 hidden text-center md:block">
+        <div className="mt-12 hidden text-center md:block lg:mt-14">
           <p data-label className="font-display uppercase leading-none text-white" style={{ fontSize: 'min(10vw, 5.5rem)' }}>
             {items[0].name}
           </p>
