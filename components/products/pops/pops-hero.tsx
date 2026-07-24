@@ -10,8 +10,8 @@ gsap.registerPlugin(ScrollTrigger)
 // The Pop.
 //
 // ON LOAD the hero already reads: the giant 5G POPS wordmark drops in
-// letter-by-letter over the striped bucket, which runs past the bottom edge and
-// behind the red band so it never looks cropped.
+// letter-by-letter over the candy stripes. (The bucket was pulled — sitting
+// there empty it read as a prop with nothing to do.)
 //
 // ON SCROLL: ~300 kernels POP into place all over the frame — scattered, not
 // swept — until the screen is full and the type is buried. Then gravity takes
@@ -40,12 +40,12 @@ export default function PopsHero() {
 
           if (c.reduce) {
             gsap.set('[data-nug]', { opacity: 0 })
-            gsap.set('[data-jar]', { opacity: 1, rotate: 0 })
+            gsap.set('[data-herojar]', { opacity: 1, rotate: 0 })
             return
           }
 
-          gsap.set('[data-jar="l"]', { opacity: 0, xPercent: -150, rotate: -60 })
-          gsap.set('[data-jar="r"]', { opacity: 0, xPercent: 150, rotate: 60 })
+          gsap.set('[data-herojar="l"]', { opacity: 0, xPercent: -150, rotate: -60 })
+          gsap.set('[data-herojar="r"]', { opacity: 0, xPercent: 150, rotate: 60 })
 
           const tl = gsap.timeline({
             scrollTrigger: {
@@ -62,10 +62,6 @@ export default function PopsHero() {
               { opacity: 1, scale: 1, rotate: n.rot, duration: 0.06, ease: 'back.out(2.2)' }, at)
           })
 
-          // the bucket kicks with the first pops
-          tl.to('[data-bucket]', { scaleX: 1.05, scaleY: 0.94, duration: 0.02, ease: 'power2.out' }, 0.02)
-            .to('[data-bucket]', { scaleX: 1, scaleY: 1, duration: 0.07, ease: 'elastic.out(1.4,0.4)' }, 0.04)
-
           // ── 2. gravity: they tumble down and out, uncovering the type
           NUGS.forEach((n, i) => {
             const at = 0.46 + n.fallAt * 0.22
@@ -81,10 +77,10 @@ export default function PopsHero() {
           tl.fromTo('[data-word]', { scale: 0.94 }, { scale: 1, duration: 0.12, ease: 'power2.out' }, 0.72)
 
           // ── 4. two jars swing in rotating
-          tl.to('[data-jar="l"]', { opacity: 1, xPercent: 0, rotate: -9, duration: 0.16, ease: 'back.out(1.35)' }, 0.80)
-            .to('[data-jar="r"]', { opacity: 1, xPercent: 0, rotate: 9, duration: 0.16, ease: 'back.out(1.35)' }, 0.84)
-            .to('[data-jar="l"]', { rotate: -4, duration: 0.08, ease: 'power2.inOut' }, 0.93)
-            .to('[data-jar="r"]', { rotate: 4, duration: 0.08, ease: 'power2.inOut' }, 0.93)
+          tl.to('[data-herojar="l"]', { opacity: 1, xPercent: 0, rotate: -9, duration: 0.16, ease: 'back.out(1.35)' }, 0.80)
+            .to('[data-herojar="r"]', { opacity: 1, xPercent: 0, rotate: 9, duration: 0.16, ease: 'back.out(1.35)' }, 0.84)
+            .to('[data-herojar="l"]', { rotate: -4, duration: 0.08, ease: 'power2.inOut' }, 0.93)
+            .to('[data-herojar="r"]', { rotate: 4, duration: 0.08, ease: 'power2.inOut' }, 0.93)
 
           tl.to({}, { duration: 0.04 })
         }
@@ -145,28 +141,19 @@ export default function PopsHero() {
       {/* two jars flank the wordmark */}
       {/* eslint-disable-next-line @next/next/no-img-element -- product jar */}
       <img
-        data-jar="l"
+        data-herojar="l"
         src="/products/pops/jar-bluog.webp"
         alt="Blu OG 5G Pops jar"
         className="absolute bottom-[7%] left-[3%] z-30 w-[min(23vw,205px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:left-[8%]"
       />
       {/* eslint-disable-next-line @next/next/no-img-element -- product jar */}
       <img
-        data-jar="r"
+        data-herojar="r"
         src="/products/pops/jar-cherriez.webp"
         alt="All Cherriez 5G Pops jar"
         className="absolute bottom-[7%] right-[3%] z-30 w-[min(23vw,205px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:right-[8%]"
       />
 
-      {/* the bucket — runs past the section edge; the red band's own z-10
-          paints over its base, so it reads as continuing behind the strip */}
-      {/* eslint-disable-next-line @next/next/no-img-element -- hero bucket */}
-      <img
-        data-bucket
-        src="/products/pops/bucket.webp"
-        alt="Jungle Boys popcorn bucket"
-        className="absolute bottom-[-24%] left-1/2 z-[5] w-[min(46vw,430px)] -translate-x-1/2 origin-bottom will-change-transform drop-shadow-[0_-10px_40px_rgba(0,0,0,0.16)]"
-      />
     </section>
   )
 }

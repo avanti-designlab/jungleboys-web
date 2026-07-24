@@ -1165,6 +1165,18 @@ body:has(.hh-page) footer {
     );
     animation: pops-stripe-drift 9s linear infinite;
   }
+  /* per-section stripe tones — the page changes ground as you scroll */
+  .pops-stripes-dark {
+    background-image: repeating-linear-gradient(104deg, #1b1b1f 0 34px, #0b0b0d 34px 80px);
+    animation: pops-stripe-drift 9s linear infinite;
+  }
+  .pops-stripes-red {
+    background-image: repeating-linear-gradient(104deg, #a80000 0 34px, var(--pops-red) 34px 80px);
+    animation: pops-stripe-drift 9s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pops-stripes-dark, .pops-stripes-red { animation: none; }
+  }
   /* white bloom so type stays readable over the stripes */
   .pops-veil {
     background:

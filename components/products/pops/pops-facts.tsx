@@ -101,10 +101,12 @@ export default function PopsFacts() {
   }, [])
 
   return (
-    <section ref={rootRef} className="relative flex h-screen min-h-[620px] items-center overflow-hidden px-6">
-      <div className="mx-auto grid w-full max-w-[1240px] items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+    <section ref={rootRef} className="relative z-10 flex h-screen min-h-[620px] items-center overflow-hidden bg-[#0b0b0d] px-6 text-white">
+      {/* black ground carries the stripe motif through */}
+      <div aria-hidden className="pops-stripes-dark pointer-events-none absolute -inset-x-[20%] -inset-y-[10%] opacity-80" />
+      <div className="relative mx-auto grid w-full max-w-[1240px] items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
         <h2
-          className="font-display text-center uppercase leading-[0.78] text-[var(--pops-ink)] lg:text-left"
+          className="font-display text-center uppercase leading-[0.78] text-white lg:text-left"
           style={{ fontSize: 'min(15vw, 8.5rem)' }}
         >
           Small <br /> Nugs. <br />
