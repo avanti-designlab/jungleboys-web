@@ -107,20 +107,14 @@ export default function PopsFacts() {
       <div data-reveal className="pops-reveal relative flex h-full w-full items-center overflow-hidden rounded-[2rem] bg-[#0b0b0d] px-6 text-white md:rounded-[3rem]">
         <PopsSectionSpray seed={11} />
       <div className="relative mx-auto grid w-full max-w-[1240px] items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-        {/* centred so the word scaling reads balanced; each word on its own
-            line in a fixed-height row so scaling never reflows the others */}
+        {/* original left-aligned lockup; on hover the two colour blocks swap
+            (white ↔ red) for a quick playful accent */}
         <h2
-          className="font-display text-center uppercase leading-[0.9] text-white"
+          className="pops-head font-display text-center uppercase leading-[0.78] lg:text-left"
           style={{ fontSize: 'min(15vw, 8.5rem)' }}
         >
-          <span className="block h-[0.9em] overflow-visible">
-            <span className="pops-shrink inline-block origin-center">Small</span>
-          </span>
-          <span className="block">Nugs.</span>
-          <span className="block h-[1.15em] overflow-visible text-[var(--pops-red)]">
-            <span className="pops-grow inline-block origin-center">Big</span>
-          </span>
-          <span className="block text-[var(--pops-red)]">Flavor.</span>
+          <span className="pops-hw">Small <br /> Nugs.</span> <br />
+          <span className="pops-hr">Big <br /> Flavor.</span>
         </h2>
 
         {/* the slot — fixed box, cards hinge through it */}

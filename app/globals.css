@@ -1216,23 +1216,14 @@ body:has(.hh-page) footer {
     }
   }
 
-  /* headline magnify — static by default; on hover each word scales like a
-     magnifying glass: SMALL shrinks (letters tighten), BIG grows (letters
-     spread). Springy ease so it feels alive; touch devices just see it static. */
-  .pops-shrink, .pops-grow {
-    cursor: pointer;
-    transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-                letter-spacing 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
-    transform-origin: center center;
-    will-change: transform;
-  }
-  .pops-shrink:hover { transform: scale(0.5); letter-spacing: -0.05em; }
-  .pops-grow:hover   { transform: scale(1.45); letter-spacing: 0.06em; }
-  @media (prefers-reduced-motion: reduce) {
-    .pops-shrink, .pops-grow { transition: none; }
-  }
+  /* headline colour swap on hover — white block ↔ red block */
+  .pops-hw { color: #ffffff; transition: color 0.35s ease; }
+  .pops-hr { color: var(--pops-red); transition: color 0.35s ease; }
+  .pops-head:hover .pops-hw { color: var(--pops-red); }
+  .pops-head:hover .pops-hr { color: #ffffff; }
+  @media (prefers-reduced-motion: reduce) { .pops-hw, .pops-hr { transition: none; } }
 
-  /* down-arrow bounce for the SCROLL button */  /* down-arrow bounce for the SCROLL button */
+  /* down-arrow bounce for the SCROLL button */  /* down-arrow bounce for the SCROLL button */  /* down-arrow bounce for the SCROLL button */
   @keyframes pops-arrow-bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
   .pops-arrow-bounce { animation: pops-arrow-bounce 1.2s ease-in-out infinite; }
   @media (prefers-reduced-motion: reduce) { .pops-arrow-bounce { animation: none; } }
