@@ -7,7 +7,7 @@ import PopsSectionSpray from './pops-spray'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// Small Nugs. Loud Flavor. — the six facts flip through ONE fixed card slot
+// Small Nugs. Big Flavor. — the six facts flip through ONE fixed card slot
 // like a rolodex: each card hinges up from below on rotateX, sits square and
 // full-size dead centre while you read it, then hinges away over the top.
 //
@@ -111,8 +111,8 @@ export default function PopsFacts() {
           className="font-display text-center uppercase leading-[0.78] text-white lg:text-left"
           style={{ fontSize: 'min(15vw, 8.5rem)' }}
         >
-          Small <br /> Nugs. <br />
-          <span className="text-[var(--pops-red)]">Loud <br /> Flavor.</span>
+          <span className="pops-shrink inline-block">Small</span> <br /> Nugs. <br />
+          <span className="text-[var(--pops-red)]"><span className="pops-grow inline-block">Big</span> <br /> Flavor.</span>
         </h2>
 
         {/* the slot — fixed box, cards hinge through it */}

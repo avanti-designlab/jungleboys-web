@@ -1216,6 +1216,15 @@ body:has(.hh-page) footer {
     }
   }
 
+  /* headline word pulses — SMALL keeps shrinking, BIG keeps expanding (opposite
+     phase). transform-origin keeps each anchored to its line so it pulses in
+     place. */
+  @keyframes pops-shrink { 0%, 100% { transform: scale(1); } 50% { transform: scale(0.72); } }
+  @keyframes pops-grow   { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.22); } }
+  .pops-shrink { transform-origin: center bottom; animation: pops-shrink 2.4s ease-in-out infinite; }
+  .pops-grow   { transform-origin: center bottom; animation: pops-grow 2.4s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .pops-shrink, .pops-grow { animation: none; } }
+
   /* down-arrow bounce for the SCROLL button */
   @keyframes pops-arrow-bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
   .pops-arrow-bounce { animation: pops-arrow-bounce 1.2s ease-in-out infinite; }
