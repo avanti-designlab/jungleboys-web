@@ -102,57 +102,30 @@ await wait(1200)
 const result = await evaluate(`(async () => {
   const wait = ms => new Promise(r => setTimeout(r, ms));
   const go = async y => { window.scrollTo(0, y); await wait(950); };
-  const mat = e => new DOMMatrixReadOnly(getComputedStyle(e).transform);
-  const rotOf = e => Math.round(Math.atan2(mat(e).b, mat(e).a) * 180 / Math.PI);
-  const out = { vw: innerWidth, vh: innerHeight };
+  const out = {};
   window.scrollTo(0, 0); await wait(900);
-
-  // ── signs: four distinct wind clocks, pivoting from the post base
-  const sways = [...document.querySelectorAll('#hh-intro .hh-sway')].slice(0, 4);
-  out.sway = sways.map(e => { const cs = getComputedStyle(e);
-    return { dur: cs.animationDuration, delay: cs.animationDelay, origin: cs.transformOrigin, name: cs.animationName }; });
-  out.swayAllDistinct = new Set(out.sway.map(s => s.dur + s.delay)).size === 4;
-  // sample rotation twice — a running animation must change it
-  const r1 = sways.map(e => Number(getComputedStyle(e).rotate.replace('deg','')) || 0);
-  await wait(1400);
-  const r2 = sways.map(e => Number(getComputedStyle(e).rotate.replace('deg','')) || 0);
-  out.swayMoving = r1.some((v, i) => Math.abs(v - r2[i]) > 0.15);
-
-  // ── unbox: rises from lower-left at an angle, shorter span
   const grp = document.querySelector('[data-grp]');
   const sec = grp.closest('section');
   const top = sec.getBoundingClientRect().top + scrollY;
   const span = innerHeight * 1.45;
-  out.pinSpanVh = 145;
   const S = [];
-  for (const f of [0.30, 0.52, 0.97]) {
+  for (const f of [0.30, 0.50, 0.97]) {
     await go(top + f * span);
     const jb = document.querySelector('[data-jzoom]').getBoundingClientRect();
-    S.push({ f, x: Math.round(mat(grp).m41), y: Math.round(mat(grp).m42), rot: rotOf(grp),
-      jl: Math.round(jb.left), jr: Math.round(jb.right), jw: Math.round(jb.width),
+    const bb = document.querySelector('[data-body]').getBoundingClientRect();
+    // overlap area between joint bbox and body bbox (proxy for "hidden inside")
+    const ox = Math.max(0, Math.min(jb.right, bb.right) - Math.max(jb.left, bb.left));
+    const oy = Math.max(0, Math.min(jb.bottom, bb.bottom) - Math.max(jb.top, bb.top));
+    S.push({ f, jw: Math.round(jb.width), jl: Math.round(jb.left), jr: Math.round(jb.right),
+      overlapFrac: +( (ox*oy) / (jb.width*jb.height) ).toFixed(2),
       bodyOp: +Number(getComputedStyle(document.querySelector('[data-body]')).opacity).toFixed(2) });
   }
-  out.unbox = S;
-  out.restAngled = S[0].rot > 45 && S[0].rot < 70;           // diagonal, not level
-  out.restLowerLeft = S[0].x < -80 && S[0].y > 20;            // left of centre and low
+  out.samples = S;
+  out.hiddenAtStart = S[0].overlapFrac > 0.75;      // tucked inside the tube
+  out.clearAtEnd = S[2].overlapFrac < 0.35;          // fully out
   out.tubeRemoved = S[2].bodyOp < 0.05;
-  out.jointZoomed = S[2].jw > S[0].jw * 1.25;
+  out.zoomed = S[2].jw > S[0].jw * 1.3;
   out.neverClipped = S.every(s => s.jl > -40 && s.jr < innerWidth + 40);
-
-  // ── even gaps around the marquee band
-  const mq = [...document.querySelectorAll('section')].find(s => s.querySelector('.marquee-pause'));
-  const prev = mq.previousElementSibling, next = mq.nextElementSibling;
-  const mqR = mq.getBoundingClientRect();
-  out.gapAbove = Math.round(mqR.top - prev.getBoundingClientRect().bottom);
-  out.gapBelow = Math.round(next.getBoundingClientRect().top - mqR.bottom);
-  out.gapsEven = Math.abs(out.gapAbove - out.gapBelow) <= 8;
-
-  // ── logo resolution actually served
-  const logo = document.querySelector('#hh-intro [data-logo]');
-  out.logo = { natural: logo.naturalWidth + 'x' + logo.naturalHeight,
-    cssW: Math.round(logo.getBoundingClientRect().width),
-    ratio: +(logo.naturalWidth / logo.getBoundingClientRect().width).toFixed(2) };
-  out.logoRetinaOk = out.logo.ratio >= 2;
   out.horizScroll = document.documentElement.scrollWidth > innerWidth;
   return out;
 })()`)

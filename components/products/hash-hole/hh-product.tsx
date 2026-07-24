@@ -19,9 +19,10 @@ gsap.registerPlugin(ScrollTrigger)
 // (0,v) lands on screen at (−v·sinθ, v·cosθ) — that identity is what centres
 // the joint at the end (see FINAL). Stack: joint (z0, behind) → body (z10,
 // the mask — no clip-path needed) → cap (z20) → burst (z30).
-// Art: tube-cap 284×176, tube-body 284×1032, joint 230×897 — all cut in ONE
-// compression pass from the 581×1456 master fill (the older 448×1123 cut,
-// re-compressed twice, is what read as pixelated).
+// Art: tube-cap 568×352 + tube-body 568×2064 (from the 581×1456 master fill,
+// one compression pass, 2x lanczos); joint 560×4196 straightened from Avanti's
+// 4288×3118 transparent cutout via image moments — Figma's own joint was only
+// 230px of true detail and read as pixelated at the hero zoom.
 
 const BALLS = [
   { key: 'a', size: 'h-[40px] w-[40px] md:h-[54px] md:w-[54px]', top: '10%', dir: 1, speed: 0.75, y0: '3vh', y1: '-7vh', spin: 540 },
@@ -34,8 +35,11 @@ const F = {
   tubeW: 0.2351,
   capH: 0.1457, capTop: -0.5,
   bodyH: 0.8543, bodyTop: -0.3543, // body top edge = the open mouth
-  jointW: 0.1904, jointH: 0.7425, jointTop: -0.25, // starts fully inside the body
-  slide: -0.90, // travel that clears the joint completely of the mouth
+  // joint aspect 0.1335 (Avanti's 4288x3118 cutout, straightened) — longer and
+  // slimmer than the old composite crop, so length/width are re-derived to keep
+  // it inside the body: spans -0.30..+0.50 against the body's -0.3543..+0.50
+  jointW: 0.1068, jointH: 0.80, jointTop: -0.30,
+  slide: -0.92, // travel that clears the joint completely of the mouth
   // the tube rises from the lower left and points up-right; art-up maps to
   // screen direction (sin θ, −cos θ), so 58° = pointing up at ~32° above level
   entryRot: 74, restRot: 58, finalRot: 68,
@@ -62,7 +66,7 @@ export default function HhProduct() {
           const L = c.isMobile ? 68 : 52 // tube length in vw — mirrors --hh-L
           const restX = c.isMobile ? -12 : -18 // sits left of centre
           const restY = c.isMobile ? 6 : 5 // …and low, so it reads as rising from the corner
-          const zoom = c.isMobile ? 1.3 : 1.45
+          const zoom = c.isMobile ? 1.45 : 1.7 // the payoff — the slimmer joint needs more
           const v = (f: number) => `${(f * L).toFixed(2)}vw`
 
           // FINAL: centre the joint for the hero beat. Its centre sits at art-y

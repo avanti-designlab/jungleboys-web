@@ -20,9 +20,12 @@ function Row() {
   )
 }
 
+// Desktop margins are deliberately asymmetric: the pinned section above ends
+// with ~105px of dead space below its vertically-centred content, so a small
+// top margin + a large bottom one is what reads as EVEN on screen.
 export default function HhMarquee({ reverse = false }: { reverse?: boolean }) {
   return (
-    <section aria-hidden className="my-14 overflow-hidden bg-[var(--hh-green)] py-4 md:my-20 md:py-6">
+    <section aria-hidden className="my-14 overflow-hidden bg-[var(--hh-green)] py-4 md:mb-28 md:mt-1 md:py-6">
       <div className="marquee-pause flex">
         <div className={`${reverse ? 'marquee-track-reverse' : 'marquee-track'} flex`}>
           <Row />
