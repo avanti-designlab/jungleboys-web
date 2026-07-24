@@ -115,10 +115,9 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
   if (items.length === 0) return null
 
   return (
-    <section ref={rootRef} className="relative z-10 overflow-hidden bg-[var(--pops-red)] py-14 text-white md:flex md:h-screen md:min-h-[680px] md:items-center md:py-0">
-      {/* red ground carries the stripe motif through */}
-      <div aria-hidden className="pops-stripes-red pointer-events-none absolute -inset-x-[20%] -inset-y-[10%] opacity-70" />
-
+    // solid pill on the striped page — the stripes show only in the gutter
+    <section ref={rootRef} className="relative z-10 p-2 md:h-screen md:min-h-[680px] md:p-3">
+      <div className="overflow-hidden rounded-[2rem] bg-[var(--pops-red)] py-14 text-white md:flex md:h-full md:items-center md:rounded-[3rem] md:py-0">
       <div className="relative w-full">
         <h2
           className="font-display px-6 text-center uppercase leading-[0.82] text-white"
@@ -175,6 +174,8 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
             </button>
           ))}
         </div>
+      </div>
+
       </div>
 
       {/* ── quick facts ── */}
