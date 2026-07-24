@@ -104,32 +104,35 @@ const result = await evaluate(`(async () => {
   const go = async y => { window.scrollTo(0, y); await wait(950); };
   const mat = e => new DOMMatrixReadOnly(getComputedStyle(e).transform);
   const out = { vw: innerWidth, vh: innerHeight };
-  const sec = document.querySelector('[data-tflight]').closest('section');
+  window.scrollTo(0, 0); await wait(800);
+  const grp = document.querySelector('[data-grp]');
+  const sec = grp.closest('section');
   const top = sec.getBoundingClientRect().top + scrollY;
-  const span = innerHeight * 1.75;
-  const jf = document.querySelector('[data-jflight]');
-  const tf = document.querySelector('[data-tflight]');
+  const span = innerHeight * 1.85;
+  const cap = document.querySelector('[data-cap]');
+  const jnt = document.querySelector('[data-jnt]');
+  const body = sec.querySelector('img[src*="tube-body"]');
   const samples = [];
-  for (const f of [0.1, 0.35, 0.55, 0.8, 0.97]) {
+  for (const f of [0.1, 0.3, 0.45, 0.56, 0.75, 0.97]) {
     await go(top + f * span);
+    const jb = jnt.getBoundingClientRect(), bb = body.getBoundingClientRect();
     samples.push({ f, secTop: Math.round(sec.getBoundingClientRect().top),
-      jx: Math.round(mat(jf).m41), tx: Math.round(mat(tf).m41),
-      ty: Math.round(mat(tf).m42), tScale: Number(mat(tf).a.toFixed(2)),
-      jointVisible: (() => { const b = document.querySelector('[data-jimg]').getBoundingClientRect();
-        const clipEdge = innerWidth / 2 - innerWidth * 0.20;
-        return b.left < clipEdge - 8; })() });
+      grpY: Math.round(mat(grp).m42), grpX: Math.round(mat(grp).m41),
+      capOp: Number(getComputedStyle(cap).opacity).toFixed(2),
+      capRot: Math.round(Math.atan2(mat(cap).b, mat(cap).a) * 180 / Math.PI),
+      jntEmergedPx: Math.round(jb.right - bb.right),
+      bodyOnScreen: bb.width > 100 && bb.left < innerWidth && bb.right > 0 });
   }
   out.samples = samples;
   out.pinned = samples.every(s => Math.abs(s.secTop) < 6);
-  out.breatheBeat = samples[0].jx < -innerWidth * 0.4 && samples[0].ty > innerHeight * 0.3;
-  out.jointArrives = samples[2].jx > samples[1].jx;
-  out.jointSwallowed = !samples[4].jointVisible && samples[1].jointVisible;
-  out.tubeEndsCentred = Math.abs(samples[4].tx) < 20 && samples[4].tScale > 1.05;
+  out.breathe = samples[0].grpY > innerHeight * 0.4;
+  out.arrived = samples[1].grpY === 0 && samples[1].bodyOnScreen;
+  out.capWasOn = Number(samples[1].capOp) === 1;
+  out.capGone = Number(samples[5].capOp) < 0.05;
+  out.jointEmerges = samples[5].jntEmergedPx > samples[2].jntEmergedPx && samples[5].jntEmergedPx > innerWidth * 0.1;
+  out.settledCentred = Math.abs(samples[5].grpX) < 20;
   out.balls = document.querySelectorAll('[data-ball]').length;
   out.horizScroll = document.documentElement.scrollWidth > innerWidth;
-  // flower mobile frames reachable
-  const r = await fetch('/products/flower/frames/mobile/0060.webp');
-  out.flowerMobileFrame = r.status;
   return out;
 })()`)
 

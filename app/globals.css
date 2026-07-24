@@ -1150,12 +1150,11 @@ body:has(.hh-page) footer {
   @keyframes hh-float { from { translate: 0 0; } to { translate: 0 -16px; } }
   .hh-float { animation: hh-float 5s ease-in-out infinite alternate; }
   /* staked signs idle on desynced clocks so the tee box feels alive, not looped */
-  /* the Hole-In-One swallow edge: everything right of the tube mouth is
-     clipped, so the joint vanishes INTO the tube; edge tracks the tube size
-     per breakpoint and hides ~3vw inside the mouth art */
-  .hh-joint-clip { clip-path: inset(0 calc(50% + 29vw) 0 0); }
+  /* the Unboxing: --hh-L = tube length; all product-group children derive
+     their art-frame geometry from it */
+  .hh-unbox { --hh-L: 88vw; }
   @media (min-width: 768px) {
-    .hh-joint-clip { clip-path: inset(0 calc(50% + 20vw) 0 0); }
+    .hh-unbox { --hh-L: 70vw; }
   }
   /* optically thinner Bebas: stroke glyph edges with the sign green */
   .hh-sign-thin { -webkit-text-stroke: 0.55px var(--hh-green); paint-order: stroke fill; }
