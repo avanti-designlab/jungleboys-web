@@ -7,18 +7,23 @@ import { buildNugField } from './pops-nugs'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// The Pop. The section pins and the whole thing happens under the thumb:
-// the striped bucket sits cut off at the bottom edge, baby nugs erupt out of
-// its mouth in waves until they fill the frame, then pop off a burst at a
-// time — each with a little scale-punch — until the frame is clear. The mega
-// POPS wordmark punches up through the gap, and two jars swing in rotating to
-// finish the reveal. Scroll back and it all packs itself away.
+// The Pop. The striped bucket sits at the bottom edge and RUNS ON past it,
+// behind the red band below, so it never reads as cropped. On scroll it kicks,
+// then ~300 pops fountain out of its mouth in a dense stream until they fill
+// the frame; they blow off in six bursts, the giant 5G POPS wordmark — sized
+// like the /media and /products wordmarks and dropped in letter-by-letter —
+// punches up behind the spray, and two jars swing in rotating.
 //
-// The nug layer sits BEHIND the bucket art, so nugs spawned at the mouth are
+// PERF: every kernel animates on TRANSFORM ONLY (x/y in vw/vh, scale, rotate).
+// The first pass animated `left`/`top`, which forces layout on every element
+// every frame — survivable at 34 kernels, fatal at 300.
+//
+// The nug layer sits BEHIND the bucket art, so kernels spawned at the mouth are
 // hidden by the bucket's own interior until they clear the rim — that is what
 // sells them as coming out of it, with no masking.
 
-const NUGS = buildNugField(34)
+const NUGS = buildNugField(300)
+const WORD = '5G POPS'
 
 export default function PopsHero() {
   const rootRef = useRef<HTMLElement>(null)
@@ -35,51 +40,54 @@ export default function PopsHero() {
 
           if (c.reduce) {
             gsap.set('[data-nug]', { opacity: 0 })
-            gsap.set('[data-wordmark]', { opacity: 1, scale: 1, y: 0 })
-            gsap.set('[data-jar]', { opacity: 1, rotate: 0, y: 0 })
+            gsap.set('[data-jar]', { opacity: 1, rotate: 0 })
             return
           }
 
-          gsap.set('[data-wordmark]', { opacity: 0, scale: 0.55, y: '18vh' })
-          gsap.set('[data-jar="l"]', { opacity: 0, xPercent: -140, rotate: -55 })
-          gsap.set('[data-jar="r"]', { opacity: 0, xPercent: 140, rotate: 55 })
+          gsap.set('[data-jar="l"]', { opacity: 0, xPercent: -150, rotate: -60 })
+          gsap.set('[data-jar="r"]', { opacity: 0, xPercent: 150, rotate: 60 })
 
           const tl = gsap.timeline({
             scrollTrigger: {
-              trigger: root, start: 'top top', end: '+=230%',
+              trigger: root, start: 'top top', end: '+=260%',
               pin: true, scrub: 0.65, anticipatePin: 1, invalidateOnRefresh: true,
             },
           })
 
-          // ── erupt: every nug launches from the bucket mouth to its own spot
+          // the bucket kicks as the first kernels blow
+          tl.to('[data-bucket]', { scaleX: 1.05, scaleY: 0.95, duration: 0.02, ease: 'power2.out' }, 0)
+            .to('[data-bucket]', { scaleX: 1, scaleY: 1, duration: 0.06, ease: 'elastic.out(1.4,0.4)' }, 0.02)
+
+          // ── the fountain: kernels leave the mouth, near ones first
           NUGS.forEach((n, i) => {
-            const at = 0.02 + (i % 12) * 0.017 + Math.floor(i / 12) * 0.05
+            const at = n.lead * 0.30 + (i % 7) * 0.004
             tl.fromTo(`[data-nug="${i}"]`,
-              { opacity: 0, left: '50%', top: '58%', scale: 0.14, rotate: 0 },
+              { opacity: 0, x: 0, y: 0, scale: 0.1, rotate: 0 },
               {
-                opacity: 1, left: `${n.x}%`, top: `${n.y}%`, scale: 1, rotate: n.rot,
-                duration: 0.3, ease: 'power2.out',
+                opacity: 1, x: `${n.dx}vw`, y: `${n.dy}vh`, scale: 1, rotate: n.rot,
+                duration: 0.34, ease: 'power2.out',
               }, at)
           })
 
-          // ── pop off: five bursts, each with a punch-then-vanish
-          for (let w = 0; w < 5; w++) {
-            const at = 0.44 + w * 0.055
+          // ── blow off in six bursts: punch, then gone
+          for (let w = 0; w < 6; w++) {
+            const at = 0.50 + w * 0.038
             const sel = NUGS.map((n, i) => (n.wave === w ? `[data-nug="${i}"]` : null)).filter(Boolean).join(',')
             if (!sel) continue
-            tl.to(sel, { scale: 1.35, duration: 0.035, ease: 'power2.out' }, at)
-              .to(sel, { scale: 0, opacity: 0, rotate: '+=90', duration: 0.06, ease: 'power2.in' }, at + 0.035)
+            tl.to(sel, { scale: 1.5, duration: 0.022, ease: 'power2.out' }, at)
+              .to(sel, { scale: 0, opacity: 0, rotate: '+=120', duration: 0.05, ease: 'power2.in' }, at + 0.022)
           }
 
-          // ── the wordmark punches up through the cleared frame
-          tl.to('[data-wordmark]', { opacity: 1, scale: 1, y: 0, duration: 0.16, ease: 'back.out(1.6)' }, 0.62)
+          // ── the wordmark punches up through the clearing spray
+          tl.fromTo('[data-word]',
+            { opacity: 0, scale: 0.62, y: '16vh' },
+            { opacity: 1, scale: 1, y: 0, duration: 0.17, ease: 'back.out(1.5)' }, 0.60)
 
-          // ── two jars swing in, rotating, to finish the reveal
-          tl.to('[data-jar="l"]', { opacity: 1, xPercent: 0, rotate: -9, duration: 0.18, ease: 'back.out(1.35)' }, 0.74)
-            .to('[data-jar="r"]', { opacity: 1, xPercent: 0, rotate: 9, duration: 0.18, ease: 'back.out(1.35)' }, 0.79)
-            // and settle upright as the section releases
-            .to('[data-jar="l"]', { rotate: -4, duration: 0.1, ease: 'power2.inOut' }, 0.9)
-            .to('[data-jar="r"]', { rotate: 4, duration: 0.1, ease: 'power2.inOut' }, 0.9)
+          // ── two jars swing in rotating
+          tl.to('[data-jar="l"]', { opacity: 1, xPercent: 0, rotate: -9, duration: 0.17, ease: 'back.out(1.35)' }, 0.76)
+            .to('[data-jar="r"]', { opacity: 1, xPercent: 0, rotate: 9, duration: 0.17, ease: 'back.out(1.35)' }, 0.80)
+            .to('[data-jar="l"]', { rotate: -4, duration: 0.09, ease: 'power2.inOut' }, 0.9)
+            .to('[data-jar="r"]', { rotate: 4, duration: 0.09, ease: 'power2.inOut' }, 0.9)
 
           tl.to({}, { duration: 0.05 })
         }
@@ -90,11 +98,13 @@ export default function PopsHero() {
   }, [])
 
   return (
-    <section ref={rootRef} className="relative h-screen min-h-[560px] overflow-hidden">
-      {/* nug field — behind the bucket so the mouth hides the spawn */}
-      <div className="absolute inset-0 z-10">
+    // NOT overflow-hidden: the bucket has to run past the bottom edge and under
+    // the red band. The kernels get their own clipping layer instead.
+    <section ref={rootRef} className="relative h-screen min-h-[560px]">
+      {/* kernel fountain — clipped on its own, behind the bucket */}
+      <div className="absolute inset-0 z-10 overflow-hidden">
         {NUGS.map((n, i) => (
-          // eslint-disable-next-line @next/next/no-img-element -- nug cutouts
+          // eslint-disable-next-line @next/next/no-img-element -- kernel cutouts
           <img
             key={i}
             data-nug={i}
@@ -103,32 +113,36 @@ export default function PopsHero() {
             aria-hidden
             className="absolute -translate-x-1/2 -translate-y-1/2 will-change-transform"
             style={{
-              left: '50%', top: '58%',
+              left: '50%', top: '57%',
               width: `${n.size}%`,
               opacity: 0,
-              filter: n.depth < 0.4 ? 'brightness(0.94)' : undefined,
+              filter: n.depth < 0.35 ? 'brightness(0.93)' : undefined,
               zIndex: Math.round(n.depth * 8),
             }}
           />
         ))}
       </div>
 
-      {/* the wordmark, between nugs and bucket */}
+      {/* giant wordmark — same treatment as the /media and /products heroes */}
       <div
-        data-wordmark
-        className="pointer-events-none absolute inset-x-0 top-[11%] z-20 text-center will-change-transform"
+        data-word
+        className="pointer-events-none absolute inset-x-0 top-[13%] z-20 text-center will-change-transform"
       >
-        <p
-          className="font-display uppercase leading-none tracking-[0.08em] text-[var(--pops-red)]"
-          style={{ fontSize: 'min(7vw, 4rem)' }}
-        >
-          New!
-        </p>
         <h1
-          className="font-display uppercase leading-[0.78] text-[var(--pops-ink)]"
-          style={{ fontSize: 'min(25vw, 15.5rem)' }}
+          aria-label="5G Pops"
+          className="font-display whitespace-nowrap uppercase leading-[0.8] text-[var(--pops-ink)]"
+          style={{ fontSize: 'min(33vw, 30rem)' }}
         >
-          <span className="text-[var(--pops-red)]">5G</span> Pops
+          {WORD.split('').map((ch, i) => (
+            <span
+              key={i}
+              aria-hidden
+              className="contact-letter"
+              style={{ animationDelay: `${0.25 + i * 0.07}s`, color: i < 2 ? 'var(--pops-red)' : undefined }}
+            >
+              {ch === ' ' ? ' ' : ch}
+            </span>
+          ))}
         </h1>
       </div>
 
@@ -138,22 +152,24 @@ export default function PopsHero() {
         data-jar="l"
         src="/products/pops/jar-bluog.webp"
         alt="Blu OG 5G Pops jar"
-        className="absolute bottom-[5%] left-[4%] z-30 w-[min(23vw,205px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:left-[9%]"
+        className="absolute bottom-[7%] left-[3%] z-30 w-[min(23vw,205px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:left-[8%]"
       />
       {/* eslint-disable-next-line @next/next/no-img-element -- product jar */}
       <img
         data-jar="r"
         src="/products/pops/jar-cherriez.webp"
         alt="All Cherriez 5G Pops jar"
-        className="absolute bottom-[5%] right-[4%] z-30 w-[min(23vw,205px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:right-[9%]"
+        className="absolute bottom-[7%] right-[3%] z-30 w-[min(23vw,205px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:right-[8%]"
       />
 
-      {/* the bucket, cut off by the bottom edge */}
+      {/* the bucket — runs past the section edge; the red band's own z-10
+          paints over its base, so it reads as continuing behind the strip */}
       {/* eslint-disable-next-line @next/next/no-img-element -- hero bucket */}
       <img
+        data-bucket
         src="/products/pops/bucket.webp"
         alt="Jungle Boys popcorn bucket"
-        className="absolute bottom-[-14%] left-1/2 z-40 w-[min(46vw,430px)] -translate-x-1/2 drop-shadow-[0_-10px_40px_rgba(0,0,0,0.18)]"
+        className="absolute bottom-[-24%] left-1/2 z-[5] w-[min(46vw,430px)] -translate-x-1/2 origin-bottom will-change-transform drop-shadow-[0_-10px_40px_rgba(0,0,0,0.16)]"
       />
     </section>
   )
