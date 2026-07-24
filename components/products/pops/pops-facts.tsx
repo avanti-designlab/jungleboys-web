@@ -6,24 +6,26 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// Why Pops — the six facts ride a real 3D drum. The cards are placed around
-// the surface of a cylinder with CSS `rotateX` + `translateZ`, and scrolling
-// spins the drum so each fact turns to face you, gets read, and rolls away.
-// The lit card scales up and its neighbours dim, so depth reads even on a flat
-// panel. First use of true perspective on the site.
-// Reduced-motion: the drum is flattened into a plain stacked list.
+// Small Nugs. Loud Flavor. — the six facts flip through ONE fixed card slot
+// like a rolodex: each card hinges up from below on rotateX, sits square and
+// full-size dead centre while you read it, then hinges away over the top.
+//
+// The first pass put the cards around a rotating drum, which threw them out of
+// frame and rescaled them as they came round. Here every card shares the exact
+// same box, so the slot never moves and nothing ever leaves the frame — the
+// depth comes from the hinge, not from travel.
+//
+// Icons are the originals from the Figma design (exported as SVG, recoloured to
+// currentColor so one set works on both the red cards and dark panels).
 
 const FACTS = [
-  { n: '01', head: '5G Jar', body: 'A full five grams in the candy-striped jar — the format built for sharing.' },
-  { n: '02', head: 'Small Nug Flower', body: 'The same indoor cannabis flower, just in bite-size pops.' },
-  { n: '03', head: 'Same Exotic Strains', body: 'Pulled from the identical premium exotic genetics as our top-shelf jars.' },
-  { n: '04', head: 'Better Value', body: 'A friendlier price per gram without giving up an ounce of quality.' },
-  { n: '05', head: 'Terpene-Rich', body: 'Full flavor profiles — the nose and the taste come through exactly the same.' },
-  { n: '06', head: 'Hand-Selected', body: 'Every pop is picked by hand from the top of each harvest.' },
+  { icon: 'jar', ar: 41 / 87, head: '5G Jar', body: 'A full five grams in the candy-striped jar — the format built for sharing.' },
+  { icon: 'nug', ar: 81 / 61, head: 'Small Nug Flower', body: 'The same indoor cannabis flower, just in bite-size pops.' },
+  { icon: 'strains', ar: 73 / 74, head: 'Same Exotic Strains', body: 'Pulled from the identical premium exotic genetics as our top-shelf jars.' },
+  { icon: 'value', ar: 64 / 66, head: 'Better Value', body: 'A friendlier price per gram without giving up an ounce of quality.' },
+  { icon: 'terps', ar: 65 / 67, head: 'Terpene-Rich', body: 'Full flavor profiles — the nose and the taste come through exactly the same.' },
+  { icon: 'hand', ar: 67 / 68, head: 'Hand-Selected', body: 'Every pop is picked by hand from the top of each harvest.' },
 ]
-
-const STEP = 360 / FACTS.length // degrees between cards on the drum
-const RADIUS = 300 // px out from the drum axis
 
 export default function PopsFacts() {
   const rootRef = useRef<HTMLElement>(null)
@@ -39,31 +41,35 @@ export default function PopsFacts() {
           const c = mmCtx.conditions as Record<string, boolean>
           if (c.reduce) return
 
-          const drum = root.querySelector<HTMLElement>('[data-drum]')
-          if (!drum) return
-
-          const state = { rot: 0 }
+          const state = { i: 0 }
           const paint = () => {
-            gsap.set(drum, { rotateX: -state.rot })
-            // card i faces the viewer when i*STEP === rot; use the signed
-            // shortest angle to that, so 0 = dead ahead
             FACTS.forEach((_, i) => {
-              const raw = i * STEP - state.rot
-              const diff = ((raw + 180) % 360 + 360) % 360 - 180
-              const facing = Math.max(0, 1 - Math.abs(diff) / STEP)
               const card = root.querySelector<HTMLElement>(`[data-fact="${i}"]`)
-              const lit = Math.pow(facing, 1.7) // falls off fast — no ghost stack
-              if (card) gsap.set(card, { opacity: 0.05 + lit * 0.95, scale: 0.86 + lit * 0.14 })
+              const dot = root.querySelector<HTMLElement>(`[data-dot="${i}"]`)
+              if (!card) return
+              const d = i - state.i // <0 = already gone, >0 = still to come
+              const ad = Math.abs(d)
+              // t stays 0 through the dwell, then ramps hard over the handover
+              const t = Math.max(0, Math.min(1, (ad - 0.62) / 0.38))
+              const sign = d < 0 ? -1 : 1
+              gsap.set(card, {
+                rotateX: -sign * t * 85,
+                yPercent: sign * t * 26,
+                opacity: 1 - t, // opaque while it dwells; the top card occludes
+                zIndex: Math.max(0, Math.round((1 - ad) * 10)),
+              })
+              const near = Math.max(0, 1 - ad)
+              if (dot) gsap.set(dot, { scaleX: 0.25 + near * 0.75, opacity: 0.3 + near * 0.7 })
             })
           }
           paint()
 
           gsap.to(state, {
-            rot: (FACTS.length - 1) * STEP,
+            i: FACTS.length - 1,
             ease: 'none',
             onUpdate: paint,
             scrollTrigger: {
-              trigger: root, start: 'top top', end: '+=260%',
+              trigger: root, start: 'top top', end: '+=300%',
               pin: true, scrub: 0.7, anticipatePin: 1, invalidateOnRefresh: true,
             },
           })
@@ -75,37 +81,58 @@ export default function PopsFacts() {
   }, [])
 
   return (
-    <section ref={rootRef} className="relative flex h-screen min-h-[560px] items-center overflow-hidden px-6">
-      <div className="mx-auto grid w-full max-w-[1240px] items-center gap-10 lg:grid-cols-[0.82fr_1.18fr]">
+    <section ref={rootRef} className="relative flex h-screen min-h-[620px] items-center overflow-hidden px-6">
+      <div className="mx-auto grid w-full max-w-[1240px] items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
         <h2
-          className="font-display text-center uppercase leading-[0.8] text-[var(--pops-ink)] lg:text-left"
-          style={{ fontSize: 'min(13vw, 7.5rem)' }}
+          className="font-display text-center uppercase leading-[0.78] text-[var(--pops-ink)] lg:text-left"
+          style={{ fontSize: 'min(15vw, 8.5rem)' }}
         >
-          Why <br className="hidden lg:block" /> they <span className="text-[var(--pops-red)]">hit</span>
+          Small <br /> Nugs. <br />
+          <span className="text-[var(--pops-red)]">Loud <br /> Flavor.</span>
         </h2>
 
-        {/* the drum */}
-        <div className="pops-scene relative h-[340px] md:h-[420px]">
-          <div data-drum className="pops-3d absolute inset-0" style={{ transformOrigin: `50% 50% -${RADIUS}px` }}>
+        {/* the slot — fixed box, cards hinge through it */}
+        <div className="pops-scene relative">
+          <div className="pops-3d relative mx-auto h-[300px] w-full max-w-[560px] md:h-[340px]">
             {FACTS.map((f, i) => (
               <article
-                key={f.n}
+                key={f.icon}
                 data-fact={i}
-                className="absolute inset-x-0 top-1/2 mx-auto max-w-[560px] -translate-y-1/2 rounded-[1.5rem] border-4 border-white bg-[var(--pops-red)] px-6 py-7 text-white shadow-[0_22px_50px_rgba(200,0,0,0.28)] md:px-9 md:py-9"
-                style={{
-                  transform: `rotateX(${i * STEP}deg) translateZ(${RADIUS}px)`,
-                  backfaceVisibility: 'hidden',
-                  WebkitBackfaceVisibility: 'hidden',
-                }}
+                className="absolute inset-0 flex flex-col justify-center rounded-[1.6rem] border-4 border-white bg-[var(--pops-red)] px-7 py-8 text-white shadow-[0_24px_54px_rgba(200,0,0,0.3)] md:px-10"
+                style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transformOrigin: '50% 50% -180px' }}
               >
-                <p className="font-display text-2xl leading-none text-white/55">{f.n}</p>
-                <h3 className="font-display mt-1 uppercase leading-[0.9]" style={{ fontSize: 'clamp(1.8rem, 4.4vw, 3rem)' }}>
+                {/* masked, not <img>: an <img>-loaded SVG is an isolated
+                    document, so its currentColor can never pick up this card's
+                    text colour. The mask paints the glyph in bg-current. */}
+                <span
+                  aria-hidden
+                  className="block h-12 shrink-0 bg-current md:h-14"
+                  style={{
+                    width: `calc(3.5rem * ${f.ar})`,
+                    WebkitMaskImage: `url(/products/pops/icons/${f.icon}.svg)`,
+                    maskImage: `url(/products/pops/icons/${f.icon}.svg)`,
+                    WebkitMaskRepeat: 'no-repeat',
+                    maskRepeat: 'no-repeat',
+                    WebkitMaskPosition: 'left center',
+                    maskPosition: 'left center',
+                    WebkitMaskSize: 'contain',
+                    maskSize: 'contain',
+                  }}
+                />
+                <h3 className="font-display mt-4 uppercase leading-[0.9]" style={{ fontSize: 'clamp(2rem, 4.6vw, 3.2rem)' }}>
                   {f.head}
                 </h3>
                 <p className="mt-2 text-sm font-medium leading-relaxed text-white/90 md:text-base" style={{ fontFamily: 'var(--font-brand)' }}>
                   {f.body}
                 </p>
               </article>
+            ))}
+          </div>
+
+          {/* progress ticks */}
+          <div className="mx-auto mt-7 flex max-w-[560px] gap-2">
+            {FACTS.map((f, i) => (
+              <span key={f.icon} data-dot={i} className="h-1.5 flex-1 origin-left rounded-full bg-[var(--pops-red)]" />
             ))}
           </div>
         </div>

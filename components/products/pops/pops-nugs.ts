@@ -16,13 +16,15 @@ export const NUG_SRC = [
 
 export type Nug = {
   src: string
-  dx: number // travel from the bucket mouth, in vw
-  dy: number // …and in vh
+  x: number // resting spot, % of stage width
+  y: number // % of stage height
   size: number // % of stage width
   rot: number
-  wave: number // which pop-off burst it belongs to
-  depth: number // 0 = far/small/dim, 1 = near
-  lead: number // 0..1 stagger position within the eruption
+  popAt: number // 0..1 — when it pops into frame
+  fallAt: number // 0..1 — when it drops out
+  drift: number // sideways sway on the way down, vw
+  spin: number // tumble on the way down
+  depth: number
 }
 
 function lcg(seed: number) {
@@ -33,28 +35,29 @@ function lcg(seed: number) {
   }
 }
 
-// A dense fountain out of the bucket mouth: a tight cone at the base that
-// widens as it rises, with plenty of kernels staying close to the rim so the
-// stream visibly pours OUT of the bucket rather than teleporting to the edges.
+// An even scatter over the whole frame (jittered grid, so it fills edge to edge
+// with no clumps or bald patches) — they POP into place where they land, then
+// fall away under gravity.
 export function buildNugField(count: number, seed = 20260724): Nug[] {
   const r = lcg(seed)
   const out: Nug[] = []
+  const cols = 20
+  const rows = Math.ceil(count / cols)
   for (let i = 0; i < count; i++) {
+    const gx = i % cols
+    const gy = Math.floor(i / cols)
     const depth = r()
-    const t = r() // 0 = hugs the mouth, 1 = flung to the far edge
-    const reach = Math.pow(t, 0.72) // biased toward the bucket
-    // the cone opens up the further a kernel travels
-    const spread = 0.22 + reach * 1.42
-    const angle = -Math.PI / 2 + (r() - 0.5) * 2 * spread
     out.push({
       src: NUG_SRC[i % NUG_SRC.length],
-      dx: Math.cos(angle) * reach * 78,
-      dy: Math.sin(angle) * reach * 74 - reach * 6, // a touch of lift
-      size: 1.5 + depth * 3.6,
+      x: ((gx + 0.5) / cols) * 112 - 6 + (r() - 0.5) * 9,
+      y: ((gy + 0.5) / rows) * 112 - 6 + (r() - 0.5) * 9,
+      size: 2.2 + depth * 4.2,
       rot: (r() - 0.5) * 300,
-      wave: i % 6,
+      popAt: r(), // scattered pop-in, not a sweep
+      fallAt: r() * 0.45,
+      drift: (r() - 0.5) * 26,
+      spin: (r() - 0.5) * 540,
       depth,
-      lead: t,
     })
   }
   return out

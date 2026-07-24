@@ -7,20 +7,20 @@ import { buildNugField } from './pops-nugs'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// The Pop. The striped bucket sits at the bottom edge and RUNS ON past it,
-// behind the red band below, so it never reads as cropped. On scroll it kicks,
-// then ~300 pops fountain out of its mouth in a dense stream until they fill
-// the frame; they blow off in six bursts, the giant 5G POPS wordmark — sized
-// like the /media and /products wordmarks and dropped in letter-by-letter —
-// punches up behind the spray, and two jars swing in rotating.
+// The Pop.
 //
-// PERF: every kernel animates on TRANSFORM ONLY (x/y in vw/vh, scale, rotate).
-// The first pass animated `left`/`top`, which forces layout on every element
-// every frame — survivable at 34 kernels, fatal at 300.
+// ON LOAD the hero already reads: the giant 5G POPS wordmark drops in
+// letter-by-letter over the striped bucket, which runs past the bottom edge and
+// behind the red band so it never looks cropped.
 //
-// The nug layer sits BEHIND the bucket art, so kernels spawned at the mouth are
-// hidden by the bucket's own interior until they clear the rim — that is what
-// sells them as coming out of it, with no masking.
+// ON SCROLL: ~300 kernels POP into place all over the frame — scattered, not
+// swept — until the screen is full and the type is buried. Then gravity takes
+// them: they tumble down and out in a ragged cascade, uncovering the wordmark
+// again. Two jars swing in to close.
+//
+// PERF: kernels animate on TRANSFORM ONLY (x/y in vw/vh, scale, rotate).
+// Animating `left`/`top` forces layout for every element every frame — fine at
+// 34, fatal at 300.
 
 const NUGS = buildNugField(300)
 const WORD = '5G POPS'
@@ -49,47 +49,44 @@ export default function PopsHero() {
 
           const tl = gsap.timeline({
             scrollTrigger: {
-              trigger: root, start: 'top top', end: '+=260%',
+              trigger: root, start: 'top top', end: '+=250%',
               pin: true, scrub: 0.65, anticipatePin: 1, invalidateOnRefresh: true,
             },
           })
 
-          // the bucket kicks as the first kernels blow
-          tl.to('[data-bucket]', { scaleX: 1.05, scaleY: 0.95, duration: 0.02, ease: 'power2.out' }, 0)
-            .to('[data-bucket]', { scaleX: 1, scaleY: 1, duration: 0.06, ease: 'elastic.out(1.4,0.4)' }, 0.02)
-
-          // ── the fountain: kernels leave the mouth, near ones first
+          // ── 1. kernels POP into place, scattered across the whole frame
           NUGS.forEach((n, i) => {
-            const at = n.lead * 0.30 + (i % 7) * 0.004
+            const at = n.popAt * 0.30
             tl.fromTo(`[data-nug="${i}"]`,
-              { opacity: 0, x: 0, y: 0, scale: 0.1, rotate: 0 },
-              {
-                opacity: 1, x: `${n.dx}vw`, y: `${n.dy}vh`, scale: 1, rotate: n.rot,
-                duration: 0.34, ease: 'power2.out',
-              }, at)
+              { opacity: 0, scale: 0, rotate: 0, y: 0, x: 0 },
+              { opacity: 1, scale: 1, rotate: n.rot, duration: 0.06, ease: 'back.out(2.2)' }, at)
           })
 
-          // ── blow off in six bursts: punch, then gone
-          for (let w = 0; w < 6; w++) {
-            const at = 0.50 + w * 0.038
-            const sel = NUGS.map((n, i) => (n.wave === w ? `[data-nug="${i}"]` : null)).filter(Boolean).join(',')
-            if (!sel) continue
-            tl.to(sel, { scale: 1.5, duration: 0.022, ease: 'power2.out' }, at)
-              .to(sel, { scale: 0, opacity: 0, rotate: '+=120', duration: 0.05, ease: 'power2.in' }, at + 0.022)
-          }
+          // the bucket kicks with the first pops
+          tl.to('[data-bucket]', { scaleX: 1.05, scaleY: 0.94, duration: 0.02, ease: 'power2.out' }, 0.02)
+            .to('[data-bucket]', { scaleX: 1, scaleY: 1, duration: 0.07, ease: 'elastic.out(1.4,0.4)' }, 0.04)
 
-          // ── the wordmark punches up through the clearing spray
-          tl.fromTo('[data-word]',
-            { opacity: 0, scale: 0.62, y: '16vh' },
-            { opacity: 1, scale: 1, y: 0, duration: 0.17, ease: 'back.out(1.5)' }, 0.60)
+          // ── 2. gravity: they tumble down and out, uncovering the type
+          NUGS.forEach((n, i) => {
+            const at = 0.46 + n.fallAt * 0.22
+            tl.to(`[data-nug="${i}"]`,
+              {
+                y: '135vh', x: `${n.drift}vw`, rotate: `+=${n.spin}`,
+                duration: 0.30, ease: 'power2.in',
+              }, at)
+              .to(`[data-nug="${i}"]`, { opacity: 0, duration: 0.06 }, at + 0.24)
+          })
 
-          // ── two jars swing in rotating
-          tl.to('[data-jar="l"]', { opacity: 1, xPercent: 0, rotate: -9, duration: 0.17, ease: 'back.out(1.35)' }, 0.76)
-            .to('[data-jar="r"]', { opacity: 1, xPercent: 0, rotate: 9, duration: 0.17, ease: 'back.out(1.35)' }, 0.80)
-            .to('[data-jar="l"]', { rotate: -4, duration: 0.09, ease: 'power2.inOut' }, 0.9)
-            .to('[data-jar="r"]', { rotate: 4, duration: 0.09, ease: 'power2.inOut' }, 0.9)
+          // ── 3. the wordmark breathes back out as the last kernels clear
+          tl.fromTo('[data-word]', { scale: 0.94 }, { scale: 1, duration: 0.12, ease: 'power2.out' }, 0.72)
 
-          tl.to({}, { duration: 0.05 })
+          // ── 4. two jars swing in rotating
+          tl.to('[data-jar="l"]', { opacity: 1, xPercent: 0, rotate: -9, duration: 0.16, ease: 'back.out(1.35)' }, 0.80)
+            .to('[data-jar="r"]', { opacity: 1, xPercent: 0, rotate: 9, duration: 0.16, ease: 'back.out(1.35)' }, 0.84)
+            .to('[data-jar="l"]', { rotate: -4, duration: 0.08, ease: 'power2.inOut' }, 0.93)
+            .to('[data-jar="r"]', { rotate: 4, duration: 0.08, ease: 'power2.inOut' }, 0.93)
+
+          tl.to({}, { duration: 0.04 })
         }
       )
       return () => mm.revert()
@@ -101,32 +98,10 @@ export default function PopsHero() {
     // NOT overflow-hidden: the bucket has to run past the bottom edge and under
     // the red band. The kernels get their own clipping layer instead.
     <section ref={rootRef} className="relative h-screen min-h-[560px]">
-      {/* kernel fountain — clipped on its own, behind the bucket */}
-      <div className="absolute inset-0 z-10 overflow-hidden">
-        {NUGS.map((n, i) => (
-          // eslint-disable-next-line @next/next/no-img-element -- kernel cutouts
-          <img
-            key={i}
-            data-nug={i}
-            src={n.src}
-            alt=""
-            aria-hidden
-            className="absolute -translate-x-1/2 -translate-y-1/2 will-change-transform"
-            style={{
-              left: '50%', top: '57%',
-              width: `${n.size}%`,
-              opacity: 0,
-              filter: n.depth < 0.35 ? 'brightness(0.93)' : undefined,
-              zIndex: Math.round(n.depth * 8),
-            }}
-          />
-        ))}
-      </div>
-
-      {/* giant wordmark — same treatment as the /media and /products heroes */}
+      {/* giant wordmark — present from load, same treatment as /media + /products */}
       <div
         data-word
-        className="pointer-events-none absolute inset-x-0 top-[13%] z-20 text-center will-change-transform"
+        className="pointer-events-none absolute inset-x-0 top-[13%] z-10 text-center will-change-transform"
       >
         <h1
           aria-label="5G Pops"
@@ -144,6 +119,27 @@ export default function PopsHero() {
             </span>
           ))}
         </h1>
+      </div>
+
+      {/* kernel field — clipped on its own, over the type so it buries it */}
+      <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden">
+        {NUGS.map((n, i) => (
+          // eslint-disable-next-line @next/next/no-img-element -- kernel cutouts
+          <img
+            key={i}
+            data-nug={i}
+            src={n.src}
+            alt=""
+            aria-hidden
+            className="absolute -translate-x-1/2 -translate-y-1/2 will-change-transform"
+            style={{
+              left: `${n.x}%`, top: `${n.y}%`,
+              width: `${n.size}%`,
+              opacity: 0,
+              filter: n.depth < 0.35 ? 'brightness(0.93)' : undefined,
+            }}
+          />
+        ))}
       </div>
 
       {/* two jars flank the wordmark */}
