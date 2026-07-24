@@ -105,6 +105,7 @@ export default function PopsHero() {
         data-word
         className="pointer-events-none absolute inset-x-0 top-[22%] z-[25] text-center will-change-transform md:top-[24%]"
       >
+        <div className="relative inline-block">
         <h1
           aria-label="5G Pops"
           className="font-display whitespace-nowrap uppercase leading-[0.8] text-[var(--pops-ink)]"
@@ -121,6 +122,30 @@ export default function PopsHero() {
             </span>
           ))}
         </h1>
+
+          {/* stroke-only twin, masked by a travelling band — the outline is the
+              OPPOSITE colour to what it traces (dark on the red 5G, red on the
+              black POPS). Rides the same letter-drop delays so it stays welded
+              to the fill while the letters land. */}
+          <span
+            aria-hidden
+            className="pops-trace font-display absolute inset-0 whitespace-nowrap uppercase leading-[0.8]"
+            style={{ fontSize: 'min(33vw, 30rem)' }}
+          >
+            {WORD.split('').map((ch, i) => (
+              <span
+                key={i}
+                className="contact-letter pops-trace-letter"
+                style={{
+                  animationDelay: `${0.25 + i * 0.07}s`,
+                  WebkitTextStrokeColor: i < 2 ? 'var(--pops-ink)' : 'var(--pops-red)',
+                }}
+              >
+                {ch === ' ' ? ch : ch}
+              </span>
+            ))}
+          </span>
+        </div>
       </div>
 
       {/* kernel field — clipped on its own, over the type so it buries it */}
@@ -150,14 +175,14 @@ export default function PopsHero() {
         data-herojar="l"
         src="/products/pops/jar-bluog.webp"
         alt="Blu OG 5G Pops jar"
-        className="absolute bottom-[11%] left-[1%] z-20 w-[min(24vw,225px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:left-[7%]"
+        className="absolute bottom-[21%] left-[1%] z-20 w-[min(24vw,225px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:left-[7%]"
       />
       {/* eslint-disable-next-line @next/next/no-img-element -- product jar */}
       <img
         data-herojar="r"
         src="/products/pops/jar-cherriez.webp"
         alt="All Cherriez 5G Pops jar"
-        className="absolute bottom-[11%] right-[1%] z-20 w-[min(24vw,225px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:right-[7%]"
+        className="absolute bottom-[21%] right-[1%] z-20 w-[min(24vw,225px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:right-[7%]"
       />
 
       {/* the line the jars frame — the hero had no CTA at all before */}
@@ -168,7 +193,7 @@ export default function PopsHero() {
         >
           Small nug indoor flower · Same exotic strains
         </p>
-        <PillCta label="Shop 5G Pops" icon="cart" hover="black" href="#pops-shop" />
+        <PillCta label="Shop 5G Pops" icon="cart" hover="black" href="#pops-facts" />
       </div>
 
       {/* the band rides inside the hero, above the fold — kernels fall behind it */}

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import PillCta from '@/components/pill-cta'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -117,8 +118,8 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
 
   return (
     // solid pill on the striped page — the stripes show only in the gutter
-    <section ref={rootRef} className="relative z-10 p-2 md:h-screen md:min-h-[680px] md:p-3">
-      <div className="overflow-hidden rounded-[2rem] bg-[var(--pops-red)] py-14 text-white md:flex md:h-full md:items-center md:rounded-[3rem] md:py-0">
+    <section ref={rootRef} className="pops-slide relative z-10 p-2 md:h-screen md:min-h-[680px] md:p-3">
+      <div data-reveal className="pops-reveal overflow-hidden rounded-[2rem] bg-[var(--pops-red)] py-14 text-white md:flex md:h-full md:items-center md:rounded-[3rem] md:py-0">
       <div className="relative w-full">
         <h2
           className="font-display px-6 pt-2 text-center uppercase leading-[0.82] text-white"
@@ -202,7 +203,7 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
             </button>
 
             <div className="flex gap-4 p-5 md:gap-6 md:p-7">
-              <div className="w-[34%] shrink-0 rounded-2xl bg-[linear-gradient(180deg,#241416_0%,#140c0d_100%)] p-3">
+              <div className="w-[34%] shrink-0 rounded-2xl bg-[linear-gradient(0deg,#241416_0%,#140c0d_100%)] p-3">
                 {/* eslint-disable-next-line @next/next/no-img-element -- jar art */}
                 <img src={open.image} alt={`${open.name} 5G Pops jar`} className="h-full w-full object-contain" />
               </div>
@@ -250,9 +251,12 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
                   </div>
                 )}
 
-                {open.price && (
-                  <p className="font-display mt-4 text-3xl leading-none">{open.price}</p>
-                )}
+                <div className="mt-5 flex flex-wrap items-center gap-4">
+                  {open.price && (
+                    <p className="font-display text-6xl leading-none md:text-7xl">{open.price}</p>
+                  )}
+                  <PillCta label="Add to Cart" icon="cart" hover="black" href="/locations" className="shrink-0" />
+                </div>
               </div>
             </div>
           </div>

@@ -1165,6 +1165,49 @@ body:has(.hh-page) footer {
     );
     animation: pops-stripe-drift 9s linear infinite;
   }
+  /* Tracing outline on the POPS wordmark. A stroke-only duplicate sits exactly
+     over the filled type; a narrow band sweeps across it, so what you see is
+     the letterform's own outline travelling around the words. Masking the
+     duplicate (rather than drawing a path) means it always matches the glyphs
+     at any size, with no font-metric guesswork. */
+  @keyframes pops-trace-sweep {
+    from { -webkit-mask-position: 240% 0; mask-position: 240% 0; }
+    to   { -webkit-mask-position: -140% 0; mask-position: -140% 0; }
+  }
+  .pops-trace {
+    -webkit-mask-image: linear-gradient(105deg, transparent 40%, #000 47%, #000 54%, transparent 61%);
+    mask-image: linear-gradient(105deg, transparent 40%, #000 47%, #000 54%, transparent 61%);
+    -webkit-mask-size: 300% 100%;
+    mask-size: 300% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    animation: pops-trace-sweep 2.8s linear infinite;
+    animation-play-state: paused; /* released with the letter drop */
+  }
+  html.jb-reveal .pops-trace { animation-play-state: running; }
+  .pops-trace-letter {
+    color: transparent;
+    -webkit-text-stroke-width: 2px;
+  }
+  @media (min-width: 768px) { .pops-trace-letter { -webkit-text-stroke-width: 3px; } }
+  @media (prefers-reduced-motion: reduce) { .pops-trace { display: none; } }
+
+  /* Sections slide DOWN into place as you reach them (like the home hero
+     banners) — the inner pill/content starts lifted and drops in. Transform +
+     opacity only; decoupled from the GSAP pins, which act on the section, not
+     this inner wrapper. */
+  .pops-reveal {
+    opacity: 0;
+    transform: translateY(-9%) scale(0.985);
+    transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, opacity;
+  }
+  .pops-reveal.is-in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .pops-reveal { opacity: 1; transform: none; transition: none; }
+  }
+
   /* per-section stripe tones — the page changes ground as you scroll */
   .pops-stripes-dark {
     background-image: repeating-linear-gradient(104deg, #1b1b1f 0 34px, #0b0b0d 34px 80px);
