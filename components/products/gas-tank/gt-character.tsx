@@ -42,8 +42,8 @@ export default function GtCharacter() {
   }, [])
 
   return (
-    <section ref={rootRef} className="relative z-10 overflow-hidden bg-[var(--gt-black)] py-6 md:py-10">
-      <div data-slit className="relative mx-auto h-[26vh] max-h-[300px] w-full overflow-hidden will-change-[clip-path]" style={{ clipPath: 'inset(43% 0% 43% 0%)' }}>
+    <section ref={rootRef} className="relative z-10 overflow-hidden bg-[var(--gt-black)] px-2 py-6 md:px-3 md:py-10">
+      <div data-slit className="relative mx-auto h-[26vh] max-h-[300px] w-full overflow-hidden rounded-[1.75rem] will-change-[clip-path] md:rounded-[2.5rem]" style={{ clipPath: 'inset(43% 0% 43% 0%)' }}>
         {/* eslint-disable-next-line @next/next/no-img-element -- character band art */}
         <img
           data-art

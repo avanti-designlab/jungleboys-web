@@ -117,7 +117,7 @@ export default function GtHero() {
     <section ref={rootRef} className="relative px-2 pt-2 md:px-3">
       <div
         data-nav-theme="dark"
-        className="relative h-[92vh] min-h-[580px] overflow-hidden rounded-[1.75rem] bg-[var(--gt-black)] md:rounded-[2.5rem]"
+        className="media-hero-in relative h-[92vh] min-h-[580px] overflow-hidden rounded-[1.75rem] bg-[var(--gt-black)] md:rounded-[2.5rem]"
       >
         {/* ── the burn ── simulated, scroll-fed, behind every bit of content */}
         <GtFire
@@ -151,7 +151,11 @@ export default function GtHero() {
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-[2vw]">
           <div data-headline className="w-full text-center will-change-transform">
           {/* one line, vw only — a rem cap stops it filling the frame on desktop */}
-          <h1 className="font-display flex items-baseline justify-center whitespace-nowrap uppercase leading-[0.82] text-white"
+            <p className="font-display mb-[0.6vw] uppercase leading-none text-white"
+              style={{ fontSize: 'min(7vw, 3rem)', letterSpacing: '0.1em' }}>
+              All-In-One
+            </p>
+            <h1 className="font-display flex items-baseline justify-center whitespace-nowrap uppercase leading-[0.82] text-white"
             style={{ fontSize: '33vw', letterSpacing: '-0.03em' }}>
             <span data-word="gas" className="will-change-transform drop-shadow-[0_0_60px_rgba(255,122,24,0.45)]">Gas</span>
             <span aria-hidden style={{ width: '0.16em' }} />

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/storyblok/seo'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 import GtHero from '@/components/products/gas-tank/gt-hero'
+import GtRefresh from '@/components/products/gas-tank/gt-refresh'
 import GtTape from '@/components/products/gas-tank/gt-tape'
 import GtCharacter from '@/components/products/gas-tank/gt-character'
 import GtUpgrade from '@/components/products/gas-tank/gt-upgrade'
@@ -43,6 +44,7 @@ export default function GasTankPage() {
         }}
       />
 
+      <GtRefresh />
       <GtHero />
       <GtCharacter />
       <GtUpgrade />
