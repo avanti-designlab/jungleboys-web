@@ -3,42 +3,47 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import TpClouds from './tp-clouds'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// THE POUR.
+// THE BANK.
 //
-// The jar sits in the smoke. Scrolling opens it: all TEN mini joints come up
-// out of the mouth and fan into an arc across the frame — each on its own beat,
-// its own angle, and its own depth.
+// The name owns the whole first frame — one line, edge to edge, vw-only so it
+// never stops growing on a wide screen. Below it a ROW of jars sits deliberately
+// oversized and cropped off the bottom edge: five of them at different heights,
+// angles and depths, each idling on its own clock so the row never pulses in
+// unison. Cropping is the point — it lets them be far bigger than the frame.
 //
-// The depth is the part that sells it. The fan is laid out in real 3D: the
-// container carries a perspective, and every joint gets a translateZ as well as
-// an angle, so the ones that swing toward you genuinely grow and the ones that
-// swing back genuinely recede. Two smoke plates drift behind at different rates.
+// The ten don't fan any more; they RISE. Each joint climbs up through the row
+// from behind, on its own lane, speed, spin and depth, so you're watching a
+// stream come up through the weather rather than a fan open in place. That also
+// frees the jars to be as large as they like.
 //
-// Geometry is generated, not hand-placed: ten joints across a -74deg..+74deg
-// spread, dealt centre-outward so the fan opens like a hand of cards rather
-// than sweeping one way. The spread comes from rotating about each joint's
-// BOTTOM edge — that pivot is why it peacocks instead of sliding sideways.
+// Six drifting cloud plates sit behind and in front (see tp-clouds.tsx).
 
+const JARS = [
+  { src: 'jar-la-gelato', x: -40, y: 16, h: 58, rot: -9, z: -260, bob: 'a', dur: 11 },
+  { src: 'jar-all-cherriez', x: -21, y: 4, h: 70, rot: 5, z: -80, bob: 'b', dur: 9 },
+  { src: 'jar-06-og', x: 0, y: -4, h: 80, rot: -3, z: 120, bob: 'a', dur: 13 },
+  { src: 'jar-rs1000', x: 21, y: 6, h: 68, rot: 8, z: -60, bob: 'b', dur: 10 },
+  { src: 'jar-blu-zerdz', x: 40, y: 18, h: 56, rot: -11, z: -280, bob: 'a', dur: 12 },
+]
+
+// ten lanes across the frame — deterministic, so the composition never shuffles
 const N = 10
-const SPREAD = 74 // degrees either side of vertical
-
-// deal order: centre pair first, then outward, alternating sides
-const ORDER = [4, 5, 3, 6, 2, 7, 1, 8, 0, 9]
-
-const JOINTS = Array.from({ length: N }, (_, i) => {
-  const t = i / (N - 1) // 0..1 left to right
-  const angle = -SPREAD + t * SPREAD * 2
-  // middle of the fan reaches furthest and sits closest to camera
-  const centreness = 1 - Math.abs(t - 0.5) * 2
+const RISERS = Array.from({ length: N }, (_, i) => {
+  const t = (i + 0.5) / N
+  const s = Math.sin(i * 45.233) * 3571.17
+  const r = s - Math.floor(s)
   return {
     i,
-    angle,
-    reach: 30 + centreness * 16, // % of its own height, travelled up the arc
-    z: -220 + centreness * 210, // px toward the camera
-    beat: ORDER.indexOf(i) / N,
+    x: -46 + t * 92 + (r - 0.5) * 5, // vw lane
+    h: 15 + r * 11, // vh tall — the far ones are smaller
+    rot: -26 + r * 52,
+    z: -520 + r * 620,
+    lead: r * 0.3, // stagger
+    climb: 118 + r * 40, // vh travelled
   }
 })
 
@@ -62,12 +67,12 @@ export default function TpHero() {
           const c = mmCtx.conditions as Record<string, boolean>
           if (c.reduce) return
 
-          // entrance — the name and the jar land before anything opens
           gsap.timeline({ delay: 0.15 })
             .from('[data-tp-kicker]', { opacity: 0, y: -14, duration: 0.5, ease: 'power2.out' }, 0)
-            .from('[data-tp-word]', { opacity: 0, yPercent: 16, filter: 'blur(14px)', duration: 0.9, stagger: 0.08, ease: 'power3.out' }, 0.08)
-            .from('[data-tp-jar]', { opacity: 0, yPercent: 14, scale: 0.9, duration: 0.9, ease: 'power3.out' }, 0.2)
-            .from('[data-tp-stat]', { opacity: 0, y: 20, duration: 0.5, stagger: 0.08, ease: 'power2.out' }, 0.6)
+            .from('[data-tp-word]', { opacity: 0, xPercent: -10, filter: 'blur(16px)', duration: 0.9, ease: 'power3.out' }, 0.06)
+            .from('[data-tp-word2]', { opacity: 0, xPercent: 10, filter: 'blur(16px)', duration: 0.9, ease: 'power3.out' }, 0.14)
+            .from('[data-tp-jar]', { opacity: 0, yPercent: 22, duration: 1, stagger: 0.07, ease: 'power3.out' }, 0.24)
+            .from('[data-tp-stat]', { opacity: 0, y: 20, duration: 0.5, stagger: 0.08, ease: 'power2.out' }, 0.7)
 
           const tl = gsap.timeline({
             scrollTrigger: {
@@ -76,34 +81,27 @@ export default function TpHero() {
             },
           })
 
-          // the name pulls back so the pour owns the frame
-          tl.to('[data-tp-head]', { scale: 0.52, yPercent: -12, opacity: 0, ease: 'power1.in', duration: 0.46 }, 0)
-            .to('[data-tp-stats]', { opacity: 0, y: 30, ease: 'power2.in', duration: 0.2 }, 0.1)
+          // the name pulls back, one clean move
+          tl.to('[data-tp-head]', { scale: 0.5, yPercent: -10, opacity: 0, ease: 'power1.in', duration: 0.46 }, 0)
+            .to('[data-tp-stats]', { opacity: 0, y: 30, ease: 'power2.in', duration: 0.2 }, 0.08)
 
-          // …and the ten come out
-          JOINTS.forEach((j) => {
-            const at = 0.1 + j.beat * 0.34
-            tl.fromTo(`[data-tp-joint="${j.i}"]`,
-              { yPercent: 34, rotate: 0, scale: 0.5, opacity: 0, z: -420 },
-              {
-                yPercent: -j.reach * 1.9,
-                rotate: j.angle,
-                scale: 1,
-                opacity: 1,
-                z: j.z,
-                ease: 'power2.out',
-                duration: 0.42,
-              }, at)
+          // the row breathes forward and drifts up as you travel through it
+          JARS.forEach((j, i) => {
+            tl.to(`[data-tp-jar="${i}"]`, {
+              yPercent: -10 - (j.z + 300) / 90,
+              ease: 'none', duration: 1,
+            }, 0)
           })
+          tl.to('[data-tp-row]', { scale: 1.14, ease: 'none', duration: 1 }, 0)
 
-          // the whole fan keeps rising and opening a little wider after it lands
-          tl.to('[data-tp-fan]', { yPercent: -7, scale: 1.06, ease: 'none', duration: 0.34 }, 0.56)
-            // the jar settles back as the joints take over
-            .to('[data-tp-jar]', { yPercent: 10, scale: 0.92, ease: 'power1.out', duration: 0.4 }, 0.3)
-
-          // smoke parallax
-          tl.fromTo('[data-tp-smoke="far"]', { yPercent: 6 }, { yPercent: -8, ease: 'none', duration: 1 }, 0)
-            .fromTo('[data-tp-smoke="near"]', { yPercent: 14 }, { yPercent: -18, ease: 'none', duration: 1 }, 0)
+          // the ten rise through the row
+          RISERS.forEach((r) => {
+            tl.fromTo(`[data-tp-rise="${r.i}"]`,
+              { yPercent: 60, opacity: 0, rotate: r.rot * 0.3, z: r.z },
+              { yPercent: -r.climb, opacity: 1, rotate: r.rot, z: r.z, ease: 'none', duration: 0.86 },
+              0.06 + r.lead)
+            tl.to(`[data-tp-rise="${r.i}"]`, { opacity: 0, ease: 'none', duration: 0.12 }, 0.8 + r.lead * 0.4)
+          })
         }
       )
       return () => mm.revert()
@@ -117,67 +115,71 @@ export default function TpHero() {
         data-nav-theme="dark"
         className="media-hero-in relative h-[92vh] min-h-[600px] overflow-hidden rounded-[1.75rem] bg-[var(--tp-black)] md:rounded-[2.5rem]"
       >
-        {/* two smoke plates, drifting at different rates */}
-        <div data-tp-smoke="far" aria-hidden className="pointer-events-none absolute inset-0 z-0 will-change-transform">
-          {/* eslint-disable-next-line @next/next/no-img-element -- texture */}
-          <img src="/products/10-pack/smoke.webp" alt="" className="tp-smoke-a h-full w-full object-cover opacity-40" />
-        </div>
-        <div data-tp-smoke="near" aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-[70%] will-change-transform">
-          {/* eslint-disable-next-line @next/next/no-img-element -- texture */}
-          <img src="/products/10-pack/smoke.webp" alt="" className="tp-smoke-b h-full w-full object-cover opacity-55" />
-        </div>
+        <TpClouds density={0.8} className="z-0" />
 
         {/* electric wash off the bottom */}
         <div aria-hidden className="pointer-events-none absolute inset-0 z-[1]"
-          style={{ background: 'radial-gradient(120% 80% at 50% 108%, rgba(25,194,255,0.34) 0%, rgba(11,88,151,0.22) 34%, rgba(5,8,15,0) 72%)' }} />
+          style={{ background: 'radial-gradient(120% 80% at 50% 108%, rgba(46,139,255,0.4) 0%, rgba(11,88,151,0.24) 34%, rgba(5,8,15,0) 74%)' }} />
 
-        {/* THE NAME */}
-        <div className="pointer-events-none absolute inset-x-0 top-[8%] z-30 px-[3vw] text-center">
+        {/* THE NAME — one line, edge to edge, vw only */}
+        <div className="pointer-events-none absolute inset-x-0 top-[7%] z-30 px-[2vw] text-center">
           <div data-tp-head className="will-change-transform">
             <p data-tp-kicker className="text-[10px] font-extrabold uppercase tracking-[0.42em] text-[var(--tp-cyan)] md:text-sm"
               style={{ fontFamily: 'var(--font-brand)' }}>
               Ten mini joints · one jar
             </p>
-            <h1 className="font-display mt-2 uppercase leading-[0.8] text-white" style={{ letterSpacing: '-0.03em' }}>
-              <span data-tp-word className="block" style={{ fontSize: 'min(17vw, 9rem)' }}>10 Pack</span>
-              <span data-tp-word className="block text-[var(--tp-cyan)]" style={{ fontSize: 'min(17vw, 9rem)' }}>Pre-Rolls</span>
+            <h1 className="font-display mt-1 flex items-baseline justify-center whitespace-nowrap uppercase leading-[0.84] text-white"
+              style={{ fontSize: '13.6vw', letterSpacing: '-0.035em' }}>
+              <span data-tp-word className="will-change-transform">10 Pack</span>
+              <span aria-hidden style={{ width: '0.14em' }} />
+              <span data-tp-word2 className="text-[var(--tp-cyan)] will-change-transform">Pre-Rolls</span>
             </h1>
           </div>
         </div>
 
-        {/* THE POUR — jar + the ten, in a shared 3D space */}
-        <div className="absolute inset-x-0 bottom-0 z-10 flex justify-center" style={{ perspective: '1200px' }}>
-          <div className="relative h-[74vh] w-full max-w-[900px]" style={{ transformStyle: 'preserve-3d' }}>
-            {/* the fan of ten, pivoting at the jar mouth */}
-            <div data-tp-fan className="absolute inset-x-0 bottom-[58%] z-10 will-change-transform" style={{ transformStyle: 'preserve-3d' }}>
-              {JOINTS.map((j) => (
-                // eslint-disable-next-line @next/next/no-img-element -- product art
-                <img
-                  key={j.i}
-                  data-tp-joint={j.i}
-                  src="/products/10-pack/joint.webp"
-                  alt=""
-                  aria-hidden
-                  className="absolute bottom-0 left-1/2 h-[23vh] w-auto origin-bottom -translate-x-1/2 opacity-0 will-change-transform drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
-                />
-              ))}
-            </div>
-
-            {/* the jar */}
-            <div data-tp-jar className="absolute inset-x-0 bottom-[8%] z-20 flex justify-center will-change-transform">
-              {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-              <img src="/products/10-pack/jar-06-og.webp" alt="Jungle Boys 10 Pack Pre-Rolls"
-                className="h-[54vh] max-h-[600px] w-auto drop-shadow-[0_36px_60px_rgba(0,0,0,0.75)]" />
-            </div>
+        {/* THE RISERS — ten climbing up through the row */}
+        <div className="pointer-events-none absolute inset-0 z-[14]" style={{ perspective: '1300px' }}>
+          <div className="relative h-full w-full" style={{ transformStyle: 'preserve-3d' }}>
+            {RISERS.map((r) => (
+              // eslint-disable-next-line @next/next/no-img-element -- product art
+              <img key={r.i} data-tp-rise={r.i} src="/products/10-pack/joint.webp" alt="" aria-hidden
+                className="absolute bottom-0 left-1/2 w-auto opacity-0 will-change-transform drop-shadow-[0_14px_24px_rgba(0,0,0,0.55)]"
+                style={{ height: `${r.h}vh`, marginLeft: `${r.x}vw` }} />
+            ))}
           </div>
         </div>
+
+        {/* light behind the row — glass needs something to catch */}
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-[8] h-[70%]"
+          style={{ background: 'radial-gradient(80% 62% at 50% 88%, rgba(120,190,255,0.34) 0%, rgba(46,139,255,0.16) 40%, rgba(5,8,15,0) 74%)' }} />
+
+        {/* THE ROW — oversized jars, cropped off the bottom on purpose */}
+        <div data-tp-row className="absolute inset-x-0 bottom-[-16%] z-10 will-change-transform" style={{ perspective: '1400px' }}>
+          <div className="relative mx-auto h-[74vh] w-full max-w-[1500px]" style={{ transformStyle: 'preserve-3d' }}>
+            {JARS.map((j, i) => (
+              <div key={j.src} data-tp-jar={i}
+                className="absolute bottom-0 left-1/2 will-change-transform"
+                style={{ marginLeft: `${j.x}vw`, transform: `translateZ(${j.z}px)`, zIndex: Math.round(j.z / 10) + 40 }}>
+                <div className={`tp-bob-${j.bob}`} style={{ ['--tp-rot' as string]: `${j.rot}deg`, ['--tp-dur' as string]: `${j.dur}s` }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
+                  <img src={`/products/10-pack/${j.src}.webp`} alt="Jungle Boys 10 Pack Pre-Rolls"
+                    className="w-auto -translate-x-1/2 drop-shadow-[0_40px_70px_rgba(0,0,0,0.8)]"
+                    style={{ height: `${j.h}vh`, marginTop: `${j.y}vh` }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* a last cloud bank IN FRONT, so the jars sit inside the weather */}
+        <TpClouds density={0.3} className="z-20 [mask-image:linear-gradient(to_top,#000_0%,rgba(0,0,0,0.5)_42%,transparent_78%)]" />
 
         {/* stat pills */}
         <div data-tp-stats className="absolute inset-x-0 bottom-[4%] z-30 will-change-transform">
           <div className="mx-auto flex w-full max-w-[720px] items-stretch justify-center gap-2 px-4 md:gap-4">
             {STATS.map((s) => (
               <span key={s.l} data-tp-stat
-                className="flex flex-1 flex-col items-center rounded-2xl border border-white/15 bg-black/45 px-3 py-2.5 backdrop-blur-md md:px-5 md:py-3.5">
+                className="flex flex-1 flex-col items-center rounded-2xl border border-white/15 bg-black/55 px-3 py-2.5 backdrop-blur-md md:px-5 md:py-3.5">
                 <span className="font-display leading-none text-white" style={{ fontSize: 'min(8vw, 2.4rem)' }}>{s.n}</span>
                 <span className="mt-1 text-[9px] font-extrabold uppercase tracking-[0.24em] text-[var(--tp-cyan)] md:text-[11px]"
                   style={{ fontFamily: 'var(--font-brand)' }}>{s.l}</span>

@@ -3,22 +3,30 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import TpClouds from './tp-clouds'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// 1 FOR NOW, 9 FOR LATER. The line splits: "1" lands on its own, then the "9"
-// counts itself up from 1 to 9 as the eight claims deal in from alternating
-// sides. The counter is the joke made literal — you watch the nine stack up.
+// 1 FOR NOW, 9 FOR LATER.
+//
+// The line is the section. It sits enormous and locked while the nine counts
+// itself up from 1 — and every time it ticks, another claim ARRIVES: the cards
+// fly in out of deep space toward you, alternating sides, so the count and the
+// evidence are the same event. Nine ticks, eight cards, one payoff.
+//
+// Cards carry the icons drawn for this section in the Figma frame, each on an
+// electric-blue disc. Real 3D: the grid holds a perspective and each card comes
+// from its own translateZ with a tilt, so they arrive rather than fade.
 
 const CLAIMS = [
-  'Consistent quality in every joint',
-  'Crafted with indoor nugs',
-  'Strain-specific packs',
-  'Freshly rolled in small batches',
-  'Perfect for sharing or stocking up',
-  'Sealed for freshness',
-  'Clean burn, smooth smoke',
-  'Great price-to-quality ratio',
+  { icon: 'quality-b', text: 'Consistent quality in every joint' },
+  { icon: 'indoor', text: 'Crafted with indoor nugs' },
+  { icon: 'strain', text: 'Strain-specific packs' },
+  { icon: 'batches', text: 'Freshly rolled in small batches' },
+  { icon: 'sharing', text: 'Perfect for sharing or stocking up' },
+  { icon: 'sealed', text: 'Sealed for freshness' },
+  { icon: 'burn', text: 'Clean burn, smooth smoke' },
+  { icon: 'value', text: 'Great price-to-quality ratio' },
 ]
 
 export default function TpFacts() {
@@ -36,26 +44,35 @@ export default function TpFacts() {
           if (c.reduce) return
 
           const tl = gsap.timeline({
-            scrollTrigger: { trigger: root, start: 'top 72%', end: 'bottom 70%', scrub: 0.7 },
+            scrollTrigger: {
+              trigger: root, start: 'top top', end: '+=185%',
+              pin: true, scrub: 0.7, anticipatePin: 1, invalidateOnRefresh: true,
+            },
           })
 
-          tl.from('[data-tp-line]', { opacity: 0, yPercent: 26, duration: 0.3, ease: 'power3.out' }, 0)
+          tl.fromTo('[data-tp-line]', { opacity: 0, yPercent: 20, scale: 0.92 },
+            { opacity: 1, yPercent: 0, scale: 1, ease: 'power3.out', duration: 0.18 }, 0)
 
-          // the nine counts itself up
+          // the nine counts itself up, one tick per card
           const nine = root.querySelector<HTMLElement>('[data-tp-nine]')
           if (nine) {
             const counter = { v: 1 }
             tl.to(counter, {
-              v: 9, duration: 0.4, ease: 'none',
+              v: 9, duration: 0.62, ease: 'none',
               onUpdate: () => { nine.textContent = String(Math.round(counter.v)) },
             }, 0.18)
           }
 
+          // each claim arrives out of depth, on the beat of its tick
           CLAIMS.forEach((_, i) => {
-            tl.from(`[data-tp-claim="${i}"]`,
-              { opacity: 0, x: i % 2 === 0 ? -50 : 50, duration: 0.22, ease: 'power2.out' },
-              0.24 + i * 0.055)
+            const at = 0.2 + (i / CLAIMS.length) * 0.6
+            tl.fromTo(`[data-tp-card="${i}"]`,
+              { opacity: 0, z: -900, xPercent: i % 2 === 0 ? -26 : 26, rotateY: i % 2 === 0 ? 22 : -22, rotateX: 12 },
+              { opacity: 1, z: 0, xPercent: 0, rotateY: 0, rotateX: 0, ease: 'power3.out', duration: 0.16 }, at)
           })
+
+          // the whole grid drifts toward you through the pass
+          tl.fromTo('[data-tp-grid]', { z: -120 }, { z: 60, ease: 'none', duration: 1 }, 0)
         }
       )
       return () => mm.revert()
@@ -67,33 +84,36 @@ export default function TpFacts() {
     <section ref={rootRef} className="relative z-10 px-2 py-2 md:px-3 md:py-3">
       <div
         data-nav-theme="dark"
-        className="relative overflow-hidden rounded-[1.75rem] px-5 py-16 text-white md:rounded-[2.5rem] md:px-10 md:py-24"
-        style={{ background: 'linear-gradient(180deg,#0b5897 0%,#083f6e 58%,#061f38 100%)' }}
+        className="relative flex h-[92vh] min-h-[620px] items-center overflow-hidden rounded-[1.75rem] px-4 text-white md:rounded-[2.5rem] md:px-10"
+        style={{ background: 'linear-gradient(180deg,#0d63a8 0%,#08406f 54%,#051d33 100%)' }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element -- texture */}
-        <img src="/products/10-pack/smoke.webp" alt="" aria-hidden
-          className="tp-smoke-b pointer-events-none absolute inset-x-0 bottom-0 h-[60%] w-full object-cover opacity-25 mix-blend-screen" />
+        <TpClouds density={1.15} className="z-0" />
 
-        <div className="relative mx-auto max-w-[1180px]">
-          <h2 data-tp-line className="font-display text-center uppercase leading-[0.84] text-white will-change-transform"
-            style={{ fontSize: 'min(11vw, 5.4rem)', letterSpacing: '-0.03em' }}>
-            1 for now, <span data-tp-nine className="text-[var(--tp-cyan)]">9</span> for later.
+        <div className="relative z-10 mx-auto w-full max-w-[1220px]">
+          <h2 data-tp-line className="font-display text-center uppercase leading-[0.82] text-white will-change-transform"
+            style={{ fontSize: 'min(13.5vw, 7rem)', letterSpacing: '-0.035em' }}>
+            1 for now,<br className="md:hidden" /> <span data-tp-nine className="text-[var(--tp-glow)]">9</span> for later.
           </h2>
 
-          <ul className="mt-10 grid grid-cols-1 gap-2.5 md:mt-14 md:grid-cols-2 md:gap-3">
+          <div data-tp-grid
+            className="mt-8 grid grid-cols-1 gap-2.5 will-change-transform md:mt-12 md:grid-cols-2 md:gap-4"
+            style={{ perspective: '1100px', transformStyle: 'preserve-3d' }}>
             {CLAIMS.map((claim, i) => (
-              <li key={claim} data-tp-claim={i}
-                className="flex items-center gap-3 rounded-full bg-white/[0.09] px-4 py-3 backdrop-blur-sm will-change-transform md:gap-4 md:px-5 md:py-3.5">
-                <span aria-hidden className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[var(--tp-cyan)] text-[12px] font-black leading-none text-[#052033] md:h-8 md:w-8">
-                  ✓
+              <div key={claim.text} data-tp-card={i}
+                className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/[0.08] px-3 py-2.5 backdrop-blur-sm will-change-transform md:gap-4 md:rounded-[1.4rem] md:px-5 md:py-4">
+                <span aria-hidden
+                  className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/25 md:h-14 md:w-14"
+                  style={{ background: 'radial-gradient(circle at 35% 30%, #6db6ff 0%, #2e8bff 55%, #0d5fc4 100%)' }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element -- section icon */}
+                  <img src={`/products/10-pack/icons/${claim.icon}.svg`} alt="" className="h-5 w-5 object-contain md:h-7 md:w-7" />
                 </span>
-                <span className="text-[11px] font-extrabold uppercase leading-tight tracking-wide text-white md:text-[14px]"
+                <span className="text-[11px] font-extrabold uppercase leading-tight tracking-wide text-white md:text-[15px]"
                   style={{ fontFamily: 'var(--font-brand)' }}>
-                  {claim}
+                  {claim.text}
                 </span>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </div>
     </section>

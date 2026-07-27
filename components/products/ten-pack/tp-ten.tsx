@@ -3,12 +3,13 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import TpClouds from './tp-clouds'
 
 gsap.registerPlugin(ScrollTrigger)
 
 // COUNT THEM. The ten joints arrive scattered and deep, then fly into a
 // perfectly even rank across a giant "10" — so the number is proved rather
-// than stated. A tally ticks 01 → 10 in step with them landing.
+// than stated, without a counter having to say it.
 //
 // Same 3D space as the hero: the scatter is a real translateZ spread, so the
 // joints resolve out of depth rather than just sliding in from the sides.
@@ -61,19 +62,7 @@ export default function TpTen() {
             tl.fromTo(`[data-tp-rank="${i}"]`,
               { xPercent: s.x * 1.2, yPercent: s.y * 1.2, rotate: s.rot, z: s.z, opacity: 0 },
               { xPercent: 0, yPercent: 0, rotate: 0, z: 0, opacity: 1, ease: 'power3.out', duration: 0.34 }, at)
-            // the tally keeps pace
-            tl.call(() => {}, [], at)
           })
-
-          // tally 01 -> 10
-          const tally = root.querySelector<HTMLElement>('[data-tp-tally]')
-          if (tally) {
-            const counter = { v: 0 }
-            tl.to(counter, {
-              v: N, duration: 0.54, ease: 'none',
-              onUpdate: () => { tally.textContent = String(Math.max(1, Math.round(counter.v))).padStart(2, '0') },
-            }, 0.1)
-          }
 
           // the settled rank drifts up as the section releases
           tl.to('[data-tp-rank-wrap]', { yPercent: -6, ease: 'none', duration: 0.3 }, 0.7)
@@ -90,9 +79,7 @@ export default function TpTen() {
         data-nav-theme="dark"
         className="relative h-[92vh] min-h-[600px] overflow-hidden rounded-[1.75rem] bg-[var(--tp-ink)] md:rounded-[2.5rem]"
       >
-        {/* eslint-disable-next-line @next/next/no-img-element -- texture */}
-        <img src="/products/10-pack/smoke.webp" alt="" aria-hidden
-          className="tp-smoke-a pointer-events-none absolute inset-0 h-full w-full object-cover opacity-25" />
+        <TpClouds density={0.85} className="z-0" />
         <div aria-hidden className="pointer-events-none absolute inset-0"
           style={{ background: 'radial-gradient(90% 70% at 50% 50%, rgba(25,194,255,0.22) 0%, rgba(10,20,36,0) 68%)' }} />
 
@@ -125,14 +112,6 @@ export default function TpTen() {
           </div>
         </div>
 
-        {/* the tally */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-[5%] z-20 text-center">
-          <span data-tp-tally className="font-display leading-none text-[var(--tp-cyan)]" style={{ fontSize: 'min(9vw, 3.4rem)' }}>01</span>
-          <span className="ml-2 text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/60 md:text-xs"
-            style={{ fontFamily: 'var(--font-brand)' }}>
-            of ten
-          </span>
-        </div>
       </div>
     </section>
   )

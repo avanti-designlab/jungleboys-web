@@ -1154,21 +1154,37 @@ body:has(.tp-page) {
   --tp-black: #05080f;
   --tp-ink: #0a1424;
   --tp-blue: #0b5897;
-  --tp-cyan: #19c2ff;
+  --tp-cyan: #2e8bff; /* electric blue — the Figma cyan read too teal */
+  --tp-glow: #6db6ff;
   background: var(--tp-black);
 }
 .tp-page { background: var(--tp-black); }
 body:has(.tp-page) footer { position: relative; z-index: 1; background: var(--tp-black); }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* smoke plates drifting at two depths */
-  @keyframes tp-drift-a { 0%,100% { transform: translate3d(-2%,0,0) scale(1.05); } 50% { transform: translate3d(3%,-2%,0) scale(1.12); } }
-  @keyframes tp-drift-b { 0%,100% { transform: translate3d(3%,1%,0) scale(1.1); } 50% { transform: translate3d(-3%,-1%,0) scale(1.02); } }
-  .tp-smoke-a { animation: tp-drift-a 26s ease-in-out infinite; }
-  .tp-smoke-b { animation: tp-drift-b 34s ease-in-out infinite; }
+  /* A cloud BANK, not a texture: six plates blown at different speeds and
+     directions, some swelling as they go, so the frame reads as weather.
+     Transform-only, so the compositor carries all of it. */
+  @keyframes tp-blow-r { from { transform: translate3d(-14%,0,0) scale(1.04); } to { transform: translate3d(14%,-3%,0) scale(1.16); } }
+  @keyframes tp-blow-l { from { transform: translate3d(12%,2%,0) scale(1.14); } to { transform: translate3d(-12%,-2%,0) scale(1.02); } }
+  @keyframes tp-swell  { 0%,100% { transform: translate3d(-4%,1%,0) scale(1.06); } 50% { transform: translate3d(5%,-3%,0) scale(1.22); } }
+
+  .tp-cloud-1 { animation: tp-blow-r 64s ease-in-out infinite alternate; }
+  .tp-cloud-2 { animation: tp-blow-l 82s ease-in-out infinite alternate; }
+  .tp-cloud-3 { animation: tp-swell 54s ease-in-out infinite; }
+  .tp-cloud-4 { animation: tp-blow-r 46s ease-in-out infinite alternate; }
+  .tp-cloud-5 { animation: tp-blow-l 96s ease-in-out infinite alternate; }
+  .tp-cloud-6 { animation: tp-swell 70s ease-in-out infinite; }
+
+  /* jars idling on desynced clocks so the row never pulses in unison */
+  @keyframes tp-bob-a { 0%,100% { transform: translate3d(0,0,0) rotate(var(--tp-rot,0deg)); } 50% { transform: translate3d(0,-14px,0) rotate(calc(var(--tp-rot,0deg) + 1.4deg)); } }
+  @keyframes tp-bob-b { 0%,100% { transform: translate3d(0,-8px,0) rotate(var(--tp-rot,0deg)); } 50% { transform: translate3d(0,10px,0) rotate(calc(var(--tp-rot,0deg) - 1.6deg)); } }
+  .tp-bob-a { animation: tp-bob-a var(--tp-dur,9s) ease-in-out infinite; }
+  .tp-bob-b { animation: tp-bob-b var(--tp-dur,11s) ease-in-out infinite; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .tp-smoke-a, .tp-smoke-b { animation: none; }
+  .tp-cloud-1, .tp-cloud-2, .tp-cloud-3, .tp-cloud-4, .tp-cloud-5, .tp-cloud-6,
+  .tp-bob-a, .tp-bob-b { animation: none; }
 }
 
 /* ── GAS TANK: fire surface ──────────────────────────────────────────
