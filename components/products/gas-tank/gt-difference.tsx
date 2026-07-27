@@ -68,22 +68,22 @@ export default function GtDifference() {
           const tl = gsap.timeline({
             scrollTrigger: {
               trigger: root, start: 'top top', end: c.mobile ? '+=175%' : '+=200%',
-              pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true,
+              pin: true, scrub: 0.85, anticipatePin: 1, invalidateOnRefresh: true,
             },
           })
 
-          // The track HOLDS on each tier and then moves, instead of sliding at a
-          // constant rate. Linear travel meant a panel was only centred for an
-          // instant — its copy was already sliding out of frame by the time you
-          // could read it. Holds: 0-.22, .38-.62, .78-1.
+          // The track eases between tiers and settles on each one. Hard stops
+          // with linear travel between them read as stop-start, so the moves are
+          // longer than the holds and carry a soft in/out.
+          // Holds: 0-.16, .38-.58, .80-1.
           const stops = TIERS.map((_, i) => -(100 / TIERS.length) * i)
           const legs = (v: (i: number) => number) => ({
             keyframes: [
-              { xPercent: v(0), duration: 0.22, ease: 'none' },
-              { xPercent: v(1), duration: 0.16, ease: 'power2.inOut' },
-              { xPercent: v(1), duration: 0.24, ease: 'none' },
-              { xPercent: v(2), duration: 0.16, ease: 'power2.inOut' },
-              { xPercent: v(2), duration: 0.22, ease: 'none' },
+              { xPercent: v(0), duration: 0.16, ease: 'none' },
+              { xPercent: v(1), duration: 0.22, ease: 'power1.inOut' },
+              { xPercent: v(1), duration: 0.2, ease: 'none' },
+              { xPercent: v(2), duration: 0.22, ease: 'power1.inOut' },
+              { xPercent: v(2), duration: 0.2, ease: 'none' },
             ],
           })
 
@@ -95,31 +95,31 @@ export default function GtDifference() {
             // rail fill steps with the track
             .to('[data-gtd-fill]', {
               keyframes: [
-                { scaleX: 0.02, duration: 0.22, ease: 'none' },
-                { scaleX: 0.5, duration: 0.16, ease: 'power2.inOut' },
-                { scaleX: 0.5, duration: 0.24, ease: 'none' },
-                { scaleX: 1, duration: 0.16, ease: 'power2.inOut' },
-                { scaleX: 1, duration: 0.22, ease: 'none' },
+                { scaleX: 0.02, duration: 0.16, ease: 'none' },
+                { scaleX: 0.5, duration: 0.22, ease: 'power1.inOut' },
+                { scaleX: 0.5, duration: 0.2, ease: 'none' },
+                { scaleX: 1, duration: 0.22, ease: 'power1.inOut' },
+                { scaleX: 1, duration: 0.2, ease: 'none' },
               ],
             }, 0)
 
           // each dot lights while its tier owns the frame
-          const holds: [number, number][] = [[0, 0.3], [0.3, 0.7], [0.7, 1]]
+          const holds: [number, number][] = [[0, 0.27], [0.27, 0.69], [0.69, 1]]
           TIERS.forEach((t, i) => {
             const [from, to] = holds[i]
             if (i > 0) tl.to(`[data-gtd-dot="${i}"]`, { opacity: 1, duration: 0.001 }, from)
             if (i < steps) tl.to(`[data-gtd-dot="${i}"]`, { opacity: 0.3, duration: 0.001 }, to)
           })
 
-          // Tier 1's rows are already settled when the section pins — you should
-          // be able to read it before anything moves. The other two tick in
-          // just ahead of their own hold.
+          // Rows tick in for every tier, timed to FINISH inside that tier's own
+          // dwell — so you always see them arrive, and never watch them animate
+          // while the panel is already sliding off.
+          const rowsIn = [0, 0.34, 0.7]
           TIERS.forEach((t, i) => {
-            if (i === 0) return
             tl.fromTo(`[data-row="${t.key}"]`,
               { x: 34, opacity: 0 },
-              { x: 0, opacity: 1, ease: 'power2.out', duration: 0.08, stagger: 0.035 },
-              holds[i][0] - 0.1)
+              { x: 0, opacity: 1, ease: 'power2.out', duration: 0.05, stagger: 0.025 },
+              rowsIn[i])
           })
         }
       )
@@ -138,9 +138,10 @@ export default function GtDifference() {
           style={{ background: 'radial-gradient(120% 90% at 50% 120%, rgba(255,122,24,0.16) 0%, rgba(10,9,8,0) 62%)' }} />
 
         {/* locked heading */}
-        <div className="pointer-events-none absolute left-5 top-[9%] z-20 md:left-12 md:top-[11%]">
-          <h2 className="font-display uppercase leading-[0.78] text-white" style={{ fontSize: 'min(11.5vw, 5.4rem)', letterSpacing: '-0.03em' }}>
-            What&apos;s the <br /> <span className="text-[var(--gt-yellow)]">Difference?</span>
+        <div className="pointer-events-none absolute inset-x-0 top-[12%] z-20 px-4 text-center md:top-[7%]">
+          <h2 className="font-display whitespace-nowrap uppercase leading-[0.82] text-white"
+            style={{ fontSize: 'min(9.5vw, 5.4rem)', letterSpacing: '-0.03em' }}>
+            What&apos;s the <span className="text-[var(--gt-yellow)]">Difference?</span>
           </h2>
         </div>
 
@@ -158,7 +159,7 @@ export default function GtDifference() {
               <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 h-[58vh] w-[58vh] -translate-x-1/2 -translate-y-1/2 rounded-full"
                 style={{ background: `radial-gradient(circle, ${t.accent}3d 0%, rgba(10,9,8,0) 66%)` }} />
 
-              <div className="absolute inset-x-4 top-[25%] bottom-[23%] md:inset-x-16 md:top-[22%] md:bottom-[26%]">
+              <div className="absolute inset-x-4 top-[24%] bottom-[23%] md:inset-x-16 md:top-[21%] md:bottom-[26%]">
                 <div className="mx-auto grid h-full w-full max-w-[1040px] grid-cols-[0.62fr_1.38fr] items-center gap-3 md:grid-cols-[0.82fr_1.18fr] md:gap-12">
                 {/* eslint-disable-next-line @next/next/no-img-element -- tier device */}
                 <img data-gtd-dev src={`/products/gas-tank/${t.device}.webp`} alt={`Gas Tank ${t.name}`}

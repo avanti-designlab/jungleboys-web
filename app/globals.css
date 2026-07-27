@@ -1166,16 +1166,10 @@ body:has(.hh-page) footer {
   body:has(.gt-page) { background: var(--gt-black); }
   body:has(.gt-page) footer { position: relative; z-index: 1; }
   /* The footer paints its own light-theme background behind its rounded panel,
-     which showed as white gutters on this dark page. Gutter goes black — but
-     then the near-black pill vanishes into it, so the pill is lifted a shade
-     and given a hairline edge. Inverting the pill to white was the other
-     option and was rejected: the footer is a locked dark brand surface on every
-     page, and a white one here would read as a bug. */
+     which showed as white gutters on this dark page. Only the gutter changes —
+     the pill keeps its own colour and carries no border (a hairline read as a
+     cut-off edge against the gutter). */
   body:has(.gt-page) footer { background: var(--gt-black); }
-  body:has(.gt-page) footer > * {
-    background: #14100f;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09);
-  }
 
   /* scrolling CAUTION tape — a diagonal hazard band that never stops */
   @keyframes gt-tape { to { background-position: 240px 0; } }
