@@ -78,7 +78,7 @@ export default function TpCreed() {
             <div className="absolute inset-x-0 bottom-[-14%]" style={{ transformStyle: 'preserve-3d' }}>
               {STACK.map((j, i) => (
                 <div key={j.src} data-tp-stack={i}
-                  className="absolute bottom-0 left-1/2 will-change-transform"
+                  className="absolute bottom-0 left-1/2 w-max will-change-transform"
                   style={{ marginLeft: `${j.x}%`, transform: `translateZ(${j.z}px)`, zIndex: Math.round(j.z / 10) + 40 }}>
                   <div className={`tp-bob-${j.bob}`} style={{ ['--tp-rot' as string]: `${j.rot}deg`, ['--tp-dur' as string]: `${j.dur}s` }}>
                     {/* eslint-disable-next-line @next/next/no-img-element -- product art */}

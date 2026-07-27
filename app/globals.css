@@ -1176,6 +1176,15 @@ body:has(.tp-page) footer { position: relative; z-index: 1; background: var(--tp
   .tp-cloud-5 { animation: tp-blow-l 96s ease-in-out infinite alternate; }
   .tp-cloud-6 { animation: tp-swell 70s ease-in-out infinite; }
 
+  /* the exhale: plates roll in from off-left and spread as they cross */
+  @keyframes tp-puff { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(46%,-6%,0) scale(1.5); } }
+  .tp-puff-1 { animation: tp-puff 58s ease-out infinite alternate; }
+  .tp-puff-2 { animation: tp-puff 44s ease-out infinite alternate; }
+  .tp-puff-3 { animation: tp-puff 72s ease-out infinite alternate; }
+  .tp-puff-4 { animation: tp-puff 38s ease-out infinite alternate; }
+  .tp-puff-5 { animation: tp-puff 64s ease-out infinite alternate; }
+  .tp-puff-6 { animation: tp-puff 50s ease-out infinite alternate; }
+
   /* jars idling on desynced clocks so the row never pulses in unison */
   @keyframes tp-bob-a { 0%,100% { transform: translate3d(0,0,0) rotate(var(--tp-rot,0deg)); } 50% { transform: translate3d(0,-14px,0) rotate(calc(var(--tp-rot,0deg) + 1.4deg)); } }
   @keyframes tp-bob-b { 0%,100% { transform: translate3d(0,-8px,0) rotate(var(--tp-rot,0deg)); } 50% { transform: translate3d(0,10px,0) rotate(calc(var(--tp-rot,0deg) - 1.6deg)); } }
@@ -1184,6 +1193,7 @@ body:has(.tp-page) footer { position: relative; z-index: 1; background: var(--tp
 }
 @media (prefers-reduced-motion: reduce) {
   .tp-cloud-1, .tp-cloud-2, .tp-cloud-3, .tp-cloud-4, .tp-cloud-5, .tp-cloud-6,
+  .tp-puff-1, .tp-puff-2, .tp-puff-3, .tp-puff-4, .tp-puff-5, .tp-puff-6,
   .tp-bob-a, .tp-bob-b { animation: none; }
 }
 

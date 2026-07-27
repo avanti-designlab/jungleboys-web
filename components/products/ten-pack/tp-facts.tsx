@@ -53,15 +53,13 @@ export default function TpFacts() {
           tl.fromTo('[data-tp-line]', { opacity: 0, yPercent: 20, scale: 0.92 },
             { opacity: 1, yPercent: 0, scale: 1, ease: 'power3.out', duration: 0.18 }, 0)
 
-          // the nine counts itself up, one tick per card
-          const nine = root.querySelector<HTMLElement>('[data-tp-nine]')
-          if (nine) {
-            const counter = { v: 1 }
-            tl.to(counter, {
-              v: 9, duration: 0.62, ease: 'none',
-              onUpdate: () => { nine.textContent = String(Math.round(counter.v)) },
-            }, 0.18)
-          }
+          // The 9 stays a 9. It used to count up from 1, which meant the line
+          // read "1 FOR NOW, 1 FOR LATER" for the whole approach — wrong copy on
+          // screen. It pulses on each claim landing instead.
+          CLAIMS.forEach((_, i) => {
+            const at = 0.2 + (i / CLAIMS.length) * 0.6
+            tl.fromTo('[data-tp-nine]', { scale: 1 }, { scale: 1.14, yoyo: true, repeat: 1, duration: 0.03, ease: 'power2.out' }, at)
+          })
 
           // each claim arrives out of depth, on the beat of its tick
           CLAIMS.forEach((_, i) => {
@@ -87,7 +85,7 @@ export default function TpFacts() {
         className="relative flex h-[92vh] min-h-[620px] items-center overflow-hidden rounded-[1.75rem] px-4 text-white md:rounded-[2.5rem] md:px-10"
         style={{ background: 'linear-gradient(180deg,#0d63a8 0%,#08406f 54%,#051d33 100%)' }}
       >
-        <TpClouds density={1.15} className="z-0" />
+        <TpClouds density={1.15} from="left" className="z-0" />
 
         <div className="relative z-10 mx-auto w-full max-w-[1220px]">
           <h2 data-tp-line className="font-display text-center uppercase leading-[0.82] text-white will-change-transform"

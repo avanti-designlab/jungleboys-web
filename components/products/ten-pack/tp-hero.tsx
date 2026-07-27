@@ -96,11 +96,15 @@ export default function TpHero() {
 
           // the ten rise through the row
           RISERS.forEach((r) => {
+            // ONE tween with an opacity keyframe track — two overlapping opacity
+            // tweens on a scrub fight each other and read as a flicker
             tl.fromTo(`[data-tp-rise="${r.i}"]`,
-              { yPercent: 60, opacity: 0, rotate: r.rot * 0.3, z: r.z },
-              { yPercent: -r.climb, opacity: 1, rotate: r.rot, z: r.z, ease: 'none', duration: 0.86 },
+              { yPercent: 60, rotate: r.rot * 0.3, z: r.z, opacity: 0 },
+              {
+                yPercent: -r.climb, rotate: r.rot, z: r.z, ease: 'none', duration: 0.88,
+                keyframes: { opacity: [0, 1, 1, 0], ease: 'none' },
+              },
               0.06 + r.lead)
-            tl.to(`[data-tp-rise="${r.i}"]`, { opacity: 0, ease: 'none', duration: 0.12 }, 0.8 + r.lead * 0.4)
           })
         }
       )
@@ -122,15 +126,15 @@ export default function TpHero() {
           style={{ background: 'radial-gradient(120% 80% at 50% 108%, rgba(46,139,255,0.4) 0%, rgba(11,88,151,0.24) 34%, rgba(5,8,15,0) 74%)' }} />
 
         {/* THE NAME — one line, edge to edge, vw only */}
-        <div className="pointer-events-none absolute inset-x-0 top-[7%] z-30 px-[2vw] text-center">
+        <div className="pointer-events-none absolute inset-x-0 top-[13%] z-30 px-[2vw] text-center">
           <div data-tp-head className="will-change-transform">
             <p data-tp-kicker className="text-[10px] font-extrabold uppercase tracking-[0.42em] text-[var(--tp-cyan)] md:text-sm"
               style={{ fontFamily: 'var(--font-brand)' }}>
               Ten mini joints · one jar
             </p>
             <h1 className="font-display mt-1 flex items-baseline justify-center whitespace-nowrap uppercase leading-[0.84] text-white"
-              style={{ fontSize: '13.6vw', letterSpacing: '-0.035em' }}>
-              <span data-tp-word className="will-change-transform">10 Pack</span>
+              style={{ fontSize: '17.4vw', letterSpacing: '-0.035em' }}>
+              <span data-tp-word className="will-change-transform">10PK</span>
               <span aria-hidden style={{ width: '0.14em' }} />
               <span data-tp-word2 className="text-[var(--tp-cyan)] will-change-transform">Pre-Rolls</span>
             </h1>
@@ -138,7 +142,7 @@ export default function TpHero() {
         </div>
 
         {/* THE RISERS — ten climbing up through the row */}
-        <div className="pointer-events-none absolute inset-0 z-[14]" style={{ perspective: '1300px' }}>
+        <div className="pointer-events-none absolute inset-0 z-[22]" style={{ perspective: '1300px' }}>
           <div className="relative h-full w-full" style={{ transformStyle: 'preserve-3d' }}>
             {RISERS.map((r) => (
               // eslint-disable-next-line @next/next/no-img-element -- product art
@@ -158,7 +162,7 @@ export default function TpHero() {
           <div className="relative mx-auto h-[74vh] w-full max-w-[1500px]" style={{ transformStyle: 'preserve-3d' }}>
             {JARS.map((j, i) => (
               <div key={j.src} data-tp-jar={i}
-                className="absolute bottom-0 left-1/2 will-change-transform"
+                className="absolute bottom-0 left-1/2 w-max will-change-transform"
                 style={{ marginLeft: `${j.x}vw`, transform: `translateZ(${j.z}px)`, zIndex: Math.round(j.z / 10) + 40 }}>
                 <div className={`tp-bob-${j.bob}`} style={{ ['--tp-rot' as string]: `${j.rot}deg`, ['--tp-dur' as string]: `${j.dur}s` }}>
                   {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
