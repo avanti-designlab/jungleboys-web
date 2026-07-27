@@ -20,7 +20,9 @@ gsap.registerPlugin(ScrollTrigger)
 // in JB yellow. Yellow needs a dark ground to pass contrast, which is exactly
 // why the climax goes dark instead of white.
 //
-// Snow + frost live in gt-snow.tsx and are driven from this timeline.
+// Snow + frost live in gt-snow.tsx. Snow is a particle loop driven by wind;
+// frost is a static canvas this timeline scales and fades (see that file's
+// performance notes — compositing it per frame cost ~9x the frame budget).
 
 const LEFT = ['Fresh frozen extract', 'Ice water hash', 'Full spectrum']
 const RIGHT = ['Native terpenes', 'No additives', 'True-to-strain flavor']
@@ -46,11 +48,6 @@ export default function GtShowcase() {
               pin: true, scrub: 0.65, anticipatePin: 1, invalidateOnRefresh: true,
               onUpdate: (self) => {
                 const p = self.progress
-                // frost creeps in, peaks through the freeze, then thaws a little
-                let f = 0
-                if (p > 0.26) f = Math.min(1, (p - 0.26) / 0.36)
-                if (p > 0.82) f = Math.max(0.3, 1 - ((p - 0.82) / 0.18) * 0.7)
-                snowRef.current?.setFrost(f)
                 snowRef.current?.setWind(0.3 + Math.min(0.7, Math.max(0, (p - 0.2) / 0.45) * 0.7))
               },
             },
@@ -71,6 +68,13 @@ export default function GtShowcase() {
             tl.fromTo(`[data-chip-r="${i}"]`, { x: 70, opacity: 0 },
               { x: 0, opacity: 1, ease: 'power2.out', duration: 0.14 }, 0.14 + i * 0.07)
           })
+
+          // Frost creeps inward. The pattern is a static canvas with an
+          // edge-to-centre ramp baked in, so scaling it DOWN walks the ice
+          // toward the middle — transform + opacity only, no per-frame masking.
+          tl.fromTo('[data-frost]', { opacity: 0, scale: 1.5 },
+            { opacity: 1, scale: 1, ease: 'none', duration: 0.36 }, 0.26)
+            .to('[data-frost]', { opacity: 0.32, scale: 1.16, ease: 'none', duration: 0.18 }, 0.82)
 
           // the heading gives way to the freeze
           tl.to('[data-ice-head]', { yPercent: -22, opacity: 0, ease: 'power2.in', duration: 0.16 }, 0.5)
