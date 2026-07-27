@@ -124,7 +124,7 @@ export default function GtHero() {
         <GtFire
           ref={fireRef}
           className="z-0 h-[86%] opacity-90 mix-blend-screen [mask-image:linear-gradient(to_top,#000_28%,rgba(0,0,0,0.55)_62%,transparent_96%)]"
-          frontClassName="z-[15] h-[24%] opacity-80 mix-blend-screen [mask-image:linear-gradient(to_top,#000_35%,transparent_92%)]"
+          frontClassName="z-[25] h-[24%] opacity-80 mix-blend-screen [mask-image:linear-gradient(to_top,#000_35%,transparent_92%)]"
         />
 
         {/* heat throw off the bed, so the black above the flames isn't dead */}
@@ -132,7 +132,7 @@ export default function GtHero() {
           style={{ background: 'radial-gradient(120% 78% at 50% 100%, rgba(255,122,24,0.34) 0%, rgba(225,27,11,0.16) 34%, rgba(10,9,8,0) 72%)' }} />
 
         {/* embers riding the updraft */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 z-[16] opacity-70">
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-[26] opacity-70">
           {EMBERS.map(([left, delay, dur, size]) => (
             <span
               key={`${left}-${delay}`}
@@ -149,7 +149,7 @@ export default function GtHero() {
         </div>
 
         {/* THE NAME — edge to edge, the whole cold-start frame */}
-        <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-[2vw]">
+        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-[2vw]">
           <div data-headline className="w-full text-center will-change-transform">
           <p data-kicker className="mb-[1.5vw] text-[10px] font-extrabold uppercase tracking-[0.42em] text-white md:text-sm" style={{ fontFamily: 'var(--font-brand)' }}>
             Introducing the all new All-In-One
@@ -165,7 +165,7 @@ export default function GtHero() {
         </div>
 
         {/* the three tiers, rising out of the bed — equal width = equal device */}
-        <div data-rig className="absolute inset-x-0 top-[2%] z-10 h-[74%] opacity-0 md:top-[1%] md:h-[116%] will-change-transform">
+        <div data-rig className="absolute inset-x-0 top-[2%] z-20 h-[74%] opacity-0 md:top-[1%] md:h-[116%] will-change-transform">
           <div className="flex h-full items-start justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
             <img data-dev="l" src="/products/gas-tank/device-flavors-n.webp" alt="Gas Tank Flavors"
