@@ -175,7 +175,9 @@ function gasTank(
     strainType,
     strain: label,
     description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
-    images: [{ url: `/products/gas-tank/device-${device}.webp`, alt: `${strain} Gas Tank ${label}` }],
+    // `-n`: the straight-on masters, one shared body width. The plain files are
+    // the angled three-quarter shots and made the three tiers look unrelated.
+    images: [{ url: `/products/gas-tank/device-${device}-n.webp`, alt: `${strain} Gas Tank ${label}` }],
     variants: [{ id: `v-gt-${slug}`, option: '1g', price: 5000, ...(deal ? { specialPrice: deal } : {}), quantityAvailable: 10 }],
     labResult: {
       lab: 'Placeholder Labs',

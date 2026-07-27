@@ -8,11 +8,15 @@ import Reveal from '@/components/reveal'
 // provider and all four pages light up together. Dark panel to match the fire
 // surface; strain-type colours lifted for AA on near-black.
 
+// Rosin first: it's the flagship tier and the one the freeze section sells.
 const TIERS = [
-  { key: 'flavors', label: 'Flavors' },
-  { key: 'live-resin', label: 'Live Resin' },
   { key: 'live-rosin', label: 'Live Rosin' },
+  { key: 'live-resin', label: 'Live Resin' },
+  { key: 'flavors', label: 'Flavors' },
 ] as const
+
+// three per row keeps every tier to a single clean line on desktop
+const PER_TIER = 3
 
 const TYPE_COLOR: Record<string, string> = {
   indica: '#6f9bff',
@@ -28,7 +32,7 @@ export default async function GtShop() {
   const tiers = await Promise.all(
     TIERS.map(async (t) => ({
       ...t,
-      items: await getProducts({ category: 'vape-pens', subcategory: `gas-tank-${t.key}` }),
+      items: (await getProducts({ category: 'vape-pens', subcategory: `gas-tank-${t.key}` })).slice(0, PER_TIER),
     }))
   )
 
@@ -47,7 +51,7 @@ export default async function GtShop() {
               {/* tier header, cut by a hazard rule */}
               <Reveal className="flex items-center gap-4">
                 <span aria-hidden className="h-[3px] flex-1 rounded-full bg-[var(--gt-yellow)]/35" />
-                <h3 className="font-display whitespace-nowrap uppercase leading-none text-[var(--gt-yellow)]" style={{ fontSize: 'min(9vw, 3.2rem)' }}>
+                <h3 className="font-display whitespace-nowrap uppercase leading-none text-white" style={{ fontSize: 'min(11vw, 4.6rem)', letterSpacing: '-0.03em' }}>
                   {tier.label}
                 </h3>
                 <span aria-hidden className="h-[3px] flex-1 rounded-full bg-[var(--gt-yellow)]/35" />
