@@ -9,6 +9,7 @@ import GtUpgrade from '@/components/products/gas-tank/gt-upgrade'
 import GtShowcase from '@/components/products/gas-tank/gt-showcase'
 import GtDifference from '@/components/products/gas-tank/gt-difference'
 import GtShop from '@/components/products/gas-tank/gt-shop'
+import GtOutro from '@/components/products/gas-tank/gt-outro'
 
 // Gas Tank — fourth Phase 2 flagship. A fire-surface cinematic scroll:
 // ignition hero (three tiers arriving out of the dark, parallax depth) →
@@ -52,7 +53,7 @@ export default function GasTankPage() {
       <GtTape reverse />
       <GtDifference />
       <GtShop />
-      <div aria-hidden className="h-[10vh] min-h-[70px]" />
+      <GtOutro />
     </main>
   )
 }

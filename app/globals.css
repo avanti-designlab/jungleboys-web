@@ -1146,30 +1146,54 @@ body:has(.hh-page) footer {
 .media-reveal.is-in .hh-pointer, .hh-pointer.is-in { opacity: 1; transform: none; }
 
 /* soft float for product mockups when at rest */
+/* ── GAS TANK: fire surface ──────────────────────────────────────────
+   Palette sampled from the artwork; caution yellow is the exact fill from the
+   triangle SVG. Black base, heat rising through red → orange → yellow.
+
+   Declared on BODY, not on .gt-page: .gt-page is the <main>, so the <footer>
+   and <body> sit outside it and never inherited these. `background:
+   var(--gt-black)` on those then resolved to nothing and computed to
+   transparent — which is what showed the white canvas through as gutters
+   around the footer pill.
+
+   Unconditional, too: this block used to live inside a
+   prefers-reduced-motion: no-preference media query, which left reduced-motion
+   visitors with no palette at all. */
+body:has(.gt-page) {
+  --gt-black: #0a0908;
+  --gt-ink: #140d0a;
+  --gt-red: #e11b0b;
+  --gt-orange: #ff7a18;
+  --gt-yellow: #fbcd03;
+  background: var(--gt-black);
+}
+.gt-page { background: var(--gt-black); }
+body:has(.gt-page) footer { position: relative; z-index: 1; background: var(--gt-black); }
+
 @media (prefers-reduced-motion: no-preference) {
   @keyframes hh-float { from { translate: 0 0; } to { translate: 0 -16px; } }
   .hh-float { animation: hh-float 5s ease-in-out infinite alternate; }
   /* staked signs idle on desynced clocks so the tee box feels alive, not looped */
   /* the Unboxing: --hh-L = tube length; all product-group children derive
      their art-frame geometry from it */
-  /* ── GAS TANK: fire surface ──────────────────────────────────────────
-     Palette sampled from the artwork; caution yellow is the exact fill from
-     the triangle SVG. Black base, heat rising through red → orange → yellow. */
-  .gt-page {
-    --gt-black: #0a0908;
-    --gt-ink: #140d0a;
-    --gt-red: #e11b0b;
-    --gt-orange: #ff7a18;
-    --gt-yellow: #fbcd03;
+
+  /* Hazard stripes fencing the scrolling tape. The pattern tiles, and the
+     animation shifts it by exactly ONE horizontal period — for a 45deg
+     repeating gradient of period P that is P / sin(45deg) = P * sqrt(2), so
+     40px bands step 56.5685px. Translating an oversized element instead is what
+     made the old stripe cut off at the edges. */
+  @keyframes gt-stripe { to { background-position: 56.5685px 0; } }
+  .gt-stripe {
+    background-image: repeating-linear-gradient(45deg, #0a0908 0 20px, #fbcd03 20px 40px);
+    animation: gt-stripe 1.4s linear infinite;
   }
-  .gt-page { background: var(--gt-black); }
-  body:has(.gt-page) { background: var(--gt-black); }
-  body:has(.gt-page) footer { position: relative; z-index: 1; }
-  /* The footer paints its own light-theme background behind its rounded panel,
-     which showed as white gutters on this dark page. Only the gutter changes —
-     the pill keeps its own colour and carries no border (a hairline read as a
-     cut-off edge against the gutter). */
-  body:has(.gt-page) footer { background: var(--gt-black); }
+
+  /* the flame triangle breathing inside the tape */
+  @keyframes gt-tri-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.13); }
+  }
+  .gt-tri-pulse { animation: gt-tri-pulse 1.7s ease-in-out infinite; }
 
   /* scrolling CAUTION tape — a diagonal hazard band that never stops */
   @keyframes gt-tape { to { background-position: 240px 0; } }
@@ -1246,7 +1270,7 @@ body:has(.hh-page) footer {
 
 
   @media (prefers-reduced-motion: reduce) {
-    .gt-tape-band, .gt-heat, .gt-ember { animation: none; }
+    .gt-tape-band, .gt-heat, .gt-ember, .gt-stripe, .gt-tri-pulse { animation: none; }
   }
 
   /* ── POPS: candy-stripe surface ───────────────────────────────────────
