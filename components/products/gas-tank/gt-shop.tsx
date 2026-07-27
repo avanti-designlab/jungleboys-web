@@ -62,7 +62,7 @@ export default async function GtShop() {
                   return (
                     <Reveal key={p.id} delay={Math.min(i, 2) * 0.08}>
                       <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-[#171312] text-white shadow-[0_14px_40px_rgba(0,0,0,0.5)] ring-1 ring-white/10">
-                        <div className="relative aspect-square overflow-hidden bg-[linear-gradient(180deg,#2a1a0c_0%,#140d08_100%)]">
+                        <div className={`gt-card-stage gt-card-${tier.key} relative aspect-square overflow-hidden`}>
                           {deal ? (
                             <span className="absolute left-4 top-4 z-20 rounded-full bg-[var(--gt-red)] px-3 py-1 text-[11px] font-extrabold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
                               {pctOff}% off
@@ -78,7 +78,7 @@ export default async function GtShop() {
                             src={p.images[0].url}
                             alt={p.images[0].alt}
                             loading="lazy"
-                            className="absolute inset-0 h-full w-full object-contain p-5 drop-shadow-[0_24px_36px_rgba(0,0,0,0.5)] transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-[1.04]"
+                            className="absolute inset-0 z-10 h-full w-full object-contain p-5 drop-shadow-[0_24px_36px_rgba(0,0,0,0.5)] transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-[1.04]"
                           />
                         </div>
                         <div className="flex flex-1 flex-col gap-2 p-5">

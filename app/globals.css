@@ -1192,6 +1192,31 @@ body:has(.hh-page) footer {
     background-repeat: space;
   }
 
+  /* Shop card stages: the hazard mark tiled in each tier's colour, with a soft
+     bloom in the middle so the device still reads against the pattern. */
+  .gt-card-stage {
+    background-repeat: space;
+    background-size: 74px;
+  }
+  .gt-card-stage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 55%, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.22) 45%, rgba(0, 0, 0, 0) 72%);
+  }
+  .gt-card-flavors {
+    background-color: #6d0d04;
+    background-image: url('/products/gas-tank/tri-red.svg');
+  }
+  .gt-card-live-resin {
+    background-color: #7a5c02;
+    background-image: url('/products/gas-tank/tri-yellow.svg');
+  }
+  .gt-card-live-rosin {
+    background-color: #7a3403;
+    background-image: url('/products/gas-tank/tri-orange.svg');
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .gt-tape-band, .gt-heat { animation: none; }
   }

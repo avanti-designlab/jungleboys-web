@@ -6,23 +6,22 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// THE HAZARD FIELD. A wall of caution triangles scrolls past in three parallax
-// layers (far/mid/near, each at its own speed and angle) while the devices and
-// their pouches float across at a fourth speed — so you're moving THROUGH the
-// scene rather than watching a flat panel. A heat bloom tracks the centre.
+// HANDLE WITH FIRE. A tunnel, not a wallpaper. The section pins and you fly
+// INTO a hazard triangle: it swells from a speck to bigger than the frame while
+// the whole lineup streams past you from the same vanishing point — each piece
+// starting as a dot dead centre, then scaling up and peeling off toward its own
+// corner. Two slow hazard walls drift behind at different depths for parallax.
 //
-// The triangles are one masked SVG tiled per layer, so they recolour and cost
-// nothing extra to load.
+// Dark ground on purpose: the earlier yellow tile field fought the products.
 
-function TriLayer({ size, opacity, className }: { size: number; opacity: number; className: string }) {
-  return (
-    <div
-      aria-hidden
-      className={`gt-tri-field pointer-events-none absolute ${className}`}
-      style={{ backgroundSize: `${size}px`, opacity }}
-    />
-  )
-}
+// where each piece exits, and how big it gets on the way out
+const STREAM = [
+  { src: 'device-rosin', alt: 'Gas Tank Live Rosin', x: '-2vw', y: '30vh', end: 1.35, rot: 4, at: 0, w: 'w-[26vw] max-w-[300px]' },
+  { src: 'pouch-flavors', alt: '', x: '-42vw', y: '-24vh', end: 1.1, rot: -22, at: 0.14, w: 'w-[24vw] max-w-[270px]' },
+  { src: 'device-resin', alt: 'Gas Tank Live Resin', x: '40vw', y: '-18vh', end: 1.2, rot: 18, at: 0.26, w: 'w-[24vw] max-w-[270px]' },
+  { src: 'pouch-resin', alt: '', x: '38vw', y: '30vh', end: 1.1, rot: 14, at: 0.4, w: 'w-[24vw] max-w-[270px]' },
+  { src: 'device-flavors', alt: 'Gas Tank Flavors', x: '-38vw', y: '28vh', end: 1.25, rot: -16, at: 0.52, w: 'w-[24vw] max-w-[270px]' },
+]
 
 export default function GtShowcase() {
   const rootRef = useRef<HTMLElement>(null)
@@ -37,18 +36,36 @@ export default function GtShowcase() {
         (mmCtx) => {
           const c = mmCtx.conditions as Record<string, boolean>
           if (c.reduce) return
+
           const tl = gsap.timeline({
-            scrollTrigger: { trigger: root, start: 'top bottom', end: 'bottom top', scrub: 0.55, invalidateOnRefresh: true },
+            scrollTrigger: {
+              trigger: root, start: 'top top', end: '+=100%',
+              pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true,
+            },
           })
-          // four depths, four speeds — the parallax core
-          tl.fromTo('[data-tri="far"]', { yPercent: -6 }, { yPercent: 10, ease: 'none' }, 0)
-            .fromTo('[data-tri="mid"]', { yPercent: -14 }, { yPercent: 22, ease: 'none' }, 0)
-            .fromTo('[data-tri="near"]', { yPercent: -26 }, { yPercent: 38, ease: 'none' }, 0)
-            .fromTo('[data-float="pouch-a"]', { yPercent: 30, rotate: -16 }, { yPercent: -34, rotate: -6, ease: 'none' }, 0)
-            .fromTo('[data-float="pouch-b"]', { yPercent: 40, rotate: 14 }, { yPercent: -26, rotate: 4, ease: 'none' }, 0)
-            .fromTo('[data-float="dev-a"]', { yPercent: 46, rotate: -12 }, { yPercent: -30, rotate: -2, ease: 'none' }, 0)
-            .fromTo('[data-float="dev-b"]', { yPercent: 58, rotate: 10 }, { yPercent: -18, rotate: 2, ease: 'none' }, 0)
-            .fromTo('[data-float="dev-c"]', { yPercent: 70, scale: 0.92 }, { yPercent: -8, scale: 1.06, ease: 'none' }, 0)
+
+          // fly into the hazard mark
+          tl.fromTo('[data-tunnel]',
+            { scale: 0.3, rotate: -14, opacity: 0.35 },
+            { scale: 2.2, rotate: 10, opacity: 0.85, ease: 'power1.in', duration: 1 }, 0)
+            .to('[data-tunnel]', { opacity: 0, ease: 'none', duration: 0.22 }, 0.78)
+
+          // two hazard walls drifting behind at different depths
+          tl.fromTo('[data-wall="far"]', { yPercent: -8, xPercent: 3 }, { yPercent: 14, xPercent: -3, ease: 'none', duration: 1 }, 0)
+            .fromTo('[data-wall="near"]', { yPercent: -20, xPercent: -4 }, { yPercent: 30, xPercent: 4, ease: 'none', duration: 1 }, 0)
+
+          // the lineup streams past, one piece at a time
+          STREAM.forEach((s, i) => {
+            tl.fromTo(`[data-stream="${i}"]`,
+              { x: 0, y: 0, scale: 0.1, rotate: 0, opacity: 0 },
+              { x: s.x, y: s.y, scale: s.end, rotate: s.rot, opacity: 1, ease: 'power1.in', duration: 0.48 }, s.at)
+              .to(`[data-stream="${i}"]`, { opacity: 0, ease: 'none', duration: 0.14 }, s.at + 0.36)
+          })
+
+          // the line sits in front of the whole flight
+          tl.set('[data-gtsc-head]', { opacity: 1 }, 0)
+            .fromTo('[data-gtsc-head]', { scale: 0.94 }, { scale: 1, ease: 'power2.out', duration: 0.14 }, 0)
+            .to('[data-gtsc-head]', { scale: 1.14, opacity: 0, ease: 'power2.in', duration: 0.22 }, 0.74)
         }
       )
       return () => mm.revert()
@@ -59,45 +76,45 @@ export default function GtShowcase() {
   return (
     <section
       ref={rootRef}
-      className="relative z-10 h-[150vh] min-h-[900px] overflow-hidden"
-      style={{ background: 'linear-gradient(180deg,#f6b800 0%,#fbcd03 42%,#ff9a10 100%)' }}
+      data-nav-theme="dark"
+      className="relative z-10 h-screen min-h-[620px] overflow-hidden"
+      style={{ background: 'radial-gradient(circle at 50% 50%, #3a1405 0%, #170a04 46%, #0a0908 100%)' }}
     >
-      {/* three depths of hazard triangles */}
-      <div data-tri="far" className="absolute -inset-x-[10%] -inset-y-[25%] will-change-transform">
-        <TriLayer size={86} opacity={0.3} className="inset-0 -rotate-[8deg]" />
-      </div>
-      <div data-tri="mid" className="absolute -inset-x-[12%] -inset-y-[28%] will-change-transform">
-        <TriLayer size={140} opacity={0.45} className="inset-0 rotate-[6deg]" />
-      </div>
-      <div data-tri="near" className="absolute -inset-x-[15%] -inset-y-[32%] will-change-transform">
-        <TriLayer size={232} opacity={0.6} className="inset-0 -rotate-[3deg]" />
+      {/* hazard walls — parallax texture behind everything */}
+      <div data-wall="far" aria-hidden className="gt-tri-field pointer-events-none absolute -inset-x-[10%] -inset-y-[30%] -rotate-[7deg] opacity-[0.045] will-change-transform" style={{ backgroundSize: '92px' }} />
+      <div data-wall="near" aria-hidden className="gt-tri-field pointer-events-none absolute -inset-x-[14%] -inset-y-[34%] rotate-[5deg] opacity-[0.07] will-change-transform" style={{ backgroundSize: '190px' }} />
+
+      {/* the mark you fly into */}
+      <div className="pointer-events-none absolute left-1/2 top-1/2 z-[1] -translate-x-1/2 -translate-y-1/2">
+        {/* eslint-disable-next-line @next/next/no-img-element -- hazard mark */}
+        <img data-tunnel src="/products/gas-tank/caution-triangle.svg" alt="" aria-hidden
+          className="h-[52vh] w-auto opacity-0 will-change-transform" />
       </div>
 
-      {/* heat bloom behind the products */}
-      <div aria-hidden className="gt-heat pointer-events-none absolute left-1/2 top-1/2 h-[80vh] w-[80vh] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.34) 0%, rgba(255,196,40,0.18) 42%, rgba(255,154,16,0) 72%)' }} />
+      {/* the lineup streaming past */}
+      <div className="pointer-events-none absolute inset-0 z-[3]">
+        {STREAM.map((s, i) => (
+          <div key={s.src} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
+            <img
+              data-stream={i}
+              src={`/products/gas-tank/${s.src}.webp`}
+              alt={s.alt}
+              aria-hidden={s.alt ? undefined : true}
+              className={`${s.w} opacity-0 will-change-transform drop-shadow-[0_40px_70px_rgba(0,0,0,0.65)]`}
+            />
+          </div>
+        ))}
+      </div>
 
-      {/* the float layer */}
-      <div className="absolute inset-0">
-        {/* eslint-disable-next-line @next/next/no-img-element -- packaging */}
-        <img data-float="pouch-a" src="/products/gas-tank/pouch-resin.webp" alt=""
-          aria-hidden className="absolute left-[3%] top-[14%] w-[30vw] max-w-[330px] will-change-transform drop-shadow-[0_30px_50px_rgba(0,0,0,0.3)]" />
-        {/* eslint-disable-next-line @next/next/no-img-element -- packaging */}
-        <img data-float="pouch-b" src="/products/gas-tank/pouch-flavors.webp" alt=""
-          aria-hidden className="absolute right-[2%] top-[9%] w-[32vw] max-w-[360px] will-change-transform drop-shadow-[0_30px_50px_rgba(0,0,0,0.28)]" />
-        {/* eslint-disable-next-line @next/next/no-img-element -- product */}
-        <img data-float="dev-a" src="/products/gas-tank/device-resin.webp" alt="Gas Tank Live Resin"
-          className="absolute left-[8%] top-[38%] w-[30vw] max-w-[300px] will-change-transform drop-shadow-[0_40px_60px_rgba(0,0,0,0.4)]" />
-        {/* eslint-disable-next-line @next/next/no-img-element -- product */}
-        <img data-float="dev-b" src="/products/gas-tank/device-flavors.webp" alt="Gas Tank Flavors"
-          className="absolute right-[9%] top-[33%] w-[29vw] max-w-[290px] will-change-transform drop-shadow-[0_40px_60px_rgba(0,0,0,0.38)]" />
-        {/* eslint-disable-next-line @next/next/no-img-element -- product */}
-        <img data-float="dev-c" src="/products/gas-tank/device-rosin.webp" alt="Gas Tank Live Rosin"
-          className="absolute left-1/2 top-[52%] w-[34vw] max-w-[330px] -translate-x-1/2 will-change-transform drop-shadow-[0_50px_80px_rgba(0,0,0,0.45)]" />
-        <span className="absolute left-1/2 top-[48%] z-10 flex h-[76px] w-[76px] -translate-x-1/2 translate-x-[7vw] rotate-[14deg] items-center justify-center rounded-full bg-[var(--gt-red)] text-center text-[10px] font-extrabold uppercase leading-[1.1] text-white shadow-[0_10px_26px_rgba(0,0,0,0.35)] md:h-[92px] md:w-[92px] md:text-xs"
-          style={{ fontFamily: 'var(--font-brand)' }}>
-          New<br />Product
-        </span>
+      {/* the line, held in front */}
+      <div data-gtsc-head className="pointer-events-none absolute inset-x-0 top-1/2 z-[2] -translate-y-1/2 px-6 text-center opacity-0 will-change-transform">
+        <h2 className="font-display uppercase leading-[0.82] text-white drop-shadow-[0_10px_40px_rgba(0,0,0,0.9)]" style={{ fontSize: 'min(15vw, 8rem)' }}>
+          Handle <br /> <span className="text-[var(--gt-yellow)]">with fire</span>
+        </h2>
+        <p className="mx-auto mt-4 max-w-[36ch] text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/60 md:text-xs" style={{ fontFamily: 'var(--font-brand)' }}>
+          Three tiers. One tank.
+        </p>
       </div>
     </section>
   )
