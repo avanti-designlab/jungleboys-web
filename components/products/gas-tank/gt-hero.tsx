@@ -25,10 +25,13 @@ gsap.registerPlugin(ScrollTrigger)
 // Nothing here is an image or a video — the fire is simulated per frame in
 // gt-fire.tsx, which is why it can react to scroll at all.
 //
-// The devices use the `-n` (normalised) art: the three product shots were taken
-// at different angles, so equal CSS size made them look like three different
-// products. The -n files place every device on one shared canvas at one shared
-// body width, so equal width here = evenly matched trio.
+// The devices use the `-n` (normalised) art, rebuilt from the STRAIGHT-ON
+// masters in Figma (flavors-3 / magnific / resin-3) rather than the angled
+// three-quarter shots the page shipped with — those read as three unrelated
+// products no matter how they were sized. Each is cropped to its solid pixels,
+// scaled to one shared body width and centred on one shared canvas, so equal
+// width here gives a genuinely matched trio. They are NOT rotated: these are
+// dead-on renders and any tilt brings the mismatch straight back.
 
 const SPECS = [
   { icon: 'palm', label: 'Palm sized\nand discreet' },
@@ -93,8 +96,8 @@ export default function GtHero() {
             { yPercent: 58, scale: 0.62, opacity: 0 },
             { yPercent: 0, scale: 1, opacity: 1, ease: 'power2.out', duration: 0.5 }, 0.14)
             // they open into a symmetric fan — mirrored, so the trio stays even
-            .to('[data-dev="l"]', { xPercent: -15, rotate: -11, ease: 'power1.out', duration: 0.22 }, 0.6)
-            .to('[data-dev="r"]', { xPercent: 15, rotate: 11, ease: 'power1.out', duration: 0.22 }, 0.6)
+            .to('[data-dev="l"]', { xPercent: -13, ease: 'power1.out', duration: 0.22 }, 0.6)
+            .to('[data-dev="r"]', { xPercent: 13, ease: 'power1.out', duration: 0.22 }, 0.6)
             .to('[data-dev="c"]', { yPercent: -4, ease: 'power1.out', duration: 0.22 }, 0.6)
             // …then the camera pulls back off them too
             .to('[data-rig]', { scale: 0.88, yPercent: -4, ease: 'power2.in', duration: 0.18 }, 0.82)
@@ -159,13 +162,13 @@ export default function GtHero() {
         {/* the three tiers, rising out of the bed — equal width = equal device */}
         <div data-rig className="absolute inset-x-0 bottom-[7%] z-10 opacity-0 will-change-transform">
           <div className="relative mx-auto w-full max-w-[1120px] px-4">
-            <div className="relative mx-auto aspect-[820/1040] w-[41%]">
+            <div className="relative mx-auto aspect-[780/1240] w-[33%]">
               {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
               <img data-dev="l" src="/products/gas-tank/device-flavors-n.webp" alt="Gas Tank Flavors"
-                className="absolute inset-y-0 left-[-72%] w-full origin-bottom -rotate-[6deg] will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)]" />
+                className="absolute inset-y-0 left-[-77%] w-full origin-bottom will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)]" />
               {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
               <img data-dev="r" src="/products/gas-tank/device-resin-n.webp" alt="Gas Tank Live Resin"
-                className="absolute inset-y-0 left-[72%] w-full origin-bottom rotate-[6deg] will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)]" />
+                className="absolute inset-y-0 left-[77%] w-full origin-bottom will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)]" />
               {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
               <img data-dev="c" src="/products/gas-tank/device-rosin-n.webp" alt="Gas Tank Live Rosin"
                 className="absolute inset-0 z-10 w-full will-change-transform drop-shadow-[0_44px_80px_rgba(0,0,0,0.8)]" />
