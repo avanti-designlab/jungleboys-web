@@ -146,7 +146,7 @@ const GtSnow = forwardRef<GtSnowHandle, { className?: string }>(function GtSnow(
     }
 
     const seed = () => {
-      const target = Math.round(Math.min(170, Math.max(50, (W * H) / (dpr * dpr) / 6400)))
+      const target = Math.round(Math.min(340, Math.max(120, (W * H) / (dpr * dpr) / 2900)))
       flakes = []
       for (let i = 0; i < target; i++) {
         const band = i % 3 === 2 ? 2 : i % 2
@@ -241,9 +241,11 @@ const GtSnow = forwardRef<GtSnowHandle, { className?: string }>(function GtSnow(
         ref={frostRef}
         data-frost
         aria-hidden
-        className={`pointer-events-none absolute inset-0 h-full w-full opacity-0 will-change-transform ${className}`}
+        className="pointer-events-none absolute inset-0 z-[8] h-full w-full opacity-0 will-change-transform"
       />
-      <canvas ref={snowRef} aria-hidden className={`pointer-events-none absolute inset-0 h-full w-full ${className}`} />
+      {/* above the freeze slab on purpose: snow keeps falling through the
+          100% SOLVENTLESS moment instead of being buried by it */}
+      <canvas ref={snowRef} aria-hidden className={`pointer-events-none absolute inset-0 z-[35] h-full w-full ${className}`} />
     </>
   )
 })

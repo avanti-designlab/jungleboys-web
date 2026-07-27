@@ -105,7 +105,7 @@ export default function GtShowcase() {
         style={{ background: 'linear-gradient(180deg,#f4fcff 0%,#cdeafb 26%,#8bcdef 60%,#3f9fd4 100%)' }}
       >
         {/* real falling snow + frost creeping in from the edges */}
-        <GtSnow ref={snowRef} className="z-[5]" />
+        <GtSnow ref={snowRef} />
 
         {/* ── heading ── */}
         <div data-ice-head className="pointer-events-none absolute inset-x-0 top-[8%] z-10 px-6 text-center will-change-transform">
@@ -113,8 +113,9 @@ export default function GtShowcase() {
             style={{ fontFamily: 'var(--font-brand)' }}>
             Introducing the all new
           </p>
-          <h2 className="font-display mt-2 uppercase leading-[0.82] text-[#0b4472]" style={{ fontSize: 'min(12.5vw, 6.6rem)', letterSpacing: '-0.03em' }}>
-            Live Rosin <br /> Gas Tank
+          <h2 className="font-display mt-2 whitespace-nowrap uppercase leading-[0.86] text-[#0b4472]"
+            style={{ fontSize: '12.6vw', letterSpacing: '-0.03em' }}>
+            Live Rosin Gas Tank
           </h2>
         </div>
 
@@ -148,9 +149,15 @@ export default function GtShowcase() {
         <div data-solv className="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center px-6 text-center opacity-0 will-change-transform">
           <span className="font-display uppercase leading-[0.8] text-white" style={{ fontSize: 'min(23vw, 13rem)', letterSpacing: '-0.03em' }}>100%</span>
           <span className="font-display -mt-[1.5vw] uppercase leading-[0.8] text-[var(--gt-yellow)]" style={{ fontSize: 'min(17.5vw, 9.8rem)', letterSpacing: '-0.03em' }}>Solventless</span>
-          <p className="mt-5 max-w-[46ch] text-[10px] font-extrabold uppercase tracking-[0.24em] text-white/75 md:text-xs" style={{ fontFamily: 'var(--font-brand)' }}>
-            Fresh frozen flower. Ice water hash. No solvents, no additives, no shortcuts.
-          </p>
+          <div className="mt-7 flex max-w-full flex-wrap items-center justify-center gap-2 md:flex-nowrap md:gap-3">
+            {['Fresh frozen flower', 'Ice water hash', 'No solvents', 'No additives', 'No shortcuts'].map((f) => (
+              <span key={f}
+                className="whitespace-nowrap rounded-full border border-white/30 bg-white/[0.12] px-3.5 py-2 text-[9px] font-extrabold uppercase tracking-wider text-white backdrop-blur-sm md:px-5 md:py-2.5 md:text-[13px]"
+                style={{ fontFamily: 'var(--font-brand)' }}>
+                {f}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </section>
