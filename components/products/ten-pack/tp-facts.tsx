@@ -85,7 +85,7 @@ export default function TpFacts() {
         className="relative flex h-[92vh] min-h-[620px] items-center overflow-hidden rounded-[1.75rem] px-4 text-white md:rounded-[2.5rem] md:px-10"
         style={{ background: 'linear-gradient(180deg,#0d63a8 0%,#08406f 54%,#051d33 100%)' }}
       >
-        <TpClouds density={1.15} from="left" className="z-0" />
+        <TpClouds density={0.72} from="left" className="z-0" />
 
         <div className="relative z-10 mx-auto w-full max-w-[1220px]">
           <h2 data-tp-line className="font-display text-center uppercase leading-[0.82] text-white will-change-transform"
@@ -98,7 +98,9 @@ export default function TpFacts() {
             style={{ perspective: '1100px', transformStyle: 'preserve-3d' }}>
             {CLAIMS.map((claim, i) => (
               <div key={claim.text} data-tp-card={i}
-                className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/[0.08] px-3 py-2.5 backdrop-blur-sm will-change-transform md:gap-4 md:rounded-[1.4rem] md:px-5 md:py-4">
+                // dark glass, not light — the smoke behind is bright enough that
+                // a white tint left the labels sitting on nothing
+                className="flex items-center gap-3 rounded-2xl border border-white/20 bg-[#04182e]/45 px-3 py-2.5 backdrop-blur-md will-change-transform md:gap-4 md:rounded-[1.4rem] md:px-5 md:py-4">
                 <span aria-hidden
                   className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/25 md:h-14 md:w-14"
                   style={{ background: 'radial-gradient(circle at 35% 30%, #6db6ff 0%, #2e8bff 55%, #0d5fc4 100%)' }}>

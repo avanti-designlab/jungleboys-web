@@ -133,7 +133,7 @@ export default function TpHero() {
               Ten mini joints · one jar
             </p>
             <h1 className="font-display mt-1 flex items-baseline justify-center whitespace-nowrap uppercase leading-[0.84] text-white"
-              style={{ fontSize: '17.4vw', letterSpacing: '-0.035em' }}>
+              style={{ fontSize: '17.4vw', letterSpacing: '-0.035em', textShadow: '0 8px 44px rgba(2,10,24,0.75)' }}>
               <span data-tp-word className="will-change-transform">10PK</span>
               <span aria-hidden style={{ width: '0.14em' }} />
               <span data-tp-word2 className="text-[var(--tp-cyan)] will-change-transform">Pre-Rolls</span>

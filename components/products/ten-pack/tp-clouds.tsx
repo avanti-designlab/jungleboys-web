@@ -26,8 +26,8 @@ export default function TpClouds({
         className={exhale ? 'tp-puff' : 'tp-cloud'}
         style={
           exhale
-            ? { position: 'absolute', left: '-78%', top: '-60%', width: '250%', height: '230%' }
-            : { position: 'absolute', left: '-60%', top: '-60%', width: '220%', height: '220%' }
+            ? { position: 'absolute', left: '-52%', top: '-34%', width: '200%', height: '175%' }
+            : { position: 'absolute', left: '-42%', top: '-38%', width: '180%', height: '180%' }
         }
       >
         {/* eslint-disable-next-line @next/next/no-img-element -- texture */}
@@ -35,9 +35,21 @@ export default function TpClouds({
           src="/products/10-pack/smoke-alpha.webp"
           alt=""
           className="h-full w-full object-cover"
-          style={{ opacity: Math.min(1, 0.95 * density) }}
+          style={{ opacity: Math.min(1, 1 * density) }}
         />
       </div>
+
+      {/* Smoke this defined is bright enough to eat white type, so a soft
+          centre-weighted scrim sits between it and the content. It stays clear
+          of the edges, so the smoke still reads at full strength around the
+          outside of the panel. */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(95% 78% at 50% 50%, rgba(3,16,34,0.52) 0%, rgba(3,16,34,0.3) 52%, rgba(3,16,34,0) 100%)',
+        }}
+      />
     </div>
   )
 }
