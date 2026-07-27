@@ -1168,7 +1168,11 @@ body:has(.gt-page) {
   background: var(--gt-black);
 }
 .gt-page { background: var(--gt-black); }
-body:has(.gt-page) footer { position: relative; z-index: 1; background: var(--gt-black); }
+/* The footer's own light-theme background is cleared so the fixed outro fire
+   (gt-outro.tsx, z-0) shows through its gutter frame — that surround is what
+   makes the black pill read as a pill, the same job the light gutter does on
+   every other page. With the fire faded out the body's black shows instead. */
+body:has(.gt-page) footer { position: relative; z-index: 1; background: transparent; }
 
 @media (prefers-reduced-motion: no-preference) {
   @keyframes hh-float { from { translate: 0 0; } to { translate: 0 -16px; } }
