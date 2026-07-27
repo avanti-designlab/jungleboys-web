@@ -40,7 +40,7 @@ const TIERS = [
     values: ['Fresh frozen extract', 'Native terpenes only', 'Full spectrum', 'Strain authentic'],
   },
   {
-    key: 'live-rosin', name: 'Live Rosin', device: 'device-rosin-n', accent: '#5ec8f5',
+    key: 'live-rosin', name: 'Live Rosin', device: 'device-rosin-n', accent: '#e11b0b',
     blurb: '100% solventless. Ice water hash only.',
     values: ['Ice water hash', 'Native terpenes', 'Full spectrum', 'True-to-strain'],
   },
@@ -150,14 +150,15 @@ export default function GtDifference() {
           {TIERS.map((t, i) => (
             <div key={t.key} className="relative flex h-full shrink-0 items-center justify-center px-5 md:px-16" style={{ width: `${100 / TIERS.length}%` }}>
               {/* ghost name, oversized, behind everything */}
-              {/* Tinted with the tier's own accent rather than white. White at a
-                  few percent reads fine over the warm orange/yellow blooms but
-                  vanishes over Live Rosin's cool blue one — same alpha, far
-                  less perceived luminance. Accent-tinting evens all three out
-                  and ties each ghost to its panel. */}
+              {/* Left-ANCHORED, not centred: centring makes a short name like
+                  FLAVORS start further right than LIVE RESIN / LIVE ROSIN, so
+                  the three don't line up and the short one hides behind the
+                  spec column. Every tier now starts at the same x.
+                  White again, and low — with Live Rosin's accent back to red,
+                  all three glows are warm and white reads evenly across them. */}
               <span data-gtd-ghost aria-hidden
-                className="font-display pointer-events-none absolute left-1/2 top-[64%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap uppercase leading-none will-change-transform"
-                style={{ fontSize: 'min(26vw, 17rem)', color: t.accent, opacity: 0.13 }}>
+                className="font-display pointer-events-none absolute left-[9%] top-[64%] -translate-y-1/2 whitespace-nowrap uppercase leading-none text-white/[0.045] will-change-transform"
+                style={{ fontSize: 'min(26vw, 17rem)' }}>
                 {t.name}
               </span>
 

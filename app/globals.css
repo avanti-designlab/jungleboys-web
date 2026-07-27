@@ -1253,10 +1253,10 @@ body:has(.gt-page) footer { position: relative; z-index: 1; background: transpar
     background-position: center, center;
   }
   .gt-card-flavors {
-    background-color: #ab160c;
+    background-color: #c25c05;
     background-image:
-      linear-gradient(180deg, #d8241a 0%, #d8241a 30%, rgba(216, 36, 26, 0) 72%),
-      url('/products/gas-tank/tri-soft-red.svg');
+      linear-gradient(180deg, #f07a10 0%, #f07a10 30%, rgba(240, 122, 16, 0) 72%),
+      url('/products/gas-tank/tri-soft-orange.svg');
   }
   .gt-card-live-resin {
     background-color: #c69400;
@@ -1265,11 +1265,12 @@ body:has(.gt-page) footer { position: relative; z-index: 1; background: transpar
       url('/products/gas-tank/tri-soft-yellow.svg');
   }
   .gt-card-live-rosin {
-    background-color: #c25c05;
+    background-color: #ab160c;
     background-image:
-      linear-gradient(180deg, #f07a10 0%, #f07a10 30%, rgba(240, 122, 16, 0) 72%),
-      url('/products/gas-tank/tri-soft-orange.svg');
+      linear-gradient(180deg, #d8241a 0%, #d8241a 30%, rgba(216, 36, 26, 0) 72%),
+      url('/products/gas-tank/tri-soft-red.svg');
   }
+
 
 
 
