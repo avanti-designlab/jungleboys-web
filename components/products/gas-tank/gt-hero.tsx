@@ -151,8 +151,11 @@ export default function GtHero() {
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-[2vw]">
           <div data-headline className="w-full text-center will-change-transform">
           {/* one line, vw only — a rem cap stops it filling the frame on desktop */}
-            <p className="font-display mb-[0.6vw] uppercase leading-none text-white"
-              style={{ fontSize: 'min(7vw, 3rem)', letterSpacing: '0.1em' }}>
+            {/* tracked and stacked tight against GAS TANK, like every other
+                Bebas lockup on the site — the wide 0.1em tracking read as a
+                different typeface next to it */}
+            <p className="font-display mb-[0.1vw] uppercase leading-[0.82] text-white"
+              style={{ fontSize: 'min(7vw, 3rem)', letterSpacing: '-0.03em' }}>
               All-In-One
             </p>
             <h1 className="font-display flex items-baseline justify-center whitespace-nowrap uppercase leading-[0.82] text-white"
