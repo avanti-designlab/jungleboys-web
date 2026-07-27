@@ -1162,28 +1162,12 @@ body:has(.tp-page) {
 body:has(.tp-page) footer { position: relative; z-index: 1; background: var(--tp-black); }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* A cloud BANK, not a texture: six plates blown at different speeds and
-     directions, some swelling as they go, so the frame reads as weather.
-     Transform-only, so the compositor carries all of it. */
-  @keyframes tp-blow-r { from { transform: translate3d(-14%,0,0) scale(1.04); } to { transform: translate3d(14%,-3%,0) scale(1.16); } }
-  @keyframes tp-blow-l { from { transform: translate3d(12%,2%,0) scale(1.14); } to { transform: translate3d(-12%,-2%,0) scale(1.02); } }
-  @keyframes tp-swell  { 0%,100% { transform: translate3d(-4%,1%,0) scale(1.06); } 50% { transform: translate3d(5%,-3%,0) scale(1.22); } }
-
-  .tp-cloud-1 { animation: tp-blow-r 64s ease-in-out infinite alternate; }
-  .tp-cloud-2 { animation: tp-blow-l 82s ease-in-out infinite alternate; }
-  .tp-cloud-3 { animation: tp-swell 54s ease-in-out infinite; }
-  .tp-cloud-4 { animation: tp-blow-r 46s ease-in-out infinite alternate; }
-  .tp-cloud-5 { animation: tp-blow-l 96s ease-in-out infinite alternate; }
-  .tp-cloud-6 { animation: tp-swell 70s ease-in-out infinite; }
-
-  /* the exhale: plates roll in from off-left and spread as they cross */
-  @keyframes tp-puff { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(46%,-6%,0) scale(1.5); } }
-  .tp-puff-1 { animation: tp-puff 58s ease-out infinite alternate; }
-  .tp-puff-2 { animation: tp-puff 44s ease-out infinite alternate; }
-  .tp-puff-3 { animation: tp-puff 72s ease-out infinite alternate; }
-  .tp-puff-4 { animation: tp-puff 38s ease-out infinite alternate; }
-  .tp-puff-5 { animation: tp-puff 64s ease-out infinite alternate; }
-  .tp-puff-6 { animation: tp-puff 50s ease-out infinite alternate; }
+  /* ONE plate per section. It is oversized and overhanging, so this motion can
+     never bring a faded edge into the panel. Transform-only. */
+  @keyframes tp-cloud { 0%, 100% { transform: translate3d(-2%, 0, 0) scale(1.02); } 50% { transform: translate3d(3%, -2%, 0) scale(1.14); } }
+  @keyframes tp-puff  { from { transform: translate3d(0, 0, 0) scale(1.02); } to { transform: translate3d(22%, -4%, 0) scale(1.24); } }
+  .tp-cloud { animation: tp-cloud 78s ease-in-out infinite; }
+  .tp-puff { animation: tp-puff 62s ease-in-out infinite alternate; }
 
   /* jars idling on desynced clocks so the row never pulses in unison */
   @keyframes tp-bob-a { 0%,100% { transform: translate3d(0,0,0) rotate(var(--tp-rot,0deg)); } 50% { transform: translate3d(0,-14px,0) rotate(calc(var(--tp-rot,0deg) + 1.4deg)); } }
@@ -1192,9 +1176,7 @@ body:has(.tp-page) footer { position: relative; z-index: 1; background: var(--tp
   .tp-bob-b { animation: tp-bob-b var(--tp-dur,11s) ease-in-out infinite; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .tp-cloud-1, .tp-cloud-2, .tp-cloud-3, .tp-cloud-4, .tp-cloud-5, .tp-cloud-6,
-  .tp-puff-1, .tp-puff-2, .tp-puff-3, .tp-puff-4, .tp-puff-5, .tp-puff-6,
-  .tp-bob-a, .tp-bob-b { animation: none; }
+  .tp-cloud, .tp-puff, .tp-bob-a, .tp-bob-b { animation: none; }
 }
 
 /* ── GAS TANK: fire surface ──────────────────────────────────────────

@@ -20,7 +20,8 @@ gsap.registerPlugin(ScrollTrigger)
 // stream come up through the weather rather than a fan open in place. That also
 // frees the jars to be as large as they like.
 //
-// Six drifting cloud plates sit behind and in front (see tp-clouds.tsx).
+// ONE oversized smoke plate sits behind it all (see tp-clouds.tsx) — layering
+// plates is what was drawing cut lines across the panels.
 
 const JARS = [
   { src: 'jar-la-gelato', x: -40, y: 16, h: 58, rot: -9, z: -260, bob: 'a', dur: 11 },
@@ -119,7 +120,7 @@ export default function TpHero() {
         data-nav-theme="dark"
         className="media-hero-in relative h-[92vh] min-h-[600px] overflow-hidden rounded-[1.75rem] bg-[var(--tp-black)] md:rounded-[2.5rem]"
       >
-        <TpClouds density={0.8} className="z-0" />
+        <TpClouds density={1} className="z-0" />
 
         {/* electric wash off the bottom */}
         <div aria-hidden className="pointer-events-none absolute inset-0 z-[1]"
@@ -174,9 +175,6 @@ export default function TpHero() {
             ))}
           </div>
         </div>
-
-        {/* a last cloud bank IN FRONT, so the jars sit inside the weather */}
-        <TpClouds density={0.3} className="z-20 [mask-image:linear-gradient(to_top,#000_0%,rgba(0,0,0,0.5)_42%,transparent_78%)]" />
 
         {/* stat pills */}
         <div data-tp-stats className="absolute inset-x-0 bottom-[4%] z-30 will-change-transform">
