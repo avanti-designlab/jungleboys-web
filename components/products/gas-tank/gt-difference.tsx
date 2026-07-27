@@ -91,7 +91,10 @@ export default function GtDifference() {
       data-nav-theme="dark"
       className="relative z-10 h-screen min-h-[620px] overflow-hidden bg-[var(--gt-black)]"
     >
-      <div aria-hidden className="gt-tri-field pointer-events-none absolute inset-0 opacity-[0.03]" style={{ backgroundSize: '130px' }} />
+      {/* clean ground — the tiled hazard field lived here and fought the type.
+          Depth now comes from the per-tier bloom inside each panel. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0"
+        style={{ background: 'radial-gradient(120% 90% at 50% 120%, rgba(255,122,24,0.16) 0%, rgba(10,9,8,0) 62%)' }} />
 
       {/* locked heading */}
       <div className="pointer-events-none absolute left-5 top-[13vh] z-20 md:left-12 md:top-[16vh]">

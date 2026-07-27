@@ -1192,33 +1192,53 @@ body:has(.hh-page) footer {
     background-repeat: space;
   }
 
-  /* Shop card stages: the hazard mark tiled in each tier's colour, with a soft
-     bloom in the middle so the device still reads against the pattern. */
-  .gt-card-stage {
-    background-repeat: space;
-    background-size: 74px;
+  /* embers riding the updraft off the hero's fire bed */
+  @keyframes gt-ember {
+    0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0; }
+    12% { opacity: 1; }
+    70% { opacity: 0.85; }
+    100% { transform: translate3d(var(--gt-ember-x, 14px), -74vh, 0) scale(0.3); opacity: 0; }
   }
-  .gt-card-stage::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 55%, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.22) 45%, rgba(0, 0, 0, 0) 72%);
+  .gt-ember {
+    animation-name: gt-ember;
+    animation-timing-function: cubic-bezier(0.3, 0, 0.5, 1);
+    animation-iteration-count: infinite;
+    box-shadow: 0 0 8px 2px rgba(255, 140, 40, 0.65);
+    will-change: transform, opacity;
+  }
+  .gt-ember:nth-child(even) { --gt-ember-x: -18px; }
+  .gt-ember:nth-child(3n) { --gt-ember-x: 26px; }
+
+  /* Shop card stages: the hazard mark tiled TONE-ON-TONE (a darker shade of the
+     tier colour, not a contrasting one) over a gradient ground, so the pattern
+     reads as texture behind the pack shot instead of competing with it. */
+  .gt-card-stage {
+    background-repeat: space, no-repeat;
+    background-size: 78px, cover;
+    background-position: center, center;
   }
   .gt-card-flavors {
-    background-color: #6d0d04;
-    background-image: url('/products/gas-tank/tri-red.svg');
+    background-color: #cf2115;
+    background-image:
+      url('/products/gas-tank/tri-soft-red.svg'),
+      linear-gradient(158deg, rgba(255, 255, 255, 0.16) 0%, rgba(0, 0, 0, 0.06) 38%, rgba(0, 0, 0, 0.5) 100%);
   }
   .gt-card-live-resin {
-    background-color: #7a5c02;
-    background-image: url('/products/gas-tank/tri-yellow.svg');
+    background-color: #e8ae00;
+    background-image:
+      url('/products/gas-tank/tri-soft-yellow.svg'),
+      linear-gradient(158deg, rgba(255, 255, 255, 0.18) 0%, rgba(0, 0, 0, 0.06) 38%, rgba(0, 0, 0, 0.48) 100%);
   }
   .gt-card-live-rosin {
-    background-color: #7a3403;
-    background-image: url('/products/gas-tank/tri-orange.svg');
+    background-color: #e8710c;
+    background-image:
+      url('/products/gas-tank/tri-soft-orange.svg'),
+      linear-gradient(158deg, rgba(255, 255, 255, 0.17) 0%, rgba(0, 0, 0, 0.06) 38%, rgba(0, 0, 0, 0.48) 100%);
   }
 
+
   @media (prefers-reduced-motion: reduce) {
-    .gt-tape-band, .gt-heat { animation: none; }
+    .gt-tape-band, .gt-heat, .gt-ember { animation: none; }
   }
 
   /* ── POPS: candy-stripe surface ───────────────────────────────────────

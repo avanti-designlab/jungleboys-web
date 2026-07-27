@@ -6,22 +6,33 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// HANDLE WITH FIRE. A tunnel, not a wallpaper. The section pins and you fly
-// INTO a hazard triangle: it swells from a speck to bigger than the frame while
-// the whole lineup streams past you from the same vanishing point — each piece
-// starting as a dot dead centre, then scaling up and peeling off toward its own
-// corner. Two slow hazard walls drift behind at different depths for parallax.
+// THE PARADE. The page's hard colour break: after two near-black sections this
+// one goes full hazard orange, and the whole lineup marches straight across the
+// frame while it's pinned.
 //
-// Dark ground on purpose: the earlier yellow tile field fought the products.
+// The headline is locked dead centre in black and the products pass IN FRONT of
+// it — that overlap is the whole idea, and it only works because everything is
+// opaque on a bright ground. (The previous dark tunnel lost the products in the
+// murk; nothing here is translucent.)
+//
+// Four oversized hazard marks drift behind at two depths, tone-on-tone so they
+// read as printed signage rather than clutter.
+//
+// Devices only on the belt: the pouch art is a flat card and at this scale it
+// read as a blank rectangle rather than packaging.
 
-// where each piece exits, and how big it gets on the way out
-const STREAM = [
-  { src: 'device-rosin', alt: 'Gas Tank Live Rosin', x: '-2vw', y: '30vh', end: 1.35, rot: 4, at: 0, w: 'w-[26vw] max-w-[300px]' },
-  { src: 'pouch-flavors', alt: '', x: '-42vw', y: '-24vh', end: 1.1, rot: -22, at: 0.14, w: 'w-[24vw] max-w-[270px]' },
-  { src: 'device-resin', alt: 'Gas Tank Live Resin', x: '40vw', y: '-18vh', end: 1.2, rot: 18, at: 0.26, w: 'w-[24vw] max-w-[270px]' },
-  { src: 'pouch-resin', alt: '', x: '38vw', y: '30vh', end: 1.1, rot: 14, at: 0.4, w: 'w-[24vw] max-w-[270px]' },
-  { src: 'device-flavors', alt: 'Gas Tank Flavors', x: '-38vw', y: '28vh', end: 1.25, rot: -16, at: 0.52, w: 'w-[24vw] max-w-[270px]' },
+const BELT = [
+  { src: 'device-rosin', label: 'Live Rosin', w: 'w-[46vw] md:w-[25vw] md:max-w-[310px]', y: 'translate-y-[4vh]', rot: '-5deg' },
+  { src: 'device-resin', label: 'Live Resin', w: 'w-[48vw] md:w-[26vw] md:max-w-[325px]', y: '-translate-y-[6vh]', rot: '6deg' },
+  { src: 'device-flavors', label: 'Flavors', w: 'w-[46vw] md:w-[25vw] md:max-w-[310px]', y: 'translate-y-[3vh]', rot: '-4deg' },
 ]
+
+const MARKS = [
+  { cls: 'left-[-6%] top-[6%] w-[26vw]', depth: 'far' },
+  { cls: 'right-[-4%] top-[14%] w-[22vw]', depth: 'near' },
+  { cls: 'left-[16%] bottom-[-8%] w-[30vw]', depth: 'near' },
+  { cls: 'right-[18%] bottom-[2%] w-[18vw]', depth: 'far' },
+] as const
 
 export default function GtShowcase() {
   const rootRef = useRef<HTMLElement>(null)
@@ -32,40 +43,30 @@ export default function GtShowcase() {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
       mm.add(
-        { reduce: '(prefers-reduced-motion: reduce)', noPref: '(prefers-reduced-motion: no-preference)' },
+        {
+          reduce: '(prefers-reduced-motion: reduce)',
+          mobile: '(prefers-reduced-motion: no-preference) and (max-width: 767px)',
+          desk: '(prefers-reduced-motion: no-preference) and (min-width: 768px)',
+        },
         (mmCtx) => {
           const c = mmCtx.conditions as Record<string, boolean>
           if (c.reduce) return
 
           const tl = gsap.timeline({
             scrollTrigger: {
-              trigger: root, start: 'top top', end: '+=100%',
+              trigger: root, start: 'top top', end: '+=130%',
               pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true,
             },
           })
 
-          // fly into the hazard mark
-          tl.fromTo('[data-tunnel]',
-            { scale: 0.3, rotate: -14, opacity: 0.35 },
-            { scale: 2.2, rotate: 10, opacity: 0.85, ease: 'power1.in', duration: 1 }, 0)
-            .to('[data-tunnel]', { opacity: 0, ease: 'none', duration: 0.22 }, 0.78)
-
-          // two hazard walls drifting behind at different depths
-          tl.fromTo('[data-wall="far"]', { yPercent: -8, xPercent: 3 }, { yPercent: 14, xPercent: -3, ease: 'none', duration: 1 }, 0)
-            .fromTo('[data-wall="near"]', { yPercent: -20, xPercent: -4 }, { yPercent: 30, xPercent: 4, ease: 'none', duration: 1 }, 0)
-
-          // the lineup streams past, one piece at a time
-          STREAM.forEach((s, i) => {
-            tl.fromTo(`[data-stream="${i}"]`,
-              { x: 0, y: 0, scale: 0.1, rotate: 0, opacity: 0 },
-              { x: s.x, y: s.y, scale: s.end, rotate: s.rot, opacity: 1, ease: 'power1.in', duration: 0.48 }, s.at)
-              .to(`[data-stream="${i}"]`, { opacity: 0, ease: 'none', duration: 0.14 }, s.at + 0.36)
-          })
-
-          // the line sits in front of the whole flight
-          tl.set('[data-gtsc-head]', { opacity: 1 }, 0)
-            .fromTo('[data-gtsc-head]', { scale: 0.94 }, { scale: 1, ease: 'power2.out', duration: 0.14 }, 0)
-            .to('[data-gtsc-head]', { scale: 1.14, opacity: 0, ease: 'power2.in', duration: 0.22 }, 0.74)
+          // the lineup marches right to left across the whole pin
+          tl.fromTo('[data-belt]', { xPercent: 4 }, { xPercent: c.mobile ? -46 : -32, ease: 'none', duration: 1 }, 0)
+            // signage drifts at two depths behind it
+            .fromTo('[data-mark="far"]', { yPercent: -6, xPercent: 2 }, { yPercent: 9, xPercent: -2, ease: 'none', duration: 1 }, 0)
+            .fromTo('[data-mark="near"]', { yPercent: -14, xPercent: -3 }, { yPercent: 20, xPercent: 3, ease: 'none', duration: 1 }, 0)
+            // the headline breathes forward as the parade passes
+            .fromTo('[data-gtsc-head]', { scale: 0.94 }, { scale: 1.06, ease: 'none', duration: 1 }, 0)
+            .fromTo('[data-gtsc-strip]', { xPercent: -16 }, { xPercent: 6, ease: 'none', duration: 1 }, 0)
         }
       )
       return () => mm.revert()
@@ -76,45 +77,49 @@ export default function GtShowcase() {
   return (
     <section
       ref={rootRef}
-      data-nav-theme="dark"
       className="relative z-10 h-screen min-h-[620px] overflow-hidden"
-      style={{ background: 'radial-gradient(circle at 50% 50%, #3a1405 0%, #170a04 46%, #0a0908 100%)' }}
+      style={{ background: 'linear-gradient(175deg,#ffa41c 0%,#f4780c 44%,#cf3a08 100%)' }}
     >
-      {/* hazard walls — parallax texture behind everything */}
-      <div data-wall="far" aria-hidden className="gt-tri-field pointer-events-none absolute -inset-x-[10%] -inset-y-[30%] -rotate-[7deg] opacity-[0.045] will-change-transform" style={{ backgroundSize: '92px' }} />
-      <div data-wall="near" aria-hidden className="gt-tri-field pointer-events-none absolute -inset-x-[14%] -inset-y-[34%] rotate-[5deg] opacity-[0.07] will-change-transform" style={{ backgroundSize: '190px' }} />
+      {/* oversized hazard signage, tone-on-tone */}
+      {MARKS.map((m) => (
+        <div key={m.cls} data-mark={m.depth} aria-hidden className={`pointer-events-none absolute ${m.cls} will-change-transform`}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- hazard mark */}
+          <img src="/products/gas-tank/tri-soft-orange.svg" alt="" className="w-full opacity-[0.55]" />
+        </div>
+      ))}
 
-      {/* the mark you fly into */}
-      <div className="pointer-events-none absolute left-1/2 top-1/2 z-[1] -translate-x-1/2 -translate-y-1/2">
-        {/* eslint-disable-next-line @next/next/no-img-element -- hazard mark */}
-        <img data-tunnel src="/products/gas-tank/caution-triangle.svg" alt="" aria-hidden
-          className="h-[52vh] w-auto opacity-0 will-change-transform" />
+      {/* the line, locked — the parade crosses in front of it */}
+      <div data-gtsc-head className="pointer-events-none absolute inset-x-0 top-1/2 z-10 -translate-y-1/2 px-6 text-center will-change-transform">
+        <h2 className="font-display uppercase leading-[0.8] text-[#180800]" style={{ fontSize: 'min(17vw, 9.5rem)' }}>
+          Handle <br /> with fire
+        </h2>
       </div>
 
-      {/* the lineup streaming past */}
-      <div className="pointer-events-none absolute inset-0 z-[3]">
-        {STREAM.map((s, i) => (
-          <div key={s.src} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      {/* the lineup, marching */}
+      <div data-belt className="absolute inset-y-0 left-0 z-20 flex w-[190%] items-center gap-[10vw] px-[10vw] md:w-[128%] md:gap-[13vw] will-change-transform">
+        {BELT.map((b) => (
+          <div key={b.src} className={`flex shrink-0 flex-col items-center ${b.y}`} style={{ rotate: b.rot }}>
             {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
             <img
-              data-stream={i}
-              src={`/products/gas-tank/${s.src}.webp`}
-              alt={s.alt}
-              aria-hidden={s.alt ? undefined : true}
-              className={`${s.w} opacity-0 will-change-transform drop-shadow-[0_40px_70px_rgba(0,0,0,0.65)]`}
+              src={`/products/gas-tank/${b.src}.webp`}
+              alt={b.label ? `Gas Tank ${b.label}` : ''}
+              aria-hidden={b.label ? undefined : true}
+              className={`${b.w} drop-shadow-[0_28px_44px_rgba(90,26,0,0.55)]`}
             />
+            {b.label && (
+              <span className="mt-4 rounded-full bg-[#180800] px-4 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--gt-yellow)] md:text-xs"
+                style={{ fontFamily: 'var(--font-brand)' }}>
+                {b.label}
+              </span>
+            )}
           </div>
         ))}
       </div>
 
-      {/* the line, held in front */}
-      <div data-gtsc-head className="pointer-events-none absolute inset-x-0 top-1/2 z-[2] -translate-y-1/2 px-6 text-center opacity-0 will-change-transform">
-        <h2 className="font-display uppercase leading-[0.82] text-white drop-shadow-[0_10px_40px_rgba(0,0,0,0.9)]" style={{ fontSize: 'min(15vw, 8rem)' }}>
-          Handle <br /> <span className="text-[var(--gt-yellow)]">with fire</span>
-        </h2>
-        <p className="mx-auto mt-4 max-w-[36ch] text-[10px] font-extrabold uppercase tracking-[0.3em] text-white/60 md:text-xs" style={{ fontFamily: 'var(--font-brand)' }}>
-          Three tiers. One tank.
-        </p>
+      {/* hazard stripe along the foot */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-30 h-[7vh] min-h-[46px] overflow-hidden border-y-4 border-[#180800]">
+        <div data-gtsc-strip className="h-full w-[140%] will-change-transform"
+          style={{ backgroundImage: 'repeating-linear-gradient(115deg,#180800 0 42px,#ffc21c 42px 84px)' }} />
       </div>
     </section>
   )
