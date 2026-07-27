@@ -87,20 +87,23 @@ export default function GtHero() {
 
           // ONE tween for the whole wordmark: a clean camera pull-back
           tl.to('[data-headline]', {
-            scale: 0.56, yPercent: -9, opacity: 0,
-            ease: 'power1.in', duration: 0.52,
+            scale: 0.5, yPercent: -6, opacity: 0,
+            ease: 'power1.in', duration: 0.5,
           }, 0)
 
-          // the trio rises up out of the fire
-          tl.fromTo('[data-rig]',
-            { yPercent: 58, scale: 0.62, opacity: 0 },
-            { yPercent: 0, scale: 1, opacity: 1, ease: 'power2.out', duration: 0.5 }, 0.14)
-            // they open into a symmetric fan — mirrored, so the trio stays even
-            .to('[data-dev="l"]', { xPercent: -13, ease: 'power1.out', duration: 0.22 }, 0.6)
-            .to('[data-dev="r"]', { xPercent: 13, ease: 'power1.out', duration: 0.22 }, 0.6)
-            .to('[data-dev="c"]', { yPercent: -4, ease: 'power1.out', duration: 0.22 }, 0.6)
-            // …then the camera pulls back off them too
-            .to('[data-rig]', { scale: 0.88, yPercent: -4, ease: 'power2.in', duration: 0.18 }, 0.82)
+          // THE LAUNCH. Each device fires up from under the bottom edge on its
+          // own beat — centre first, then the flankers — overshooting slightly
+          // before settling, so it lands rather than fades in. They stay
+          // oversized and bottom-cropped the whole way: the crop is the point.
+          const LAUNCH: [string, number][] = [['c', 0.10], ['l', 0.18], ['r', 0.25]]
+          LAUNCH.forEach(([k, at]) => {
+            tl.fromTo(`[data-dev="${k}"]`,
+              { yPercent: 104, scale: 1.14 },
+              { yPercent: 0, scale: 1, ease: 'back.out(1.05)', duration: 0.42 }, at)
+          })
+          tl.fromTo('[data-rig]', { opacity: 0 }, { opacity: 1, duration: 0.06 }, 0.1)
+            // and they keep growing toward you for the rest of the scrub
+            .to('[data-rig]', { scale: 1.07, ease: 'none', duration: 0.4 }, 0.55)
 
           tl.to('[data-specs]', { y: 40, opacity: 0, ease: 'power2.in', duration: 0.2 }, 0.3)
         }
@@ -146,7 +149,8 @@ export default function GtHero() {
         </div>
 
         {/* THE NAME — edge to edge, the whole cold-start frame */}
-        <div data-headline className="pointer-events-none absolute inset-x-0 top-[12%] z-20 px-[2vw] text-center will-change-transform">
+        <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-[2vw]">
+          <div data-headline className="w-full text-center will-change-transform">
           <p data-kicker className="mb-[1.5vw] text-[10px] font-extrabold uppercase tracking-[0.42em] text-white md:text-sm" style={{ fontFamily: 'var(--font-brand)' }}>
             Introducing the all new All-In-One
           </p>
@@ -156,23 +160,22 @@ export default function GtHero() {
             <span data-word="gas" className="will-change-transform drop-shadow-[0_0_60px_rgba(255,122,24,0.45)]">Gas</span>
             <span aria-hidden style={{ width: '0.16em' }} />
             <span data-word="tank" className="text-[var(--gt-yellow)] will-change-transform drop-shadow-[0_0_60px_rgba(225,27,11,0.5)]">Tank</span>
-          </h1>
+            </h1>
+          </div>
         </div>
 
         {/* the three tiers, rising out of the bed — equal width = equal device */}
-        <div data-rig className="absolute inset-x-0 bottom-[7%] z-10 opacity-0 will-change-transform">
-          <div className="relative mx-auto w-full max-w-[1120px] px-4">
-            <div className="relative mx-auto aspect-[780/1240] w-[33%]">
-              {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-              <img data-dev="l" src="/products/gas-tank/device-flavors-n.webp" alt="Gas Tank Flavors"
-                className="absolute inset-y-0 left-[-77%] w-full origin-bottom will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)]" />
-              {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-              <img data-dev="r" src="/products/gas-tank/device-resin-n.webp" alt="Gas Tank Live Resin"
-                className="absolute inset-y-0 left-[77%] w-full origin-bottom will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)]" />
-              {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-              <img data-dev="c" src="/products/gas-tank/device-rosin-n.webp" alt="Gas Tank Live Rosin"
-                className="absolute inset-0 z-10 w-full will-change-transform drop-shadow-[0_44px_80px_rgba(0,0,0,0.8)]" />
-            </div>
+        <div data-rig className="absolute inset-x-0 top-[2%] z-10 h-[74%] opacity-0 md:top-[1%] md:h-[116%] will-change-transform">
+          <div className="flex h-full items-start justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
+            <img data-dev="l" src="/products/gas-tank/device-flavors-n.webp" alt="Gas Tank Flavors"
+              className="-mr-[13vw] h-full w-auto md:-mr-[8vw] will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)]" />
+            {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
+            <img data-dev="c" src="/products/gas-tank/device-rosin-n.webp" alt="Gas Tank Live Rosin"
+              className="z-10 h-full w-auto will-change-transform drop-shadow-[0_44px_80px_rgba(0,0,0,0.85)]" />
+            {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
+            <img data-dev="r" src="/products/gas-tank/device-resin-n.webp" alt="Gas Tank Live Resin"
+              className="-ml-[13vw] h-full w-auto md:-ml-[8vw] will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)]" />
           </div>
         </div>
 
