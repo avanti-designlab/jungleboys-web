@@ -13,6 +13,9 @@ gsap.registerPlugin(ScrollTrigger)
 //
 // Same 3D space as the hero: the scatter is a real translateZ spread, so the
 // joints resolve out of depth rather than just sliding in from the sides.
+//
+// Near-black with the blue radiating up off the floor, deliberately: it sits
+// between two solid blue panels and needs to break the run.
 
 const N = 10
 
@@ -77,11 +80,12 @@ export default function TpTen() {
     <section ref={rootRef} className="relative z-10 px-2 py-2 md:px-3 md:py-3">
       <div
         data-nav-theme="dark"
-        className="relative h-[92vh] min-h-[600px] overflow-hidden rounded-[1.75rem] bg-[var(--tp-ink)] md:rounded-[2.5rem]"
+        className="relative h-[92vh] min-h-[600px] overflow-hidden rounded-[1.75rem] md:rounded-[2.5rem]"
+        style={{ background: 'radial-gradient(125% 82% at 50% 104%, #1a7ad0 0%, #0b3f70 26%, #05192e 56%, #02060c 100%)' }}
       >
         <TpClouds density={0.85} className="z-0" />
-        <div aria-hidden className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(90% 70% at 50% 50%, rgba(25,194,255,0.22) 0%, rgba(10,20,36,0) 68%)' }} />
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[60%]"
+          style={{ background: 'radial-gradient(90% 100% at 50% 100%, rgba(46,139,255,0.34) 0%, rgba(2,6,12,0) 72%)' }} />
 
         {/* the giant numeral */}
         <span data-tp-numeral aria-hidden

@@ -33,7 +33,7 @@ export default async function TpShop() {
               Ten in every jar
             </p>
             <h2 className="font-display mt-2 uppercase leading-[0.84] text-[#062038]" style={{ fontSize: 'min(13vw, 6rem)', letterSpacing: '-0.03em' }}>
-              Shop <span className="text-[#2e8bff]">10 Packs</span>
+              Shop <span className="text-[#2e8bff]">10PK Pre-Rolls</span>
             </h2>
           </Reveal>
 

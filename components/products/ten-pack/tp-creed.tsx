@@ -9,13 +9,14 @@ gsap.registerPlugin(ScrollTrigger)
 
 // NO TRIM. NO SHAKE. NO SHORTCUTS.
 //
-// Three refusals, so they land as three — each wipes in on its own beat rather
-// than the block fading up together.
+// Three refusals, and each one gets STRUCK OUT: a red X draws itself — two
+// strokes, one then the other, like it's being marked by hand — and the line
+// wipes in behind it. Drawn as SVG strokes with pathLength normalised to 1, so
+// the dash offset animates cleanly at any size.
 //
-// The left is a STACK, not a single jar: three oversized jars overlapping at
-// different depths and angles, each idling on its own clock and counter-drifting
-// against the others as you pass. They run off the bottom of the panel on
-// purpose, which is what lets them be this big.
+// The left is a STACK: three oversized jars overlapping at different depths and
+// angles, each idling on its own clock and counter-drifting against the others
+// as you pass. They run off the bottom of the panel on purpose.
 
 const STACK = [
   { src: 'jar-motor-breath', x: -16, y: 10, h: 46, rot: -12, z: -220, bob: 'a', dur: 12, drift: -16 },
@@ -40,17 +41,24 @@ export default function TpCreed() {
           if (c.reduce) return
 
           const tl = gsap.timeline({
-            scrollTrigger: { trigger: root, start: 'top 88%', end: 'bottom 55%', scrub: 0.7 },
+            scrollTrigger: { trigger: root, start: 'top 85%', end: 'bottom 52%', scrub: 0.7 },
           })
 
           LINES.forEach((_, i) => {
-            tl.fromTo(`[data-tp-creed="${i}"]`,
-              { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
-              { clipPath: 'inset(0 0% 0 0)', opacity: 1, ease: 'power2.out', duration: 0.22 },
-              0.1 + i * 0.15)
+            const at = 0.08 + i * 0.17
+            // the X marks it first — one stroke, then the other
+            tl.fromTo(`[data-tp-x="${i}"] [data-s="1"]`,
+              { strokeDashoffset: 1 }, { strokeDashoffset: 0, ease: 'power2.out', duration: 0.05 }, at)
+              .fromTo(`[data-tp-x="${i}"] [data-s="2"]`,
+                { strokeDashoffset: 1 }, { strokeDashoffset: 0, ease: 'power2.out', duration: 0.05 }, at + 0.035)
+              .fromTo(`[data-tp-x="${i}"]`,
+                { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, ease: 'back.out(2)', duration: 0.06 }, at)
+              // …then the refusal wipes in behind it
+              .fromTo(`[data-tp-word="${i}"]`,
+                { clipPath: 'inset(0 100% 0 0)', opacity: 0, xPercent: -3 },
+                { clipPath: 'inset(0 0% 0 0)', opacity: 1, xPercent: 0, ease: 'power3.out', duration: 0.13 }, at + 0.05)
           })
 
-          // each jar travels at its own rate — the stack opens as you pass
           STACK.forEach((j, i) => {
             tl.fromTo(`[data-tp-stack="${i}"]`,
               { yPercent: 18, xPercent: j.x * 0.25 },
@@ -72,7 +80,7 @@ export default function TpCreed() {
       >
         <TpClouds density={1} className="z-0" />
 
-        <div className="relative z-10 grid grid-cols-1 items-center gap-4 px-5 pt-12 md:grid-cols-[1.05fr_1fr] md:gap-8 md:px-14 md:pt-16">
+        <div className="relative z-10 grid grid-cols-1 items-center gap-4 px-5 pt-12 md:grid-cols-[0.95fr_1.05fr] md:gap-6 md:px-12 md:pt-16">
           {/* the stack — oversized, overlapping, cropped off the floor */}
           <div className="relative h-[38vh] md:h-[62vh]" style={{ perspective: '1300px' }}>
             <div className="absolute inset-x-0 bottom-[-14%]" style={{ transformStyle: 'preserve-3d' }}>
@@ -91,10 +99,17 @@ export default function TpCreed() {
             </div>
           </div>
 
-          <h2 className="font-display pb-12 uppercase leading-[0.86] text-white md:pb-16" style={{ letterSpacing: '-0.035em' }}>
+          <h2 className="font-display pb-12 uppercase leading-[0.9] text-white md:pb-16" style={{ letterSpacing: '-0.035em' }}>
             {LINES.map((l, i) => (
-              <span key={l} data-tp-creed={i} className="block will-change-[clip-path]" style={{ fontSize: 'min(14vw, 6.6rem)' }}>
-                {l}
+              <span key={l} className="flex items-center gap-3 md:gap-5" style={{ fontSize: 'min(12.5vw, 7.2rem)' }}>
+                <svg data-tp-x={i} viewBox="0 0 100 100" aria-hidden
+                  className="h-[0.62em] w-[0.62em] shrink-0 opacity-0 will-change-transform">
+                  <line data-s="1" x1="14" y1="14" x2="86" y2="86" pathLength={1} strokeDasharray={1}
+                    stroke="#ff2f2f" strokeWidth="17" strokeLinecap="round" />
+                  <line data-s="2" x1="86" y1="14" x2="14" y2="86" pathLength={1} strokeDasharray={1}
+                    stroke="#ff2f2f" strokeWidth="17" strokeLinecap="round" />
+                </svg>
+                <span data-tp-word={i} className="block whitespace-nowrap will-change-[clip-path]">{l}</span>
               </span>
             ))}
           </h2>
