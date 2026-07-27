@@ -3,45 +3,31 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import GtFire, { type GtFireHandle } from './gt-fire'
+import GtSnow, { type GtSnowHandle } from './gt-snow'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// ONE PULL.
+// THE FREEZE — Live Rosin.
 //
-// Every other section on this page shows the product. This one shows what it
-// DOES — which is the only way out of looking at the same three devices for a
-// fifth time.
+// The page's cold break: every other panel is fire, red or hazard orange, so
+// this one drops into ice. Snow actually falls (three parallax depth bands) and
+// frost actually grows — a branching crystal pattern seeded off all four edges
+// and revealed inward by scroll, so the glass ices over around you.
 //
-// A single device, alone and huge. Scrolling is the draw: the oil window
-// ignites, heat climbs the body, and vapor pours out of the mouthpiece and
-// floods the frame until it whites out. The line lands inside the whiteout,
-// then the cloud thins and clears.
+// The six supporting claims flank the device. The seventh — 100% SOLVENTLESS,
+// the whole reason this tier exists — is held back and paid off at the freeze:
+// the frame ices over, a deep ice slab drops in, and the claim lands full size
+// in JB yellow. Yellow needs a dark ground to pass contrast, which is exactly
+// why the climax goes dark instead of white.
 //
-// The vapor is the SAME solver as the hero's fire, run in its vapor mode — a
-// narrow plume at the mouthpiece, cooling slowly so it climbs the whole frame,
-// fanning off-axis as it rises so it billows instead of running up as a column.
-// Nothing here is a video or a sprite, which is why it can react to scroll.
-//
-// Geometry constants are measured off device-rosin-n.webp, not eyeballed:
-//   mouthpiece centre  x 0.606 / top y 0.082
-//   oil window centre  x 0.707 / y 0.446
-// The vapor canvas is 3.4x the device width, offset 1.2x left, and its BOTTOM
-// edge sits on the mouthpiece — so the plume centre in canvas space is
-// (1.2 + 0.606) / 3.4.
-const MOUTH_TOP = 0.082
-const PLUME_X = (1.2 + 0.606) / 3.4
+// Snow + frost live in gt-snow.tsx and are driven from this timeline.
 
-const MARKS = [
-  { cls: 'left-[-8%] top-[4%] w-[28vw]', depth: 'far' },
-  { cls: 'right-[-6%] top-[12%] w-[24vw]', depth: 'near' },
-  { cls: 'left-[10%] bottom-[-10%] w-[32vw]', depth: 'near' },
-  { cls: 'right-[14%] bottom-[-2%] w-[20vw]', depth: 'far' },
-] as const
+const LEFT = ['Fresh frozen extract', 'Ice water hash', 'Full spectrum']
+const RIGHT = ['Native terpenes', 'No additives', 'True-to-strain flavor']
 
 export default function GtShowcase() {
   const rootRef = useRef<HTMLElement>(null)
-  const vaporRef = useRef<GtFireHandle>(null)
+  const snowRef = useRef<GtSnowHandle>(null)
 
   useEffect(() => {
     const root = rootRef.current
@@ -56,39 +42,48 @@ export default function GtShowcase() {
 
           const tl = gsap.timeline({
             scrollTrigger: {
-              trigger: root, start: 'top top', end: '+=170%',
+              trigger: root, start: 'top top', end: '+=185%',
               pin: true, scrub: 0.65, anticipatePin: 1, invalidateOnRefresh: true,
-              // the draw: vapor builds, holds, then thins out
               onUpdate: (self) => {
                 const p = self.progress
-                let v = 0
-                if (p > 0.14) v = Math.min(1, (p - 0.14) / 0.4)
-                if (p > 0.74) v = Math.max(0, 1 - (p - 0.74) / 0.26)
-                vaporRef.current?.setIntensity(v)
+                // frost creeps in, peaks through the freeze, then thaws a little
+                let f = 0
+                if (p > 0.26) f = Math.min(1, (p - 0.26) / 0.36)
+                if (p > 0.82) f = Math.max(0.3, 1 - ((p - 0.82) / 0.18) * 0.7)
+                snowRef.current?.setFrost(f)
+                snowRef.current?.setWind(0.3 + Math.min(0.7, Math.max(0, (p - 0.2) / 0.45) * 0.7))
               },
             },
           })
 
-          // the device pushes toward you the whole way
-          tl.fromTo('[data-dev]', { yPercent: 8, scale: 0.94 }, { yPercent: 0, scale: 1.06, ease: 'none', duration: 1 }, 0)
-            // the coil lights
-            .fromTo('[data-glow]', { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, ease: 'power2.out', duration: 0.2 }, 0.08)
-            .to('[data-glow]', { opacity: 0.35, ease: 'power1.in', duration: 0.22 }, 0.72)
-            // heat climbing the body
-            .fromTo('[data-heat]', { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1.25, ease: 'power2.out', duration: 0.34 }, 0.1)
-            .to('[data-heat]', { opacity: 0, ease: 'none', duration: 0.2 }, 0.76)
-            // the cloud reveals itself
-            .fromTo('[data-vapor]', { opacity: 0 }, { opacity: 1, ease: 'none', duration: 0.12 }, 0.14)
-            .to('[data-vapor]', { opacity: 0, ease: 'none', duration: 0.2 }, 0.8)
-            // whiteout at the peak of the draw
-            .fromTo('[data-white]', { opacity: 0 }, { opacity: 0.88, ease: 'power2.in', duration: 0.16 }, 0.52)
-            .to('[data-white]', { opacity: 0, ease: 'power2.out', duration: 0.2 }, 0.74)
-            // the line punches through it
-            .fromTo('[data-line]', { opacity: 0, scale: 1.16 }, { opacity: 1, scale: 1, ease: 'power3.out', duration: 0.14 }, 0.56)
-            .to('[data-line]', { opacity: 0, scale: 0.96, ease: 'power2.in', duration: 0.14 }, 0.78)
-            // signage parallax
-            .fromTo('[data-mark="far"]', { yPercent: -5 }, { yPercent: 8, ease: 'none', duration: 1 }, 0)
-            .fromTo('[data-mark="near"]', { yPercent: -12 }, { yPercent: 18, ease: 'none', duration: 1 }, 0)
+          // the device rises out of the ice and keeps coming
+          tl.fromTo('[data-ice-dev]',
+            { yPercent: 40, scale: 0.86, opacity: 0 },
+            { yPercent: 0, scale: 1, opacity: 1, ease: 'power3.out', duration: 0.3 }, 0.04)
+            .to('[data-ice-dev]', { scale: 1.08, ease: 'none', duration: 0.6 }, 0.34)
+
+          // the claims slide in from their own sides
+          LEFT.forEach((_, i) => {
+            tl.fromTo(`[data-chip-l="${i}"]`, { x: -70, opacity: 0 },
+              { x: 0, opacity: 1, ease: 'power2.out', duration: 0.14 }, 0.1 + i * 0.07)
+          })
+          RIGHT.forEach((_, i) => {
+            tl.fromTo(`[data-chip-r="${i}"]`, { x: 70, opacity: 0 },
+              { x: 0, opacity: 1, ease: 'power2.out', duration: 0.14 }, 0.14 + i * 0.07)
+          })
+
+          // the heading gives way to the freeze
+          tl.to('[data-ice-head]', { yPercent: -22, opacity: 0, ease: 'power2.in', duration: 0.16 }, 0.5)
+            .to('[data-chips]', { opacity: 0, ease: 'power2.in', duration: 0.12 }, 0.54)
+
+          // FREEZE
+          tl.fromTo('[data-slab]', { opacity: 0 }, { opacity: 1, ease: 'power2.in', duration: 0.14 }, 0.56)
+            .fromTo('[data-solv]', { opacity: 0, scale: 1.24, filter: 'blur(14px)' },
+              { opacity: 1, scale: 1, filter: 'blur(0px)', ease: 'power3.out', duration: 0.16 }, 0.6)
+            .to('[data-solv]', { scale: 1.05, ease: 'none', duration: 0.16 }, 0.78)
+            .to(['[data-slab]', '[data-solv]'], { opacity: 0, ease: 'power2.out', duration: 0.14 }, 0.86)
+            .to('[data-ice-head]', { yPercent: 0, opacity: 1, ease: 'power2.out', duration: 0.12 }, 0.88)
+            .to('[data-chips]', { opacity: 1, ease: 'power2.out', duration: 0.12 }, 0.88)
         }
       )
       return () => mm.revert()
@@ -96,57 +91,62 @@ export default function GtShowcase() {
     return () => ctx.revert()
   }, [])
 
+  const chip =
+    'rounded-full bg-[#125f9e] px-3 py-2 text-[9px] font-extrabold uppercase tracking-wide text-white shadow-[0_8px_22px_rgba(9,58,99,0.32)] md:px-6 md:py-3 md:text-[15px]'
+
   return (
     <section ref={rootRef} className="relative z-10 px-2 py-2 md:px-3 md:py-3">
       <div
-        className="relative h-[92vh] min-h-[620px] overflow-hidden rounded-[1.75rem] md:rounded-[2.5rem]"
-        style={{ background: 'linear-gradient(175deg,#ffa41c 0%,#f4780c 44%,#cf3a08 100%)' }}
+        className="relative h-[92vh] min-h-[640px] overflow-hidden rounded-[1.75rem] md:rounded-[2.5rem]"
+        style={{ background: 'linear-gradient(180deg,#f4fcff 0%,#cdeafb 26%,#8bcdef 60%,#3f9fd4 100%)' }}
       >
-        {/* oversized hazard signage, tone-on-tone */}
-        {MARKS.map((m) => (
-          <div key={m.cls} data-mark={m.depth} aria-hidden className={`pointer-events-none absolute ${m.cls} will-change-transform`}>
-            {/* eslint-disable-next-line @next/next/no-img-element -- hazard mark */}
-            <img src="/products/gas-tank/tri-soft-orange.svg" alt="" className="w-full opacity-[0.5]" />
-          </div>
-        ))}
+        {/* real falling snow + frost creeping in from the edges */}
+        <GtSnow ref={snowRef} className="z-[5]" />
 
-        <span className="absolute left-5 top-[7%] z-40 text-[10px] font-extrabold uppercase tracking-[0.42em] text-[#180800] md:left-10 md:text-xs"
-          style={{ fontFamily: 'var(--font-brand)' }}>
-          One pull
-        </span>
+        {/* ── heading ── */}
+        <div data-ice-head className="pointer-events-none absolute inset-x-0 top-[8%] z-10 px-6 text-center will-change-transform">
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.36em] text-[#0b4472]/80 md:text-xs"
+            style={{ fontFamily: 'var(--font-brand)' }}>
+            Introducing the all new
+          </p>
+          <h2 className="font-display mt-2 uppercase leading-[0.82] text-[#0b4472]" style={{ fontSize: 'min(12.5vw, 6.6rem)', letterSpacing: '-0.03em' }}>
+            Live Rosin <br /> Gas Tank
+          </h2>
+        </div>
 
-        {/* ── the draw ── */}
-        <div className="absolute inset-x-0 bottom-0 flex justify-center pb-[2%]">
-          <div className="relative aspect-[780/1240] h-[46vh] max-h-[520px] md:h-[56vh]">
-            {/* heat bloom behind the body */}
-            <div data-heat aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 h-[150%] w-[150%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0 will-change-transform"
-              style={{ background: 'radial-gradient(circle, rgba(255,238,190,0.75) 0%, rgba(255,158,40,0.35) 40%, rgba(255,120,12,0) 70%)' }} />
-
-            {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-            <img data-dev src="/products/gas-tank/device-rosin-n.webp" alt="Gas Tank All-In-One"
-              className="absolute inset-0 h-full w-full object-contain will-change-transform drop-shadow-[0_36px_60px_rgba(90,26,0,0.55)]" />
-
-            {/* the coil lighting up, on the measured oil window */}
-            <span data-glow aria-hidden
-              className="pointer-events-none absolute z-10 h-[26%] w-[46%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0 mix-blend-screen will-change-transform"
-              style={{ left: '70.7%', top: '44.6%', background: 'radial-gradient(circle, rgba(255,236,150,0.95) 0%, rgba(255,170,30,0.5) 38%, rgba(255,120,0,0) 70%)' }} />
-
-            {/* the cloud — 5x the device width, bottom edge on the mouthpiece */}
-            <div data-vapor className="pointer-events-none absolute left-[-120%] z-20 h-[84%] w-[340%] opacity-0"
-              style={{ bottom: `${100 - MOUTH_TOP * 100}%` }}>
-              <GtFire ref={vaporRef} mode="vapor" plumeX={PLUME_X} initial={0} className="h-full" />
+        {/* ── the claims, flanking the device ── */}
+        <div data-chips className="pointer-events-none absolute inset-x-0 bottom-[6%] z-20 px-4 md:bottom-[10%] md:px-10">
+          <div className="mx-auto flex w-full max-w-[1180px] items-end justify-between gap-3">
+            <div className="flex shrink-0 flex-col items-start gap-2 md:gap-3">
+              {LEFT.map((f, i) => (
+                <span key={f} data-chip-l={i} className={`${chip} will-change-transform`} style={{ fontFamily: 'var(--font-brand)' }}>{f}</span>
+              ))}
+            </div>
+            <div className="flex shrink-0 flex-col items-end gap-2 md:gap-3">
+              {RIGHT.map((f, i) => (
+                <span key={f} data-chip-r={i} className={`${chip} will-change-transform`} style={{ fontFamily: 'var(--font-brand)' }}>{f}</span>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* whiteout at the peak of the draw */}
-        <div data-white aria-hidden className="pointer-events-none absolute inset-0 z-30 bg-white opacity-0" />
+        {/* ── the device, between them ── */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center pb-[2%]">
+          {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
+          <img data-ice-dev src="/products/gas-tank/device-rosin-n.webp" alt="Live Rosin Gas Tank All-In-One"
+            className="h-[40vh] max-h-[580px] w-auto opacity-0 will-change-transform drop-shadow-[0_30px_54px_rgba(9,58,99,0.4)] md:h-[60vh]" />
+        </div>
 
-        {/* the line, inside the whiteout */}
-        <div data-line className="pointer-events-none absolute inset-0 z-40 flex items-center justify-center px-6 text-center opacity-0 will-change-transform">
-          <h2 className="font-display uppercase leading-[0.8] text-[#180800]" style={{ fontSize: 'min(15vw, 8.5rem)' }}>
-            All gas. <br /> No brakes.
-          </h2>
+        {/* ── the freeze ── */}
+        <div data-slab aria-hidden className="pointer-events-none absolute inset-0 z-30 opacity-0"
+          style={{ background: 'linear-gradient(180deg,#0d4f86 0%,#093a63 55%,#062a49 100%)' }} />
+
+        <div data-solv className="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center px-6 text-center opacity-0 will-change-transform">
+          <span className="font-display uppercase leading-[0.8] text-white" style={{ fontSize: 'min(23vw, 13rem)', letterSpacing: '-0.03em' }}>100%</span>
+          <span className="font-display -mt-[1.5vw] uppercase leading-[0.8] text-[var(--gt-yellow)]" style={{ fontSize: 'min(17.5vw, 9.8rem)', letterSpacing: '-0.03em' }}>Solventless</span>
+          <p className="mt-5 max-w-[46ch] text-[10px] font-extrabold uppercase tracking-[0.24em] text-white/75 md:text-xs" style={{ fontFamily: 'var(--font-brand)' }}>
+            Fresh frozen flower. Ice water hash. No solvents, no additives, no shortcuts.
+          </p>
         </div>
       </div>
     </section>
