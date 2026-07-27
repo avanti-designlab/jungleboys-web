@@ -156,7 +156,7 @@ export default function GtHero() {
                 different typeface next to it */}
             <p className="font-display mb-[0.1vw] uppercase leading-[0.82] text-white"
               style={{ fontSize: 'min(7.5vw, 3.2rem)', letterSpacing: '-0.03em' }}>
-              Introducing the new All-In-One
+              The New All-In-One
             </p>
             <h1 className="font-display flex items-baseline justify-center whitespace-nowrap uppercase leading-[0.82] text-white"
             style={{ fontSize: '33vw', letterSpacing: '-0.03em' }}>
