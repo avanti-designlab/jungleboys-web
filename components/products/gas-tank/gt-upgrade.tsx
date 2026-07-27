@@ -6,15 +6,17 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// THE UPGRADE — a spec sheet that rewrites itself, on a flat red ground.
+// THE UPGRADE — a spec sheet that rewrites itself, on a red pill panel.
 //
 // Stacked, not side by side: heading, then ONE contained stage that hands over
-// from the Milk Cart to the Gas Tank, then the six specs as a 2-up grid of
-// chips underneath. Each chip flips on its X axis from the struck-out old spec
-// (dark, muted) to the fixed one (JB yellow, black type) — so before and after
-// occupy the exact same box and you read the swap rather than compare columns.
+// from the Milk Cart to the Gas Tank, then the six specs as full-width pill
+// chips. Each chip flips on its X axis from the struck-out old spec (dark,
+// muted) to the fixed one (JB yellow, black type) — so before and after occupy
+// the exact same box and you read the swap rather than compare two columns.
 //
-// Every element owns its own row, so the art can never crash into the type.
+// Both stages use the `-n` normalised art (one shared canvas, one shared body
+// width per family), so `h-full w-auto` renders every item at a genuinely
+// matching size instead of whatever its original crop happened to be.
 
 const ROWS: [string, string][] = [
   ['Smaller vapor output', 'Dense vapor production'],
@@ -41,21 +43,21 @@ export default function GtUpgrade() {
 
           const tl = gsap.timeline({
             scrollTrigger: {
-              trigger: root, start: 'top top', end: '+=110%',
+              trigger: root, start: 'top top', end: '+=120%',
               pin: true, scrub: 0.65, anticipatePin: 1, invalidateOnRefresh: true,
             },
           })
 
           // the stage hands over first, then the chips rewrite in a wave
-          tl.to('[data-stage="old"]', { yPercent: 22, opacity: 0, filter: 'blur(9px)', ease: 'power2.in', duration: 0.24 }, 0.14)
+          tl.to('[data-stage="old"]', { yPercent: 20, opacity: 0, filter: 'blur(9px)', ease: 'power2.in', duration: 0.22 }, 0.12)
             .fromTo('[data-stage="new"]',
-              { yPercent: -18, opacity: 0, scale: 0.88, filter: 'blur(9px)' },
-              { yPercent: 0, opacity: 1, scale: 1, filter: 'blur(0px)', ease: 'power3.out', duration: 0.3 }, 0.26)
-            .to('[data-name="old"]', { opacity: 0, y: -10, duration: 0.16 }, 0.16)
-            .fromTo('[data-name="new"]', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.2 }, 0.3)
+              { yPercent: -16, opacity: 0, scale: 0.9, filter: 'blur(9px)' },
+              { yPercent: 0, opacity: 1, scale: 1, filter: 'blur(0px)', ease: 'power3.out', duration: 0.28 }, 0.22)
+            .to('[data-name="old"]', { opacity: 0, y: -10, duration: 0.14 }, 0.14)
+            .fromTo('[data-name="new"]', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.18 }, 0.26)
 
           ROWS.forEach((_, i) => {
-            tl.to(`[data-flip="${i}"]`, { rotateX: -180, ease: 'power2.inOut', duration: 0.17 }, 0.34 + i * 0.09)
+            tl.to(`[data-flip="${i}"]`, { rotateX: -180, ease: 'power2.inOut', duration: 0.17 }, 0.32 + i * 0.09)
           })
         }
       )
@@ -65,63 +67,65 @@ export default function GtUpgrade() {
   }, [])
 
   return (
-    <section
-      ref={rootRef}
-      data-nav-theme="dark"
-      className="relative z-10 flex h-screen min-h-[660px] items-center overflow-hidden px-4 pt-16 text-white md:pt-0"
-      style={{ background: 'linear-gradient(180deg,#d51f10 0%,#b0140a 58%,#7d0d05 100%)' }}
-    >
-      <div className="mx-auto flex w-full max-w-[1000px] flex-col items-center">
-        <h2 className="font-display text-center uppercase leading-[0.84]" style={{ fontSize: 'min(11vw, 4.6rem)' }}>
-          Everything <span className="text-[var(--gt-yellow)]">we fixed.</span>
-        </h2>
+    // pill panel, matching the section treatment site-wide
+    <section ref={rootRef} className="relative z-10 px-2 py-2 md:px-3 md:py-3">
+      <div
+        data-nav-theme="dark"
+        className="relative flex h-[92vh] min-h-[640px] items-center overflow-hidden rounded-[1.75rem] px-4 pt-8 text-white md:rounded-[2.5rem] md:pt-0"
+        style={{ background: 'linear-gradient(180deg,#e02414 0%,#b8160b 56%,#7d0d05 100%)' }}
+      >
+        <div className="mx-auto flex w-full max-w-[1060px] flex-col items-center">
+          <h2 className="font-display text-center uppercase leading-[0.82]" style={{ fontSize: 'min(11.5vw, 6.2rem)' }}>
+            Everything <span className="text-[#1a0604]">we fixed.</span>
+          </h2>
 
-        {/* ── one contained stage, two generations ── */}
-        <div className="relative mt-5 h-[21vh] max-h-[230px] w-full md:mt-8 md:h-[33vh] md:max-h-[350px]">
-          <div data-stage="old" className="absolute inset-0 flex items-end justify-center gap-2 will-change-transform">
-            {/* eslint-disable-next-line @next/next/no-img-element -- legacy product */}
-            <img src="/products/gas-tank/milkcart-a.webp" alt="" aria-hidden className="h-[88%] w-auto drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)]" />
-            {/* eslint-disable-next-line @next/next/no-img-element -- legacy product */}
-            <img src="/products/gas-tank/milkcart-b.webp" alt="Milk Cart AIO" className="h-full w-auto drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)]" />
+          {/* ── one contained stage, two generations, matched sizing ── */}
+          <div className="relative mt-4 h-[24vh] max-h-[300px] w-full md:mt-5 md:h-[40vh] md:max-h-[350px]">
+            <div data-stage="old" className="absolute inset-0 flex items-center justify-center gap-2 will-change-transform md:gap-4">
+              {/* eslint-disable-next-line @next/next/no-img-element -- legacy product */}
+              <img src="/products/gas-tank/milkcart-a-n.webp" alt="" aria-hidden className="h-full w-auto drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)]" />
+              {/* eslint-disable-next-line @next/next/no-img-element -- legacy product */}
+              <img src="/products/gas-tank/milkcart-b-n.webp" alt="Milk Cart AIO" className="h-full w-auto drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)]" />
+            </div>
+
+            <div data-stage="new" className="absolute inset-0 flex items-center justify-center opacity-0 will-change-transform">
+              {/* eslint-disable-next-line @next/next/no-img-element -- product */}
+              <img src="/products/gas-tank/device-flavors-n.webp" alt="" aria-hidden className="-mr-[2%] h-[82%] w-auto drop-shadow-[0_22px_36px_rgba(0,0,0,0.5)]" />
+              {/* eslint-disable-next-line @next/next/no-img-element -- product */}
+              <img src="/products/gas-tank/device-rosin-n.webp" alt="Gas Tank AIO" className="relative z-10 h-[82%] w-auto drop-shadow-[0_28px_48px_rgba(0,0,0,0.6)]" />
+              {/* eslint-disable-next-line @next/next/no-img-element -- product */}
+              <img src="/products/gas-tank/device-resin-n.webp" alt="" aria-hidden className="-ml-[2%] h-[82%] w-auto drop-shadow-[0_22px_36px_rgba(0,0,0,0.5)]" />
+            </div>
           </div>
 
-          <div data-stage="new" className="absolute inset-0 flex items-end justify-center gap-1 opacity-0 will-change-transform">
-            {/* eslint-disable-next-line @next/next/no-img-element -- product */}
-            <img src="/products/gas-tank/device-flavors.webp" alt="" aria-hidden className="h-[82%] w-auto -rotate-[6deg] drop-shadow-[0_22px_36px_rgba(0,0,0,0.5)]" />
-            {/* eslint-disable-next-line @next/next/no-img-element -- product */}
-            <img src="/products/gas-tank/device-rosin.webp" alt="Gas Tank AIO" className="relative z-10 h-full w-auto drop-shadow-[0_28px_48px_rgba(0,0,0,0.6)]" />
-            {/* eslint-disable-next-line @next/next/no-img-element -- product */}
-            <img src="/products/gas-tank/device-resin.webp" alt="" aria-hidden className="h-[82%] w-auto rotate-[6deg] drop-shadow-[0_22px_36px_rgba(0,0,0,0.5)]" />
+          {/* the name gets its own row so it can never collide with the art */}
+          <div className="relative mt-5 h-9 w-full md:mt-6 md:h-11">
+            <span data-name="old" className="font-display absolute inset-x-0 text-center uppercase leading-none text-white/70" style={{ fontSize: 'min(8vw, 2.7rem)' }}>Milk Cart AIO</span>
+            <span data-name="new" className="font-display absolute inset-x-0 text-center uppercase leading-none text-[var(--gt-yellow)] opacity-0" style={{ fontSize: 'min(8vw, 2.7rem)' }}>Gas Tank AIO</span>
           </div>
-        </div>
 
-        {/* the name gets its own row so it can never collide with the art */}
-        <div className="relative mt-3 h-7 w-full md:h-9">
-          <span data-name="old" className="font-display absolute inset-x-0 text-center uppercase leading-none text-white/60" style={{ fontSize: 'min(6vw, 1.9rem)' }}>Milk Cart AIO</span>
-          <span data-name="new" className="font-display absolute inset-x-0 text-center uppercase leading-none text-[var(--gt-yellow)] opacity-0" style={{ fontSize: 'min(6vw, 1.9rem)' }}>Gas Tank AIO</span>
+          {/* ── the ledger: full-width pill chips, 2-up on desktop ── */}
+          <ul className="mt-5 grid w-full grid-cols-1 gap-1.5 sm:grid-cols-2 md:mt-6 md:gap-2.5" style={{ perspective: '1200px' }}>
+            {ROWS.map(([old, nu], i) => (
+              <li key={old} className="relative h-[38px] md:h-[52px]">
+                <div data-flip={i} className="absolute inset-0 [transform-style:preserve-3d] will-change-transform">
+                  {/* before */}
+                  <span className="absolute inset-0 flex w-full items-center gap-3 rounded-full bg-black/35 px-4 text-[11px] font-extrabold uppercase leading-tight tracking-wide text-white/75 [backface-visibility:hidden] md:px-5 md:text-[13px]"
+                    style={{ fontFamily: 'var(--font-brand)' }}>
+                    <span aria-hidden className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-white/15 text-[12px] leading-none text-white/80">✕</span>
+                    <span className="line-through decoration-white/50 decoration-[1.5px]">{old}</span>
+                  </span>
+                  {/* after — pre-rotated so the flip lands it upright */}
+                  <span className="absolute inset-0 flex w-full items-center gap-3 rounded-full bg-[var(--gt-yellow)] px-4 text-[11px] font-extrabold uppercase leading-tight tracking-wide text-[#160c02] [backface-visibility:hidden] [transform:rotateX(180deg)] md:px-5 md:text-[13px]"
+                    style={{ fontFamily: 'var(--font-brand)' }}>
+                    <span aria-hidden className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[#160c02] text-[12px] font-black leading-none text-[var(--gt-yellow)]">✓</span>
+                    {nu}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
-
-        {/* ── the ledger: 2-up chips that hug their type ── */}
-        <ul className="mt-5 grid w-full grid-cols-1 gap-2 sm:grid-cols-2 md:mt-7 md:gap-2.5" style={{ perspective: '1100px' }}>
-          {ROWS.map(([old, nu], i) => (
-            <li key={old} className="relative h-[44px] md:h-[52px]">
-              <div data-flip={i} className="absolute inset-0 [transform-style:preserve-3d] will-change-transform">
-                {/* before */}
-                <span className="absolute inset-0 flex items-center gap-2.5 rounded-xl bg-black/35 px-3.5 text-[11px] font-extrabold uppercase leading-tight tracking-wide text-white/75 [backface-visibility:hidden] md:px-4 md:text-[13px]"
-                  style={{ fontFamily: 'var(--font-brand)' }}>
-                  <span aria-hidden className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-white/15 text-[11px] leading-none text-white/80">✕</span>
-                  <span className="line-through decoration-white/50 decoration-[1.5px]">{old}</span>
-                </span>
-                {/* after — pre-rotated so the flip lands it upright */}
-                <span className="absolute inset-0 flex items-center gap-2.5 rounded-xl bg-[var(--gt-yellow)] px-3.5 text-[11px] font-extrabold uppercase leading-tight tracking-wide text-[#160c02] [backface-visibility:hidden] [transform:rotateX(180deg)] md:px-4 md:text-[13px]"
-                  style={{ fontFamily: 'var(--font-brand)' }}>
-                  <span aria-hidden className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#160c02] text-[11px] font-black leading-none text-[var(--gt-yellow)]">✓</span>
-                  {nu}
-                </span>
-              </div>
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   )
