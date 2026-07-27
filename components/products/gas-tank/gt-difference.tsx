@@ -67,37 +67,59 @@ export default function GtDifference() {
           const steps = TIERS.length - 1
           const tl = gsap.timeline({
             scrollTrigger: {
-              trigger: root, start: 'top top', end: c.mobile ? '+=150%' : '+=175%',
+              trigger: root, start: 'top top', end: c.mobile ? '+=175%' : '+=200%',
               pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true,
             },
           })
 
-          // the track slides one panel at a time
-          tl.to('[data-gtd-track]', { xPercent: -(100 / TIERS.length) * steps, ease: 'none', duration: 1 }, 0)
-            // devices lag the track — parallax inside the slide
-            .to('[data-gtd-dev]', { xPercent: 12, ease: 'none', duration: 1 }, 0)
-            // giant ghost names run ahead of it
-            .to('[data-gtd-ghost]', { xPercent: -16, ease: 'none', duration: 1 }, 0)
-            // rail fill tracks progress
-            .to('[data-gtd-fill]', { scaleX: 1, ease: 'none', duration: 1 }, 0)
-
-          // each dot lights when its panel owns the frame
-          TIERS.forEach((t, i) => {
-            const mid = i / steps
-            tl.to(`[data-gtd-dot="${i}"]`,
-              { opacity: 1, ease: 'none', duration: 0.001 },
-              Math.max(0, mid - 0.24))
-            if (i < steps) {
-              tl.to(`[data-gtd-dot="${i}"]`, { opacity: 0.3, ease: 'none', duration: 0.001 }, mid + 0.26)
-            }
+          // The track HOLDS on each tier and then moves, instead of sliding at a
+          // constant rate. Linear travel meant a panel was only centred for an
+          // instant — its copy was already sliding out of frame by the time you
+          // could read it. Holds: 0-.22, .38-.62, .78-1.
+          const stops = TIERS.map((_, i) => -(100 / TIERS.length) * i)
+          const legs = (v: (i: number) => number) => ({
+            keyframes: [
+              { xPercent: v(0), duration: 0.22, ease: 'none' },
+              { xPercent: v(1), duration: 0.16, ease: 'power2.inOut' },
+              { xPercent: v(1), duration: 0.24, ease: 'none' },
+              { xPercent: v(2), duration: 0.16, ease: 'power2.inOut' },
+              { xPercent: v(2), duration: 0.22, ease: 'none' },
+            ],
           })
 
-          // the axis rows tick in as each panel arrives
+          tl.to('[data-gtd-track]', legs((i) => stops[i]), 0)
+            // devices lag the track — parallax inside the slide
+            .to('[data-gtd-dev]', legs((i) => i * 6), 0)
+            // giant ghost names run ahead of it
+            .to('[data-gtd-ghost]', legs((i) => i * -8), 0)
+            // rail fill steps with the track
+            .to('[data-gtd-fill]', {
+              keyframes: [
+                { scaleX: 0.02, duration: 0.22, ease: 'none' },
+                { scaleX: 0.5, duration: 0.16, ease: 'power2.inOut' },
+                { scaleX: 0.5, duration: 0.24, ease: 'none' },
+                { scaleX: 1, duration: 0.16, ease: 'power2.inOut' },
+                { scaleX: 1, duration: 0.22, ease: 'none' },
+              ],
+            }, 0)
+
+          // each dot lights while its tier owns the frame
+          const holds: [number, number][] = [[0, 0.3], [0.3, 0.7], [0.7, 1]]
           TIERS.forEach((t, i) => {
-            const at = Math.max(0, i / steps - 0.2)
+            const [from, to] = holds[i]
+            if (i > 0) tl.to(`[data-gtd-dot="${i}"]`, { opacity: 1, duration: 0.001 }, from)
+            if (i < steps) tl.to(`[data-gtd-dot="${i}"]`, { opacity: 0.3, duration: 0.001 }, to)
+          })
+
+          // Tier 1's rows are already settled when the section pins — you should
+          // be able to read it before anything moves. The other two tick in
+          // just ahead of their own hold.
+          TIERS.forEach((t, i) => {
+            if (i === 0) return
             tl.fromTo(`[data-row="${t.key}"]`,
               { x: 34, opacity: 0 },
-              { x: 0, opacity: 1, ease: 'power2.out', duration: 0.1, stagger: 0.045 }, at)
+              { x: 0, opacity: 1, ease: 'power2.out', duration: 0.08, stagger: 0.035 },
+              holds[i][0] - 0.1)
           })
         }
       )
