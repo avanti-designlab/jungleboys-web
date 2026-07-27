@@ -69,7 +69,6 @@ export default function GtHero() {
           gsap.timeline({ delay: 0.15 })
             .from('[data-word="gas"]', { opacity: 0, xPercent: -14, filter: 'blur(16px)', duration: 0.85, ease: 'power3.out' }, 0)
             .from('[data-word="tank"]', { opacity: 0, xPercent: 14, filter: 'blur(16px)', duration: 0.85, ease: 'power3.out' }, 0.08)
-            .from('[data-kicker]', { opacity: 0, y: -12, duration: 0.5, ease: 'power2.out' }, 0.45)
             .from('[data-spec]', { opacity: 0, y: 18, duration: 0.45, stagger: 0.05, ease: 'power2.out' }, 0.55)
 
           const tl = gsap.timeline({
@@ -151,9 +150,6 @@ export default function GtHero() {
         {/* THE NAME — edge to edge, the whole cold-start frame */}
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-[2vw]">
           <div data-headline className="w-full text-center will-change-transform">
-          <p data-kicker className="mb-[1.5vw] text-[10px] font-extrabold uppercase tracking-[0.42em] text-white md:text-sm" style={{ fontFamily: 'var(--font-brand)' }}>
-            Introducing the all new All-In-One
-          </p>
           {/* one line, vw only — a rem cap stops it filling the frame on desktop */}
           <h1 className="font-display flex items-baseline justify-center whitespace-nowrap uppercase leading-[0.82] text-white"
             style={{ fontSize: '33vw', letterSpacing: '-0.03em' }}>

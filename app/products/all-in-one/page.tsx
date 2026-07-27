@@ -44,7 +44,6 @@ export default function GasTankPage() {
       />
 
       <GtHero />
-      <GtTape />
       <GtCharacter />
       <GtUpgrade />
       <GtShowcase />
