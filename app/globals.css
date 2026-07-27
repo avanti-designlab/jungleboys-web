@@ -1146,6 +1146,31 @@ body:has(.hh-page) footer {
 .media-reveal.is-in .hh-pointer, .hh-pointer.is-in { opacity: 1; transform: none; }
 
 /* soft float for product mockups when at rest */
+/* ── 10 PACK PRE-ROLLS: smoke + electric blue ────────────────────────
+   Palette sampled off the Figma frame. Declared on BODY (not on .tp-page,
+   which is the <main>) so <body> and <footer> inherit it too — see the Gas
+   Tank note below for what happens when they don't. */
+body:has(.tp-page) {
+  --tp-black: #05080f;
+  --tp-ink: #0a1424;
+  --tp-blue: #0b5897;
+  --tp-cyan: #19c2ff;
+  background: var(--tp-black);
+}
+.tp-page { background: var(--tp-black); }
+body:has(.tp-page) footer { position: relative; z-index: 1; background: var(--tp-black); }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* smoke plates drifting at two depths */
+  @keyframes tp-drift-a { 0%,100% { transform: translate3d(-2%,0,0) scale(1.05); } 50% { transform: translate3d(3%,-2%,0) scale(1.12); } }
+  @keyframes tp-drift-b { 0%,100% { transform: translate3d(3%,1%,0) scale(1.1); } 50% { transform: translate3d(-3%,-1%,0) scale(1.02); } }
+  .tp-smoke-a { animation: tp-drift-a 26s ease-in-out infinite; }
+  .tp-smoke-b { animation: tp-drift-b 34s ease-in-out infinite; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tp-smoke-a, .tp-smoke-b { animation: none; }
+}
+
 /* ── GAS TANK: fire surface ──────────────────────────────────────────
    Palette sampled from the artwork; caution yellow is the exact fill from the
    triangle SVG. Black base, heat rising through red → orange → yellow.

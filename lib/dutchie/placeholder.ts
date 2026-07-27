@@ -153,6 +153,45 @@ function pops(
 
 // Gas Tank AIO — three tiers (Flavors / Live Resin / Live Rosin), each its own
 // device finish. Placeholder values until Dutchie (Phase 3).
+
+// 10 Pack Pre-Rolls — ten 0.7g mini joints per jar, 7g total. Jar art is
+// normalised the same way as the Gas Tank devices: solid-pixel crop, one shared
+// body width, one shared canvas, so every card renders at a matching size.
+function tenPack(
+  slug: string,
+  strain: string,
+  lineage: string,
+  strainType: Product['strainType'],
+  thc: number,
+  topTerp: string,
+  featured = false,
+  deal?: number
+): Product {
+  return {
+    id: `prod-tp-${slug}`,
+    slug: `${slug}-10-pack`,
+    name: strain,
+    brand: 'Jungle Boys',
+    category: 'pre-rolls',
+    subcategory: '10-pack',
+    strainType,
+    strain: lineage,
+    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    images: [{ url: `/products/10-pack/jar-${slug}.webp`, alt: `${strain} 10 Pack Pre-Rolls` }],
+    variants: [{ id: `v-tp-${slug}`, option: '7g', price: 6000, ...(deal ? { specialPrice: deal } : {}), quantityAvailable: 10 }],
+    labResult: {
+      lab: 'Placeholder Labs',
+      testedAt: '2026-07-01',
+      potency: { thc: { value: thc, unit: '%' } },
+      terpenes: [{ name: topTerp, percentage: 1.6 }, { name: 'Caryophyllene', percentage: 0.8 }],
+    },
+    effects: ['euphoric', 'relaxed'],
+    featured,
+    retailerId: 'placeholder-dtla',
+
+  }
+}
+
 function gasTank(
   slug: string,
   strain: string,
@@ -228,6 +267,15 @@ const products: Product[] = [
   gasTank('zangria', 'Zangria', 'live-rosin', 'sativa', 73.2, 'Terpinolene'),
   gasTank('zom', 'ZOM', 'live-rosin', 'indica', 75.8, 'Myrcene'),
   gasTank('sherbanger', 'Sherbanger', 'live-rosin', 'hybrid', 76.4, 'Caryophyllene'),
+  // ── 10 Pack Pre-Rolls
+  tenPack('06-og', '06 OG', 'Motor Breath x Gator Breath', 'indica', 31.4, 'Myrcene', true),
+  tenPack('rs1000', 'RS1000', 'RS11 x Obama Runtz', 'hybrid', 29.8, 'Limonene'),
+  tenPack('all-cherriez', 'All Cherriez', 'Cherry Gelato x LCG', 'hybrid', 30.2, 'Caryophyllene', false, 5200),
+  tenPack('la-gelato', 'LA Gelato', 'Lemon Cherry Gelato x Triangle Kush', 'hybrid', 28.9, 'Limonene'),
+  tenPack('motor-breath', 'Motor Breath', 'SFV OG x Chem D', 'indica', 32.1, 'Myrcene'),
+  tenPack('blu-zerdz', 'Blu Zerdz', 'Blu Frootz x LCG', 'hybrid', 29.4, 'Linalool'),
+  tenPack('rainbow-belts', 'Rainbow Belts', 'Moonbow x Zkittlez', 'hybrid', 30.7, 'Terpinolene'),
+  tenPack('vanilla-velvet', 'Vanilla Velvet', 'Gelato 41 x Kush Mints', 'indica', 28.3, 'Linalool'),
 ]
 
 const categories: ProductCategory[] = [
