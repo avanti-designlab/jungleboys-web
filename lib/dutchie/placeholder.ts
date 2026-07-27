@@ -151,6 +151,44 @@ function pops(
   }
 }
 
+// Gas Tank AIO — three tiers (Flavors / Live Resin / Live Rosin), each its own
+// device finish. Placeholder values until Dutchie (Phase 3).
+function gasTank(
+  slug: string,
+  strain: string,
+  tier: 'flavors' | 'live-resin' | 'live-rosin',
+  strainType: Product['strainType'],
+  thc: number,
+  topTerp: string,
+  featured = false,
+  deal?: number
+): Product {
+  const device = tier === 'flavors' ? 'flavors' : tier === 'live-resin' ? 'resin' : 'rosin'
+  const label = tier === 'flavors' ? 'Flavors' : tier === 'live-resin' ? 'Live Resin' : 'Live Rosin'
+  return {
+    id: `prod-gt-${slug}`,
+    slug: `${slug}-gas-tank`,
+    name: strain,
+    brand: 'Jungle Boys',
+    category: 'vape-pens',
+    subcategory: `gas-tank-${tier}`,
+    strainType,
+    strain: label,
+    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    images: [{ url: `/products/gas-tank/device-${device}.webp`, alt: `${strain} Gas Tank ${label}` }],
+    variants: [{ id: `v-gt-${slug}`, option: '1g', price: 5000, ...(deal ? { specialPrice: deal } : {}), quantityAvailable: 10 }],
+    labResult: {
+      lab: 'Placeholder Labs',
+      testedAt: '2026-07-01',
+      potency: { thc: { value: thc, unit: '%' } },
+      terpenes: [{ name: topTerp, percentage: 1.7 }, { name: 'Caryophyllene', percentage: 0.9 }],
+    },
+    effects: ['euphoric', 'uplifted'],
+    featured,
+    retailerId: 'placeholder-dtla',
+  }
+}
+
 const products: Product[] = [
   hashHole('gelato-z', 'Gelato Z', 'Gator Breath', 40.9, false, 3200),
   hashHole('private-reserve', 'Private Reserve', 'Rainbow Belts', 45.7, true),
@@ -172,6 +210,22 @@ const products: Product[] = [
   pops('gator-breath', 'Gator Breath', 'gatorbreath', 'indica', 30.4, 'Caryophyllene', false, 3600),
   pops('jungle-cake', 'Jungle Cake', 'junglecake', 'hybrid', 29.7, 'Limonene'),
   pops('cochino', 'Cochino', 'cochino', 'sativa', 26.3, 'Terpinolene'),
+  // ── Gas Tank: Flavors
+  gasTank('06-og', '06 OG', 'flavors', 'indica', 84.2, 'Limonene', true),
+  gasTank('gelato-33', 'Gelato #33', 'flavors', 'hybrid', 82.7, 'Caryophyllene'),
+  gasTank('strawnana', 'Strawnana', 'flavors', 'hybrid', 83.4, 'Myrcene', false, 4200),
+  gasTank('motorbreath', 'Motorbreath', 'flavors', 'indica', 85.1, 'Myrcene'),
+  gasTank('jungle-cake', 'Jungle Cake', 'flavors', 'hybrid', 83.9, 'Limonene'),
+  // ── Gas Tank: Live Resin
+  gasTank('blu-frootz', 'Blu Frootz', 'live-resin', 'indica', 78.6, 'Myrcene', true),
+  gasTank('don-z', 'Don Z', 'live-resin', 'hybrid', 79.3, 'Limonene'),
+  gasTank('orange-apricot', 'Orange Apricot', 'live-resin', 'sativa', 77.8, 'Terpinolene'),
+  gasTank('strawcooler', 'Strawcooler', 'live-resin', 'hybrid', 80.1, 'Caryophyllene', false, 4400),
+  // ── Gas Tank: Live Rosin
+  gasTank('apple-jam', 'Apple Jam', 'live-rosin', 'hybrid', 74.5, 'Limonene', true),
+  gasTank('zangria', 'Zangria', 'live-rosin', 'sativa', 73.2, 'Terpinolene'),
+  gasTank('zom', 'ZOM', 'live-rosin', 'indica', 75.8, 'Myrcene'),
+  gasTank('sherbanger', 'Sherbanger', 'live-rosin', 'hybrid', 76.4, 'Caryophyllene'),
 ]
 
 const categories: ProductCategory[] = [

@@ -1152,6 +1152,50 @@ body:has(.hh-page) footer {
   /* staked signs idle on desynced clocks so the tee box feels alive, not looped */
   /* the Unboxing: --hh-L = tube length; all product-group children derive
      their art-frame geometry from it */
+  /* ── GAS TANK: fire surface ──────────────────────────────────────────
+     Palette sampled from the artwork; caution yellow is the exact fill from
+     the triangle SVG. Black base, heat rising through red → orange → yellow. */
+  .gt-page {
+    --gt-black: #0a0908;
+    --gt-ink: #140d0a;
+    --gt-red: #e11b0b;
+    --gt-orange: #ff7a18;
+    --gt-yellow: #fbcd03;
+  }
+  .gt-page { background: var(--gt-black); }
+  body:has(.gt-page) { background: var(--gt-black); }
+  body:has(.gt-page) footer { position: relative; z-index: 1; }
+
+  /* scrolling CAUTION tape — a diagonal hazard band that never stops */
+  @keyframes gt-tape { to { background-position: 240px 0; } }
+  .gt-tape-band {
+    background-image: repeating-linear-gradient(
+      -58deg,
+      var(--gt-yellow) 0 46px,
+      #0a0908 46px 92px
+    );
+    animation: gt-tape 3.2s linear infinite;
+  }
+  .gt-band .marquee-track, .gt-band .marquee-track-reverse { animation-duration: 22s; }
+  @media (min-width: 768px) {
+    .gt-band .marquee-track, .gt-band .marquee-track-reverse { animation-duration: 32s; }
+  }
+  /* heat haze that breathes behind hero content */
+  @keyframes gt-heat { 0%,100% { opacity: 0.55; transform: scale(1); } 50% { opacity: 0.9; transform: scale(1.08); } }
+  .gt-heat { animation: gt-heat 6s ease-in-out infinite; }
+
+  /* the caution-triangle field. Tiled as a real background-image, NOT a mask:
+     masking flattens the glyph into one silhouette and loses the black flame
+     inside the yellow triangle, which is the whole motif. */
+  .gt-tri-field {
+    background-image: url('/products/gas-tank/caution-triangle.svg');
+    background-repeat: space;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gt-tape-band, .gt-heat { animation: none; }
+  }
+
   /* ── POPS: candy-stripe surface ───────────────────────────────────────
      Palette sampled off the pack art (red #c80000 on white). The stripe field
      is one fixed layer behind everything; content sits in `relative z-10`. */
