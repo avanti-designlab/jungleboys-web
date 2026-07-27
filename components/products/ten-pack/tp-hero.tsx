@@ -72,7 +72,7 @@ export default function TpHero() {
             .from('[data-tp-kicker]', { opacity: 0, y: -14, duration: 0.5, ease: 'power2.out' }, 0)
             .from('[data-tp-word]', { opacity: 0, xPercent: -10, filter: 'blur(16px)', duration: 0.9, ease: 'power3.out' }, 0.06)
             .from('[data-tp-word2]', { opacity: 0, xPercent: 10, filter: 'blur(16px)', duration: 0.9, ease: 'power3.out' }, 0.14)
-            .from('[data-tp-jar]', { opacity: 0, yPercent: 22, duration: 1, stagger: 0.07, ease: 'power3.out' }, 0.24)
+            .from('[data-tp-jar-in]', { opacity: 0, yPercent: 22, duration: 1, stagger: 0.07, ease: 'power3.out' }, 0.24)
             .from('[data-tp-stat]', { opacity: 0, y: 20, duration: 0.5, stagger: 0.08, ease: 'power2.out' }, 0.7)
 
           const tl = gsap.timeline({
@@ -88,10 +88,9 @@ export default function TpHero() {
 
           // the row breathes forward and drifts up as you travel through it
           JARS.forEach((j, i) => {
-            tl.to(`[data-tp-jar="${i}"]`, {
-              yPercent: -10 - (j.z + 300) / 90,
-              ease: 'none', duration: 1,
-            }, 0)
+            tl.fromTo(`[data-tp-jar="${i}"]`,
+              { yPercent: 0 },
+              { yPercent: -10 - (j.z + 300) / 90, ease: 'none', duration: 1 }, 0)
           })
           tl.to('[data-tp-row]', { scale: 1.14, ease: 'none', duration: 1 }, 0)
 
@@ -165,11 +164,15 @@ export default function TpHero() {
               <div key={j.src} data-tp-jar={i}
                 className="absolute bottom-0 left-1/2 w-max will-change-transform"
                 style={{ marginLeft: `${j.x}vw`, transform: `translateZ(${j.z}px)`, zIndex: Math.round(j.z / 10) + 40 }}>
-                <div className={`tp-bob-${j.bob}`} style={{ ['--tp-rot' as string]: `${j.rot}deg`, ['--tp-dur' as string]: `${j.dur}s` }}>
-                  {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-                  <img src={`/products/10-pack/${j.src}.webp`} alt="Jungle Boys 10 Pack Pre-Rolls"
-                    className="w-auto -translate-x-1/2 drop-shadow-[0_40px_70px_rgba(0,0,0,0.8)]"
-                    style={{ height: `${j.h}vh`, marginTop: `${j.y}vh` }} />
+                {/* entrance lives on its OWN element — the scrub owns yPercent on
+                    the parent, and two timelines on one property snap */}
+                <div data-tp-jar-in className="will-change-transform">
+                  <div className={`tp-bob-${j.bob}`} style={{ ['--tp-rot' as string]: `${j.rot}deg`, ['--tp-dur' as string]: `${j.dur}s` }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
+                    <img src={`/products/10-pack/${j.src}.webp`} alt="Jungle Boys 10 Pack Pre-Rolls"
+                      className="w-auto -translate-x-1/2 drop-shadow-[0_40px_70px_rgba(0,0,0,0.8)]"
+                      style={{ height: `${j.h}vh`, marginTop: `${j.y}vh` }} />
+                  </div>
                 </div>
               </div>
             ))}
