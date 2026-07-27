@@ -150,9 +150,14 @@ export default function GtDifference() {
           {TIERS.map((t, i) => (
             <div key={t.key} className="relative flex h-full shrink-0 items-center justify-center px-5 md:px-16" style={{ width: `${100 / TIERS.length}%` }}>
               {/* ghost name, oversized, behind everything */}
+              {/* Tinted with the tier's own accent rather than white. White at a
+                  few percent reads fine over the warm orange/yellow blooms but
+                  vanishes over Live Rosin's cool blue one — same alpha, far
+                  less perceived luminance. Accent-tinting evens all three out
+                  and ties each ghost to its panel. */}
               <span data-gtd-ghost aria-hidden
-                className="font-display pointer-events-none absolute left-1/2 top-[66%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap uppercase leading-none text-white/[0.035] will-change-transform"
-                style={{ fontSize: 'min(19vw, 12rem)' }}>
+                className="font-display pointer-events-none absolute left-1/2 top-[64%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap uppercase leading-none will-change-transform"
+                style={{ fontSize: 'min(26vw, 17rem)', color: t.accent, opacity: 0.13 }}>
                 {t.name}
               </span>
 
