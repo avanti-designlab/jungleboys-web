@@ -106,7 +106,10 @@ export default async function SiteFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="transition-transform duration-200 hover:scale-110 hover:text-[var(--color-accent)] [&_svg]:h-7 [&_svg]:w-7"
+                  // JB yellow, white on hover. Safe here because the footer is a
+                  // forced-dark brand surface in both themes — yellow on white is
+                  // forbidden by the token rules and never happens on this ground.
+                  className="text-[var(--color-accent)] transition-all duration-200 hover:scale-110 hover:text-white [&_svg]:h-9 [&_svg]:w-9"
                 >
                   {s.icon}
                 </a>
