@@ -162,6 +162,25 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
 
 ## Recorded decisions & gate status
 
+- **Rosin + ORC stay as live placeholder pages (Avanti, 2026-07-28).** `/products/rosin` and
+  `/products/orc` keep rendering the generic `[line]` placeholder (they return 200 today — the
+  template generates them from `PRODUCT_LINES`) so both lines stay present on the site. Avanti may
+  rebrand/merge them into a single **"Jungle Boys Extracts"** page; revisit then. No redirects are
+  owed — neither `/rosin` nor `/orc` was ever a live URL, so nothing legacy is at stake. IF the
+  merge happens, that is the point at which these two `/products/` routes need either a 301 to the
+  new page or removal from `PRODUCT_LINES`; shipping them as orphaned "coming soon" pages is the
+  failure mode to avoid. **Pre-cutover check: confirm this is still the intent.**
+- **Phase 2 asset waits — Avanti supplies before cutover (2026-07-28).** Three outstanding, all
+  confirmed coming before the live site: (1) two rolling-process clips for `/products/pre-rolls`,
+  (2) `roll.mp4` + `smoke.mp4` for the Hash Hole process cards, (3) optional higher-res HASH HOLE
+  wordmark. All three degrade cleanly today — the video cards render a designed "Video coming"
+  placeholder INSTEAD OF a `<video>`, so nothing 404s while we wait. Dropping each clip in is a
+  one-line change: set `src` on the card. **Pre-cutover check: chase these; a placeholder card must
+  not ship live.**
+- **Gas Tank FREEZE section stays ice-blue (Avanti, 2026-07-28).** The Live Rosin freeze section
+  runs an ice/frost palette while the Live Rosin tier is red everywhere else on
+  `/products/all-in-one`. This was raised as a possible inconsistency and Avanti ruled: **leave as
+  is.** It is intentional, not a bug — do not "correct" it to red in a later polish pass.
 - **Branch protection on `main`: DEFERRED AGAIN at Phase 1 start (Avanti's explicit ruling,
   2026-07-19)** — solo-merger friction outweighs benefit while one agent builds sequentially.
   **Hard trigger remains: enable BEFORE CUTOVER, non-negotiable** (and revisit if multiple agents
