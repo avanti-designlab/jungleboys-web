@@ -60,17 +60,17 @@ function VideoTile({
           alt={v.title}
           fill
           priority={big}
-          sizes={big ? '(max-width:1024px) 100vw, 760px' : '(max-width:640px) 50vw, (max-width:1024px) 33vw, 380px'}
+          sizes={big ? '(max-width:1024px) 100vw, 760px' : '(max-width:767px) 100vw, (max-width:1024px) 33vw, 380px'}
           className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
         />
 
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-        <span className={`pointer-events-none absolute right-3 top-3 flex items-center justify-center rounded-full bg-black/45 text-white opacity-70 backdrop-blur-sm transition-all duration-300 group-hover:bg-[var(--color-accent)] group-hover:text-black group-hover:opacity-100 ${big ? 'h-11 w-11' : 'h-9 w-9'}`}>
-          <PlayIcon className={`ml-0.5 ${big ? 'h-5 w-5' : 'h-4 w-4'}`} />
+        <span className={`pointer-events-none absolute right-3 top-3 flex items-center justify-center rounded-full bg-black/45 text-white opacity-70 backdrop-blur-sm transition-all duration-300 group-hover:bg-[var(--color-accent)] group-hover:text-black group-hover:opacity-100 ${big ? 'h-9 w-9 md:h-11 md:w-11' : 'h-9 w-9'}`}>
+          <PlayIcon className={`ml-0.5 ${big ? 'h-4 w-4 md:h-5 md:w-5' : 'h-4 w-4'}`} />
         </span>
 
         <div className="pointer-events-none absolute inset-x-0 bottom-0 p-3 md:p-4" style={{ fontFamily: 'var(--font-brand)' }}>
-          <h3 className={`line-clamp-2 font-extrabold uppercase leading-tight tracking-wide text-white ${big ? 'text-base md:text-xl' : 'text-xs md:text-sm'}`}>
+          <h3 className={`line-clamp-2 font-extrabold uppercase leading-tight tracking-wide text-white ${big ? 'text-sm md:text-base lg:text-xl' : 'text-sm md:text-xs lg:text-sm'}`}>
             {v.title}
           </h3>
           <p className="mt-1 text-[10px] uppercase tracking-wide text-white/60">{formatDate(v.publishedAt)}</p>
@@ -205,13 +205,18 @@ export default function MediaHub({ videos }: { videos: Video[] }) {
         {/* Mosaic — all 16:9, some 2×2 for rhythm, all aligned */}
         <div
           ref={gridRef}
-          className="grid grid-cols-2 gap-4 [grid-auto-flow:row_dense] md:grid-cols-3 lg:grid-cols-4 lg:gap-5"
+          className="grid grid-cols-1 gap-4 [grid-auto-flow:row_dense] md:grid-cols-3 lg:grid-cols-4 lg:gap-5"
           style={{ gridAutoRows: 'var(--row-h, 200px)' }}
         >
           {rest.map((v, i) => {
-            const big = i % 5 === 0 // every 5th tile is a 2×2 accent (1 big + 4 small tiles the 4-col band)
+            // every 5th tile is a 2×2 accent — but only from md up. On a phone
+            // that mosaic produced one full-width tile followed by four
+            // half-width ones, and the groups of four were too small to read.
+            // One column, all tiles identical. --row-h is derived from a 1-span
+            // slot, so it resolves to a full-width 16:9 on its own.
+            const big = i % 5 === 0
             return (
-              <div key={v.id} data-span={big ? '2' : '1'} className={`relative ${big ? 'col-span-2 row-span-2' : ''}`}>
+              <div key={v.id} data-span={big ? '2' : '1'} className={`relative ${big ? 'md:col-span-2 md:row-span-2' : ''}`}>
                 <VideoTile v={v} big={big} fill {...tileProps(v)} />
               </div>
             )

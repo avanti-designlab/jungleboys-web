@@ -79,8 +79,7 @@ export default async function MediaPage() {
           {/* giant MEDIA wordmark — drops in letter-by-letter, below the header */}
           <span
             aria-hidden
-            className="font-display pointer-events-none absolute left-1/2 top-[86px] z-0 -translate-x-1/2 whitespace-nowrap uppercase leading-none text-white/90 md:top-[104px]"
-            style={{ fontSize: 'min(37vw, 900px)' }}
+            className="font-display pointer-events-none absolute left-1/2 top-[86px] z-0 -translate-x-1/2 whitespace-nowrap text-[53vw] uppercase leading-none text-white/90 md:top-[104px] md:text-[min(37vw,900px)]"
           >
             {'MEDIA'.split('').map((ch, i) => (
               <span key={i} className="contact-letter" style={{ animationDelay: `${0.2 + i * 0.075}s` }}>

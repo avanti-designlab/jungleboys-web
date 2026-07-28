@@ -73,7 +73,7 @@ export default async function WholesalePage() {
           <img
             src="/wholesale/wholesale-header.svg"
             alt="Jungle Boys Wholesale"
-            className="hero-alive relative z-10 drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
+            className="hero-alive relative z-10 origin-bottom scale-[1.18] drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)] md:scale-100"
           />
         </div>
       </section>
