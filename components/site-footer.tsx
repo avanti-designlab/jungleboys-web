@@ -83,25 +83,9 @@ export default async function SiteFooter() {
           <p className="mx-auto max-w-4xl text-[10px] leading-relaxed text-white/30 md:mx-0">{warningText.trim()}</p>
         </div>
 
-        {/* socials */}
-        <div className="flex items-center justify-center gap-7 md:justify-start">
-          {FOOTER_SOCIALS.map((s) => (
-            <a
-              key={s.label}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={s.label}
-              className="transition-transform duration-200 hover:scale-110 hover:text-[var(--color-accent)] [&_svg]:h-8 [&_svg]:w-8"
-            >
-              {s.icon}
-            </a>
-          ))}
-        </div>
-
-        {/* very bottom: legal + copyright */}
+        {/* very bottom: legal left, socials stacked over the copyright right */}
         <div
-          className="mt-2 flex flex-col items-center gap-3 border-t border-white/10 pt-6 text-xs uppercase tracking-wider md:flex-row md:justify-between"
+          className="mt-2 flex flex-col items-center gap-5 border-t border-white/10 pt-6 text-xs uppercase tracking-wider md:flex-row md:items-end md:justify-between"
           style={{ fontFamily: 'var(--font-brand)' }}
         >
           <div className="flex items-center gap-6">
@@ -112,7 +96,24 @@ export default async function SiteFooter() {
               Privacy
             </Link>
           </div>
-          <span className="text-white/50">© {new Date().getFullYear()} Jungle Boys. All rights reserved.</span>
+
+          <div className="flex flex-col items-center gap-3 md:items-end">
+            <div className="flex items-center gap-6">
+              {FOOTER_SOCIALS.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  className="transition-transform duration-200 hover:scale-110 hover:text-[var(--color-accent)] [&_svg]:h-7 [&_svg]:w-7"
+                >
+                  {s.icon}
+                </a>
+              ))}
+            </div>
+            <span className="text-white/50">© {new Date().getFullYear()} Jungle Boys. All rights reserved.</span>
+          </div>
         </div>
       </div>
       </div>
