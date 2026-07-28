@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import TpClouds from './tp-clouds'
+import TpSmoke from './tp-smoke'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -20,8 +20,8 @@ gsap.registerPlugin(ScrollTrigger)
 // stream come up through the weather rather than a fan open in place. That also
 // frees the jars to be as large as they like.
 //
-// ONE oversized smoke plate sits behind it all (see tp-clouds.tsx) — layering
-// plates is what was drawing cut lines across the panels.
+// The smoke behind it is a real fluid sim (see tp-smoke.tsx), not a drifting
+// bitmap — a bitmap can only slide, and the eye reads that as a photo moving.
 
 const JARS = [
   { src: 'jar-la-gelato', x: -40, y: 16, h: 58, rot: -9, z: -260, bob: 'a', dur: 11 },
@@ -119,7 +119,7 @@ export default function TpHero() {
         data-nav-theme="dark"
         className="media-hero-in relative h-[92vh] min-h-[600px] overflow-hidden rounded-[1.75rem] bg-[var(--tp-black)] md:rounded-[2.5rem]"
       >
-        <TpClouds density={1} className="z-0" />
+        <TpSmoke from="bottom" tint={[226, 238, 252]} strength={1} seed={3} className="z-0" />
 
         {/* electric wash off the bottom */}
         <div aria-hidden className="pointer-events-none absolute inset-0 z-[1]"

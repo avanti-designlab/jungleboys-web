@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import TpClouds from './tp-clouds'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -83,9 +82,6 @@ export default function TpTen() {
         className="relative h-[92vh] min-h-[600px] overflow-hidden rounded-[1.75rem] md:rounded-[2.5rem]"
         style={{ background: 'radial-gradient(125% 82% at 50% 104%, #1a7ad0 0%, #0b3f70 26%, #05192e 56%, #02060c 100%)' }}
       >
-        {/* barely any here on purpose — this section is meant to read as the
-            dark, blue-floor room between two smoke-filled ones */}
-        <TpClouds density={0.3} className="z-0" />
         <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[60%]"
           style={{ background: 'radial-gradient(90% 100% at 50% 100%, rgba(46,139,255,0.34) 0%, rgba(2,6,12,0) 72%)' }} />
 

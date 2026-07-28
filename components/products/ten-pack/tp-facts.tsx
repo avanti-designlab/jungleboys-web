@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import TpClouds from './tp-clouds'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -85,7 +84,11 @@ export default function TpFacts() {
         className="relative flex h-[92vh] min-h-[620px] items-center overflow-hidden rounded-[1.75rem] px-4 text-white md:rounded-[2.5rem] md:px-10"
         style={{ background: 'linear-gradient(180deg,#0d63a8 0%,#08406f 54%,#051d33 100%)' }}
       >
-        <TpClouds density={0.72} from="left" className="z-0" />
+        {/* deliberately no smoke here — it runs in the hero and again in the
+            creed, and a third helping was what made the page feel repetitive.
+            This panel earns its depth from light instead. */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-0"
+          style={{ background: 'radial-gradient(85% 62% at 50% 8%, rgba(120,190,255,0.28) 0%, rgba(13,99,168,0.1) 45%, rgba(5,29,51,0) 78%)' }} />
 
         <div className="relative z-10 mx-auto w-full max-w-[1220px]">
           <h2 data-tp-line className="font-display text-center uppercase leading-[0.82] text-white will-change-transform"

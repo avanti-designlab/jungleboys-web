@@ -1162,24 +1162,6 @@ body:has(.tp-page) {
 body:has(.tp-page) footer { position: relative; z-index: 1; background: var(--tp-black); }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* ONE plate per section, oversized and overhanging so this motion can never
-     bring a faded edge into the panel. Two axes and a scale so the smoke visibly
-     churns rather than sliding as a flat sheet. Transform-only. */
-  @keyframes tp-cloud {
-    0%   { transform: translate3d(-6%, 2%, 0) scale(1.02) rotate(-0.6deg); }
-    35%  { transform: translate3d(3%, -3%, 0) scale(1.16) rotate(0.5deg); }
-    68%  { transform: translate3d(6%, 1%, 0) scale(1.08) rotate(-0.3deg); }
-    100% { transform: translate3d(-6%, 2%, 0) scale(1.02) rotate(-0.6deg); }
-  }
-  @keyframes tp-puff {
-    0%   { transform: translate3d(-8%, 3%, 0) scale(1.04) rotate(0.4deg); }
-    40%  { transform: translate3d(10%, -4%, 0) scale(1.22) rotate(-0.7deg); }
-    72%  { transform: translate3d(18%, 2%, 0) scale(1.12) rotate(0.3deg); }
-    100% { transform: translate3d(-8%, 3%, 0) scale(1.04) rotate(0.4deg); }
-  }
-  .tp-cloud { animation: tp-cloud 34s ease-in-out infinite; }
-  .tp-puff { animation: tp-puff 28s ease-in-out infinite; }
-
   /* jars idling on desynced clocks so the row never pulses in unison */
   @keyframes tp-bob-a { 0%,100% { transform: translate3d(0,0,0) rotate(var(--tp-rot,0deg)); } 50% { transform: translate3d(0,-14px,0) rotate(calc(var(--tp-rot,0deg) + 1.4deg)); } }
   @keyframes tp-bob-b { 0%,100% { transform: translate3d(0,-8px,0) rotate(var(--tp-rot,0deg)); } 50% { transform: translate3d(0,10px,0) rotate(calc(var(--tp-rot,0deg) - 1.6deg)); } }
@@ -1187,7 +1169,7 @@ body:has(.tp-page) footer { position: relative; z-index: 1; background: var(--tp
   .tp-bob-b { animation: tp-bob-b var(--tp-dur,11s) ease-in-out infinite; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .tp-cloud, .tp-puff, .tp-bob-a, .tp-bob-b { animation: none; }
+  .tp-bob-a, .tp-bob-b { animation: none; }
 }
 
 /* ── GAS TANK: fire surface ──────────────────────────────────────────
