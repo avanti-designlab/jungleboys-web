@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="156" height="156" viewBox="0 0 156 156">
+  <!-- Running-bond brick, one tile. Two courses per tile: the upper course has
+       its joints at the tile edges, the lower one at the midpoint, so repeating
+       this produces a proper offset bond with no seam. -->
+  <g stroke="#ffffff" stroke-opacity="0.075" stroke-width="2" fill="none" shape-rendering="crispEdges">
+    <path d="M0 1 H156 M0 78 H156 M0 155 H156" />
+    <path d="M1 1 V78 M155 1 V78" />
+    <path d="M78 78 V155" />
+  </g>
+</svg>

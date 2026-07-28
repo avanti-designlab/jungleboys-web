@@ -7,8 +7,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 // THE BAND — full bleed, no pill, the way the crossover band works on the 1G
-// page. The mascot pair is cropped hard to their faces so it reads as a mural
-// the page passes through rather than a picture sitting in a box.
+// page.
+//
+// This uses the mural Figma actually drew for this strip (a 4.6:1 artwork), not
+// a hard crop of the tall mascot-pair lockup. Cover-cropping a portrait image
+// into a wide band zoomed it to the point where it read as a garbled close-up
+// rather than the design.
 //
 // Two layers of type run in OPPOSITE directions across it, which is the same
 // mirror idea as the rest of the page and stops a single marquee reading as a
@@ -67,13 +71,13 @@ export default function TwBand() {
 
   return (
     <section ref={rootRef} className="relative z-10">
-      <div data-nav-theme="dark" className="relative h-[70vh] min-h-[420px] overflow-hidden bg-[var(--tw-black)]">
+      <div data-nav-theme="dark" className="relative h-[46vh] min-h-[320px] overflow-hidden bg-[var(--tw-black)]">
         {/* the mural, cropped to the faces */}
         <div className="absolute inset-0 overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element -- brand art */}
-          <img data-tw-mural src="/products/twins/mascot-pair.webp" alt="Jungle Boys Twins"
+          <img data-tw-mural src="/products/twins/band.webp" alt="Jungle Boys Twins"
             className="absolute inset-0 h-full w-full object-cover will-change-transform"
-            style={{ objectPosition: '50% 38%' }} />
+            style={{ objectPosition: '50% 50%' }} />
         </div>
 
         {/* darken top and bottom so the type reads over the artwork */}

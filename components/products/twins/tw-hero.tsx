@@ -55,9 +55,15 @@ export default function TwHero() {
             { scale: 2.6, opacity: 0, filter: 'blur(26px)', rotateX: 28 },
             { scale: 1, opacity: 1, filter: 'blur(0px)', rotateX: 0, duration: 1.15, ease: 'back.out(1.5)' }, 0.35)
             .fromTo('[data-tw-sub]', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 1.25)
-            // specular sweep, once, after it lands
-            .fromTo('[data-tw-shine]', { xPercent: -140 }, { xPercent: 140, duration: 1.1, ease: 'power2.inOut' }, 1.35)
             .fromTo('[data-tw-stat]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }, 1.45)
+
+          // Specular sweep, on a loop. xPercent is relative to the element's OWN
+          // width and this element is 36% of its container, so clearing the right
+          // edge takes 100/36*100 = 278% — at the old 140 it stopped dead over the
+          // lettering and read as a smear. -130 -> 330 takes it fully off both sides.
+          gsap.fromTo('[data-tw-shine]',
+            { xPercent: -130 },
+            { xPercent: 330, duration: 1.5, ease: 'power1.inOut', repeat: -1, repeatDelay: 3.8, delay: 1.35 })
 
           const st = gsap.timeline({
             scrollTrigger: {
@@ -92,8 +98,15 @@ export default function TwHero() {
             style={{ background: 'radial-gradient(44% 42% at 70% 38%, rgba(27,63,176,0.55) 0%, rgba(27,63,176,0) 72%)' }} />
         </div>
 
-        {/* floor rake */}
+        {/* Brick wall over the gradient, from the Figma hero. Figma draws it as
+            a field of vector rects — exporting that would be a huge file for a
+            flat pattern, so this is a 156px running-bond tile that repeats:
+            sharp at any size, and a fraction of a kilobyte. */}
         <div aria-hidden className="pointer-events-none absolute inset-0 z-[1]"
+          style={{ backgroundImage: 'url(/products/twins/brick.svg)', backgroundRepeat: 'repeat', backgroundSize: '156px 156px' }} />
+
+        {/* floor rake */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 z-[2]"
           style={{ background: 'radial-gradient(115% 68% at 50% 112%, rgba(230,36,44,0.34) 0%, rgba(27,63,176,0.2) 34%, rgba(5,6,12,0) 74%)' }} />
 
         {/* THE TWINS — one asset, mirrored. They part from dead centre. */}
@@ -119,9 +132,9 @@ export default function TwHero() {
         </div>
 
         {/* THE MARK — massive */}
-        <div className="pointer-events-none absolute inset-x-0 top-[5%] z-30 px-[3vw] text-center" style={{ perspective: '1200px' }}>
+        <div className="pointer-events-none absolute inset-x-0 top-[13%] z-30 px-[3vw] text-center" style={{ perspective: '1200px' }}>
           <div data-tw-mark-wrap className="will-change-transform">
-            <div data-tw-mark className="relative mx-auto w-full will-change-transform" style={{ maxWidth: 'min(52vw, 760px)' }}>
+            <div data-tw-mark className="relative mx-auto w-full will-change-transform" style={{ maxWidth: 'min(48vw, 700px)' }}>
               {/* eslint-disable-next-line @next/next/no-img-element -- brand mark */}
               <img src="/products/twins/wordmark-twins.webp" alt="Twins"
                 className="mx-auto h-auto w-full drop-shadow-[0_18px_50px_rgba(0,0,0,0.75)]" />

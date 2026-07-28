@@ -17,15 +17,17 @@ gsap.registerPlugin(ScrollTrigger)
 // Colour alternates red / blue down the pairs, the two colours taken out of the
 // mark itself.
 
+// The Twins frame's own icons, pulled as complete groups (3916:4527-4532) —
+// they already include the red disc, so the card does not wrap them in one.
 const LEFT = [
-  { icon: 'strain', text: '0.75g pre-rolls, 1.5g total', tone: 'red' },
+  { icon: 'total', text: '0.75g pre-rolls, 1.5g total', tone: 'red' },
   { icon: 'burn', text: 'Smooth, consistent burn start to finish', tone: 'blue' },
-  { icon: 'sealed', text: 'All natural unrefined paper & crutch', tone: 'red' },
+  { icon: 'paper', text: 'All natural unrefined paper & crutch', tone: 'red' },
 ]
 const RIGHT = [
-  { icon: 'indoor', text: 'Premium cannabis flower only', tone: 'blue' },
-  { icon: 'sharing', text: 'No cones. Rolled to perfection', tone: 'red' },
-  { icon: 'value', text: 'Perfect for solo sessions or sharing', tone: 'blue' },
+  { icon: 'flower', text: 'Premium cannabis flower only', tone: 'blue' },
+  { icon: 'rolled', text: 'No cones. Rolled to perfection', tone: 'red' },
+  { icon: 'share', text: 'Perfect for solo sessions or sharing', tone: 'blue' },
 ]
 
 const TONE: Record<string, { ring: string; disc: string; glow: string }> = {
@@ -55,11 +57,10 @@ function Claim({ item, mirrored }: { item: (typeof LEFT)[number]; mirrored: bool
         boxShadow: `0 18px 44px rgba(0,0,0,0.5), inset 0 1px 0 ${t.glow}`,
       }}
     >
-      <span aria-hidden className="grid h-11 w-11 shrink-0 place-items-center rounded-full md:h-14 md:w-14"
-        style={{ background: t.disc, boxShadow: `0 8px 24px ${t.glow}` }}>
-        {/* eslint-disable-next-line @next/next/no-img-element -- section icon */}
-        <img src={`/products/twins/icons/${item.icon}.svg`} alt="" className="h-5 w-5 md:h-7 md:w-7" />
-      </span>
+      {/* eslint-disable-next-line @next/next/no-img-element -- section icon */}
+      <img aria-hidden src={`/products/twins/icons/${item.icon}.svg`} alt=""
+        className="h-12 w-12 shrink-0 md:h-16 md:w-16"
+        style={{ filter: `drop-shadow(0 8px 22px ${t.glow})` }} />
       <span className={`text-[12px] font-extrabold uppercase leading-tight tracking-[0.06em] text-white md:text-[14px] ${mirrored ? 'text-left' : 'text-right'}`}
         style={{ fontFamily: 'var(--font-brand)' }}>
         {item.text}
