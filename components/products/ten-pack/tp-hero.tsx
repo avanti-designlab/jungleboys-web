@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import TpSmoke from './tp-smoke'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -20,8 +19,7 @@ gsap.registerPlugin(ScrollTrigger)
 // stream come up through the weather rather than a fan open in place. That also
 // frees the jars to be as large as they like.
 //
-// The smoke behind it is a real fluid sim (see tp-smoke.tsx), not a drifting
-// bitmap — a bitmap can only slide, and the eye reads that as a photo moving.
+// The smoke behind it is a real filmed plate, screen-blended onto the panel.
 
 const JARS = [
   { src: 'jar-la-gelato', x: -40, y: 16, h: 58, rot: -9, z: -260, bob: 'a', dur: 11 },
@@ -56,6 +54,7 @@ const STATS = [
 
 export default function TpHero() {
   const rootRef = useRef<HTMLElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
     const root = rootRef.current
@@ -66,7 +65,10 @@ export default function TpHero() {
         { reduce: '(prefers-reduced-motion: reduce)', noPref: '(prefers-reduced-motion: no-preference)' },
         (mmCtx) => {
           const c = mmCtx.conditions as Record<string, boolean>
-          if (c.reduce) return
+          if (c.reduce) {
+            videoRef.current?.pause()
+            return
+          }
 
           gsap.timeline({ delay: 0.15 })
             .from('[data-tp-kicker]', { opacity: 0, y: -14, duration: 0.5, ease: 'power2.out' }, 0)
@@ -119,7 +121,25 @@ export default function TpHero() {
         data-nav-theme="dark"
         className="media-hero-in relative h-[92vh] min-h-[600px] overflow-hidden rounded-[1.75rem] bg-[var(--tp-black)] md:rounded-[2.5rem]"
       >
-        <TpSmoke from="bottom" tint={[226, 238, 252]} strength={1} seed={3} className="z-0" />
+        {/* Real smoke plate. The source is white smoke on pure black — despite
+            being sold as an "alpha channel" clip it is plain H.264, which has
+            no alpha — so `screen` does the compositing: black contributes
+            nothing, the smoke stays. The panel's entrance animation makes it a
+            stacking context, which conveniently keeps the blend scoped to this
+            panel instead of leaking onto the page behind it.
+            It also opens and closes on black, so the loop has no visible seam. */}
+        <video
+          ref={videoRef}
+          aria-hidden
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover mix-blend-screen"
+        >
+          <source src="/products/10-pack/smoke.mp4" type="video/mp4" />
+        </video>
 
         {/* electric wash off the bottom */}
         <div aria-hidden className="pointer-events-none absolute inset-0 z-[1]"

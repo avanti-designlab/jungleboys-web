@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import TpSmoke from './tp-smoke'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -78,7 +77,6 @@ export default function TpCreed() {
         className="relative overflow-hidden rounded-[1.75rem] md:rounded-[2.5rem]"
         style={{ background: 'linear-gradient(110deg,#0d63a8 0%,#1178c9 44%,#07406f 100%)' }}
       >
-        <TpSmoke from="left" tint={[236, 246, 255]} strength={1} seed={11} className="z-0" />
 
         <div className="relative z-10 grid grid-cols-1 items-center gap-4 px-5 pt-12 md:grid-cols-[0.95fr_1.05fr] md:gap-6 md:px-12 md:pt-16">
           {/* the stack — oversized, overlapping, cropped off the floor */}
