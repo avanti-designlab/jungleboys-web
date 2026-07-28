@@ -35,7 +35,11 @@ export default function PopsHero() {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
       mm.add(
-        { reduce: '(prefers-reduced-motion: reduce)', noPref: '(prefers-reduced-motion: no-preference)' },
+        {
+          reduce: '(prefers-reduced-motion: reduce)',
+          noPref: '(prefers-reduced-motion: no-preference)',
+          isMobile: '(max-width: 767px)',
+        },
         (mmCtx) => {
           const c = mmCtx.conditions as Record<string, boolean>
 
@@ -50,9 +54,15 @@ export default function PopsHero() {
           gsap.set('[data-herojar="r"]', { opacity: 0, xPercent: 150, rotate: 60 })
           gsap.set('[data-cta]', { opacity: 0, y: 26 })
 
+          // Pacing: this page ran 15.2 screens on desktop with 11.5 of them
+          // spent inside three pinned panels — half again as long as the other
+          // flagships. Mobile gets a shorter pin still: pinned scrub costs real
+          // thumb distance on a phone.
+          const END = c.isMobile ? '+=130%' : '+=170%'
+
           const tl = gsap.timeline({
             scrollTrigger: {
-              trigger: root, start: 'top top', end: '+=250%',
+              trigger: root, start: 'top top', end: END,
               pin: true, scrub: 0.65, anticipatePin: 1, invalidateOnRefresh: true,
             },
           })

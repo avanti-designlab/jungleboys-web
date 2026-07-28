@@ -96,7 +96,7 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
             ease: 'none',
             onUpdate: paint,
             scrollTrigger: {
-              trigger: root, start: 'top top', end: '+=300%',
+              trigger: root, start: 'top top', end: '+=210%',
               pin: true, scrub: 0.7, anticipatePin: 1, invalidateOnRefresh: true,
             },
           })

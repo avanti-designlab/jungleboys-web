@@ -37,7 +37,11 @@ export default function PopsFacts() {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
       mm.add(
-        { reduce: '(prefers-reduced-motion: reduce)', noPref: '(prefers-reduced-motion: no-preference)' },
+        {
+          reduce: '(prefers-reduced-motion: reduce)',
+          noPref: '(prefers-reduced-motion: no-preference)',
+          isMobile: '(max-width: 767px)',
+        },
         (mmCtx) => {
           const c = mmCtx.conditions as Record<string, boolean>
           if (c.reduce) return
@@ -90,7 +94,7 @@ export default function PopsFacts() {
             ease: 'none',
             onUpdate: paint,
             scrollTrigger: {
-              trigger: root, start: 'top top', end: '+=300%',
+              trigger: root, start: 'top top', end: c.isMobile ? '+=150%' : '+=200%',
               pin: true, scrub: 0.7, anticipatePin: 1, invalidateOnRefresh: true,
             },
           })
