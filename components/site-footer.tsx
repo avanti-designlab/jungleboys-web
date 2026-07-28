@@ -75,26 +75,29 @@ export default async function SiteFooter() {
 
       {/* bottom rows */}
       <div className="mx-auto flex w-full max-w-[1560px] flex-col gap-6 px-6 pb-24 md:px-8 lg:pb-10">
-        {/* compliance */}
-        <div className="flex flex-col gap-3 text-center md:text-left">
-          <p className="text-[11px] tracking-wide text-white/50" style={{ fontFamily: 'var(--font-brand)' }}>
-            {LICENSE_NUMBERS.join(' | ')}
-          </p>
-          <p className="mx-auto max-w-4xl text-[10px] leading-relaxed text-white/30 md:mx-0">{warningText.trim()}</p>
-        </div>
-
-        {/* very bottom: legal left, socials stacked over the copyright right */}
+        {/* Very bottom, all below the divider: compliance sits directly over the
+            legal links on the left, socials over the copyright on the right.
+            Grouping the two columns this way is what closes the gap the divider
+            used to leave when the left side was only one line tall. */}
         <div
-          className="mt-2 flex flex-col items-center gap-5 border-t border-white/10 pt-6 text-xs uppercase tracking-wider md:flex-row md:items-end md:justify-between"
+          className="mt-2 flex flex-col items-center gap-8 border-t border-white/10 pt-6 text-xs uppercase tracking-wider md:flex-row md:items-end md:justify-between md:gap-10"
           style={{ fontFamily: 'var(--font-brand)' }}
         >
-          <div className="flex items-center gap-6">
-            <Link href="/terms" className="text-white/85 transition-colors duration-200 hover:text-[var(--color-accent)]">
-              Terms
-            </Link>
-            <Link href="/privacy" className="text-white/85 transition-colors duration-200 hover:text-[var(--color-accent)]">
-              Privacy
-            </Link>
+          <div className="flex flex-col gap-4 text-center md:text-left">
+            <div className="flex flex-col gap-3">
+              <p className="text-[11px] tracking-wide text-white/50">{LICENSE_NUMBERS.join(' | ')}</p>
+              <p className="mx-auto max-w-4xl text-[10px] normal-case leading-relaxed tracking-normal text-white/30 md:mx-0">
+                {warningText.trim()}
+              </p>
+            </div>
+            <div className="flex items-center justify-center gap-6 md:justify-start">
+              <Link href="/terms" className="text-white/85 transition-colors duration-200 hover:text-[var(--color-accent)]">
+                Terms
+              </Link>
+              <Link href="/privacy" className="text-white/85 transition-colors duration-200 hover:text-[var(--color-accent)]">
+                Privacy
+              </Link>
+            </div>
           </div>
 
           <div className="flex flex-col items-center gap-3 md:items-end">
