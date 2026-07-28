@@ -17,9 +17,13 @@ gsap.registerPlugin(ScrollTrigger)
 // angles, each idling on its own clock and counter-drifting against the others
 // as you pass. They run off the bottom of the panel on purpose.
 
+// x is a % of the left column. At -16/+14 the front jar covered all but ~26% of
+// each of the two behind it, so they read as slivers rather than jars; these
+// spread them out to roughly 60% clear while staying inside the column so they
+// never crowd the type.
 const STACK = [
-  { src: 'jar-motor-breath', x: -16, y: 10, h: 46, rot: -12, z: -220, bob: 'a', dur: 12, drift: -16 },
-  { src: 'jar-rainbow-belts', x: 14, y: 16, h: 44, rot: 11, z: -140, bob: 'b', dur: 10, drift: -9 },
+  { src: 'jar-motor-breath', x: -27, y: 10, h: 46, rot: -12, z: -220, bob: 'a', dur: 12, drift: -16 },
+  { src: 'jar-rainbow-belts', x: 25, y: 16, h: 44, rot: 11, z: -140, bob: 'b', dur: 10, drift: -9 },
   { src: 'jar-all-cherriez', x: 0, y: 0, h: 58, rot: -3, z: 90, bob: 'a', dur: 14, drift: -24 },
 ]
 
