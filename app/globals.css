@@ -1459,3 +1459,39 @@ body:has(.gt-page) footer { position: relative; z-index: 1; background: transpar
 @media (prefers-reduced-motion: reduce) {
   .hh-letter, .hh-scrollbtn { opacity: 1; }
 }
+
+/* ── 1G PRE-ROLLS ────────────────────────────────────────────────────
+   Palette lives on BODY, not on .pr-page: the footer and the body gutter
+   behind it are outside <main>, so a scope on the page element leaves them
+   resolving these vars to nothing (that is what left white gutters under the
+   Gas Tank footer). Unconditional — never inside a reduced-motion query. */
+body:has(.pr-page) {
+  --pr-black: #04100a;
+  --pr-ink: #082016;
+  --pr-deep: #021109;
+  --pr-green: #14a04a;
+  --pr-lime: #7dff4f;
+  --pr-glow: #b6ff8a;
+  background: var(--pr-black);
+}
+.pr-page { background: var(--pr-black); }
+body:has(.pr-page) footer { position: relative; z-index: 1; background: var(--pr-black); }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* slow aurora behind the green rooms — transform/opacity only */
+  @keyframes pr-aurora {
+    0%, 100% { transform: translate3d(-6%, 3%, 0) scale(1.1) rotate(-4deg); opacity: 0.75; }
+    50%      { transform: translate3d(7%, -4%, 0) scale(1.28) rotate(5deg); opacity: 1; }
+  }
+  .pr-aurora { animation: pr-aurora 26s ease-in-out infinite; }
+  .pr-aurora-b { animation: pr-aurora 34s ease-in-out infinite reverse; }
+
+  /* tubes idling on desynced clocks so the row never pulses in unison */
+  @keyframes pr-bob-a { 0%,100% { transform: translate3d(0,0,0) rotate(var(--pr-rot,0deg)); } 50% { transform: translate3d(0,-15px,0) rotate(calc(var(--pr-rot,0deg) + 1.3deg)); } }
+  @keyframes pr-bob-b { 0%,100% { transform: translate3d(0,-9px,0) rotate(var(--pr-rot,0deg)); } 50% { transform: translate3d(0,11px,0) rotate(calc(var(--pr-rot,0deg) - 1.5deg)); } }
+  .pr-bob-a { animation: pr-bob-a var(--pr-dur,10s) ease-in-out infinite; }
+  .pr-bob-b { animation: pr-bob-b var(--pr-dur,12s) ease-in-out infinite; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pr-aurora, .pr-aurora-b, .pr-bob-a, .pr-bob-b { animation: none; }
+}

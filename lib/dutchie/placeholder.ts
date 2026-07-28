@@ -192,6 +192,40 @@ function tenPack(
   }
 }
 
+function oneGram(
+  slug: string,
+  strain: string,
+  lineage: string,
+  strainType: Product['strainType'],
+  thc: number,
+  topTerp: string,
+  featured = false,
+  deal?: number
+): Product {
+  return {
+    id: `prod-1g-${slug}`,
+    slug: `${slug}-1g-preroll`,
+    name: strain,
+    brand: 'Jungle Boys',
+    category: 'pre-rolls',
+    subcategory: '1g-preroll',
+    strainType,
+    strain: lineage,
+    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    images: [{ url: `/products/pre-rolls/tube-${slug}.webp`, alt: `${strain} 1G Pre-Roll` }],
+    variants: [{ id: `v-1g-${slug}`, option: '1g', price: 1800, ...(deal ? { specialPrice: deal } : {}), quantityAvailable: 10 }],
+    labResult: {
+      lab: 'Placeholder Labs',
+      testedAt: '2026-07-01',
+      potency: { thc: { value: thc, unit: '%' } },
+      terpenes: [{ name: topTerp, percentage: 1.6 }, { name: 'Caryophyllene', percentage: 0.8 }],
+    },
+    effects: ['euphoric', 'relaxed'],
+    featured,
+    retailerId: 'placeholder-dtla',
+  }
+}
+
 function gasTank(
   slug: string,
   strain: string,
@@ -276,6 +310,11 @@ const products: Product[] = [
   tenPack('blu-zerdz', 'Blu Zerdz', 'Blu Frootz x LCG', 'hybrid', 29.4, 'Linalool'),
   tenPack('rainbow-belts', 'Rainbow Belts', 'Moonbow x Zkittlez', 'hybrid', 30.7, 'Terpinolene'),
   tenPack('vanilla-velvet', 'Vanilla Velvet', 'Gelato 41 x Kush Mints', 'indica', 28.3, 'Linalool'),
+  // ── 1G Pre-Rolls
+  oneGram('zangria', 'Zangria', 'Thin Mint Cookies x Z', 'sativa', 30.6, 'Terpinolene', true),
+  oneGram('pop-rockets', 'Pop Rockets', 'Runtz x Zero Gravity', 'hybrid', 31.8, 'Limonene'),
+  oneGram('cherry-gelato', 'Cherry Gelato', 'Cherry Punch x Mike Larry', 'hybrid', 29.9, 'Caryophyllene', false, 1500),
+  oneGram('blu-og', 'Blu OG', 'Blu Frootz x 06 OG', 'indica', 32.4, 'Myrcene'),
 ]
 
 const categories: ProductCategory[] = [
