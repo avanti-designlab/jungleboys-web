@@ -18,6 +18,19 @@ const TIERS = [
 // three per row keeps every tier to a single clean line on desktop
 const PER_TIER = 3
 
+// On mobile each tier becomes a horizontal snap carousel instead of a stacked
+// column: one card in view, the next peeking so the swipe is discoverable. The
+// stacked version made this the longest section on the site (6.5 screens of the
+// page's 18.2) — this shows the same products in about a fifth of the height
+// without dropping a single one. Same pattern the Pops lineup already uses.
+const TIER_ROW =
+  'mt-8 -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3 ' +
+  '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden ' +
+  'md:mx-0 md:grid md:grid-cols-2 md:gap-6 md:overflow-visible md:px-0 md:pb-0 lg:grid-cols-3'
+
+// 82% leaves a slice of the next card showing — that peek IS the affordance
+const TIER_CARD = 'min-w-[82%] snap-start md:min-w-0'
+
 const TYPE_COLOR: Record<string, string> = {
   indica: '#6f9bff',
   sativa: '#ff6b6b',
@@ -57,14 +70,14 @@ export default async function GtShop() {
                 <span aria-hidden className="h-[3px] flex-1 rounded-full bg-[var(--gt-yellow)]/35" />
               </Reveal>
 
-              <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className={TIER_ROW}>
                 {tier.items.map((p, i) => {
                   const v = p.variants[0]
                   const thc = p.labResult?.potency?.thc
                   const deal = v.specialPrice
                   const pctOff = deal ? Math.round((1 - deal / v.price) * 100) : 0
                   return (
-                    <Reveal key={p.id} delay={Math.min(i, 2) * 0.08}>
+                    <Reveal key={p.id} delay={Math.min(i, 2) * 0.08} className={TIER_CARD}>
                       <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-[#171312] text-white shadow-[0_14px_40px_rgba(0,0,0,0.5)] ring-1 ring-white/10">
                         <div className={`gt-card-stage gt-card-${tier.key} relative aspect-square overflow-hidden`}>
                           {deal ? (
