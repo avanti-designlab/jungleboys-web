@@ -14,10 +14,11 @@ gsap.registerPlugin(ScrollTrigger)
 // mascot asset; the second is the same file with scaleX(-1), which is also
 // exactly how the artwork was drawn.
 //
-// Over that, the TWINS mark arrives MASSIVE: it starts oversized, blurred and
+// Over that, the real TWINS script mark arrives MASSIVE: it starts oversized,
+// blurred and
 // deep in Z, then slams down into place with an overshoot and a specular sweep
 // runs across it. The sweep is a skewed gradient behind a mask of the mark, so
-// it lights the letterforms rather than a rectangle.
+// it lights the lettering and its coloured outline rather than a rectangle.
 
 const STATS = [
   { n: '2', l: 'Pre-rolls' },
@@ -118,9 +119,9 @@ export default function TwHero() {
         </div>
 
         {/* THE MARK — massive */}
-        <div className="pointer-events-none absolute inset-x-0 top-[7%] z-30 px-[3vw] text-center" style={{ perspective: '1200px' }}>
+        <div className="pointer-events-none absolute inset-x-0 top-[5%] z-30 px-[3vw] text-center" style={{ perspective: '1200px' }}>
           <div data-tw-mark-wrap className="will-change-transform">
-            <div data-tw-mark className="relative mx-auto w-full will-change-transform" style={{ maxWidth: '80vw' }}>
+            <div data-tw-mark className="relative mx-auto w-full will-change-transform" style={{ maxWidth: 'min(52vw, 760px)' }}>
               {/* eslint-disable-next-line @next/next/no-img-element -- brand mark */}
               <img src="/products/twins/wordmark-twins.webp" alt="Twins"
                 className="mx-auto h-auto w-full drop-shadow-[0_18px_50px_rgba(0,0,0,0.75)]" />
@@ -137,7 +138,7 @@ export default function TwHero() {
                   style={{ background: 'linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0) 100%)', transform: 'skewX(-16deg)' }} />
               </div>
             </div>
-            <div data-tw-sub className="mx-auto mt-3 w-full will-change-transform" style={{ maxWidth: 'min(52vw, 620px)' }}>
+            <div data-tw-sub className="mx-auto mt-3 w-full will-change-transform" style={{ maxWidth: 'min(38vw, 460px)' }}>
               {/* eslint-disable-next-line @next/next/no-img-element -- brand mark */}
               <img src="/products/twins/wordmark-2pack.webp" alt="2 Pack Pre-Rolls" className="mx-auto h-auto w-full" />
             </div>
