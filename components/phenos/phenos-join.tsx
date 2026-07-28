@@ -164,7 +164,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
             hero scroll offset so the landing shows black above, not cut-off pills. ===== */}
         <div
           id="join"
-          className="mt-28 flex min-h-[600px] scroll-mt-28 flex-col justify-center rounded-[2.25rem] bg-white p-7 text-black shadow-[0_50px_140px_-40px_rgba(0,0,0,0.8)] md:min-h-[560px] md:p-14"
+          className="mt-12 flex h-[calc(100svh-7.5rem)] max-h-[780px] scroll-mt-28 flex-col rounded-[2.25rem] bg-white p-6 text-black shadow-[0_50px_140px_-40px_rgba(0,0,0,0.8)] md:mt-28 md:h-auto md:max-h-none md:min-h-[560px] md:justify-center md:p-14"
         >
           {state === 'done' ? (
             <div className="flex flex-col items-center gap-5 py-8 text-center">
@@ -180,15 +180,15 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
           ) : (
             <>
               {/* header */}
-              <div className="mb-8 md:mb-10">
+              <div className="mb-5 shrink-0 md:mb-10">
                 <span className="text-xs font-extrabold uppercase tracking-[0.4em] text-black/50" style={{ fontFamily: 'var(--font-brand)' }}>
                   Pheno Hunt
                 </span>
-                <h3 className="font-display mt-2 text-5xl uppercase leading-[0.88] md:text-7xl">Share your feedback with us!</h3>
+                <h3 className="font-display mt-2 text-3xl uppercase leading-[0.88] md:text-7xl">Share your feedback with us!</h3>
               </div>
 
               {/* progress */}
-              <div className="mb-3 flex items-center justify-between">
+              <div className="mb-3 flex shrink-0 items-center justify-between">
                 <span className="text-xs font-extrabold uppercase tracking-widest text-black/60" style={{ fontFamily: 'var(--font-brand)' }}>
                   {autoAdvance ? 'Tap to answer' : 'Your answer'}
                 </span>
@@ -196,13 +196,13 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
                   {step + 1} / {total}
                 </span>
               </div>
-              <div className="mb-10 h-1.5 w-full overflow-hidden rounded-full bg-black/10">
+              <div className="mb-6 h-1.5 w-full shrink-0 overflow-hidden rounded-full bg-black/10 md:mb-10">
                 <div className="h-full rounded-full bg-black transition-all duration-500" style={{ width: `${((step + 1) / total) * 100}%` }} />
               </div>
 
-              <div className="grid gap-8 md:grid-cols-2 md:items-center md:gap-14">
+              <div className="grid min-h-0 flex-1 content-center gap-5 overflow-y-auto md:grid-cols-2 md:items-center md:gap-14 md:overflow-visible">
                 <div key={step} className="gate-in">
-                  <span className="font-display block text-4xl uppercase leading-[0.95] md:text-6xl">{q.label}</span>
+                  <span className="font-display block text-[1.75rem] uppercase leading-[0.95] md:text-6xl">{q.label}</span>
                   {q.hint && <span className="mt-3 block text-sm font-medium text-black/50">{q.hint}</span>}
                 </div>
 
@@ -302,7 +302,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
                     </p>
                   )}
 
-                  <div className="mt-8 flex items-center justify-between gap-4">
+                  <div className="mt-6 flex items-center justify-between gap-4 md:mt-8">
                     <button
                       type="button"
                       onClick={() => setStep((s) => Math.max(0, s - 1))}

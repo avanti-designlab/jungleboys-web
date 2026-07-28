@@ -21,8 +21,12 @@ export default function NewsletterPopup({ consentText }: { consentText: string }
 
   // ── trigger: once per visitor, after the age gate, on scroll or a delay ──
   useEffect(() => {
-    // never interrupt an immersive product-line landing page
-    if (window.location.pathname.startsWith('/products/')) return
+    // Never interrupt an immersive product-line landing page — and never pop a
+    // signup form over a page whose whole job is a different form. It triggers
+    // at 60% scroll, which on these pages is exactly where the form is, so it
+    // landed on top of the thing the visitor came to fill in.
+    const path = window.location.pathname
+    if (path.startsWith('/products/') || ['/phenos', '/contact', '/wholesale'].some((p) => path.startsWith(p))) return
     try {
       if (localStorage.getItem(SEEN_KEY)) return
     } catch {}
