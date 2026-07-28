@@ -1534,3 +1534,25 @@ body:has(.tw-page) footer { position: relative; z-index: 1; background: var(--tw
 @media (prefers-reduced-motion: reduce) {
   .tw-bloom, .tw-bloom-b, .tw-idle-l, .tw-idle-r { animation: none; }
 }
+
+/* ── PHENOS: mobile jar cluster ──────────────────────────────────────
+   The jars carry "PHENO BATCH" printed on their labels. At desktop size on a
+   phone that type lands at nearly the same scale as the lockup, so the hero
+   read as two overlapping logos. On mobile they scale back and regroup high,
+   under the header, leaving the lower half clear for the logo. */
+.pheno-jar {
+  left: var(--l);
+  top: var(--t);
+  width: calc(var(--jw) * var(--jar-scale, 1));
+}
+@media (max-width: 767px) {
+  .pheno-jar {
+    --jar-scale: 0.62;
+    left: var(--ml, var(--l));
+    top: var(--mt, var(--t));
+  }
+  /* the texture repeats the same words as the lockup's second line — hold it
+     back on a small screen so it reads as texture rather than a second logo */
+  .hunt-row { font-size: clamp(1.5rem, 7vw, 2.6rem); color: rgba(255, 255, 255, 0.04); }
+  .hunt-row:nth-child(even) { color: rgba(255, 255, 255, 0.026); }
+}

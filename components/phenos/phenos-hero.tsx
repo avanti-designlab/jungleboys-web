@@ -10,11 +10,16 @@ import gsap from 'gsap'
 
 // jars — framing the logo: big center peeks over the top, flanks left + right,
 // one accent upper-right. big center jar = jar-3.
+// mLeft/mTop are the phone layout. At their desktop size the jars ran to 38% of
+// a 390px screen, which put their printed "PHENO BATCH" labels at nearly the
+// same scale as the lockup — that is the "double logo" Avanti spotted. On mobile
+// they scale down (--jar-scale) and regroup into a tight cluster under the
+// header, leaving the lower half clear for the logo.
 const JARS = [
-  { src: '/phenos/jar-3.png', left: '38%', top: '16%', w: 150, tilt: 0, dur: 7.2, del: 0, z: 5 },
-  { src: '/phenos/jar-1.png', left: '12%', top: '44%', w: 132, tilt: -7, dur: 5.9, del: 0.5, z: 3 },
-  { src: '/phenos/jar-4.png', left: '88%', top: '42%', w: 134, tilt: 7, dur: 6.3, del: 0.35, z: 4 },
-  { src: '/phenos/jar-2.png', left: '73%', top: '12%', w: 122, tilt: 5, dur: 6.6, del: 0.2, z: 4 },
+  { src: '/phenos/jar-3.png', left: '38%', top: '16%', mLeft: '33%', mTop: '9%', w: 150, tilt: 0, dur: 7.2, del: 0, z: 5 },
+  { src: '/phenos/jar-1.png', left: '12%', top: '44%', mLeft: '15%', mTop: '25%', w: 132, tilt: -7, dur: 5.9, del: 0.5, z: 3 },
+  { src: '/phenos/jar-4.png', left: '88%', top: '42%', mLeft: '84%', mTop: '24%', w: 134, tilt: 7, dur: 6.3, del: 0.35, z: 4 },
+  { src: '/phenos/jar-2.png', left: '73%', top: '12%', mLeft: '68%', mTop: '8%', w: 122, tilt: 5, dur: 6.6, del: 0.2, z: 4 },
 ]
 
 // nugs — a stream that flows out from behind/around the logo. left/top here are
@@ -86,10 +91,12 @@ export default function PhenosHero() {
             key={j.src}
             className="pheno-jar absolute -translate-x-1/2"
             style={{
-              left: j.left,
-              top: j.top,
+              ['--l' as string]: j.left,
+              ['--t' as string]: j.top,
+              ['--ml' as string]: j.mLeft,
+              ['--mt' as string]: j.mTop,
+              ['--jw' as string]: `${j.w}px`,
               zIndex: j.z,
-              width: j.w,
               ['--tilt' as string]: `${j.tilt}deg`,
               ['--dur' as string]: `${j.dur}s`,
               ['--del' as string]: `${j.del}s`,
@@ -101,8 +108,19 @@ export default function PhenosHero() {
         ))}
       </div>
 
+      {/* Knock back whatever sits directly behind the lockup. The jars carry
+          "PHENO BATCH" printed on them, so a jar label landing under the logo
+          read as a second, doubled logo. This sits above the jars (z 3-5) and
+          below the lockup (z 10), so the cluster stays bright at the edges and
+          only the area under the type darkens. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-[6]"
+        style={{ background: 'radial-gradient(62% 40% at 50% 50%, rgba(0,0,0,0.93) 0%, rgba(0,0,0,0.78) 42%, rgba(0,0,0,0) 76%)' }}
+      />
+
       {/* logo + nug burst */}
-      <div className="relative z-10 mx-auto w-full max-w-[1120px]">
+      <div className="relative z-10 mx-auto mt-[13vh] w-full max-w-[1120px] md:mt-0">
         {/* nugs flow out from behind/around the logo */}
         <div ref={nugsRef} aria-hidden className="pointer-events-none absolute inset-0 z-20">
           {NUGS.map((n, i) => (
