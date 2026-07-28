@@ -1495,3 +1495,42 @@ body:has(.pr-page) footer { position: relative; z-index: 1; background: var(--pr
 @media (prefers-reduced-motion: reduce) {
   .pr-aurora, .pr-aurora-b, .pr-bob-a, .pr-bob-b { animation: none; }
 }
+
+/* ── TWINS 2PK PRE-ROLLS ─────────────────────────────────────────────
+   Colours sampled straight out of the TWINS mark rather than eyeballed:
+   #081d47 navy outline, #b70001 red fill, white highlight.
+   On BODY, not .tw-page — the footer and the gutter behind it sit outside
+   <main> and would otherwise resolve these to nothing. */
+body:has(.tw-page) {
+  --tw-black: #05060c;
+  --tw-ink: #0a1130;
+  --tw-navy: #081d47;
+  --tw-blue: #1b3fb0;
+  --tw-blue-hot: #2f5ce0;
+  --tw-red: #c1111a;
+  --tw-red-hot: #e6242c;
+  --tw-cream: #fff4ea;
+  background: var(--tw-black);
+}
+.tw-page { background: var(--tw-black); }
+body:has(.tw-page) footer { position: relative; z-index: 1; background: var(--tw-black); }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* red and blue blooms drifting against each other — the two brand colours
+     never sit still, which is what keeps the black ground from going flat */
+  @keyframes tw-bloom {
+    0%, 100% { transform: translate3d(-5%, 3%, 0) scale(1.08) rotate(-3deg); opacity: 0.8; }
+    50%      { transform: translate3d(6%, -4%, 0) scale(1.3) rotate(4deg); opacity: 1; }
+  }
+  .tw-bloom { animation: tw-bloom 24s ease-in-out infinite; }
+  .tw-bloom-b { animation: tw-bloom 31s ease-in-out infinite reverse; }
+
+  /* the twins idle in mirror image — same clock, opposite direction */
+  @keyframes tw-idle-l { 0%,100% { transform: translate3d(0,0,0) rotate(-2deg); } 50% { transform: translate3d(0,-14px,0) rotate(-4deg); } }
+  @keyframes tw-idle-r { 0%,100% { transform: translate3d(0,0,0) rotate(2deg); } 50% { transform: translate3d(0,-14px,0) rotate(4deg); } }
+  .tw-idle-l { animation: tw-idle-l 7s ease-in-out infinite; }
+  .tw-idle-r { animation: tw-idle-r 7s ease-in-out infinite; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tw-bloom, .tw-bloom-b, .tw-idle-l, .tw-idle-r { animation: none; }
+}

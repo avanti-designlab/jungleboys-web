@@ -226,6 +226,41 @@ function oneGram(
   }
 }
 
+function twins(
+  slug: string,
+  strain: string,
+  lineage: string,
+  strainType: Product['strainType'],
+  thc: number,
+  topTerp: string,
+  featured = false,
+  deal?: number
+): Product {
+  return {
+    id: `prod-tw-${slug}`,
+    slug: `${slug}-twins-2pack`,
+    name: strain,
+    brand: 'Jungle Boys',
+    category: 'pre-rolls',
+    subcategory: 'twins-2pack',
+    strainType,
+    strain: lineage,
+    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    images: [{ url: `/products/twins/tube-${slug}.webp`, alt: `${strain} Twins 2 Pack Pre-Rolls` }],
+    // two 0.75g rolls per tube — 1.5g total, which is the whole point of the line
+    variants: [{ id: `v-tw-${slug}`, option: '1.5g', price: 2400, ...(deal ? { specialPrice: deal } : {}), quantityAvailable: 10 }],
+    labResult: {
+      lab: 'Placeholder Labs',
+      testedAt: '2026-07-01',
+      potency: { thc: { value: thc, unit: '%' } },
+      terpenes: [{ name: topTerp, percentage: 1.6 }, { name: 'Caryophyllene', percentage: 0.8 }],
+    },
+    effects: ['euphoric', 'relaxed'],
+    featured,
+    retailerId: 'placeholder-dtla',
+  }
+}
+
 function gasTank(
   slug: string,
   strain: string,
@@ -315,6 +350,10 @@ const products: Product[] = [
   oneGram('pop-rockets', 'Pop Rockets', 'Runtz x Zero Gravity', 'hybrid', 31.8, 'Limonene'),
   oneGram('cherry-gelato', 'Cherry Gelato', 'Cherry Punch x Mike Larry', 'hybrid', 29.9, 'Caryophyllene', false, 1500),
   oneGram('blu-og', 'Blu OG', 'Blu Frootz x 06 OG', 'indica', 32.4, 'Myrcene'),
+  // ── Twins 2 Pack Pre-Rolls
+  twins('blu-zerdz', 'Blu Zerdz', 'Blu Frootz x LCG', 'indica', 30.8, 'Linalool', true),
+  twins('all-cherriez', 'All Cherriez', 'Cherry Gelato x LCG', 'indica', 31.5, 'Caryophyllene', false, 2000),
+  twins('motor-breath', 'Motor Breath', 'SFV OG x Chem D', 'indica', 33.2, 'Myrcene'),
 ]
 
 const categories: ProductCategory[] = [
