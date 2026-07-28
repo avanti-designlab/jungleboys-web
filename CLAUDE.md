@@ -170,6 +170,14 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   merge happens, that is the point at which these two `/products/` routes need either a 301 to the
   new page or removal from `PRODUCT_LINES`; shipping them as orphaned "coming soon" pages is the
   failure mode to avoid. **Pre-cutover check: confirm this is still the intent.**
+- **Phase 2 body copy stays hardcoded, NOT wired to Storyblok (Avanti, 2026-07-28).** The ten
+  product-line pages keep their headlines, claims and section copy in the components; only the
+  per-page SEO fields go through Storyblok (`pageMetadata`). Asked whether the copy should be
+  CMS-editable and Avanti ruled no — she is the only person who would ever edit it, and she is
+  happy for changes to come through a code change. Consequence, accepted: **every copy tweak on a
+  product page is a deploy, not a CMS login.** This is consistent with the design-weight map (00
+  §7) — these pages are the design showcase, and Storyblok is explicitly "never constrains design".
+  Do not retrofit CMS bindings onto these pages without asking her first.
 - **Phase 2 asset waits — Avanti supplies before cutover (2026-07-28).** Three outstanding, all
   confirmed coming before the live site: (1) two rolling-process clips for `/products/pre-rolls`,
   (2) `roll.mp4` + `smoke.mp4` for the Hash Hole process cards, (3) optional higher-res HASH HOLE
