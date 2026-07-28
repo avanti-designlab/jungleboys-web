@@ -19,7 +19,6 @@ type Card = {
   title: string
   copy: string
   src: string | null
-  still: string
 }
 
 const CARDS: Card[] = [
@@ -28,14 +27,12 @@ const CARDS: Card[] = [
     title: 'Whole nugs, never trim',
     copy: 'Every roll starts from the same jarred flower we sell by the eighth — broken down by hand, never sweepings off the floor.',
     src: null,
-    still: '/products/pre-rolls/tube-cherry-gelato.webp',
   },
   {
     step: '02',
     title: 'Packed for an even burn',
     copy: 'Filled to a consistent density end to end, so it draws smooth from the first spark and never canoes down one side.',
     src: null,
-    still: '/products/pre-rolls/joint.webp',
   },
 ]
 
@@ -117,9 +114,25 @@ export default function PrProcess() {
                       <source src={card.src} type="video/mp4" />
                     </video>
                   ) : (
-                    /* eslint-disable-next-line @next/next/no-img-element -- product art */
-                    <img data-pr-proc-media src={card.still} alt=""
-                      className="absolute inset-0 h-full w-full object-contain p-3 will-change-transform drop-shadow-[0_20px_40px_rgba(0,0,0,0.6)]" />
+                    /* Empty video slot. A product shot sat here before and read
+                       as the finished card rather than a gap, which made it look
+                       like the section was meant to be a photo. This is honestly
+                       a placeholder: a framed slot with a play mark. */
+                    <div className="absolute inset-0 grid place-items-center">
+                      <div aria-hidden className="absolute inset-4 rounded-[0.9rem] border border-dashed border-[var(--pr-lime)]/30" />
+                      <div className="relative flex flex-col items-center gap-3">
+                        <span className="grid h-14 w-14 place-items-center rounded-full border border-[var(--pr-lime)]/50 md:h-16 md:w-16"
+                          style={{ background: 'radial-gradient(circle at 35% 30%, rgba(182,255,138,0.3) 0%, rgba(18,144,63,0.25) 100%)' }}>
+                          <svg viewBox="0 0 24 24" className="ml-1 h-6 w-6 md:h-7 md:w-7" fill="var(--pr-lime)" aria-hidden>
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                        </span>
+                        <span className="text-[10px] font-extrabold uppercase tracking-[0.32em] text-[var(--pr-lime)]/70 md:text-[11px]"
+                          style={{ fontFamily: 'var(--font-brand)' }}>
+                          Video coming
+                        </span>
+                      </div>
+                    </div>
                   )}
                   <span className="font-display absolute left-4 top-3 z-10 leading-none text-[var(--pr-lime)]"
                     style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)', textShadow: '0 4px 18px rgba(0,0,0,0.6)' }}>

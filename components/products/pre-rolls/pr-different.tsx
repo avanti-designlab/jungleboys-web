@@ -23,15 +23,15 @@ gsap.registerPlugin(ScrollTrigger)
 // CSS solve that removes a resize listener and a whole class of stale-measurement
 // bug.
 
-const CLAIMS = [
-  '100% Indoor Flower',
-  'Crafted from ACTUAL Nugs',
-  'Rolled to Perfection',
-  'Clean & Potent',
-  'Strain-Specific Options',
-  'Fresh Batches Only',
-  'Even Burn & Smooth Draw',
-  'Lab-Tested & Trusted',
+const CLAIMS: { icon: string; text: string }[] = [
+  { icon: 'indoor', text: '100% Indoor Flower' },
+  { icon: 'quality', text: 'Crafted from ACTUAL Nugs' },
+  { icon: 'sharing', text: 'Rolled to Perfection' },
+  { icon: 'burn', text: 'Clean & Potent' },
+  { icon: 'strain', text: 'Strain-Specific Options' },
+  { icon: 'batches', text: 'Fresh Batches Only' },
+  { icon: 'sealed', text: 'Even Burn & Smooth Draw' },
+  { icon: 'quality-b', text: 'Lab-Tested & Trusted' },
 ]
 
 const STEP = 360 / CLAIMS.length
@@ -138,7 +138,7 @@ export default function PrDifferent() {
             <div data-pr-ring className="absolute h-0 w-0 will-change-transform"
               style={{ transformStyle: 'preserve-3d', transform: 'rotateX(-7deg) rotateY(18deg)' }}>
               {CLAIMS.map((claim, i) => (
-                <div key={claim} data-pr-card
+                <div key={claim.text} data-pr-card
                   className="absolute grid place-items-center will-change-transform"
                   style={{
                     width: 'clamp(150px, 21vw, 268px)',
@@ -152,12 +152,16 @@ export default function PrDifferent() {
                       background: 'linear-gradient(160deg, rgba(11,66,33,0.95) 0%, rgba(3,22,12,0.94) 100%)',
                       boxShadow: '0 18px 44px rgba(0,0,0,0.45), inset 0 1px 0 rgba(182,255,138,0.25)',
                     }}>
-                    <span className="font-display block leading-none text-[var(--pr-lime)]" style={{ fontSize: 'clamp(1.5rem, 2.6vw, 2.3rem)' }}>
-                      {String(i + 1).padStart(2, '0')}
+                    <span aria-hidden
+                      className="mx-auto grid h-11 w-11 place-items-center rounded-full border border-[var(--pr-lime)]/40 md:h-14 md:w-14"
+                      style={{ background: 'radial-gradient(circle at 35% 30%, #b6ff8a 0%, #4fd97a 45%, #12903f 100%)' }}>
+                      {/* eslint-disable-next-line @next/next/no-img-element -- section icon */}
+                      <img src={`/products/pre-rolls/icons/${claim.icon}.svg`} alt="" className="h-5 w-5 md:h-7 md:w-7"
+                        style={{ filter: 'brightness(0) saturate(100%) invert(6%) sepia(30%) saturate(1400%) hue-rotate(100deg)' }} />
                     </span>
-                    <span className="mt-1.5 block text-[12px] font-extrabold uppercase leading-tight tracking-[0.08em] text-white md:text-[14px]"
+                    <span className="mt-2 block text-[12px] font-extrabold uppercase leading-tight tracking-[0.08em] text-white md:text-[14px]"
                       style={{ fontFamily: 'var(--font-brand)' }}>
-                      {claim}
+                      {claim.text}
                     </span>
                   </div>
                 </div>

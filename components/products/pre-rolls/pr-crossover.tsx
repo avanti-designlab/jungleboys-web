@@ -28,7 +28,7 @@ import gsap from 'gsap'
 
 const PLATE_URL = '/products/pre-rolls/joint-h.webp'
 const PLATE_POS = 'center 50%'
-const PLATE_SIZE = '88% auto'
+const PLATE_SIZE = '94% auto'
 
 const plate = {
   backgroundImage: `url(${PLATE_URL})`,
@@ -64,7 +64,7 @@ const maskOffJoint = {
   maskComposite: 'exclude',
 }
 
-const LINE = 'No prep. All fire.'
+const LINE = 'One joint. All fire.'
 const REPEATS = 7
 
 function Column({ outlined }: { outlined: boolean }) {
@@ -73,7 +73,7 @@ function Column({ outlined }: { outlined: boolean }) {
       key={i}
       className="block whitespace-nowrap text-center"
       style={{
-        fontSize: 'min(13.5vw, 8.5rem)',
+        fontSize: 'var(--pr-line-size)',
         letterSpacing: '-0.035em',
         lineHeight: 1.02,
         ...(outlined
@@ -88,7 +88,7 @@ function Column({ outlined }: { outlined: boolean }) {
     </span>
   ))
   return (
-    <div data-pr-marq className="font-display uppercase will-change-transform">
+    <div data-pr-marq className="font-display w-full uppercase will-change-transform">
       <div>{rows}</div>
       {/* second copy makes the -50% loop seamless */}
       <div aria-hidden>{rows}</div>
@@ -124,20 +124,23 @@ export default function PrCrossover() {
   }, [])
 
   return (
-    <section ref={rootRef} className="relative z-10 px-2 py-2 md:px-3 md:py-3">
+    // Full bleed, no pill: every other section on this page is a rounded panel,
+    // and boxing a scrolling band inside one made it read as a widget. Running
+    // it edge to edge on flat black lets it behave like a band the page passes
+    // through, which is what it is.
+    <section ref={rootRef} className="relative z-10">
       <div
         data-nav-theme="dark"
-        className="relative h-[92vh] min-h-[560px] overflow-hidden rounded-[1.75rem] md:rounded-[2.5rem]"
-        style={{ background: 'radial-gradient(120% 80% at 50% 50%, #0b3f22 0%, #062514 46%, #021008 100%)' }}
+        className="relative h-[62vh] min-h-[380px] overflow-hidden bg-[var(--pr-black)]"
+        // Sized in vw with no rem cap so the line always spans the full width.
+        // The old min(13.5vw, 8.5rem) capped out and left the copy floating in
+        // the middle of the panel with dead margins either side. The coefficient
+        // is measured, not guessed — see the note below.
+        style={{ ['--pr-line-size' as string]: '17.7vw' }}
       >
-        <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-          <div className="pr-aurora absolute -inset-[30%]"
-            style={{ background: 'radial-gradient(40% 44% at 30% 50%, rgba(20,160,74,0.45) 0%, rgba(20,160,74,0) 70%)' }} />
-        </div>
-
         {/* glow under the joint so it reads as lit, not pasted on */}
         <div aria-hidden className="pointer-events-none absolute inset-0 z-[1]"
-          style={{ background: 'radial-gradient(58% 22% at 50% 50%, rgba(182,255,138,0.3) 0%, rgba(182,255,138,0) 70%)' }} />
+          style={{ background: 'radial-gradient(52% 26% at 50% 50%, rgba(125,255,79,0.22) 0%, rgba(125,255,79,0) 72%)' }} />
 
         {/* the pre-roll itself */}
         <div aria-hidden className="absolute inset-0 z-10 drop-shadow-[0_24px_50px_rgba(0,0,0,0.6)]" style={plate} />
