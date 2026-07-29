@@ -126,7 +126,7 @@ export default function RewardsIntro() {
         <button
           data-intro-cue
           onClick={scrollDown}
-          className="group absolute bottom-10 flex cursor-pointer flex-col items-center gap-2"
+          className="group absolute bottom-28 flex cursor-pointer flex-col items-center gap-2 md:bottom-10"
           style={{ fontFamily: 'var(--font-brand)' }}
         >
           <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-white/80 transition-colors group-hover:text-[var(--color-accent)]">

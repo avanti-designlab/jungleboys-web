@@ -157,7 +157,7 @@ export default function PhenosHero() {
           const y = el.getBoundingClientRect().top + window.scrollY - 96
           window.scrollTo({ top: y, behavior: 'smooth' })
         }}
-        className="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 cursor-pointer flex-col items-center gap-2.5 text-white/55 transition-colors duration-200 hover:text-white"
+        className="absolute bottom-28 left-1/2 z-30 flex -translate-x-1/2 cursor-pointer flex-col items-center gap-2.5 text-white/55 transition-colors duration-200 hover:text-white md:bottom-8"
       >
         <span className="text-[11px] font-bold uppercase tracking-[0.45em]" style={{ fontFamily: 'var(--font-brand)' }}>
           Scroll

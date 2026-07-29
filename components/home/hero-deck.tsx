@@ -114,7 +114,7 @@ export default function HeroDeck({ slides = HERO_SLIDES }: { slides?: HeroSlide[
             {/* overlays removed — banners show full-bright (Avanti) */}
             <div
               data-content={i}
-              className="absolute inset-0 flex flex-col items-start justify-end gap-3 p-8 pb-16 text-white md:p-16 md:pb-20"
+              className="absolute inset-0 flex flex-col items-start justify-end gap-3 p-8 pb-28 text-white md:p-16 md:pb-20"
             >
               <p
                 className="inline-flex rounded-full bg-black/55 px-4 py-2 text-xs font-medium uppercase tracking-[0.22em] text-white backdrop-blur-sm md:text-sm"
