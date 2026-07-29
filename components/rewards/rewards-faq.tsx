@@ -35,7 +35,7 @@ export default function RewardsFaq() {
           </div>
         </div>
 
-        <Scrub enter start="top 80%" className="mt-10 space-y-3">
+        <Scrub enter perItem className="mt-10 space-y-3">
           {REWARDS_FAQ.map((f, i) => {
             const isOpen = open === i
             return (

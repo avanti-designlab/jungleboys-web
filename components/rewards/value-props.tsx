@@ -19,9 +19,13 @@ export default function ValueProps() {
         <SplitHeading
           mode="words"
           className="text-center text-3xl font-extrabold uppercase leading-[1.1] tracking-tight text-[var(--color-foreground)] md:text-4xl xl:text-5xl"
+          // Four explicit lines. Left to wrap, it broke as "EVERY DOLLAR YOU /
+          // SPEND", orphaning a word; these are the breaks Avanti asked for.
           lines={[
-            { text: 'Every Dollar You Spend' },
-            { text: 'Comes Back to You in Rewards.', accent: true, block: true },
+            { text: 'Every Dollar', block: true },
+            { text: 'You Spend', block: true },
+            { text: 'Comes Back to', accent: true, block: true },
+            { text: 'You in Rewards.', accent: true, block: true },
           ]}
         />
         <Scrub enter start="top 75%" className="mt-12 grid gap-5 sm:grid-cols-2">

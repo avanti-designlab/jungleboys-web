@@ -136,6 +136,7 @@ export function Scrub({
   start = 'top 80%',
   end = 'bottom 100%',
   enter = false,
+  perItem = false,
 }: {
   children: React.ReactNode
   className?: string
@@ -143,6 +144,8 @@ export function Scrub({
   end?: string
   /** play once on enter (slow, smooth) instead of scrubbing with scroll */
   enter?: boolean
+  /** one ScrollTrigger per child instead of one staggered timeline for the lot */
+  perItem?: boolean
 }) {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -153,6 +156,38 @@ export function Scrub({
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       const items = [...el.querySelectorAll<HTMLElement>('[data-reveal]')]
       if (!items.length) return
+      // A single staggered timeline reveals late items on a TIMER, so on a long
+      // list (the FAQ) you scroll past questions 4-8 before their turn comes up.
+      // perItem gives every child its own trigger, so each one appears as it
+      // enters the viewport regardless of how fast you scroll.
+      if (enter && perItem) {
+        // One IntersectionObserver per list, revealing each row as it actually
+        // becomes visible.
+        //
+        // Two things ruled out the obvious approaches. A single staggered
+        // timeline reveals later rows on a TIMER, so on a long list you scroll
+        // past rows 4-8 before their turn arrives — that was the reported bug.
+        // A ScrollTrigger per row then failed too: "rise" starts at
+        // yPercent:100, displacing each row by its own height, and the trigger
+        // is measured where the transform puts it, so every start point moved
+        // down with it. An observer watches the box the visitor can actually
+        // see, so neither problem applies.
+        const small = { opacity: 0, y: 40 }
+        items.forEach((item) => gsap.set(item, small))
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (!e.isIntersecting) return
+              io.unobserve(e.target)
+              gsap.to(e.target, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' })
+            })
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.05 }
+        )
+        items.forEach((item) => io.observe(item))
+        return () => io.disconnect()
+      }
+
       const tl = gsap.timeline({
         scrollTrigger: enter
           ? { trigger: el, start, once: true }
@@ -182,7 +217,7 @@ export function Scrub({
       })
     })
     return () => mm.revert()
-  }, [start, end, enter])
+  }, [start, end, enter, perItem])
 
   return (
     <div ref={ref} className={className}>

@@ -167,7 +167,7 @@ export const CLUB_PERKS = [
 
 export const APP_FEATURES = [
   'Early access to products',
-  'Push notifications for drops and promos',
+  'Push notifications for\nDrops and promos',
   'View tier and progress',
   'App-exclusive drops',
   'App-only merch',

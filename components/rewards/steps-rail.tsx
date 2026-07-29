@@ -59,7 +59,7 @@ export default function StepsRail() {
         // Broke as "IN-STORE REWARDS / POINTS" on a phone, orphaning one word.
         // Split deliberately so it reads "IN-STORE" / "REWARDS POINTS", and
         // sized up to fill the pill. One line again from sm up.
-        className="mx-auto w-fit rounded-full bg-[var(--color-foreground)] px-8 py-4 text-center text-[1.6rem] font-extrabold uppercase leading-[1.05] tracking-widest text-[var(--color-background)] sm:text-xl sm:leading-normal md:px-10 md:text-2xl"
+        className="mx-auto w-fit rounded-full bg-[var(--color-foreground)] px-8 py-4 text-center text-[1.6rem] font-extrabold uppercase leading-[1.05] tracking-[0.04em] text-[var(--color-background)] sm:text-xl sm:leading-normal md:px-10 md:text-2xl"
         style={{ fontFamily: 'var(--font-brand)' }}
       >
         <span className="block sm:inline">In-Store</span>{' '}

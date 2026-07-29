@@ -160,7 +160,7 @@ export default function ConnoisseurClub() {
             sizes="(max-width: 768px) 88vw, 640px"
             className="relative z-10 mx-auto w-[70%] max-w-[640px]"
           />
-          <div className="rw-breathe relative mx-auto -mt-[14%] w-full max-w-[1280px]">
+          <div className="rw-breathe relative -mx-4 -mt-[14%] w-[calc(100%+2rem)] max-w-none md:mx-auto md:w-full md:max-w-[1280px]">
             <Image
               src="/rewards/club-bg-title.png"
               alt="Jungle Boys mascots in a private lounge"
@@ -177,8 +177,8 @@ export default function ConnoisseurClub() {
         </div>
 
         {/* decorative tied-back drapes (from the art) at the stage edges */}
-        <img src="/rewards/curtain-left.png" alt="" aria-hidden className="absolute left-0 top-0 z-20 w-[15%] max-w-[300px] opacity-95" />
-        <img src="/rewards/curtain-right.png" alt="" aria-hidden className="absolute right-0 top-0 z-20 w-[15%] max-w-[300px] opacity-95" />
+        <img src="/rewards/curtain-left.png" alt="" aria-hidden className="absolute left-0 top-0 z-20 w-[26%] max-w-[440px] opacity-95" />
+        <img src="/rewards/curtain-right.png" alt="" aria-hidden className="absolute right-0 top-0 z-20 w-[26%] max-w-[440px] opacity-95" />
 
         {/* closing gathered curtains (scene-style art) that part on scroll */}
         <div data-curtain-left aria-hidden className="absolute inset-y-0 left-0 z-30 w-1/2 will-change-transform">
@@ -197,8 +197,9 @@ export default function ConnoisseurClub() {
             className="relative rounded-[calc(2.5rem-3px)] border border-[var(--color-accent)]/40 bg-[#0b0a07] px-6 py-12 md:px-14"
             style={{ fontFamily: 'var(--font-brand)' }}
           >
-            <p className="text-center text-[11px] font-bold uppercase tracking-[0.35em] text-white/90">
-              The highest tier of PWF Rewards
+            <p className="text-center text-[11px] font-bold uppercase leading-[1.6] tracking-[0.35em] text-white/90">
+              <span className="block">The highest tier of</span>
+              <span className="block">PWF Rewards</span>
             </p>
             <SplitHeading
               as="h3"

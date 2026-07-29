@@ -22,11 +22,14 @@ export default function WaysToEarn() {
       <div className="mx-auto max-w-6xl">
         <SplitHeading
           mode="letters"
-          className="text-center text-3xl font-extrabold uppercase leading-[1.15] tracking-tight text-[var(--color-foreground)] md:text-4xl"
+          className="text-center text-[1.35rem] font-extrabold uppercase leading-[1.15] tracking-tight text-[var(--color-foreground)] sm:text-3xl md:text-4xl"
+          // Lines 2 and 3 used to flow together and wrap wherever they ran out
+          // of room ("MORE REASONS TO / KEEP PLAYING WITH / FIRE."). Three
+          // explicit blocks give three even lines at any width.
           lines={[
             { text: 'More Ways to Earn.', block: true },
-            { text: 'More Reasons to Keep ' },
-            { text: 'Playing With Fire.', accent: true },
+            { text: 'More Reasons to Keep', block: true },
+            { text: 'Playing With Fire.', accent: true, block: true },
           ]}
         />
 
