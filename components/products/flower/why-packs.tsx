@@ -80,6 +80,11 @@ export default function WhyPacks() {
         />
       ))}
 
+      {/* Scrim. It sits ABOVE the nugs (z-0) and BELOW the type (z-10), so the
+          cutouts keep their parallax and their edges while the claims read
+          against near-black instead of against frosty trichomes. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-[5] bg-black/60" />
+
       <div className="relative z-10 mx-auto max-w-[1200px] px-6">
         <h2 className="font-display text-center uppercase leading-[0.86]" style={{ fontSize: 'min(15vw, 11rem)' }}>
           <span className="media-reveal block text-white">Why Our Packs</span>

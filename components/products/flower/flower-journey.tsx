@@ -42,8 +42,8 @@ export default function FlowerJourney() {
       {/* genetics statement — outlined in JB yellow, owns the frame */}
       <div
         ref={statementRef}
-        className="font-display pointer-events-none absolute inset-x-0 top-[10vh] z-10 text-center uppercase leading-[0.9]"
-        style={{ fontSize: 'min(9.5vw, 8rem)' }}
+        className="font-display pointer-events-none absolute inset-x-0 top-[13vh] z-10 text-center uppercase leading-[0.9] md:top-[10vh]"
+        style={{ fontSize: 'min(13.5vw, 8rem)' }}
       >
         <span className="fl-stroke-accent block">Jungle Boys Genetics</span>
         <span className="fl-stroke-accent block">From Seed to Fire</span>

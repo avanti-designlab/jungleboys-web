@@ -135,7 +135,7 @@ export default function PrHero() {
           </div>
         </div>
 
-        <div data-pr-stats className="absolute inset-x-0 bottom-[4%] z-30 will-change-transform">
+        <div data-pr-stats className="absolute inset-x-0 bottom-[14%] z-30 will-change-transform md:bottom-[4%]">
           <div className="mx-auto flex w-full max-w-[720px] items-stretch justify-center gap-2 px-4 md:gap-4">
             {STATS.map((s) => (
               <span key={s.l} data-pr-stat

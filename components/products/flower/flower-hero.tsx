@@ -41,7 +41,7 @@ export default function FlowerHero() {
 
   return (
     <section ref={sectionRef} className="relative h-[180vh] bg-black">
-      <div data-fl-stage className="sticky top-0 flex h-screen items-start justify-center overflow-hidden bg-[#050505] pt-[13vh]">
+      <div data-fl-stage className="sticky top-0 flex h-screen items-start justify-center overflow-hidden bg-[#050505] pt-[17vh] md:pt-[13vh]">
         {/* graffiti mural texture */}
         {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}
         <img
@@ -77,7 +77,7 @@ export default function FlowerHero() {
           data-fl-plant
           src="/products/flower/plant-cutout.webp"
           alt="Frost-covered Jungle Boys live top"
-          className="fl-plant absolute bottom-0 left-1/2 z-20 w-[min(135vw,1350px)] max-w-none drop-shadow-[0_50px_90px_rgba(0,0,0,0.85)]"
+          className="fl-plant absolute bottom-0 left-1/2 z-20 w-[170vw] max-w-none md:w-[min(135vw,1350px)] drop-shadow-[0_50px_90px_rgba(0,0,0,0.85)]"
         />
 
         {/* scroll cue */}

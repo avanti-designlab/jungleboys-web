@@ -142,8 +142,12 @@ export default function Anniversary() {
       {/* gold ambience */}
       <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 30%, rgba(233,193,90,0.14), transparent 65%)' }} />
 
-      {/* nug fountain layer — rides above the content, never blocks it */}
-      <div ref={fountainRef} aria-hidden className="pointer-events-none absolute inset-0 z-20" />
+      {/* Nug fountain — BEHIND the copy. It used to run at z-20, over the top
+          of everything, so nugs landed across the paragraph and the closing
+          line and you could not read either. */}
+      <div ref={fountainRef} aria-hidden className="pointer-events-none absolute inset-0 z-[4]" />
+      {/* and a scrim over them, still under the text */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-[6] bg-black/55" />
 
       <div className="relative z-10 mx-auto max-w-[1100px] px-6 text-center">
         <h2 className="media-reveal fl-stag font-display uppercase leading-[0.86]" style={{ fontSize: 'min(13vw, 9rem)' }}>

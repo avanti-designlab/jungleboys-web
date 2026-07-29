@@ -49,8 +49,11 @@ export default function TpFacts() {
             },
           })
 
+          // Lands in the first 7% of the pin, not the first 18%: pinned scrub
+          // progress only starts once the section is ALREADY full screen, so a
+          // slow reveal here reads as the headline arriving late.
           tl.fromTo('[data-tp-line]', { opacity: 0, yPercent: 20, scale: 0.92 },
-            { opacity: 1, yPercent: 0, scale: 1, ease: 'power3.out', duration: 0.18 }, 0)
+            { opacity: 1, yPercent: 0, scale: 1, ease: 'power3.out', duration: 0.07 }, 0)
 
           // The 9 stays a 9. It used to count up from 1, which meant the line
           // read "1 FOR NOW, 1 FOR LATER" for the whole approach — wrong copy on
@@ -81,7 +84,7 @@ export default function TpFacts() {
     <section ref={rootRef} className="relative z-10 px-2 py-2 md:px-3 md:py-3">
       <div
         data-nav-theme="dark"
-        className="relative flex h-[92vh] min-h-[620px] items-center overflow-hidden rounded-[1.75rem] px-4 text-white md:rounded-[2.5rem] md:px-10"
+        className="relative flex h-[92vh] min-h-[620px] items-start overflow-hidden rounded-[1.75rem] px-4 pt-[19vh] text-white md:items-center md:rounded-[2.5rem] md:px-10 md:pt-0"
         style={{ background: 'linear-gradient(180deg,#0d63a8 0%,#08406f 54%,#051d33 100%)' }}
       >
         {/* deliberately no smoke here — it runs in the hero and again in the
@@ -97,7 +100,7 @@ export default function TpFacts() {
           </h2>
 
           <div data-tp-grid
-            className="mt-8 grid grid-cols-1 gap-2.5 will-change-transform md:mt-12 md:grid-cols-2 md:gap-4"
+            className="mt-5 grid grid-cols-1 gap-2 will-change-transform md:mt-12 md:grid-cols-2 md:gap-4"
             style={{ perspective: '1100px', transformStyle: 'preserve-3d' }}>
             {CLAIMS.map((claim, i) => (
               <div key={claim.text} data-tp-card={i}

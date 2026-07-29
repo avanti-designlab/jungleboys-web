@@ -178,8 +178,8 @@ export default function TpHero() {
           style={{ background: 'radial-gradient(80% 62% at 50% 88%, rgba(120,190,255,0.34) 0%, rgba(46,139,255,0.16) 40%, rgba(5,8,15,0) 74%)' }} />
 
         {/* THE ROW — oversized jars, cropped off the bottom on purpose */}
-        <div data-tp-row className="absolute inset-x-0 bottom-[-16%] z-10 will-change-transform" style={{ perspective: '1400px' }}>
-          <div className="relative mx-auto h-[74vh] w-full max-w-[1500px]" style={{ transformStyle: 'preserve-3d' }}>
+        <div data-tp-row className="absolute inset-x-0 bottom-[-24%] z-10 will-change-transform md:bottom-[-16%]" style={{ perspective: '1400px' }}>
+          <div className="relative mx-auto h-[67vh] w-full max-w-[1500px] md:h-[74vh]" style={{ transformStyle: 'preserve-3d' }}>
             {JARS.map((j, i) => (
               <div key={j.src} data-tp-jar={i}
                 className="absolute bottom-0 left-1/2 w-max will-change-transform"
@@ -200,7 +200,7 @@ export default function TpHero() {
         </div>
 
         {/* stat pills */}
-        <div data-tp-stats className="absolute inset-x-0 bottom-[4%] z-30 will-change-transform">
+        <div data-tp-stats className="absolute inset-x-0 bottom-[14%] z-30 will-change-transform md:bottom-[4%]">
           <div className="mx-auto flex w-full max-w-[720px] items-stretch justify-center gap-2 px-4 md:gap-4">
             {STATS.map((s) => (
               <span key={s.l} data-tp-stat

@@ -24,7 +24,8 @@ gsap.registerPlugin(ScrollTrigger)
 const STACK = [
   { src: 'jar-motor-breath', x: -27, y: 10, h: 46, rot: -12, z: -220, bob: 'a', dur: 12, drift: -16 },
   { src: 'jar-rainbow-belts', x: 25, y: 16, h: 44, rot: 11, z: -140, bob: 'b', dur: 10, drift: -9 },
-  { src: 'jar-all-cherriez', x: 0, y: 0, h: 58, rot: -3, z: 90, bob: 'a', dur: 14, drift: -24 },
+  // front jar only — at 58 it ran past the panel's top and bottom edges
+  { src: 'jar-all-cherriez', x: 0, y: 0, h: 47, rot: -3, z: 90, bob: 'a', dur: 14, drift: -24 },
 ]
 
 const LINES = ['No trim.', 'No shake.', 'No shortcuts.']

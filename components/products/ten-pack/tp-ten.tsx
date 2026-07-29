@@ -87,8 +87,8 @@ export default function TpTen() {
 
         {/* the giant numeral */}
         <span data-tp-numeral aria-hidden
-          className="font-display pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 leading-none text-white/[0.07] will-change-transform"
-          style={{ fontSize: 'min(58vw, 40rem)', letterSpacing: '-0.04em' }}>
+          className="font-display pointer-events-none absolute left-1/2 top-[44%] -translate-x-1/2 -translate-y-1/2 leading-none text-white/[0.07] will-change-transform md:top-1/2"
+          style={{ fontSize: 'min(130vw, 40rem)', letterSpacing: '-0.04em' }}>
           10
         </span>
 

@@ -131,7 +131,7 @@ export default function PrCrossover() {
     <section ref={rootRef} className="relative z-10">
       <div
         data-nav-theme="dark"
-        className="relative h-[62vh] min-h-[380px] overflow-hidden bg-[var(--pr-black)]"
+        className="relative h-[26vh] min-h-[215px] overflow-hidden bg-[var(--pr-black)] md:h-[62vh] md:min-h-[380px]"
         // Sized in vw with no rem cap so the line always spans the full width.
         // The old min(13.5vw, 8.5rem) capped out and left the copy floating in
         // the middle of the panel with dead margins either side. The coefficient
