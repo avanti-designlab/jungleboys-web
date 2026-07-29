@@ -84,7 +84,7 @@ export default function TpFacts() {
     <section ref={rootRef} className="relative z-10 px-2 py-2 md:px-3 md:py-3">
       <div
         data-nav-theme="dark"
-        className="relative flex h-[92vh] min-h-[620px] items-start overflow-hidden rounded-[1.75rem] px-4 pt-[19vh] text-white md:items-center md:rounded-[2.5rem] md:px-10 md:pt-0"
+        className="relative flex h-[92vh] min-h-[620px] items-center overflow-hidden rounded-[1.75rem] px-4 pt-[16vh] text-white md:rounded-[2.5rem] md:px-10 md:pt-0"
         style={{ background: 'linear-gradient(180deg,#0d63a8 0%,#08406f 54%,#051d33 100%)' }}
       >
         {/* deliberately no smoke here — it runs in the hero and again in the
@@ -95,20 +95,20 @@ export default function TpFacts() {
 
         <div className="relative z-10 mx-auto w-full max-w-[1220px]">
           <h2 data-tp-line className="font-display text-center uppercase leading-[0.82] text-white will-change-transform"
-            style={{ fontSize: 'min(13.5vw, 7rem)', letterSpacing: '-0.035em' }}>
+            style={{ fontSize: 'min(16vw, 7rem)', letterSpacing: '-0.035em' }}>
             1 for now,<br className="md:hidden" /> <span data-tp-nine className="text-[var(--tp-glow)]">9</span> for later.
           </h2>
 
           <div data-tp-grid
-            className="mt-5 grid grid-cols-1 gap-2 will-change-transform md:mt-12 md:grid-cols-2 md:gap-4"
+            className="mt-4 grid grid-cols-1 gap-1.5 will-change-transform md:mt-12 md:grid-cols-2 md:gap-4"
             style={{ perspective: '1100px', transformStyle: 'preserve-3d' }}>
             {CLAIMS.map((claim, i) => (
               <div key={claim.text} data-tp-card={i}
                 // dark glass, not light — the smoke behind is bright enough that
                 // a white tint left the labels sitting on nothing
-                className="flex items-center gap-3 rounded-2xl border border-white/20 bg-[#04182e]/45 px-3 py-2.5 backdrop-blur-md will-change-transform md:gap-4 md:rounded-[1.4rem] md:px-5 md:py-4">
+                className="flex items-center gap-3 rounded-2xl border border-white/20 bg-[#04182e]/45 px-3 py-1.5 backdrop-blur-md will-change-transform md:gap-4 md:rounded-[1.4rem] md:px-5 md:py-4">
                 <span aria-hidden
-                  className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/25 md:h-14 md:w-14"
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/25 md:h-14 md:w-14"
                   style={{ background: 'radial-gradient(circle at 35% 30%, #6db6ff 0%, #2e8bff 55%, #0d5fc4 100%)' }}>
                   {/* eslint-disable-next-line @next/next/no-img-element -- section icon */}
                   <img src={`/products/10-pack/icons/${claim.icon}.svg`} alt="" className="h-5 w-5 object-contain md:h-7 md:w-7" />

@@ -79,7 +79,7 @@ export default function TpTen() {
     <section ref={rootRef} className="relative z-10 px-2 py-2 md:px-3 md:py-3">
       <div
         data-nav-theme="dark"
-        className="relative h-[92vh] min-h-[600px] overflow-hidden rounded-[1.75rem] md:rounded-[2.5rem]"
+        className="relative h-[68vh] min-h-[470px] overflow-hidden rounded-[1.75rem] md:h-[92vh] md:min-h-[600px] md:rounded-[2.5rem]"
         style={{ background: 'radial-gradient(125% 82% at 50% 104%, #1a7ad0 0%, #0b3f70 26%, #05192e 56%, #02060c 100%)' }}
       >
         <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[60%]"
@@ -87,7 +87,13 @@ export default function TpTen() {
 
         {/* the giant numeral */}
         <span data-tp-numeral aria-hidden
-          className="font-display pointer-events-none absolute left-1/2 top-[44%] -translate-x-1/2 -translate-y-1/2 leading-none text-white/[0.07] will-change-transform md:top-1/2"
+          // Solid, not a 7% ghost, and dropped so the rank covers its lower
+          // half — that overlap is what kills the empty band this section used
+          // to carry above the joints. inset-x-0 + text-center rather than
+          // left-1/2/-translate-x-1/2: the negative letter-spacing after the
+          // final glyph shrinks the box on the right, so centring the BOX threw
+          // the ink off to the right.
+          className="font-display pointer-events-none absolute inset-x-0 top-[58%] -translate-y-1/2 text-center leading-none text-[#123c68] will-change-transform md:top-1/2"
           style={{ fontSize: 'min(130vw, 40rem)', letterSpacing: '-0.04em' }}>
           10
         </span>

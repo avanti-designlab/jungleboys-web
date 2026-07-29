@@ -27,7 +27,7 @@ const TUBES = [
 const STATS = [
   { n: '1G', l: 'Every roll' },
   { n: '100%', l: 'Indoor flower' },
-  { n: '0', l: 'Trim, ever' },
+  { n: 'No', l: 'Trim/shake' },
 ]
 
 export default function PrHero() {
@@ -139,9 +139,9 @@ export default function PrHero() {
           <div className="mx-auto flex w-full max-w-[720px] items-stretch justify-center gap-2 px-4 md:gap-4">
             {STATS.map((s) => (
               <span key={s.l} data-pr-stat
-                className="flex flex-1 flex-col items-center rounded-2xl border border-[var(--pr-lime)]/30 bg-black/72 px-3 py-2.5 backdrop-blur-md md:px-5 md:py-3.5">
+                className="flex flex-1 flex-col items-center rounded-2xl border border-[var(--pr-lime)]/30 bg-black/72 px-1.5 py-2.5 backdrop-blur-md md:px-5 md:py-3.5">
                 <span className="font-display leading-none text-white" style={{ fontSize: 'min(8vw, 2.4rem)' }}>{s.n}</span>
-                <span className="mt-1 text-[9px] font-extrabold uppercase tracking-[0.24em] text-[var(--pr-lime)] md:text-[11px]"
+                <span className="mt-1 whitespace-nowrap text-[8px] font-extrabold uppercase tracking-[0.1em] text-[var(--pr-lime)] md:text-[11px] md:tracking-[0.24em]"
                   style={{ fontFamily: 'var(--font-brand)' }}>{s.l}</span>
               </span>
             ))}
