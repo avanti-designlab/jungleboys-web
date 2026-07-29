@@ -1,6 +1,6 @@
 // Jungle Boys owned dispensaries for /locations — the store directory grouped by
 // state (CA native menus + FL embed menus). Hand-drawn store illustrations live
-// in public/locations/stores/<slug>.png. St. Petersburg is a live listing with
+// in public/locations/stores/<slug>.webp. St. Petersburg is a live listing with
 // no menu page yet, so it's omitted until its embed exists. SEPARATE from the
 // Product Finder's 3rd-party stockist list (two-map rule).
 
@@ -33,7 +33,7 @@ function store(state: 'CA' | 'FL', slug: string, name: string, address: string, 
     state,
     lat,
     lng,
-    image: `/locations/stores/${slug}.png`,
+    image: `/locations/stores/${slug}.webp`,
     menuUrl: `/menu/${state === 'CA' ? 'california' : 'florida'}/${slug}`,
   }
 }
