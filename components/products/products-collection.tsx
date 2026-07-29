@@ -309,12 +309,12 @@ export default function ProductsCollection() {
                   </div>
                   <span
                     aria-hidden
-                    className="ml-auto inline-flex shrink-0 items-center gap-2 rounded-full bg-black py-2 pl-4 pr-2 text-white transition-colors duration-200 group-hover:bg-[var(--color-accent)] group-hover:text-black"
+                    className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-full bg-black py-2 pl-3.5 pr-1.5 text-white transition-colors duration-200 group-hover:bg-[var(--color-accent)] group-hover:text-black"
                   >
-                    <span className="text-[11px] font-extrabold uppercase tracking-widest" style={{ fontFamily: 'var(--font-brand)' }}>
+                    <span className="text-[11px] font-extrabold uppercase tracking-[0.12em]" style={{ fontFamily: 'var(--font-brand)' }}>
                       Shop Now
                     </span>
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-black transition-colors duration-200 group-hover:bg-black group-hover:text-[var(--color-accent)]">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-black transition-colors duration-200 group-hover:bg-black group-hover:text-[var(--color-accent)]">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden>
                         <path d="M7 17 17 7M9 7h8v8" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
