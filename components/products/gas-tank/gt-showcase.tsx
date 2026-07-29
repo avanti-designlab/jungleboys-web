@@ -96,7 +96,7 @@ export default function GtShowcase() {
   }, [])
 
   const chip =
-    'rounded-full bg-[#125f9e] px-3 py-2 text-[9px] font-extrabold uppercase tracking-wide text-white shadow-[0_8px_22px_rgba(9,58,99,0.32)] md:px-6 md:py-3 md:text-[15px]'
+    'rounded-full bg-[#125f9e] px-4 py-2.5 text-[11px] font-extrabold uppercase tracking-wide text-white shadow-[0_8px_22px_rgba(9,58,99,0.32)] md:px-6 md:py-3 md:text-[15px]'
 
   return (
     <section ref={rootRef} className="relative z-10 px-2 py-2 md:px-3 md:py-3">
@@ -108,26 +108,31 @@ export default function GtShowcase() {
         <GtSnow ref={snowRef} />
 
         {/* ── heading ── */}
-        <div data-ice-head className="pointer-events-none absolute inset-x-0 top-[8%] z-10 px-6 text-center will-change-transform">
+        <div data-ice-head className="pointer-events-none absolute inset-x-0 top-[16%] z-10 px-6 text-center will-change-transform md:top-[8%]">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.36em] text-[#0b4472]/80 md:text-xs"
             style={{ fontFamily: 'var(--font-brand)' }}>
             Introducing the all new
           </p>
-          <h2 className="font-display mt-2 whitespace-nowrap uppercase leading-[0.86] text-[#0b4472]"
-            style={{ fontSize: '12.6vw', letterSpacing: '-0.03em' }}>
-            Live Rosin Gas Tank
+          {/* Two lines on mobile so each can be much larger — one 12.6vw line
+              had to stay small enough to fit "Live Rosin Gas Tank" across a
+              390px screen. Back to a single line from md up. */}
+          <h2 className="font-display mt-2 uppercase leading-[0.84] text-[#0b4472]"
+            style={{ letterSpacing: '-0.03em' }}>
+            <span className="block text-[19vw] md:hidden">Live Rosin</span>
+            <span className="block text-[19vw] md:hidden">Gas Tank</span>
+            <span className="hidden whitespace-nowrap md:block" style={{ fontSize: '12.6vw' }}>Live Rosin Gas Tank</span>
           </h2>
         </div>
 
         {/* ── the claims, flanking the device ── */}
-        <div data-chips className="pointer-events-none absolute inset-x-0 bottom-[6%] z-20 px-4 md:bottom-[10%] md:px-10">
-          <div className="mx-auto flex w-full max-w-[1180px] items-end justify-between gap-3">
-            <div className="flex shrink-0 flex-col items-start gap-2 md:gap-3">
+        <div data-chips className="pointer-events-none absolute inset-x-0 bottom-[13%] z-20 px-4 md:bottom-[10%] md:px-10">
+          <div className="mx-auto flex w-full max-w-[1180px] flex-wrap items-center justify-center gap-2 md:flex-nowrap md:items-end md:justify-between md:gap-3">
+            <div className="contents md:flex md:shrink-0 md:flex-col md:items-start md:gap-3">
               {LEFT.map((f, i) => (
                 <span key={f} data-chip-l={i} className={`${chip} will-change-transform`} style={{ fontFamily: 'var(--font-brand)' }}>{f}</span>
               ))}
             </div>
-            <div className="flex shrink-0 flex-col items-end gap-2 md:gap-3">
+            <div className="contents md:flex md:shrink-0 md:flex-col md:items-end md:gap-3">
               {RIGHT.map((f, i) => (
                 <span key={f} data-chip-r={i} className={`${chip} will-change-transform`} style={{ fontFamily: 'var(--font-brand)' }}>{f}</span>
               ))}
@@ -136,10 +141,10 @@ export default function GtShowcase() {
         </div>
 
         {/* ── the device, between them ── */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex justify-center pb-[2%]">
+        <div className="pointer-events-none absolute inset-x-0 bottom-[19%] z-10 flex justify-center md:bottom-0 md:pb-[2%]">
           {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
           <img data-ice-dev src="/products/gas-tank/device-rosin-n.webp" alt="Live Rosin Gas Tank All-In-One"
-            className="h-[40vh] max-h-[580px] w-auto opacity-0 will-change-transform drop-shadow-[0_30px_54px_rgba(9,58,99,0.4)] md:h-[60vh]" />
+            className="h-[46vh] max-h-[580px] w-auto opacity-0 will-change-transform drop-shadow-[0_30px_54px_rgba(9,58,99,0.4)] md:h-[60vh]" />
         </div>
 
         {/* ── the freeze ── */}
