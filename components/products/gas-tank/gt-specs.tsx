@@ -67,14 +67,19 @@ export default function GtSpecs() {
             <span
               key={s.icon}
               data-gt-spec
-              className="flex items-center gap-3 rounded-2xl border border-white/15 bg-black/55 px-3.5 py-3.5 text-left text-[11px] font-extrabold uppercase leading-[1.25] tracking-wider text-white/90 backdrop-blur-md will-change-transform md:gap-3.5 md:rounded-full md:px-5 md:py-4 md:text-[13px]"
+              className="flex items-center gap-3 rounded-2xl border border-white/15 bg-black/55 px-3.5 py-3.5 text-left text-[11px] font-extrabold uppercase leading-[1.25] tracking-wider text-white/90 backdrop-blur-md will-change-transform md:gap-4 md:rounded-full md:px-6 md:py-4 md:text-[17px]"
               style={{ fontFamily: 'var(--font-brand)' }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element -- inline icon */}
               <img src={`/products/gas-tank/icons/${s.icon}.svg`} alt="" aria-hidden
                 className="h-6 w-6 shrink-0 object-contain md:h-7 md:w-7" />
-              <span className="block">
+              {/* two lines on a phone, where that is what fits; one line from md
+                  up, at a size that actually fills the pill */}
+              <span className="block md:hidden">
                 {s.label.split('\n')[0]}<br />{s.label.split('\n')[1]}
+              </span>
+              <span className="hidden whitespace-nowrap md:block">
+                {s.label.replace('\n', ' ')}
               </span>
             </span>
           ))}

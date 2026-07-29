@@ -300,7 +300,7 @@ export default function ProductsCollection() {
                 </div>
 
                 {/* editorial footer: tag + big name (left), arrow disc (right) */}
-                <div className="relative z-10 flex flex-wrap items-end justify-between gap-x-3 gap-y-4 px-5 pb-5 pt-1 md:px-6 md:pb-6">
+                <div className="relative z-10 flex flex-wrap items-end justify-between gap-x-3 gap-y-2 px-5 pb-4 pt-1 md:px-6 md:pb-5">
                   <div className="min-w-0">
                     <span className="block text-[10px] font-bold uppercase tracking-[0.26em] text-black/40" style={{ fontFamily: 'var(--font-brand)' }}>
                       {line.tag}

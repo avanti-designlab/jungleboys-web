@@ -22,10 +22,10 @@ gsap.registerPlugin(ScrollTrigger)
 // spread them out to roughly 60% clear while staying inside the column so they
 // never crowd the type.
 const STACK = [
-  { src: 'jar-motor-breath', x: -27, y: 10, h: 46, rot: -12, z: -220, bob: 'a', dur: 12, drift: -16 },
-  { src: 'jar-rainbow-belts', x: 25, y: 16, h: 44, rot: 11, z: -140, bob: 'b', dur: 10, drift: -9 },
+  { src: 'jar-motor-breath', x: -27, y: 4, h: 52, rot: -12, z: -220, bob: 'a', dur: 12, drift: -16 },
+  { src: 'jar-rainbow-belts', x: 25, y: 9, h: 50, rot: 11, z: -140, bob: 'b', dur: 10, drift: -9 },
   // front jar only — at 58 it ran past the panel's top and bottom edges
-  { src: 'jar-all-cherriez', x: 0, y: 0, h: 47, rot: -3, z: 90, bob: 'a', dur: 14, drift: -24 },
+  { src: 'jar-all-cherriez', x: 0, y: -6, h: 54, rot: -3, z: 90, bob: 'a', dur: 14, drift: -24 },
 ]
 
 const LINES = ['No trim.', 'No shake.', 'No shortcuts.']
@@ -86,7 +86,7 @@ export default function TpCreed() {
         <div className="relative z-10 grid grid-cols-1 items-center gap-4 px-5 pt-12 md:grid-cols-[0.95fr_1.05fr] md:gap-6 md:px-12 md:pt-16">
           {/* the stack — oversized, overlapping, cropped off the floor */}
           <div className="relative h-[38vh] md:h-[62vh]" style={{ perspective: '1300px' }}>
-            <div className="absolute inset-x-0 bottom-[-14%]" style={{ transformStyle: 'preserve-3d' }}>
+            <div className="absolute inset-x-0 bottom-[-6%]" style={{ transformStyle: 'preserve-3d' }}>
               {STACK.map((j, i) => (
                 <div key={j.src} data-tp-stack={i}
                   className="absolute bottom-0 left-1/2 w-max will-change-transform"

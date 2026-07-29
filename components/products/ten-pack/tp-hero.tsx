@@ -116,10 +116,10 @@ export default function TpHero() {
   }, [])
 
   return (
-    <section ref={rootRef} className="relative px-2 pt-2 md:px-3">
+    <section ref={rootRef} className="relative px-2 pb-2 pt-2 md:px-3 md:pb-3">
       <div
         data-nav-theme="dark"
-        className="media-hero-in relative h-[92vh] min-h-[600px] overflow-hidden rounded-[1.75rem] bg-[var(--tp-black)] md:rounded-[2.5rem]"
+        className="media-hero-in relative h-[92vh] min-h-[600px] overflow-hidden rounded-[1.75rem] bg-[var(--tp-black)] [--tp-jar-k:0.78] md:rounded-[2.5rem] md:[--tp-jar-k:1]"
       >
         {/* Real smoke plate. The source is white smoke on pure black — despite
             being sold as an "alpha channel" clip it is plain H.264, which has
@@ -196,7 +196,7 @@ export default function TpHero() {
                       fetchPriority={j.h === 80 ? 'high' : 'low'}
                       src={`/products/10-pack/${j.src}.webp`} alt="Jungle Boys 10 Pack Pre-Rolls"
                       className="w-auto -translate-x-1/2 drop-shadow-[0_40px_70px_rgba(0,0,0,0.8)]"
-                      style={{ height: `${j.h}vh`, marginTop: `${j.y}vh` }} />
+                      style={{ height: `calc(${j.h}vh * var(--tp-jar-k, 1))`, marginTop: `calc(${j.y}vh * var(--tp-jar-k, 1))` }} />
                   </div>
                 </div>
               </div>
