@@ -115,10 +115,13 @@ export default function PopsFacts() {
             (white ↔ red) for a quick playful accent */}
         <h2
           className="pops-head font-display text-center uppercase leading-[0.78] lg:text-left"
-          style={{ fontSize: 'min(15vw, 8.5rem)' }}
+          style={{ fontSize: 'min(21vw, 8.5rem)' }}
         >
-          <span className="pops-hw">Small <br /> Nugs.</span> <br />
-          <span className="pops-hr">Big <br /> Flavor.</span>
+          {/* two lines, not four: the hard breaks inside each phrase split
+              "Small Nugs." and "Big Flavor." across four short lines, which
+              capped how big the type could go */}
+          <span className="pops-hw block whitespace-nowrap">Small Nugs.</span>
+          <span className="pops-hr block whitespace-nowrap">Big Flavor.</span>
         </h2>
 
         {/* the slot — fixed box, cards hinge through it */}

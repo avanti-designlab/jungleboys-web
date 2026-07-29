@@ -23,7 +23,7 @@ gsap.registerPlugin(ScrollTrigger)
 // Animating `left`/`top` forces layout for every element every frame — fine at
 // 34, fatal at 300.
 
-const NUGS = buildNugField(300)
+const NUGS = buildNugField(380)
 const WORD = '5G POPS'
 
 export default function PopsHero() {
@@ -88,6 +88,11 @@ export default function PopsHero() {
 
           // ── 3. the wordmark breathes back out as the last kernels clear
           tl.fromTo('[data-word]', { scale: 0.94 }, { scale: 1, duration: 0.12, ease: 'power2.out' }, 0.72)
+          // …then lifts, because on a phone it sits dead centre and the jars
+          // are about to land there
+          if (c.isMobile) {
+            tl.to('[data-word]', { yPercent: -45, scale: 0.40, duration: 0.16, ease: 'power2.inOut' }, 0.78)
+          }
 
           // ── 4. two jars swing in rotating
           tl.to('[data-herojar="l"]', { opacity: 1, xPercent: 0, rotate: -9, duration: 0.16, ease: 'back.out(1.35)' }, 0.80)
@@ -110,17 +115,18 @@ export default function PopsHero() {
     // the red band. The kernels get their own clipping layer instead.
     <section ref={rootRef} className="relative h-screen min-h-[560px]">
       {/* giant wordmark — present from load, same treatment as /media + /products */}
-      <div
-        data-word
-        className="pointer-events-none absolute inset-x-0 top-[22%] z-[25] text-center will-change-transform md:top-[24%]"
-      >
+      {/* Positioning lives on the OUTER div and centring is done with flex, not
+          a translate — [data-word] is animated by GSAP, and a Tailwind
+          -translate-y-1/2 on the same element would be overwritten by it. */}
+      <div className="pointer-events-none absolute inset-0 z-[25] flex items-center justify-center px-2 md:block md:inset-auto md:inset-x-0 md:top-[24%]">
+      <div data-word className="w-full text-center will-change-transform">
         {/* Layered outline: colour ring (bottom) → white ring → fill (top),
             all stacked in one grid cell so they're concentric and uniform. The
             two rings wipe on left→right as the letters drop, then hold solid.
             Letter-spacing keeps the fat strokes from overlapping neighbours. */}
-        <div className="pops-word grid">
+        <div className="pops-word grid [--pops-word-size:58vw] md:[--pops-word-size:min(33vw,30rem)]">
           {/* outer coloured ring — thickest stroke, painted lowest */}
-          <span aria-hidden className="pops-outline pops-outline-color pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8]" style={{ fontSize: 'min(33vw, 30rem)' }}>
+          <span aria-hidden className="pops-outline pops-outline-color pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8]" style={{ fontSize: 'var(--pops-word-size)' }}>
             {WORD.split('').map((ch, i) =>
               ch === ' ' ? (
                 <span key={i} className="pops-gap" aria-hidden />
@@ -132,7 +138,7 @@ export default function PopsHero() {
             )}
           </span>
           {/* white ring — narrower stroke, painted over the colour's inner part */}
-          <span aria-hidden className="pops-outline pops-outline-white pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8]" style={{ fontSize: 'min(33vw, 30rem)' }}>
+          <span aria-hidden className="pops-outline pops-outline-white pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8]" style={{ fontSize: 'var(--pops-word-size)' }}>
             {WORD.split('').map((ch, i) =>
               ch === ' ' ? <span key={i} className="pops-gap" aria-hidden /> : <span key={i} className="pops-glyph">{ch}</span>
             )}
@@ -141,7 +147,7 @@ export default function PopsHero() {
           <h1
             aria-label="5G Pops"
             className="pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8] text-[var(--pops-ink)]"
-            style={{ fontSize: 'min(33vw, 30rem)' }}
+            style={{ fontSize: 'var(--pops-word-size)' }}
           >
             {WORD.split('').map((ch, i) =>
               ch === ' ' ? (
@@ -160,9 +166,10 @@ export default function PopsHero() {
           </h1>
         </div>
       </div>
+      </div>
 
       {/* kernel field — clipped on its own, over the type so it buries it */}
-      <div className="pointer-events-none absolute inset-0 z-30 overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 z-30 overflow-hidden [--pops-nug-k:1.7] md:[--pops-nug-k:1]">
         {NUGS.map((n, i) => (
           // eslint-disable-next-line @next/next/no-img-element -- kernel cutouts
           <img
@@ -174,7 +181,7 @@ export default function PopsHero() {
             className="absolute -translate-x-1/2 -translate-y-1/2 will-change-transform"
             style={{
               left: `${n.x}%`, top: `${n.y}%`,
-              width: `${n.size}%`,
+              width: `calc(${n.size}% * var(--pops-nug-k, 1))`,
               opacity: 0,
               filter: n.depth < 0.35 ? 'brightness(0.93)' : undefined,
             }}
@@ -182,24 +189,30 @@ export default function PopsHero() {
         ))}
       </div>
 
-      {/* two jars flank the wordmark, sitting on the band */}
-      {/* eslint-disable-next-line @next/next/no-img-element -- product jar */}
-      <img
-        data-herojar="l"
-        src="/products/pops/jar-bluog.webp"
-        alt="Blu OG 5G Pops jar"
-        className="absolute bottom-[21%] left-[1%] z-20 w-[min(24vw,225px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:left-[7%]"
-      />
-      {/* eslint-disable-next-line @next/next/no-img-element -- product jar */}
-      <img
-        data-herojar="r"
-        src="/products/pops/jar-cherriez.webp"
-        alt="All Cherriez 5G Pops jar"
-        className="absolute bottom-[21%] right-[1%] z-20 w-[min(24vw,225px)] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:right-[7%]"
-      />
+      {/* THE JARS. On a phone they are a centred PAIR in the middle of the
+          frame with the line and the CTA underneath — pinned to the left and
+          right edges at 24vw they were small and half off the screen. From md
+          up the wrapper is display:contents, which hands the two images back
+          their original absolute positions flanking the wordmark. */}
+      <div className="pointer-events-none absolute inset-x-0 top-[40%] z-20 flex items-end justify-center gap-2 px-3 md:contents">
+        {/* eslint-disable-next-line @next/next/no-img-element -- product jar */}
+        <img
+          data-herojar="l"
+          src="/products/pops/jar-bluog.webp"
+          alt="Blu OG 5G Pops jar"
+          className="w-[35vw] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:absolute md:bottom-[21%] md:left-[7%] md:w-[min(24vw,225px)]"
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element -- product jar */}
+        <img
+          data-herojar="r"
+          src="/products/pops/jar-cherriez.webp"
+          alt="All Cherriez 5G Pops jar"
+          className="w-[35vw] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:absolute md:bottom-[21%] md:right-[7%] md:w-[min(24vw,225px)]"
+        />
+      </div>
 
       {/* the line the jars frame — the hero had no CTA at all before */}
-      <div data-cta className="absolute inset-x-0 bottom-[15%] z-[26] flex flex-col items-center gap-4 px-6 text-center will-change-transform">
+      <div data-cta className="absolute inset-x-0 bottom-[12%] z-[26] flex flex-col items-center gap-3 px-6 text-center will-change-transform md:bottom-[15%] md:gap-4">
         <p
           className="max-w-[30ch] text-sm font-extrabold uppercase leading-snug tracking-[0.18em] text-black md:text-base"
           style={{ fontFamily: 'var(--font-brand)' }}

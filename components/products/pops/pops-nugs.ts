@@ -41,7 +41,7 @@ function lcg(seed: number) {
 export function buildNugField(count: number, seed = 20260724): Nug[] {
   const r = lcg(seed)
   const out: Nug[] = []
-  const cols = 20
+  const cols = 24
   const rows = Math.ceil(count / cols)
   for (let i = 0; i < count; i++) {
     const gx = i % cols

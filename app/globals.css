@@ -1331,6 +1331,13 @@ body:has(.gt-page) footer { position: relative; z-index: 1; background: transpar
      two runs space letters differently and the outline drifts across the word */
   .pops-glyph { display: inline-block; }
   .pops-gap { display: inline-block; width: 0.34em; }
+  /* On a phone 5G POPS goes on TWO lines so it can be far bigger. A BLOCK
+     element inside the inline glyph run splits the line box, which breaks the
+     word without touching the letter-spacing the three stacked outline layers
+     depend on to stay concentric. */
+  @media (max-width: 767px) {
+    .pops-gap { display: block; width: 100%; height: 0; }
+  }
 
   /* two concentric rings: fill → white → thin colour. Each ring is a stacked
      text copy with transparent fill and a centred stroke; the wider colour
