@@ -28,9 +28,14 @@ export const MENU_COLUMNS: { label: string; href: string; external?: boolean }[]
     { label: 'Contact', href: '/contact' },
   ],
   [
-    // Shop points at /products for now, exactly like the header's Shop pill —
-    // the real Dutchie storefront is Phase 3 and does not exist yet.
-    { label: 'Shop', href: '/products' },
+    // NO 'Shop' entry until Phase 3 (Avanti, 2026-07-29). Shop and Products are
+    // two different destinations — Products is the curated JB-only collection,
+    // Shop will be the real Dutchie storefront with live dispensary inventory,
+    // strictly Jungle Boys products. It has no page yet, so listing it here
+    // pointed a second anchor at /products: two <li> with the same React key,
+    // and Google credits only the first anchor's text for a repeated href, so
+    // "Shop" won and "Products" — the term we want to rank — was discarded.
+    // PHASE 3: re-add { label: 'Shop', href: '/shop' } as the FIRST entry.
     { label: 'Products', href: '/products' },
     { label: 'Clothing', href: 'https://jungleboysclothing.com/', external: true },
   ],

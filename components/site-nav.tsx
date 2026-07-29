@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { MENU_COLUMNS, BRAND_ASSETS } from '@/lib/site-config'
 import { SocialIcons } from './social-icons'
 import ThemeToggle from './theme-toggle'
@@ -43,6 +43,7 @@ function UserIcon({ className }: { className: string }) {
 
 export default function SiteNav() {
   const [open, setOpen] = useState(false)
+  const overlayRef = useRef<HTMLDivElement>(null)
   const [condensed, setCondensed] = useState(false)
   // adaptive header: true = a dark section is behind the bar → use white content;
   // false = light behind → use black. Detected by sampling the page under the bar
@@ -100,13 +101,56 @@ export default function SiteNav() {
     }
   }, [])
 
+  // The overlay is a modal, so it has to behave like one. It renders BEFORE
+  // <header> in the DOM, so without a trap forward-Tab walked straight past its
+  // 14 links into the page behind — which the visitor cannot see. The menu was
+  // only reachable by Shift+Tab, in reverse. Mirrors components/age-gate.tsx.
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
     const esc = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
     document.addEventListener('keydown', esc)
+
+    if (!open) {
+      document.body.style.overflow = ''
+      document.removeEventListener('keydown', esc)
+      return () => document.removeEventListener('keydown', esc)
+    }
+
+    const overlay = overlayRef.current
+    const focusables = () =>
+      overlay ? [...overlay.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')] : []
+
+    // move focus in
+    focusables()[0]?.focus()
+
+    const trap = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || !overlay) return
+      const items = focusables()
+      if (!items.length) return
+      const first = items[0]
+      const last = items[items.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      } else if (!overlay.contains(document.activeElement)) {
+        // focus escaped to the header or the page behind — pull it back
+        e.preventDefault()
+        first.focus()
+      }
+    }
+    document.addEventListener('keydown', trap)
+
     return () => {
       document.body.style.overflow = ''
       document.removeEventListener('keydown', esc)
+      document.removeEventListener('keydown', trap)
+      // Restore focus to the toggle, explicitly. Reading document.activeElement
+      // on open is not reliable — a click does not always leave focus on the
+      // button — and closing with focus on <body> loses the visitor's place.
+      document.querySelector<HTMLElement>('[data-menu-toggle]')?.focus()
     }
   }, [open])
 
@@ -119,7 +163,14 @@ export default function SiteNav() {
     <>
       {/* full-screen menu (under the header, above everything else) */}
       {open && (
-        <div data-nav-overlay className="menu-overlay fixed inset-0 z-40 h-dvh overflow-hidden bg-[#0b0b0b]">
+        <div
+          ref={overlayRef}
+          data-nav-overlay
+          role="dialog"
+          aria-modal="true"
+          aria-label="Main menu"
+          className="menu-overlay fixed inset-0 z-40 h-dvh overflow-hidden bg-[#0b0b0b]"
+        >
           <nav className="mx-auto grid h-full w-full max-w-[1560px] grid-cols-1 content-start gap-x-10 gap-y-9 px-8 pt-28 md:[grid-template-columns:1fr_1fr_1.35fr] md:gap-y-1 md:pt-40">
             {MENU_COLUMNS.map((column, c) => (
               <ul key={c} className="flex flex-col">
@@ -203,6 +254,7 @@ export default function SiteNav() {
             <button
               aria-expanded={open}
               aria-label={open ? 'Close menu' : 'Open menu'}
+              data-menu-toggle
               onClick={() => setOpen((o) => !o)}
               className="flex cursor-pointer flex-col items-start gap-[7px] p-2"
             >
@@ -280,6 +332,7 @@ export default function SiteNav() {
           >
             <button
               aria-label="Open menu"
+              data-menu-toggle
               onClick={() => setOpen(true)}
               className="flex cursor-pointer flex-col items-start gap-[5px] p-1"
             >
