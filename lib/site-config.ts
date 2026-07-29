@@ -28,13 +28,16 @@ export const MENU_COLUMNS: { label: string; href: string; external?: boolean }[]
     { label: 'Contact', href: '/contact' },
   ],
   [
+    // Shop points at /products for now, exactly like the header's Shop pill —
+    // the real Dutchie storefront is Phase 3 and does not exist yet.
+    { label: 'Shop', href: '/products' },
     { label: 'Products', href: '/products' },
     { label: 'Clothing', href: 'https://jungleboysclothing.com/', external: true },
-    { label: 'Rewards', href: '/rewards' },
   ],
   [
     { label: 'Locations', href: '/locations' },
     { label: 'Product Finder', href: '/find-jb-products' },
+    { label: 'Rewards', href: '/rewards' },
   ],
 ]
 

@@ -120,7 +120,7 @@ export default function SiteNav() {
       {/* full-screen menu (under the header, above everything else) */}
       {open && (
         <div data-nav-overlay className="menu-overlay fixed inset-0 z-40 h-dvh overflow-hidden bg-[#0b0b0b]">
-          <nav className="mx-auto grid h-full w-full max-w-[1560px] grid-cols-1 content-start gap-x-10 gap-y-1 px-8 pt-28 md:[grid-template-columns:1fr_1fr_1.35fr] md:pt-40">
+          <nav className="mx-auto grid h-full w-full max-w-[1560px] grid-cols-1 content-start gap-x-10 gap-y-9 px-8 pt-28 md:[grid-template-columns:1fr_1fr_1.35fr] md:gap-y-1 md:pt-40">
             {MENU_COLUMNS.map((column, c) => (
               <ul key={c} className="flex flex-col">
                 {column.map((l) => {
