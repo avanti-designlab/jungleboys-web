@@ -119,7 +119,7 @@ export default function TpHero() {
     <section ref={rootRef} className="relative px-2 pb-2 pt-2 md:px-3 md:pb-3">
       <div
         data-nav-theme="dark"
-        className="media-hero-in relative h-[92vh] min-h-[600px] overflow-hidden rounded-[1.75rem] bg-[var(--tp-black)] [--tp-jar-k:0.78] md:rounded-[2.5rem] md:[--tp-jar-k:1]"
+        className="media-hero-in relative h-[92vh] min-h-[600px] overflow-hidden rounded-[1.75rem] bg-[var(--tp-black)] [--tp-jar-k:0.82] [--tp-jar-kc:0.62] md:rounded-[2.5rem] md:[--tp-jar-k:1] md:[--tp-jar-kc:1]"
       >
         {/* Real smoke plate. The source is white smoke on pure black — despite
             being sold as an "alpha channel" clip it is plain H.264, which has
@@ -178,7 +178,7 @@ export default function TpHero() {
           style={{ background: 'radial-gradient(80% 62% at 50% 88%, rgba(120,190,255,0.34) 0%, rgba(46,139,255,0.16) 40%, rgba(5,8,15,0) 74%)' }} />
 
         {/* THE ROW — oversized jars, cropped off the bottom on purpose */}
-        <div data-tp-row className="absolute inset-x-0 bottom-[-24%] z-10 will-change-transform md:bottom-[-16%]" style={{ perspective: '1400px' }}>
+        <div data-tp-row className="absolute inset-x-0 bottom-[-6%] z-10 will-change-transform md:bottom-[-16%]" style={{ perspective: '1400px' }}>
           <div className="relative mx-auto h-[67vh] w-full max-w-[1500px] md:h-[74vh]" style={{ transformStyle: 'preserve-3d' }}>
             {JARS.map((j, i) => (
               <div key={j.src} data-tp-jar={i}
@@ -196,7 +196,10 @@ export default function TpHero() {
                       fetchPriority={j.h === 80 ? 'high' : 'low'}
                       src={`/products/10-pack/${j.src}.webp`} alt="Jungle Boys 10 Pack Pre-Rolls"
                       className="w-auto -translate-x-1/2 drop-shadow-[0_40px_70px_rgba(0,0,0,0.8)]"
-                      style={{ height: `calc(${j.h}vh * var(--tp-jar-k, 1))`, marginTop: `calc(${j.y}vh * var(--tp-jar-k, 1))` }} />
+                      style={{
+                        height: `calc(${j.h}vh * var(${j.h === 80 ? '--tp-jar-kc' : '--tp-jar-k'}, 1))`,
+                        marginTop: `calc(${j.y}vh * var(--tp-jar-k, 1))`,
+                      }} />
                   </div>
                 </div>
               </div>
