@@ -1113,7 +1113,10 @@ body:has(.hh-page) footer {
   color: var(--hh-gold);
   -webkit-text-stroke: 2px var(--hh-ink);
   paint-order: stroke fill;
-  text-shadow: 0 6px 0 rgba(14,42,23,0.25);
+  /* depth shadow in em, not px: a fixed 6px offset stays put while the type
+     scales, so at display sizes it detached and read as a second, ghosted copy
+     of the word sitting under the first */
+  text-shadow: 0 0.035em 0 rgba(14,42,23,0.22);
 }
 @media (min-width: 768px) { .hh-gold-head { -webkit-text-stroke-width: 3px; } }
 

@@ -72,11 +72,16 @@ export default function HhBreakdown() {
         tl.to({}, { duration: 0.3 }) // beat of stillness before release
       })
 
-      // mobile: no pin — fast one-shot build on entry
+      // mobile: no pin, but the build is still SCRUBBED to the scroll, so each
+      // piece lands as she scrolls to it. A one-shot timeline fired all four on
+      // a timer, so on a slow scroll the roll was already assembled before the
+      // stage was on screen, and on a fast one it played to an empty viewport.
       mm.add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () => {
-        const tl = gsap.timeline({ scrollTrigger: { trigger: root, start: 'top 70%', once: true } })
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: root, start: 'top 88%', end: 'bottom 62%', scrub: 0.5 },
+        })
         tl.from('[data-head]', { opacity: 0, x: -40, duration: 0.4, ease: 'power2.out' }, 0)
-        PARTS.forEach((p, i) => addBuild(tl, p, 0.3 + i * 0.55))
+        PARTS.forEach((p, i) => addBuild(tl, p, 0.5 + i * 0.9))
       })
 
       return () => mm.revert()
@@ -88,7 +93,12 @@ export default function HhBreakdown() {
     <section ref={rootRef} className="relative overflow-hidden px-6 pb-14 pt-2 md:flex md:min-h-screen md:items-center md:py-0">
       <div className="mx-auto grid w-full max-w-[1250px] items-center gap-8 lg:grid-cols-[0.85fr_1.15fr]">
         <h2 data-head className="font-display text-center uppercase leading-[0.82] text-[var(--hh-green-deep)] lg:text-left" style={{ fontSize: 'min(13vw, 8.75rem)' }}>
-          What&apos;s <br className="hidden lg:block" /> Inside <br className="hidden lg:block" /> the <span className="hh-gold-head">Roll</span>
+          What&apos;s <br className="hidden lg:block" /> Inside <br className="hidden lg:block" /> the{' '}
+          {/* on mobile ROLL gets its own line so it can run much bigger than the
+              rest of the heading without ever wrapping */}
+          <span className="hh-gold-head block whitespace-nowrap text-[26vw] leading-[0.9] lg:inline lg:text-[length:inherit] lg:leading-[inherit]">
+            Roll
+          </span>
         </h2>
 
         <div className="relative mx-auto w-full max-w-[520px]" style={{ aspectRatio: `${STAGE.w} / ${STAGE.h}` }}>
