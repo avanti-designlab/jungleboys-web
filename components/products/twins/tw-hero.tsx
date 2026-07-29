@@ -161,7 +161,7 @@ export default function TwHero() {
         </div>
 
         {/* THE MARK — massive */}
-        <div className="pointer-events-none absolute inset-x-0 top-[9%] z-30 px-[3vw] text-center md:top-[13%]" style={{ perspective: '1200px' }}>
+        <div className="pointer-events-none absolute inset-x-0 top-[19%] z-30 px-[3vw] text-center md:top-[13%]" style={{ perspective: '1200px' }}>
           <div data-tw-mark-wrap className="will-change-transform">
             <div data-tw-mark
               className="relative mx-auto w-full will-change-transform [--tw-mark-w:88vw] md:[--tw-mark-w:min(48vw,700px)]"
