@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// The Unboxing. The section pins and opens the product under the thumb: sky
+// The Unboxing. The stage sticks and opens the product under the thumb: sky
 // breathes, the closed tube swings up left-of-centre, the ribbed cap wiggles
 // loose and pops off along the axis with a star-burst, the joint slides ALL
 // the way out of the open end, the empty tube tips away and fades out of
@@ -41,8 +41,11 @@ const F = {
   jointW: 0.1068, jointH: 0.80, jointTop: -0.30,
   slide: -0.92, // travel that clears the joint completely of the mouth
   // the tube rises from the lower left and points up-right; art-up maps to
-  // screen direction (sin θ, −cos θ), so 58° = pointing up at ~32° above level
-  entryRot: 74, restRot: 58, finalRot: 68,
+  // screen direction (sin θ, −cos θ), so 58° = pointing up at ~32° above level.
+  // finalRot is measured FROM VERTICAL, so the smaller it is the steeper the
+  // hero joint lies: 68° put it at only ~22° above level, near-flat. 46° is a
+  // true corner-to-corner diagonal.
+  entryRot: 74, restRot: 58, finalRot: 46,
 }
 const cl = (f: number) => `calc(var(--hh-L) * ${f})`
 
@@ -66,7 +69,13 @@ export default function HhProduct() {
           const L = c.isMobile ? 68 : 52 // tube length in vw — mirrors --hh-L
           const restX = c.isMobile ? -12 : -18 // sits left of centre
           const restY = c.isMobile ? 6 : 5 // …and low, so it reads as rising from the corner
-          const zoom = c.isMobile ? 1.45 : 1.7 // the payoff — the slimmer joint needs more
+          // the payoff. At 1.45 the joint's box was 301x153 on a 390 screen —
+          // 14% of the viewport, which read as small rather than as a hero.
+          // 2.05 spans it ~353px corner to corner (37%) without either lit end
+          // running off the edge. Desktop comes DOWN from 1.7: the steeper
+          // finalRot trades width for height, and 1.7 measured 827x805 on an
+          // 813-tall viewport — a hair from clipping on any short laptop.
+          const zoom = c.isMobile ? 2.05 : 1.4
           const v = (f: number) => `${(f * L).toFixed(2)}vw`
 
           // FINAL: centre the joint for the hero beat. Its centre sits at art-y
@@ -90,10 +99,21 @@ export default function HhProduct() {
           gsap.set('[data-grp]', { rotate: F.restRot })
           gsap.set('[data-burst]', { opacity: 0 })
 
+          // NO GSAP pin. The stage is held by CSS `position: sticky` and the
+          // section's own height supplies the 145vh of travel, so the trigger
+          // only ever scrubs — it never moves the DOM.
+          //
+          // A real pin was replaying this whole section on phones. GSAP pins by
+          // measuring the section, injecting a spacer and re-parenting the
+          // content; every time the mobile URL bar slides in or out the
+          // viewport height changes, ScrollTrigger refreshes, and it re-measures
+          // and re-places the pin mid-scroll — so the green fairway and the
+          // joint came back after they had already gone. Sticky is measured by
+          // the browser on every frame instead, and cannot fall out of step.
           const tl = gsap.timeline({
             scrollTrigger: {
-              trigger: root, start: 'top top', end: '+=145%',
-              pin: true, scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true,
+              trigger: root, start: 'top top', end: 'bottom bottom',
+              scrub: 0.6, invalidateOnRefresh: true,
             },
           })
 
@@ -143,48 +163,51 @@ export default function HhProduct() {
   }, [])
 
   return (
-    <section ref={rootRef} className="hh-unbox relative h-screen min-h-[560px] overflow-hidden">
-      {/* fairway rolls over the horizon from the intro */}
-      <div aria-hidden className="absolute left-[-15%] top-0 z-0 h-[11%] w-[130%] rounded-b-[100%_100%] bg-[var(--hh-green-deep)]" />
-      <div aria-hidden className="absolute left-[-10%] top-0 z-0 h-[7%] w-[120%] rounded-b-[100%_100%] bg-[var(--hh-green)]" />
+    // section height = one held screen + 145vh of scroll travel for the scrub
+    <section ref={rootRef} className="hh-unbox relative h-[245vh]">
+      <div className="sticky top-0 h-screen min-h-[560px] overflow-hidden">
+        {/* fairway rolls over the horizon from the intro */}
+        <div aria-hidden className="absolute left-[-15%] top-0 z-0 h-[11%] w-[130%] rounded-b-[100%_100%] bg-[var(--hh-green-deep)]" />
+        <div aria-hidden className="absolute left-[-10%] top-0 z-0 h-[7%] w-[120%] rounded-b-[100%_100%] bg-[var(--hh-green)]" />
 
-      {/* the volley */}
-      {BALLS.map((b) => (
-        <div key={b.key} data-ball={b.key} className="absolute left-1/2 z-10 will-change-transform" style={{ top: b.top, opacity: b.dim ? 0.82 : 1 }}>
-          <div data-ball-spin className={`relative rounded-full bg-white shadow-[inset_-5px_-5px_9px_rgba(0,0,0,0.18),0_8px_16px_rgba(0,0,0,0.2)] ${b.size}`}>
-            <span aria-hidden className="absolute left-[30%] top-[36%] h-[9%] w-[9%] rounded-full bg-black/12" />
-            <span aria-hidden className="absolute left-[54%] top-[26%] h-[9%] w-[9%] rounded-full bg-black/12" />
-            <span aria-hidden className="absolute left-[46%] top-[54%] h-[9%] w-[9%] rounded-full bg-black/12" />
+        {/* the volley */}
+        {BALLS.map((b) => (
+          <div key={b.key} data-ball={b.key} className="absolute left-1/2 z-10 will-change-transform" style={{ top: b.top, opacity: b.dim ? 0.82 : 1 }}>
+            <div data-ball-spin className={`relative rounded-full bg-white shadow-[inset_-5px_-5px_9px_rgba(0,0,0,0.18),0_8px_16px_rgba(0,0,0,0.2)] ${b.size}`}>
+              <span aria-hidden className="absolute left-[30%] top-[36%] h-[9%] w-[9%] rounded-full bg-black/12" />
+              <span aria-hidden className="absolute left-[54%] top-[26%] h-[9%] w-[9%] rounded-full bg-black/12" />
+              <span aria-hidden className="absolute left-[46%] top-[54%] h-[9%] w-[9%] rounded-full bg-black/12" />
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
 
-      {/* the product group — children live in the art frame; child y = along the axis */}
-      <div data-grp className="absolute left-1/2 top-[52%] z-20 will-change-transform">
-        {/* joint: slide wrapper travels the axis, inner img zooms about its own centre */}
-        <div data-jslide className="absolute z-0 will-change-transform"
-          style={{ width: cl(F.jointW), height: cl(F.jointH), left: cl(-F.jointW / 2), top: cl(F.jointTop) }}>
+        {/* the product group — children live in the art frame; child y = along the axis */}
+        <div data-grp className="absolute left-1/2 top-[52%] z-20 will-change-transform">
+          {/* joint: slide wrapper travels the axis, inner img zooms about its own centre */}
+          <div data-jslide className="absolute z-0 will-change-transform"
+            style={{ width: cl(F.jointW), height: cl(F.jointH), left: cl(-F.jointW / 2), top: cl(F.jointTop) }}>
+            {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
+            <img data-jzoom src="/products/hash-hole/joint.webp" alt="Jungle Boys Hash Hole infused pre-roll"
+              className="h-full w-full origin-center will-change-transform drop-shadow-[0_26px_44px_rgba(0,0,0,0.30)]" />
+          </div>
+          {/* body — the mask; its glass neck is the opening */}
           {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-          <img data-jzoom src="/products/hash-hole/joint.webp" alt="Jungle Boys Hash Hole infused pre-roll"
-            className="h-full w-full origin-center will-change-transform drop-shadow-[0_26px_44px_rgba(0,0,0,0.30)]" />
-        </div>
-        {/* body — the mask; its glass neck is the opening */}
-        {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-        <img data-body src="/products/hash-hole/tube-body.webp" alt="" aria-hidden
-          className="absolute z-10 max-w-none will-change-transform drop-shadow-[0_28px_50px_rgba(0,0,0,0.32)]"
-          style={{ width: cl(F.tubeW), height: cl(F.bodyH), left: cl(-F.tubeW / 2), top: cl(F.bodyTop) }} />
-        {/* cap — pops off */}
-        {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-        <img data-cap src="/products/hash-hole/tube-cap.webp" alt="" aria-hidden
-          className="absolute z-20 max-w-none will-change-transform drop-shadow-[0_16px_28px_rgba(0,0,0,0.28)]"
-          style={{ width: cl(F.tubeW), height: cl(F.capH), left: cl(-F.tubeW / 2), top: cl(F.capTop) }} />
-        {/* star-burst at the opening */}
-        <div data-burst aria-hidden className="absolute z-30" style={{ left: 0, top: cl(F.bodyTop) }}>
-          {[0, 60, 120, 180, 240, 300].map((deg) => (
-            <span key={deg} className="absolute h-[4px] w-[5vw] max-w-[58px] rounded-full bg-white"
-              style={{ transform: `rotate(${deg}deg) translateX(2.4vw)`, transformOrigin: '0 50%' }} />
-          ))}
-        </div>
+          <img data-body src="/products/hash-hole/tube-body.webp" alt="" aria-hidden
+            className="absolute z-10 max-w-none will-change-transform drop-shadow-[0_28px_50px_rgba(0,0,0,0.32)]"
+            style={{ width: cl(F.tubeW), height: cl(F.bodyH), left: cl(-F.tubeW / 2), top: cl(F.bodyTop) }} />
+          {/* cap — pops off */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
+          <img data-cap src="/products/hash-hole/tube-cap.webp" alt="" aria-hidden
+            className="absolute z-20 max-w-none will-change-transform drop-shadow-[0_16px_28px_rgba(0,0,0,0.28)]"
+            style={{ width: cl(F.tubeW), height: cl(F.capH), left: cl(-F.tubeW / 2), top: cl(F.capTop) }} />
+          {/* star-burst at the opening */}
+          <div data-burst aria-hidden className="absolute z-30" style={{ left: 0, top: cl(F.bodyTop) }}>
+            {[0, 60, 120, 180, 240, 300].map((deg) => (
+              <span key={deg} className="absolute h-[4px] w-[5vw] max-w-[58px] rounded-full bg-white"
+                style={{ transform: `rotate(${deg}deg) translateX(2.4vw)`, transformOrigin: '0 50%' }} />
+            ))}
+          </div>
+      </div>
       </div>
     </section>
   )
