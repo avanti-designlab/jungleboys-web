@@ -108,7 +108,7 @@ export default function PopsFacts() {
   return (
     // solid pill on the striped page — the stripes show only in the gutter
     <section id="pops-facts" ref={rootRef} className="pops-slide relative z-10 h-screen min-h-[620px] scroll-mt-0 p-2 md:p-3">
-      <div data-reveal className="pops-reveal relative flex h-full w-full items-center overflow-hidden rounded-[2rem] bg-[#0b0b0d] px-6 text-white md:rounded-[3rem]">
+      <div data-reveal className="pops-reveal relative flex h-full w-full items-center overflow-hidden rounded-[2rem] bg-[var(--color-ink)] px-6 text-white md:rounded-[3rem]">
         <PopsSectionSpray seed={11} />
       <div className="relative mx-auto grid w-full max-w-[1240px] items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
         {/* original left-aligned lockup; on hover the two colour blocks swap

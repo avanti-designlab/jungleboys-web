@@ -153,7 +153,7 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
           </div>
 
           {/* RIGHT — media pill (branded; swap for the official Nabis video/asset) */}
-          <div className="media-reveal relative min-h-[320px] overflow-hidden rounded-[2rem] border border-[var(--color-border)] bg-[#0b0b0d] lg:min-h-0">
+          <div className="media-reveal relative min-h-[320px] overflow-hidden rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-ink)] lg:min-h-0">
             {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}
             <img
               src="/contact/contact-bg.webp"

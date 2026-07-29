@@ -141,7 +141,7 @@ export default function NewsletterPopup({ consentText }: { consentText: string }
       {/* modal */}
       <div
         ref={dialogRef}
-        className={`relative w-full max-w-md overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] text-[#F5F5F0] shadow-[0_50px_120px_-30px_rgba(0,0,0,0.9)] ring-1 ring-white/10 transition-all duration-300 ${mounted ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-6 scale-95 opacity-0'}`}
+        className={`relative w-full max-w-md overflow-hidden rounded-[1.75rem] bg-[var(--color-ink)] text-[#F5F5F0] shadow-[0_50px_120px_-30px_rgba(0,0,0,0.9)] ring-1 ring-white/10 transition-all duration-300 ${mounted ? 'translate-y-0 scale-100 opacity-100' : 'translate-y-6 scale-95 opacity-0'}`}
       >
         {/* accent glow header */}
         <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-40" style={{ background: 'radial-gradient(90% 100% at 50% 0%, rgba(254,207,14,0.28), transparent 70%)' }} />

@@ -10,10 +10,14 @@ import Reveal from '@/components/reveal'
 // blue cards gives them the most separation. The pack shot still sits on a light
 // pill inside each card so the glass keeps something to catch.
 
+// Strain colour comes from the site-wide --strain-* tokens, not a local map.
+// Six shop files each carried their own, in three different palettes, so the
+// same label rendered in three different blues across the site — and two of
+// those palettes failed AA. See app/globals.css :root.
 const TYPE_COLOR: Record<string, string> = {
-  indica: '#3b6fd4',
-  sativa: '#c2410c',
-  hybrid: '#0f7a3d',
+  indica: 'var(--strain-indica)',
+  sativa: 'var(--strain-sativa)',
+  hybrid: 'var(--strain-hybrid)',
 }
 
 function dollars(cents: number) {
@@ -25,14 +29,14 @@ export default async function TpShop() {
 
   return (
     <section id="tp-shop" className="relative z-10 scroll-mt-24 px-2 pb-4 md:px-3">
-      <div className="rounded-[1.75rem] bg-[#f2f7fc] px-4 py-14 text-[#062038] md:rounded-[2.5rem] md:px-10 md:py-20">
+      <div className="rounded-[1.75rem] bg-[#f2f7fc] px-4 py-14 text-[var(--tp-shop-ink)] md:rounded-[2.5rem] md:px-10 md:py-20">
         <div className="mx-auto max-w-[1240px]">
           <Reveal className="text-center">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.42em] text-[#0d63a8] md:text-xs"
               style={{ fontFamily: 'var(--font-brand)' }}>
               Ten in every jar
             </p>
-            <h2 className="font-display mt-2 uppercase leading-[0.84] text-[#062038]" style={{ fontSize: 'min(13vw, 6rem)', letterSpacing: '-0.03em' }}>
+            <h2 className="font-display mt-2 uppercase leading-[0.84] text-[var(--tp-shop-ink)]" style={{ fontSize: 'min(13vw, 6rem)', letterSpacing: '-0.03em' }}>
               Shop <span className="text-[#2e8bff]">10PK Pre-Rolls</span>
             </h2>
           </Reveal>
@@ -45,7 +49,7 @@ export default async function TpShop() {
               const pctOff = deal ? Math.round((1 - deal / v.price) * 100) : 0
               return (
                 <Reveal key={p.id} delay={Math.min(i, 2) * 0.08}>
-                  <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] text-white shadow-[0_16px_44px_rgba(10,50,100,0.28)] ring-1 ring-white/15" style={{ background: 'linear-gradient(180deg,#1a79c9 0%,#0d5296 52%,#083a6d 100%)' }}>
+                  <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] text-white shadow-[0_16px_44px_rgba(10,50,100,0.28)] ring-1 ring-white/15" style={{ background: 'linear-gradient(180deg,var(--tp-blue-hot) 0%,var(--tp-blue) 52%,var(--tp-blue-deep) 100%)' }}>
                     {/* white pill stage — the jars are dark and glossy, they read
                         best knocked out rather than on a coloured ground */}
                     <div className="relative m-3 aspect-square overflow-hidden rounded-[1.35rem] bg-[linear-gradient(180deg,#ffffff_0%,#eef4fa_100%)]">
@@ -55,7 +59,7 @@ export default async function TpShop() {
                         </span>
                       ) : null}
                       {p.featured && (
-                        <span className="absolute right-3 top-3 z-20 rounded-full bg-[#062038] px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
+                        <span className="absolute right-3 top-3 z-20 rounded-full bg-[var(--tp-shop-ink)] px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
                           Featured
                         </span>
                       )}
@@ -73,7 +77,7 @@ export default async function TpShop() {
                         {p.strainType && (
                           <span
                             className="rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white ring-1 ring-inset ring-white/70"
-                            style={{ fontFamily: 'var(--font-brand)', background: TYPE_COLOR[p.strainType] || '#0f7a3d' }}
+                            style={{ fontFamily: 'var(--font-brand)', background: TYPE_COLOR[p.strainType] || 'var(--strain-hybrid)' }}
                           >
                             {p.strainType}
                           </span>
@@ -115,7 +119,7 @@ export default async function TpShop() {
           </div>
 
           <Reveal className="mt-12 text-center">
-            <p className="text-[11px] uppercase tracking-widest text-[#062038]/80" style={{ fontFamily: 'var(--font-brand)' }}>
+            <p className="text-[11px] uppercase tracking-widest text-[var(--tp-shop-ink)]/80" style={{ fontFamily: 'var(--font-brand)' }}>
               Availability varies by store — live menus &amp; deals connect at launch.
             </p>
           </Reveal>

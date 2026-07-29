@@ -60,7 +60,7 @@ export default function AuthHub() {
       </p>
 
       {/* scan visual */}
-      <div className="relative mx-auto mt-10 flex h-56 w-full max-w-sm items-center justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d]" data-nav-theme="dark">
+      <div className="relative mx-auto mt-10 flex h-56 w-full max-w-sm items-center justify-center overflow-hidden rounded-[1.75rem] bg-[var(--color-ink)]" data-nav-theme="dark">
         <div className="relative h-36 w-36">
           <span className="absolute left-0 top-0 h-8 w-8 rounded-tl-lg border-l-4 border-t-4 border-[var(--color-accent)]" />
           <span className="absolute right-0 top-0 h-8 w-8 rounded-tr-lg border-r-4 border-t-4 border-[var(--color-accent)]" />

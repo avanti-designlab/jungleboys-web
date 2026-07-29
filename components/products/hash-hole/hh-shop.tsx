@@ -30,7 +30,7 @@ export default async function HhShop() {
               const pctOff = deal ? Math.round((1 - deal / v.price) * 100) : 0
               return (
                 <Reveal key={p.id} delay={Math.min(i, 2) * 0.08}>
-                  <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white text-[#0b0b0d] shadow-[0_10px_40px_rgba(0,0,0,0.1)]">
+                  <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white text-[var(--color-ink)] shadow-[0_10px_40px_rgba(0,0,0,0.1)]">
                     <div className="relative aspect-square overflow-hidden bg-[linear-gradient(180deg,#8fd4f7_0%,#bfe8fb_100%)]">
                       {deal ? (
                         <span className="absolute left-4 top-4 z-20 rounded-full bg-[var(--hh-gold)] px-3 py-1 text-[11px] font-extrabold uppercase tracking-widest text-[var(--hh-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
@@ -53,11 +53,11 @@ export default async function HhShop() {
                     </div>
                     <div className="flex flex-1 flex-col gap-2 p-5">
                       <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="rounded-full border-2 border-[#199a43] px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#199a43]" style={{ fontFamily: 'var(--font-brand)' }}>
+                        <span className="rounded-full border-2 border-[var(--strain-hybrid)] px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[var(--strain-hybrid)]" style={{ fontFamily: 'var(--font-brand)' }}>
                           Hybrid
                         </span>
                         {thc && (
-                          <span className="rounded-full border border-[#0b0b0d]/25 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[#0b0b0d]/75" style={{ fontFamily: 'var(--font-brand)' }}>
+                          <span className="rounded-full border border-[var(--color-ink)]/25 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)]/75" style={{ fontFamily: 'var(--font-brand)' }}>
                             THC {thc.value}%
                           </span>
                         )}
@@ -72,16 +72,16 @@ export default async function HhShop() {
                         <p className="leading-none">
                           {deal ? (
                             <>
-                              <span className="mb-1 block text-xs font-bold text-[#0b0b0d]/40 line-through" style={{ fontFamily: 'var(--font-brand)' }}>{dollars(v.price)}</span>
+                              <span className="mb-1 block text-xs font-bold text-[var(--color-ink)]/40 line-through" style={{ fontFamily: 'var(--font-brand)' }}>{dollars(v.price)}</span>
                               <span className="whitespace-nowrap">
                                 <span className="font-display text-[2.1rem] leading-none text-[#c21f1f]">{dollars(deal)}</span>
-                                <span className="ml-1 text-xs font-bold uppercase text-[#0b0b0d]/45" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
+                                <span className="ml-1 text-xs font-bold uppercase text-[var(--color-ink)]/45" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
                               </span>
                             </>
                           ) : (
                             <span className="whitespace-nowrap">
                               <span className="font-display text-[2.1rem] leading-none">{dollars(v.price)}</span>
-                              <span className="ml-1 text-xs font-bold uppercase text-[#0b0b0d]/45" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
+                              <span className="ml-1 text-xs font-bold uppercase text-[var(--color-ink)]/45" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
                             </span>
                           )}
                         </p>

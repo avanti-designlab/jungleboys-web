@@ -134,7 +134,7 @@ export default function BlogIndex({ posts }: { posts: BlogSummary[] }) {
       <section
         data-theme="dark"
         data-nav-theme="dark"
-        className="mt-12 overflow-hidden rounded-[2rem] bg-[#0b0b0d] p-6 text-[var(--color-foreground)] md:mt-16 md:rounded-[2.75rem] md:p-10 lg:p-12"
+        className="mt-12 overflow-hidden rounded-[2rem] bg-[var(--color-ink)] p-6 text-[var(--color-foreground)] md:mt-16 md:rounded-[2.75rem] md:p-10 lg:p-12"
       >
         {/* filter pills */}
         {categories.length > 0 && (

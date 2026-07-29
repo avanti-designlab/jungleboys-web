@@ -14,9 +14,9 @@ function dollars(cents: number) {
 
 // scoped card accents per strain type (Avanti: blue / red / green outlines)
 const STRAIN_STYLE = {
-  indica: { label: 'Indica', cls: 'border-[#2f6bff] text-[#2f6bff]' },
-  sativa: { label: 'Sativa', cls: 'border-[#e03131] text-[#e03131]' },
-  hybrid: { label: 'Hybrid', cls: 'border-[#199a43] text-[#199a43]' },
+  indica: { label: 'Indica', cls: 'border-[var(--strain-indica)] text-[var(--strain-indica)]' },
+  sativa: { label: 'Sativa', cls: 'border-[var(--strain-sativa)] text-[var(--strain-sativa)]' },
+  hybrid: { label: 'Hybrid', cls: 'border-[var(--strain-hybrid)] text-[var(--strain-hybrid)]' },
 } as const
 
 export default async function FlowerShop() {
@@ -45,7 +45,7 @@ export default async function FlowerShop() {
               const strain = p.strainType ? STRAIN_STYLE[p.strainType] : null
               return (
                 <Reveal key={p.id} delay={Math.min(i, 3) * 0.08}>
-                  <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white text-[#0b0b0d] shadow-[0_10px_40px_rgba(0,0,0,0.08)]">
+                  <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white text-[var(--color-ink)] shadow-[0_10px_40px_rgba(0,0,0,0.08)]">
                     {/* stage */}
                     <div className="relative aspect-[4/5] overflow-hidden">
                       <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_75%_60%_at_50%_68%,rgba(233,193,90,0.28),transparent_72%)]" />
@@ -55,7 +55,7 @@ export default async function FlowerShop() {
                         </span>
                       ) : null}
                       {p.featured && (
-                        <span className="absolute right-4 top-4 z-20 rounded-full bg-[#0b0b0d] px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
+                        <span className="absolute right-4 top-4 z-20 rounded-full bg-[var(--color-ink)] px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
                           Featured
                         </span>
                       )}
@@ -77,12 +77,12 @@ export default async function FlowerShop() {
                           </span>
                         )}
                         {thc && (
-                          <span className="rounded-full border border-[#0b0b0d]/25 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[#0b0b0d]/75" style={{ fontFamily: 'var(--font-brand)' }}>
+                          <span className="rounded-full border border-[var(--color-ink)]/25 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)]/75" style={{ fontFamily: 'var(--font-brand)' }}>
                             THC {thc.value}%
                           </span>
                         )}
                         {terps ? (
-                          <span className="rounded-full border border-[#0b0b0d]/25 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[#0b0b0d]/75" style={{ fontFamily: 'var(--font-brand)' }}>
+                          <span className="rounded-full border border-[var(--color-ink)]/25 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)]/75" style={{ fontFamily: 'var(--font-brand)' }}>
                             Terps {terps.toFixed(1)}%
                           </span>
                         ) : null}
@@ -93,13 +93,13 @@ export default async function FlowerShop() {
                             the same row shape as the rest */}
                         <p className="leading-none">
                           {deal && (
-                            <span className="mb-1 block text-xs font-bold text-[#0b0b0d]/40 line-through" style={{ fontFamily: 'var(--font-brand)' }}>
+                            <span className="mb-1 block text-xs font-bold text-[var(--color-ink)]/40 line-through" style={{ fontFamily: 'var(--font-brand)' }}>
                               {dollars(v.price)}
                             </span>
                           )}
                           <span className="whitespace-nowrap">
                             <span className={`font-display text-[2.1rem] leading-none ${deal ? 'text-[#c21f1f]' : ''}`}>{dollars(deal ?? v.price)}</span>
-                            <span className="ml-1 text-xs font-bold uppercase text-[#0b0b0d]/45" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
+                            <span className="ml-1 text-xs font-bold uppercase text-[var(--color-ink)]/45" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
                           </span>
                         </p>
                         <PillCta label="Add to Cart" size="sm" icon="cart" href="/locations" className="shrink-0 whitespace-nowrap" />

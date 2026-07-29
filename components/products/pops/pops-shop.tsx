@@ -10,10 +10,14 @@ import PopsSectionSpray from './pops-spray'
 
 // shared strain-type colours (matches the flower shop)
 // lifted from the light-panel values so they still pass on near-black
+// Strain colour comes from the site-wide --strain-* tokens, not a local map.
+// Six shop files each carried their own, in three different palettes, so the
+// same label rendered in three different blues across the site — and two of
+// those palettes failed AA. See app/globals.css :root.
 const TYPE_COLOR: Record<string, string> = {
-  indica: '#6f9bff',
-  sativa: '#ff6b6b',
-  hybrid: '#43d16f',
+  indica: 'var(--strain-indica)',
+  sativa: 'var(--strain-sativa)',
+  hybrid: 'var(--strain-hybrid)',
 }
 
 function dollars(cents: number) {
@@ -25,7 +29,7 @@ export default async function PopsShop() {
 
   return (
     <section id="pops-shop" className="pops-slide scroll-mt-24 px-3 pb-16 md:px-4 md:pb-24">
-      <div data-reveal className="pops-reveal relative overflow-hidden rounded-[2rem] border-4 border-[#101012] bg-[#0b0b0d] px-4 py-16 text-white shadow-[0_26px_70px_rgba(0,0,0,0.4)] md:rounded-[3rem] md:px-10 md:py-24">
+      <div data-reveal className="pops-reveal relative overflow-hidden rounded-[2rem] border-4 border-[#101012] bg-[var(--color-ink)] px-4 py-16 text-white shadow-[0_26px_70px_rgba(0,0,0,0.4)] md:rounded-[3rem] md:px-10 md:py-24">
         <PopsSectionSpray seed={53} />
         <div className="mx-auto max-w-[1240px]">
           <Reveal className="text-center">
@@ -50,7 +54,7 @@ export default async function PopsShop() {
                         </span>
                       ) : null}
                       {p.featured && (
-                        <span className="absolute right-4 top-4 z-20 rounded-full bg-white px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[#0b0b0d]" style={{ fontFamily: 'var(--font-brand)' }}>
+                        <span className="absolute right-4 top-4 z-20 rounded-full bg-white px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[var(--color-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
                           Featured
                         </span>
                       )}
@@ -69,8 +73,8 @@ export default async function PopsShop() {
                           className="rounded-full border-2 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest"
                           style={{
                             fontFamily: 'var(--font-brand)',
-                            color: (p.strainType && TYPE_COLOR[p.strainType]) || '#199a43',
-                            borderColor: (p.strainType && TYPE_COLOR[p.strainType]) || '#199a43',
+                            color: (p.strainType && TYPE_COLOR[p.strainType]) || 'var(--strain-hybrid)',
+                            borderColor: (p.strainType && TYPE_COLOR[p.strainType]) || 'var(--strain-hybrid)',
                           }}
                         >
                           {p.strainType}

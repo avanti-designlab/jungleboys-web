@@ -49,9 +49,9 @@ export default function StateMiniMap({ stores, label }: { stores: OwnedStore[]; 
   return (
     <div
       data-nav-theme="dark"
-      className="jb-map relative h-full min-h-[280px] overflow-hidden rounded-[1.6rem] border border-[var(--color-border)] bg-[#0b0b0d]"
+      className="jb-map relative h-full min-h-[280px] overflow-hidden rounded-[1.6rem] border border-[var(--color-border)] bg-[var(--color-ink)]"
     >
-      <div ref={el} className="h-full w-full" style={{ background: '#0b0b0d' }} />
+      <div ref={el} className="h-full w-full" style={{ background: 'var(--color-ink)' }} />
       <div
         className="pointer-events-none absolute left-4 top-4 z-[500] flex items-center gap-2 rounded-full bg-black/60 px-4 py-2 text-xs font-bold uppercase tracking-widest text-white backdrop-blur-sm"
         style={{ fontFamily: 'var(--font-brand)' }}

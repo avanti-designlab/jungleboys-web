@@ -44,7 +44,7 @@ export default function HhHero() {
   return (
     <section className="relative px-2 pt-2 md:px-3">
       {/* the header samples this region: dark video → dark header pill */}
-      <div data-nav-theme="dark" className="media-hero-in relative h-[92vh] min-h-[560px] overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] md:rounded-[2.5rem]">
+      <div data-nav-theme="dark" className="media-hero-in relative h-[92vh] min-h-[560px] overflow-hidden rounded-[1.75rem] bg-[var(--color-ink)] md:rounded-[2.5rem]">
         {/* The hero is deliberately art-only — a film, no type over it. The page
             still needs exactly one h1, so it is visually hidden rather than
             drawn. Nothing on screen changes. */}

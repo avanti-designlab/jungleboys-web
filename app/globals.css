@@ -5,6 +5,23 @@
    Category accents (per product line) are declared ONLY in that line's page CSS. */
 
 :root {
+  /* STRAIN TYPE — site-wide product semantics, not a per-page accent.
+     These were duplicated across six shop files in THREE different palettes,
+     so the same label rendered in three different blues depending on which
+     product line you were looking at. Two of those palettes also failed AA:
+     #6f9bff on white is 2.69:1 and #43d16f is 1.98:1. These values clear 4.5:1
+     against white in both directions, so they work as an outline colour on a
+     light panel AND as a filled chip with white text.
+     Phase 3 commerce will read these from the Dutchie product shape. */
+  /* the generic near-black panel surface. MASTER.md:123 left this as an open
+     TODO and 39 literals accumulated in the meantime. Line-specific darks
+     (--tw-black, --pr-black, …) stay separate — they are deliberately tinted. */
+  --color-ink: #0b0b0d;
+
+  --strain-indica: #2358d8;  /* 6.07:1 on white */
+  --strain-sativa: #c2410c;  /* 5.18:1 */
+  --strain-hybrid: #157a37;  /* 5.43:1 */
+
   /* color — LIGHT theme is the site default (Avanti 2026-07-19) */
   --color-background: #f7f7f7;
   --color-surface: #ffffff;
@@ -1169,6 +1186,9 @@ body:has(.tp-page) {
   --tp-ink: #0a1424;
   --tp-blue: #0b5897;
   --tp-cyan: #2e8bff; /* electric blue — the Figma cyan read too teal */
+  --tp-blue-hot: #1a79c9;
+  --tp-blue-deep: #083a6d;
+  --tp-shop-ink: #062038;
   --tp-glow: #6db6ff;
   background: var(--tp-black);
 }
@@ -1419,7 +1439,7 @@ body:has(.gt-page) footer { position: relative; z-index: 1; background: transpar
 
   /* per-section stripe tones  /* per-section stripe tones — the page changes ground as you scroll */
   .pops-stripes-dark {
-    background-image: repeating-linear-gradient(104deg, #1b1b1f 0 34px, #0b0b0d 34px 80px);
+    background-image: repeating-linear-gradient(104deg, #1b1b1f 0 34px, var(--color-ink) 34px 80px);
     animation: pops-stripe-drift 9s linear infinite;
   }
   .pops-stripes-red {
@@ -1492,6 +1512,9 @@ body:has(.pr-page) {
   --pr-deep: #021109;
   --pr-green: #14a04a;
   --pr-lime: #7dff4f;
+  --pr-green-hot: #1cae55;
+  --pr-green-deep: #08512a;
+  --pr-shop-ink: #06301a;
   --pr-glow: #b6ff8a;
   background: var(--pr-black);
 }
@@ -1530,6 +1553,8 @@ body:has(.tw-page) {
   --tw-blue-hot: #2f5ce0;
   --tw-red: #c1111a;
   --tw-red-hot: #e6242c;
+  --tw-red-deep: #7d0a11;
+  --tw-shop-ink: #2a0507;
   --tw-cream: #fff4ea;
   background: var(--tw-black);
 }

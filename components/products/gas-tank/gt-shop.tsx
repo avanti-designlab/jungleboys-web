@@ -31,10 +31,14 @@ const TIER_ROW =
 // 82% leaves a slice of the next card showing — that peek IS the affordance
 const TIER_CARD = 'min-w-[82%] snap-start md:min-w-0'
 
+// Strain colour comes from the site-wide --strain-* tokens, not a local map.
+// Six shop files each carried their own, in three different palettes, so the
+// same label rendered in three different blues across the site — and two of
+// those palettes failed AA. See app/globals.css :root.
 const TYPE_COLOR: Record<string, string> = {
-  indica: '#6f9bff',
-  sativa: '#ff6b6b',
-  hybrid: '#43d16f',
+  indica: 'var(--strain-indica)',
+  sativa: 'var(--strain-sativa)',
+  hybrid: 'var(--strain-hybrid)',
 }
 
 function dollars(cents: number) {
@@ -105,8 +109,8 @@ export default async function GtShop() {
                                 className="rounded-full border-2 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest"
                                 style={{
                                   fontFamily: 'var(--font-brand)',
-                                  color: TYPE_COLOR[p.strainType] || '#43d16f',
-                                  borderColor: TYPE_COLOR[p.strainType] || '#43d16f',
+                                  color: TYPE_COLOR[p.strainType] || 'var(--strain-hybrid)',
+                                  borderColor: TYPE_COLOR[p.strainType] || 'var(--strain-hybrid)',
                                 }}
                               >
                                 {p.strainType}

@@ -35,7 +35,7 @@ export default async function BlogIndex() {
       <section data-blog-banner className="px-2 pt-2 md:px-3">
         <div
           data-nav-theme="dark"
-          className="media-hero-in relative flex h-[400px] items-end justify-center overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 md:h-[540px] md:rounded-[2.5rem]"
+          className="media-hero-in relative flex h-[400px] items-end justify-center overflow-hidden rounded-[1.75rem] bg-[var(--color-ink)] px-6 md:h-[540px] md:rounded-[2.5rem]"
         >
           {/* graffiti mural background */}
           {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}

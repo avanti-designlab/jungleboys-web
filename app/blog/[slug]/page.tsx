@@ -127,7 +127,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div
             data-theme="dark"
             data-nav-theme="dark"
-            className="overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] px-6 py-14 text-[var(--color-foreground)] md:rounded-[2.75rem] md:px-12 md:py-20"
+            className="overflow-hidden rounded-[1.75rem] bg-[var(--color-ink)] px-6 py-14 text-[var(--color-foreground)] md:rounded-[2.75rem] md:px-12 md:py-20"
           >
             <div className="flex items-end justify-between gap-4">
               <h2 className="font-display text-4xl uppercase leading-[0.9] md:text-6xl">Keep Reading</h2>

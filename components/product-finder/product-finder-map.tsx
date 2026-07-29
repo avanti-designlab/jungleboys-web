@@ -234,7 +234,7 @@ export default function ProductFinderMap() {
     <section className="px-2 pb-16 md:px-3">
       <div className="mx-auto max-w-[1500px]">
         {/* bold stat + California-cities marquee band */}
-        <div className="mb-6 overflow-hidden rounded-[1.5rem] bg-[#0b0b0d] md:rounded-[2rem]" data-nav-theme="dark">
+        <div className="mb-6 overflow-hidden rounded-[1.5rem] bg-[var(--color-ink)] md:rounded-[2rem]" data-nav-theme="dark">
           <div className="flex flex-col items-center gap-3 px-6 py-6 sm:flex-row sm:justify-between md:px-10 md:py-7">
             <div className="flex items-center gap-4">
               <span className="font-display text-7xl leading-[0.8] text-[var(--color-accent)] md:text-8xl">{count}</span>
@@ -323,9 +323,9 @@ export default function ProductFinderMap() {
         {/* full-width map with a floating results panel */}
         <div
           data-nav-theme="dark"
-          className="jb-map relative overflow-hidden rounded-[1.75rem] border-2 border-[var(--color-accent)]/20 bg-[#0b0b0d] shadow-[0_40px_120px_-30px_rgba(254,207,14,0.3)] md:rounded-[2.5rem]"
+          className="jb-map relative overflow-hidden rounded-[1.75rem] border-2 border-[var(--color-accent)]/20 bg-[var(--color-ink)] shadow-[0_40px_120px_-30px_rgba(254,207,14,0.3)] md:rounded-[2.5rem]"
         >
-          <div ref={mapEl} className="h-[68vh] min-h-[480px] w-full" style={{ background: '#0b0b0d' }} />
+          <div ref={mapEl} className="h-[68vh] min-h-[480px] w-full" style={{ background: 'var(--color-ink)' }} />
 
           {/* bold idle-state CTA — fades out once the visitor touches the map,
               picks a store, or runs a search */}

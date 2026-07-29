@@ -201,7 +201,7 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
           onClick={() => setOpen(null)}
         >
           <div
-            className="relative max-h-full w-full max-w-[560px] overflow-y-auto overflow-x-hidden rounded-[1.75rem] bg-[#0b0b0d] text-white shadow-[0_30px_80px_rgba(0,0,0,0.6)] ring-1 ring-white/12"
+            className="relative max-h-full w-full max-w-[560px] overflow-y-auto overflow-x-hidden rounded-[1.75rem] bg-[var(--color-ink)] text-white shadow-[0_30px_80px_rgba(0,0,0,0.6)] ring-1 ring-white/12"
             onClick={(e) => e.stopPropagation()}
           >
             <button

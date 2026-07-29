@@ -108,9 +108,9 @@ export default function LocationsMap() {
 
         <div
           data-nav-theme="dark"
-          className="jb-map relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0b0b0d] md:rounded-[2.5rem]"
+          className="jb-map relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-[var(--color-ink)] md:rounded-[2.5rem]"
         >
-          <div ref={mapRef} className="h-[62vh] min-h-[440px] w-full" style={{ background: '#0b0b0d' }} />
+          <div ref={mapRef} className="h-[62vh] min-h-[440px] w-full" style={{ background: 'var(--color-ink)' }} />
 
           {/* store preview card */}
           <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[500] p-4 md:inset-y-0 md:right-0 md:left-auto md:flex md:w-[360px] md:items-center md:p-6">
