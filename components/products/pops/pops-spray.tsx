@@ -15,7 +15,7 @@ export default function PopsSectionSpray({ seed = 4242 }: { seed?: number }) {
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
       {nugs.map((n, i) => (
         // eslint-disable-next-line @next/next/no-img-element -- ambient kernel
-        <img
+        <img loading="lazy" decoding="async"
           key={i}
           src={n.src}
           alt=""

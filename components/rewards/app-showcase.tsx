@@ -119,7 +119,7 @@ export default function AppShowcase() {
               }}
             >
               <Image
-                src="/rewards/phone-glow.png"
+                src="/rewards/phone-glow.webp"
                 alt="The Jungle Boys app glowing on a phone"
                 width={1005}
                 height={1004}

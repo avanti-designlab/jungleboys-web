@@ -30,7 +30,7 @@ export const CA_STORES: Store[] = [
     lat: 34.0287,
     lng: -118.2337,
     shopUrl: '/menu/california/downtown-los-angeles',
-    image: '/contact/contact-bg.jpg',
+    image: '/contact/contact-bg.webp',
   },
   {
     slug: 'orange-county',
@@ -43,7 +43,7 @@ export const CA_STORES: Store[] = [
     lat: 33.7148,
     lng: -117.8553,
     shopUrl: '/menu/california/orange-county',
-    image: '/contact/contact-bg.jpg',
+    image: '/contact/contact-bg.webp',
   },
   {
     slug: 'pomona',
@@ -56,7 +56,7 @@ export const CA_STORES: Store[] = [
     lat: 34.0592,
     lng: -117.8093,
     shopUrl: '/menu/california/pomona',
-    image: '/contact/contact-bg.jpg',
+    image: '/contact/contact-bg.webp',
   },
   {
     slug: 'san-diego',
@@ -69,6 +69,6 @@ export const CA_STORES: Store[] = [
     lat: 32.7758,
     lng: -117.0186,
     shopUrl: '/menu/california/san-diego',
-    image: '/contact/contact-bg.jpg',
+    image: '/contact/contact-bg.webp',
   },
 ]

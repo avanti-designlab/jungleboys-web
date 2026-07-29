@@ -181,6 +181,8 @@ export default function PopsHero() {
             src={n.src}
             alt=""
             aria-hidden
+            loading="lazy"
+            decoding="async"
             className="absolute -translate-x-1/2 -translate-y-1/2 will-change-transform"
             style={{
               left: `${n.x}%`, top: `${n.y}%`,
@@ -203,14 +205,14 @@ export default function PopsHero() {
           data-herojar="l"
           src="/products/pops/jar-bluog.webp"
           alt="Blu OG 5G Pops jar"
-          className="w-[35vw] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:absolute md:bottom-[21%] md:left-[7%] md:w-[min(24vw,225px)]"
+          className="w-[35vw] opacity-0 origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:absolute md:bottom-[21%] md:left-[7%] md:w-[min(24vw,225px)]"
         />
         {/* eslint-disable-next-line @next/next/no-img-element -- product jar */}
         <img
           data-herojar="r"
           src="/products/pops/jar-cherriez.webp"
           alt="All Cherriez 5G Pops jar"
-          className="w-[35vw] origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:absolute md:bottom-[21%] md:right-[7%] md:w-[min(24vw,225px)]"
+          className="w-[35vw] opacity-0 origin-bottom will-change-transform drop-shadow-[0_28px_44px_rgba(0,0,0,0.28)] md:absolute md:bottom-[21%] md:right-[7%] md:w-[min(24vw,225px)]"
         />
       </div>
 

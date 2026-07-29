@@ -125,8 +125,8 @@ export default function LocationsDirectory() {
 
   return (
     <div ref={rootRef}>
-      <StateSection postcard="/locations/california.png" alt="California" stores={CA_OWNED} />
-      <StateSection postcard="/locations/florida.png" alt="Florida" stores={FL_OWNED} />
+      <StateSection postcard="/locations/california.webp" alt="California" stores={CA_OWNED} />
+      <StateSection postcard="/locations/florida.webp" alt="Florida" stores={FL_OWNED} />
     </div>
   )
 }

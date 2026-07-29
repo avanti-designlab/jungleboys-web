@@ -14,8 +14,8 @@ export const HERO_SLIDES = [
     title: 'JULY DEALS',
     cta: 'Learn more',
     href: '/710-deals',
-    image: '/hero/july-deals-fireworks.jpg',
-    imageMobile: '/hero/july-deals-mobile.jpg',
+    image: '/hero/july-deals-fireworks.webp',
+    imageMobile: '/hero/july-deals-mobile.webp',
     alt: 'Fourth of July fireworks over the downtown LA skyline and the 6th Street Viaduct',
     // bright fireworks stay crisp; a bottom scrim keeps the headline legible
     // over the lit bridge arches
@@ -26,8 +26,8 @@ export const HERO_SLIDES = [
     title: 'GAS TANK',
     cta: 'Shop now',
     href: '/products',
-    image: '/hero/gas-tank-beach.jpg',
-    imageMobile: '/hero/gas-tank-mobile.jpg',
+    image: '/hero/gas-tank-beach.webp',
+    imageMobile: '/hero/gas-tank-mobile.webp',
     alt: 'Jungle Boys Gas Tank all-in-one vapes standing in the sand at the beach',
     overlay: false, // bright + crisp per Avanti
   },
@@ -36,8 +36,8 @@ export const HERO_SLIDES = [
     title: 'GOLD MYLARS',
     cta: 'Shop now',
     href: '/products',
-    image: '/hero/gold-mylar-skyline.jpg',
-    imageMobile: '/hero/gold-mylar-mobile.jpg',
+    image: '/hero/gold-mylar-skyline.webp',
+    imageMobile: '/hero/gold-mylar-mobile.webp',
     alt: 'Gold Jungle Boys mylar bag towering over the LA skyline at sunset',
     overlay: false, // art is bright + crisp on its own (Avanti)
   },

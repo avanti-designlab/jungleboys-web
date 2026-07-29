@@ -56,7 +56,7 @@ export default async function ContactPage() {
           {/* graffiti mural background */}
           {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}
           <img
-            src="/contact/contact-bg.jpg"
+            src="/contact/contact-bg.webp"
             alt=""
             aria-hidden
             data-contact-bg

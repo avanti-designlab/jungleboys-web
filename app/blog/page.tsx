@@ -40,7 +40,7 @@ export default async function BlogIndex() {
           {/* graffiti mural background */}
           {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}
           <img
-            src="/contact/contact-bg.jpg"
+            src="/contact/contact-bg.webp"
             alt=""
             aria-hidden
             className="absolute inset-0 h-full w-full scale-110 object-cover object-center will-change-transform"

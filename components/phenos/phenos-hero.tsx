@@ -16,15 +16,15 @@ import gsap from 'gsap'
 // they scale down (--jar-scale) and regroup into a tight cluster under the
 // header, leaving the lower half clear for the logo.
 const JARS = [
-  { src: '/phenos/jar-3.png', left: '38%', top: '16%', mLeft: '33%', mTop: '9%', w: 150, tilt: 0, dur: 7.2, del: 0, z: 5 },
-  { src: '/phenos/jar-1.png', left: '12%', top: '44%', mLeft: '15%', mTop: '25%', w: 132, tilt: -7, dur: 5.9, del: 0.5, z: 3 },
-  { src: '/phenos/jar-4.png', left: '88%', top: '42%', mLeft: '84%', mTop: '24%', w: 134, tilt: 7, dur: 6.3, del: 0.35, z: 4 },
-  { src: '/phenos/jar-2.png', left: '73%', top: '12%', mLeft: '68%', mTop: '8%', w: 122, tilt: 5, dur: 6.6, del: 0.2, z: 4 },
+  { src: '/phenos/jar-3.webp', left: '38%', top: '16%', mLeft: '33%', mTop: '9%', w: 150, tilt: 0, dur: 7.2, del: 0, z: 5 },
+  { src: '/phenos/jar-1.webp', left: '12%', top: '44%', mLeft: '15%', mTop: '25%', w: 132, tilt: -7, dur: 5.9, del: 0.5, z: 3 },
+  { src: '/phenos/jar-4.webp', left: '88%', top: '42%', mLeft: '84%', mTop: '24%', w: 134, tilt: 7, dur: 6.3, del: 0.35, z: 4 },
+  { src: '/phenos/jar-2.webp', left: '73%', top: '12%', mLeft: '68%', mTop: '8%', w: 122, tilt: 5, dur: 6.6, del: 0.2, z: 4 },
 ]
 
 // nugs — a stream that flows out from behind/around the logo. left/top here are
 // only the reduced-motion resting spots (a subset shows; the rest are motion-only).
-const NUG_IMGS = ['/phenos/nug-1.png', '/phenos/nug-2.png', '/phenos/nug-3.png', '/phenos/nug-4.png', '/phenos/nug-5.png', '/phenos/nug-6.png']
+const NUG_IMGS = ['/phenos/nug-1.png', '/phenos/nug-2.png', '/phenos/nug-3.png', '/phenos/nug-4.webp', '/phenos/nug-5.png', '/phenos/nug-6.png']
 const NUGS = Array.from({ length: 20 }, (_, i) => ({
   src: NUG_IMGS[i % NUG_IMGS.length],
   left: `${8 + ((i * 61) % 84)}%`,

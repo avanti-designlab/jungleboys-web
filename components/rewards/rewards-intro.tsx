@@ -110,8 +110,8 @@ export default function RewardsIntro() {
           role="img"
           aria-label="PWF Rewards"
         >
-          <img src="/rewards/pwf-script.png" alt="" className="mx-auto w-full" />
-          <img src="/rewards/pwf-rewards-plate.png" alt="" className="mx-auto -mt-2 w-[82%]" />
+          <img src="/rewards/pwf-script.webp" alt="" className="mx-auto w-full" />
+          <img src="/rewards/pwf-rewards-plate.webp" alt="" className="mx-auto -mt-2 w-[82%]" />
         </div>
 
         {/* coin layer — coins burst from behind the logo */}

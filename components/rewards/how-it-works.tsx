@@ -14,7 +14,7 @@ export default function HowItWorks() {
             <div data-reveal="up">
               <h2 className="sr-only">How Playing With Fire Rewards works</h2>
               <Image
-                src="/rewards/pwf-works.png"
+                src="/rewards/pwf-works.webp"
                 alt="How Playing With Fire Rewards works"
                 width={609}
                 height={364}
@@ -25,7 +25,7 @@ export default function HowItWorks() {
             <div className="text-center">
               <div data-reveal="up">
                 <Image
-                  src="/rewards/mascots-coins.png"
+                  src="/rewards/mascots-coins.webp"
                   alt="Jungle Boys mascots collecting reward coins"
                   width={492}
                   height={424}

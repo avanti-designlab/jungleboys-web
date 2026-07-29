@@ -120,7 +120,7 @@ export default function RewardsHero() {
             ))}
           </div>
           <Image
-            src="/rewards/phone-hero.png"
+            src="/rewards/phone-hero.webp"
             alt="The Jungle Boys app on a phone"
             width={833}
             height={833}

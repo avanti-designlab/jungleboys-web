@@ -56,7 +56,9 @@ export default function HhHero() {
           loop
           muted
           playsInline
-          preload="auto"
+          // metadata, not auto: at "auto" the 4.8MB clip competed with its own
+          // poster for the connection and delayed first paint by seconds
+          preload="metadata"
           poster={mobile ? '/products/hash-hole/hero-mobile-poster.webp' : '/products/hash-hole/hero-poster.webp'}
         >
           {mobile !== null && (

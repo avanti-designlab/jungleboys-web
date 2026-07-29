@@ -153,7 +153,7 @@ export default function ConnoisseurClub() {
         <h2 className="sr-only">The Connoisseur Club</h2>
         <div data-club-inner className="relative mx-auto max-w-7xl px-4 pb-6 pt-10 md:pt-14">
           <Image
-            src="/rewards/club-table-scene.png"
+            src="/rewards/club-table-scene.webp"
             alt="The Connoisseur Club"
             width={975}
             height={644}
@@ -162,7 +162,7 @@ export default function ConnoisseurClub() {
           />
           <div className="rw-breathe relative -mx-4 -mt-[14%] w-[calc(100%+2rem)] max-w-none md:mx-auto md:w-full md:max-w-[1280px]">
             <Image
-              src="/rewards/club-bg-title.png"
+              src="/rewards/club-bg-title.webp"
               alt="Jungle Boys mascots in a private lounge"
               width={1475}
               height={913}
@@ -177,8 +177,8 @@ export default function ConnoisseurClub() {
         </div>
 
         {/* decorative tied-back drapes (from the art) at the stage edges */}
-        <img src="/rewards/curtain-left.png" alt="" aria-hidden className="absolute left-0 top-0 z-20 w-[26%] max-w-[440px] opacity-95" />
-        <img src="/rewards/curtain-right.png" alt="" aria-hidden className="absolute right-0 top-0 z-20 w-[26%] max-w-[440px] opacity-95" />
+        <img src="/rewards/curtain-left.webp" alt="" aria-hidden className="absolute left-0 top-0 z-20 w-[26%] max-w-[440px] opacity-95" />
+        <img src="/rewards/curtain-right.webp" alt="" aria-hidden className="absolute right-0 top-0 z-20 w-[26%] max-w-[440px] opacity-95" />
 
         {/* closing gathered curtains (scene-style art) that part on scroll */}
         <div data-curtain-left aria-hidden className="absolute inset-y-0 left-0 z-30 w-1/2 will-change-transform">

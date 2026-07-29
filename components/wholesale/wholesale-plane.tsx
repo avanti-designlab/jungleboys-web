@@ -56,7 +56,7 @@ export default function WholesalePlane() {
       ))}
       <div className="ws-plane absolute left-0 top-[4%] z-30 w-[min(58vw,660px)]">
         {/* eslint-disable-next-line @next/next/no-img-element -- transparent art */}
-        <img src="/wholesale/plane.png" alt="" className="h-auto w-full drop-shadow-[0_18px_34px_rgba(0,0,0,0.5)]" />
+        <img src="/wholesale/plane.webp" alt="" className="h-auto w-full drop-shadow-[0_18px_34px_rgba(0,0,0,0.5)]" />
       </div>
     </div>
   )

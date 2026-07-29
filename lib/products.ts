@@ -27,7 +27,7 @@ export type ProductLine = {
 }
 
 // Shared pop-out layouts, reused across products.
-const PRE = '/products/fx/pre-roll.png'
+const PRE = '/products/fx/pre-roll.webp'
 // A single pre-roll popping from each side (1G Pre-Rolls — same image both sides).
 const ONE_EACH_SIDE: PopOut[] = [
   { src: PRE, x: 15, y: 52, rot: -16, w: 7 },
@@ -41,12 +41,12 @@ const TWO_EACH_SIDE: PopOut[] = [
   { src: PRE, x: 77, y: 66, rot: 8, w: 6.5 },
 ]
 // The hash-hole infused pre-roll, popping from each side.
-const HASH = '/products/fx/hash-hole-joint.png'
+const HASH = '/products/fx/hash-hole-joint.webp'
 const HASH_EACH_SIDE: PopOut[] = [
   { src: HASH, x: 16, y: 50, rot: -15, w: 13 },
   { src: HASH, x: 84, y: 50, rot: 15, w: 13 },
 ]
-const POPS_NUGS = [1, 2, 3, 4, 5, 6].map((n) => `/products/fx/pops-${n}.png`)
+const POPS_NUGS = [1, 2, 3, 4, 5, 6].map((n) => `/products/fx/pops-${n}.webp`)
 
 export const PRODUCT_LINES: ProductLine[] = [
   {
@@ -54,7 +54,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     name: 'All-In-One Gas Tank',
     tag: 'Vapes',
     blurb: 'Ready-to-go all-in-one devices — charged, filled, and done. No cart, no hassle.',
-    image: '/products/fx/gas-tank-still.png', // = the hover video's first frame (poster)
+    image: '/products/fx/gas-tank-still.webp', // = the hover video's first frame (poster)
     isNew: true,
     hoverVideo: '/products/fx/gas-tank-hover-2.mp4',
   },
@@ -63,7 +63,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     name: 'Hash Hole',
     tag: 'Infused Pre-Roll',
     blurb: 'Indoor flower wrapped around a molten hash-rosin core. The one that started the frenzy.',
-    image: '/products/v11/hash-hole.png',
+    image: '/products/v11/hash-hole.webp',
     isNew: true,
     popOut: HASH_EACH_SIDE,
   },
@@ -72,7 +72,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     name: 'Twins',
     tag: '2-PK Pre-Rolls',
     blurb: 'Double-infused, double trouble. Two-strain blends rolled for a heavier hit.',
-    image: '/products/v11/twins.png',
+    image: '/products/v11/twins.webp',
     isNew: true,
     popOut: TWO_EACH_SIDE,
   },
@@ -81,7 +81,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     name: 'Pops',
     tag: 'Premium Indoor Smalls',
     blurb: 'Bite-size infused minis in the candy-striped jar. Small format, full send.',
-    image: '/products/v11/pops.png',
+    image: '/products/v11/pops.webp',
     popcorn: POPS_NUGS,
   },
   {
@@ -89,10 +89,10 @@ export const PRODUCT_LINES: ProductLine[] = [
     name: '3.5G Gold Mylars',
     tag: 'Premium Indoor Flower',
     blurb: 'Top-shelf, hand-trimmed indoor — sealed fresh in the gold pouch.',
-    image: '/products/v11/premium-flower.png',
+    image: '/products/v11/premium-flower.webp',
     popOut: [
       { src: '/phenos/nug-1.png', x: 25, y: 50, rot: -15, w: 38 },
-      { src: '/phenos/nug-4.png', x: 75, y: 46, rot: 15, w: 38 },
+      { src: '/phenos/nug-4.webp', x: 75, y: 46, rot: 15, w: 38 },
     ],
   },
   {
@@ -100,7 +100,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     name: 'Pre-Rolls',
     tag: '1G Pre-Rolls',
     blurb: 'Single-strain infused pre-rolls, packed with the same flower we jar. Spark and go.',
-    image: '/products/v11/pre-rolls.png',
+    image: '/products/v11/pre-rolls.webp',
     popOut: ONE_EACH_SIDE,
   },
   {
@@ -108,9 +108,9 @@ export const PRODUCT_LINES: ProductLine[] = [
     name: '10PK Pre-Rolls',
     tag: 'Multipack',
     blurb: 'Ten mini pre-rolls to a pack — the everyday carry for when one is never enough.',
-    image: '/products/v11/10-pack-prerolls.png',
+    image: '/products/v11/10-pack-prerolls.webp',
     fan: {
-      src: '/products/fx/mini-preroll.png',
+      src: '/products/fx/mini-preroll.webp',
       w: 7.5,
       pivotY: 64,
       angles: [-30, -45, -60, -75, -90, 30, 45, 60, 75, 90],
@@ -121,13 +121,13 @@ export const PRODUCT_LINES: ProductLine[] = [
     name: 'Rosin',
     tag: 'Solventless Live Rosin',
     blurb: 'Solventless live rosin, pressed from fresh-frozen flower. Pure, full-spectrum flavor.',
-    image: '/products/v11/rosin.png',
+    image: '/products/v11/rosin.webp',
   },
   {
     slug: 'orc',
     name: 'Oil Refinery Co.',
     tag: 'Concentrates',
     blurb: 'Our concentrate line — potent, terp-forward extracts for the connoisseur.',
-    image: '/products/v11/orc.png',
+    image: '/products/v11/orc.webp',
   },
 ]

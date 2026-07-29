@@ -166,7 +166,7 @@ export default function TpHero() {
           <div className="relative h-full w-full" style={{ transformStyle: 'preserve-3d' }}>
             {RISERS.map((r) => (
               // eslint-disable-next-line @next/next/no-img-element -- product art
-              <img key={r.i} data-tp-rise={r.i} src="/products/10-pack/joint.webp" alt="" aria-hidden
+              <img key={r.i} data-tp-rise={r.i} loading="lazy" decoding="async" src="/products/10-pack/joint.webp" alt="" aria-hidden
                 className="absolute bottom-0 left-1/2 w-auto opacity-0 will-change-transform drop-shadow-[0_14px_24px_rgba(0,0,0,0.55)]"
                 style={{ height: `${r.h}vh`, marginLeft: `${r.x}vw` }} />
             ))}
@@ -189,7 +189,12 @@ export default function TpHero() {
                 <div data-tp-jar-in className="will-change-transform">
                   <div className={`tp-bob-${j.bob}`} style={{ ['--tp-rot' as string]: `${j.rot}deg`, ['--tp-dur' as string]: `${j.dur}s` }}>
                     {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-                    <img fetchPriority="high" src={`/products/10-pack/${j.src}.webp`} alt="Jungle Boys 10 Pack Pre-Rolls"
+                    <img
+                      // Only the front jar (h:80, the tallest and nearest) competes for
+                      // first paint. Five images at equal priority made the LCP one finish
+                      // last; the other four stagger in a beat later anyway.
+                      fetchPriority={j.h === 80 ? 'high' : 'low'}
+                      src={`/products/10-pack/${j.src}.webp`} alt="Jungle Boys 10 Pack Pre-Rolls"
                       className="w-auto -translate-x-1/2 drop-shadow-[0_40px_70px_rgba(0,0,0,0.8)]"
                       style={{ height: `${j.h}vh`, marginTop: `${j.y}vh` }} />
                   </div>

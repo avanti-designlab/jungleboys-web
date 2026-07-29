@@ -53,7 +53,7 @@ export const OWNED_STORES: OwnedStore[] = [
     state: 'CA',
     lat: 34.033,
     lng: -118.2337,
-    image: '/locations/stores/jungle-boys-clothing.png',
+    image: '/locations/stores/jungle-boys-clothing.webp',
     menuUrl: 'https://jungleboysclothing.com',
     external: true,
     cta: 'Shop Clothing →',
