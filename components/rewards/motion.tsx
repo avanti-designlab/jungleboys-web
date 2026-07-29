@@ -90,9 +90,24 @@ export function SplitHeading({
           aria-hidden
           className={`${l.block ? 'block' : ''} ${l.nowrap ? 'md:whitespace-nowrap' : ''} ${l.accent ? accentClass : ''}`}
         >
-          {(mode === 'letters' ? [...l.text] : l.text.split(/(\s+)/)).map((part, i) =>
+          {/* Split to WORDS first, always. In letters mode each character is its
+              own inline-block, and the browser is free to break a line between
+              any two inline-blocks — which is why headings were breaking
+              mid-word ("TO K/EEP", "LIMITE/D", "JUN/GLE", "TOD/AY"). Wrapping
+              each word in a nowrap inline-block keeps the per-letter stagger
+              (data-split is still on every character) while making a space the
+              only legal break point. */}
+          {l.text.split(/(\s+)/).map((part, i) =>
             /^\s+$/.test(part) || part === ' ' ? (
               ' '
+            ) : mode === 'letters' ? (
+              <span key={i} className="inline-block whitespace-nowrap">
+                {[...part].map((ch, j) => (
+                  <span key={j} data-split className="inline-block whitespace-pre will-change-transform">
+                    {ch}
+                  </span>
+                ))}
+              </span>
             ) : (
               <span key={i} data-split className="inline-block whitespace-pre will-change-transform">
                 {part}

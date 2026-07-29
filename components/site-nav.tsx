@@ -126,7 +126,7 @@ export default function SiteNav() {
                 {column.map((l) => {
                   const delay = `${0.05 + linkIndex++ * 0.03}s`
                   const cls =
-                    'font-display whitespace-nowrap text-6xl md:text-7xl xl:text-8xl uppercase text-white transition-colors duration-200 hover:text-[var(--color-accent)]'
+                    'font-display whitespace-nowrap text-5xl leading-[0.92] md:text-6xl xl:text-7xl uppercase text-white transition-colors duration-200 hover:text-[var(--color-accent)]'
                   return (
                     <li key={l.href} className="menu-line">
                       {l.external ? (

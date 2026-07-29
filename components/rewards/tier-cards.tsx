@@ -37,7 +37,7 @@ export default function TierCards() {
         <Scrub
           enter
           start="top 70%"
-          className="mt-64 grid items-stretch gap-y-44 md:mt-72 md:grid-cols-3 md:gap-x-6 md:gap-y-0 xl:gap-x-8"
+          className="mt-64 grid items-stretch gap-y-56 md:mt-72 md:grid-cols-3 md:gap-x-6 md:gap-y-0 xl:gap-x-8"
         >
           {TIER_CARDS.map((t, i) => {
             const isGold = t.theme === 'gold'
@@ -73,7 +73,10 @@ export default function TierCards() {
                         // they land — the plates are the consistent anchor.
                         left: ['50%', 'calc(50% - 14px)', '50%'][i],
                         height: ['443px', '411px', '359px'][i],
-                        top: ['-304px', '-273px', '-232px'][i],
+                        // Lowered ~40px each: they were rising 304/273/232px above their own
+                        // card, which overlapped the card ABOVE, and left a 53-65px gap
+                        // between the plate and the tier name. Dropping them closes both.
+                        top: ['-262px', '-233px', '-196px'][i],
                       }}
                     />
                     {/* living smoke rising off the character */}
@@ -93,7 +96,7 @@ export default function TierCards() {
                       <span className={`block text-lg font-extrabold uppercase tracking-widest ${themes[t.theme].name}`}>
                         {t.color}
                       </span>
-                      <span className="block text-3xl font-extrabold uppercase tracking-tight text-white md:text-[2rem] xl:text-4xl">
+                      <span className="block text-[2.15rem] font-extrabold uppercase leading-[0.95] tracking-tight text-white md:text-[2rem] xl:text-4xl">
                         {t.name}
                       </span>
                     </h3>

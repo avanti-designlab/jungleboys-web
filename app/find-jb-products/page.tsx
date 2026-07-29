@@ -51,7 +51,7 @@ export default function ProductFinderPage() {
           <span
             aria-hidden
             className="font-display pointer-events-none absolute left-1/2 top-[40px] z-0 flex -translate-x-1/2 flex-col items-center whitespace-nowrap uppercase leading-[0.82] text-white/90 md:top-[64px]"
-            style={{ fontSize: 'min(16.5vw, 290px)' }}
+            style={{ fontSize: 'min(26vw, 290px)' }}
           >
             <span className="block">
               {'PRODUCT'.split('').map((ch, i) => (
@@ -68,7 +68,7 @@ export default function ProductFinderPage() {
           <img
             src="/product-finder/pf-header.svg"
             alt="Find Jungle Boys products"
-            className="hero-alive relative z-10 drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
+            className="hero-alive relative z-10 origin-bottom scale-[0.76] drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)] md:scale-100"
           />
         </div>
       </section>

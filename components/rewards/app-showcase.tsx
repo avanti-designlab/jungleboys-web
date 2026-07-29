@@ -77,7 +77,7 @@ export default function AppShowcase() {
     <li
       key={label}
       {...{ [side === 'left' ? 'data-pill-left' : 'data-pill-right']: '' }}
-      className={`w-fit rounded-full bg-[#181818] px-7 py-4.5 text-sm font-extrabold uppercase tracking-wide text-white shadow-[0_0_24px_rgba(254,207,14,0.12)] ring-1 ring-white/15 will-change-transform md:text-base ${
+      className={`mx-auto w-fit rounded-full bg-[#181818] lg:mx-0 px-7 py-4.5 text-sm font-extrabold uppercase tracking-wide text-white shadow-[0_0_24px_rgba(254,207,14,0.12)] ring-1 ring-white/15 will-change-transform md:text-base ${
         side === 'left' ? 'lg:justify-self-end lg:text-right' : 'lg:justify-self-start'
       }`}
       style={{ fontFamily: 'var(--font-brand)' }}

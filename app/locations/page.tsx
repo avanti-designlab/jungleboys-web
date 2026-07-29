@@ -75,7 +75,10 @@ export default function LocationsPage() {
           <img
             src="/product-finder/pf-header.svg"
             alt="Jungle Boys Locations"
-            className="hero-alive relative z-10 drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)]"
+            // Measured at 103% of the banner height on mobile — it overflowed the
+            // panel and buried the LOCATIONS wordmark. A transform keeps it
+            // proportional; origin-bottom shrinks it toward the baseline it sits on.
+            className="hero-alive relative z-10 origin-bottom scale-[0.76] drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)] md:scale-100"
           />
         </div>
       </section>
