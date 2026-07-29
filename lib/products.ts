@@ -51,7 +51,7 @@ const POPS_NUGS = [1, 2, 3, 4, 5, 6].map((n) => `/products/fx/pops-${n}.png`)
 export const PRODUCT_LINES: ProductLine[] = [
   {
     slug: 'all-in-one',
-    name: 'All-In-One Gas Tanks',
+    name: 'All-In-One Gas Tank',
     tag: 'Vapes',
     blurb: 'Ready-to-go all-in-one devices — charged, filled, and done. No cart, no hassle.',
     image: '/products/fx/gas-tank-still.png', // = the hover video's first frame (poster)

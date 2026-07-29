@@ -309,7 +309,7 @@ export default function ProductsCollection() {
                   </div>
                   <span
                     aria-hidden
-                    className="inline-flex shrink-0 items-center gap-2 rounded-full bg-black py-2 pl-4 pr-2 text-white transition-colors duration-200 group-hover:bg-[var(--color-accent)] group-hover:text-black"
+                    className="ml-auto inline-flex shrink-0 items-center gap-2 rounded-full bg-black py-2 pl-4 pr-2 text-white transition-colors duration-200 group-hover:bg-[var(--color-accent)] group-hover:text-black"
                   >
                     <span className="text-[11px] font-extrabold uppercase tracking-widest" style={{ fontFamily: 'var(--font-brand)' }}>
                       Shop Now

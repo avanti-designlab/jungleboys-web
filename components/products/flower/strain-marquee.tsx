@@ -20,10 +20,10 @@ function TextRow() {
     <div className="flex shrink-0 items-center">
       {WORDS.map((w) => (
         <span key={w} className="flex items-center">
-          <span className="font-display whitespace-nowrap px-5 uppercase leading-none text-white" style={{ fontSize: 'min(9vw, 6rem)' }}>
+          <span className="font-display whitespace-nowrap px-5 uppercase leading-none text-white" style={{ fontSize: 'min(15vw, 6rem)' }}>
             {w}
           </span>
-          <span aria-hidden className="fl-stroke font-display leading-none" style={{ fontSize: 'min(9vw, 6rem)' }}>
+          <span aria-hidden className="fl-stroke font-display leading-none" style={{ fontSize: 'min(15vw, 6rem)' }}>
             ✦
           </span>
         </span>
@@ -34,10 +34,10 @@ function TextRow() {
 
 function LogoRow() {
   return (
-    <div className="flex shrink-0 items-center gap-14 pr-14 md:gap-20 md:pr-20">
+    <div className="fl-logo-row flex shrink-0 items-center gap-7 pr-7 md:gap-16 md:pr-16">
       {LOGOS.map((l) => (
         // eslint-disable-next-line @next/next/no-img-element -- strain art
-        <img key={l} src={`/products/flower/${l}.webp`} alt="" aria-hidden className="h-16 w-auto opacity-90 md:h-24" loading="lazy" />
+        <img key={l} src={`/products/flower/${l}.webp`} alt="" aria-hidden className="h-24 w-auto opacity-90 md:h-28" loading="lazy" />
       ))}
     </div>
   )
@@ -52,7 +52,7 @@ export default function StrainMarquee() {
           <TextRow />
         </div>
       </div>
-      <div className="marquee-pause mt-10 flex md:mt-14" aria-hidden>
+      <div className="marquee-pause fl-strain-logos mt-10 flex md:mt-14" aria-hidden>
         <div className="marquee-track-reverse flex">
           <LogoRow />
           <LogoRow />

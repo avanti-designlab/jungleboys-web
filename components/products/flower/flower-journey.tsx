@@ -43,10 +43,15 @@ export default function FlowerJourney() {
       <div
         ref={statementRef}
         className="font-display pointer-events-none absolute inset-x-0 top-[13vh] z-10 text-center uppercase leading-[0.9] md:top-[10vh]"
-        style={{ fontSize: 'min(13.5vw, 8rem)' }}
+        style={{ fontSize: 'min(16vw, 8rem)' }}
       >
-        <span className="fl-stroke-accent block">Jungle Boys Genetics</span>
-        <span className="fl-stroke-accent block">From Seed to Fire</span>
+        {/* three lines, not two: "Jungle Boys Genetics" was the longest run and
+            it alone set the size ceiling. Split off "Genetics" and the widest
+            line becomes "From Seed to Fire", which buys the whole lockup a jump
+            in size and fills the black band it sits in. */}
+        <span className="fl-stroke-accent block whitespace-nowrap">Jungle Boys</span>
+        <span className="fl-stroke-accent block whitespace-nowrap">Genetics</span>
+        <span className="fl-stroke-accent block whitespace-nowrap">From Seed to Fire</span>
       </div>
 
       {/* frosty nug cutout blows up to fill */}

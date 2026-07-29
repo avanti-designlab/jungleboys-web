@@ -167,6 +167,11 @@ body {
 .marquee-pause:hover {
   animation-play-state: paused;
 }
+/* the flower page's strain logos run quicker than the shared 40s default */
+.fl-strain-logos .marquee-track-reverse { animation-duration: 24s; }
+@media (min-width: 768px) {
+  .fl-strain-logos .marquee-track-reverse { animation-duration: 32s; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,
