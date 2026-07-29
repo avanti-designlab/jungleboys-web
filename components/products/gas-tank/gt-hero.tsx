@@ -90,15 +90,21 @@ export default function GtHero() {
             ease: 'power1.in', duration: 0.5,
           }, 0)
 
-          // THE LAUNCH. Each device fires up from under the bottom edge on its
-          // own beat — centre first, then the flankers — overshooting slightly
-          // before settling, so it lands rather than fades in. They stay
-          // oversized and bottom-cropped the whole way: the crop is the point.
-          const LAUNCH: [string, number][] = [['c', 0.10], ['l', 0.18], ['r', 0.25]]
-          LAUNCH.forEach(([k, at]) => {
+          // THE LAUNCH. The flankers sweep IN FROM THE SIDES, then the white
+          // centre rises from the floor — three separate beats, so all three
+          // are on screen together rather than one hero with two slivers.
+          // Everything overshoots slightly before settling, so each lands
+          // rather than fades in. The centre stays bottom-cropped: the crop is
+          // the point.
+          const LAUNCH: [string, gsap.TweenVars, number][] = [
+            ['l', { xPercent: -78, yPercent: 16, opacity: 0, scale: 1.06 }, 0.06],
+            ['r', { xPercent: 78, yPercent: 16, opacity: 0, scale: 1.06 }, 0.13],
+            ['c', { yPercent: 104, scale: 1.14 }, 0.2],
+          ]
+          LAUNCH.forEach(([k, from, at]) => {
             tl.fromTo(`[data-dev="${k}"]`,
-              { yPercent: 104, scale: 1.14 },
-              { yPercent: 0, scale: 1, ease: 'back.out(1.05)', duration: 0.42 }, at)
+              from,
+              { xPercent: 0, yPercent: 0, opacity: 1, scale: 1, ease: 'back.out(1.05)', duration: 0.44 }, at)
           })
           tl.fromTo('[data-rig]', { opacity: 0 }, { opacity: 1, duration: 0.06 }, 0.1)
             // and they keep growing toward you for the rest of the scrub
@@ -168,22 +174,22 @@ export default function GtHero() {
         </div>
 
         {/* the three tiers, rising out of the bed — equal width = equal device */}
-        <div data-rig className="absolute inset-x-0 top-[2%] z-20 h-[74%] opacity-0 md:top-[1%] md:h-[116%] will-change-transform">
+        <div data-rig className="absolute inset-x-0 top-[30%] z-20 h-[35%] opacity-0 will-change-transform md:top-[1%] md:h-[116%]">
           <div className="flex h-full items-start justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
             <img data-dev="l" src="/products/gas-tank/device-flavors-n.webp" alt="Gas Tank Flavors"
-              className="-mr-[13vw] h-full w-auto md:-mr-[8vw] will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)]" />
+              className="-mr-[6vw] mt-[9%] h-[80%] w-auto will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)] md:-mr-[8vw] md:mt-0 md:h-full" />
             {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
             <img data-dev="c" src="/products/gas-tank/device-rosin-n.webp" alt="Gas Tank Live Rosin"
               className="z-10 h-full w-auto will-change-transform drop-shadow-[0_44px_80px_rgba(0,0,0,0.85)]" />
             {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
             <img data-dev="r" src="/products/gas-tank/device-resin-n.webp" alt="Gas Tank Live Resin"
-              className="-ml-[13vw] h-full w-auto md:-ml-[8vw] will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)]" />
+              className="-ml-[6vw] mt-[9%] h-[80%] w-auto will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)] md:-ml-[8vw] md:mt-0 md:h-full" />
           </div>
         </div>
 
         {/* spec pills — one line, Figma icons, sitting over the burn */}
-        <div data-specs className="absolute inset-x-0 bottom-[4%] z-30 will-change-transform">
+        <div data-specs className="absolute inset-x-0 bottom-[14%] z-30 will-change-transform md:bottom-[4%]">
           <div className="gt-specs-row mx-auto flex w-full max-w-[1320px] items-stretch justify-start gap-1.5 overflow-x-auto px-4 md:justify-center md:gap-2.5 md:overflow-visible">
             {SPECS.map((s) => (
               <span
