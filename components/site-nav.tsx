@@ -169,7 +169,7 @@ export default function SiteNav() {
           role="dialog"
           aria-modal="true"
           aria-label="Main menu"
-          className="menu-overlay fixed inset-0 z-40 h-dvh overflow-hidden bg-[#0b0b0b]"
+          className="menu-overlay fixed inset-0 z-40 h-dvh overflow-y-auto overscroll-contain bg-[#0b0b0b]"
         >
           <nav className="mx-auto grid h-full w-full max-w-[1560px] grid-cols-1 content-start gap-x-10 gap-y-9 px-8 pt-28 md:[grid-template-columns:1fr_1fr_1.35fr] md:gap-y-1 md:pt-40">
             {MENU_COLUMNS.map((column, c) => (
@@ -200,6 +200,28 @@ export default function SiteNav() {
                           {l.label}
                         </Link>
                       )}
+
+                      {/* Product lines, nested under PRODUCTS. Roughly half the
+                          parent's size so the group reads as subordinate and
+                          still fits a phone. This is the whole point of the
+                          submenu: reaching a line page from anywhere is one tap
+                          instead of menu -> Products -> scroll -> tap. */}
+                      {l.children?.length ? (
+                        <ul className="mb-1 mt-1 flex flex-col gap-y-0.5 pl-1">
+                          {l.children.map((c) => (
+                            <li key={c.href} className="menu-line">
+                              <Link
+                                href={c.href}
+                                onClick={() => setOpen(false)}
+                                style={{ animationDelay: `${0.05 + linkIndex++ * 0.03}s` }}
+                                className="font-display block whitespace-nowrap text-2xl uppercase leading-[1.05] text-white/55 transition-colors duration-200 hover:text-[var(--color-accent)] md:text-[1.7rem] xl:text-3xl"
+                              >
+                                {c.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
                     </li>
                   )
                 })}
