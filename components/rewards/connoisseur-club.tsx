@@ -204,8 +204,11 @@ export default function ConnoisseurClub() {
               as="h3"
               mode="letters"
               accentClass="text-[var(--color-accent)]"
-              className="mt-3 text-center text-2xl font-extrabold uppercase tracking-wide text-[var(--color-accent)] md:text-4xl"
-              lines={[{ text: 'Invite Only. Limited Availability.' }]}
+              className="mt-3 text-center text-xl font-extrabold uppercase leading-[1.1] tracking-wide text-[var(--color-accent)] sm:text-2xl md:text-4xl"
+              lines={[
+                { text: 'Invite Only.', block: true, nowrap: true },
+                { text: 'Limited Availability.', block: true, nowrap: true },
+              ]}
             />
             <p className="mt-4 text-center text-xs font-bold uppercase leading-relaxed tracking-wide text-white md:whitespace-nowrap">
               Reserved for a select group of OG customers and brand loyalists.

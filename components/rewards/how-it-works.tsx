@@ -27,7 +27,7 @@ export default function HowItWorks() {
                 <Image
                   src="/rewards/mascots-coins.png"
                   alt="Jungle Boys mascots collecting reward coins"
-                  width={562}
+                  width={492}
                   height={424}
                   sizes="(max-width: 768px) 80vw, 480px"
                   className="mx-auto w-full max-w-[480px]"
