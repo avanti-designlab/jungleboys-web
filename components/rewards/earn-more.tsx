@@ -12,7 +12,7 @@ import { Scrub, SplitHeading } from './motion'
 const TIER_COLORS: Record<string, string> = {
   Trimmer: '#37d16b',
   Grower: '#c9c9d1',
-  'Pheno Hunter': 'var(--color-accent-ink)',
+  'Pheno Hunter': '#fecf0e',
   'Connoisseur Club': '#c8102e',
 }
 
@@ -60,7 +60,7 @@ export default function EarnMore() {
                       <span
                         aria-hidden
                         className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-extrabold text-black"
-                        style={{ backgroundColor: TIER_COLORS[t.name] ?? 'var(--color-accent-ink)' }}
+                        style={{ backgroundColor: TIER_COLORS[t.name] ?? '#fecf0e' }}
                       >
                         {i + 1}
                       </span>

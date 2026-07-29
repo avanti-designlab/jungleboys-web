@@ -7,7 +7,7 @@ export default function Coin({ className = '' }: { className?: string }) {
       <defs>
         <linearGradient id="rw-coin-face" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="#ffe873" />
-          <stop offset="0.55" stopColor="var(--color-accent-ink)" />
+          <stop offset="0.55" stopColor="#fecf0e" />
           <stop offset="1" stopColor="#d9a400" />
         </linearGradient>
       </defs>

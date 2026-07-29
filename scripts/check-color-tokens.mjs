@@ -10,13 +10,26 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 const css = fs.readFileSync('app/globals.css', 'utf8')
-const BRAND = /^--(tw|tp|gt|pr|pops|hh|fl|strain)-|^--color-(accent-ink|danger)$/
+const BRAND = /^--(tw|tp|gt|pr|pops|hh|fl|strain)-/
 const SKIP = new Set(['gt-fire.tsx', 'gt-snow.tsx'])
+
+// A token declared with DIFFERENT values under different theme selectors can
+// never stand in for a fixed literal — substituting it silently changes the
+// colour in one theme. --color-accent-ink is the cautionary tale: #8a6a00 in
+// light, #fecf0e in dark. Mapping the brand yellow onto it turned the loading
+// screen dark gold in light mode. So: count declarations per token, and only
+// trust the ones declared exactly once.
+const declCount = {}
+for (const m of css.matchAll(/--([a-z0-9-]+):\s*(#[0-9a-fA-F]{6})/g)) {
+  declCount['--' + m[1]] = (declCount['--' + m[1]] || 0) + 1
+}
 
 const tokens = {}
 for (const m of css.matchAll(/--([a-z0-9-]+):\s*(#[0-9a-fA-F]{6})/g)) {
   const name = '--' + m[1]
-  if (BRAND.test(name) && !(m[2].toLowerCase() in tokens)) tokens[m[2].toLowerCase()] = name
+  if (!BRAND.test(name)) continue
+  if (declCount[name] > 1) continue            // theme-varying: not substitutable
+  if (!(m[2].toLowerCase() in tokens)) tokens[m[2].toLowerCase()] = name
 }
 
 const hits = []

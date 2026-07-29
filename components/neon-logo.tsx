@@ -10,7 +10,7 @@ export default function NeonLogo({ className }: { className?: string }) {
       {LOGO_PATHS.map((d, i) => (
         <path key={i} d={d} fill="#ffffff" />
       ))}
-      <path d={LOGO_PATHS[0]} fill="none" stroke="var(--color-accent-ink)" strokeWidth="1.6" className="neon-trace" />
+      <path d={LOGO_PATHS[0]} fill="none" stroke="#FECF0E" strokeWidth="1.6" className="neon-trace" />
     </svg>
   )
 }

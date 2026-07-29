@@ -83,7 +83,7 @@ export function BirthdayIcon({ className = '' }: { className?: string }) {
     <svg viewBox="0 0 48 48" className={className} aria-hidden fill="none">
       <g className="rw-ic-tilt">
         <path d="M14 44 24 20l10 14-20 10Z" fill="#111" />
-        <path d="M18 38l10-6" stroke="var(--color-accent-ink)" strokeWidth="2" />
+        <path d="M18 38l10-6" stroke="#fecf0e" strokeWidth="2" />
       </g>
       <path className="rw-ic-sparkle" d="M30 10l1.4 3 3 1.4-3 1.4-1.4 3-1.4-3-3-1.4 3-1.4 1.4-3Z" fill="#111" />
       <path className="rw-ic-sparkle" d="M40 22l1 2.2 2.2 1-2.2 1-1 2.2-1-2.2-2.2-1 2.2-1 1-2.2Z" fill="#111" style={{ animationDelay: '0.5s' }} />

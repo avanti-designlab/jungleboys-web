@@ -45,7 +45,7 @@ export default function StepsRail() {
         const arrow = arrows[i]
         if (arrow) {
           gsap.set(arrow, { opacity: 0.15, scale: 0.7 })
-          tl.to(arrow, { opacity: 1, scale: 1.25, color: 'var(--color-accent-ink)', duration: 0.25, ease: 'none' }, '<+0.1')
+          tl.to(arrow, { opacity: 1, scale: 1.25, color: '#fecf0e', duration: 0.25, ease: 'none' }, '<+0.1')
         }
       })
     })
