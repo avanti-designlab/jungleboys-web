@@ -53,7 +53,7 @@ export default async function BlogIndex() {
           {/* giant BLOG wordmark — drops in letter-by-letter, below the header */}
           <span
             aria-hidden
-            className="font-display pointer-events-none absolute left-1/2 top-[86px] z-0 -translate-x-1/2 whitespace-nowrap text-[64vw] uppercase leading-none text-white/90 md:top-[104px] md:text-[min(37vw,900px)]"
+            className="font-display pointer-events-none absolute left-1/2 top-[86px] z-0 -translate-x-1/2 whitespace-nowrap text-[80vw] uppercase leading-none text-white/90 md:top-[104px] md:text-[min(37vw,900px)]"
           >
             {'BLOG'.split('').map((ch, i) => (
               <span key={i} className="contact-letter" style={{ animationDelay: `${0.2 + i * 0.075}s` }}>
