@@ -184,7 +184,7 @@ export default function Anniversary() {
             </p>
             <p className="uppercase tracking-wide">
               From the iconic gold vials of our early days to today&apos;s 3.5g gold mylars: hand-trimmed, full, frosty
-              top nugs only. <span className="text-[var(--fl-gold,#e9c15a)]">Gold is the standard</span> — what&apos;s inside earns the bag.
+              top nugs only. <span className="text-[var(--fl-gold,var(--fl-gold))]">Gold is the standard</span> — what&apos;s inside earns the bag.
             </p>
           </div>
         </div>

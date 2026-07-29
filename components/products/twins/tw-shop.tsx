@@ -32,12 +32,12 @@ export default async function TwShop() {
       <div className="rounded-[1.75rem] bg-[#fdf3f3] px-4 py-14 text-[var(--tw-shop-ink)] md:rounded-[2.5rem] md:px-10 md:py-20">
         <div className="mx-auto max-w-[1240px]">
           <Reveal className="text-center">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.42em] text-[#c1111a] md:text-xs"
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.42em] text-[var(--tw-red)] md:text-xs"
               style={{ fontFamily: 'var(--font-brand)' }}>
               Two in every tube
             </p>
             <h2 className="font-display mt-2 uppercase leading-[0.84] text-[var(--tw-shop-ink)]" style={{ fontSize: 'min(13vw, 6rem)', letterSpacing: '-0.03em' }}>
-              Shop <span className="text-[#e6242c]">Twins</span>
+              Shop <span className="text-[var(--tw-red-hot)]">Twins</span>
             </h2>
           </Reveal>
 
@@ -58,7 +58,7 @@ export default async function TwShop() {
                         </span>
                       ) : null}
                       {p.featured && (
-                        <span className="absolute right-3 top-3 z-20 rounded-full bg-[#081d47] px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
+                        <span className="absolute right-3 top-3 z-20 rounded-full bg-[var(--tw-navy)] px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
                           Featured
                         </span>
                       )}

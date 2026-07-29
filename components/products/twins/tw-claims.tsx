@@ -33,12 +33,12 @@ const RIGHT = [
 const TONE: Record<string, { ring: string; disc: string; glow: string }> = {
   red: {
     ring: 'rgba(230,36,44,0.45)',
-    disc: 'radial-gradient(circle at 35% 30%, #ff7b80 0%, #e6242c 46%, #8a0d13 100%)',
+    disc: 'radial-gradient(circle at 35% 30%, #ff7b80 0%, var(--tw-red-hot) 46%, #8a0d13 100%)',
     glow: 'rgba(230,36,44,0.3)',
   },
   blue: {
     ring: 'rgba(47,92,224,0.45)',
-    disc: 'radial-gradient(circle at 35% 30%, #8fb0ff 0%, #2f5ce0 46%, #10225e 100%)',
+    disc: 'radial-gradient(circle at 35% 30%, #8fb0ff 0%, var(--tw-blue-hot) 46%, #10225e 100%)',
     glow: 'rgba(47,92,224,0.3)',
   },
 }
@@ -112,7 +112,7 @@ export default function TwClaims() {
       <div
         data-nav-theme="dark"
         className="relative overflow-hidden rounded-[1.75rem] px-4 py-14 md:rounded-[2.5rem] md:px-10 md:py-20"
-        style={{ background: 'linear-gradient(170deg, #0a1130 0%, #070b1e 48%, #04050c 100%)' }}
+        style={{ background: 'linear-gradient(170deg, var(--tw-ink) 0%, #070b1e 48%, #04050c 100%)' }}
       >
         <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
           <div className="tw-bloom absolute -inset-[30%]"

@@ -30,17 +30,17 @@ const AXES = [
 
 const TIERS = [
   {
-    key: 'flavors', name: 'Flavors', device: 'device-flavors-n', accent: '#ff7a18',
+    key: 'flavors', name: 'Flavors', device: 'device-flavors-n', accent: 'var(--gt-orange)',
     blurb: 'Cannabis oil, refined and dialled in.',
     values: ['Ultra refined cannabis oil', 'Terpene forward', 'High potency THC', 'Exotic flavor profiles'],
   },
   {
-    key: 'live-resin', name: 'Live Resin', device: 'device-resin-n', accent: '#fbcd03',
+    key: 'live-resin', name: 'Live Resin', device: 'device-resin-n', accent: 'var(--gt-yellow)',
     blurb: 'Fresh frozen. Nothing added back.',
     values: ['Fresh frozen extract', 'Native terpenes only', 'Full spectrum', 'Strain authentic'],
   },
   {
-    key: 'live-rosin', name: 'Live Rosin', device: 'device-rosin-n', accent: '#e11b0b',
+    key: 'live-rosin', name: 'Live Rosin', device: 'device-rosin-n', accent: 'var(--gt-red)',
     blurb: '100% solventless. Ice water hash only.',
     values: ['Ice water hash', 'Native terpenes', 'Full spectrum', 'True-to-strain'],
   },

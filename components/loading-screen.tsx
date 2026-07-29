@@ -59,7 +59,7 @@ export default function LoadingScreen() {
       .to(paths, { fillOpacity: 1, duration: 0.35, ease: 'power2.out' }, 1.55)
       .to([paths[1], paths[2]], { opacity: 1, duration: 0.25 }, 1.6)
       // yellow flash — panels to brand yellow, logo flips to black
-      .to(panels, { backgroundColor: '#FECF0E', duration: 0.3, ease: 'power2.inOut' }, 2.0)
+      .to(panels, { backgroundColor: 'var(--color-accent-ink)', duration: 0.3, ease: 'power2.inOut' }, 2.0)
       .to(logo, { color: '#0a0a0a', duration: 0.3 }, 2.0)
       // split open
       .to(logo, { scale: 1.06, autoAlpha: 0, duration: 0.4, ease: 'power2.in' }, 2.45)

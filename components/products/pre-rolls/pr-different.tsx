@@ -154,7 +154,7 @@ export default function PrDifferent() {
                     }}>
                     <span aria-hidden
                       className="mx-auto grid h-11 w-11 place-items-center rounded-full border border-[var(--pr-lime)]/40 md:h-14 md:w-14"
-                      style={{ background: 'radial-gradient(circle at 35% 30%, #b6ff8a 0%, #4fd97a 45%, #12903f 100%)' }}>
+                      style={{ background: 'radial-gradient(circle at 35% 30%, var(--pr-glow) 0%, #4fd97a 45%, #12903f 100%)' }}>
                       {/* eslint-disable-next-line @next/next/no-img-element -- section icon */}
                       <img src={`/products/pre-rolls/icons/${claim.icon}.svg`} alt="" className="h-5 w-5 md:h-7 md:w-7"
                         style={{ filter: 'brightness(0) saturate(100%) invert(6%) sepia(30%) saturate(1400%) hue-rotate(100deg)' }} />

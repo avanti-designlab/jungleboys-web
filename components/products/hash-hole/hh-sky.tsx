@@ -65,7 +65,7 @@ export default function HhSky() {
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #7fd0f7 0%, #4db2ef 55%, #63c3f5 100%)' }} />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #7fd0f7 0%, var(--hh-sky-mid) 55%, #63c3f5 100%)' }} />
       <div ref={warmRef} className="absolute inset-0 opacity-0" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(255,220,130,0.22) 72%, rgba(150,210,120,0.35) 100%)' }} />
       {/* cloud bands */}
       <div className="absolute inset-x-0 top-[6vh] h-[46vh]">

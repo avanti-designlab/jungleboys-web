@@ -37,7 +37,7 @@ export default async function PrShop() {
               One gram, one strain
             </p>
             <h2 className="font-display mt-2 uppercase leading-[0.84] text-[var(--pr-shop-ink)]" style={{ fontSize: 'min(13vw, 6rem)', letterSpacing: '-0.03em' }}>
-              Shop <span className="text-[#14a04a]">1G Pre-Rolls</span>
+              Shop <span className="text-[var(--pr-green)]">1G Pre-Rolls</span>
             </h2>
           </Reveal>
 

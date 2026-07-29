@@ -12,7 +12,7 @@ import { SocialIcons } from '@/components/social-icons'
 type Topic = { id: string; label: string; color: string; hint: string }
 
 const TOPICS: Topic[] = [
-  { id: 'General', label: 'General', color: '#FECF0E', hint: 'Questions & everything else' },
+  { id: 'General', label: 'General', color: 'var(--color-accent-ink)', hint: 'Questions & everything else' },
   { id: 'Wholesale', label: 'Wholesale', color: '#34D399', hint: 'Stock Jungle Boys' },
   { id: 'Press & Media', label: 'Press & Media', color: '#A78BFA', hint: 'Interviews & assets' },
   { id: 'Collabs', label: 'Collabs', color: '#FB923C', hint: 'Partnerships & drops' },

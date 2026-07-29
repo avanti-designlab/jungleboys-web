@@ -95,7 +95,7 @@ export default async function PopsShop() {
                             <>
                               <span className="mb-1 block text-xs font-bold text-white/40 line-through" style={{ fontFamily: 'var(--font-brand)' }}>{dollars(v.price)}</span>
                               <span className="whitespace-nowrap">
-                                <span className="font-display text-[2.1rem] leading-none text-[#c21f1f]">{dollars(deal)}</span>
+                                <span className="font-display text-[2.1rem] leading-none text-[var(--color-danger)]">{dollars(deal)}</span>
                                 <span className="ml-1 text-xs font-bold uppercase text-white/45" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
                               </span>
                             </>

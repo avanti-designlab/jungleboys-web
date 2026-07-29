@@ -94,7 +94,7 @@ export default function WhyPacks() {
         <ol className="mt-16 md:mt-24">
           {CLAIMS.map((c, i) => (
             <li key={c} className={`media-reveal flex items-baseline gap-4 py-3 md:gap-8 md:py-4 ${i % 2 ? 'fl-claim-r flex-row-reverse text-right' : 'fl-claim-l'}`}>
-              <span className="shrink-0 text-xs font-bold tracking-[0.3em] text-[var(--fl-gold,#e9c15a)]" style={{ fontFamily: 'var(--font-brand)' }}>
+              <span className="shrink-0 text-xs font-bold tracking-[0.3em] text-[var(--fl-gold,var(--fl-gold))]" style={{ fontFamily: 'var(--font-brand)' }}>
                 {String(i + 1).padStart(2, '0')}
               </span>
               <span

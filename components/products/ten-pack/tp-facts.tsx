@@ -109,7 +109,7 @@ export default function TpFacts() {
                 className="flex items-center gap-3 rounded-2xl border border-white/20 bg-[#04182e]/45 px-3 py-1.5 backdrop-blur-md will-change-transform md:gap-4 md:rounded-[1.4rem] md:px-5 md:py-4">
                 <span aria-hidden
                   className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/25 md:h-14 md:w-14"
-                  style={{ background: 'radial-gradient(circle at 35% 30%, #6db6ff 0%, #2e8bff 55%, #0d5fc4 100%)' }}>
+                  style={{ background: 'radial-gradient(circle at 35% 30%, var(--tp-glow) 0%, var(--tp-cyan) 55%, #0d5fc4 100%)' }}>
                   {/* eslint-disable-next-line @next/next/no-img-element -- section icon */}
                   <img src={`/products/10-pack/icons/${claim.icon}.svg`} alt="" className="h-5 w-5 object-contain md:h-7 md:w-7" />
                 </span>
