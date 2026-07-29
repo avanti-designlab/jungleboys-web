@@ -27,8 +27,13 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Audit (fail on high/critical)
-        run: npm audit --audit-level=high
+      # Not `npm audit --audit-level=high` directly: that is all-or-nothing, so
+      # an advisory nobody can fix yet leaves the only choices as a permanently
+      # red build or dropping the threshold — and dropping it silently stops
+      # catching the next one. The gate requires every high/critical to be
+      # documented in security/audit-exceptions.json with a reason and a date.
+      - name: Audit gate (new or lapsed advisories fail)
+        run: node scripts/audit-gate.mjs
       - name: Lint
         run: npx eslint .
       - name: Build

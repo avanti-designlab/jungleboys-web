@@ -1,0 +1,60 @@
+{
+  "$comment": [
+    "Advisories that are KNOWN, ASSESSED and TEMPORARILY ACCEPTED.",
+    "An entry here waives ONE advisory id until its reviewBy date. Anything not",
+    "listed — or listed but past reviewBy — still fails the build.",
+    "Adding an entry requires: why it cannot be fixed, what the real exposure is,",
+    "and a date. Never add one just to make CI green."
+  ],
+  "exceptions": [
+    {
+      "id": "GHSA-f88m-g3jw-g9cj",
+      "package": "sharp",
+      "title": "sharp inherited vulnerabilities in libvips",
+      "reason": "Transitive through next. No released Next version escapes the advisory range (9.3.4-canary.0 - 16.3.0-preview.7); we are already on latest (16.2.12). npm's only offered fix is next@9.3.3, a seven-major downgrade.",
+      "exposure": "Limited. sharp runs at build time over first-party art, and at runtime only for next/image fetches from the four hosts in remotePatterns. No user-supplied image ever reaches it.",
+      "acceptedOn": "2026-07-29",
+      "reviewBy": "2026-08-26"
+    },
+    {
+      "id": "GHSA-6g55-p6wh-862q",
+      "package": "postcss",
+      "title": "Arbitrary file read via attacker-controlled sourceMappingURL",
+      "reason": "Bundled inside next. Same story: not separately upgradable.",
+      "exposure": "None at runtime. postcss runs at build time over our own CSS; no attacker-controlled stylesheet exists in the pipeline.",
+      "acceptedOn": "2026-07-29",
+      "reviewBy": "2026-08-26"
+    },
+    {
+      "id": "GHSA-r28c-9q8g-f849",
+      "package": "postcss",
+      "title": "Path traversal in previous source map auto-loading",
+      "reason": "Bundled inside next. Not separately upgradable.",
+      "exposure": "None at runtime. Build-time only, over our own CSS.",
+      "acceptedOn": "2026-07-29",
+      "reviewBy": "2026-08-26"
+    },
+    {
+      "id": "GHSA-qx2v-qp2m-jg93",
+      "package": "postcss",
+      "title": "XSS via unescaped </style> in CSS stringify output",
+      "reason": "Bundled inside next. Not separately upgradable.",
+      "exposure": "None at runtime. Build-time only, over our own CSS.",
+      "acceptedOn": "2026-07-29",
+      "reviewBy": "2026-08-26"
+    }
+  ],
+  "notAccepted": {
+    "$comment": [
+      "The four `next` advisories are NOT waived and NOT exploitable here — they",
+      "are recorded so the assessment is not lost:",
+      "- middleware/proxy bypass: no middleware.ts exists in the repo.",
+      "- SSRF in Server Actions: no 'use server' anywhere in the tree.",
+      "- SSRF in rewrites: we declare redirects() only, from a static array in",
+      "  lib/redirects. No rewrites, no request-derived destinations.",
+      "- Image Optimization DoS via SVG: dangerouslyAllowSVG is not set and",
+      "  remotePatterns is four fixed hosts. Reachable in principle; the one to",
+      "  re-check first when a patched Next ships."
+    ]
+  }
+}
