@@ -49,6 +49,48 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
   const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
   const [error, setError] = useState('')
 
+  // ── keep the form usable with the on-screen keyboard up ──────────────────
+  // svh is a static unit: it does NOT shrink when iOS opens the keyboard, so a
+  // box sized in svh keeps its full height while the visible area roughly
+  // halves, and the field you are typing into ends up underneath the keyboard.
+  // visualViewport is the only thing that reports the actually-visible area.
+  //
+  // Only engaged while the keyboard is genuinely open (a >120px collapse) —
+  // tracking visualViewport at all times would resize the panel every time the
+  // URL bar hides on scroll, which reads as jitter.
+  useEffect(() => {
+    const vv = window.visualViewport
+    if (!vv) return
+    const root = document.documentElement
+    const apply = () => {
+      const open = vv.height < window.innerHeight - 120
+      root.style.setProperty('--vvh', `${Math.round(vv.height)}px`)
+      if (open) root.dataset.kb = '1'
+      else delete root.dataset.kb
+    }
+    apply()
+    vv.addEventListener('resize', apply)
+    vv.addEventListener('scroll', apply)
+    return () => {
+      vv.removeEventListener('resize', apply)
+      vv.removeEventListener('scroll', apply)
+      delete root.dataset.kb
+    }
+  }, [])
+
+  // When a field takes focus, bring it into the visible strip. The keyboard
+  // animates in over ~300ms, so this waits for the viewport to settle rather
+  // than measuring against a viewport that is still moving.
+  useEffect(() => {
+    const onFocus = (e: FocusEvent) => {
+      const el = e.target as HTMLElement
+      if (!el.matches?.('input, textarea')) return
+      window.setTimeout(() => el.scrollIntoView({ block: 'center', behavior: 'smooth' }), 350)
+    }
+    document.addEventListener('focusin', onFocus)
+    return () => document.removeEventListener('focusin', onFocus)
+  }, [])
+
   // scroll reveal (+ failsafe)
   useEffect(() => {
     const root = rootRef.current
@@ -164,7 +206,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
             hero scroll offset so the landing shows black above, not cut-off pills. ===== */}
         <div
           id="join"
-          className="mt-12 flex h-[calc(100svh-7.5rem)] max-h-[780px] scroll-mt-28 flex-col rounded-[2.25rem] bg-white p-6 text-black shadow-[0_50px_140px_-40px_rgba(0,0,0,0.8)] md:mt-28 md:h-auto md:max-h-none md:min-h-[560px] md:justify-center md:p-14"
+          className="pheno-form-panel mt-12 flex h-[calc(100svh-7.5rem)] max-h-[780px] scroll-mt-28 flex-col rounded-[2.25rem] bg-white p-6 pb-24 text-black shadow-[0_50px_140px_-40px_rgba(0,0,0,0.8)] md:mt-28 md:h-auto md:max-h-none md:min-h-[560px] md:justify-center md:p-14 md:pb-14"
         >
           {state === 'done' ? (
             <div className="flex flex-col items-center gap-5 py-8 text-center">
