@@ -80,24 +80,46 @@ export default function ProductsCollection() {
     if (!root || !window.matchMedia('(hover: none)').matches) return
     const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-fx-card]'))
     if (!cards.length) return
-    const io = new IntersectionObserver(
+    // TWO observers, because the two jobs want opposite margins.
+    //
+    // Video wants to start buffering EARLY, so it is ready by the time you get
+    // there. The visual effect wants to fire LATE — only once the card is
+    // properly on screen. Running both off one observer with rootMargin 200px
+    // meant every card within 200px of the viewport lit up at once, so on a
+    // phone the whole list had already played by the time you reached it.
+    const preload = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          const v = (e.target as HTMLElement).querySelector('video')
+          if (!v) return
+          if (e.isIntersecting) v.play().catch(() => {})
+          else v.pause()
+        })
+      },
+      { threshold: 0, rootMargin: '200px 0px' }
+    )
+
+    // Fires when the card is genuinely in view: more than half of it visible,
+    // and inside the middle band rather than clipping the edges.
+    const effect = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
           const card = e.target as HTMLElement
-          const v = card.querySelector('video')
-          if (e.isIntersecting) {
-            card.classList.add('fx-active')
-            if (v) v.play().catch(() => {}) // buffers just-in-time as the card nears view
-          } else {
-            card.classList.remove('fx-active')
-            if (v) v.pause()
-          }
+          if (e.isIntersecting) card.classList.add('fx-active')
+          else card.classList.remove('fx-active')
         })
       },
-      { threshold: 0.2, rootMargin: '200px 0px' }
+      { threshold: 0.55, rootMargin: '-8% 0px -8% 0px' }
     )
-    cards.forEach((c) => io.observe(c))
-    return () => io.disconnect()
+
+    cards.forEach((c) => {
+      preload.observe(c)
+      effect.observe(c)
+    })
+    return () => {
+      preload.disconnect()
+      effect.disconnect()
+    }
   }, [])
 
   return (
@@ -342,12 +364,16 @@ export default function ProductsCollection() {
                   <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-2">
                     <h4 className="font-display text-2xl uppercase leading-[0.9] text-white md:text-[2rem]">{c.title}</h4>
                     <span
-                      className="inline-flex shrink-0 items-center gap-2 self-end rounded-full bg-[var(--color-accent)] py-2 pl-4 pr-2 text-[11px] font-extrabold uppercase tracking-widest text-black shadow-[0_8px_20px_-8px_rgba(254,207,14,0.7)] transition-colors duration-200 group-hover:bg-black group-hover:text-[var(--color-accent)] md:self-auto"
+                      // self-START, not self-end: stacked under the title on a
+                      // narrow card, a right-aligned pill left the two sitting on
+                      // opposite edges. Also a size down on mobile — at desktop
+                      // proportions it nearly spanned the card.
+                      className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-full bg-[var(--color-accent)] py-1.5 pl-3.5 pr-1.5 text-[10px] font-extrabold uppercase tracking-[0.14em] text-black shadow-[0_8px_20px_-8px_rgba(254,207,14,0.7)] transition-colors duration-200 group-hover:bg-black group-hover:text-[var(--color-accent)] md:gap-2 md:self-auto md:py-2 md:pl-4 md:pr-2 md:text-[11px] md:tracking-widest"
                       style={{ fontFamily: 'var(--font-brand)' }}
                     >
                       Explore
-                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-[var(--color-accent)] transition-colors duration-200 group-hover:bg-[var(--color-accent)] group-hover:text-black">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden>
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-[var(--color-accent)] transition-colors duration-200 group-hover:bg-[var(--color-accent)] group-hover:text-black md:h-6 md:w-6">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" className="h-3 w-3 transition-transform duration-200 group-hover:translate-x-0.5 md:h-3.5 md:w-3.5" aria-hidden>
                           <path d="M5 12h14M13 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </span>
