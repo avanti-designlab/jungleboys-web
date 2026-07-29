@@ -74,10 +74,18 @@ export default function GtHero() {
             },
           })
 
+          // The rig is opacity-0 in the markup so the devices are never visible
+          // before hydration. Clear that ONCE, here — it used to be a tween
+          // inside the scrub, and a 0.06-long opacity flip on the parent meant
+          // all three devices blinked on together in the middle of their own
+          // staggered entrances. Each device now carries its own opacity, so
+          // nothing is revealed except by its own beat.
+          gsap.set('[data-rig]', { opacity: 1 })
+
           // ONE tween for the whole wordmark: a clean camera pull-back
           tl.to('[data-headline]', {
             scale: 0.5, yPercent: -6, opacity: 0,
-            ease: 'power1.in', duration: 0.5,
+            ease: 'power1.in', duration: 0.3,
           }, 0)
 
           // THE LAUNCH. The flankers sweep IN FROM THE SIDES, then the white
@@ -86,19 +94,22 @@ export default function GtHero() {
           // Everything overshoots slightly before settling, so each lands
           // rather than fades in. The centre stays bottom-cropped: the crop is
           // the point.
+          // Nothing launches until the wordmark has actually gone: the first
+          // device now starts at 0.32, just after the headline finishes pulling
+          // back at 0.30. They used to start at 0.05 and run under a wordmark
+          // that was still most of the way opaque.
           const LAUNCH: [string, gsap.TweenVars, number][] = [
-            ['l', { xPercent: -78, yPercent: 16, opacity: 0, scale: 1.06 }, 0.05],
-            ['r', { xPercent: 78, yPercent: 16, opacity: 0, scale: 1.06 }, 0.19],
-            ['c', { yPercent: 104, scale: 1.14 }, 0.33],
+            ['l', { xPercent: -78, yPercent: 16, opacity: 0, scale: 1.06 }, 0.32],
+            ['r', { xPercent: 78, yPercent: 16, opacity: 0, scale: 1.06 }, 0.45],
+            ['c', { yPercent: 104, opacity: 0, scale: 1.14 }, 0.58],
           ]
           LAUNCH.forEach(([k, from, at]) => {
             tl.fromTo(`[data-dev="${k}"]`,
               from,
-              { xPercent: 0, yPercent: 0, opacity: 1, scale: 1, ease: 'back.out(1.05)', duration: 0.44 }, at)
+              { xPercent: 0, yPercent: 0, opacity: 1, scale: 1, ease: 'back.out(1.05)', duration: 0.34 }, at)
           })
-          tl.fromTo('[data-rig]', { opacity: 0 }, { opacity: 1, duration: 0.06 }, 0.1)
-            // and they keep growing toward you for the rest of the scrub
-            .to('[data-rig]', { scale: 1.07, ease: 'none', duration: 0.4 }, 0.55)
+          // and they keep growing toward you for the rest of the scrub
+          tl.to('[data-rig]', { scale: 1.07, ease: 'none', duration: 0.26 }, 0.74)
         }
       )
       return () => mm.revert()
