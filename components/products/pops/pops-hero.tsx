@@ -197,7 +197,7 @@ export default function PopsHero() {
           right edges at 24vw they were small and half off the screen. From md
           up the wrapper is display:contents, which hands the two images back
           their original absolute positions flanking the wordmark. */}
-      <div className="pointer-events-none absolute inset-x-0 top-[40%] z-20 flex items-end justify-center gap-2 px-3 md:contents">
+      <div className="pointer-events-none absolute inset-x-0 bottom-[27%] z-20 flex items-end justify-center gap-2 px-3 md:contents">
         {/* eslint-disable-next-line @next/next/no-img-element -- product jar */}
         <img
           data-herojar="l"
@@ -215,7 +215,7 @@ export default function PopsHero() {
       </div>
 
       {/* the line the jars frame — the hero had no CTA at all before */}
-      <div data-cta className="absolute inset-x-0 bottom-[12%] z-[26] flex flex-col items-center gap-3 px-6 text-center will-change-transform md:bottom-[15%] md:gap-4">
+      <div data-cta className="absolute inset-x-0 bottom-[13%] z-[26] flex flex-col items-center gap-3 px-6 text-center will-change-transform md:bottom-[15%] md:gap-4">
         <p
           className="max-w-[30ch] text-sm font-extrabold uppercase leading-snug tracking-[0.18em] text-black md:text-base"
           style={{ fontFamily: 'var(--font-brand)' }}

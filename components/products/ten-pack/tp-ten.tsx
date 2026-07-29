@@ -92,9 +92,13 @@ export default function TpTen() {
           // to carry above the joints. inset-x-0 + text-center rather than
           // left-1/2/-translate-x-1/2: the negative letter-spacing after the
           // final glyph shrinks the box on the right, so centring the BOX threw
-          // the ink off to the right.
+          // the ink off to the right. inset-x-0 alone did not finish the job:
+          // letter-spacing applies AFTER the last glyph too, so with -0.04em the
+          // line box is 0.04em NARROWER than the ink and text-align:center still
+          // lands the ink 0.02em right of true centre. paddingRight of exactly
+          // one trailing letter-space moves the centring axis back.
           className="font-display pointer-events-none absolute inset-x-0 top-[58%] -translate-y-1/2 text-center leading-none text-[#123c68] will-change-transform md:top-1/2"
-          style={{ fontSize: 'min(130vw, 40rem)', letterSpacing: '-0.04em' }}>
+          style={{ fontSize: 'min(130vw, 40rem)', letterSpacing: '-0.04em', paddingRight: '0.04em' }}>
           10
         </span>
 

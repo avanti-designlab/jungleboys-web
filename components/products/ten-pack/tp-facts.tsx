@@ -84,7 +84,7 @@ export default function TpFacts() {
     <section ref={rootRef} className="relative z-10 px-2 py-2 md:px-3 md:py-3">
       <div
         data-nav-theme="dark"
-        className="relative flex h-[92vh] min-h-[620px] items-center overflow-hidden rounded-[1.75rem] px-4 pt-[16vh] text-white md:rounded-[2.5rem] md:px-10 md:pt-0"
+        className="relative flex h-[92vh] min-h-[620px] items-center overflow-hidden rounded-[1.75rem] px-4 pb-[13vh] pt-[9vh] text-white md:rounded-[2.5rem] md:px-10 md:pb-0 md:pt-0"
         style={{ background: 'linear-gradient(180deg,#0d63a8 0%,#08406f 54%,#051d33 100%)' }}
       >
         {/* deliberately no smoke here — it runs in the hero and again in the

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import PillCta from '@/components/pill-cta'
@@ -40,6 +41,8 @@ const TYPE_COLOR: Record<string, string> = {
 
 export default function PopsLineup({ items }: { items: LineupItem[] }) {
   const rootRef = useRef<HTMLElement>(null)
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
   const [open, setOpen] = useState<LineupItem | null>(null)
 
   useEffect(() => {
@@ -183,16 +186,22 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
       </div>
 
       {/* ── quick facts ── */}
-      {open && (
+      {open && mounted && createPortal(
+        // PORTALLED TO <body>. z-index alone could not lift this above the tab
+        // bar: the modal sits inside a section with transformed, will-change
+        // ancestors, which creates a stacking context and traps z-[80] inside
+        // it — so the bar's z-30 at the document root painted over the panel's
+        // price and Add to Cart. Centred rather than a bottom sheet, with room
+        // reserved below for the bar.
         <div
-          className="fixed inset-0 z-[80] flex items-end justify-center bg-black/70 p-4 backdrop-blur-sm md:items-center"
+          className="fixed inset-0 z-[1200] flex items-center justify-center bg-black/70 p-4 pb-28 backdrop-blur-sm md:pb-4"
           role="dialog"
           aria-modal="true"
           aria-label={`${open.name} quick facts`}
           onClick={() => setOpen(null)}
         >
           <div
-            className="relative w-full max-w-[560px] overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] text-white shadow-[0_30px_80px_rgba(0,0,0,0.6)] ring-1 ring-white/12"
+            className="relative max-h-full w-full max-w-[560px] overflow-y-auto overflow-x-hidden rounded-[1.75rem] bg-[#0b0b0d] text-white shadow-[0_30px_80px_rgba(0,0,0,0.6)] ring-1 ring-white/12"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -262,7 +271,8 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </section>
   )
