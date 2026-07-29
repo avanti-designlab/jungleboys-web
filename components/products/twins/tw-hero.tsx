@@ -35,20 +35,37 @@ export default function TwHero() {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
       mm.add(
-        { reduce: '(prefers-reduced-motion: reduce)', noPref: '(prefers-reduced-motion: no-preference)' },
+        {
+          isMobile: '(max-width: 767px)',
+          reduce: '(prefers-reduced-motion: reduce)',
+          noPref: '(prefers-reduced-motion: no-preference)',
+        },
         (mmCtx) => {
           const c = mmCtx.conditions as Record<string, boolean>
           if (c.reduce) return
 
+          // The pair are laid out side by side in a flex row, so xPercent 0 is
+          // already "shoulder to shoulder at centre" — NOT stacked. Moving them
+          // OUT from there is what walked them off a phone: at 390px each
+          // mascot is ~209px wide, the row is already 418px, and any positive
+          // split pushed ~96px of each one past the edge.
+          //
+          // So on a phone the move runs the other way: they start OVERLAPPED at
+          // centre (reading as one figure, which is the whole idea) and part to
+          // land shoulder to shoulder, both fully in frame. Wide screens have
+          // the room to keep parting outward.
+          const startX = c.isMobile ? 36 : 0
+          const endX = c.isMobile ? 0 : 122
+
           const tl = gsap.timeline({ delay: 0.2 })
 
-          // the split: both twins start stacked at centre, then part
+          // one becomes two — and they arrive a beat apart so you read each
           tl.fromTo('[data-tw-mascot="l"]',
-            { xPercent: 0, opacity: 0, scale: 0.9 },
-            { xPercent: -122, opacity: 1, scale: 1, duration: 1.15, ease: 'power3.out' }, 0)
+            { xPercent: startX, opacity: 0, scale: 0.9 },
+            { xPercent: -endX, opacity: 1, scale: 1, duration: 1.15, ease: 'power3.out' }, 0)
             .fromTo('[data-tw-mascot="r"]',
-              { xPercent: 0, opacity: 0, scale: 0.9 },
-              { xPercent: 122, opacity: 1, scale: 1, duration: 1.15, ease: 'power3.out' }, 0)
+              { xPercent: -startX, opacity: 0, scale: 0.9 },
+              { xPercent: endX, opacity: 1, scale: 1, duration: 1.15, ease: 'power3.out' }, 0.18)
 
           // the mark slams in from深 Z
           tl.fromTo('[data-tw-mark]',
@@ -67,16 +84,28 @@ export default function TwHero() {
 
           const st = gsap.timeline({
             scrollTrigger: {
-              trigger: root, start: 'top top', end: '+=170%',
+              // 170% of pinned scroll left roughly a screen of nothing but
+              // background once the mark had gone. The travel now ends shortly
+              // after the twins finish growing.
+              trigger: root, start: 'top top', end: c.isMobile ? '+=105%' : '+=170%',
               pin: true, scrub: 0.7, anticipatePin: 1, invalidateOnRefresh: true,
             },
           })
           st.to('[data-tw-mark-wrap]', { scale: 0.5, yPercent: -14, opacity: 0, ease: 'power1.in', duration: 0.45 }, 0)
             .to('[data-tw-stats]', { opacity: 0, y: 30, ease: 'power2.in', duration: 0.2 }, 0.06)
-          // the twins drift further apart as you travel through — the entrance
-          // owns [data-tw-mascot], this owns the wrapper, so they never fight
-          st.to('[data-tw-pair-l]', { xPercent: -26, yPercent: -6, ease: 'none', duration: 1 }, 0)
-            .to('[data-tw-pair-r]', { xPercent: 26, yPercent: -6, ease: 'none', duration: 1 }, 0)
+
+          if (c.isMobile) {
+            // the mark hands the frame OVER: as it shrinks away the twins grow
+            // into the space it leaves. Origin is the floor they stand on, so
+            // they scale up without their feet sliding.
+            st.to('[data-tw-pair-l]', { scale: 1.35, transformOrigin: '50% 100%', ease: 'power1.inOut', duration: 1 }, 0)
+              .to('[data-tw-pair-r]', { scale: 1.35, transformOrigin: '50% 100%', ease: 'power1.inOut', duration: 1 }, 0)
+          } else {
+            // the twins drift further apart as you travel through — the entrance
+            // owns [data-tw-mascot], this owns the wrapper, so they never fight
+            st.to('[data-tw-pair-l]', { xPercent: -26, yPercent: -6, ease: 'none', duration: 1 }, 0)
+              .to('[data-tw-pair-r]', { xPercent: 26, yPercent: -6, ease: 'none', duration: 1 }, 0)
+          }
         }
       )
       return () => mm.revert()
@@ -116,7 +145,7 @@ export default function TwHero() {
               <div className="tw-idle-l">
                 {/* eslint-disable-next-line @next/next/no-img-element -- brand art */}
                 <img src="/products/twins/mascot.webp" alt="Jungle Boys Twins mascot"
-                  className="h-[58vh] w-auto drop-shadow-[0_30px_60px_rgba(0,0,0,0.8)] md:h-[66vh]" />
+                  className="h-[42vh] w-auto drop-shadow-[0_30px_60px_rgba(0,0,0,0.8)] md:h-[66vh]" />
               </div>
             </div>
           </div>
@@ -125,16 +154,18 @@ export default function TwHero() {
               <div className="tw-idle-r">
                 {/* eslint-disable-next-line @next/next/no-img-element -- brand art */}
                 <img src="/products/twins/mascot.webp" alt="" aria-hidden
-                  className="h-[58vh] w-auto -scale-x-100 drop-shadow-[0_30px_60px_rgba(0,0,0,0.8)] md:h-[66vh]" />
+                  className="h-[42vh] w-auto -scale-x-100 drop-shadow-[0_30px_60px_rgba(0,0,0,0.8)] md:h-[66vh]" />
               </div>
             </div>
           </div>
         </div>
 
         {/* THE MARK — massive */}
-        <div className="pointer-events-none absolute inset-x-0 top-[13%] z-30 px-[3vw] text-center" style={{ perspective: '1200px' }}>
+        <div className="pointer-events-none absolute inset-x-0 top-[9%] z-30 px-[3vw] text-center md:top-[13%]" style={{ perspective: '1200px' }}>
           <div data-tw-mark-wrap className="will-change-transform">
-            <div data-tw-mark className="relative mx-auto w-full will-change-transform" style={{ maxWidth: 'min(48vw, 700px)' }}>
+            <div data-tw-mark
+              className="relative mx-auto w-full will-change-transform [--tw-mark-w:88vw] md:[--tw-mark-w:min(48vw,700px)]"
+              style={{ maxWidth: 'var(--tw-mark-w)' }}>
               {/* eslint-disable-next-line @next/next/no-img-element -- brand mark */}
               <img src="/products/twins/wordmark-twins.webp" alt="Twins"
                 className="mx-auto h-auto w-full drop-shadow-[0_18px_50px_rgba(0,0,0,0.75)]" />
@@ -151,14 +182,16 @@ export default function TwHero() {
                   style={{ background: 'linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0) 100%)', transform: 'skewX(-16deg)' }} />
               </div>
             </div>
-            <div data-tw-sub className="mx-auto mt-3 w-full will-change-transform" style={{ maxWidth: 'min(38vw, 460px)' }}>
+            <div data-tw-sub
+              className="mx-auto mt-3 w-full will-change-transform [--tw-sub-w:72vw] md:[--tw-sub-w:min(38vw,460px)]"
+              style={{ maxWidth: 'var(--tw-sub-w)' }}>
               {/* eslint-disable-next-line @next/next/no-img-element -- brand mark */}
               <img src="/products/twins/wordmark-2pack.webp" alt="2 Pack Pre-Rolls" className="mx-auto h-auto w-full" />
             </div>
           </div>
         </div>
 
-        <div data-tw-stats className="absolute inset-x-0 bottom-[4%] z-30 will-change-transform">
+        <div data-tw-stats className="absolute inset-x-0 bottom-[13%] z-30 will-change-transform md:bottom-[4%]">
           <div className="mx-auto flex w-full max-w-[720px] items-stretch justify-center gap-2 px-4 md:gap-4">
             {STATS.map((s) => (
               <span key={s.l} data-tw-stat

@@ -43,7 +43,10 @@ const FLIGHT: Item[] = [
 ]
 
 const PERSP = 1150
-const CAM_END = 4400
+// The last pair sits at z -3450 and has fully faded by z 620, so the camera
+// only needs to reach 4070. 4400 overran that and left the closing stretch of
+// the scrub on an empty green field.
+const CAM_END = 4090
 
 const smooth = (a: number, b: number, x: number) => {
   const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
@@ -87,7 +90,8 @@ export default function TwDouble() {
 
           const tl = gsap.timeline({
             scrollTrigger: {
-              trigger: root, start: 'top top', end: '+=280%',
+              trigger: root, start: 'top top',
+              end: window.matchMedia('(max-width: 767px)').matches ? '+=200%' : '+=280%',
               pin: true, scrub: 0.8, anticipatePin: 1, invalidateOnRefresh: true,
             },
           })
