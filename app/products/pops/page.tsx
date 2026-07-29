@@ -10,6 +10,7 @@ import PopsShop from '@/components/products/pops/pops-shop'
 import PopsReveal from '@/components/products/pops/pops-reveal'
 import { getProducts } from '@/lib/dutchie'
 import type { LineupItem } from '@/components/products/pops/pops-lineup'
+import MoreLines from '@/components/products/more-lines'
 
 // Pops — third Phase 2 flagship. Candy-stripe surface: the bucket erupts with
 // baby nugs and clears to the POPS reveal → a 3D fact drum → the lineup as a
@@ -79,6 +80,7 @@ export default async function PopsPage() {
         <PopsShop />
         <div aria-hidden className="h-[10vh] min-h-[70px]" />
       </div>
-    </main>
+          <MoreLines current="pops" />
+</main>
   )
 }

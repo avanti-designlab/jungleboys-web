@@ -6,6 +6,7 @@ import TwDouble from '@/components/products/twins/tw-double'
 import TwClaims from '@/components/products/twins/tw-claims'
 import TwBand from '@/components/products/twins/tw-band'
 import TwShop from '@/components/products/twins/tw-shop'
+import MoreLines from '@/components/products/more-lines'
 
 // Twins 2PK Pre-Rolls — the last Phase 2 flagship, and the red-and-navy one.
 // Colours are sampled out of the TWINS mark itself, not eyeballed.
@@ -50,6 +51,7 @@ export default function TwinsPage() {
       <TwBand />
       <TwShop />
       <div aria-hidden className="h-[8vh] min-h-[60px]" />
-    </main>
+          <MoreLines current="twins" />
+</main>
   )
 }

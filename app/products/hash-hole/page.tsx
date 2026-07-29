@@ -12,6 +12,7 @@ import HhVideos from '@/components/products/hash-hole/hh-videos'
 import HhShop from '@/components/products/hash-hole/hh-shop'
 import HhMarquee from '@/components/products/hash-hole/hh-marquee'
 import HhFinale from '@/components/products/hash-hole/hh-finale'
+import MoreLines from '@/components/products/more-lines'
 
 // Hash Hole — second Phase 2 flagship. A sky-day journey: video hero → intro
 // specs → product twirl → inside-the-hole breakdown → how to smoke → roll/smoke
@@ -59,6 +60,7 @@ export default function HashHolePage() {
         {/* sky breathing room so the green scene never touches the footer */}
         <div aria-hidden className="h-[16vh] min-h-[110px]" />
       </div>
-    </main>
+          <MoreLines current="hash-hole" />
+</main>
   )
 }

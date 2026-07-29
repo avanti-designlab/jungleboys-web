@@ -6,6 +6,7 @@ import PrDifferent from '@/components/products/pre-rolls/pr-different'
 import PrProcess from '@/components/products/pre-rolls/pr-process'
 import PrCrossover from '@/components/products/pre-rolls/pr-crossover'
 import PrShop from '@/components/products/pre-rolls/pr-shop'
+import MoreLines from '@/components/products/more-lines'
 
 // 1G Pre-Rolls — sixth Phase 2 flagship, and the green one.
 // The name at full bleed over a row of oversized tubes → WE ROLL DIFFERENT as a
@@ -47,6 +48,7 @@ export default function PreRollsPage() {
       <PrCrossover />
       <PrShop />
       <div aria-hidden className="h-[8vh] min-h-[60px]" />
-    </main>
+          <MoreLines current="pre-rolls" />
+</main>
   )
 }

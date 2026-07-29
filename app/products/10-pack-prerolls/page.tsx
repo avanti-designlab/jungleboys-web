@@ -6,6 +6,7 @@ import TpFacts from '@/components/products/ten-pack/tp-facts'
 import TpTen from '@/components/products/ten-pack/tp-ten'
 import TpCreed from '@/components/products/ten-pack/tp-creed'
 import TpShop from '@/components/products/ten-pack/tp-shop'
+import MoreLines from '@/components/products/more-lines'
 
 // 10 Pack Pre-Rolls — fifth Phase 2 flagship. Smoke + electric blue:
 // the pour (ten mini joints fanning out of the jar in real 3D) → the claims →
@@ -46,6 +47,7 @@ export default function TenPackPage() {
       <TpCreed />
       <TpShop />
       <div aria-hidden className="h-[8vh] min-h-[60px]" />
-    </main>
+          <MoreLines current="10-pack-prerolls" />
+</main>
   )
 }
