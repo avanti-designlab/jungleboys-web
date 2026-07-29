@@ -128,7 +128,7 @@ export default function SiteNav() {
                   const cls =
                     'font-display whitespace-nowrap text-5xl leading-[0.92] md:text-6xl xl:text-7xl uppercase text-white transition-colors duration-200 hover:text-[var(--color-accent)]'
                   return (
-                    <li key={l.href} className="menu-line">
+                    <li key={l.label} className="menu-line">
                       {l.external ? (
                         <a
                           href={l.href}

@@ -163,15 +163,21 @@ export function videoSchema(video: {
   }
 }
 
-export function itemListSchema(name: string, urls: string[]) {
+export function itemListSchema(name: string, items: Array<string | { name: string; path: string }>) {
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name,
-    itemListElement: urls.map((url, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      url: `${SITE_URL}${url}`,
-    })),
+    itemListElement: items.map((item, i) => {
+      const path = typeof item === 'string' ? item : item.path
+      return {
+        '@type': 'ListItem',
+        position: i + 1,
+        ...(typeof item === 'string' ? {} : { name: item.name }),
+        // ALWAYS SITE_URL — a hand-rolled list here once hardcoded the preview
+        // domain, so one page emitted two different origins in a single script
+        url: `${SITE_URL}${path}`,
+      }
+    }),
   }
 }

@@ -54,6 +54,9 @@ export default function FlowerHero() {
 
         {/* headline — near full-screen stack */}
         <h1 data-fl-words className="relative z-10 select-none text-center">
+          {/* PREMIUM and CANNABIS are separate blocks of per-letter spans, so no
+              space survives between them in the text node */}
+          <span className="sr-only">Premium Cannabis</span>
           <span className="fl-zoom font-display block uppercase text-white" style={{ fontSize: 'min(26vw, 48vh, 24rem)' }}>
             {LINES.map((line, lineIdx) => (
               <span key={line} className="block">

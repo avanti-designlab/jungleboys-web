@@ -149,6 +149,9 @@ export default function PopsHero() {
             className="pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8] text-[var(--pops-ink)]"
             style={{ fontSize: 'var(--pops-word-size)' }}
           >
+            {/* the space is a zero-content spacer span, so the h1's text node
+                reads "5GPOPS"; this restores the real phrase for extraction */}
+            <span className="sr-only">5G Pops</span>
             {WORD.split('').map((ch, i) =>
               ch === ' ' ? (
                 <span key={i} className="pops-gap" aria-hidden />

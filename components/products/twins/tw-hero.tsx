@@ -119,6 +119,10 @@ export default function TwHero() {
         data-nav-theme="dark"
         className="media-hero-in relative h-[94vh] min-h-[620px] overflow-hidden rounded-[1.75rem] bg-[var(--tw-black)] md:rounded-[2.5rem]"
       >
+        {/* The TWINS mark is artwork, not type, so the page had no h1 at all.
+            Hidden heading supplies one without touching the design. */}
+        <h1 className="sr-only">Jungle Boys Twins — 2 Pack Pre-Rolls</h1>
+
         {/* the two brand colours drifting against each other */}
         <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
           <div className="tw-bloom absolute -inset-[30%]"

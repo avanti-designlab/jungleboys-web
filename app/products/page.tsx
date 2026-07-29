@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/storyblok/seo'
 import ProductsCollection from '@/components/products/products-collection'
 import { PRODUCT_LINES } from '@/lib/products'
-import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
+import { jsonLdHtml, breadcrumbSchema, itemListSchema } from '@/lib/schema'
 
 // Products — the curated Jungle Boys collection (JB-only lines), separate from
 // the Dutchie-powered Shop. Static: no API. Each line links to /products/<slug>.
@@ -16,17 +16,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function ProductsPage() {
-  const itemList = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: 'Jungle Boys Products',
-    itemListElement: PRODUCT_LINES.map((l, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      name: l.name,
-      url: `https://jungleboys-web.vercel.app/products/${l.slug}`,
-    })),
-  }
+  // via the generator, never hand-rolled — the inline version here hardcoded
+  // the preview domain while the breadcrumb beside it used the real one
+  const itemList = itemListSchema(
+    'Jungle Boys Products',
+    PRODUCT_LINES.map((l) => ({ name: l.name, path: `/products/${l.slug}` }))
+  )
 
   return (
     <main className="bg-[var(--color-background)] pb-16 text-[var(--color-foreground)]">

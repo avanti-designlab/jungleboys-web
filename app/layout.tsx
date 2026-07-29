@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SITE_ORIGIN } from "@/lib/storyblok/seo";
 import { Bebas_Neue, DM_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import AgeGate from "@/components/age-gate";
@@ -37,9 +38,11 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  // Absolute base for OG/Twitter image URLs. Staging for now — switch to
-  // https://www.jungleboys.com at cutover.
-  metadataBase: new URL("https://jungleboys-web.vercel.app"),
+  // Absolute base for OG/Twitter image URLs. The real domain, matching the
+  // canonical every page now emits and SITE_URL in lib/schema — one identity
+  // everywhere. On staging that means OG images point at the live host, which
+  // is correct: staging must never advertise itself as the canonical home.
+  metadataBase: new URL(SITE_ORIGIN),
   title: {
     default: "Jungle Boys",
     template: "%s | Jungle Boys",

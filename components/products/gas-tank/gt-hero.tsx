@@ -170,9 +170,12 @@ export default function GtHero() {
             </p>
             <h1 className="font-display flex items-baseline justify-center whitespace-nowrap uppercase leading-[0.82] text-white"
             style={{ fontSize: '33vw', letterSpacing: '-0.03em' }}>
-            <span data-word="gas" className="will-change-transform drop-shadow-[0_0_60px_rgba(255,122,24,0.45)]">Gas</span>
+            {/* the words are split by a fixed-width spacer, so the text node
+                has no space in it and the h1 extracts as "GasTank" */}
+            <span className="sr-only">Gas Tank</span>
+            <span aria-hidden data-word="gas" className="will-change-transform drop-shadow-[0_0_60px_rgba(255,122,24,0.45)]">Gas</span>
             <span aria-hidden style={{ width: '0.16em' }} />
-            <span data-word="tank" className="text-[var(--gt-yellow)] will-change-transform drop-shadow-[0_0_60px_rgba(225,27,11,0.5)]">Tank</span>
+            <span aria-hidden data-word="tank" className="text-[var(--gt-yellow)] will-change-transform drop-shadow-[0_0_60px_rgba(225,27,11,0.5)]">Tank</span>
             </h1>
           </div>
         </div>

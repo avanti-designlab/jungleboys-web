@@ -45,6 +45,10 @@ export default function HhHero() {
     <section className="relative px-2 pt-2 md:px-3">
       {/* the header samples this region: dark video → dark header pill */}
       <div data-nav-theme="dark" className="media-hero-in relative h-[92vh] min-h-[560px] overflow-hidden rounded-[1.75rem] bg-[#0b0b0d] md:rounded-[2.5rem]">
+        {/* The hero is deliberately art-only — a film, no type over it. The page
+            still needs exactly one h1, so it is visually hidden rather than
+            drawn. Nothing on screen changes. */}
+        <h1 className="sr-only">Jungle Boys Hash Hole — Infused Pre-Roll</h1>
         <video
           key={String(mobile)}
           ref={videoRef}
