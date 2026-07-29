@@ -42,7 +42,12 @@ export default function PrHero() {
         { reduce: '(prefers-reduced-motion: reduce)', noPref: '(prefers-reduced-motion: no-preference)' },
         (mmCtx) => {
           const c = mmCtx.conditions as Record<string, boolean>
-          if (c.reduce) return
+          if (c.reduce) {
+            // land the settled hero rather than leaving authored-hidden art at 0
+            gsap.set('[data-pr-stat]', { opacity: 1, y: 0 })
+            gsap.set('[data-pr-stats]', { opacity: 1, y: 0 })
+            return
+          }
 
           gsap.timeline({ delay: 0.15 })
             .from('[data-pr-kicker]', { opacity: 0, y: -14, duration: 0.5, ease: 'power2.out' }, 0)
@@ -125,7 +130,7 @@ export default function PrHero() {
                 <div data-pr-tube-in className="will-change-transform">
                   <div className={`pr-bob-${t.bob}`} style={{ ['--pr-rot' as string]: `${t.rot}deg`, ['--pr-dur' as string]: `${t.dur}s` }}>
                     {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-                    <img src={`/products/pre-rolls/${t.src}.webp`} alt="Jungle Boys 1G Pre-Roll"
+                    <img fetchPriority="high" src={`/products/pre-rolls/${t.src}.webp`} alt="Jungle Boys 1G Pre-Roll"
                       className="w-auto -translate-x-1/2 drop-shadow-[0_40px_70px_rgba(0,0,0,0.85)]"
                       style={{ height: `${t.h}vh`, marginTop: `${t.y}vh` }} />
                   </div>

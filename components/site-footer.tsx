@@ -86,7 +86,7 @@ export default async function SiteFooter() {
           <div className="flex flex-col gap-4 text-center md:text-left">
             <div className="flex flex-col gap-3">
               <p className="text-[11px] tracking-wide text-white/50">{LICENSE_NUMBERS.join(' | ')}</p>
-              <p className="mx-auto max-w-4xl text-[10px] normal-case leading-relaxed tracking-normal text-white/30 md:mx-0">
+              <p className="mx-auto max-w-4xl text-[10px] normal-case leading-relaxed tracking-normal text-white/60 md:mx-0">
                 {warningText.trim()}
               </p>
             </div>

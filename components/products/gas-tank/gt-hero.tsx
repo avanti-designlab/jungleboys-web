@@ -58,7 +58,16 @@ export default function GtHero() {
         },
         (mmCtx) => {
           const c = mmCtx.conditions as Record<string, boolean>
-          if (c.reduce) return
+          if (c.reduce) {
+            // [data-rig] is opacity-0 in the markup so the devices never flash
+            // before hydration — under reduced motion nothing else clears it,
+            // so all three were simply invisible. Land the settled trio.
+            gsap.set('[data-rig]', { opacity: 1, scale: 1 })
+            document.querySelectorAll('[data-dev]').forEach((el) =>
+              gsap.set(el, { opacity: 1, xPercent: 0, yPercent: 0, scale: 1 })
+            )
+            return
+          }
 
           // ── cold start: the name slams in, the bed is still just embers
           gsap.timeline({ delay: 0.15 })

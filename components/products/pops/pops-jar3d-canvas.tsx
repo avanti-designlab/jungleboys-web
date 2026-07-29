@@ -15,6 +15,9 @@ function Jar({ src }: { src: string }) {
 }
 
 export default function PopsJar3DCanvas({ src }: { src: string }) {
+  const reduceMotion = typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
   return (
     <Canvas
       dpr={[1, 2]}
@@ -33,7 +36,9 @@ export default function PopsJar3DCanvas({ src }: { src: string }) {
         </Bounds>
       </Suspense>
       <OrbitControls
-        autoRotate
+        // the global reduced-motion rule kills CSS animation but cannot reach
+        // a render loop — this has to opt out itself
+        autoRotate={!reduceMotion}
         autoRotateSpeed={1.6}
         enableZoom={false}
         enablePan={false}

@@ -95,7 +95,7 @@ export default async function HhShop() {
           </div>
 
           <Reveal className="mt-10 text-center">
-            <p className="text-[11px] uppercase tracking-widest text-[var(--hh-ink)]/50" style={{ fontFamily: 'var(--font-brand)' }}>
+            <p className="text-[11px] uppercase tracking-widest text-[var(--hh-ink)]/80" style={{ fontFamily: 'var(--font-brand)' }}>
               Availability varies by store — live menus &amp; deals connect at launch.
             </p>
           </Reveal>

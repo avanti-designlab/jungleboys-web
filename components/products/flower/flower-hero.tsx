@@ -78,6 +78,7 @@ export default function FlowerHero() {
         {/* eslint-disable-next-line @next/next/no-img-element -- hero art */}
         <img
           data-fl-plant
+          fetchPriority="high"
           src="/products/flower/plant-cutout.webp"
           alt="Frost-covered Jungle Boys live top"
           className="fl-plant absolute bottom-0 left-1/2 z-20 w-[170vw] max-w-none md:w-[min(135vw,1350px)] drop-shadow-[0_50px_90px_rgba(0,0,0,0.85)]"

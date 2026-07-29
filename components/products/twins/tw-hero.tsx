@@ -148,7 +148,7 @@ export default function TwHero() {
             <div data-tw-mascot="l" className="will-change-transform">
               <div className="tw-idle-l">
                 {/* eslint-disable-next-line @next/next/no-img-element -- brand art */}
-                <img src="/products/twins/mascot.webp" alt="Jungle Boys Twins mascot"
+                <img fetchPriority="high" src="/products/twins/mascot.webp" alt="Jungle Boys Twins mascot"
                   className="h-[42vh] w-auto drop-shadow-[0_30px_60px_rgba(0,0,0,0.8)] md:h-[66vh]" />
               </div>
             </div>
@@ -171,7 +171,7 @@ export default function TwHero() {
               className="relative mx-auto w-full will-change-transform [--tw-mark-w:88vw] md:[--tw-mark-w:min(48vw,700px)]"
               style={{ maxWidth: 'var(--tw-mark-w)' }}>
               {/* eslint-disable-next-line @next/next/no-img-element -- brand mark */}
-              <img src="/products/twins/wordmark-twins.webp" alt="Twins"
+              <img fetchPriority="high" src="/products/twins/wordmark-twins.webp" alt="Twins"
                 className="mx-auto h-auto w-full drop-shadow-[0_18px_50px_rgba(0,0,0,0.75)]" />
               {/* specular sweep, masked to the mark so it lights the letterforms
                   and not a passing rectangle */}

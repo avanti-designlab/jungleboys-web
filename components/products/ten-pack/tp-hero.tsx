@@ -189,7 +189,7 @@ export default function TpHero() {
                 <div data-tp-jar-in className="will-change-transform">
                   <div className={`tp-bob-${j.bob}`} style={{ ['--tp-rot' as string]: `${j.rot}deg`, ['--tp-dur' as string]: `${j.dur}s` }}>
                     {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-                    <img src={`/products/10-pack/${j.src}.webp`} alt="Jungle Boys 10 Pack Pre-Rolls"
+                    <img fetchPriority="high" src={`/products/10-pack/${j.src}.webp`} alt="Jungle Boys 10 Pack Pre-Rolls"
                       className="w-auto -translate-x-1/2 drop-shadow-[0_40px_70px_rgba(0,0,0,0.8)]"
                       style={{ height: `${j.h}vh`, marginTop: `${j.y}vh` }} />
                   </div>

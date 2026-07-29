@@ -40,7 +40,18 @@ export default function GtShowcase() {
         { reduce: '(prefers-reduced-motion: reduce)', noPref: '(prefers-reduced-motion: no-preference)' },
         (mmCtx) => {
           const c = mmCtx.conditions as Record<string, boolean>
-          if (c.reduce) return
+          if (c.reduce) {
+            // Returning here strands every element at its authored opacity-0
+            // and the section loses real content. Jump to the END state.
+            gsap.set('[data-ice-dev]', { opacity: 1, scale: 1 })
+            gsap.set('[data-chips]', { opacity: 1 })
+            gsap.set('[data-slab]', { opacity: 1 })
+            gsap.set('[data-solv]', { opacity: 1, scale: 1 })
+            document.querySelectorAll('[data-chip-l],[data-chip-r]').forEach((el) =>
+              gsap.set(el, { x: 0, opacity: 1 })
+            )
+            return
+          }
 
           const tl = gsap.timeline({
             scrollTrigger: {

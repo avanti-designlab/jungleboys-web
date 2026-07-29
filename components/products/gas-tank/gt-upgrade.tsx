@@ -39,7 +39,20 @@ export default function GtUpgrade() {
         { reduce: '(prefers-reduced-motion: reduce)', noPref: '(prefers-reduced-motion: no-preference)' },
         (mmCtx) => {
           const c = mmCtx.conditions as Record<string, boolean>
-          if (c.reduce) return
+          if (c.reduce) {
+            // This one INVERTED the meaning: the old Milk Cart stayed, the new
+            // Gas Tank never appeared, and the six chips never flipped — so the
+            // section read as six unfixed defects under the heading
+            // "Everything we fixed." Land the AFTER state directly.
+            gsap.set('[data-stage="old"]', { opacity: 0 })
+            gsap.set('[data-name="old"]', { opacity: 0 })
+            gsap.set('[data-stage="new"]', { opacity: 1, scale: 1, y: 0 })
+            gsap.set('[data-name="new"]', { opacity: 1, y: 0 })
+            document.querySelectorAll('[data-flip]').forEach((el) =>
+              gsap.set(el, { rotateX: -180 })
+            )
+            return
+          }
 
           const tl = gsap.timeline({
             scrollTrigger: {

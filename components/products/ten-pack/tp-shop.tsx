@@ -72,7 +72,7 @@ export default async function TpShop() {
                       <div className="flex flex-wrap items-center gap-1.5">
                         {p.strainType && (
                           <span
-                            className="rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white"
+                            className="rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white ring-1 ring-inset ring-white/70"
                             style={{ fontFamily: 'var(--font-brand)', background: TYPE_COLOR[p.strainType] || '#0f7a3d' }}
                           >
                             {p.strainType}
@@ -115,7 +115,7 @@ export default async function TpShop() {
           </div>
 
           <Reveal className="mt-12 text-center">
-            <p className="text-[11px] uppercase tracking-widest text-[#062038]/50" style={{ fontFamily: 'var(--font-brand)' }}>
+            <p className="text-[11px] uppercase tracking-widest text-[#062038]/80" style={{ fontFamily: 'var(--font-brand)' }}>
               Availability varies by store — live menus &amp; deals connect at launch.
             </p>
           </Reveal>

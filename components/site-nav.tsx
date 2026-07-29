@@ -189,6 +189,10 @@ export default function SiteNav() {
         )}
         {/* expanded bar */}
         <div
+          // hidden variant stays mounted for the cross-fade, so it must be
+          // taken out of the tab order explicitly — otherwise Tab lands on
+          // invisible controls and no focus ring appears anywhere on screen
+          inert={condensed && !open ? true : undefined}
           className={`mx-auto flex w-full items-center justify-between px-4 pt-6 pb-3 transition-all duration-500 sm:px-8 md:px-12 ${
             condensed && !open
               ? 'pointer-events-none -translate-y-8 opacity-0'
@@ -258,6 +262,9 @@ export default function SiteNav() {
 
         {/* condensed floating pill */}
         <div
+          // same as the expanded bar above — the inactive one must not be
+          // reachable by keyboard
+          inert={condensed && !open ? undefined : true}
           className={`absolute inset-x-0 top-0 flex justify-center transition-all duration-500 ${
             condensed && !open
               ? 'translate-y-3 opacity-100'

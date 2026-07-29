@@ -65,7 +65,15 @@ export default function TwDouble() {
         { reduce: '(prefers-reduced-motion: reduce)', noPref: '(prefers-reduced-motion: no-preference)' },
         (mmCtx) => {
           const c = mmCtx.conditions as Record<string, boolean>
-          if (c.reduce) return
+          if (c.reduce) {
+            // show the composed opening pair rather than an empty stage
+            FLIGHT.forEach((it, i) => {
+              const el = root.querySelector<HTMLElement>(`[data-tw-fly="${i}"]`)
+              if (el) gsap.set(el, { opacity: it.z >= -1400 ? 1 : 0, filter: 'none' })
+            })
+            gsap.set('[data-tw-head]', { opacity: 1, yPercent: 0 })
+            return
+          }
 
           const els = FLIGHT.map((_, i) => root.querySelector<HTMLElement>(`[data-tw-fly="${i}"]`))
           // quickSetters: three properties per item, ten items, every scrub tick

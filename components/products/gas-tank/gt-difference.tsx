@@ -62,7 +62,25 @@ export default function GtDifference() {
         },
         (mmCtx) => {
           const c = mmCtx.conditions as Record<string, boolean>
-          if (c.reduce) return
+          if (c.reduce) {
+            // The tiers live on a horizontal track that only scroll can move,
+            // so returning here left LIVE RESIN and LIVE ROSIN unreachable —
+            // two of the three product tiers simply did not exist. Make the
+            // track a real swipeable rail and reveal every row.
+            const track = root.querySelector<HTMLElement>('[data-gtd-track]')
+            if (track?.parentElement) {
+              track.parentElement.style.overflowX = 'auto'
+              track.style.position = 'relative'
+              track.style.width = `${TIERS.length * 100}%`
+            }
+            document.querySelectorAll('[data-row]').forEach((el) =>
+              gsap.set(el, { x: 0, opacity: 1 })
+            )
+            document.querySelectorAll('[data-gtd-dot]').forEach((el) =>
+              gsap.set(el, { opacity: 1 })
+            )
+            return
+          }
 
           const steps = TIERS.length - 1
           const tl = gsap.timeline({
