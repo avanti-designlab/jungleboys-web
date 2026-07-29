@@ -5,6 +5,7 @@ import GtHero from '@/components/products/gas-tank/gt-hero'
 import GtRefresh from '@/components/products/gas-tank/gt-refresh'
 import GtTape from '@/components/products/gas-tank/gt-tape'
 import GtCharacter from '@/components/products/gas-tank/gt-character'
+import GtSpecs from '@/components/products/gas-tank/gt-specs'
 import GtUpgrade from '@/components/products/gas-tank/gt-upgrade'
 import GtShowcase from '@/components/products/gas-tank/gt-showcase'
 import GtDifference from '@/components/products/gas-tank/gt-difference'
@@ -48,6 +49,7 @@ export default function GasTankPage() {
       <GtRefresh />
       <GtHero />
       <GtCharacter />
+      <GtSpecs />
       <GtUpgrade />
       <GtShowcase />
       <GtTape reverse />

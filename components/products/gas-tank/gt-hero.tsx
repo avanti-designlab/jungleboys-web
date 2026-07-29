@@ -33,15 +33,6 @@ gsap.registerPlugin(ScrollTrigger)
 // width here gives a genuinely matched trio. They are NOT rotated: these are
 // dead-on renders and any tilt brings the mismatch straight back.
 
-const SPECS = [
-  { icon: 'palm', label: 'Palm sized\nand discreet' },
-  { icon: 'extracts', label: 'Built for\npure extracts' },
-  { icon: 'vapor', label: 'Big vapor,\nsmooth pull' },
-  { icon: 'taste', label: 'Uncompromised\ntaste' },
-  { icon: 'lasts', label: 'Performance\nthat lasts' },
-  { icon: 'ccell', label: 'Powered by\nCCELL tech' },
-]
-
 // embers drifting up off the bed — left/delay/duration/size, hand-scattered so
 // they don't read as a grid
 const EMBERS = [
@@ -69,7 +60,6 @@ export default function GtHero() {
           gsap.timeline({ delay: 0.15 })
             .from('[data-word="gas"]', { opacity: 0, xPercent: -14, filter: 'blur(16px)', duration: 0.85, ease: 'power3.out' }, 0)
             .from('[data-word="tank"]', { opacity: 0, xPercent: 14, filter: 'blur(16px)', duration: 0.85, ease: 'power3.out' }, 0.08)
-            .from('[data-spec]', { opacity: 0, y: 18, duration: 0.45, stagger: 0.05, ease: 'power2.out' }, 0.55)
 
           const tl = gsap.timeline({
             scrollTrigger: {
@@ -97,9 +87,9 @@ export default function GtHero() {
           // rather than fades in. The centre stays bottom-cropped: the crop is
           // the point.
           const LAUNCH: [string, gsap.TweenVars, number][] = [
-            ['l', { xPercent: -78, yPercent: 16, opacity: 0, scale: 1.06 }, 0.06],
-            ['r', { xPercent: 78, yPercent: 16, opacity: 0, scale: 1.06 }, 0.13],
-            ['c', { yPercent: 104, scale: 1.14 }, 0.2],
+            ['l', { xPercent: -78, yPercent: 16, opacity: 0, scale: 1.06 }, 0.05],
+            ['r', { xPercent: 78, yPercent: 16, opacity: 0, scale: 1.06 }, 0.19],
+            ['c', { yPercent: 104, scale: 1.14 }, 0.33],
           ]
           LAUNCH.forEach(([k, from, at]) => {
             tl.fromTo(`[data-dev="${k}"]`,
@@ -109,8 +99,6 @@ export default function GtHero() {
           tl.fromTo('[data-rig]', { opacity: 0 }, { opacity: 1, duration: 0.06 }, 0.1)
             // and they keep growing toward you for the rest of the scrub
             .to('[data-rig]', { scale: 1.07, ease: 'none', duration: 0.4 }, 0.55)
-
-          tl.to('[data-specs]', { y: 40, opacity: 0, ease: 'power2.in', duration: 0.2 }, 0.3)
         }
       )
       return () => mm.revert()
@@ -173,40 +161,25 @@ export default function GtHero() {
           </div>
         </div>
 
-        {/* the three tiers, rising out of the bed — equal width = equal device */}
-        <div data-rig className="absolute inset-x-0 top-[30%] z-20 h-[35%] opacity-0 will-change-transform md:top-[1%] md:h-[116%]">
+        {/* The three tiers, rising out of the bed — equal width = equal device.
+            On a phone all three cannot stand clear of each other at this size:
+            un-overlapped they measure 822px across a 390px screen. So they
+            overlap hard (-29vw) and the trio lands inside the frame instead of
+            two of them hanging off the edges. */}
+        <div data-rig className="absolute inset-x-0 top-[20%] z-20 h-[52%] opacity-0 will-change-transform md:top-[1%] md:h-[116%]">
           <div className="flex h-full items-start justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
             <img data-dev="l" src="/products/gas-tank/device-flavors-n.webp" alt="Gas Tank Flavors"
-              className="-mr-[6vw] mt-[9%] h-[80%] w-auto will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)] md:-mr-[8vw] md:mt-0 md:h-full" />
+              className="-mr-[29vw] mt-[6%] h-[72%] w-auto will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)] md:-mr-[8vw] md:mt-0 md:h-full" />
             {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
             <img data-dev="c" src="/products/gas-tank/device-rosin-n.webp" alt="Gas Tank Live Rosin"
               className="z-10 h-full w-auto will-change-transform drop-shadow-[0_44px_80px_rgba(0,0,0,0.85)]" />
             {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
             <img data-dev="r" src="/products/gas-tank/device-resin-n.webp" alt="Gas Tank Live Resin"
-              className="-ml-[6vw] mt-[9%] h-[80%] w-auto will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)] md:-ml-[8vw] md:mt-0 md:h-full" />
+              className="-ml-[29vw] mt-[6%] h-[72%] w-auto will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)] md:-ml-[8vw] md:mt-0 md:h-full" />
           </div>
         </div>
 
-        {/* spec pills — one line, Figma icons, sitting over the burn */}
-        <div data-specs className="absolute inset-x-0 bottom-[14%] z-30 will-change-transform md:bottom-[4%]">
-          <div className="gt-specs-row mx-auto flex w-full max-w-[1320px] items-stretch justify-start gap-1.5 overflow-x-auto px-4 md:justify-center md:gap-2.5 md:overflow-visible">
-            {SPECS.map((s) => (
-              <span
-                key={s.icon}
-                data-spec
-                className="flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-white/15 bg-black/55 px-3 py-2 text-left text-[9px] font-extrabold uppercase leading-[1.15] tracking-wider text-white/90 backdrop-blur-md md:px-4 md:py-2.5 md:text-[10px]"
-                style={{ fontFamily: 'var(--font-brand)' }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element -- inline icon */}
-                <img src={`/products/gas-tank/icons/${s.icon}.svg`} alt="" aria-hidden className="h-4 w-4 shrink-0 object-contain md:h-[18px] md:w-[18px]" />
-                <span className="block">
-                  {s.label.split('\n')[0]}<br />{s.label.split('\n')[1]}
-                </span>
-              </span>
-            ))}
-          </div>
-        </div>
       </div>
     </section>
   )
