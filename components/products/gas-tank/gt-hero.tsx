@@ -51,7 +51,11 @@ export default function GtHero() {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
       mm.add(
-        { reduce: '(prefers-reduced-motion: reduce)', noPref: '(prefers-reduced-motion: no-preference)' },
+        {
+          isMobile: '(max-width: 767px)',
+          reduce: '(prefers-reduced-motion: reduce)',
+          noPref: '(prefers-reduced-motion: no-preference)',
+        },
         (mmCtx) => {
           const c = mmCtx.conditions as Record<string, boolean>
           if (c.reduce) return
@@ -88,28 +92,29 @@ export default function GtHero() {
             ease: 'power1.in', duration: 0.3,
           }, 0)
 
-          // THE LAUNCH. The flankers sweep IN FROM THE SIDES, then the white
-          // centre rises from the floor — three separate beats, so all three
-          // are on screen together rather than one hero with two slivers.
-          // Everything overshoots slightly before settling, so each lands
-          // rather than fades in. The centre stays bottom-cropped: the crop is
-          // the point.
-          // Nothing launches until the wordmark has actually gone: the first
-          // device now starts at 0.32, just after the headline finishes pulling
-          // back at 0.30. They used to start at 0.05 and run under a wordmark
-          // that was still most of the way opaque.
+          // THE LAUNCH. The flankers sweep in from the sides, then the white
+          // centre rises between them — three beats, each overshooting slightly
+          // so it lands rather than fades in.
+          //
+          // Nothing launches until the wordmark has gone: the first device
+          // starts at 0.32, just after the headline finishes pulling back at
+          // 0.30. The beats are 0.09 apart, tight enough to read as one move
+          // arriving in sequence; at 0.13 the flankers sat finished and alone
+          // while you waited on the white one.
           const LAUNCH: [string, gsap.TweenVars, number][] = [
-            ['l', { xPercent: -78, yPercent: 16, opacity: 0, scale: 1.06 }, 0.32],
-            ['r', { xPercent: 78, yPercent: 16, opacity: 0, scale: 1.06 }, 0.45],
-            ['c', { yPercent: 104, opacity: 0, scale: 1.14 }, 0.58],
+            ['l', { xPercent: -58, yPercent: 12, opacity: 0, scale: 1.06 }, 0.32],
+            ['r', { xPercent: 58, yPercent: 12, opacity: 0, scale: 1.06 }, 0.41],
+            ['c', { yPercent: 78, opacity: 0, scale: 1.06 }, 0.50],
           ]
           LAUNCH.forEach(([k, from, at]) => {
             tl.fromTo(`[data-dev="${k}"]`,
               from,
-              { xPercent: 0, yPercent: 0, opacity: 1, scale: 1, ease: 'back.out(1.05)', duration: 0.34 }, at)
+              { xPercent: 0, yPercent: 0, opacity: 1, scale: 1, ease: 'back.out(1.05)', duration: 0.3 }, at)
           })
-          // and they keep growing toward you for the rest of the scrub
-          tl.to('[data-rig]', { scale: 1.07, ease: 'none', duration: 0.26 }, 0.74)
+          // and they keep growing toward you for the rest of the scrub. Kept
+          // small on mobile: the group is already a touch wider than the frame,
+          // and 1.07 there pushed 30px of the grey and the black off the edges.
+          tl.to('[data-rig]', { scale: c.isMobile ? 1.03 : 1.07, ease: 'none', duration: 0.24 }, 0.76)
         }
       )
       return () => mm.revert()
@@ -173,21 +178,23 @@ export default function GtHero() {
         </div>
 
         {/* The three tiers, rising out of the bed — equal width = equal device.
-            On a phone all three cannot stand clear of each other at this size:
-            un-overlapped they measure 822px across a 390px screen. So they
-            overlap hard (-29vw) and the trio lands inside the frame instead of
-            two of them hanging off the edges. */}
-        <div data-rig className="absolute inset-x-0 top-[20%] z-20 h-[52%] opacity-0 will-change-transform md:top-[1%] md:h-[116%]">
-          <div className="flex h-full items-start justify-center">
+            On a phone all three cannot stand clear of each other at this size,
+            so they overlap (-31vw) and the trio lands inside the frame instead
+            of two of them hanging off the edges. items-END is what makes it
+            read as a group: all three stand on one baseline with the centre
+            rising taller in front, rather than hanging from a shared ceiling
+            with the white one dropping 22% below the other two. */}
+        <div data-rig className="absolute inset-x-0 top-[22%] z-20 h-[50%] opacity-0 will-change-transform md:top-[1%] md:h-[116%]">
+          <div className="flex h-full items-end justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
             <img data-dev="l" src="/products/gas-tank/device-flavors-n.webp" alt="Gas Tank Flavors"
-              className="-mr-[29vw] mt-[6%] h-[72%] w-auto will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)] md:-mr-[8vw] md:mt-0 md:h-full" />
+              className="-mr-[31vw] h-[84%] w-auto will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)] md:-mr-[8vw] md:mt-0 md:h-full" />
             {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
             <img data-dev="c" src="/products/gas-tank/device-rosin-n.webp" alt="Gas Tank Live Rosin"
               className="z-10 h-full w-auto will-change-transform drop-shadow-[0_44px_80px_rgba(0,0,0,0.85)]" />
             {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
             <img data-dev="r" src="/products/gas-tank/device-resin-n.webp" alt="Gas Tank Live Resin"
-              className="-ml-[29vw] mt-[6%] h-[72%] w-auto will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)] md:-ml-[8vw] md:mt-0 md:h-full" />
+              className="-ml-[31vw] h-[84%] w-auto will-change-transform drop-shadow-[0_30px_60px_rgba(0,0,0,0.7)] md:-ml-[8vw] md:mt-0 md:h-full" />
           </div>
         </div>
 
