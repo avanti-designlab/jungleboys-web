@@ -31,7 +31,12 @@ export default function FlowerHero() {
         scrollTrigger: { trigger: section, start: 'top top', end: 'bottom bottom', scrub: 0.6 },
       })
       tl.to(words, { yPercent: -16, opacity: 0.22, scale: 0.96, ease: 'none', duration: 0.6 }, 0)
-        .to(stage, { opacity: 0, ease: 'power1.in', duration: 0.4 }, 0.6)
+      // NO fade on the stage. It is sticky inside a 180vh section, so once its
+      // travel is spent it scrolls out of frame on its own, artwork and all.
+      // Fading it to 0 first left the remainder of the section as bare
+      // bg-black — a measured 600px corridor with nothing in it. Retiming the
+      // fade did not help because the fade was never the point; the emptiness
+      // after it was.
       return () => tl.scrollTrigger?.kill()
     })
     return () => mm.revert()
@@ -40,7 +45,7 @@ export default function FlowerHero() {
   let li = 0 // running letter index for the drop stagger
 
   return (
-    <section ref={sectionRef} className="relative h-[180vh] bg-black">
+    <section ref={sectionRef} className="relative h-[150vh] bg-black">
       <div data-fl-stage className="sticky top-0 flex h-screen items-start justify-center overflow-hidden bg-[#050505] pt-[17vh] md:pt-[13vh]">
         {/* graffiti mural texture */}
         {/* eslint-disable-next-line @next/next/no-img-element -- bg art */}

@@ -12,33 +12,34 @@ import ScrollSequence from './scroll-sequence'
 export default function FlowerJourney() {
   const statementRef = useRef<HTMLDivElement>(null)
   const nugRef = useRef<HTMLImageElement>(null)
-  const fadeRef = useRef<HTMLDivElement>(null)
 
   const onProgress = (p: number) => {
-    // statement: reads through the opening, gone by 30%
+    // Statement holds LONGER. It used to be gone by 30% while the nug does not
+    // start until 50%, so p 0.30-0.50 had nothing in it but the sequence's
+    // opening frames, which are its darkest (mean luma 18 of 255). On a phone
+    // that measured as 300px of void. Now it hands over to the nug directly.
     if (statementRef.current) {
-      const o = p < 0.16 ? 1 : Math.max(0, 1 - (p - 0.16) / 0.14)
+      const o = p < 0.3 ? 1 : Math.max(0, 1 - (p - 0.3) / 0.16)
       statementRef.current.style.opacity = String(o)
     }
-    // nug: appears from 50%, blows up past the viewport by 100%
+    // nug: starts as the statement leaves, blows up past the viewport by 100%
     if (nugRef.current) {
-      const t = Math.min(1, Math.max(0, (p - 0.5) / 0.5))
+      const t = Math.min(1, Math.max(0, (p - 0.42) / 0.58))
       const scale = 0.3 + t * t * 4.5 // ease-in blow-up, capped to keep the native cutout crisp
       const op = t <= 0 ? 0 : t < 0.07 ? t / 0.07 : 1
       nugRef.current.style.opacity = String(op)
       nugRef.current.style.transform = `translate(-50%, -50%) scale(${scale}) rotate(${t * 12}deg)`
     }
-    // full fade to black, compressed into the last beats — reaches 1 exactly
-    // when the stage un-pins, so the handoff into the next section is a
-    // seamless black-to-black cut (no visible seam, no long dead stretch)
-    if (fadeRef.current) {
-      const f = Math.min(1, Math.max(0, (p - 0.9) / 0.1))
-      fadeRef.current.style.opacity = String(f)
-    }
+    // There WAS a black overlay here, meant as a seamless black-to-black cut
+    // into the next section. It produced a measured 600px corridor of nothing
+    // instead. The scroll handler stops updating once the section leaves its
+    // range, so the overlay kept whatever opacity it last wrote — full black —
+    // while the sticky stage spent the rest of the section scrolling out. The
+    // next section is already black, so the cut was buying nothing anyway.
   }
 
   return (
-    <ScrollSequence frames={121} heightVh={330} onProgress={onProgress}>
+    <ScrollSequence frames={121} heightVh={270} onProgress={onProgress}>
       {/* genetics statement — outlined in JB yellow, owns the frame */}
       <div
         ref={statementRef}
@@ -66,7 +67,6 @@ export default function FlowerJourney() {
         style={{ transform: 'translate(-50%, -50%) scale(0.3)' }}
       />
 
-      <div ref={fadeRef} aria-hidden className="pointer-events-none absolute inset-0 z-30 bg-black opacity-0" />
     </ScrollSequence>
   )
 }
