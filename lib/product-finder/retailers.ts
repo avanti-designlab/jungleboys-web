@@ -1,7 +1,14 @@
 // 3rd-party retailers that stock Jungle Boys products (Product Finder /find-jb-products).
 // SEPARATE data source from the owned-locations map (two-map rule). Extracted from the
-// live Webflow store locator; coordinates geocoded via OpenStreetMap. Move to Supabase
-// `retailers` (public read) when seeded.
+// live Webflow store locator; coordinates geocoded via OpenStreetMap.
+//
+// THIS FILE IS THE SOURCE OF TRUTH. The Supabase `retailers` table exists but is
+// deliberately unseeded and unread — do not "finish the migration". That promise used to
+// live here and was the trap: seeding the table creates a second truth that disagrees
+// with this one. Kept in code because there is no admin path, so a DB would just move
+// hand-editing into a dashboard; and because two surfaces already fail silently through
+// exactly that DB-with-code-fallback shape (see SEC-P2-16).
+// Provisional — Phase 3 makes the final call. See CLAUDE.md for the flip triggers.
 
 export type Retailer = { name: string; address: string; state: string; lat: number; lng: number }
 

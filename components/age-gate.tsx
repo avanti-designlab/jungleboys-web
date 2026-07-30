@@ -77,13 +77,16 @@ export default function AgeGate() {
     window.dispatchEvent(new CustomEvent('jb:gate-passed'))
   }
 
+  // Scrim is near-opaque on purpose: at /70 the page BEHIND set the ground, so
+  // this surface changed with the theme despite being specified to stay dark in
+  // both. In light that put the 21+ line at 4.31:1.
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-label="Age verification"
       data-nav-ignore
-      className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 backdrop-blur-md p-4"
+      className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
     >
       <div
         ref={panelRef}

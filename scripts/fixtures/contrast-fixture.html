@@ -69,5 +69,25 @@
 <!-- H2: same colour at 16px -> needs 4.5 -> FAILS. Proves the large-text rule. -->
 <div class="row" id="rH2" style="top: 580px;"><span style="color:#616161;font-size:16px">CASE-H2 fail small</span></div>
 
+<!-- I: ::placeholder is not a text node. The collector could not see it at all
+     until placeholderBoxes existed, so every form on the site went unmeasured.
+     #666666 on #0A0A0F = 3.44:1 at 16px, same as CASE-B. -->
+<div class="row" id="rI" style="top: 20px; left: 700px;">
+  <input id="phi" placeholder="CASE-I fail placeholder"
+         style="width:340px;font-size:16px;background:#0A0A0F;border:0;outline:0">
+</div>
+<style>#phi::placeholder { color: #666666; opacity: 1; }</style>
+
+<!-- J: two identical spans stacked at the same rect. The BURIED one (z-1) must
+     be silent: it is not the pixel a reader sees. Scoring it against whatever
+     is painted over it is how a phantom "Shop now" failure was manufactured. -->
+<div class="row" id="rJ" style="top: 100px; left: 700px; background:#0A0A0F;">
+  <span style="position:absolute;left:12px;top:20px;z-index:1;color:#FFFFFF;font-size:16px">CASE-J buried twin</span>
+  <!-- opaque plate painted over it, carrying no text of its own. In the ground
+       plate the buried span's box samples THIS, so measuring it yields white on
+       #FFE24D = 1.29 — a failure no reader can see. -->
+  <div style="position:absolute;left:8px;top:14px;width:280px;height:30px;z-index:2;background:#FFE24D"></div>
+</div>
+
 </body>
 </html>

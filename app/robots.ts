@@ -18,7 +18,13 @@ export default function robots(): MetadataRoute.Robots {
           // retired), and a redirect target Google cannot crawl consolidates
           // nothing. The page carries its own robots: noindex instead, so it is
           // crawlable but not indexable.
-          '/login',
+          // NOT '/login' either, for the same reason as /auth above and one
+          // more: it is linked from the site nav on every page AND 307s to
+          // /rewards. Disallowed + linked + redirected is the textbook
+          // "Indexed, though blocked by robots.txt" recipe — Google sees the
+          // links, is forbidden to fetch the URL, and so never learns about the
+          // redirect. Crawlable-but-noindex is the correct treatment; when the
+          // real auth shell lands it carries robots: noindex itself.
           '/signup',
           '/callback',
           '/forgot-password',

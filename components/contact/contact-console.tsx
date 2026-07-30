@@ -99,7 +99,7 @@ export default function ContactConsole({ consentText }: { consentText: string })
   }
 
   const inputCls =
-    'w-full rounded-full border border-white/15 bg-white/[0.04] px-5 py-3.5 text-[15px] text-white placeholder:text-white/35 outline-none transition focus:border-[var(--tint)] focus:bg-white/[0.07] focus:ring-2 focus:ring-[var(--tint)]/30'
+    'w-full rounded-full border border-white/15 bg-white/[0.04] px-5 py-3.5 text-[15px] text-white placeholder:text-white/60 outline-none transition focus:border-[var(--tint)] focus:bg-white/[0.07] focus:ring-2 focus:ring-[var(--tint)]/30'
 
   return (
     <div ref={rootRef} className="mx-auto grid max-w-[1300px] items-start gap-10 px-4 pb-20 md:px-8 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14">
@@ -149,7 +149,7 @@ export default function ContactConsole({ consentText }: { consentText: string })
         style={{ ['--tint' as string]: active.color }}
       >
         {/* topic pill grid */}
-        <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-white/45" style={{ fontFamily: 'var(--font-brand)' }}>
+        <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-white/60" style={{ fontFamily: 'var(--font-brand)' }}>
           What&apos;s it about?
         </p>
         <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -222,7 +222,7 @@ export default function ContactConsole({ consentText }: { consentText: string })
                 <span className="flex items-center border-r border-white/15 px-4 text-sm font-bold text-white/50" style={{ fontFamily: 'var(--font-brand)' }}>
                   US +1
                 </span>
-                <input name="phone" type="tel" inputMode="numeric" autoComplete="tel-national" placeholder="Phone (optional)" maxLength={14} className="w-full bg-transparent px-5 py-3.5 text-[15px] text-white placeholder:text-white/35 outline-none" />
+                <input name="phone" type="tel" inputMode="numeric" autoComplete="tel-national" placeholder="Phone (optional)" maxLength={14} className="w-full bg-transparent px-5 py-3.5 text-[15px] text-white placeholder:text-white/60 outline-none" />
               </div>
             </label>
             <label className="md:col-span-2">
@@ -233,7 +233,7 @@ export default function ContactConsole({ consentText }: { consentText: string })
                 rows={5}
                 placeholder={`Tell us about your ${active.label.toLowerCase()} inquiry…`}
                 maxLength={2000}
-                className="w-full resize-none rounded-[1.4rem] border border-white/15 bg-white/[0.04] px-5 py-4 text-[15px] text-white placeholder:text-white/35 outline-none transition focus:border-[var(--tint)] focus:bg-white/[0.07] focus:ring-2 focus:ring-[var(--tint)]/30"
+                className="w-full resize-none rounded-[1.4rem] border border-white/15 bg-white/[0.04] px-5 py-4 text-[15px] text-white placeholder:text-white/60 outline-none transition focus:border-[var(--tint)] focus:bg-white/[0.07] focus:ring-2 focus:ring-[var(--tint)]/30"
               />
             </label>
 

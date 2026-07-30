@@ -23,6 +23,10 @@ export default async function Home() {
           __html: jsonLdHtml([organizationSchema(), websiteSchema()]),
         }}
       />
+      {/* The homepage's one h1. The hero slides are rotating promos and now use
+          h2 — same sr-only pattern already used on /locations. */}
+      <h1 className="sr-only">Jungle Boys — Premium Cannabis Flower, Pre-Rolls &amp; Hash Holes</h1>
+
       <HeroDeck slides={heroSlides} />
       <QuickCards cards={quickCards} />
     </main>

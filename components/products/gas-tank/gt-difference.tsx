@@ -32,6 +32,12 @@ const AXES = [
 // no contrast floor. `ink` is the same colour where it renders as TEXT on the
 // black stage. They are identical for two of the three tiers; --gt-red is
 // 4.13:1 there, so Live Rosin takes the on-dark variant for type only.
+// Resting opacity of an unlit rail label. The step tweens below hold this value
+// at every scroll position, so it is read, not passed through: at 0.3 it
+// measured 2.65:1 against the rail ground. Declared once because the initial
+// style and the timeline both set it, and fixing only one lets the scrub undo it.
+const DOT_DIM = 0.5
+
 const TIERS = [
   {
     key: 'flavors', name: 'Flavors', device: 'device-flavors-n', accent: 'var(--gt-orange)', ink: 'var(--gt-orange)',
@@ -126,7 +132,7 @@ export default function GtDifference() {
           TIERS.forEach((t, i) => {
             const [from, to] = holds[i]
             if (i > 0) tl.to(`[data-gtd-dot="${i}"]`, { opacity: 1, duration: 0.001 }, from)
-            if (i < steps) tl.to(`[data-gtd-dot="${i}"]`, { opacity: 0.3, duration: 0.001 }, to)
+            if (i < steps) tl.to(`[data-gtd-dot="${i}"]`, { opacity: DOT_DIM, duration: 0.001 }, to)
           })
 
           // Rows tick in for every tier, timed to FINISH inside that tier's own
@@ -239,7 +245,7 @@ export default function GtDifference() {
             {TIERS.map((t, i) => (
               <span key={t.key} data-gtd-dot={i}
                 className="text-[9px] font-extrabold uppercase tracking-[0.24em] text-white md:text-[11px]"
-                style={{ fontFamily: 'var(--font-brand)', opacity: i === 0 ? 1 : 0.3 }}>
+                style={{ fontFamily: 'var(--font-brand)', opacity: i === 0 ? 1 : DOT_DIM }}>
                 {t.name}
               </span>
             ))}

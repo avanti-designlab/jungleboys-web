@@ -46,6 +46,25 @@ const hex = (c) => '#' + c.map((v) => v.toString(16).padStart(2, '0')).join('')
 /** id -> { worstRec, best, maxAlpha } across every scroll step of the sweep. */
 const seenEls = new Map()
 
+// One row per element, already deduped by identity. `best` is the element's
+// most-readable observed state: best < need means it never clears AA anywhere
+// on the page (a real finding), while best >= need means it only failed while
+// a scrub had it part-way faded or part-way across a changing ground.
+function collate() {
+  const out = []
+  for (const { worstRec, best, maxAlpha } of seenEls.values()) {
+    if (worstRec.ratio >= worstRec.need) continue
+    out.push({ ...worstRec, best: +best.toFixed(2), maxAlpha: +maxAlpha.toFixed(3),
+      everPasses: best >= worstRec.need })
+  }
+  return out.sort((a, b) => a.ratio - b.ratio)
+}
+
+// Results are flushed after EVERY route when --out is given. Printing only at
+// the end means one lost CDP round-trip on route 11 of 15 discards ten
+// completed routes — which is exactly what happened to the QA gate.
+const outFile = flag('out', '')
+
 for (const url of urls) {
   const overlays = await b.goto(url)
   if (overlays && overlays.length) process.stderr.write(`OVERLAY on ${url}: ${JSON.stringify(overlays)}\n`)
@@ -138,19 +157,9 @@ for (const url of urls) {
     })
   }
   process.stderr.write(`done ${url}\n`)
+  if (outFile) fs.writeFileSync(outFile, JSON.stringify(collate(), null, 1))
 }
 
-// One row per element, already deduped by identity. `best` is the element's
-// most-readable observed state: best < need means it never clears AA anywhere
-// on the page (a real finding), while best >= need means it only failed while
-// a scrub had it part-way faded or part-way across a changing ground.
-const out = []
-for (const { worstRec, best, maxAlpha } of seenEls.values()) {
-  if (worstRec.ratio >= worstRec.need) continue
-  out.push({ ...worstRec, best: +best.toFixed(2), maxAlpha: +maxAlpha.toFixed(3),
-    everPasses: best >= worstRec.need })
-}
-out.sort((a, b) => a.ratio - b.ratio)
-console.log(JSON.stringify(out, null, 1))
+console.log(JSON.stringify(collate(), null, 1))
 b.kill()
 process.exit(0)

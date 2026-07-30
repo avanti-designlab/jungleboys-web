@@ -170,9 +170,14 @@ export default function HeroDeck({ slides = HERO_SLIDES }: { slides?: HeroSlide[
               >
                 {s.kicker}
               </p>
-              <h1 className="font-display text-7xl uppercase leading-[0.82] md:text-9xl xl:text-[11rem]">
+              {/* h2, not h1. One h1 per document, and these are rotating promo
+                  slides — the homepage was emitting three ("JULY DEALS", "GAS
+                  TANK", "GOLD MYLARS"), none of which says what the site is, on
+                  the page that ranks for the brand. A seasonal promo in the h1
+                  also goes stale on a date. The real h1 is in app/page.tsx. */}
+              <h2 className="font-display text-7xl uppercase leading-[0.82] md:text-9xl xl:text-[11rem]">
                 {s.title}
-              </h1>
+              </h2>
               <PillCta label={s.cta} href={s.href} className="mt-3" />
             </div>
           </div>

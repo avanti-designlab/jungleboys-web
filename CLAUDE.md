@@ -149,7 +149,7 @@ motion 7, density 4). **Reconciled + FROZEN 2026-07-19 (see gate status above).*
 3. **Neither is a pixel-lock.** The new build ELEVATES both — the current design is deliberately
    being replaced with a fully interactive/motion-driven language.
 
-**Design-weight map (Avanti):** the **10 product-line landing pages are the flagship** — immersive,
+**Design-weight map (Avanti):** the **9 product-line landing pages are the flagship** — immersive,
 3D-heavy, scroll-driven (Complex tier; where the brand showcase lives). **Rewards landing**: already
 well-designed and on-brand — follow the existing design closely. **Most other pages**: informational,
 cleaner, Subtle/Standard motion only.
@@ -175,7 +175,7 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   merge happens, that is the point at which these two `/products/` routes need either a 301 to the
   new page or removal from `PRODUCT_LINES`; shipping them as orphaned "coming soon" pages is the
   failure mode to avoid. **Pre-cutover check: confirm this is still the intent.**
-- **Phase 2 body copy stays hardcoded, NOT wired to Storyblok (Avanti, 2026-07-28).** The ten
+- **Phase 2 body copy stays hardcoded, NOT wired to Storyblok (Avanti, 2026-07-28).** The nine
   product-line pages keep their headlines, claims and section copy in the components; only the
   per-page SEO fields go through Storyblok (`pageMetadata`). Asked whether the copy should be
   CMS-editable and Avanti ruled no — she is the only person who would ever edit it, and she is
@@ -210,7 +210,7 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   heading is white + gold with no green, so the scrim was free there (white 2.35 → 8.62, gold
   1.41 → 5.18). Revisit only if the sky ground itself changes.
 - **Product-line pages are THEME-INVARIANT — dark and light render identically (Avanti,
-  2026-07-30).** The ten `/products/*` line pages are custom designs, each built around its
+  2026-07-30).** The nine `/products/*` line pages are custom designs, each built around its
   own artwork and palette; they are not a light design with a dark variant. There is
   therefore nothing to sweep on them for dark mode, and **a dark-mode contrast finding on a
   product-line page is not a finding** — it is the same surface already measured in light.
@@ -245,6 +245,27 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   centred on a clean page load — "Download the App" read 1.06, then 18.88. Settle-detection alone
   does not catch this; `contrast-verify.mjs` reloads per finding for exactly this reason. Never
   ship a contrast fix off a sweep number that has not been through the verify pass.
+- **Product Finder data stays in CODE — provisional, revisit in Phase 3 (Avanti, 2026-07-30).**
+  `/find-jb-products` renders 110 retailers (95 CA + 15 FL) from `lib/product-finder/retailers.ts`.
+  The Supabase `retailers` table is EMPTY and nothing queries it — the page is not broken, and a
+  gate reading "0 rows" as "no data" is wrong. Kept in code because there is no admin path and no
+  plan for one, so a DB would mean hand-editing rows in the Supabase dashboard instead of a typed
+  file — trading type safety for a network call and a failure mode. The precedent matters: the
+  homepage and `/blog` are BOTH silently on code fallbacks right now because a CMS read fails and
+  falls back cleanly (SEC-P2-16); a third DB-with-fallback repeats that. **This is provisional and
+  does NOT overturn 00 §9** (which names `retailers` as a sanctioned Supabase table) — the table
+  stays in place, deliberately unseeded. **Phase 3 revisit: make the final call.** Flips to
+  Supabase if any of these becomes true: someone other than Avanti needs to edit stockists; the
+  list updates more than ~monthly; or an admin path or automated feed appears. If it flips, no
+  silent code fallback — an honest empty state instead.
+- **Gold tier gradient CONFIRMED by Avanti (2026-07-30).** `via` `#96700a` → `#4a3705` on the gold
+  tier card. Text colour alone could not fix the 3.02:1 tier name (even pure white measured 3.95
+  on the old band at 18px), so the ground moved. Measured 5.65–5.76 after; hue holds 43–47° top to
+  bottom, so it still reads as gold beside green and silver. **The real finding underneath: the
+  tier palette is nine hardcoded hexes across two files and had ALREADY drifted** — Silver is
+  `#e4e4e8` in `tier-cards.tsx` and `#c9c9d1` in `earn-more.tsx`; Gold `#ffe98a` vs `#fecf0e`.
+  Tokenise as `--rw-tier-*` and add `rw` to the BRAND regex in `check-color-tokens.mjs`, which
+  would not police them even after tokenising. Not done yet.
 - **Branch protection on `main`: DEFERRED AGAIN at Phase 1 start (Avanti's explicit ruling,
   2026-07-19)** — solo-merger friction outweighs benefit while one agent builds sequentially.
   **Hard trigger remains: enable BEFORE CUTOVER, non-negotiable** (and revisit if multiple agents

@@ -289,11 +289,15 @@ export default function ProductFinderMap() {
               <circle cx="11" cy="11" r="7" />
               <path d="M21 21l-4.3-4.3" strokeLinecap="round" />
             </svg>
+            {/* aria-label, not a bare placeholder: the placeholder was the only
+                accessible name this field had (WCAG 4.1.2/3.3.2), and it stops
+                being one the moment anything is typed. */}
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              aria-label="Search by address or ZIP code"
               placeholder="Enter your address or ZIP…"
-              className="w-full rounded-full border-2 border-[var(--color-border)] bg-[var(--color-surface)] py-5 pl-16 pr-6 text-lg font-medium text-[var(--color-foreground)] shadow-lg outline-none transition focus:border-[var(--color-accent)] focus:shadow-[0_0_0_4px_rgba(254,207,14,0.2)]"
+              className="w-full rounded-full border-2 border-[var(--color-border)] bg-[var(--color-surface)] py-5 pl-16 pr-6 text-lg font-medium text-[var(--color-foreground)] shadow-lg outline-none transition placeholder:text-[var(--color-muted)] focus:border-[var(--color-accent)] focus:shadow-[0_0_0_4px_rgba(254,207,14,0.2)]"
               autoComplete="off"
             />
             {suggests.length > 0 && (

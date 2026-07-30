@@ -25,8 +25,27 @@ function rateLimited(ip: string): boolean {
   return arr.length > LIMIT
 }
 
+// The rate-limit key must be a value the CLIENT cannot choose.
+//
+// x-forwarded-for is a client-appendable list: the platform appends the real
+// peer, so the FIRST entry is attacker-supplied and the LAST is the trustworthy
+// one. Keying on the first meant eight requests with eight invented XFF values
+// sailed straight past a limiter that correctly throttled the same eight
+// requests without it — unbounded writes to the TCPA consent ledger.
+// x-vercel-forwarded-for is set by the platform and cannot be spoofed inbound.
+function clientKey(req: Request): string {
+  const vercel = req.headers.get('x-vercel-forwarded-for')
+  if (vercel) return vercel.trim()
+  const xff = req.headers.get('x-forwarded-for')
+  if (xff) {
+    const parts = xff.split(',').map((s) => s.trim()).filter(Boolean)
+    if (parts.length) return parts[parts.length - 1]
+  }
+  return 'unknown'
+}
+
 export async function POST(req: Request) {
-  const ip = (req.headers.get('x-forwarded-for') ?? 'unknown').split(',')[0].trim()
+  const ip = clientKey(req)
   if (rateLimited(ip)) {
     return Response.json({ error: 'Too many requests — try again shortly.' }, { status: 429 })
   }

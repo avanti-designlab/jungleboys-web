@@ -235,7 +235,7 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
                           onChange={(e) => setValue(e.target.value)}
                           onKeyDown={(e) => e.key === 'Enter' && next()}
                           placeholder={q.placeholder}
-                          className="w-full bg-transparent px-5 py-4 text-lg text-black outline-none placeholder:text-black/30"
+                          className="w-full bg-transparent px-5 py-4 text-lg text-black outline-none placeholder:text-black/60"
                         />
                       </div>
                     ) : (
@@ -247,7 +247,7 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
                         onChange={(e) => setValue(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && next()}
                         placeholder={q.placeholder}
-                        className="w-full rounded-full bg-white px-6 py-4 text-lg text-black outline-none placeholder:text-black/30"
+                        className="w-full rounded-full bg-white px-6 py-4 text-lg text-black outline-none placeholder:text-black/60"
                       />
                     )}
 

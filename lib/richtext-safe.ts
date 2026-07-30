@@ -47,12 +47,35 @@ const ALLOWED_ATTRS = new Set([
 // Hex, rgb()/hsl(), or a bare keyword only — no `;`, no `:`, no url().
 const SAFE_COLOR = /^(#[0-9a-f]{3,8}|(rgb|rgba|hsl|hsla)\([0-9.,%\s/-]+\)|[a-z]+)$/i
 
+// `class` is a VALUE-position risk, exactly like `color` above.
+//
+// Tailwind's utilities are already in the shipped stylesheet, so a CMS author
+// with publish rights can borrow them without adding any CSS of their own:
+// `class="fixed inset-0 z-50 bg-black h-screen w-full"` is a full-viewport
+// overlay — the clickjack the `textStyle`/`color` restriction was added to
+// prevent, smuggled through the attribute sitting next to it. Storyblok's
+// `styled` mark uses class legitimately, so the value is constrained rather
+// than the name dropped: no positioning, stacking, sizing or inset utilities.
+const UNSAFE_CLASS = /^(fixed|absolute|sticky|inset|top|right|bottom|left|z|h|w|min-h|min-w|max-h|max-w|translate|scale|rotate|opacity|pointer-events|overflow|transform)(-|$)/
+
+function safeClassValue(v: unknown): string | null {
+  if (typeof v !== 'string') return null
+  const kept = v.split(/\s+/).filter((c) => c && !UNSAFE_CLASS.test(c))
+  return kept.length ? kept.join(' ') : null
+}
+
 function cleanAttrs(attrs: Record<string, unknown>): Record<string, unknown> {
   const out: Record<string, unknown> = {}
   for (const [k, v] of Object.entries(attrs)) {
     if (!ALLOWED_ATTRS.has(k)) continue
     if (k === 'color' && !(typeof v === 'string' && SAFE_COLOR.test(v.trim()))) continue
     if ((k === 'href' || k === 'src') && typeof v === 'string' && !isSafeUrl(v)) continue
+    if (k === 'class') {
+      const safe = safeClassValue(v)
+      if (safe === null) continue
+      out[k] = safe
+      continue
+    }
     out[k] = v
   }
   return out

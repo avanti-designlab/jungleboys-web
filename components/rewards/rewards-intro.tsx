@@ -99,7 +99,12 @@ export default function RewardsIntro() {
             <span data-intro-word className="inline-block text-[var(--color-accent)]">
               to
             </span>
-          </span>
+          </span>{' '}
+          {/* The program name is only in the logo lockup below, which is an
+              image — so the loyalty page's one h1 read "Welcome to" and named
+              nothing indexable. Note the real space before this span (the
+              10-Pack pattern): without it crawlers read "Welcome toPWF Rewards". */}
+          <span className="sr-only">PWF Rewards</span>
         </h1>
 
         <div

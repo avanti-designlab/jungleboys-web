@@ -89,12 +89,16 @@ ok('CASE-D  sampled ground is the glow #ffe24d', d && d.ground.toLowerCase() ===
 ok('CASE-H2 #616161 at 16px reported at 3.19 (needs 4.5)',
   by('CASE-H2') && near(by('CASE-H2').ratio, 3.19), by('CASE-H2') ? `got ${by('CASE-H2').ratio}` : 'NOT REPORTED')
 
+ok('CASE-I  ::placeholder measured at 3.44 (not a text node — invisible to the old collector)',
+  by('CASE-I') && near(by('CASE-I').ratio, 3.44), by('CASE-I') ? `got ${by('CASE-I').ratio}` : 'NOT REPORTED')
+
 // Silences: the harness must NOT invent these.
 ok('CASE-A  19.75:1 opaque pass is silent', !by('CASE-A'))
 ok('CASE-E  text under a pinned bar is silent (phantom white-on-yellow class)', !by('CASE-E'))
 ok('CASE-F  sr-only text is silent', !by('CASE-F'))
 ok('CASE-G  backface-culled face is silent', !by('CASE-G'))
 ok('CASE-H1 same colour at 24px passes the 3.0 large-text floor', !by('CASE-H1'))
+ok('CASE-J  a twin buried under an opaque plate is silent (stacked-duplicate phantom)', !by('CASE-J'))
 
 // ---------------------------------------------------------------------------
 // 3. The theme guard. A page that never applies data-theme must ABORT the

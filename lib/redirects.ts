@@ -81,6 +81,12 @@ export const redirects: Redirect[] = [
   // looking for either way.
   { source: '/verify', destination: '/auth', permanent: true },
 
+  // /about 404s today and carries ~144 clicks/yr. TEMPORARY on purpose: the URL
+  // inventory still intends a real /about, so a 308 would tell Google it is
+  // never coming back. The redirect-qa exemption that was hiding this 404 under
+  // a "Phase 3" label has been removed.
+  { source: '/about', destination: '/', permanent: false },
+
   // Product-line landings nest under /products (Avanti decision)
   { source: '/hash-hole', destination: '/products/hash-hole', permanent: true },
   { source: '/pre-rolls', destination: '/products/pre-rolls', permanent: true },

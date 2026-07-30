@@ -66,7 +66,7 @@ old_url,earns_traffic,new_url,action,template,status,verified
 /menu/florida/jungle-boys-tallahassee,0,/menu/florida/tallahassee,301 (legacy menu format; GBP links point here; 404 TODAY — fix in Webflow now AND carry into rebuild),location-menu,draft,
 /menu/florida/jungle-boys-tampa,0,/menu/florida/tampa,301 (legacy menu format; GBP links point here; 404 TODAY — fix in Webflow now AND carry into rebuild),location-menu,draft,
 /menu/arizona/jungle-boys-phoenix,18728,/locations,301 (store closed — confirmed by Avanti; point at locations index),location-menu,confirmed-by-avanti,
-/verify,3702,/verify,keep — REBUILT as own template: product-authenticity verification (QR scan / scratch-code entry); a main anchor of the new build per Avanti,verify,confirmed-by-avanti,
+/verify,3702,/auth,RETIRED — 308 permanent to /auth (Avanti 2026-07-30; supersedes the earlier "rebuild as own template" ruling). It served an older verification process the rebuild does not use. Accepted: /verify leaves the index and its clicks land on /auth,redirect-308,confirmed-by-avanti,
 /about,144,TBD,301 to new /about when built (Phase 1); interim: /,,draft,
 /menu/tlc-collective,93,/locations,301 (store closed — confirmed by Avanti; point at locations index),location-menu,confirmed-by-avanti,
 /menu/jungle-boys-dtla/category/flower,369,/menu/california/downtown-los-angeles,301 (legacy deep link; live in Webflow),location-menu,confirmed-by-avanti,live-2026-07-19

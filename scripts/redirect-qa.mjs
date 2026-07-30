@@ -32,9 +32,39 @@ const PENDING_PHASE_3 = [
   /^\/menu\//,
   /^\/(login|signup|callback|forgot-password|reset-password|delete-account)$/,
   /^\/(profile|profile-reward)$/,   // logged-in shells, Phase 3
-  /^\/(about|420-pre-game)$/,
+  // /about was exempted here as "Phase 3" while the inventory says Phase 1 and
+  // names its own interim destination — the script was laundering a live 404 on
+  // a URL with real traffic. It now has that interim redirect, so the exemption
+  // is gone rather than reworded.
+  /^\/420-pre-game$/,   // 0 clicks/yr, status=draft in the inventory
 ]
 const isPending = (u) => PENDING_PHASE_3.some((re) => re.test(u))
+
+// Redirects where TEMPORARY is the correct answer, each with the reason it is.
+// Everything else must be 301/308: a legacy URL that has to transfer its signal
+// cannot do it through a 307, and the /verify ruling turns entirely on that
+// distinction. Declared here rather than accepted silently — an undeclared
+// temporary redirect is now a failure, and an entry here that stops being
+// temporary is a failure too, so this list cannot rot into a rubber stamp.
+const INTERIM_TEMPORARY = {
+  '/710-deals': 'seasonal deal page — rotates back into use, so it is not gone',
+  '/420-deals': 'seasonal deal page — rotates back into use',
+  '/april-deals': 'seasonal deal page — rotates back into use',
+  '/may-deals': 'seasonal deal page — rotates back into use',
+  '/june-deals': 'seasonal deal page — rotates back into use',
+  '/about': 'inventory still intends a real /about; 308 would say it is never coming back',
+}
+
+// robots.txt is part of redirect correctness, not a separate concern: a
+// disallowed URL's redirect is never fetched, so the two rules interact.
+const robotsTxt = await fetch(BASE + '/robots.txt').then((r) => r.text()).catch(() => '')
+const DISALLOWED = robotsTxt
+  .split('\n')
+  .map((l) => l.trim())
+  .filter((l) => /^disallow:/i.test(l))
+  .map((l) => l.split(':').slice(1).join(':').trim())
+  .filter(Boolean)
+const isDisallowed = (u) => DISALLOWED.some((d) => d !== '/' && u.startsWith(d.replace(/\*$/, '')))
 
 let fails = 0
 let pending = 0
@@ -55,11 +85,24 @@ for (const u of urls) {
   }
   const hops = chain.length
   const ok = hops <= 1 && status === 200
-  const permanent = chain.every((c) => c.includes('-308->') || c.includes('-307->'))
-  const good = ok && (hops === 0 || permanent)
+  // 301/308 ONLY. This used to accept 307 under a variable named `permanent`,
+  // which meant the script guarding the redirect map could not fail the single
+  // property the /verify ruling turns on: a 307 tells Google the URL is coming
+  // back, and it is not. Every legacy URL that must transfer its signal has to
+  // be permanent; a temporary redirect here is a silent ranking loss.
+  const declaredInterim = Object.prototype.hasOwnProperty.call(INTERIM_TEMPORARY, u)
+  const permanent = declaredInterim
+    ? chain.every((c) => c.includes('-307->') || c.includes('-302->'))
+    : chain.every((c) => c.includes('-308->') || c.includes('-301->'))
+  // A redirect Googlebot is forbidden to fetch is never followed, so a URL that
+  // is BOTH disallowed and redirected is the "indexed though blocked" recipe —
+  // and the old script printed a green ok for exactly that.
+  const blocked = isDisallowed(u)
+  const good = ok && (hops === 0 || permanent) && !(hops > 0 && blocked)
 
   if (good) {
-    console.log(`ok      ${u}  hops=${hops} final=${status}${hops ? '  ' + chain.join(' | ') : ''}`)
+    const tag = declaredInterim ? 'interim' : 'ok    '
+    console.log(`${tag}  ${u}  hops=${hops} final=${status}${hops ? '  ' + chain.join(' | ') : ''}${declaredInterim ? '  — ' + INTERIM_TEMPORARY[u] : ''}`)
   } else if (isPending(u)) {
     pending++
     console.log(`PENDING ${u}  hops=${hops} final=${status}  ${chain.join(' | ')}  (Phase 3)`)

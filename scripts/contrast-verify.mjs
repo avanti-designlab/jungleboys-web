@@ -62,15 +62,23 @@ for (const { mobile, theme, items } of groups.values()) {
 
     await b.evaluate(PROBE)
     // Centre the target and let its reveal finish.
+    // Match on class as well as tag+text, and prefer an exact class match.
+    // Tag+text alone is ambiguous 307 times across these routes — on
+    // /products/all-in-one it silently returned a 272px aria-hidden watermark
+    // in place of the 11px rail label that shares its wording, and reported a
+    // confident ratio for the wrong element.
     const placed = await b.evaluate(`(async () => {
-      const want = ${JSON.stringify(f.text)};
-      const el = [...document.querySelectorAll(${JSON.stringify(f.tag)})].find(e => {
+      const want = ${JSON.stringify(f.text)}, wantCls = ${JSON.stringify(f.cls || '')};
+      const cands = [...document.querySelectorAll(${JSON.stringify(f.tag)})].filter(e => {
         let t=''; for (const n of e.childNodes) if (n.nodeType===3) t += n.nodeValue;
         return t.replace(/\\s+/g,' ').trim().slice(0,60) === want;
       });
-      if (!el) return false;
+      if (!cands.length) return false;
+      const cls = e => String(e.className && e.className.baseVal !== undefined ? e.className.baseVal : (e.className || '')).slice(0, 90);
+      const el = cands.find(e => cls(e) === wantCls) || cands[0];
       el.scrollIntoView({ block: 'center', behavior: 'instant' });
       window.__DG_TARGET = el;
+      window.__DG_AMBIG = cands.length;
       return true;
     })()`)
     if (!placed) { results.push({ ...f, verified: null, note: 'element not found when centred' }); continue }
@@ -104,6 +112,20 @@ for (const { mobile, theme, items } of groups.values()) {
 
     const e = els[idx], s = sampled[idx]
     if (!s || !s.cands.length) { results.push({ ...f, verified: null, note: 'no ground sampled' }); continue }
+
+    // REFUSE to report if the element we centred is not the one the sweep saw.
+    // Matching found a candidate; this proves it is the right one. Without it a
+    // confident number can belong to a completely different element — the exact
+    // failure that made a 272px watermark masquerade as an 11px label.
+    const drift = []
+    if (f.fs != null && Math.abs(e.fs - f.fs) > 0.6) drift.push(`font-size ${f.fs}->${e.fs}`)
+    if (f.fw != null && e.fw !== f.fw) drift.push(`weight ${f.fw}->${e.fw}`)
+    if (f.ariaHidden != null && e.ariaHidden !== f.ariaHidden) drift.push(`aria-hidden ${f.ariaHidden}->${e.ariaHidden}`)
+    if (drift.length) {
+      results.push({ ...f, verified: null,
+        note: `identity mismatch — centred a different element (${drift.join(', ')})` })
+      continue
+    }
     const alpha = e.rgba[3] * e.opacity
     let pool = s.cands.filter((c) => c.share >= 0.2)
     if (!pool.length) pool = [{ rgb: s.mean, share: -1 }]

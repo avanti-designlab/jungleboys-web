@@ -179,18 +179,33 @@ const GtFire = forwardRef<GtFireHandle, Props>(function GtFire(
       }
     }
 
-    // settle the sim so the first painted frame is already alive
-    for (let i = 0; i < (vapor ? 140 : 90); i++) step()
+    // Settle the sim so the first painted frame is already alive.
+    //
+    // Two things matter about WHERE this runs. It used to sit above the reduce
+    // check, so a reduced-motion visitor paid all 90/140 full-grid iterations
+    // for a single static frame. And running it synchronously here put the work
+    // inside the navigation commit: two GtFire instances mount on this route, so
+    // a keyboard-activated client-side transition into it measured a 422ms long
+    // task against a 456ms INP — roughly 4.9M cell updates before the browser
+    // could respond. A reduced pass is enough to look alive when nothing moves;
+    // the full warm-up now happens off the commit path.
+    const warm = (n: number) => { for (let i = 0; i < n; i++) step() }
 
-    if (reduce) return
+    if (reduce) {
+      warm(vapor ? 24 : 16)
+      return
+    }
 
     let raf = 0
+    let warmed = false
     let last = 0
     let visible = true
     const loop = (now: number) => {
       raf = requestAnimationFrame(loop)
       if (!visible || now - last < FRAME_MS) return
       last = now
+      // first animated frame absorbs the settle, after the commit has landed
+      if (!warmed) { warmed = true; warm(vapor ? 140 : 90) }
       step()
     }
     raf = requestAnimationFrame(loop)

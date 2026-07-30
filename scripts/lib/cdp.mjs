@@ -14,6 +14,11 @@ export const wait = (ms) => new Promise((r) => setTimeout(r, ms))
 export async function launch({
   port = 9411, width = 1440, height = 900, mobile = false, theme = 'light',
   reducedMotion = false,
+  // 'closed' (default) seeds every overlay dismissed so page content is
+  // measurable. 'age-gate' deliberately leaves the gate UP and does not click
+  // through it, because otherwise that surface can never be measured at all —
+  // which is how its 21+ line sat at 4.31:1 in the DEFAULT theme unnoticed.
+  overlays = 'closed',
 } = {}) {
   const args = [
     `--headless=new`, `--remote-debugging-port=${port}`, '--no-first-run',
@@ -69,7 +74,8 @@ export async function launch({
   const seed = `try{
     localStorage.setItem('jb-newsletter','1');
     localStorage.setItem('jb-cookie-consent','accepted');
-    localStorage.setItem('jb-age-gate', JSON.stringify({verifiedAt: Date.now()}));
+    ${overlays === 'age-gate' ? `localStorage.removeItem('jb-age-gate');`
+      : `localStorage.setItem('jb-age-gate', JSON.stringify({verifiedAt: Date.now()}));`}
     localStorage.setItem('jb-theme', ${JSON.stringify(theme)});
     sessionStorage.setItem('jb-intro-done','1');
   }catch(e){}`
@@ -98,9 +104,11 @@ export async function launch({
     }
     if (!ok) throw new Error('navigation never committed: ' + url)
     await wait(settle)
-    await evaluate(`(() => {
-      const b=[...document.querySelectorAll('button')].find(x=>/^\\s*yes/i.test(x.textContent||''));
-      if(b){b.click();return true} return false })()`)
+    if (overlays !== 'age-gate') {
+      await evaluate(`(() => {
+        const b=[...document.querySelectorAll('button')].find(x=>/^\\s*yes/i.test(x.textContent||''));
+        if(b){b.click();return true} return false })()`)
+    }
     await wait(1600)
 
     // HARD ASSERT the theme landed. Emulation.setEmulatedMedia does nothing
@@ -145,9 +153,28 @@ function wsConnect(url) {
     let up = false, buf = Buffer.alloc(0), acc = Buffer.alloc(0)
     const waiting = new Map()
     let id = 0
-    const send = (method, params = {}) => new Promise((res) => {
+    // Every call gets a deadline and a reject path.
+    //
+    // Without them a single lost round-trip hangs forever: Chrome's DevTools
+    // endpoint can stop answering while the process stays alive, and the whole
+    // run then sits at 0% CPU looking exactly like work in progress. For a gate
+    // instrument that is the worst available failure mode — a hang is
+    // indistinguishable from "still measuring", and it orphans the browser too.
+    const CALL_TIMEOUT = Number(process.env.CDP_TIMEOUT_MS || 60000)
+    const settle = (mid, fn, arg) => {
+      const e = waiting.get(mid)
+      if (!e) return
+      clearTimeout(e.timer)
+      waiting.delete(mid)
+      fn(arg)
+    }
+    const send = (method, params = {}) => new Promise((res, rej) => {
       const mid = ++id
-      waiting.set(mid, res)
+      const timer = setTimeout(
+        () => settle(mid, rej, new Error(`CDP timeout after ${CALL_TIMEOUT}ms: ${method}`)),
+        CALL_TIMEOUT,
+      )
+      waiting.set(mid, { res, rej, timer })
       const payload = Buffer.from(JSON.stringify({ id: mid, method, params }))
       const mask = crypto.randomBytes(4)
       let header
@@ -188,10 +215,15 @@ function wsConnect(url) {
         acc = Buffer.alloc(0)
         try {
           const msg = JSON.parse(frame)
-          if (msg.id && waiting.has(msg.id)) { waiting.get(msg.id)(msg); waiting.delete(msg.id) }
+          if (msg.id && waiting.has(msg.id)) settle(msg.id, waiting.get(msg.id).res, msg)
         } catch {}
       }
     })
-    sock.on('error', reject)
+    // Chrome going away must fail every in-flight call, not strand it.
+    const failAll = (why) => {
+      for (const mid of [...waiting.keys()]) settle(mid, waiting.get(mid).rej, new Error(why))
+    }
+    sock.on('close', () => failAll('CDP socket closed (Chrome went away)'))
+    sock.on('error', (e) => { failAll('CDP socket error: ' + e.message); reject(e) })
   })
 }

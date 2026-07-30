@@ -130,48 +130,103 @@
     }
     return [x0, y0, x1, y1]
   }
-  // Elements pinned over the page (the sticky header, the mobile tab bar)
-  // paint ON TOP of text that scrolls under them. In the ground plate that
-  // reads as "white text on brand yellow 1.48:1" when the truth is that the
-  // text is not visible there at all — it is behind the yellow SHOP pill.
-  function occluders(el) {
-    const out = []
-    for (const e of document.querySelectorAll('body *')) {
-      const c = getComputedStyle(e)
-      if (c.position !== 'fixed' && c.position !== 'sticky') continue
-      if (c.visibility === 'hidden' || parseFloat(c.opacity) === 0) continue
-      if (e.contains(el)) continue
-      const r = e.getBoundingClientRect()
-      if (r.width < 4 || r.height < 4) continue
-      out.push(r)
-    }
-    return out
+  // Is this point actually the element's own pixel, or is something painted on
+  // top of it?
+  //
+  // This replaces a geometric "any fixed/sticky box that overlaps counts as
+  // covering" heuristic, which was wrong in both directions:
+  //   - FALSE POSITIVE: on the homepage the `sticky top-0 h-svh` hero deck
+  //     overlaps everything, so measuring the age-gate overlay trimmed every
+  //     glyph box to nothing and the gate reported ZERO elements. A compliance
+  //     surface failing AA in light mode hid behind that for the whole build.
+  //   - FALSE NEGATIVE: it only considered fixed/sticky, so two normally
+  //     positioned "Shop now" pills stacked at the same rect (z-2 and z-3) both
+  //     measured, and the buried one scored against the slide painted over it.
+  // Hit-testing asks the compositor instead of guessing from geometry, so it
+  // gets stacking order right without enumerating anything.
+  // Does this element actually PAINT, or is it just a box in the hit-test tree?
+  // elementFromPoint answers "what would receive the click", which is not the
+  // same question: a transparent layout wrapper sitting over text captures the
+  // hit while painting nothing, and the text below it is perfectly visible.
+  // Treating that as occlusion drops real findings — the gt-difference rail
+  // labels vanished entirely that way, which is a worse failure than the
+  // phantom it was meant to fix.
+  function paints(e) {
+    const c = getComputedStyle(e)
+    if (c.backgroundImage !== 'none') return true
+    if (c.backdropFilter && c.backdropFilter !== 'none') return true
+    const bg = DG.parse(c.backgroundColor)
+    if (bg && bg[3] > 0.02) return true
+    return false
   }
+  function hitsSelf(el, x, y) {
+    const hit = document.elementFromPoint(x, y)
+    if (!hit) return false
+    if (hit === el || el.contains(hit)) return true
+    // Walk up from whatever was hit. An ancestor shared with `el` paints BEHIND
+    // the text, not over it, so stop there and call it visible.
+    let p = hit
+    while (p && p !== document.documentElement) {
+      if (p.contains(el)) return true
+      if (paints(p)) return false
+      p = p.parentElement
+    }
+    return true
+  }
+  // Keep a clipped box only if the element actually owns most of its pixels.
+  // 5x3 probe grid inset from the edges, so a 1px border or an antialiased
+  // glyph edge does not decide it.
+  function keepIfVisible(el, l, t, r, bt, boxes) {
+    if (r - l < 3 || bt - t < 3) return
+    let hits = 0, total = 0
+    for (let iy = 0; iy < 3; iy++) {
+      for (let ix = 0; ix < 5; ix++) {
+        const x = l + ((r - l) * (ix + 0.5)) / 5
+        const y = t + ((bt - t) * (iy + 0.5)) / 3
+        total++
+        if (hitsSelf(el, x, y)) hits++
+      }
+    }
+    if (hits / total < 0.5) return
+    boxes.push([Math.round(l), Math.round(t), Math.round(r - l), Math.round(bt - t)])
+  }
+
   DG.boxesFor = function (el) {
     const [cx0, cy0, cx1, cy1] = clipRect(el)
-    const occ = occluders(el)
     const boxes = []
     for (const n of el.childNodes) {
       if (n.nodeType !== 3 || !n.nodeValue.trim()) continue
       const rg = document.createRange()
       rg.selectNodeContents(n)
       for (const q of rg.getClientRects()) {
-        const l = Math.max(q.left, cx0, 0)
-        let t = Math.max(q.top, cy0, 0)
-        const r = Math.min(q.right, cx1, innerWidth)
-        let bt = Math.min(q.bottom, cy1, innerHeight)
-        // trim the band an overlapping pinned element covers
-        for (const o of occ) {
-          if (o.right <= l || o.left >= r || o.bottom <= t || o.top >= bt) continue
-          if (o.top <= t && o.bottom >= bt) { t = bt; break }
-          if (o.top <= t) t = Math.max(t, o.bottom)
-          else if (o.bottom >= bt) bt = Math.min(bt, o.top)
-          else { t = bt; break } // occluder splits the line: give up on it
-        }
-        if (r - l < 3 || bt - t < 3) continue
-        boxes.push([Math.round(l), Math.round(t), Math.round(r - l), Math.round(bt - t)])
+        keepIfVisible(el,
+          Math.max(q.left, cx0, 0), Math.max(q.top, cy0, 0),
+          Math.min(q.right, cx1, innerWidth), Math.min(q.bottom, cy1, innerHeight), boxes)
       }
     }
+    return boxes
+  }
+
+  // ---- placeholders ----------------------------------------------------
+  // ::placeholder is not a text node, so the collector above cannot see it and
+  // never has. On /contact the visible labels are sr-only, which makes the
+  // placeholder the ONLY label a sighted user gets — and it measured 3.25:1.
+  // The glyph run is approximated by the input's content box: placeholders are
+  // single-line and the ground under a field is flat, so the box is the ground.
+  DG.placeholderBoxes = function (el) {
+    const cs = getComputedStyle(el)
+    const q = el.getBoundingClientRect()
+    const [cx0, cy0, cx1, cy1] = clipRect(el)
+    const padL = parseFloat(cs.paddingLeft) || 0
+    const padR = parseFloat(cs.paddingRight) || 0
+    const padT = parseFloat(cs.paddingTop) || 0
+    const fs = parseFloat(cs.fontSize) || 16
+    // one line's worth, starting at the top padding edge
+    const top = el.tagName === 'TEXTAREA' ? q.top + padT : q.top + (q.height - fs * 1.2) / 2
+    const boxes = []
+    keepIfVisible(el,
+      Math.max(q.left + padL, cx0, 0), Math.max(top, cy0, 0),
+      Math.min(q.right - padR, cx1, innerWidth), Math.min(top + fs * 1.2, cy1, innerHeight), boxes)
     return boxes
   }
 
@@ -228,6 +283,41 @@
       })
       if (out.length > 900) break
     }
+
+    // Second pass: ::placeholder text on empty fields. Only empty ones — a
+    // field with a value paints the value, not the placeholder.
+    for (const el of document.querySelectorAll('input[placeholder], textarea[placeholder]')) {
+      if (el.value) continue
+      const cs = getComputedStyle(el)
+      if (cs.display === 'none' || cs.visibility === 'hidden') continue
+      const ph = getComputedStyle(el, '::placeholder')
+      const col = DG.parse(ph.color || cs.color)
+      if (!col) continue
+      const boxes = DG.placeholderBoxes(el)
+      if (!boxes.length) continue
+      let op = 1, p = el, hidden = false
+      while (p && p !== document.documentElement) {
+        const pcs = getComputedStyle(p)
+        op *= parseFloat(pcs.opacity)
+        if (pcs.visibility === 'hidden') hidden = true
+        p = p.parentElement
+      }
+      if (hidden) continue
+      const fs = parseFloat(ph.fontSize || cs.fontSize)
+      const fw = parseInt(ph.fontWeight || cs.fontWeight, 10) || 400
+      const r = el.getBoundingClientRect()
+      out.push({
+        i: out.length, tag: el.tagName.toLowerCase() + '::placeholder',
+        text: (el.getAttribute('placeholder') || '').slice(0, 60),
+        cls: String(el.className || '').slice(0, 90),
+        color: ph.color || cs.color, rgba: col, opacity: +op.toFixed(3), ariaHidden: false,
+        fs: +fs.toFixed(1), fw, large: fs >= 24 || (fs >= 18.66 && fw >= 700),
+        stroke: '', shadow: '', mixBlend: 'normal', bgClip: 'border-box',
+        rect: [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)],
+        boxes, el, isPlaceholder: true,
+      })
+    }
+
     DG._els = out
     return out.map(({ el, ...rest }) => rest)
   }
@@ -245,7 +335,8 @@
       // border, image, gradient and glow exactly where it is.
       s.textContent = `*, *::before, *::after { color: transparent !important;
         -webkit-text-stroke-color: transparent !important; text-shadow: none !important;
-        text-decoration-color: transparent !important; caret-color: transparent !important; }`
+        text-decoration-color: transparent !important; caret-color: transparent !important; }
+        *::placeholder { color: transparent !important; }`
     } else if (s) s.remove()
     return true
   }
@@ -299,7 +390,9 @@
   // scrubbed tracks keep moving; rects read seconds earlier point at ground
   // the text has already left.
   DG.refreshRects = function () {
-    for (const e of DG._els) e.boxes = DG.boxesFor(e.el)
+    for (const e of DG._els) {
+      e.boxes = e.isPlaceholder ? DG.placeholderBoxes(e.el) : DG.boxesFor(e.el)
+    }
     return { scrollY: Math.round(scrollY), h: document.documentElement.scrollHeight }
   }
 

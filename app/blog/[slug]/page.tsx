@@ -66,12 +66,27 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   // and our CSP's `script-src 'unsafe-inline'` is exactly what lets it run.
   // Document sanitised BEFORE the renderer (attribute NAMES are not escaped by
   // it), then the output pass for link schemes.
+  // The raw-HTML path is gated on PROVENANCE, not on shape. `typeof body ===
+  // 'string'` was a proxy for "this is a hardcoded sample", and it is not one:
+  // getBlogPost() returns story.content.body straight from the CMS, and a
+  // Markdown or Textarea field — both natural choices for a field called
+  // "body" — returns a string too. That routed CMS content around
+  // sanitizeRichTextDoc into dangerouslySetInnerHTML, where `<img src=x
+  // onerror=...>` survived intact and our CSP's script-src 'unsafe-inline'
+  // would run it. Inert only while every CMS call 401s; armed the moment the
+  // Storyblok region is corrected.
+  const rawIsTrusted = isSamplePost(slug) && typeof post.body === 'string'
   const html = sanitizeRichTextHtml(
-    typeof post.body === 'string'
-      ? post.body
-      : post.body
-        ? renderRichText(sanitizeRichTextDoc(post.body) as never)
-        : ''
+    rawIsTrusted
+      ? (post.body as string)
+      : typeof post.body === 'string'
+        // A CMS string body is NOT richtext and must never reach the raw path,
+        // so it renders as escaped text rather than markup.
+        ? String(post.body).replace(/[&<>"']/g, (ch) =>
+            ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch] as string)
+        : post.body
+          ? renderRichText(sanitizeRichTextDoc(post.body) as never)
+          : ''
   )
   const mins = readingTime(html)
 

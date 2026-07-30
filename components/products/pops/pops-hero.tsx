@@ -154,12 +154,17 @@ export default function PopsHero() {
             className="pops-word-cell font-display whitespace-nowrap uppercase leading-[0.8] text-[var(--pops-ink)]"
             style={{ fontSize: 'var(--pops-word-size)' }}
           >
-            {/* the space is a zero-content spacer span, so the h1's text node
-                reads "5GPOPS"; this restores the real phrase for extraction */}
-            <span className="sr-only">5G Pops</span>
+            {/* No duplicate sr-only phrase here. Adding one alongside the
+                per-letter spans made the h1 extract as "5G Pops5GPOPS" — the
+                aria-label above already supplies the accessible name, and
+                Google ignores aria-label and reads the DOM text. All the
+                visible run needs is a REAL space at the gap. The 10-Pack
+                pattern cannot be copied wholesale here because that heading
+                splits on words; this one splits on letters, so dropping
+                aria-hidden would expose a run of single-letter spans. */}
             {WORD.split('').map((ch, i) =>
               ch === ' ' ? (
-                <span key={i} className="pops-gap" aria-hidden />
+                <span key={i} className="pops-gap" aria-hidden>{' '}</span>
               ) : (
                 <span
                   key={i}

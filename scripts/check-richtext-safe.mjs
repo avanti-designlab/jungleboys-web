@@ -34,6 +34,14 @@ const ATTR_VECTORS = [
   ['textStyle css-injection', { type:'doc', content:[{ type:'paragraph', content:[
     { type:'text', text:'overlay', marks:[{ type:'textStyle',
       attrs:{ color:'red; position:fixed; inset:0; z-index:99999; background:#fff' } }] }]}]}],
+  // Same clickjack as the textStyle vector, smuggled through the attribute
+  // sitting NEXT to the one that was constrained. Tailwind's utilities are
+  // already in the shipped stylesheet, so an author needs no CSS of their own —
+  // `class` was allowed by name with no value check while `color` beside it was
+  // validated. Borrowing the positioning utilities is a full-viewport overlay.
+  ['class tailwind-overlay', { type:'doc', content:[
+    { type:'paragraph', attrs:{ class:'fixed inset-0 z-50 bg-black h-screen w-full' },
+      content:[{ type:'text', text:'FREE DROP — CLICK HERE' }] }]}],
 ]
 
 const ATTACKS = [
@@ -64,6 +72,9 @@ for (const [name, d] of ATTR_VECTORS) {
   const out = render(d)
   const leaked = /\son[a-z]+=/i.test(out) || /<img[^>]*onerror/i.test(out)
     || /position:\s*fixed/i.test(out) || /<a[^>]*\sq"/i.test(out)
+    // positioning/stacking/sizing utilities surviving in a class attribute are
+    // an overlay regardless of whether any inline CSS came with them
+    || /class="[^"]*(?:^|\s)(?:fixed|absolute|sticky|inset-\S+|z-\d+|h-screen|w-full)(?:\s|")/i.test(out)
   if (leaked) bad++
   console.log(`  ${leaked ? '*** LEAKED ***' : 'BLOCKED'}  ${name.padEnd(28)} -> ${out.slice(0,88)}`)
 }

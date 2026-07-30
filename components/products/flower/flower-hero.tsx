@@ -58,13 +58,17 @@ export default function FlowerHero() {
         <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_50%_45%,transparent_0%,rgba(0,0,0,0.82)_100%)]" />
 
         {/* headline — near full-screen stack */}
-        <h1 data-fl-words className="relative z-10 select-none text-center">
-          {/* PREMIUM and CANNABIS are separate blocks of per-letter spans, so no
-              space survives between them in the text node */}
-          <span className="sr-only">Premium Cannabis</span>
+        {/* aria-label supplies the accessible name for a heading built from
+            per-letter spans. The sr-only phrase that used to sit here did the
+            same job for screen readers but ALSO duplicated the heading for
+            crawlers — it extracted as "Premium CannabisPREMIUMCANNABIS". Google
+            ignores aria-label and reads the DOM text, so the per-line space
+            below is what it needs. */}
+        <h1 data-fl-words aria-label="Premium Cannabis" className="relative z-10 select-none text-center">
           <span className="fl-zoom font-display block uppercase text-white" style={{ fontSize: 'min(26vw, 48vh, 24rem)' }}>
             {LINES.map((line, lineIdx) => (
               <span key={line} className="block">
+                {lineIdx > 0 && <span className="sr-only"> </span>}
                 {line.split('').map((ch) => (
                   <span
                     key={li}

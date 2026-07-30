@@ -3,7 +3,7 @@
 // Every generator returns a plain object; render with <JsonLd data={...} />.
 // Owned by the SEO/Schema agent. Add generators here, never inline in pages.
 
-import type { Location, Product } from '@/lib/dutchie'
+import type { Product } from '@/lib/dutchie'
 import { SOCIALS } from '@/lib/site-config'
 
 const SITE_URL = 'https://www.jungleboys.com'
@@ -47,35 +47,20 @@ export function websiteSchema() {
   }
 }
 
-export function storeSchema(location: Location) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Store',
-    name: location.name,
-    url: `${SITE_URL}/menu/${location.state === 'CA' ? 'california' : 'florida'}/${location.slug}`,
-    telephone: location.phone,
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: location.address,
-      addressLocality: location.city,
-      addressRegion: location.state,
-      postalCode: location.zip,
-      addressCountry: 'US',
-    },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: location.lat,
-      longitude: location.lng,
-    },
-    openingHoursSpecification: location.hours.map((h) => ({
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: h.day,
-      opens: h.opens,
-      closes: h.closes,
-    })),
-  }
-}
+// storeSchema() DELETED (2026-07-30). It was dead — /locations hand-rolls its
+// own Store nodes — and it still carried the exact `url` bug that was fixed
+// inline there, so the next person to "do it properly" would have reintroduced
+// it. It was also typed against the Dutchie `Location` shape, which nothing
+// supplies: /locations renders `OwnedStore`, whose hours are a display string
+// ('8:30AM - 8:30PM Mon-Sat'), so its openingHoursSpecification could never
+// have populated. Rebuilding it needs a DATA change first — structured hours
+// and a parsed address on OwnedStore in lib/owned-stores.ts — not a schema one.
 
+// NOT WIRED. Unlike the two generators above this is not a duplicate — no page
+// emits Product structured data yet, so there is nothing for it to drift from.
+// It is Phase 3 scaffolding against the frozen Dutchie contract; the commerce
+// agent wires it when the shop templates land. Do not treat its existence as
+// evidence that product schema is shipping.
 export function productSchema(product: Product) {
   const lowest = Math.min(...product.variants.map((v) => v.specialPrice ?? v.price))
   const available = product.variants.some((v) => (v.quantityAvailable ?? 0) > 0)
@@ -123,26 +108,10 @@ export function faqSchema(faqs: { question: string; answer: string }[]) {
   }
 }
 
-export function articleSchema(post: {
-  title: string
-  slug: string
-  description?: string
-  image?: string
-  publishedAt: string
-  updatedAt?: string
-}) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: post.description,
-    image: post.image,
-    url: `${SITE_URL}/blog/${post.slug}`,
-    datePublished: post.publishedAt,
-    dateModified: post.updatedAt ?? post.publishedAt,
-    publisher: { '@type': 'Organization', name: BRAND },
-  }
-}
+// articleSchema() DELETED (2026-07-30). Dead, and strictly WORSE than the
+// inline BlogPosting in app/blog/[slug]/page.tsx, which carries `author` and
+// `mainEntityOfPage` that this one lacked. Adopting it would have been a
+// downgrade dressed up as consolidation.
 
 export function videoSchema(video: {
   title: string
