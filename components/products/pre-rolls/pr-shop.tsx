@@ -15,7 +15,9 @@ export default function PrShop() {
       titleAccent="1G Pre-Rolls"
       panel="#f2faf4"
       ink="var(--pr-shop-ink)"
-      accent="var(--pr-green)"
+      // the kicker renders in `accent` on the #f2faf4 panel, where --pr-green is
+      // 3.21:1. The deep end of the same ramp is the same hue and clears AA.
+      accent="var(--pr-green-deep)"
       accentHot="var(--pr-green)"
       cardFrom="var(--pr-green-hot)"
       cardMid="var(--pr-green)"

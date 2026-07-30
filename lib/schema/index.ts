@@ -4,6 +4,7 @@
 // Owned by the SEO/Schema agent. Add generators here, never inline in pages.
 
 import type { Location, Product } from '@/lib/dutchie'
+import { SOCIALS } from '@/lib/site-config'
 
 const SITE_URL = 'https://www.jungleboys.com'
 const BRAND = 'Jungle Boys'
@@ -22,12 +23,13 @@ export function organizationSchema() {
     name: BRAND,
     url: SITE_URL,
     logo: `${SITE_URL}/logo.png`,
-    sameAs: [
-      'https://www.instagram.com/jungleboys',
-      'https://www.youtube.com/@jungleboys',
-      'https://x.com/jungleboys',
-      'https://www.tiktok.com/@jungleboys',
-    ],
+    // DERIVED, never retyped. The hand-written list here had @jungleboys for
+    // YouTube and X — the real accounts are @JungleBoysfilms and
+    // @jungleboysdrops — plus a TikTok that does not exist. sameAs is how
+    // Google reconciles the site with the brand's other profiles, so a wrong
+    // handle in it actively works against the entity match. Sourcing it from
+    // the footer's own list means it cannot drift again.
+    sameAs: SOCIALS.map((s) => s.href),
   }
 }
 

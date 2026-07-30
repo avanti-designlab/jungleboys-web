@@ -113,7 +113,7 @@ export default async function LineShop({
                       style={{ background: `linear-gradient(180deg,#ffffff 0%,${shotTo} 100%)` }}
                     >
                       {deal ? (
-                        <span className="absolute left-3 top-3 z-20 rounded-full bg-[var(--color-danger)] px-3 py-1 text-[11px] font-extrabold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
+                        <span className="absolute left-3 top-3 z-20 rounded-full bg-[var(--color-danger-solid)] px-3 py-1 text-[11px] font-extrabold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
                           {pctOff}% off
                         </span>
                       ) : null}

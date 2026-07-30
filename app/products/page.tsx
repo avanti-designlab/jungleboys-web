@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/storyblok/seo'
 import ProductsCollection from '@/components/products/products-collection'
-import { PRODUCT_LINES } from '@/lib/products'
+import { PRODUCT_LINES, isPlaceholderLine } from '@/lib/products'
 import { jsonLdHtml, breadcrumbSchema, itemListSchema } from '@/lib/schema'
 
 // Products — the curated Jungle Boys collection (JB-only lines), separate from
@@ -18,9 +18,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function ProductsPage() {
   // via the generator, never hand-rolled — the inline version here hardcoded
   // the preview domain while the breadcrumb beside it used the real one
+  // Same exclusion the sitemap applies. Rosin and ORC render the generic
+  // placeholder and are noindex, so listing them here contradicted both.
   const itemList = itemListSchema(
     'Jungle Boys Products',
-    PRODUCT_LINES.map((l) => ({ name: l.name, path: `/products/${l.slug}` }))
+    PRODUCT_LINES.filter((l) => !isPlaceholderLine(l.slug))
+      .map((l) => ({ name: l.name, path: `/products/${l.slug}` }))
   )
 
   return (

@@ -48,6 +48,15 @@ const HASH_EACH_SIDE: PopOut[] = [
 ]
 const POPS_NUGS = [1, 2, 3, 4, 5, 6].map((n) => `/products/fx/pops-${n}.webp`)
 
+// The two lines that still render the generic placeholder (Avanti, 2026-07-28:
+// keep them live, possibly merging into "Jungle Boys Extracts"). They are
+// noindex, so they must also stay out of the sitemap AND the ItemList — which
+// are two different files, which is exactly how the two lists drifted apart.
+// One definition, both consumers.
+export const PLACEHOLDER_LINES = ['rosin', 'orc'] as const
+export const isPlaceholderLine = (slug: string) =>
+  (PLACEHOLDER_LINES as readonly string[]).includes(slug)
+
 export const PRODUCT_LINES: ProductLine[] = [
   {
     slug: 'all-in-one',

@@ -1,10 +1,12 @@
 // Site-wide navigation + brand config. Edit here, never inline in components.
 
-const CDN = 'https://cdn.prod.website-files.com/6981ad8672f6252d7d7bb320'
-
+// ON-DOMAIN. These were served from the Webflow CDN, which is the very host the
+// rebuild replaces: the day that Webflow site is torn down, the new site's own
+// header logo 404s. Vector kept as vector — the header renders it at a different
+// size at every breakpoint.
 export const BRAND_ASSETS = {
-  logoWhite: `${CDN}/69bd11bc7c3329f84fc63900_JB-Stacked-Logo-R-White.svg`,
-  logoBlack: `${CDN}/69bd11bc658e8d5d5b06e952_JB-Stacked-Logo-R-Black.svg`,
+  logoWhite: '/brand/jb-stacked-white.svg',
+  logoBlack: '/brand/jb-stacked-black.svg',
 } as const
 
 export const NAV_LINKS = [
@@ -46,13 +48,6 @@ export const MENU_COLUMNS: { label: string; href: string; external?: boolean }[]
   ],
 ]
 
-export const FOOTER_LINKS = [
-  { label: 'Terms', href: '/terms' },
-  { label: 'Privacy', href: '/privacy' },
-  { label: 'FAQ', href: '/faq' },
-  { label: 'Verify Product', href: '/auth' },
-] as const
-
 export const SOCIALS = [
   { label: 'Instagram', href: 'https://www.instagram.com/jungleboys' },
   { label: 'Drops IG', href: 'https://www.instagram.com/jungleboysdrops' },
@@ -80,10 +75,10 @@ export const FOOTER_NAV = [
   { label: 'Wholesale', href: '/wholesale' },
   { label: 'Contact', href: '/contact' },
   { label: 'Locations', href: '/locations' },
-  // FAQ was reachable ONLY from sitemap.xml — it sat in a FOOTER_LINKS export
-  // that nothing imported, so it had zero internal links from any rendered
-  // page. A page a crawler can only reach via the sitemap gets crawled slowly
-  // and ranks accordingly.
+  // FAQ was reachable ONLY from sitemap.xml — it sat in a dead export that
+  // nothing imported, so it had zero internal links from any rendered page. A
+  // page a crawler can only reach via the sitemap gets crawled slowly and
+  // ranks accordingly. (That export is now deleted.)
   { label: 'FAQ', href: '/faq' },
 ] as const
 

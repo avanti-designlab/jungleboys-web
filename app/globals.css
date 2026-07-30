@@ -32,13 +32,6 @@
   --strain-sativa-on-dark: #ff8a4c;  /* 7.74:1 */
   --strain-hybrid-on-dark: #43d16f;  /* 9.11:1 */
 
-  /* THEME-AWARE pair, for the one surface whose panel follows the theme
-     (flower-shop sits on --color-background). Fixed brand panels must keep
-     using the explicit sets above — they are dark in BOTH themes, so a
-     theme-aware value would be wrong there half the time. */
-  --strain-indica-auto: var(--strain-indica);
-  --strain-sativa-auto: var(--strain-sativa);
-  --strain-hybrid-auto: var(--strain-hybrid);
 
   /* color — LIGHT theme is the site default (Avanti 2026-07-19) */
   --color-background: #f7f7f7;
@@ -227,12 +220,14 @@ body {
   /* semantic status colors — darkened for AA on the light bg, vivid in dark */
   --color-success: #0c6e2f;
   --color-danger: #c21f1f;
+  /* FIXED, not theme-varying: for a filled badge with white text sitting on a
+     surface that is light in both themes. --color-danger flips to #ef4444 in
+     dark, which is right for error TEXT on a dark ground and wrong here — it
+     took the % off badge to 3.76:1 while the badge's own ground never moved. */
+  --color-danger-solid: #c21f1f;
   --color-warning: #8a5300;
 }
 [data-theme='dark'] {
-  --strain-indica-auto: var(--strain-indica-on-dark);
-  --strain-sativa-auto: var(--strain-sativa-on-dark);
-  --strain-hybrid-auto: var(--strain-hybrid-on-dark);
   --color-accent-ink: #fecf0e;
   --color-success: #22c55e;
   --color-danger: #ef4444;
@@ -248,8 +243,16 @@ input:focus-visible,
 textarea:focus-visible,
 select:focus-visible,
 [tabindex]:focus-visible {
+  /* TWO-TONE, and it has to be. A single yellow ring is 1.48:1 on white — it
+     fails WCAG 1.4.11 on the default theme, which is most of the site. But
+     yellow is also the only ring that reads on the dark brand surfaces (menu
+     overlay, footer, age gate), where an ink ring would vanish.
+     So: ink ring hugging the element, yellow ring just outside it. Whichever
+     ground the element sits on, the ring's outer edge clears 3:1 against it —
+     ink 17.9:1 on white, yellow 12.6:1 on the brand black. */
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--color-ink);
   border-radius: 3px;
 }
 
@@ -259,6 +262,11 @@ select:focus-visible,
 [data-theme='dark'] .light-hide { display: none; }
 
 
+/* The head script sets .jb-no-intro before first paint on a return visit or
+   under reduced motion. Hiding the panels in CSS means the visitor never sees
+   them at all, instead of waiting for hydration to unmount them. */
+html.jb-no-intro .jb-intro { display: none; }
+
 /* ── PAGE TOKENS AND GROUNDS — deliberately OUTSIDE any motion query ───────
    These were declared inside @media (prefers-reduced-motion: no-preference).
    A visitor with reduce set therefore had --hh-L undefined, so every
@@ -266,7 +274,11 @@ select:focus-visible,
    Hole product group rendered 0x0 — the joint carries real alt text, so that
    is content loss, not a lost animation. Pops likewise lost its brand palette
    AND its white ground. Only animation belongs in a motion query. */
-  .pops-page { --pops-red: #c80000; --pops-red-deep: #9c0000; --pops-ink: #16090a; }
+  .pops-page { --pops-red: #c80000; --pops-red-deep: #9c0000; --pops-ink: #16090a;
+    /* #c80000 is the FILL red (white on it = 6.5:1). As TEXT on the #161618
+       card it is 2.97:1. Lightened + slightly desaturated to 4.61:1; full
+       saturation would have hit the ratio at #ff1212, which reads neon. */
+    --pops-red-on-dark: #ea4242; }
   .pops-page { background: #fff; }
   .hh-unbox { --hh-L: 68vw; }
   @media (min-width: 768px) {
@@ -1259,6 +1271,9 @@ body:has(.gt-page) {
   --gt-black: #0a0908;
   --gt-ink: #140d0a;
   --gt-red: #e11b0b;
+  /* Same value, nudged to clear 4.5:1 as text on the black stage (4.13 -> 4.63).
+     Fills and glows keep --gt-red; only tier text uses this. */
+  --gt-red-on-dark: #f01d0c;
   --gt-orange: #ff7a18;
   --gt-yellow: #fbcd03;
   background: var(--gt-black);

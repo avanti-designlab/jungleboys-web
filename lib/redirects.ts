@@ -69,8 +69,13 @@ export const redirects: Redirect[] = [
   { source: '/app', destination: '/rewards', permanent: true },
   { source: '/pwf-reward', destination: '/rewards', permanent: true },
 
-  // Product authentication moved to /auth (BatchSys verify + scan flow)
-  { source: '/verify', destination: '/auth', permanent: true },
+  // Product authentication currently lands on /auth (BatchSys verify + scan
+  // flow). TEMPORARY (307), not permanent: 00 §7 names /verify as a main anchor
+  // of the new build at its preserved URL — it will become a real page once the
+  // backend behind the old one is identified. A 301 tells Google to forget
+  // /verify, which is the opposite of what a URL we intend to rebuild needs,
+  // and ~3.7k clicks/yr already point at it.
+  { source: '/verify', destination: '/auth', permanent: false },
 
   // Product-line landings nest under /products (Avanti decision)
   { source: '/hash-hole', destination: '/products/hash-hole', permanent: true },

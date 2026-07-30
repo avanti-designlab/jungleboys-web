@@ -28,19 +28,23 @@ const AXES = [
   { icon: 'taste', label: 'Flavor' },
 ] as const
 
+// `accent` paints the glow, the value-chip fill and its border — decoration,
+// no contrast floor. `ink` is the same colour where it renders as TEXT on the
+// black stage. They are identical for two of the three tiers; --gt-red is
+// 4.13:1 there, so Live Rosin takes the on-dark variant for type only.
 const TIERS = [
   {
-    key: 'flavors', name: 'Flavors', device: 'device-flavors-n', accent: 'var(--gt-orange)',
+    key: 'flavors', name: 'Flavors', device: 'device-flavors-n', accent: 'var(--gt-orange)', ink: 'var(--gt-orange)',
     blurb: 'Cannabis oil, refined and dialled in.',
     values: ['Ultra refined cannabis oil', 'Terpene forward', 'High potency THC', 'Exotic flavor profiles'],
   },
   {
-    key: 'live-resin', name: 'Live Resin', device: 'device-resin-n', accent: 'var(--gt-yellow)',
+    key: 'live-resin', name: 'Live Resin', device: 'device-resin-n', accent: 'var(--gt-yellow)', ink: 'var(--gt-yellow)',
     blurb: 'Fresh frozen. Nothing added back.',
     values: ['Fresh frozen extract', 'Native terpenes only', 'Full spectrum', 'Strain authentic'],
   },
   {
-    key: 'live-rosin', name: 'Live Rosin', device: 'device-rosin-n', accent: 'var(--gt-red)',
+    key: 'live-rosin', name: 'Live Rosin', device: 'device-rosin-n', accent: 'var(--gt-red)', ink: 'var(--gt-red-on-dark)',
     blurb: '100% solventless. Ice water hash only.',
     values: ['Ice water hash', 'Native terpenes', 'Full spectrum', 'True-to-strain'],
   },
@@ -181,7 +185,7 @@ export default function GtDifference() {
               </span>
 
               <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 h-[58vh] w-[58vh] -translate-x-1/2 -translate-y-1/2 rounded-full"
-                style={{ background: `radial-gradient(circle, ${t.accent}3d 0%, rgba(10,9,8,0) 66%)` }} />
+                style={{ background: `radial-gradient(circle, color-mix(in srgb, ${t.accent} 24%, transparent) 0%, rgba(10,9,8,0) 66%)` }} />
 
               <div className="absolute inset-x-4 top-[24%] bottom-[23%] md:inset-x-16 md:top-[21%] md:bottom-[26%]">
                 <div className="mx-auto grid h-full w-full max-w-[1040px] grid-cols-[0.62fr_1.38fr] items-center gap-3 md:grid-cols-[0.82fr_1.18fr] md:gap-12">
@@ -190,13 +194,13 @@ export default function GtDifference() {
                   className="mx-auto max-h-full w-auto will-change-transform drop-shadow-[0_36px_60px_rgba(0,0,0,0.7)]" />
 
                 <div>
-                  <span className="font-display block leading-none" style={{ fontSize: 'min(5vw, 1.7rem)', color: t.accent }}>
+                  <span className="font-display block leading-none" style={{ fontSize: 'min(5vw, 1.7rem)', color: t.ink }}>
                     0{i + 1}
                   </span>
                   <h3 className="font-display uppercase leading-[0.84] text-white" style={{ fontSize: 'min(10.5vw, 4.2rem)', letterSpacing: '-0.03em' }}>
                     {t.name}
                   </h3>
-                  <p className="mt-1.5 text-[10px] font-extrabold uppercase tracking-[0.16em] md:text-sm" style={{ fontFamily: 'var(--font-brand)', color: t.accent }}>
+                  <p className="mt-1.5 text-[10px] font-extrabold uppercase tracking-[0.16em] md:text-sm" style={{ fontFamily: 'var(--font-brand)', color: t.ink }}>
                     {t.blurb}
                   </p>
 
@@ -206,13 +210,13 @@ export default function GtDifference() {
                       <li key={a.label} data-row={t.key}
                         className="flex items-center gap-2.5 rounded-2xl border border-white/10 bg-white/[0.045] px-2.5 py-1.5 will-change-transform md:gap-3.5 md:px-4 md:py-2">
                         <span aria-hidden className="grid h-7 w-7 shrink-0 place-items-center rounded-full md:h-9 md:w-9"
-                          style={{ background: `${t.accent}26`, border: `1.5px solid ${t.accent}` }}>
+                          style={{ background: `color-mix(in srgb, ${t.accent} 15%, transparent)`, border: `1.5px solid ${t.accent}` }}>
                           {/* eslint-disable-next-line @next/next/no-img-element -- axis icon */}
                           <img src={`/products/gas-tank/icons/${a.icon}.svg`} alt="" className="h-4 w-4 object-contain md:h-[17px] md:w-[17px]" />
                         </span>
                         <span className="min-w-0">
                           <span className="block text-[8px] font-extrabold uppercase tracking-[0.26em] md:text-[10px]"
-                            style={{ fontFamily: 'var(--font-brand)', color: t.accent }}>
+                            style={{ fontFamily: 'var(--font-brand)', color: t.ink }}>
                             {a.label}
                           </span>
                           <span className="block text-[11px] font-bold uppercase leading-tight tracking-wide text-white md:text-[15px]"

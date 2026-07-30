@@ -79,7 +79,7 @@ const SAMPLE_POSTS: BlogPost[] = [
     slug: 'inside-the-pheno-hunt',
     title: 'Inside the Pheno Hunt',
     excerpt: 'How an unnamed seed becomes the next strain everyone is chasing — and how you get a say in it.',
-    image: 'https://cdn.prod.website-files.com/6981ad8672f6252d7d7bb320/69b3324153cf4c36d0ced471_SNL%205x.1.jpg',
+    image: '/home/card-snl.webp',
     imageAlt: 'Trichome macro of a Jungle Boys pheno',
     date: '2026-07-10',
     category: 'Genetics',

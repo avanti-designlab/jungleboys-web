@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import type { Metadata } from 'next'
+import { SITE_ORIGIN } from '@/lib/storyblok/seo'
 import LegalDoc from '@/components/legal/legal-doc'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
@@ -12,6 +13,9 @@ import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description: 'How Jungle Boys collects, uses, and protects your personal information.',
+  // Every other route gets this from pageMetadata(); these four declare
+  // metadata by hand, so the canonical has to be declared with them.
+  alternates: { canonical: `${SITE_ORIGIN}/privacy` },
 }
 
 export default async function PrivacyPage() {

@@ -70,6 +70,22 @@ export default function RootLayout({
               "try{if(localStorage.getItem('jb-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}",
           }}
         />
+        <script
+          // Decides the intro BEFORE first paint. LoadingScreen and RevealGate
+          // both made this call in useEffect, so a returning visitor sat under
+          // an opaque #050505 panel until hydration finished — 4.2s of black on
+          // a fast connection, and the LCP that was measured was the panel, not
+          // the page. Same reasoning as the theme script above: a decision that
+          // controls what the first frame looks like has to run before it.
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var d=document.documentElement," +
+              "s=sessionStorage.getItem('jb-intro-done')==='1'||matchMedia('(prefers-reduced-motion: reduce)').matches," +
+              "g=!!localStorage.getItem('jb-age-gate');" +
+              "if(s)d.classList.add('jb-no-intro');" +
+              "if(s&&g)d.classList.add('jb-reveal')}catch(e){}",
+          }}
+        />
       </head>
       <body className="min-h-full flex flex-col">
         <ScanProvider>

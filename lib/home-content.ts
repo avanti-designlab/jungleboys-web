@@ -4,7 +4,6 @@
 
 import { getStory, assetUrl } from '@/lib/storyblok'
 
-const CDN = 'https://cdn.prod.website-files.com/6981ad8672f6252d7d7bb320'
 
 // Banner art contract: `image` = 16:9 (desktop), `imageMobile` = 9:16 (phones).
 // imageMobile falls back to the desktop art until vertical crops are supplied.
@@ -58,26 +57,26 @@ export const QUICK_CARDS = [
   {
     title: 'Shop',
     href: '/products',
-    image: `${CDN}/69b99e2a0a6ed0851aacc074_JB_Website_Product1_2X3.jpg`,
+    image: '/home/card-products.webp',
     alt: 'Jungle Boys products collage',
   },
   {
     title: 'Locations',
     href: '/locations',
-    image: `${CDN}/69b34477ef35cdcbdfd3580c_JB%20Locations%20Image.jpg`,
+    image: '/home/card-locations.webp',
     alt: 'Jungle Boys dispensary locations',
   },
   {
     title: 'Clothing',
     href: 'https://jungleboysclothing.com/',
     external: true,
-    image: `${CDN}/69b3446029edcd55bd76425d_JBC%20Image.jpg`,
+    image: '/home/card-clothing.webp',
     alt: 'Jungle Boys clothing',
   },
   {
     title: 'Pheno Hunt',
     href: '/phenos',
-    image: `${CDN}/69b3324153cf4c36d0ced471_SNL%205x.1.jpg`,
+    image: '/home/card-snl.webp',
     alt: 'Pheno hunt trichome macro',
   },
 ] as const
@@ -85,17 +84,7 @@ export const QUICK_CARDS = [
 export const MARQUEE_TILES = [
   74, 75, 76, 77, 78, 79, 80, 81, 82, 84, 85,
 ].map((n) => ({
-  image:
-    n === 83
-      ? `${CDN}/699d79a8997e77f11b5cf575_Rectangle%2083.png`
-      : `${CDN}/699d78${
-          {
-            74: '19c50634032ae3d380', 75: '193cbaf6cef823a9da', 76: '191f0ee4764fa8165a',
-            77: '1984b05d522a53f889', 78: '1999dce0a1ed9448a5', 79: '19b1f6f889dde1a19a',
-            80: '182dfae27cfc1efc81', 81: '1947a1c40aca3bacd4', 82: '19050c538096d226f9',
-            84: '193f928dc8ff629e27', 85: '189871d6b47f8e36a2',
-          }[n]
-        }_Rectangle%20${n}.png`,
+  image: `/home/tiles/tile-${n}.webp`,
   alt: `Jungle Boys product tile ${n}`,
 }))
 
@@ -105,7 +94,7 @@ export const MEDIA_BANNER = {
   copy: 'Documentaries, drops, and two decades of the hunt — straight from the jungle.',
   cta: 'Watch on Media',
   href: '/media',
-  image: `${CDN}/69e7ee53bc94e5cc8f331c78_JB%20April%20Deals%20BG%20Desktop.png`,
+  image: '/home/deals-bg.webp',
   alt: 'Jungle Boys media feature',
 }
 

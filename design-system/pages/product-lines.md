@@ -18,7 +18,6 @@ this documents what they are for.** Never retype a value into a component.
 | `--strain-sativa` | `#c2410c` | |
 | `--strain-hybrid` | `#157a37` | |
 | `--strain-*-on-dark` | `#6f9bff` / `#ff8a4c` / `#43d16f` | The same hues for a panel that is dark in BOTH themes. |
-| `--strain-*-auto` | resolves per theme | For the one surface whose panel follows the theme (flower-shop). |
 
 **One trio is not enough, and the first version of this file was wrong about
 that.** It claimed a single set worked "as an outline colour on a light panel
@@ -30,7 +29,11 @@ Hence three sets, chosen by what the panel actually is:
 
 - **light panel, fixed** → `--strain-*` (line-shop, hash-hole)
 - **dark panel, fixed in both themes** → `--strain-*-on-dark` (gas-tank, pops)
-- **panel follows the theme** → `--strain-*-auto` (flower-shop only)
+There WAS a third, theme-aware `--strain-*-auto` set. It was wrong and is gone.
+flower-shop's panel does follow the theme, but the pill sits inside a card that
+is hard-coded `bg-white` in both themes — so the token flipped to the on-dark
+values against a white ground and measured 2.69 / 1.98 / 2.34. **Match the token
+to the surface the text sits on, not to the theme.**
 
 The strain trio is site-wide on purpose. It was previously duplicated across six
 shop components in **three different palettes**, so the same "INDICA" label

@@ -42,7 +42,6 @@ const nextConfig: NextConfig = {
     // Interim: current-site assets served from Webflow's CDN while content
     // migrates; production assets move first-party before cutover (03 CWV budget).
     remotePatterns: [
-      { protocol: "https", hostname: "cdn.prod.website-files.com" },
       { protocol: "https", hostname: "i.ytimg.com" }, // YouTube thumbnails (Media hub)
       { protocol: "https", hostname: "a.storyblok.com" }, // Storyblok assets (EU)
       { protocol: "https", hostname: "a-us.storyblok.com" }, // Storyblok assets (US — our space)

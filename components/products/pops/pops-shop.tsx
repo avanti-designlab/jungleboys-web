@@ -87,7 +87,7 @@ export default async function PopsShop() {
                         )}
                       </div>
                       <h3 className="font-display text-[2.3rem] uppercase leading-[0.85]">{p.name}</h3>
-                      <p className="text-xs font-bold uppercase tracking-wide text-[var(--pops-red)]" style={{ fontFamily: 'var(--font-brand)' }}>
+                      <p className="text-xs font-bold uppercase tracking-wide text-[var(--pops-red-on-dark)]" style={{ fontFamily: 'var(--font-brand)' }}>
                         Small nug indoor flower
                       </p>
                       <div className="mt-auto flex items-end justify-between gap-3 pt-2">

@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import type { Metadata } from 'next'
+import { SITE_ORIGIN } from '@/lib/storyblok/seo'
 import LegalDoc from '@/components/legal/legal-doc'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
@@ -10,6 +11,9 @@ import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 export const metadata: Metadata = {
   title: 'Terms of Service',
   description: 'The Terms of Service governing your use of the Jungle Boys website and services.',
+  // Every other route gets this from pageMetadata(); these four declare
+  // metadata by hand, so the canonical has to be declared with them.
+  alternates: { canonical: `${SITE_ORIGIN}/terms` },
 }
 
 export default async function TermsPage() {

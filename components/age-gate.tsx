@@ -10,9 +10,8 @@ import NeonLogo from './neon-logo'
 
 const STORAGE_KEY = 'jb-age-gate'
 const VALID_DAYS = 30
-const CDN = 'https://cdn.prod.website-files.com/6981ad8672f6252d7d7bb320'
-const MASCOT_YES = `${CDN}/699dec7c3642bdd71693423e_Asset%201%404x%201.svg`
-const MASCOT_NO = `${CDN}/69ce1258c60c35f38358e867_Group%20378.svg`
+const MASCOT_YES = '/brand/mascot-yes.webp'
+const MASCOT_NO = '/brand/mascot-no.webp'
 
 export function isAgeVerified(): boolean {
   try {

@@ -156,6 +156,7 @@ export default function TpHero() {
               style={{ fontSize: '17.4vw', letterSpacing: '-0.035em', textShadow: '0 8px 44px rgba(2,10,24,0.75)' }}>
               <span data-tp-word className="will-change-transform">10PK</span>
               <span aria-hidden style={{ width: '0.14em' }} />
+              <span className="sr-only"> </span>
               <span data-tp-word2 className="text-[var(--tp-cyan)] will-change-transform">Pre-Rolls</span>
             </h1>
           </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SITE_ORIGIN } from '@/lib/storyblok/seo'
 import LocationsDirectory from '@/components/locations/locations-directory'
 import { OWNED_STORES } from '@/lib/owned-stores'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
@@ -12,9 +13,10 @@ export const metadata: Metadata = {
   title: 'Locations — Jungle Boys Dispensaries',
   description:
     'Visit a Jungle Boys dispensary. Find our stores across California and Florida — addresses, hours, and menus. Playing With Fire® since 2006.',
+  // Every other route gets this from pageMetadata(); these four declare
+  // metadata by hand, so the canonical has to be declared with them.
+  alternates: { canonical: `${SITE_ORIGIN}/locations` },
 }
-
-const SITE_URL = 'https://www.jungleboys.com'
 
 export default function LocationsPage() {
   return (
@@ -31,7 +33,7 @@ export default function LocationsPage() {
               '@context': 'https://schema.org',
               '@type': 'Store',
               name: `Jungle Boys ${s.name}`,
-              url: `${SITE_URL}${s.menuUrl}`,
+              url: `${SITE_ORIGIN}${s.menuUrl}`,
               telephone: s.phone,
               address: { '@type': 'PostalAddress', streetAddress: s.address, addressCountry: 'US' },
             })),

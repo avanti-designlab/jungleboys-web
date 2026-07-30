@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { SITE_ORIGIN } from '@/lib/storyblok/seo'
 import ProductFinderMap from '@/components/product-finder/product-finder-map'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
@@ -10,6 +11,9 @@ export const metadata: Metadata = {
   title: 'Product Finder — Find Jungle Boys Near You',
   description:
     'Find Jungle Boys products near you. Search your address or ZIP, or use your location, to find dispensaries that carry Jungle Boys across California and Florida.',
+  // Every other route gets this from pageMetadata(); these four declare
+  // metadata by hand, so the canonical has to be declared with them.
+  alternates: { canonical: `${SITE_ORIGIN}/find-jb-products` },
 }
 
 export default function ProductFinderPage() {

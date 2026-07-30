@@ -75,21 +75,20 @@ async function syncComponents() {
 
 // ── 2) pre-fill the Home story with the current banners/deals ────────────────
 // (inline copy of lib/home-content.ts defaults so this runs with plain `node`)
-const CDN = 'https://cdn.prod.website-files.com/6981ad8672f6252d7d7bb320'
 const HERO_SLIDES = [
   { kicker: 'JULY 13–31', title: 'JULY DEALS', cta: 'Learn more', href: '/710-deals', image: '/hero/july-deals-fireworks.jpg', imageMobile: '/hero/july-deals-mobile.jpg', alt: 'Fourth of July fireworks over the downtown LA skyline and the 6th Street Viaduct', overlay: 'scrim' },
   { kicker: 'NEW! ALL-IN-ONE', title: 'GAS TANK', cta: 'Shop now', href: '/products', image: '/hero/gas-tank-beach.jpg', imageMobile: '/hero/gas-tank-mobile.jpg', alt: 'Jungle Boys Gas Tank all-in-one vapes standing in the sand at the beach', overlay: false },
   { kicker: '20 YEAR ANNIVERSARY EDITION', title: 'GOLD MYLARS', cta: 'Shop now', href: '/products', image: '/hero/gold-mylar-skyline.jpg', imageMobile: '/hero/gold-mylar-mobile.jpg', alt: 'Gold Jungle Boys mylar bag towering over the LA skyline at sunset', overlay: false },
 ]
 const QUICK_CARDS = [
-  { title: 'Shop', href: '/products', image: `${CDN}/69b99e2a0a6ed0851aacc074_JB_Website_Product1_2X3.jpg`, alt: 'Jungle Boys products collage' },
-  { title: 'Locations', href: '/locations', image: `${CDN}/69b34477ef35cdcbdfd3580c_JB%20Locations%20Image.jpg`, alt: 'Jungle Boys dispensary locations' },
-  { title: 'Clothing', href: 'https://jungleboysclothing.com/', external: true, image: `${CDN}/69b3446029edcd55bd76425d_JBC%20Image.jpg`, alt: 'Jungle Boys clothing' },
-  { title: 'Pheno Hunt', href: '/phenos', image: `${CDN}/69b3324153cf4c36d0ced471_SNL%205x.1.jpg`, alt: 'Pheno hunt trichome macro' },
+  { title: 'Shop', href: '/products', image: '/home/card-products.webp', alt: 'Jungle Boys products collage' },
+  { title: 'Locations', href: '/locations', image: '/home/card-locations.webp', alt: 'Jungle Boys dispensary locations' },
+  { title: 'Clothing', href: 'https://jungleboysclothing.com/', external: true, image: '/home/card-clothing.webp', alt: 'Jungle Boys clothing' },
+  { title: 'Pheno Hunt', href: '/phenos', image: '/home/card-snl.webp', alt: 'Pheno hunt trichome macro' },
 ]
 
-// keep the current filename as-is (relative /hero/… renders locally; CDN URLs
-// render remotely). Avanti replaces images by uploading in Storyblok later.
+// all paths are now site-relative — the Webflow CDN is fully retired.
+// Avanti replaces images by uploading in Storyblok later.
 const asset = (url) => ({ fieldtype: 'asset', filename: url })
 const uid = () => crypto.randomUUID()
 
