@@ -189,6 +189,21 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   runs an ice/frost palette while the Live Rosin tier is red everywhere else on
   `/products/all-in-one`. This was raised as a possible inconsistency and Avanti ruled: **leave as
   is.** It is intentional, not a bug — do not "correct" it to red in a later polish pass.
+- **Hash Hole gold-on-sky headlines: ACCEPTED AS IS (Avanti, 2026-07-30).** `.hh-gold-head`
+  (`--hh-gold` `#f5c21a`) renders on the `.hh-page` sky ground (`--hh-sky-mid` `#4db2ef`) at
+  **1.41:1**, below the 3:1 large-text floor. This is a deliberate brand pairing and every fix
+  costs more than it buys — all three were measured before the ruling:
+  (a) darkening the gold to reach 3:1 lands on `#6c5405`, which is olive, not gold;
+  (b) deepening the page sky to `#1073af` fixes it globally but turns Hash Hole from a bright
+  summer sky into dusk;
+  (c) a dark scrim behind the `hh-breakdown` heading fixes the gold ROLL (1.41 → 4.53) but
+  **breaks the green words beside it** (`--hh-green-deep` currently PASSES at 3.44:1 and would
+  drop to 1.07:1) — two colours in one heading wanting opposite grounds.
+  The gold carries a 2–3px `--hh-ink` keyline with `paint-order: stroke fill`, which separates
+  the letterforms in practice; a fill-vs-background check cannot credit it. **Do not "fix" this
+  in a later pass, and do not re-raise it as a gate blocker.** `hh-finale` IS scrimmed — that
+  heading is white + gold with no green, so the scrim was free there (white 2.35 → 8.62, gold
+  1.41 → 5.18). Revisit only if the sky ground itself changes.
 - **Branch protection on `main`: DEFERRED AGAIN at Phase 1 start (Avanti's explicit ruling,
   2026-07-19)** — solo-merger friction outweighs benefit while one agent builds sequentially.
   **Hard trigger remains: enable BEFORE CUTOVER, non-negotiable** (and revisit if multiple agents
