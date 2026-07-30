@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { MENU_COLUMNS, BRAND_ASSETS } from '@/lib/site-config'
+import { MENU_COLUMNS, PRODUCT_SUBMENU, BRAND_ASSETS } from '@/lib/site-config'
 import { SocialIcons } from './social-icons'
 import ThemeToggle from './theme-toggle'
 import PillCta from './pill-cta'
@@ -154,6 +154,8 @@ export default function SiteNav() {
     }
   }, [open])
 
+  const onProducts = pathname?.startsWith('/products') ?? false
+
   let linkIndex = 0 // running index for the stagger delay across all columns
 
   // the bar's left cluster is white over any dark backdrop OR the open menu
@@ -171,7 +173,13 @@ export default function SiteNav() {
           aria-label="Main menu"
           className="menu-overlay fixed inset-0 z-40 h-dvh overflow-y-auto overscroll-contain bg-[#0b0b0b]"
         >
-          <nav className="mx-auto grid h-full w-full max-w-[1560px] grid-cols-1 content-start gap-x-10 gap-y-9 px-8 pt-28 md:[grid-template-columns:1fr_1fr_1.35fr] md:gap-y-1 md:pt-40">
+          <nav
+            className={`mx-auto grid h-full w-full max-w-[1560px] grid-cols-1 content-start gap-x-10 gap-y-9 px-8 pt-28 md:gap-y-1 md:pt-40 ${
+              onProducts
+                ? 'md:[grid-template-columns:1fr_1fr_1fr_1.1fr]'
+                : 'md:[grid-template-columns:1fr_1fr_1.35fr]'
+            }`}
+          >
             {MENU_COLUMNS.map((column, c) => (
               <ul key={c} className="flex flex-col">
                 {column.map((l) => {
@@ -201,32 +209,43 @@ export default function SiteNav() {
                         </Link>
                       )}
 
-                      {/* Product lines, nested under PRODUCTS. Roughly half the
-                          parent's size so the group reads as subordinate and
-                          still fits a phone. This is the whole point of the
-                          submenu: reaching a line page from anywhere is one tap
-                          instead of menu -> Products -> scroll -> tap. */}
-                      {l.children?.length ? (
-                        <ul className="mb-1 mt-1 flex flex-col gap-y-0.5 pl-1">
-                          {l.children.map((c) => (
-                            <li key={c.href} className="menu-line">
-                              <Link
-                                href={c.href}
-                                onClick={() => setOpen(false)}
-                                style={{ animationDelay: `${0.05 + linkIndex++ * 0.03}s` }}
-                                className="font-display block whitespace-nowrap text-2xl uppercase leading-[1.05] text-white/55 transition-colors duration-200 hover:text-[var(--color-accent)] md:text-[1.7rem] xl:text-3xl"
-                              >
-                                {c.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      ) : null}
+
                     </li>
                   )
                 })}
               </ul>
             ))}
+
+            {/* PRODUCT LINES — their own column, in the empty space to the
+                right, joined back to the menu by a connector rule so the group
+                reads as belonging to PRODUCTS rather than floating.
+
+                Only on a Products route: seven extra rows in front of someone
+                reading the blog is noise, and the list earns its space only
+                where the visitor is already in that part of the site.
+
+                A real grid column rather than an absolutely-positioned panel —
+                the first attempt hung it off the PRODUCTS <li> and it landed
+                underneath the third column, laid out but invisible. */}
+            {onProducts && PRODUCT_SUBMENU.length ? (
+              <div data-product-submenu className="md:flex md:items-start md:gap-4">
+                <span aria-hidden className="hidden md:mt-4 md:block md:h-px md:w-8 md:shrink-0 md:bg-white/25 lg:w-12" />
+                <ul className="flex flex-col gap-y-0.5 rounded-2xl border border-white/12 bg-white/[0.05] px-5 py-4 md:gap-y-1">
+                  {PRODUCT_SUBMENU.map((c) => (
+                    <li key={c.href} className="menu-line">
+                      <Link
+                        href={c.href}
+                        onClick={() => setOpen(false)}
+                        style={{ animationDelay: `${0.05 + linkIndex++ * 0.03}s` }}
+                        className="font-display block whitespace-nowrap text-xl uppercase leading-[1.15] text-white/60 transition-colors duration-200 hover:text-[var(--color-accent)] xl:text-2xl"
+                      >
+                        {c.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
           </nav>
 
           <div className="menu-socials absolute bottom-8 right-8 flex items-center gap-6 text-white">
