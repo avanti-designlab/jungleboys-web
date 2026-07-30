@@ -43,24 +43,26 @@ export default function HhHero() {
 
   return (
     <section className="relative px-2 pt-2 md:px-3">
-      {/* The LCP element here is the video's POSTER, and a poster cannot carry
-          fetchPriority. Without this it queued behind eight decorative images
-          and four woff2, landing seconds late on a throttled connection.
-          Preload puts it at the front of the queue instead. */}
-      {mobile !== null && (
-        <link
-          rel="preload"
-          as="image"
-          href={mobile ? '/products/hash-hole/hero-mobile-poster.webp' : '/products/hash-hole/hero-poster.webp'}
-          fetchPriority="high"
-        />
-      )}
       {/* the header samples this region: dark video → dark header pill */}
       <div data-nav-theme="dark" className="media-hero-in relative h-[92vh] min-h-[560px] overflow-hidden rounded-[1.75rem] bg-[var(--color-ink)] md:rounded-[2.5rem]">
         {/* The hero is deliberately art-only — a film, no type over it. The page
             still needs exactly one h1, so it is visually hidden rather than
             drawn. Nothing on screen changes. */}
         <h1 className="sr-only">Jungle Boys Hash Hole — Infused Pre-Roll</h1>
+        {/* The poster is a real <picture>, not a video attribute: the attribute
+            was picked from client state, so the server always emitted the
+            DESKTOP poster and both variants downloaded. This gives the browser
+            one correct choice, and unlike a poster it can be prioritised. */}
+        <picture>
+          <source media="(max-width: 767px)" srcSet="/products/hash-hole/hero-mobile-poster.webp" />
+          <img
+            src="/products/hash-hole/hero-poster.webp"
+            alt=""
+            aria-hidden
+            fetchPriority="high"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </picture>
         <video
           key={String(mobile)}
           ref={videoRef}
@@ -71,7 +73,6 @@ export default function HhHero() {
           // metadata, not auto: at "auto" the 4.8MB clip competed with its own
           // poster for the connection and delayed first paint by seconds
           preload="metadata"
-          poster={mobile ? '/products/hash-hole/hero-mobile-poster.webp' : '/products/hash-hole/hero-poster.webp'}
         >
           {mobile !== null && (
             <source src={mobile ? '/products/hash-hole/hero-mobile.mp4' : '/products/hash-hole/hero.mp4'} type="video/mp4" />

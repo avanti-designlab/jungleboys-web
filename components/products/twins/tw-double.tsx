@@ -139,7 +139,7 @@ export default function TwDouble() {
               <div key={i} data-tw-fly={i} className="absolute will-change-transform"
                 style={{ marginLeft: `${it.x}vw`, marginTop: `${it.y}vh`, transform: `translateZ(${it.z}px)`, opacity: 0 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-                <img
+                <img loading="lazy" decoding="async"
                   src={it.kind === 'tube' ? `/products/twins/${it.src}.webp` : '/products/twins/joint.webp'}
                   alt={i === 0 ? 'Jungle Boys Twins 2 Pack' : ''}
                   aria-hidden={i !== 0}

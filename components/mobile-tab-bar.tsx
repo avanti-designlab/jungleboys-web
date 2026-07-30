@@ -54,7 +54,7 @@ const RIGHT = [
 
 function TabLink({ item, active }: { item: (typeof LEFT)[number]; active: boolean }) {
   return (
-    <Link
+    <Link prefetch={false}
       href={item.href}
       className={`flex flex-col items-center gap-1 transition-colors duration-200 ${
         active ? 'text-[var(--color-accent)]' : 'hover:text-[var(--color-accent)]'
@@ -68,6 +68,10 @@ function TabLink({ item, active }: { item: (typeof LEFT)[number]; active: boolea
   )
 }
 
+// prefetch={false} on every entry: Next prefetches linked routes when they
+// enter the viewport, and this bar is on every page, so /locations' 130KB
+// header SVG was downloading alongside the hero on product pages and pushing
+// LCP out. The bar is one tap from anywhere; it does not need to be warm.
 export default function MobileTabBar() {
   const pathname = usePathname()
   const { open } = useScanner()

@@ -104,7 +104,7 @@ export default function HhBreakdown() {
         <div className="relative mx-auto w-full max-w-[520px]" style={{ aspectRatio: `${STAGE.w} / ${STAGE.h}` }}>
           {PARTS.map((p) => (
             // eslint-disable-next-line @next/next/no-img-element -- positioned SVG-derived pieces
-            <img key={p.key} data-piece={p.key} src={p.img} alt={p.label}
+            <img loading="lazy" decoding="async" key={p.key} data-piece={p.key} src={p.img} alt={p.label}
               className="absolute will-change-transform"
               style={{ left: `${p.left}%`, top: `${p.top}%`, width: `${p.width}%` }} />
           ))}

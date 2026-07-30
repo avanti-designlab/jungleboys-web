@@ -106,7 +106,7 @@ export default function HhIntro() {
 
         {/* the pin — planted behind the front hill crest */}
         {/* eslint-disable-next-line @next/next/no-img-element -- hero logo */}
-        <img
+        <img loading="lazy" decoding="async"
           data-logo
           src="/products/hash-hole/hashhole-logo.webp"
           alt="Jungle Boys Hash Hole"
@@ -148,7 +148,7 @@ export default function HhIntro() {
       {/* ── mobile: pin, signs 2×2, turf below ── */}
       <div className="relative pt-2 md:hidden">
         {/* eslint-disable-next-line @next/next/no-img-element -- hero logo */}
-        <img src="/products/hash-hole/hashhole-logo.webp" alt="Jungle Boys Hash Hole" className="hh-float relative z-10 mx-auto w-[72vw]" />
+        <img loading="lazy" decoding="async" src="/products/hash-hole/hashhole-logo.webp" alt="Jungle Boys Hash Hole" className="hh-float relative z-10 mx-auto w-[72vw]" />
         <div className="relative z-10 mx-auto mt-8 grid max-w-[520px] grid-cols-2 gap-4 px-6" style={{ fontSize: '8vw' }}>
           {SIGNS.map((s, i) => (
             <div

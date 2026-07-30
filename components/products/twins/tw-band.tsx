@@ -77,7 +77,7 @@ export default function TwBand() {
         {/* the mural, cropped to the faces */}
         <div className="absolute inset-0 overflow-hidden">
           {/* eslint-disable-next-line @next/next/no-img-element -- brand art */}
-          <img data-tw-mural src="/products/twins/band.webp" alt="Jungle Boys Twins"
+          <img loading="lazy" decoding="async" data-tw-mural src="/products/twins/band.webp" alt="Jungle Boys Twins"
             className="absolute inset-0 h-full w-full object-contain will-change-transform md:object-cover"
             style={{ objectPosition: '50% 50%' }} />
         </div>

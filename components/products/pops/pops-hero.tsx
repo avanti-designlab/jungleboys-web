@@ -46,13 +46,18 @@ export default function PopsHero() {
           if (c.reduce) {
             gsap.set('[data-nug]', { opacity: 0 })
             gsap.set('[data-herojar]', { opacity: 1, rotate: 0 })
-            gsap.set('[data-cta]', { opacity: 1, y: 0 })
+            gsap.set('[data-cta]', { autoAlpha: 1, y: 0 })
             return
           }
 
           gsap.set('[data-herojar="l"]', { opacity: 0, xPercent: -150, rotate: -60 })
           gsap.set('[data-herojar="r"]', { opacity: 0, xPercent: 150, rotate: 60 })
-          gsap.set('[data-cta]', { opacity: 0, y: 26 })
+          // autoAlpha, not opacity: this block holds the only CTA on the hero and it
+          // is revealed at 0.88 of a PINNED scrub, which keyboard focus cannot advance.
+          // At plain opacity 0 it stayed focusable forever with no visible ring —
+          // WCAG 2.4.7. autoAlpha adds visibility:hidden, so it leaves the tab order
+          // until it is genuinely on screen.
+          gsap.set('[data-cta]', { autoAlpha: 0, y: 26 })
 
           // Pacing: this page ran 15.2 screens on desktop with 11.5 of them
           // spent inside three pinned panels — half again as long as the other
@@ -100,7 +105,7 @@ export default function PopsHero() {
             .to('[data-herojar="l"]', { rotate: -4, duration: 0.08, ease: 'power2.inOut' }, 0.93)
             .to('[data-herojar="r"]', { rotate: 4, duration: 0.08, ease: 'power2.inOut' }, 0.93)
             // the line + CTA land last, so the jars have something to frame
-            .to('[data-cta]', { opacity: 1, y: 0, duration: 0.12, ease: 'power2.out' }, 0.88)
+            .to('[data-cta]', { autoAlpha: 1, y: 0, duration: 0.12, ease: 'power2.out' }, 0.88)
 
           tl.to({}, { duration: 0.04 })
         }

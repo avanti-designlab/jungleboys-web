@@ -69,7 +69,11 @@ export default function TwHero() {
 
           // the mark slams in from深 Z
           tl.fromTo('[data-tw-mark]',
-            { scale: 2.6, opacity: 0, filter: 'blur(26px)', rotateX: 28 },
+            // NO opacity here. It is the LCP element on this page, and starting at
+            // opacity 0 meant it could not paint until hydration + GSAP ran: the file
+            // landed at 2496ms and LCP fired at 4552ms. Starting blurred and scaled
+            // still reads as an arrival, and the pixels are on screen immediately.
+            { scale: 2.6, filter: 'blur(26px)', rotateX: 28 },
             { scale: 1, opacity: 1, filter: 'blur(0px)', rotateX: 0, duration: 1.15, ease: 'back.out(1.5)' }, 0.35)
             .fromTo('[data-tw-sub]', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 1.25)
             .fromTo('[data-tw-stat]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }, 1.45)

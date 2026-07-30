@@ -32,6 +32,15 @@ export default function HashHolePage() {
     // overflow-x-clip, never overflow-hidden: hidden makes this a scroll
     // container and every ScrollTrigger inside freezes at a fixed progress
     <main className="hh-page relative overflow-x-clip">
+      {/* LCP on this page is the hero video's POSTER, and a poster cannot carry
+          fetchPriority. Preload it from the SERVER html — an earlier attempt put
+          this inside the hero component behind client state, so it only appeared
+          after hydration and did nothing for LCP. media= means exactly one of
+          the two downloads. */}
+      <link rel="preload" as="image" fetchPriority="high" media="(max-width: 767px)"
+        href="/products/hash-hole/hero-mobile-poster.webp" />
+      <link rel="preload" as="image" fetchPriority="high" media="(min-width: 768px)"
+        href="/products/hash-hole/hero-poster.webp" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

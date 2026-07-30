@@ -190,14 +190,12 @@ export default function TpHero() {
                   <div className={`tp-bob-${j.bob}`} style={{ ['--tp-rot' as string]: `${j.rot}deg`, ['--tp-dur' as string]: `${j.dur}s` }}>
                     {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
                     <img
-                      // Do NOT mark the others 'low'. "Tallest jar" is not the same as
-                      // "largest painted area": at 390x844 jar-rs1000 (h:68) renders
-                      // 276x476 = 131,130 px2 while jar-06-og (h:80) renders 245x469 =
-                      // 115,008 px2, because the shorter jars sit lower and wider in
-                      // frame. The heuristic demoted the actual LCP element to 'low' and
-                      // cost seconds. Omitting the attribute lets the browser's own
-                      // largest-image heuristic pick, which is the thing being measured.
-                      {...(j.h === 80 ? { fetchPriority: 'high' as const } : {})}
+                      // NO fetchPriority hint at all. I guessed the LCP jar twice and
+                      // was wrong twice: "tallest" is not "largest painted area" —
+                      // jar-rs1000 (h:68) renders 131,130px2 against jar-06-og's
+                      // 115,008px2, because the shorter jars sit lower and wider in
+                      // frame. A wrong hint is worse than none, and the browser's own
+                      // selection is exactly the thing LCP measures.
                       src={`/products/10-pack/${j.src}.webp`} alt="Jungle Boys 10 Pack Pre-Rolls"
                       className="w-auto -translate-x-1/2 drop-shadow-[0_40px_70px_rgba(0,0,0,0.8)]"
                       style={{
