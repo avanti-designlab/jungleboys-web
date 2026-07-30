@@ -291,6 +291,16 @@ select:focus-visible,
 html.jb-no-intro .jb-intro {
   display: none;
 }
+/* The specular sweep is masked by the wordmark, so the mask URL has to follow
+   the same breakpoint the <picture> does — otherwise a phone downloads the
+   mobile file for the img AND the desktop file for the mask, and the smaller
+   asset costs bandwidth instead of saving it. Mobile-first, like the markup.
+   Deliberately outside any motion query: this is what the element IS. */
+.tw-mark-mask { --tw-mark-src: url('/products/twins/wordmark-twins-m.webp'); }
+@media (min-width: 768px) {
+  .tw-mark-mask { --tw-mark-src: url('/products/twins/wordmark-twins.webp'); }
+}
+
 /* ── PAGE TOKENS AND GROUNDS — deliberately OUTSIDE any motion query ───────
    These were declared inside @media (prefers-reduced-motion: no-preference).
    A visitor with reduce set therefore had --hh-L undefined, so every

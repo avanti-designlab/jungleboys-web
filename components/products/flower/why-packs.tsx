@@ -73,6 +73,9 @@ export default function WhyPacks() {
           src={n.src}
           alt=""
           aria-hidden
+          loading="lazy"
+          fetchPriority="low"
+          decoding="async"
           data-plx={n.plx}
           data-rot={n.rot}
           className="media-reveal pointer-events-none absolute z-0 will-change-transform"

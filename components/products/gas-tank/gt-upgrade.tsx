@@ -48,9 +48,10 @@ export default function GtUpgrade() {
             gsap.set('[data-name="old"]', { opacity: 0 })
             gsap.set('[data-stage="new"]', { opacity: 1, scale: 1, y: 0 })
             gsap.set('[data-name="new"]', { opacity: 1, y: 0 })
-            document.querySelectorAll('[data-flip]').forEach((el) =>
-              gsap.set(el, { rotateX: -180 })
-            )
+            // gsap.set with a selector STRING resolves through the context's
+            // root; document.querySelectorAll did not, so this reached every
+            // [data-flip] on the page instead of this section's chips.
+            gsap.set('[data-flip]', { rotateX: -180 })
             return
           }
 

@@ -63,9 +63,7 @@ export default function GtHero() {
             // before hydration — under reduced motion nothing else clears it,
             // so all three were simply invisible. Land the settled trio.
             gsap.set('[data-rig]', { opacity: 1, scale: 1 })
-            document.querySelectorAll('[data-dev]').forEach((el) =>
-              gsap.set(el, { opacity: 1, xPercent: 0, yPercent: 0, scale: 1 })
-            )
+            gsap.set('[data-dev]', { opacity: 1, xPercent: 0, yPercent: 0, scale: 1 })
             return
           }
 

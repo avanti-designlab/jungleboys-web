@@ -151,18 +151,24 @@ export default function TwHero() {
           <div data-tw-pair-l className="relative will-change-transform">
             <div data-tw-mascot="l" className="will-change-transform">
               <div className="tw-idle-l">
-                {/* eslint-disable-next-line @next/next/no-img-element -- brand art */}
-                <img fetchPriority="high" src="/products/twins/mascot.webp" alt="Jungle Boys Twins mascot"
-                  className="h-[42vh] w-auto drop-shadow-[0_30px_60px_rgba(0,0,0,0.8)] md:h-[66vh]" />
+                <picture>
+                  <source media="(max-width: 767px)" srcSet="/products/twins/mascot-m.webp" />
+                  {/* eslint-disable-next-line @next/next/no-img-element -- brand art */}
+                  <img fetchPriority="high" src="/products/twins/mascot.webp" alt="Jungle Boys Twins mascot"
+                    className="h-[42vh] w-auto drop-shadow-[0_30px_60px_rgba(0,0,0,0.8)] md:h-[66vh]" />
+                </picture>
               </div>
             </div>
           </div>
           <div data-tw-pair-r className="relative will-change-transform">
             <div data-tw-mascot="r" className="will-change-transform">
               <div className="tw-idle-r">
-                {/* eslint-disable-next-line @next/next/no-img-element -- brand art */}
-                <img src="/products/twins/mascot.webp" alt="" aria-hidden
-                  className="h-[42vh] w-auto -scale-x-100 drop-shadow-[0_30px_60px_rgba(0,0,0,0.8)] md:h-[66vh]" />
+                <picture>
+                  <source media="(max-width: 767px)" srcSet="/products/twins/mascot-m.webp" />
+                  {/* eslint-disable-next-line @next/next/no-img-element -- brand art */}
+                  <img src="/products/twins/mascot.webp" alt="" aria-hidden
+                    className="h-[42vh] w-auto -scale-x-100 drop-shadow-[0_30px_60px_rgba(0,0,0,0.8)] md:h-[66vh]" />
+                </picture>
               </div>
             </div>
           </div>
@@ -174,15 +180,18 @@ export default function TwHero() {
             <div data-tw-mark
               className="relative mx-auto w-full will-change-transform [--tw-mark-w:88vw] md:[--tw-mark-w:min(48vw,700px)]"
               style={{ maxWidth: 'var(--tw-mark-w)' }}>
-              {/* eslint-disable-next-line @next/next/no-img-element -- brand mark */}
-              <img fetchPriority="high" src="/products/twins/wordmark-twins.webp" alt="Twins"
-                className="mx-auto h-auto w-full drop-shadow-[0_18px_50px_rgba(0,0,0,0.75)]" />
+              <picture>
+                <source media="(max-width: 767px)" srcSet="/products/twins/wordmark-twins-m.webp" />
+                {/* eslint-disable-next-line @next/next/no-img-element -- brand mark */}
+                <img fetchPriority="high" src="/products/twins/wordmark-twins.webp" alt="Twins"
+                  className="mx-auto h-auto w-full drop-shadow-[0_18px_50px_rgba(0,0,0,0.75)]" />
+              </picture>
               {/* specular sweep, masked to the mark so it lights the letterforms
                   and not a passing rectangle */}
-              <div aria-hidden className="absolute inset-0 overflow-hidden"
+              <div aria-hidden className="tw-mark-mask absolute inset-0 overflow-hidden"
                 style={{
-                  WebkitMaskImage: 'url(/products/twins/wordmark-twins.webp)',
-                  maskImage: 'url(/products/twins/wordmark-twins.webp)',
+                  WebkitMaskImage: 'var(--tw-mark-src)',
+                  maskImage: 'var(--tw-mark-src)',
                   WebkitMaskSize: '100% 100%', maskSize: '100% 100%',
                   WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat',
                 }}>

@@ -77,12 +77,8 @@ export default function GtDifference() {
               track.style.position = 'relative'
               track.style.width = `${TIERS.length * 100}%`
             }
-            document.querySelectorAll('[data-row]').forEach((el) =>
-              gsap.set(el, { x: 0, opacity: 1 })
-            )
-            document.querySelectorAll('[data-gtd-dot]').forEach((el) =>
-              gsap.set(el, { opacity: 1 })
-            )
+            gsap.set('[data-row]', { x: 0, opacity: 1 })
+            gsap.set('[data-gtd-dot]', { opacity: 1 })
             return
           }
 

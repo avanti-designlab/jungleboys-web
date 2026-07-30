@@ -16,6 +16,16 @@ export default function HhFinale() {
         alt="Jungle Boys — Hash Hole on the course"
         className="absolute inset-x-0 bottom-0 top-[22vh] w-full select-none object-cover object-top md:top-0"
       />
+      {/* Sky scrim. The kicker was white on #4db2ef — 2.35:1 — and the gold
+          headline 1.41:1; a drop-shadow earns no contrast credit. Deepening the
+          gold to pass would have taken it to #6c5405, which is olive, not gold,
+          so the GROUND moves instead. Fades out by 52% so the course below
+          keeps its full brightness. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-[52%]"
+        style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.50) 28%, rgba(0,0,0,0) 100%)' }}
+      />
       <div className="absolute inset-x-0 top-[11vh] z-10 text-center md:top-[8vh]">
         <p className="text-sm font-extrabold uppercase tracking-[0.4em] text-white drop-shadow-[0_3px_10px_rgba(0,0,0,0.5)]" style={{ fontFamily: 'var(--font-brand)' }}>
           Playing with fire since 2006

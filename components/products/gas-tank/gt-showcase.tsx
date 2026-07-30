@@ -47,9 +47,7 @@ export default function GtShowcase() {
             gsap.set('[data-chips]', { opacity: 1 })
             gsap.set('[data-slab]', { opacity: 1 })
             gsap.set('[data-solv]', { opacity: 1, scale: 1 })
-            document.querySelectorAll('[data-chip-l],[data-chip-r]').forEach((el) =>
-              gsap.set(el, { x: 0, opacity: 1 })
-            )
+            gsap.set('[data-chip-l],[data-chip-r]', { x: 0, opacity: 1 })
             return
           }
 

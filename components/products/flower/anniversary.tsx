@@ -166,6 +166,9 @@ export default function Anniversary() {
               src="/products/flower/anniv-bag-1.webp"
               alt=""
               aria-hidden
+              loading="lazy"
+              fetchPriority="low"
+              decoding="async"
               className="absolute left-[2%] w-[62%] will-change-transform drop-shadow-[0_40px_60px_rgba(0,0,0,0.6)]"
             />
             {/* eslint-disable-next-line @next/next/no-img-element -- pack art */}
@@ -173,6 +176,9 @@ export default function Anniversary() {
               ref={bag2Ref}
               src="/products/flower/anniv-bag-2.webp"
               alt="Jungle Boys 20th anniversary gold mylar bags"
+              loading="lazy"
+              fetchPriority="low"
+              decoding="async"
               className="absolute right-[2%] w-[64%] will-change-transform drop-shadow-[0_40px_60px_rgba(0,0,0,0.65)]"
             />
           </div>

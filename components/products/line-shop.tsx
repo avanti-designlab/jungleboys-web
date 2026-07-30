@@ -31,7 +31,9 @@ function dollars(cents: number) {
 }
 
 export type LineShopProps = {
-  /** anchor id — the page's Shop CTA scrolls here */
+  /** anchor id — the deep-link target for this line's shop, e.g.
+      /products/twins#tw-shop. NOT wired to an on-page CTA: none of the seven
+      line pages has one, and the previous wording here claimed otherwise. */
   id: string
   filter: ProductFilter
   kicker: string
