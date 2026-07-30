@@ -126,7 +126,7 @@ export default function PopsFacts() {
 
         {/* the slot — fixed box, cards hinge through it */}
         <div className="pops-scene relative">
-          <div className="pops-3d relative mx-auto h-[300px] w-full max-w-[560px] md:h-[340px]">
+          <div data-pops-stack className="pops-3d relative mx-auto h-[300px] w-full max-w-[560px] md:h-[340px]">
             {FACTS.map((f, i) => (
               <article
                 key={f.icon}

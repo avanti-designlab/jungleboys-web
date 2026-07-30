@@ -1924,9 +1924,13 @@ body:has(.gt-page) {
   --gt-black: #0a0908;
   --gt-ink: #140d0a;
   --gt-red: #e11b0b;
-  /* Same value, nudged to clear 4.5:1 as text on the black stage (4.13 -> 4.63).
+  /* Text-on-dark variant. #f01d0c was computed against the FLAT stage black and
+     measured 4.63 there — but the tier's own red radial bloom lifts the ground
+     to #341613-#221a14, where it is only 3.63-4.03. The glow the tier draws
+     behind its own type is part of that type's background. Re-solved against
+     the measured composite: 4.67 worst case, 3.63 mobile -> passing.
      Fills and glows keep --gt-red; only tier text uses this. */
-  --gt-red-on-dark: #f01d0c;
+  --gt-red-on-dark: #f54a3c;
   --gt-orange: #ff7a18;
   --gt-yellow: #fbcd03;
   background: var(--gt-black);
@@ -2457,9 +2461,14 @@ body:has(.tw-page) {
   --tw-blue-hot: #2f5ce0;
   --tw-red: #c1111a;
   --tw-red-hot: #e6242c;
-  /* Same hue, lifted just enough to clear AA as TYPE on the section's near-black
-     (4.11 -> 4.61). --tw-red-hot stays the fill/glow value. */
-  --tw-red-hot-ink: #e72a32;
+  /* Text-on-dark variant. #e72a32 was my previous attempt and it did NOT clear:
+     4.61 against flat --tw-black, but the type sits inside the navy radial bloom
+     (rgba(27,63,176,0.34)), so the real ground is #090e27-#140e26 and it
+     measured 4.20-4.33. Same mistake as --gt-red-on-dark above, one round after
+     naming it: a bloom drawn behind the type IS the type's background.
+     Re-solved against the measured composite: 4.66 worst case.
+     --tw-red-hot stays the fill/glow value. */
+  --tw-red-hot-ink: #e93d45;
   --tw-red-deep: #7d0a11;
   --tw-shop-ink: #2a0507;
   --tw-cream: #fff4ea;
@@ -2562,5 +2571,39 @@ body:has(.tw-page) footer {
     max-height: none;
     margin-top: 0.5rem;
     scroll-margin-top: 0.5rem;
+  }
+}
+
+/* ── REDUCED-MOTION FALLBACK for the two Pops card stacks ────────────────────
+   Both sections lay their cards out `absolute inset-0` and rely on GSAP to
+   bring each one forward in turn. Under `reduce` the GSAP branch early-returns
+   (pops-facts.tsx `if (c.reduce) return`, pops-lineup.tsx `if (!c.isDesktop)
+   return`, which catches reduce too), so all six facts and all nine jars sit
+   exactly on top of one another and only the top-most is visible. Measured:
+   six cards, one identical rect, one hit. The progress rail still renders
+   underneath, advertising five facts you cannot reach.
+
+   This is the third instance of the same defect — gt-difference and gt-upgrade
+   were the first two — and the fix is the same shape: give reduced-motion
+   visitors the CONTENT, laid out in normal flow, rather than the frozen first
+   frame of an animation they will never see. */
+@media (prefers-reduced-motion: reduce) {
+  [data-pops-stack] {
+    position: static;
+    display: grid;
+    gap: 1rem;
+    height: auto;
+    min-height: 0;
+    pointer-events: auto;
+  }
+  [data-pops-stack] > * {
+    position: static;
+    inset: auto;
+    transform: none;
+  }
+  /* the parent slot is a fixed-height box sized for one card */
+  .pops-scene:has([data-pops-stack]) {
+    height: auto;
+    min-height: 0;
   }
 }

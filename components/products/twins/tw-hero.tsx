@@ -260,7 +260,7 @@ export default function TwHero() {
               <span key={s.l} data-tw-stat
                 className="flex flex-1 flex-col items-center rounded-2xl border border-white/15 bg-black/70 px-3 py-2.5 backdrop-blur-md md:px-5 md:py-3.5">
                 <span className="font-display leading-none text-white" style={{ fontSize: 'min(8vw, 2.4rem)' }}>{s.n}</span>
-                <span className="mt-1 text-[9px] font-extrabold uppercase tracking-[0.24em] text-[var(--tw-red-hot)] md:text-[11px]"
+                <span className="mt-1 text-[9px] font-extrabold uppercase tracking-[0.24em] text-[var(--tw-red-hot-ink)] md:text-[11px]"
                   style={{ fontFamily: 'var(--font-brand)' }}>{s.l}</span>
               </span>
             ))}

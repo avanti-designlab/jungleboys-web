@@ -23,6 +23,17 @@ const css = fs.readFileSync('app/globals.css', 'utf8')
 const BRAND = /^--(tw|tp|gt|pr|pops|hh|fl|strain|color)-/
 const SKIP = new Set(['gt-fire.tsx', 'gt-snow.tsx'])
 
+// NOT ALL REMAINING HITS ARE FALSE POSITIVES — read this before dismissing the
+// list. The design gate checked, and the `#fecf0e` hits are REAL: --color-accent
+// is the brand yellow, declared once, identical in both themes, and meaning-
+// equal at every one of those sites. It also disproved the mechanical objection
+// — `var()` DOES resolve in SVG `fill`/`stroke`/`stop-color` in this Chrome.
+// Genuinely exempt classes, which should be encoded here rather than argued in
+// prose: (a) the literal is the right-hand side of a custom-property DEFINITION
+// rather than a consumption; (b) design-check, whose job is to print token
+// hexes; (c) GSAP tween targets, which cannot interpolate a var() string — the
+// same exemption the canvas sims already have.
+//
 // READ THE SUGGESTION BEFORE APPLYING IT. This tool matches on VALUE, and
 // value-equal is not meaning-equal. It will offer --color-surface-light for a
 // white text fill or SVG stroke; a surface token is not a text colour, and

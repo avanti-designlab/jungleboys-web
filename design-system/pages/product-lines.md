@@ -60,6 +60,26 @@ gradient never needs a literal.
 | Twins | `--tw-black` | `--tw-ink` | `--tw-red-hot` → `--tw-red` → `--tw-red-deep`; `--tw-navy`, `--tw-blue`, `--tw-blue-hot`, `--tw-cream` |
 | Pops | — | `--pops-ink` | `--pops-red` |
 
+## Text-on-dark variants (added during the Phase 2 gate remediation)
+
+Three lines needed a SECOND value of an accent for use as TYPE, because the
+value tuned as a fill does not clear AA as text on that line's own dark stage.
+The fill value stays; only type uses the `-on-dark` / `-ink` variant.
+
+| Token | Value | Fill counterpart | Why |
+|---|---|---|---|
+| `--gt-red-on-dark` | `#f54a3c` | `--gt-red` `#e11b0b` | Live Rosin tier type. |
+| `--tw-red-hot-ink` | `#e93d45` | `--tw-red-hot` `#e6242c` | Twins claims + hero labels. |
+| `--pops-red-on-dark` | `#ea4242` | `--pops-red` `#c80000` | Shop card subtitle on `#161618`. |
+
+**Solve these against the COMPOSITED ground, not the flat token.** Both red
+variants were wrong on their first attempt for the same reason: each sits inside
+its own section's radial bloom, and a glow drawn behind type is part of that
+type's background. `--gt-red-on-dark` measured 4.63 against flat stage black and
+3.63 against the real `#341613`; `--tw-red-hot-ink` measured 4.61 against flat
+`--tw-black` and 4.20 inside the navy bloom. Screenshot the ground and sample
+it; do not compute against the token you think is behind the text.
+
 Shop panels also carry `--tw-shop-ink`, `--tp-shop-ink`, `--pr-shop-ink` — the
 deep text colour on that line's light shop panel.
 

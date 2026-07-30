@@ -147,7 +147,7 @@ export default async function LineShop({
                           </span>
                         )}
                         {thc && (
-                          <span className="rounded-full border border-white/35 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
+                          <span className="rounded-full border border-white/35 bg-black/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
                             THC {thc.value}%
                           </span>
                         )}

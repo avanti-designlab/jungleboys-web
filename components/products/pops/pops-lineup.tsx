@@ -139,7 +139,7 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
 
         {/* desktop: 3D coverflow rail */}
         <div className="pops-scene relative mt-10 hidden h-[38vh] min-h-[230px] md:block lg:mt-12">
-          <div data-rail className="pops-3d pointer-events-none absolute inset-0">
+          <div data-rail data-pops-stack className="pops-3d pointer-events-none absolute inset-0">
             {items.map((j, i) => (
               <button
                 key={j.id}

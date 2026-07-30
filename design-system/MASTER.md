@@ -139,6 +139,7 @@ that line's Figma frames + packaging art. They never leak into global components
 ### Status colors (semantic — added at Phase 1 exit)
 
 - `--color-success` / `--color-danger` / `--color-warning` — theme-aware (AA-darkened on the light
+| `--color-danger-solid` | `#c21f1f` | FIXED, never theme-varying. For a filled badge with white text on a surface that is light in BOTH themes — `--color-danger` flips to `#ef4444` in dark, which is right for error text on a dark ground and wrong under white text. |
   bg, vivid in dark). Use these tokens for verify states, form errors, alerts — never hard-coded
   green/red/amber.
 
