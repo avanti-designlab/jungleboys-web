@@ -148,13 +148,26 @@ export default function ScrollSequence({ frames, heightVh = 300, base = BASE, si
       (entries) => {
         if (!entries[0].isIntersecting) return
         io.disconnect()
-        const imgs = Array.from({ length: frames }, (_, i) => {
-          const im = new Image()
-          im.src = src(i)
-          return im
-        })
+        const imgs: HTMLImageElement[] = Array.from({ length: frames }, () => new Image())
         imagesRef.current = imgs
-        Promise.all(imgs.map((im) => im.decode().catch(() => {}))).then(() => {
+
+        // Setting all 61 `src` at once opened 61 parallel requests — ~5MB
+        // hitting the connection in one burst, which starved everything else on
+        // the page and kept the load event from firing at all on a throttled
+        // profile. A window of 6 moves the same bytes without monopolising the
+        // pipe. The brief's contract is unchanged: every frame is still decoded
+        // before the scroll handler attaches, so there is no scrub jank.
+        const LANES = 6
+        let next = 0
+        const pump = async (): Promise<void> => {
+          while (!cancelled) {
+            const i = next++
+            if (i >= frames) return
+            imgs[i].src = src(i)
+            await imgs[i].decode().catch(() => {})
+          }
+        }
+        Promise.all(Array.from({ length: Math.min(LANES, frames) }, pump)).then(() => {
           if (cancelled) return
           stateRef.current.ready = true
           size()
