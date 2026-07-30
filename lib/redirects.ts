@@ -69,13 +69,17 @@ export const redirects: Redirect[] = [
   { source: '/app', destination: '/rewards', permanent: true },
   { source: '/pwf-reward', destination: '/rewards', permanent: true },
 
-  // Product authentication currently lands on /auth (BatchSys verify + scan
-  // flow). TEMPORARY (307), not permanent: 00 §7 names /verify as a main anchor
-  // of the new build at its preserved URL — it will become a real page once the
-  // backend behind the old one is identified. A 301 tells Google to forget
-  // /verify, which is the opposite of what a URL we intend to rebuild needs,
-  // and ~3.7k clicks/yr already point at it.
-  { source: '/verify', destination: '/auth', permanent: false },
+  // /verify is RETIRED (Avanti, 2026-07-30). It served an older verification
+  // process that the rebuild does not use; /auth is the real product-auth flow
+  // and the printed sticker format (jungleboys.com/auth/<CODE>).
+  //
+  // PERMANENT (308), not the temporary redirect this was before. A 307 says
+  // "this URL is coming back", which was right while /verify was still planned
+  // as a page and is wrong now that it is deliberately gone. A 308 tells Google
+  // to fold /verify's history into /auth and stop offering the old URL — which
+  // is what retiring it means. The ~3.7k clicks/yr land on the flow they were
+  // looking for either way.
+  { source: '/verify', destination: '/auth', permanent: true },
 
   // Product-line landings nest under /products (Avanti decision)
   { source: '/hash-hole', destination: '/products/hash-hole', permanent: true },

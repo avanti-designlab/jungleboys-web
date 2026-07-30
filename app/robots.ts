@@ -14,9 +14,10 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: [
           '/api/',
-          // NOT '/auth' — /verify 308s here, and a redirect target Google
-          // cannot crawl consolidates nothing. The page carries its own
-          // robots: noindex instead, so it is crawlable but not indexable.
+          // NOT '/auth' — /verify 308s here (permanently, since /verify is
+          // retired), and a redirect target Google cannot crawl consolidates
+          // nothing. The page carries its own robots: noindex instead, so it is
+          // crawlable but not indexable.
           '/login',
           '/signup',
           '/callback',

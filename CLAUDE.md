@@ -52,11 +52,16 @@ is the execution timeline.**
   motion tier, video-first layout. Full-archive/stats upgrade (YouTube Data API key) deferred/optional.
   **Channel (confirmed): youtube.com/@JungleBoysfilms — channelId `UC3FkXgy37Xc5tRBl4ltHuDA`;
   uploads feed `youtube.com/feeds/videos.xml?channel_id=UC3FkXgy37Xc5tRBl4ltHuDA` (verified working).**
-- **`/verify` template (Avanti, 2026-07-19 — adds to brief 00 §7):** product-authenticity
-  verification page (customer scans QR or enters scratch code to confirm the product is genuine).
-  A main anchor of the new build at the preserved `/verify` URL (currently 404s despite ~3.7k
-  clicks/yr). Anti-counterfeit = brand protection. Backend/data source for code verification: TBD —
-  discover what system powered the old page before building (Phase 1 planning question for Avanti).
+- **`/verify` RETIRED (Avanti, 2026-07-30 — SUPERSEDES the 2026-07-19 entry below).**
+  The earlier decision made `/verify` a main anchor of the new build at its preserved URL.
+  Avanti has since ruled the opposite: **it served an older verification process the rebuild
+  does not use, so it should not exist.** `/verify` **308s permanently** to `/auth`, which is
+  the real product-auth flow and the printed sticker format (`jungleboys.com/auth/<CODE>`).
+  Permanent, not temporary: a 307 tells Google the URL is coming back, and it is not.
+  Consequence, accepted: `/verify` drops out of the index and its ~3.7k clicks/yr land on
+  `/auth` instead. Do NOT rebuild a `/verify` page or re-raise this as an SEO finding.
+  (Superseded text, kept for history: product-authenticity verification page at the preserved
+  `/verify` URL; anti-counterfeit = brand protection; backend TBD.)
 - **Products vs Shop rule (Avanti, 2026-07-19 — refines brief 00 §7 items 12–13):** the **Products tab**
   is a curated JB-only collection — each product line (Hash Holes, Pre-Rolls, 10-Pack Prerolls, Premium
   Flower…) gets its own custom design-heavy landing page with a shop option (these are the Phase 2 Figma

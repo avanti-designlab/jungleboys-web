@@ -9,7 +9,10 @@ export const metadata: Metadata = {
   title: 'Verify Your Product',
   description: 'Confirm your Jungle Boys product is authentic.',
   robots: { index: false, follow: false },
-  alternates: { canonical: '/auth' },
+  // NO canonical. noindex plus a canonical pointing at a DIFFERENT page is a
+  // conflicting signal, and Google can resolve it by propagating the noindex to
+  // the canonical target — i.e. this per-code page could have taken /auth down
+  // with it. There are unbounded code URLs, so noindex alone is the right tool.
 }
 
 export default async function AuthCodePage({ params }: { params: Promise<{ code: string }> }) {
