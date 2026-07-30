@@ -20,24 +20,29 @@ type Part = {
   left: number; top: number; width: number
   from: { x: number; y: number; r: number }
   pill: { left: number; top: number }
-  // thin connector: a fixed-thickness line that DRAWS from the piece toward
-  // the pill. axis v = vertical (origin top), h = horizontal (origin right)
-  line: { left: number; top: number; len: number; axis: 'v' | 'h' }
+  // Thin connector stub: a fixed-thickness vertical line that DRAWS downward
+  // and lands exactly on its pill's top edge.
+  //
+  // Its `top` is NOT authored — it is derived as pill.top - len, so a connector
+  // can never float free of the pill it belongs to. Two of the four used to be
+  // horizontal bars with a hand-typed `top` that sat 2.5% ABOVE the pill,
+  // pointing at nothing. Deriving the position removes that whole class of bug.
+  line: { left: number; len: number }
 }
 
 const PARTS: Part[] = [
   { key: 'paper', label: 'All-Natural Paper', img: '/products/hash-hole/roll-paper.webp',
     left: 0, top: 6.74, width: 99.87, from: { x: 0, y: 60, r: 6 },
-    pill: { left: 28, top: 80 }, line: { left: 37, top: 74.5, len: 5, axis: 'v' } },
+    pill: { left: 34, top: 84 }, line: { left: 43, len: 6 } },
   { key: 'flower', label: 'Premium Indoor Flower', img: '/products/hash-hole/roll-flower.webp',
     left: 31.11, top: 7.11, width: 52.21, from: { x: 30, y: -45, r: -10 },
-    pill: { left: 58, top: 54 }, line: { left: 68, top: 50.5, len: 3.5, axis: 'v' } },
+    pill: { left: 58, top: 54 }, line: { left: 68, len: 3.5 } },
   { key: 'rosin', label: 'Live Hash Rosin', img: '/products/hash-hole/roll-rosin.webp',
     left: 16.75, top: 0, width: 50.12, from: { x: -40, y: -40, r: -14 },
-    pill: { left: 0, top: 33 }, line: { left: 9, top: 30.5, len: 9, axis: 'h' } },
+    pill: { left: 0, top: 33 }, line: { left: 18, len: 5 } },
   { key: 'tip', label: 'Organic Wood Tip', img: '/products/hash-hole/roll-tip.webp',
     left: 13.61, top: 57.68, width: 15.1, from: { x: -55, y: 25, r: 16 },
-    pill: { left: 0, top: 73 }, line: { left: 9, top: 70.5, len: 7, axis: 'h' } },
+    pill: { left: 0, top: 73 }, line: { left: 18, len: 5 } },
 ]
 
 // one build beat per piece: piece → line draws → pill pops
@@ -45,7 +50,7 @@ function addBuild(tl: gsap.core.Timeline, p: Part, at: number) {
   tl.from(`[data-piece="${p.key}"]`,
     { opacity: 0, xPercent: p.from.x, yPercent: p.from.y, rotate: p.from.r, duration: 0.5, ease: 'power2.out' }, at)
     .from(`[data-line="${p.key}"]`,
-      { [p.line.axis === 'v' ? 'scaleY' : 'scaleX']: 0, duration: 0.22, ease: 'power1.inOut' }, at + 0.42)
+      { scaleY: 0, duration: 0.22, ease: 'power1.inOut' }, at + 0.42)
     .from(`[data-pill="${p.key}"]`,
       { opacity: 0, scale: 0.6, duration: 0.24, ease: 'back.out(2.2)' }, at + 0.66)
 }
@@ -115,11 +120,13 @@ export default function HhBreakdown() {
                 aria-hidden
                 className="absolute bg-[var(--hh-green-deep)]"
                 style={{
-                  left: `${p.line.left}%`, top: `${p.line.top}%`,
-                  width: p.line.axis === 'v' ? '2px' : `${p.line.len}%`,
-                  height: p.line.axis === 'v' ? `${p.line.len}%` : '2px',
+                  left: `${p.line.left}%`,
+                  // derived, never authored — always lands on the pill's top edge
+                  top: `${p.pill.top - p.line.len}%`,
+                  width: '2px',
+                  height: `${p.line.len}%`,
                   // draw AWAY from the piece, toward the pill
-                  transformOrigin: p.line.axis === 'v' ? 'top center' : 'right center',
+                  transformOrigin: 'top center',
                 }}
               />
               <span data-pill={p.key}
