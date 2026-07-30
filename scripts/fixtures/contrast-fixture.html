@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>contrast harness fixture</title>
+<!-- Mirrors app/layout.tsx: data-theme comes from localStorage, default LIGHT.
+     If the harness stops seeding jb-theme, this stays 'light' and the sweep's
+     theme assertion fires — which is the point. -->
+<script>try{if(localStorage.getItem('jb-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
+<style>
+  html, body { margin: 0; padding: 0; }
+  /* MUST stay shorter than the viewport. A --window-size of 1440x900 yields an
+     innerHeight of 813 in headless Chrome, so a 900px body scrolls by 87px — and
+     CASE-E's text then slides out from under its pinned bar and is legitimately
+     reported. Keep the page unscrollable or CASE-E stops testing occlusion. */
+  body { background: #0A0A0F; font-family: system-ui, sans-serif; height: 700px; position: relative; }
+  .row { position: absolute; left: 40px; width: 600px; height: 60px;
+         display: flex; align-items: center; padding-left: 12px; }
+  /* A bright ground painted by a SIBLING, not by any ancestor of the text.
+     A DOM-walking background lookup cannot see this; only pixels can. */
+  .glow { position: absolute; inset: 0; background: #FFE24D; }
+  .over { position: relative; color: #FFFFFF; font-size: 16px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden;
+        clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;
+        color: #FFFFFF; background: #FFE24D; }
+</style>
+</head>
+<body>
+
+<!-- A: #FFFFFF on #0A0A0F = 19.75:1 -> PASSES, must NOT be reported -->
+<div class="row" id="rA" style="top: 20px;"><span style="color:#FFFFFF;font-size:16px">CASE-A pass opaque</span></div>
+
+<!-- B: #666666 on #0A0A0F = 3.44:1 at 16px -> FAILS (need 4.5) -->
+<div class="row" id="rB" style="top: 100px;"><span style="color:#666666;font-size:16px">CASE-B fail opaque</span></div>
+
+<!-- C: Tailwind-style translucent. Chrome reports this as oklab(), not rgba().
+     An rgba-only parser drops it silently. white@35% over #13131A = 3.23:1 -->
+<div class="row" id="rC" style="top: 180px; background:#13131A;">
+  <span style="color:color-mix(in oklab, #FFFFFF 35%, transparent);font-size:16px">CASE-C fail translucent oklab</span>
+</div>
+
+<!-- D: the composited-ground discriminator. Every ancestor of the text is
+     #0A0A0F (would score 19.75:1, a pass). The real painted ground is the
+     #FFE24D sibling glow = 1.29:1, a fail. -->
+<div class="row" id="rD" style="top: 260px; background:#0A0A0F;">
+  <div class="glow"></div><span class="over">CASE-D fail over glow</span>
+</div>
+
+<!-- E: identical to D but fully covered by a pinned bar. The glyphs are not
+     visible there at all, so it must NOT be reported. This is the phantom
+     "white on yellow" class the sticky header used to manufacture. -->
+<div class="row" id="rE" style="top: 340px; background:#0A0A0F;">
+  <div class="glow"></div><span class="over">CASE-E occluded over glow</span>
+</div>
+<div id="occ" style="position:fixed;left:0;top:335px;width:100%;height:70px;background:#0A0A0F;"></div>
+
+<!-- F: sr-only. Read aloud, never painted -> no ratio applies. -->
+<span class="sr">CASE-F sr-only over glow</span>
+
+<!-- G: backface-culled. Both faces of a flip live in the DOM at full opacity;
+     the away-facing one is dropped by the compositor, not by any style. -->
+<div class="row" id="rG" style="top: 420px; background:#0A0A0F; transform: rotateY(180deg); backface-visibility: hidden;">
+  <div class="glow"></div><span class="over">CASE-G culled over glow</span>
+</div>
+
+<!-- H1: #616161 on #0A0A0F = 3.19:1 at 24px -> large text, needs 3.0 -> PASSES -->
+<div class="row" id="rH1" style="top: 500px;"><span style="color:#616161;font-size:24px">CASE-H1 pass large</span></div>
+
+<!-- H2: same colour at 16px -> needs 4.5 -> FAILS. Proves the large-text rule. -->
+<div class="row" id="rH2" style="top: 580px;"><span style="color:#616161;font-size:16px">CASE-H2 fail small</span></div>
+
+</body>
+</html>

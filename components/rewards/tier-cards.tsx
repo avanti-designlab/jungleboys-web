@@ -16,7 +16,11 @@ const themes = {
     name: 'text-[#e4e4e8]',
   },
   gold: {
-    card: 'bg-gradient-to-b from-[#f0c419] via-[#96700a] to-[#241b02]',
+    // `via` darkened from #96700a. The tier name lands on this band, where
+    // #ffe98a measured 3.02:1. Text colour alone cannot fix it — even pure
+    // white is only 3.95:1 on the old band, still short of the 4.5 floor for
+    // 18px — so the ground had to move rather than the ink.
+    card: 'bg-gradient-to-b from-[#f0c419] via-[#4a3705] to-[#241b02]',
     name: 'text-[#ffe98a]',
   },
 } as const

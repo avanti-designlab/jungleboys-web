@@ -359,7 +359,7 @@ export default function ProductsCollection() {
                   {/* eyebrow chip */}
                   <div className="relative z-10">
                     <span
-                      className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/85 ring-1 ring-inset ring-white/15 backdrop-blur-sm"
+                      className="inline-flex items-center rounded-full bg-white/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white ring-1 ring-inset ring-white/15 backdrop-blur-sm"
                       style={{ fontFamily: 'var(--font-brand)' }}
                     >
                       {c.sub}

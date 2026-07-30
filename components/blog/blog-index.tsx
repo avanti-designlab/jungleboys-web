@@ -171,7 +171,11 @@ export default function BlogIndex({ posts }: { posts: BlogSummary[] }) {
                 ) : (
                   <div className="absolute inset-0" style={{ background: 'radial-gradient(90% 90% at 30% 10%, rgba(254,207,14,0.25), transparent 60%), #121216' }} />
                 )}
-                <span className="font-display absolute right-3 top-1 text-5xl leading-none text-white/20">
+                {/* Ornamental card index. It repeats the card's own position and
+                    carries nothing a reader needs, so it is declared decoration
+                    rather than lifted to AA — at white/20 it is a watermark by
+                    design (WCAG 1.4.3 exempts pure decoration). */}
+                <span aria-hidden="true" className="font-display absolute right-3 top-1 text-5xl leading-none text-white/20">
                   {String(i + 1).padStart(2, '0')}
                 </span>
               </div>

@@ -228,7 +228,7 @@ export default function NewsletterPopup({ consentText }: { consentText: string }
                 )}
               </button>
 
-              <p className="text-[10px] leading-relaxed text-white/35">{consentText}</p>
+              <p className="text-[10px] leading-relaxed text-white/60">{consentText}</p>
             </form>
           )}
         </div>

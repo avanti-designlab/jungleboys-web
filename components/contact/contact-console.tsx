@@ -180,7 +180,7 @@ export default function ContactConsole({ consentText }: { consentText: string })
                     {t.label}
                   </span>
                 </span>
-                <span className="text-[11px] leading-tight text-white/45">{t.hint}</span>
+                <span className="text-[11px] leading-tight text-white/60">{t.hint}</span>
               </button>
             )
           })}
@@ -247,7 +247,8 @@ export default function ContactConsole({ consentText }: { consentText: string })
             )}
 
             <div className="flex flex-col gap-4 md:col-span-2 md:flex-row md:items-center md:justify-between">
-              <p className="max-w-md text-[11px] leading-relaxed text-white/35">{consentText}</p>
+              {/* TCPA consent copy — 11px at white/35 measured 3.16:1 on this panel. */}
+              <p className="max-w-md text-[11px] leading-relaxed text-white/60">{consentText}</p>
               <button
                 type="submit"
                 disabled={state === 'sending'}

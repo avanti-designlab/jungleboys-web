@@ -672,13 +672,19 @@ html.jb-no-intro .jb-intro {
 .jb-pin.is-active .jb-pin-mark {
   transform: scale(1.15);
 }
-/* Leaflet chrome tuned for the charcoal theme */
-.jb-map .leaflet-control-attribution {
-  background: rgba(0, 0, 0, 0.5);
-  color: rgba(255, 255, 255, 0.5);
+/* Leaflet chrome tuned for the charcoal theme.
+   The container-scoped selector is deliberate: Leaflet sets the attribution
+   background on `.leaflet-container .leaflet-control-attribution` (0,2,0), the
+   same specificity this rule used to have, and its stylesheet is imported from
+   the map components so Next injects it AFTER globals.css and wins the tie.
+   Only the background lost — Leaflet's `color` sits on a (0,1,0) rule — which
+   left white text on Leaflet's default white chip: 1.23:1 on a dark map. */
+.jb-map .leaflet-container .leaflet-control-attribution {
+  background: rgba(6, 6, 8, 0.86);
+  color: rgba(255, 255, 255, 0.82);
 }
-.jb-map .leaflet-control-attribution a {
-  color: rgba(255, 255, 255, 0.7);
+.jb-map .leaflet-container .leaflet-control-attribution a {
+  color: rgba(255, 255, 255, 0.95);
 }
 .jb-map .leaflet-bar a {
   background: #16161a;

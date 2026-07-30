@@ -218,6 +218,33 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   CONTENT and SHELL templates: home, `/products` collection, locations, contact, find-jb-products,
   rewards, media, phenos, wholesale, blog, faq, terms, privacy, auth. Gate agents: scope the
   dark sweep to those and say so explicitly rather than silently skipping product pages.
+- **Dark-mode contrast sweep: DONE (2026-07-30).** First dark sweep of the content + shell
+  templates (the 15 routes in `scripts/lib/routes.mjs`), desktop 1440 + mobile 390, against a
+  production build. The design gate's throwaway harness is now promoted into `scripts/`
+  (`contrast-sweep.mjs`, `contrast-verify.mjs`, `selftest-contrast.mjs`, `lib/`), so results are
+  reproducible. **Run `node scripts/selftest-contrast.mjs` before trusting any number from it** —
+  it drives the real sweep over fixtures whose ratios are known analytically and fails if any
+  guard regresses. It caught two instrument bugs during promotion.
+  FIXED (each re-measured against the ground it actually lands on):
+  Leaflet attribution 1.23 → 13.21 and its "Leaflet" link 1.32 → 17.83 on `/contact` +
+  `/find-jb-products`; TCPA consent copy 3.16 → 7.30; contact topic hints 4.30 → 6.44;
+  `/products` badges 4.18 → 5.08 and 4.48 → 5.45; `/rewards` Gold tier name 3.02 → 5.65.
+  **NOT findings — do not re-raise:**
+  (a) `/wholesale` "Next →" at 1.86 is a `disabled:opacity-40` control; WCAG 1.4.3 exempts
+      inactive components.
+  (b) `/find-jb-products` map clusters at 2.95/3.24 are measured through the idle
+      "Find your closest drop" scrim (`bg-black/55`), which fades on first interaction. The
+      cluster's own design is `#000` on `#fecf0e` = 11.7:1.
+  (c) 16 `aria-hidden` decorative items (the giant `contact-letter` watermarks, the `hunt-row`
+      texture at 3.5% alpha, the phenos numerals, the blog `|` separator). Pure decoration is
+      exempt; the blog card index numbers were the one such item NOT declared decorative and are
+      now `aria-hidden`.
+  **Measurement trap, learned here:** a scroll-triggered reveal that has not FIRED yet is
+  perfectly stable and therefore indistinguishable from one that has finished. Six `/rewards`
+  findings looked real at alpha 0.039–0.425 and measured 12.7–20.6:1 once each element was
+  centred on a clean page load — "Download the App" read 1.06, then 18.88. Settle-detection alone
+  does not catch this; `contrast-verify.mjs` reloads per finding for exactly this reason. Never
+  ship a contrast fix off a sweep number that has not been through the verify pass.
 - **Branch protection on `main`: DEFERRED AGAIN at Phase 1 start (Avanti's explicit ruling,
   2026-07-19)** — solo-merger friction outweighs benefit while one agent builds sequentially.
   **Hard trigger remains: enable BEFORE CUTOVER, non-negotiable** (and revisit if multiple agents
