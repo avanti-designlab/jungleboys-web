@@ -204,7 +204,7 @@ export default function ScanOverlay({ open, onClose }: { open: boolean; onClose:
             placeholder="Enter code manually"
             aria-label="Enter product code manually"
             autoCapitalize="characters"
-            className="min-w-0 flex-1 rounded-full border border-white/25 bg-white/5 px-5 py-3 text-sm uppercase tracking-wide text-white placeholder:text-white/40 focus:border-[var(--color-accent)] focus:outline-none"
+            className="min-w-0 flex-1 rounded-full border border-white/25 bg-white/5 px-5 py-3 text-sm uppercase tracking-wide text-white placeholder:text-white/55 focus:border-[var(--color-accent)] focus:outline-none"
             style={{ fontFamily: 'var(--font-brand)' }}
           />
           <button

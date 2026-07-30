@@ -302,7 +302,11 @@ export default function ProductsCollection() {
                 {/* editorial footer: tag + big name (left), arrow disc (right) */}
                 <div className="relative z-10 flex flex-wrap items-end justify-between gap-x-3 gap-y-2 px-5 pb-4 pt-1 md:px-6 md:pb-5">
                   <div className="min-w-0">
-                    <span className="block text-[10px] font-bold uppercase tracking-[0.26em] text-black/40" style={{ fontFamily: 'var(--font-brand)' }}>
+                    {/* /55 not /40: at 10px this is the smallest type on the card, and /40
+                        measures 2.85:1 on white and 2.83:1 on the #f7f7f7 card.
+                        /55 clears AA on both grounds (4.74 / 4.69) and still reads
+                        as a muted tag against the solid-black name beneath it. */}
+                    <span className="block text-[10px] font-bold uppercase tracking-[0.26em] text-black/55" style={{ fontFamily: 'var(--font-brand)' }}>
                       {line.tag}
                     </span>
                     <h3 className="font-display mt-1 text-[2rem] uppercase leading-[0.9] text-black md:text-[2.5rem]">{line.name}</h3>

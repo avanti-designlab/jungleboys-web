@@ -65,7 +65,7 @@ export default function NewsletterForm({ consentText }: { consentText: string })
             inputMode="numeric"
             placeholder="Phone number"
             maxLength={14}
-            className="h-full w-full bg-transparent px-4 py-4 text-base text-white placeholder:text-white/40 focus:outline-none"
+            className="h-full w-full bg-transparent px-4 py-4 text-base text-white placeholder:text-white/55 focus:outline-none"
           />
         </label>
         <button
@@ -87,7 +87,9 @@ export default function NewsletterForm({ consentText }: { consentText: string })
         </p>
       )}
 
-      <p className="text-[11px] leading-relaxed text-white/40">{consentText}</p>
+      {/* /55 not /40. This is the TCPA consent language (07 §7) — 3.80:1 at 11px
+          is below AA, and consent you cannot read is not consent. 6.25:1. */}
+      <p className="text-[11px] leading-relaxed text-white/55">{consentText}</p>
     </form>
   )
 }
