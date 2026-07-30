@@ -68,8 +68,26 @@ export default function HeroDeck({ slides = HERO_SLIDES }: { slides?: HeroSlide[
     })
 
     mm.add('(prefers-reduced-motion: reduce)', () => {
-      wrap.style.height = '100svh'
-      slides.slice(1).forEach((s) => (s.style.display = 'none'))
+      // Was: `slides.slice(1).forEach(s => s.style.display = 'none')` — which
+      // DELETED two of the three promotions for anyone with reduced motion on,
+      // with no carousel control to reach them. Not a degraded animation: the
+      // content was unreachable, and GOLD MYLARS is the home LCP element.
+      //
+      // Same fix shape as the two Pops stacks: give reduced-motion visitors the
+      // CONTENT in normal flow instead of the first frame of an animation they
+      // will never see. Three full-height panels they simply scroll through.
+      const stage = stageRef.current
+      if (stage) {
+        stage.style.position = 'static'
+        stage.style.height = 'auto'
+      }
+      wrap.style.height = 'auto'
+      slides.forEach((sl) => {
+        sl.style.position = 'relative'
+        sl.style.height = '100svh'
+        sl.style.opacity = '1'
+        sl.style.transform = 'none'
+      })
     })
 
     return () => mm.revert()
