@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import PillCta from '@/components/pill-cta'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { HERO_SLIDES, type HeroSlide } from '@/lib/home-content'
@@ -21,6 +21,20 @@ gsap.registerPlugin(ScrollTrigger)
 export default function HeroDeck({ slides = HERO_SLIDES }: { slides?: HeroSlide[] }) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
+
+  // Slides 2 and 3 are stacked in the SAME viewport box as slide 1 (all
+  // `absolute inset-2` inside the sticky stage), so `loading="lazy"` never
+  // holds them back — the browser sees them as in-viewport and fetches all
+  // three up front. Their art is therefore kept out of the DOM until `load`,
+  // the same treatment the 10-Pack smoke video needed. Only the slide you can
+  // actually see competes for the critical path.
+  const [showRest, setShowRest] = useState(false)
+  useEffect(() => {
+    if (document.readyState === 'complete') return setShowRest(true)
+    const on = () => setShowRest(true)
+    window.addEventListener('load', on, { once: true })
+    return () => window.removeEventListener('load', on)
+  }, [])
 
   useEffect(() => {
     const wrap = wrapRef.current
@@ -112,6 +126,18 @@ export default function HeroDeck({ slides = HERO_SLIDES }: { slides?: HeroSlide[
           >
             {/* 9:16 art on phones when supplied; 16:9 desktop art otherwise */}
             <div className="relative h-full w-full">
+              {/* Both variants render and `display:none` does NOT stop a
+                  download, so every slide was fetching its phone AND desktop
+                  art. Worse, both carried `priority`, so on a phone the DESKTOP
+                  file preloaded at 1962ms and delayed the mobile file that is
+                  the actual LCP element to 2599ms — the hero was queued behind
+                  a copy of itself nobody sees.
+                  Priority now goes to the phone variant only (the measured
+                  profile and the one under budget pressure); the desktop
+                  variant loads lazily and is in-viewport on desktop anyway, so
+                  it still fetches immediately there, just without competing for
+                  the preload slot. */}
+              {(i === 0 || showRest) && (
               <Image
                 src={s.imageMobile ?? s.image}
                 alt={s.alt}
@@ -120,14 +146,18 @@ export default function HeroDeck({ slides = HERO_SLIDES }: { slides?: HeroSlide[
                 sizes="100vw"
                 className={`object-cover ${s.imageMobile ? 'md:hidden' : 'hidden'}`}
               />
+              )}
+              {(i === 0 || showRest) && (
               <Image
                 src={s.image}
                 alt={s.alt}
                 fill
-                priority={i === 0}
+                loading={i === 0 && !s.imageMobile ? undefined : 'lazy'}
+                priority={i === 0 && !s.imageMobile}
                 sizes="100vw"
                 className={`object-cover ${s.imageMobile ? 'hidden md:block' : ''}`}
               />
+              )}
             </div>
             {/* overlays removed — banners show full-bright (Avanti) */}
             <div

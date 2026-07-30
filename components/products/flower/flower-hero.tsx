@@ -81,6 +81,12 @@ export default function FlowerHero() {
 
         {/* the frosty live-top rises to overlap the words */}
         {/* eslint-disable-next-line @next/next/no-img-element -- hero art */}
+        {/* The LCP element, and it was the whole constraint: 165KB finishing at
+            3779ms on a 1.6 Mbps pipe. A phone renders it at 663 CSS px from a
+            1200px file, so most of those bytes were never seen. Media-scoped
+            source, same pattern as the Twins wordmark. */}
+        <picture>
+          <source media="(max-width: 767px)" srcSet="/products/flower/plant-cutout-m.webp" />
         <img
           data-fl-plant
           fetchPriority="high"
@@ -88,6 +94,7 @@ export default function FlowerHero() {
           alt="Frost-covered Jungle Boys live top"
           className="fl-plant absolute bottom-0 left-1/2 z-20 w-[170vw] max-w-none md:w-[min(135vw,1350px)] drop-shadow-[0_50px_90px_rgba(0,0,0,0.85)]"
         />
+        </picture>
 
         {/* scroll cue */}
         <div aria-hidden className="absolute bottom-7 left-1/2 z-30 -translate-x-1/2 text-[10px] font-bold uppercase tracking-[0.34em] text-white/50" style={{ fontFamily: 'var(--font-brand)' }}>
