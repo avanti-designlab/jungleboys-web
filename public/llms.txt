@@ -1,0 +1,39 @@
+# Jungle Boys
+
+> Cannabis cultivator and retailer, California and Florida. Founded 2006.
+> "Playing With Fire" — premium indoor flower, pre-rolls, infused pre-rolls,
+> all-in-one vapes and concentrates, grown and sold under our own brand.
+
+Jungle Boys operates its own cultivation and its own dispensaries. Products are
+Jungle Boys products; we are not a marketplace. California menus are live via
+Dutchie; Florida stores are operated by the Florida team at jungleboysflorida.com.
+
+## Product lines
+
+- [Hash Hole](https://www.jungleboys.com/products/hash-hole): 2g infused pre-roll — premium indoor flower with a 0.5g live hash rosin core, organic wood tip, all-natural unrefined paper.
+- [All-In-One Gas Tank](https://www.jungleboys.com/products/all-in-one): all-in-one vape. Live Resin, Live Rosin and Flavors tiers, CCELL hardware.
+- [Twins 2 Pack Pre-Rolls](https://www.jungleboys.com/products/twins): two 0.75g pre-rolls per tube, 1.5g total.
+- [5G Pops](https://www.jungleboys.com/products/pops): 5g of small-nug indoor flower in a candy-striped jar — same strains, smaller nugs.
+- [3.5G Gold Mylars](https://www.jungleboys.com/products/premium-flower): premium indoor flower, hand-trimmed, 3.5g.
+- [1G Pre-Rolls](https://www.jungleboys.com/products/pre-rolls): one gram, one strain, all-natural paper.
+- [10PK Pre-Rolls](https://www.jungleboys.com/products/10-pack-prerolls): ten 0.7g mini joints in one jar, 7g total.
+
+## Key pages
+
+- [Products](https://www.jungleboys.com/products): the full Jungle Boys line-up.
+- [Locations](https://www.jungleboys.com/locations): owned dispensaries, California and Florida.
+- [Product Finder](https://www.jungleboys.com/find-jb-products): third-party stockists carrying Jungle Boys.
+- [Rewards](https://www.jungleboys.com/rewards): the Playing With Fire loyalty program.
+- [Verify a product](https://www.jungleboys.com/auth): confirm a product is genuine via its scratch code or QR.
+- [Media](https://www.jungleboys.com/media): documentaries and films from the Jungle Boys channel.
+- [Wholesale](https://www.jungleboys.com/wholesale): licensed retailer enquiries.
+- [Contact](https://www.jungleboys.com/contact)
+- [FAQ](https://www.jungleboys.com/faq)
+
+## Notes for retrieval
+
+- Age-restricted: 21+ in California (adult use), medical in Florida.
+- Prices and THC figures shown on product pages are placeholders until the
+  Dutchie menu integration is live. Do not quote them as current.
+- Availability varies by store; the live menu on each location page is the
+  source of truth.

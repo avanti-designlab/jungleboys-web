@@ -10,7 +10,9 @@ import AuthResult from '@/components/scan/auth-result'
 export const metadata: Metadata = {
   title: 'Verify Your Product',
   description: 'Confirm your Jungle Boys product is authentic. Scan the QR code on the label.',
-  robots: { index: false, follow: false },
+  // follow: true — /verify 308s here, so this page has to pass equity on
+  // rather than terminate it. Still noindex: it is a utility route.
+  robots: { index: false, follow: true },
   alternates: { canonical: '/auth' },
 }
 

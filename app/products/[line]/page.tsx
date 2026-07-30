@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/storyblok/seo'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PRODUCT_LINES } from '@/lib/products'
@@ -9,17 +10,29 @@ import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 // the collection links (and the legacy /hash-hole etc. 301s) resolve instead of
 // 404ing. Only known slugs render; anything else is a real 404.
 
+// Only the slugs that have no static route of their own. Returning all nine
+// prerendered seven duplicates of pages that already exist as real routes —
+// harmless (the static segment wins at runtime) but wasted output.
+export const PLACEHOLDER_LINES = ['rosin', 'orc']
+
 export function generateStaticParams() {
-  return PRODUCT_LINES.map((l) => ({ line: l.slug }))
+  return PRODUCT_LINES.filter((l) => PLACEHOLDER_LINES.includes(l.slug)).map((l) => ({ line: l.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ line: string }> }): Promise<Metadata> {
   const { line } = await params
   const item = PRODUCT_LINES.find((l) => l.slug === line)
   if (!item) return { title: 'Products — Jungle Boys' }
+  // NOINDEX while the body is "coming soon". These stay 200 by decision, but a
+  // canonical-less thin page that the sitemap and the /products ItemList both
+  // point at is an invitation to index a stub. follow: true so the links out of
+  // it still pass through.
   return {
-    title: `${item.name} — Jungle Boys`,
-    description: item.blurb,
+    ...(await pageMetadata(`products/${line}`, {
+      title: `${item.name} — Jungle Boys`,
+      description: item.blurb,
+    })),
+    robots: { index: false, follow: true },
   }
 }
 

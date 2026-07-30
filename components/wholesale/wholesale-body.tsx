@@ -40,6 +40,9 @@ function NabisMark({ className = '' }: { className?: string }) {
 
 export default function WholesaleBody({ consentText }: { consentText: string }) {
   const rootRef = useRef<HTMLDivElement>(null)
+  // spam honeypot, matching the other three lead forms. A wizard builds its
+  // payload from state rather than FormData, so this reads through a ref.
+  const honeypotRef = useRef<HTMLInputElement>(null)
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
@@ -103,6 +106,7 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          company: honeypotRef.current?.value ?? '',
           name: `${answers.firstName ?? ''} ${answers.lastName ?? ''}`.trim(),
           email: answers.email,
           phone: answers.phone ? `+1${String(answers.phone).replace(/\D/g, '')}` : '',
@@ -129,6 +133,7 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
 
   return (
     <div ref={rootRef}>
+      <input ref={honeypotRef} name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
       {/* intro: info pill (left) + media pill (right) — plane flies across on scroll-in */}
       <section className="relative px-4 pt-16 md:px-8 md:pt-24 lg:px-12">
         <WholesalePlane />

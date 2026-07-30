@@ -38,7 +38,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority,
   }))
 
-  const lines = PRODUCT_LINES.map((line) => ({
+  // Rosin and ORC render the generic placeholder and are noindex — a sitemap
+  // that advertises a soft-404 is the same mistake as one that advertises a 404.
+  const PLACEHOLDER_LINES = ['rosin', 'orc']
+  const lines = PRODUCT_LINES.filter((l) => !PLACEHOLDER_LINES.includes(l.slug)).map((line) => ({
     url: `${SITE_ORIGIN}/products/${line.slug}`,
     lastModified: now,
     changeFrequency: 'weekly' as const,

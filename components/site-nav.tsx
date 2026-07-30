@@ -200,14 +200,11 @@ export default function SiteNav() {
                           {l.label}
                         </Link>
                       )}
-
-
                     </li>
                   )
                 })}
               </ul>
             ))}
-
           </nav>
 
           <div className="menu-socials absolute bottom-8 right-8 flex items-center gap-6 text-white">

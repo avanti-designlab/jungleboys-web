@@ -1,5 +1,5 @@
 // ─── REDIRECT MAP v1 (03 §4 — from seo/url-inventory.csv) ────────────────────
-// Every rule is single-hop 301 (permanent: true). No chains. Owned by the
+// Every rule is single-hop and permanent (Next emits 308 for permanent: true). No chains. Owned by the
 // SEO/Schema agent; changes require an inventory row. QA'd against staging
 // before cutover by the redirect QA script.
 
@@ -53,6 +53,17 @@ export const redirects: Redirect[] = [
   { source: '/april-deals', destination: '/rewards', permanent: false },
   { source: '/may-deals', destination: '/rewards', permanent: false },
   { source: '/june-deals', destination: '/rewards', permanent: false },
+
+  // INTERIM, same pattern as the deal rotations above: these three are linked
+  // from live chrome (mobile tab bar, /products "explore more" cards, the
+  // header Log in control) but their Phase-3 destinations do not exist yet, so
+  // every one of them was a crawlable 404 on the primary category page and on
+  // all seven line pages. Pointing them at the nearest live surface keeps the
+  // links honest and stops the crawl budget draining into dead ends.
+  // RESTORE all three to their real destinations when Phase 3 ships.
+  { source: '/710-deals', destination: '/rewards', permanent: false },
+  { source: '/drops', destination: '/products', permanent: false },
+  { source: '/login', destination: '/rewards', permanent: false },
 
   // Rewards consolidation — /rewards is the loyalty landing (supersedes /loyalty)
   { source: '/app', destination: '/rewards', permanent: true },

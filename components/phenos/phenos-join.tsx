@@ -44,6 +44,9 @@ const ALL_Q: Q[] = [
 
 export default function PhenosJoin({ consentText }: { consentText: string }) {
   const rootRef = useRef<HTMLDivElement>(null)
+  // spam honeypot, matching the other three lead forms. A wizard builds its
+  // payload from state rather than FormData, so this reads through a ref.
+  const honeypotRef = useRef<HTMLInputElement>(null)
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
@@ -152,6 +155,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          company: honeypotRef.current?.value ?? '',
           name: answers.suggestName ? `Pheno hunter (${answers.suggestName})` : 'Pheno hunter',
           email: answers.email,
           phone: '',
@@ -187,6 +191,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
 
   return (
     <div ref={rootRef} className="relative z-10 px-4 pb-16 md:px-8 lg:px-12">
+      <input ref={honeypotRef} name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
       <div className="mx-auto max-w-[1280px]">
         {/* ===== two yellow pitch pills on top ===== */}
         <div className="grid gap-5 md:grid-cols-2 md:gap-6">

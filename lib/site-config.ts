@@ -80,6 +80,11 @@ export const FOOTER_NAV = [
   { label: 'Wholesale', href: '/wholesale' },
   { label: 'Contact', href: '/contact' },
   { label: 'Locations', href: '/locations' },
+  // FAQ was reachable ONLY from sitemap.xml — it sat in a FOOTER_LINKS export
+  // that nothing imported, so it had zero internal links from any rendered
+  // page. A page a crawler can only reach via the sitemap gets crawled slowly
+  // and ranks accordingly.
+  { label: 'FAQ', href: '/faq' },
 ] as const
 
 export const BRAND = {
