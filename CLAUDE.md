@@ -209,6 +209,15 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   in a later pass, and do not re-raise it as a gate blocker.** `hh-finale` IS scrimmed — that
   heading is white + gold with no green, so the scrim was free there (white 2.35 → 8.62, gold
   1.41 → 5.18). Revisit only if the sky ground itself changes.
+- **Product-line pages are THEME-INVARIANT — dark and light render identically (Avanti,
+  2026-07-30).** The ten `/products/*` line pages are custom designs, each built around its
+  own artwork and palette; they are not a light design with a dark variant. There is
+  therefore nothing to sweep on them for dark mode, and **a dark-mode contrast finding on a
+  product-line page is not a finding** — it is the same surface already measured in light.
+  The site-wide dark-mode AA requirement (design system §LIGHT + DARK MODE) applies to the
+  CONTENT and SHELL templates: home, `/products` collection, locations, contact, find-jb-products,
+  rewards, media, phenos, wholesale, blog, faq, terms, privacy, auth. Gate agents: scope the
+  dark sweep to those and say so explicitly rather than silently skipping product pages.
 - **Branch protection on `main`: DEFERRED AGAIN at Phase 1 start (Avanti's explicit ruling,
   2026-07-19)** — solo-merger friction outweighs benefit while one agent builds sequentially.
   **Hard trigger remains: enable BEFORE CUTOVER, non-negotiable** (and revisit if multiple agents
