@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { renderRichText } from '@storyblok/react/rsc'
 import { SITE_ORIGIN } from '@/lib/storyblok/seo'
-import { sanitizeRichTextHtml } from '@/lib/richtext-safe'
+import { sanitizeRichTextDoc, sanitizeRichTextHtml } from '@/lib/richtext-safe'
 import { getBlogPost, getBlogPosts } from '@/lib/blog'
 import { assetUrl } from '@/lib/storyblok'
 import ReadingProgress from '@/components/blog/reading-progress'
@@ -57,8 +57,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   // Sanitised, not raw: the richtext renderer escapes text and attribute values
   // but not link SCHEMES, so a `javascript:` href reaches the DOM intact —
   // and our CSP's `script-src 'unsafe-inline'` is exactly what lets it run.
+  // Document sanitised BEFORE the renderer (attribute NAMES are not escaped by
+  // it), then the output pass for link schemes.
   const html = sanitizeRichTextHtml(
-    typeof post.body === 'string' ? post.body : post.body ? renderRichText(post.body as never) : ''
+    typeof post.body === 'string'
+      ? post.body
+      : post.body
+        ? renderRichText(sanitizeRichTextDoc(post.body) as never)
+        : ''
   )
   const mins = readingTime(html)
 

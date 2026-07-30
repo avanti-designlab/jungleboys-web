@@ -9,9 +9,21 @@ type StoryVersion = 'draft' | 'published'
 // Fetch a Storyblok story. Storyblok is OPTIONAL by design: with no token (space
 // not connected yet) or on any error, returns null so callers fall back to the
 // code defaults — the site never depends on the CMS to render.
+// Reject traversal and empty segments before a slug reaches the API path.
+// Not currently reachable — Next's [slug] is a single segment and %2F does not
+// survive routing — but it is one catch-all route away from being reachable,
+// and every caller of getStory() inherits whatever this allows.
+function safeSlug(slug: string): string | null {
+  const parts = slug.split('/')
+  if (parts.some((p) => p === '' || p === '.' || p === '..')) return null
+  return parts.map(encodeURIComponent).join('/')
+}
+
 export async function getStory(slug: string, version: StoryVersion = 'draft') {
   const token = process.env.STORYBLOK_TOKEN
   if (!token) return null
+  const safe = safeSlug(slug)
+  if (safe === null) return null
 
   try {
     const res = await fetch(
@@ -19,8 +31,13 @@ export async function getStory(slug: string, version: StoryVersion = 'draft') {
       // [slug] route param, and Next decodes %3F back into it, so a raw
       // interpolation let `blog/x%3Fversion%3Ddraft%26` append a second
       // `version` param — first-wins — and serve DRAFT content on a public URL.
-      // `..` segments also escaped the /stories/ prefix with our token attached.
-      `${CDN_API}/stories/${slug.split('/').map(encodeURIComponent).join('/')}` +
+      //
+      // Encoding alone does NOT stop `..` — dots are unreserved, so
+      // encodeURIComponent('..') is '..' and fetch's URL parser still resolves
+      // the dot segments, reaching /v2/cdn/datasources with our token attached.
+      // An earlier version of this comment claimed the encoding handled that.
+      // It did not. Hence the explicit reject in safeSlug() above.
+      `${CDN_API}/stories/${safe}` +
         `?version=${encodeURIComponent(version)}&token=${token}`,
       // ISR: on-demand via /api/revalidate (Storyblok publish webhook) AND a 60s
       // time-based fallback so published edits appear within a minute even before

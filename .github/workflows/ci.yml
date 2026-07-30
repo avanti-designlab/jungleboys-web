@@ -36,5 +36,12 @@ jobs:
         run: node scripts/audit-gate.mjs
       - name: Lint
         run: npx eslint .
+
+      # The richtext sanitizer's whole value is that it fails when a renderer
+      # upgrade changes the escaping it depends on. A test nothing runs cannot
+      # do that, and this one was not wired in. `--experimental-strip-types` is
+      # native on the Node this workflow uses, so it needs no tsx install.
+      - name: Richtext sanitizer regression (SEC-P2-1)
+        run: node --experimental-strip-types scripts/check-richtext-safe.mjs
       - name: Build
         run: npm run build

@@ -1,19 +1,82 @@
-// Scheme allowlist for CMS richtext (security finding SEC-P2-1).
+// Sanitizer for CMS richtext (SEC-P2-1, first AND second pass).
 //
-// `renderRichText` from @storyblok/richtext escapes text nodes and attribute
-// VALUES, but it does not validate link SCHEMES. A Storyblok editor can author
-//   { type: 'link', attrs: { href: 'javascript:alert(document.domain)' } }
-// and the renderer emits it verbatim into an href. Both consumers push that
-// straight into `dangerouslySetInnerHTML`, and our CSP carries
-// `script-src 'unsafe-inline'`, which is exactly the grant that lets a
-// `javascript:` URI run — so CSP does not catch it either.
+// TWO layers, because the renderer has two separate holes and my first fix only
+// closed one of them.
 //
-// Invariant 04 §9 #5 is unconditional: all CMS content is untrusted and must be
-// sanitized. This is the sanitizer for the one hole that renderer leaves.
+// LAYER 1 — sanitizeRichTextDoc(), the important one, added after the security
+// gate broke the first version. `@storyblok/richtext` builds attributes as
 //
-// It deliberately does NOT try to be a general HTML sanitizer. The renderer's
-// escaping of text and attribute values is sound (verified against the
-// installed package), so widening scope here would add risk, not remove it.
+//     result += ` ${key}="${escapeAttr(value)}"`      (dist/index.mjs:669)
+//
+// so the attribute VALUE is escaped and the attribute NAME is not — and names
+// are attacker-supplied. Every attrs interface carries `[key: string]: unknown`,
+// and a link's declared `custom` object is expanded key-by-key into attributes
+// (dist/index.mjs:433). From a CMS account with publish rights that yields:
+//   custom: { onmouseover: 'alert(1)' }       -> <a … onmouseover="alert(1)">
+//   image attrs: { onerror: 'alert(1)' }      -> <img … onerror="alert(1)">
+//   custom: { 'q"><img src=x onerror=alert(1)><a b="': 'z' }
+//                                             -> breaks the tag open entirely
+//   textStyle color: 'red; position:fixed; inset:0; z-index:99999'
+//                                             -> full-viewport clickjack overlay
+//
+// My first version rewrote only href/src in the OUTPUT and justified that narrow
+// scope with "the renderer's escaping of attribute values is sound". True, and
+// irrelevant — the injection is in the NAME position. The same false premise
+// also made the output regex unsound, because a `"` CAN appear unescaped when it
+// arrives via a name. Scope decisions resting on an unverified premise are how
+// a sanitizer ends up looking finished while being open.
+//
+// LAYER 2 — sanitizeRichTextHtml(), the original pass, kept as defence in depth
+// for link schemes, which IS a value-position problem the renderer never checks.
+
+
+// ── LAYER 1: attribute-name allowlist ────────────────────────────────────────
+
+// Names the renderer legitimately emits across every node and mark type it
+// supports. Everything else is dropped by simply not being here — every `on*`
+// handler, `style`, and the `custom` bag included.
+const ALLOWED_ATTRS = new Set([
+  'href', 'target', 'anchor', 'uuid', 'linktype', 'title', 'rel',
+  'src', 'alt', 'width', 'height', 'loading', 'decoding',
+  'level', 'class', 'id', 'name', 'start', 'order', 'language',
+  'colspan', 'rowspan', 'color',
+])
+
+// `color` is the one allowed name whose VALUE lands inside a style declaration
+// (`style="color: <value>"`), so it is the one value that can still inject CSS.
+// Hex, rgb()/hsl(), or a bare keyword only — no `;`, no `:`, no url().
+const SAFE_COLOR = /^(#[0-9a-f]{3,8}|(rgb|rgba|hsl|hsla)\([0-9.,%\s/-]+\)|[a-z]+)$/i
+
+function cleanAttrs(attrs: Record<string, unknown>): Record<string, unknown> {
+  const out: Record<string, unknown> = {}
+  for (const [k, v] of Object.entries(attrs)) {
+    if (!ALLOWED_ATTRS.has(k)) continue
+    if (k === 'color' && !(typeof v === 'string' && SAFE_COLOR.test(v.trim()))) continue
+    if ((k === 'href' || k === 'src') && typeof v === 'string' && !isSafeUrl(v)) continue
+    out[k] = v
+  }
+  return out
+}
+
+/** Deep-clean a Storyblok richtext document. Never mutates the input. */
+export function sanitizeRichTextDoc<T>(doc: T): T {
+  const walk = (n: unknown): unknown => {
+    if (Array.isArray(n)) return n.map(walk)
+    if (!n || typeof n !== 'object') return n
+    const out: Record<string, unknown> = {}
+    for (const [k, v] of Object.entries(n as Record<string, unknown>)) {
+      if (k === 'attrs' && v && typeof v === 'object' && !Array.isArray(v)) {
+        out[k] = cleanAttrs(v as Record<string, unknown>)
+      } else {
+        out[k] = walk(v)
+      }
+    }
+    return out
+  }
+  return walk(doc) as T
+}
+
+// ── LAYER 2: link schemes in the rendered output ─────────────────────────────
 
 const SAFE_SCHEMES = ['http:', 'https:', 'mailto:', 'tel:']
 

@@ -1,6 +1,6 @@
 import { getStory } from '@/lib/storyblok'
 import { renderRichText } from '@storyblok/react/rsc'
-import { sanitizeRichTextHtml } from '@/lib/richtext-safe'
+import { sanitizeRichTextDoc, sanitizeRichTextHtml } from '@/lib/richtext-safe'
 
 // Editable FAQ from Storyblok: a `faq` story whose body is a list of `faq_item`
 // bloks (question + richtext answer). Fallback-safe: empty list if not present.
@@ -17,7 +17,9 @@ export async function getFaqItems(): Promise<FaqEntry[]> {
     .map((b) => {
       // sanitised HERE rather than at the sink, so any future consumer of
       // answerHtml inherits the protection instead of having to remember it
-      const answerHtml = b.answer ? sanitizeRichTextHtml(renderRichText(b.answer as never)) : ''
+      const answerHtml = b.answer
+        ? sanitizeRichTextHtml(renderRichText(sanitizeRichTextDoc(b.answer) as never))
+        : ''
       return {
         question: (b.question as string) || '',
         answerHtml,

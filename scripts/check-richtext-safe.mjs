@@ -5,12 +5,36 @@
 //
 // Runs the REAL renderer, not a mock, so it fails if a renderer upgrade ever
 // changes the escaping this sanitizer depends on.
-//   npx tsx scripts/check-richtext-safe.mjs
+//   node --experimental-strip-types scripts/check-richtext-safe.mjs
 import { renderRichText } from '@storyblok/richtext'
-import { sanitizeRichTextHtml, isSafeUrl } from '../lib/richtext-safe'
+import { sanitizeRichTextDoc, sanitizeRichTextHtml } from '../lib/richtext-safe.ts'
 
 const doc = (href) => ({ type:'doc', content:[{ type:'paragraph', content:[
   { type:'text', text:'click me', marks:[{ type:'link', attrs:{ href, target:'_self' } }] }]}]})
+
+// Render exactly as the app does: document sanitised BEFORE the renderer, then
+// the output pass. Testing only the output pass is what let the first version
+// look finished while attribute-NAME injection walked straight through.
+const render = (d) => sanitizeRichTextHtml(renderRichText(sanitizeRichTextDoc(d)))
+
+// The five vectors the security gate used to break v1. Attribute NAMES are
+// interpolated raw by the renderer (dist/index.mjs:669) and a link's `custom`
+// bag is expanded key-by-key into attributes (dist/index.mjs:433).
+const ATTR_VECTORS = [
+  ['link custom onmouseover', { type:'doc', content:[{ type:'paragraph', content:[
+    { type:'text', text:'click me', marks:[{ type:'link', attrs:{ href:'https://jungleboys.com',
+      custom:{ onmouseover:'alert(document.domain)' } } }] }]}]}],
+  ['link custom tag-breakout', { type:'doc', content:[{ type:'paragraph', content:[
+    { type:'text', text:'hi', marks:[{ type:'link', attrs:{ href:'https://x.com',
+      custom:{ 'q\"><img src=x onerror=alert(1)><a b=\"':'z' } } }] }]}]}],
+  ['paragraph onmouseover', { type:'doc', content:[
+    { type:'paragraph', attrs:{ onmouseover:'alert(1)' }, content:[{ type:'text', text:'hover me' }] }]}],
+  ['image onerror', { type:'doc', content:[
+    { type:'image', attrs:{ src:'https://a-us.storyblok.com/f/x.jpg', onerror:'alert(1)' } }]}],
+  ['textStyle css-injection', { type:'doc', content:[{ type:'paragraph', content:[
+    { type:'text', text:'overlay', marks:[{ type:'textStyle',
+      attrs:{ color:'red; position:fixed; inset:0; z-index:99999; background:#fff' } }] }]}]}],
+]
 
 const ATTACKS = [
   'javascript:alert(document.domain)',
@@ -35,10 +59,19 @@ const LEGIT = [
 ]
 
 let bad = 0
-console.log('ATTACKS — must all be neutralised:')
+console.log('ATTRIBUTE-NAME VECTORS (the ones that broke v1):')
+for (const [name, d] of ATTR_VECTORS) {
+  const out = render(d)
+  const leaked = /\son[a-z]+=/i.test(out) || /<img[^>]*onerror/i.test(out)
+    || /position:\s*fixed/i.test(out) || /<a[^>]*\sq"/i.test(out)
+  if (leaked) bad++
+  console.log(`  ${leaked ? '*** LEAKED ***' : 'BLOCKED'}  ${name.padEnd(28)} -> ${out.slice(0,88)}`)
+}
+
+console.log('\nSCHEME VECTORS — must all be neutralised:')
 for (const a of ATTACKS) {
   const raw = renderRichText(doc(a))
-  const safe = sanitizeRichTextHtml(raw)
+  const safe = render(doc(a))
   const stillThere = /href="(?!#")/.test(safe) && !/href="#"/.test(safe)
   const ok = !stillThere
   if (!ok) bad++
@@ -47,7 +80,7 @@ for (const a of ATTACKS) {
 console.log('\nLEGITIMATE — must all survive untouched:')
 for (const l of LEGIT) {
   const raw = renderRichText(doc(l))
-  const safe = sanitizeRichTextHtml(raw)
+  const safe = render(doc(l))
   const ok = raw === safe
   if (!ok) bad++
   console.log(`  ${ok ? 'kept   ' : '*** BROKEN ***'}  ${l.padEnd(46)} -> ${safe.match(/href="[^"]*"/)?.[0] ?? '(none)'}`)
