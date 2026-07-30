@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation'
 import { renderRichText } from '@storyblok/react/rsc'
 import { SITE_ORIGIN } from '@/lib/storyblok/seo'
 import { sanitizeRichTextDoc, sanitizeRichTextHtml } from '@/lib/richtext-safe'
-import { getBlogPost, getBlogPosts } from '@/lib/blog'
+import { getBlogPost, getBlogPosts, getPublishedBlogPosts, isSamplePost } from '@/lib/blog'
 import { assetUrl } from '@/lib/storyblok'
 import ReadingProgress from '@/components/blog/reading-progress'
 import { AnimatedHeading, ParallaxImage } from '@/components/blog/post-hero'
@@ -15,7 +15,9 @@ import BlogMarquee from '@/components/blog/blog-marquee'
 export const revalidate = 60
 
 export async function generateStaticParams() {
-  const posts = await getBlogPosts()
+  // REAL posts only. Prerendering the samples is what put three fabricated
+  // articles on the site as indexable 200s.
+  const posts = await getPublishedBlogPosts()
   return posts.map((p) => ({ slug: p.slug }))
 }
 
@@ -33,6 +35,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title,
     description,
     alternates: { canonical: `/blog/${slug}` },
+    // A sample post can still be reached directly (or via a stale link) even
+    // though it is no longer prerendered, so it must also refuse indexing.
+    // Belt and braces on purpose: one of these advertises a promo that never
+    // ran, and it is not worth a second incident to save a line.
+    ...(isSamplePost(slug) ? { robots: { index: false, follow: false } } : {}),
     openGraph: { title, description, type: 'article', ...(image ? { images: [image] } : {}) },
   }
 }

@@ -56,6 +56,20 @@ export async function getBlogPosts(): Promise<BlogSummary[]> {
  * Same principle the sitemap already applies to placeholder product lines:
  * advertising a soft-404 is the same mistake as advertising a 404.
  */
+/**
+ * True when a slug is one of the hardcoded samples rather than a real CMS post.
+ *
+ * Keeping the samples out of the sitemap was not enough: they are prerendered,
+ * return 200, are self-canonical and are linked from /blog and from every
+ * post's Keep Reading block, so Google reaches them by crawl regardless. One of
+ * them advertises a deals period that never ran, on a cannabis domain — the
+ * same 07 §7 argument that justified the sitemap split, with more force,
+ * because this is the page itself rather than a hint about it.
+ */
+export function isSamplePost(slug: string): boolean {
+  return SAMPLE_POSTS.some((p) => p.slug === slug)
+}
+
 export async function getPublishedBlogPosts(): Promise<BlogSummary[]> {
   const stories = (await getStories(
     'content_type=blog_post&sort_by=content.published_date:desc&per_page=100'
@@ -73,7 +87,8 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
       seo: Array.isArray(seoField) ? (seoField[0] as Record<string, unknown>) : undefined,
     }
   }
-  // fallback: temporary sample posts (removed once real posts are published)
+  // fallback: temporary sample posts (removed once real posts are published).
+  // The caller must treat these as NOINDEX — see isSamplePost.
   return SAMPLE_POSTS.find((p) => p.slug === slug) ?? null
 }
 

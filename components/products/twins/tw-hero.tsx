@@ -77,19 +77,28 @@ export default function TwHero() {
           // 1079px, so every run recorded that transient giant frame at ~4.5s
           // instead of the resting paint at ~2.0s. The animation was the metric.
           //
-          // Scaling UNDER 1 and easing up was also wrong, and measurably so:
-          // 4516ms -> 5088ms. Any geometry animation means the resting size is
-          // only reached when the tween ENDS, so LCP waits for the animation
-          // either way — too big early, or too small early.
+          // THE MARK HAS NO ENTRANCE, and that is the fix — third time here.
           //
-          // So the geometry does not animate at all. A filter leaves the
-          // bounding box untouched, so the mark is at its full resting size the
-          // instant the image decodes, and LCP fires then. The entrance becomes
-          // a focus pull — the mark resolves out of a blur — which is the same
-          // arrival read without costing the metric.
-          tl.fromTo('[data-tw-mark]',
-            { filter: 'blur(30px)' },
-            { opacity: 1, filter: 'blur(0px)', duration: 1.05, ease: 'power2.out' }, 0.35)
+          // It went scale 2.6->1, then scale 0.88->1, then filter-only, each
+          // time to protect LCP. The filter-only version's comment claimed "a
+          // filter leaves the bounding box untouched, so LCP fires when the
+          // image decodes". True for LAYOUT and false for LCP: Chrome credits
+          // LCP by PAINTED area, which includes filter ink overflow. Animating
+          // blur(30px)->blur(0) meant the painted area shrank across the whole
+          // tween while the border box never moved — invisible to any check
+          // that measures getBoundingClientRect, which is why I could not find
+          // it, and why removing the container's scale bought nothing.
+          //
+          // Measured, controlled, production build at 4x CPU / 1.6 Mbps:
+          //   as shipped ............................. 4260ms
+          //   container scale removed ................ 4288ms  (nothing)
+          //   GSAP blur removed from the mark ........ 2760ms  (-1500ms)
+          //   blur AND the img drop-shadow removed ... 1728ms  (-2532ms)
+          //
+          // So the mark is simply present. The mascots, sub-mark and stats keep
+          // their entrances, so the hero still arrives — the LCP element just
+          // is not part of the choreography any more. Any future entrance here
+          // must not animate geometry OR filters on this element.
             .fromTo('[data-tw-sub]', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 1.25)
             .fromTo('[data-tw-stat]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }, 1.45)
 
