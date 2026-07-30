@@ -1,5 +1,3 @@
-import { PRODUCT_LINES } from '@/lib/products'
-
 // Site-wide navigation + brand config. Edit here, never inline in components.
 
 const CDN = 'https://cdn.prod.website-files.com/6981ad8672f6252d7d7bb320'
@@ -22,17 +20,7 @@ export const NAV_LINKS = [
 ] as const
 
 // Full-screen menu — three-column layout matching the live site's overlay
-// The seven built flagship lines, in the order they appear on /products.
-// Rosin and ORC are deliberately NOT here: they still render the generic
-// placeholder pending the "Jungle Boys Extracts" decision (CLAUDE.md), and
-// putting a placeholder in the main menu is the "orphaned coming-soon page"
-// failure mode that decision was written to avoid. Add them when they are real.
-const PLACEHOLDER_LINES = ['rosin', 'orc']
-export const PRODUCT_SUBMENU = PRODUCT_LINES
-  .filter((l) => !PLACEHOLDER_LINES.includes(l.slug))
-  .map((l) => ({ label: l.name, href: `/products/${l.slug}` }))
-
-export const MENU_COLUMNS: { label: string; href: string; external?: boolean; children?: { label: string; href: string }[] }[][] = [
+export const MENU_COLUMNS: { label: string; href: string; external?: boolean }[][] = [
   [
     { label: 'Media', href: '/media' },
     { label: 'Phenos', href: '/phenos' },
@@ -48,7 +36,7 @@ export const MENU_COLUMNS: { label: string; href: string; external?: boolean; ch
     // and Google credits only the first anchor's text for a repeated href, so
     // "Shop" won and "Products" — the term we want to rank — was discarded.
     // PHASE 3: re-add { label: 'Shop', href: '/shop' } as the FIRST entry.
-    { label: 'Products', href: '/products', children: PRODUCT_SUBMENU },
+    { label: 'Products', href: '/products' },
     { label: 'Clothing', href: 'https://jungleboysclothing.com/', external: true },
   ],
   [
