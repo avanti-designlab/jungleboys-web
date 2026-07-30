@@ -273,7 +273,12 @@ select:focus-visible,
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
   box-shadow: 0 0 0 2px var(--color-ink);
-  border-radius: 3px;
+  /* NO border-radius. This block is unlayered so it beat Tailwind's layered
+     `rounded-*`, and 30 of 53 focusable controls on /products have a designed
+     radius > 4px — every pill CTA squared off the instant it took focus, and
+     the ring then traced a rectangle around a round button. Both `outline` and
+     `box-shadow` already follow the element's own radius, so the declaration
+     bought nothing and cost that. */
 }
 /* show/hide by theme (e.g. watermark logo variants) */
 .dark-only {
@@ -2452,6 +2457,9 @@ body:has(.tw-page) {
   --tw-blue-hot: #2f5ce0;
   --tw-red: #c1111a;
   --tw-red-hot: #e6242c;
+  /* Same hue, lifted just enough to clear AA as TYPE on the section's near-black
+     (4.11 -> 4.61). --tw-red-hot stays the fill/glow value. */
+  --tw-red-hot-ink: #e72a32;
   --tw-red-deep: #7d0a11;
   --tw-shop-ink: #2a0507;
   --tw-cream: #fff4ea;

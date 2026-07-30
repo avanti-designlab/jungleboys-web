@@ -98,7 +98,7 @@ export default async function FlowerShop() {
                             </span>
                           )}
                           <span className="whitespace-nowrap">
-                            <span className={`font-display text-[2.1rem] leading-none ${deal ? 'text-[#c21f1f]' : ''}`}>{dollars(deal ?? v.price)}</span>
+                            <span className={`font-display text-[2.1rem] leading-none ${deal ? 'text-[var(--color-danger-solid)]' : ''}`}>{dollars(deal ?? v.price)}</span>
                             <span className="ml-1 text-xs font-bold uppercase text-[var(--color-ink)]/60" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
                           </span>
                         </p>

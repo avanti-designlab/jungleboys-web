@@ -10,8 +10,25 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 const css = fs.readFileSync('app/globals.css', 'utf8')
-const BRAND = /^--(tw|tp|gt|pr|pops|hh|fl|strain)-/
+// Includes --color-* deliberately. The design gate found this regex was the
+// hole: by never looking at --color-*, the checker certified 15 literal
+// duplicates of single-declaration --color-* tokens — including three copies of
+// #c21f1f, the exact value of --color-danger-solid, a token created in the same
+// remediation pass the checker was supposed to be guarding. A checker that
+// green-lights violations of the freeze rule it exists to enforce is worse than
+// no checker, because it reads as a pass.
+//
+// The theme-varying guard below still applies: tokens declared more than once
+// are skipped, so --color-accent-ink and friends cannot be mis-substituted.
+const BRAND = /^--(tw|tp|gt|pr|pops|hh|fl|strain|color)-/
 const SKIP = new Set(['gt-fire.tsx', 'gt-snow.tsx'])
+
+// READ THE SUGGESTION BEFORE APPLYING IT. This tool matches on VALUE, and
+// value-equal is not meaning-equal. It will offer --color-surface-light for a
+// white text fill or SVG stroke; a surface token is not a text colour, and
+// swapping it there is the same class of error as the --color-accent-ink
+// incident below — right hex, wrong concept. Fix the ones where the token
+// genuinely names what the literal is FOR; leave the rest and say why.
 
 // A token declared with DIFFERENT values under different theme selectors can
 // never stand in for a fixed literal — substituting it silently changes the

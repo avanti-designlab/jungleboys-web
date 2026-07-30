@@ -123,7 +123,7 @@ export default function TwClaims() {
 
         <div className="relative z-10 mx-auto max-w-[1240px]">
           <div className="text-center">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.42em] text-[var(--tw-red-hot)] md:text-xs"
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.42em] text-[var(--tw-red-hot-ink)] md:text-xs"
               style={{ fontFamily: 'var(--font-brand)' }}>
               Matched pair
             </p>

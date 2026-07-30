@@ -147,7 +147,7 @@ export default async function LineShop({
                           </span>
                         )}
                         {thc && (
-                          <span className="rounded-full border border-white/35 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white/85" style={{ fontFamily: 'var(--font-brand)' }}>
+                          <span className="rounded-full border border-white/35 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
                             THC {thc.value}%
                           </span>
                         )}
@@ -163,13 +163,13 @@ export default async function LineShop({
                               <span className="mb-1 block text-xs font-bold text-white/55 line-through" style={{ fontFamily: 'var(--font-brand)' }}>{dollars(v.price)}</span>
                               <span className="whitespace-nowrap">
                                 <span className="font-display text-[2rem] leading-none text-[#ffd166]">{dollars(deal)}</span>
-                                <span className="ml-1 text-xs font-bold uppercase text-white/60" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
+                                <span className="ml-1 text-xs font-bold uppercase text-white/85" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
                               </span>
                             </>
                           ) : (
                             <span className="whitespace-nowrap">
                               <span className="font-display text-[2rem] leading-none">{dollars(v.price)}</span>
-                              <span className="ml-1 text-xs font-bold uppercase text-white/60" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
+                              <span className="ml-1 text-xs font-bold uppercase text-white/85" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
                             </span>
                           )}
                         </p>
