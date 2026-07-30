@@ -101,6 +101,28 @@ export default function TwHero() {
             { xPercent: -130 },
             { xPercent: 330, duration: 1.5, ease: 'power1.inOut', repeat: -1, repeatDelay: 3.8, delay: 1.35 })
 
+          // OPEN — twins LCP ~3.8-4.1s, and `pin: true` below is implicated.
+          //
+          // PROVEN: pinning wraps this section in a GSAP .pin-spacer, and
+          // wrapping detaches and re-inserts the node, which cancels and
+          // restarts every CSS animation inside it. Traced on a production
+          // build: the .media-hero-in zoom is cancelled at the exact
+          // millisecond the pin-spacers appear, and again right after `load`
+          // when ScrollTrigger.refresh() redoes the pin. Control: hash-hole and
+          // /products carry the same class WITHOUT a pin and never restart.
+          // The stylesheet count never changes, so it is not hydration
+          // re-inserting CSS.
+          //
+          // NOT THE WHOLE STORY. Removing the scale from the shared
+          // media-hero-in keyframes stabilised THAT source — the recorded
+          // element size stopped inflating 497x325 -> stayed 440x288 — but LCP
+          // did not move, because the wordmark still grows ~8% between its real
+          // paint at 2064ms and 4072ms from a SECOND source not yet identified.
+          // Candidates not ruled out: the pin switching the section to
+          // position:fixed and changing the containing block for the mark's
+          // 88vw max-width, or anticipatePin's pre-applied transform.
+          // Do not spend the hero zoom on this until that second source is
+          // found — reverted for now precisely because it bought nothing.
           const st = gsap.timeline({
             scrollTrigger: {
               // 170% of pinned scroll left roughly a screen of nothing but
