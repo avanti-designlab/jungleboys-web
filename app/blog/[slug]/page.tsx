@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { renderRichText } from '@storyblok/react/rsc'
+import { SITE_ORIGIN } from '@/lib/storyblok/seo'
 import { sanitizeRichTextHtml } from '@/lib/richtext-safe'
 import { getBlogPost, getBlogPosts } from '@/lib/blog'
 import { assetUrl } from '@/lib/storyblok'
@@ -18,7 +19,6 @@ export async function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }))
 }
 
-const SITE = 'https://jungleboys-web.vercel.app'
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
@@ -79,7 +79,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             datePublished: post.date || undefined,
             author: { '@type': 'Organization', name: 'Jungle Boys' },
             publisher: { '@type': 'Organization', name: 'Jungle Boys' },
-            mainEntityOfPage: `${SITE}/blog/${slug}`,
+            mainEntityOfPage: `${SITE_ORIGIN}/blog/${slug}`,
           }),
         }}
       />

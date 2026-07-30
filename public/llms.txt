@@ -26,6 +26,8 @@ Dutchie; Florida stores are operated by the Florida team at jungleboysflorida.co
 - [Rewards](https://www.jungleboys.com/rewards): the Playing With Fire loyalty program.
 - [Verify a product](https://www.jungleboys.com/auth): confirm a product is genuine via its scratch code or QR.
 - [Media](https://www.jungleboys.com/media): documentaries and films from the Jungle Boys channel.
+- [Phenos](https://www.jungleboys.com/phenos): the pheno-hunting program — how strains are selected.
+- [Blog](https://www.jungleboys.com/blog): stories from the grow, drops and culture.
 - [Wholesale](https://www.jungleboys.com/wholesale): licensed retailer enquiries.
 - [Contact](https://www.jungleboys.com/contact)
 - [FAQ](https://www.jungleboys.com/faq)

@@ -43,6 +43,26 @@ export async function getBlogPosts(): Promise<BlogSummary[]> {
   return stories.map(summarize)
 }
 
+/**
+ * Real CMS posts only — NEVER the samples. For the sitemap.
+ *
+ * `getBlogPosts()` falls back to SAMPLE_POSTS on zero rows, and zero rows is
+ * indistinguishable from a Storyblok auth error or outage at build time. Since
+ * the sitemap now lists individual posts, that fallback would submit three
+ * fabricated articles to Google as canonical content — including promotional
+ * copy for a deals period that never ran. Advertising invented promos on a
+ * cannabis domain is a compliance problem (07 §7), not just an SEO one.
+ *
+ * Same principle the sitemap already applies to placeholder product lines:
+ * advertising a soft-404 is the same mistake as advertising a 404.
+ */
+export async function getPublishedBlogPosts(): Promise<BlogSummary[]> {
+  const stories = (await getStories(
+    'content_type=blog_post&sort_by=content.published_date:desc&per_page=100'
+  )) as SB[]
+  return stories.map(summarize)
+}
+
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
   const story = (await getStory(`blog/${slug}`, 'published')) as SB | null
   if (story?.content && story.content.component === 'blog_post') {

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { PRODUCT_LINES, isPlaceholderLine } from '@/lib/products'
-import { getBlogPosts } from '@/lib/blog'
+import { getPublishedBlogPosts } from '@/lib/blog'
 import { SITE_ORIGIN } from '@/lib/storyblok/seo'
 
 // Dynamic sitemap. Built from the same PRODUCT_LINES array the routes are
@@ -48,11 +48,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
-  // Individual posts, from the same call the blog index renders from — so a
-  // published post is in the sitemap the moment it is on the site. Only /blog
-  // itself was listed before, which left every actual article discoverable to
-  // a crawler ONLY by following the index.
-  const posts = (await getBlogPosts()).map((post) => ({
+  // Individual posts — real CMS posts ONLY, never the sample fallback. A
+  // published post appears here the moment it is live; a Storyblok outage
+  // yields an empty list rather than three fabricated articles.
+  const posts = (await getPublishedBlogPosts()).map((post) => ({
     url: `${SITE_ORIGIN}/blog/${post.slug}`,
     lastModified: post.date ? new Date(post.date) : now,
     changeFrequency: 'monthly' as const,

@@ -29,11 +29,20 @@ export default function LocationsPage() {
               { name: 'Home', path: '/' },
               { name: 'Locations', path: '/locations' },
             ]),
-            ...OWNED_STORES.map((s) => ({
+            // DISPENSARIES ONLY. The clothing store carries `external: true` and
+            // is a merch site, not a dispensary — typing it `Store` alongside 19
+            // real ones told Google it was one. Its absolute menuUrl also got
+            // prefixed with the origin, emitting
+            // `https://www.jungleboys.comhttps://jungleboysclothing.com`, and its
+            // name doubled to "Jungle Boys Jungle Boys Clothing".
+            ...OWNED_STORES.filter((s) => !s.external).map((s) => ({
               '@context': 'https://schema.org',
               '@type': 'Store',
-              name: `Jungle Boys ${s.name}`,
-              url: `${SITE_ORIGIN}${s.menuUrl}`,
+              name: s.name.startsWith('Jungle Boys') ? s.name : `Jungle Boys ${s.name}`,
+              // NO `url`. Every /menu/* target is Phase 3 and 404s today —
+              // advertising them in schema is the same mistake as advertising
+              // them in the sitemap, which we deliberately don't. Address, phone
+              // and geo stand on their own. Restore `url` when the menus exist.
               telephone: s.phone,
               address: { '@type': 'PostalAddress', streetAddress: s.address, addressCountry: 'US' },
             })),

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/storyblok/seo'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { PRODUCT_LINES } from '@/lib/products'
+import { PRODUCT_LINES, isPlaceholderLine } from '@/lib/products'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
 // Per-line landing pages. These are the flagship, design-heavy Phase 2 pages
@@ -13,10 +13,13 @@ import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 // Only the slugs that have no static route of their own. Returning all nine
 // prerendered seven duplicates of pages that already exist as real routes —
 // harmless (the static segment wins at runtime) but wasted output.
-export const PLACEHOLDER_LINES = ['rosin', 'orc']
-
+//
+// Uses the SHARED helper. This file kept its own literal copy through the last
+// hoist, which left two definitions of the same fact — and this was the copy
+// that decides which pages get prerendered and noindexed, i.e. the one that
+// actually governs indexability.
 export function generateStaticParams() {
-  return PRODUCT_LINES.filter((l) => PLACEHOLDER_LINES.includes(l.slug)).map((l) => ({ line: l.slug }))
+  return PRODUCT_LINES.filter((l) => isPlaceholderLine(l.slug)).map((l) => ({ line: l.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ line: string }> }): Promise<Metadata> {
