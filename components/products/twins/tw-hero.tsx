@@ -67,14 +67,29 @@ export default function TwHero() {
               { xPercent: -startX, opacity: 0, scale: 0.9 },
               { xPercent: endX, opacity: 1, scale: 1, duration: 1.15, ease: 'power3.out' }, 0.18)
 
-          // the mark slams in from深 Z
+          // The mark arrives from depth — but APPROACHING, never receding.
+          //
+          // It is the LCP element. Two rounds of this: first the from-state had
+          // opacity 0, so it could not paint until GSAP ran. Removing that was
+          // right but not enough, because the from-state was ALSO scale 2.6 —
+          // and LCP takes the LARGEST paint, whenever it happens. At 390px the
+          // mark rests at 343px wide; scaled 2.6x with back.out overshoot it hit
+          // 1079px, so every run recorded that transient giant frame at ~4.5s
+          // instead of the resting paint at ~2.0s. The animation was the metric.
+          //
+          // Scaling UNDER 1 and easing up was also wrong, and measurably so:
+          // 4516ms -> 5088ms. Any geometry animation means the resting size is
+          // only reached when the tween ENDS, so LCP waits for the animation
+          // either way — too big early, or too small early.
+          //
+          // So the geometry does not animate at all. A filter leaves the
+          // bounding box untouched, so the mark is at its full resting size the
+          // instant the image decodes, and LCP fires then. The entrance becomes
+          // a focus pull — the mark resolves out of a blur — which is the same
+          // arrival read without costing the metric.
           tl.fromTo('[data-tw-mark]',
-            // NO opacity here. It is the LCP element on this page, and starting at
-            // opacity 0 meant it could not paint until hydration + GSAP ran: the file
-            // landed at 2496ms and LCP fired at 4552ms. Starting blurred and scaled
-            // still reads as an arrival, and the pixels are on screen immediately.
-            { scale: 2.6, filter: 'blur(26px)', rotateX: 28 },
-            { scale: 1, opacity: 1, filter: 'blur(0px)', rotateX: 0, duration: 1.15, ease: 'back.out(1.5)' }, 0.35)
+            { filter: 'blur(30px)' },
+            { opacity: 1, filter: 'blur(0px)', duration: 1.05, ease: 'power2.out' }, 0.35)
             .fromTo('[data-tw-sub]', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, 1.25)
             .fromTo('[data-tw-stat]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' }, 1.45)
 
