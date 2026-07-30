@@ -15,7 +15,13 @@ export async function getStory(slug: string, version: StoryVersion = 'draft') {
 
   try {
     const res = await fetch(
-      `${CDN_API}/stories/${slug}?version=${version}&token=${token}`,
+      // Each path SEGMENT is encoded separately: the slug arrives from the
+      // [slug] route param, and Next decodes %3F back into it, so a raw
+      // interpolation let `blog/x%3Fversion%3Ddraft%26` append a second
+      // `version` param — first-wins — and serve DRAFT content on a public URL.
+      // `..` segments also escaped the /stories/ prefix with our token attached.
+      `${CDN_API}/stories/${slug.split('/').map(encodeURIComponent).join('/')}` +
+        `?version=${encodeURIComponent(version)}&token=${token}`,
       // ISR: on-demand via /api/revalidate (Storyblok publish webhook) AND a 60s
       // time-based fallback so published edits appear within a minute even before
       // the webhook is configured.

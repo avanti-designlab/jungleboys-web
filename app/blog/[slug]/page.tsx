@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { renderRichText } from '@storyblok/react/rsc'
+import { sanitizeRichTextHtml } from '@/lib/richtext-safe'
 import { getBlogPost, getBlogPosts } from '@/lib/blog'
 import { assetUrl } from '@/lib/storyblok'
 import ReadingProgress from '@/components/blog/reading-progress'
@@ -53,7 +54,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   if (!post) notFound()
 
   // Storyblok posts carry richtext; the temporary sample posts carry HTML strings.
-  const html = typeof post.body === 'string' ? post.body : post.body ? renderRichText(post.body as never) : ''
+  // Sanitised, not raw: the richtext renderer escapes text and attribute values
+  // but not link SCHEMES, so a `javascript:` href reaches the DOM intact —
+  // and our CSP's `script-src 'unsafe-inline'` is exactly what lets it run.
+  const html = sanitizeRichTextHtml(
+    typeof post.body === 'string' ? post.body : post.body ? renderRichText(post.body as never) : ''
+  )
   const mins = readingTime(html)
 
   const related = (await getBlogPosts()).filter((p) => p.slug !== slug).slice(0, 3)
