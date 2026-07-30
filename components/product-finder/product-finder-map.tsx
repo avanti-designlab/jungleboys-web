@@ -118,7 +118,9 @@ export default function ProductFinderMap() {
           iconSize: [34, 34],
           iconAnchor: [17, 17],
         })
-        const m = L.marker([r.lat, r.lng], { icon })
+        // named for the same reason as the /contact map — an unnamed
+        // role=button tab stop is WCAG 4.1.2 Level A
+        const m = L.marker([r.lat, r.lng], { icon, title: r.name, alt: r.name })
         m.on('click', () => {
           setActive(r)
           map.flyTo([r.lat, r.lng], Math.max(map.getZoom(), 12), { duration: 0.6 })
@@ -127,6 +129,23 @@ export default function ProductFinderMap() {
         cluster.addLayer(m)
       })
       map.addLayer(cluster)
+
+      // Cluster bubbles are built by leaflet.markercluster, not by us, so they
+      // never get the `title`/`alt` that names the individual pins — they land
+      // as `role=button tabindex=0` whose only accessible name is a bare digit.
+      // They are re-created on every zoom, so this re-runs rather than being a
+      // one-shot after addLayer.
+      const labelClusters = () => {
+        map.getPane('markerPane')?.querySelectorAll<HTMLElement>('.leaflet-marker-icon').forEach((el) => {
+          const badge = el.querySelector('.jb-cluster')
+          if (!badge) return
+          const n = badge.textContent?.trim() ?? ''
+          el.setAttribute('aria-label', `${n} stockists in this area — activate to zoom in`)
+        })
+      }
+      labelClusters()
+      map.on('zoomend moveend', labelClusters)
+      cluster.on('animationend', labelClusters)
       // size the map before fitting, else the fit computes against a 0-height
       // box and never leaves the default world zoom. Re-fit once laid out.
       const fit = () => {
@@ -200,8 +219,10 @@ export default function ProductFinderMap() {
       const L = (await import('leaflet')).default
       if (!map) return
       if (meMarker.current) meMarker.current.remove()
+      // the "you are here" dot conveys nothing a keyboard user can act on
       meMarker.current = L.marker([lat, lng], {
-        icon: L.divIcon({ className: '', html: '<div class="jb-me"></div>', iconSize: [20, 20], iconAnchor: [10, 10] }),
+        keyboard: false,
+        icon: L.divIcon({ className: '', html: '<div class="jb-me" aria-hidden="true"></div>', iconSize: [20, 20], iconAnchor: [10, 10] }),
       }).addTo(map)
     })()
   }, [])
@@ -252,7 +273,7 @@ export default function ProductFinderMap() {
           <div className="relative flex overflow-hidden border-t border-white/10 py-3">
             <div className="marquee-track flex shrink-0 items-center gap-8 whitespace-nowrap pr-8">
               {[...CITIES, ...CITIES].map((c, i) => (
-                <span key={i} className="flex items-center gap-8 font-display text-2xl uppercase text-white/25 md:text-3xl">
+                <span key={i} className="flex items-center gap-8 font-display text-2xl uppercase text-white/55 md:text-3xl">
                   {c}
                   <span className="text-[var(--color-accent)]">◆</span>
                 </span>

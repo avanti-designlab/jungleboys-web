@@ -164,7 +164,7 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
           <p data-sub className="mt-2 text-sm font-extrabold uppercase tracking-[0.38em] text-white" style={{ fontFamily: 'var(--font-brand)' }}>
             {items[0].strainType ?? ''}
           </p>
-          <p className="mt-3 text-[11px] uppercase tracking-[0.28em] text-white/70" style={{ fontFamily: 'var(--font-brand)' }}>
+          <p className="mt-3 text-[11px] uppercase tracking-[0.28em] text-white/90" style={{ fontFamily: 'var(--font-brand)' }}>
             Tap a jar for quick facts
           </p>
         </div>

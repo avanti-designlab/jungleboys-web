@@ -328,6 +328,14 @@ html.jb-no-intro .jb-intro {
     --hh-L: 52vw;
   }
 }
+/* The last two stragglers, caught by the QA gate parsing every declaration
+   rather than trusting my property allow-list. `paint-order` was separated from
+   its own `-webkit-text-stroke` (hoisted earlier), so a reduced-motion visitor
+   got the stroke painting OVER the glyph instead of under it — the sign type
+   rendered at a different weight than everyone else sees. */
+.hh-sign-thin { paint-order: stroke fill; }
+.pops-word > .pops-word-cell { justify-self: center; }
+
 /* Hoisted OUT of the no-preference query below: these declarations
    describe what the element IS, not how it moves. Inside the query a
    reduced-motion visitor never got them. */
@@ -2225,9 +2233,7 @@ body:has(.pops-page) footer {
      the letters have dropped, then a bright segment sweeps across it so the
      outline reads as "tracing" around the words. Animating a SECOND letter-drop
      is what made the previous version glitch and sit off-centre. */
-  .pops-word > .pops-word-cell {
-    justify-self: center;
-  }
+
   /* outline glyphs must be inline-block like the fill's .contact-letter, or the
      two runs space letters differently and the outline drifts across the word */
   /* On a phone 5G POPS goes on TWO lines so it can be far bigger. A BLOCK
@@ -2339,10 +2345,7 @@ body:has(.pops-page) footer {
       animation-duration: 26s;
     }
   }
-  /* optically thinner Bebas: stroke glyph edges with the sign green */
-  .hh-sign-thin {
-    paint-order: stroke fill;
-  }
+
   /* period/phase/amplitude per sign via custom props — nth-of-type counted the
      hill divs too, so two signs shared the base timing and moved in lockstep */
   @keyframes hh-sway {

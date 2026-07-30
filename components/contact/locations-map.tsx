@@ -44,7 +44,16 @@ export default function LocationsMap() {
           iconSize: [46, 46],
           iconAnchor: [23, 23],
         })
-        const marker = L.marker([store.lat, store.lng], { icon }).addTo(map)
+        // Leaflet renders a divIcon marker as `div[role=button][tabindex=0]`
+        // with NO accessible name — a keyboard user tabs onto an anonymous
+        // button (WCAG 4.1.2, Level A). These markers DO something, so name
+        // them rather than removing them from the tab order.
+        const marker = L.marker([store.lat, store.lng], {
+          icon,
+          title: store.name,
+          alt: store.name,
+        }).addTo(map)
+        marker.getElement()?.setAttribute('aria-label', `${store.name} — view details`)
         marker.on('click', () => setActive(store))
         return marker
       })

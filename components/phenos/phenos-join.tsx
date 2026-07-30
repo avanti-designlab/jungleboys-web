@@ -228,7 +228,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
             <>
               {/* header */}
               <div className="mb-5 shrink-0 md:mb-10">
-                <span className="text-xs font-extrabold uppercase tracking-[0.4em] text-black/50" style={{ fontFamily: 'var(--font-brand)' }}>
+                <span className="text-xs font-extrabold uppercase tracking-[0.4em] text-black/60" style={{ fontFamily: 'var(--font-brand)' }}>
                   Pheno Hunt
                 </span>
                 <h3 className="font-display mt-2 text-3xl uppercase leading-[0.88] md:text-7xl">Share your feedback with us!</h3>
@@ -250,7 +250,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
               <div className="grid min-h-0 flex-1 content-center gap-5 overflow-y-auto md:grid-cols-2 md:items-center md:gap-14 md:overflow-visible">
                 <div key={step} className="gate-in">
                   <span className="font-display block text-[1.75rem] uppercase leading-[0.95] md:text-6xl">{q.label}</span>
-                  {q.hint && <span className="mt-3 block text-sm font-medium text-black/50">{q.hint}</span>}
+                  {q.hint && <span className="mt-3 block text-sm font-medium text-black/60">{q.hint}</span>}
                 </div>
 
                 <div>
@@ -354,7 +354,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
                       type="button"
                       onClick={() => setStep((s) => Math.max(0, s - 1))}
                       disabled={step === 0}
-                      className="rounded-full px-5 py-3 text-xs font-bold uppercase tracking-widest text-black/50 transition hover:text-black disabled:opacity-0"
+                      className="rounded-full px-5 py-3 text-xs font-bold uppercase tracking-widest text-black/60 transition hover:text-black disabled:opacity-0"
                       style={{ fontFamily: 'var(--font-brand)' }}
                     >
                       ← Back

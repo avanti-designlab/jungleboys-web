@@ -93,13 +93,13 @@ export default async function FlowerShop() {
                             the same row shape as the rest */}
                         <p className="leading-none">
                           {deal && (
-                            <span className="mb-1 block text-xs font-bold text-[var(--color-ink)]/40 line-through" style={{ fontFamily: 'var(--font-brand)' }}>
+                            <span className="mb-1 block text-xs font-bold text-[var(--color-ink)]/60 line-through" style={{ fontFamily: 'var(--font-brand)' }}>
                               {dollars(v.price)}
                             </span>
                           )}
                           <span className="whitespace-nowrap">
                             <span className={`font-display text-[2.1rem] leading-none ${deal ? 'text-[#c21f1f]' : ''}`}>{dollars(deal ?? v.price)}</span>
-                            <span className="ml-1 text-xs font-bold uppercase text-[var(--color-ink)]/45" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
+                            <span className="ml-1 text-xs font-bold uppercase text-[var(--color-ink)]/60" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
                           </span>
                         </p>
                         <PillCta label="Add to Cart" size="sm" icon="cart" href="/locations" className="shrink-0 whitespace-nowrap" />

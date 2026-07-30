@@ -22,10 +22,15 @@ export default function StateMiniMap({ stores, label }: { stores: OwnedStore[]; 
       mapObj.current = map
       L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19 }).addTo(map)
       stores.forEach((s) => {
+        // Decorative only — these pins have no click handler, and every store
+        // is already a real, focusable HTML card beneath the map. Naming them
+        // would add 19 redundant tab stops; removing them from the tab order
+        // is the correct fix here.
         L.marker([s.lat, s.lng], {
+          keyboard: false,
           icon: L.divIcon({
             className: '',
-            html: `<div class="jb-pin jb-pin--sm"><span class="jb-pin-pulse"></span><span class="jb-pin-mark"></span></div>`,
+            html: `<div class="jb-pin jb-pin--sm" aria-hidden="true"><span class="jb-pin-pulse"></span><span class="jb-pin-mark"></span></div>`,
             iconSize: [30, 30],
             iconAnchor: [15, 15],
           }),
