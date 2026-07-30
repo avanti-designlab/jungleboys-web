@@ -14,9 +14,9 @@ function dollars(cents: number) {
 
 // scoped card accents per strain type (Avanti: blue / red / green outlines)
 const STRAIN_STYLE = {
-  indica: { label: 'Indica', cls: 'border-[var(--strain-indica)] text-[var(--strain-indica)]' },
-  sativa: { label: 'Sativa', cls: 'border-[var(--strain-sativa)] text-[var(--strain-sativa)]' },
-  hybrid: { label: 'Hybrid', cls: 'border-[var(--strain-hybrid)] text-[var(--strain-hybrid)]' },
+  indica: { label: 'Indica', cls: 'border-[var(--strain-indica-auto)] text-[var(--strain-indica-auto)]' },
+  sativa: { label: 'Sativa', cls: 'border-[var(--strain-sativa-auto)] text-[var(--strain-sativa-auto)]' },
+  hybrid: { label: 'Hybrid', cls: 'border-[var(--strain-hybrid-auto)] text-[var(--strain-hybrid-auto)]' },
 } as const
 
 export default async function FlowerShop() {

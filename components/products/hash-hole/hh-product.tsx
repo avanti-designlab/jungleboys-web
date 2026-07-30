@@ -187,17 +187,17 @@ export default function HhProduct() {
           <div data-jslide className="absolute z-0 will-change-transform"
             style={{ width: cl(F.jointW), height: cl(F.jointH), left: cl(-F.jointW / 2), top: cl(F.jointTop) }}>
             {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-            <img data-jzoom src="/products/hash-hole/joint.webp" alt="Jungle Boys Hash Hole infused pre-roll"
+            <img data-jzoom loading="lazy" decoding="async" src="/products/hash-hole/joint.webp" alt="Jungle Boys Hash Hole infused pre-roll"
               className="h-full w-full origin-center will-change-transform drop-shadow-[0_26px_44px_rgba(0,0,0,0.30)]" />
           </div>
           {/* body — the mask; its glass neck is the opening */}
           {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-          <img data-body src="/products/hash-hole/tube-body.webp" alt="" aria-hidden
+          <img data-body loading="lazy" decoding="async" src="/products/hash-hole/tube-body.webp" alt="" aria-hidden
             className="absolute z-10 max-w-none will-change-transform drop-shadow-[0_28px_50px_rgba(0,0,0,0.32)]"
             style={{ width: cl(F.tubeW), height: cl(F.bodyH), left: cl(-F.tubeW / 2), top: cl(F.bodyTop) }} />
           {/* cap — pops off */}
           {/* eslint-disable-next-line @next/next/no-img-element -- product art */}
-          <img data-cap src="/products/hash-hole/tube-cap.webp" alt="" aria-hidden
+          <img data-cap loading="lazy" decoding="async" src="/products/hash-hole/tube-cap.webp" alt="" aria-hidden
             className="absolute z-20 max-w-none will-change-transform drop-shadow-[0_16px_28px_rgba(0,0,0,0.28)]"
             style={{ width: cl(F.tubeW), height: cl(F.capH), left: cl(-F.tubeW / 2), top: cl(F.capTop) }} />
           {/* star-burst at the opening */}

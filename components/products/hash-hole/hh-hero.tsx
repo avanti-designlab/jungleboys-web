@@ -43,6 +43,18 @@ export default function HhHero() {
 
   return (
     <section className="relative px-2 pt-2 md:px-3">
+      {/* The LCP element here is the video's POSTER, and a poster cannot carry
+          fetchPriority. Without this it queued behind eight decorative images
+          and four woff2, landing seconds late on a throttled connection.
+          Preload puts it at the front of the queue instead. */}
+      {mobile !== null && (
+        <link
+          rel="preload"
+          as="image"
+          href={mobile ? '/products/hash-hole/hero-mobile-poster.webp' : '/products/hash-hole/hero-poster.webp'}
+          fetchPriority="high"
+        />
+      )}
       {/* the header samples this region: dark video → dark header pill */}
       <div data-nav-theme="dark" className="media-hero-in relative h-[92vh] min-h-[560px] overflow-hidden rounded-[1.75rem] bg-[var(--color-ink)] md:rounded-[2.5rem]">
         {/* The hero is deliberately art-only — a film, no type over it. The page

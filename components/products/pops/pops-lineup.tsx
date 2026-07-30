@@ -34,9 +34,13 @@ export type LineupItem = {
 }
 
 const TYPE_COLOR: Record<string, string> = {
-  indica: '#6f9bff',
-  sativa: '#ff9b9b',
-  hybrid: '#7ce6a0',
+  // was a fourth private palette (#6f9bff / #ff9b9b / #7ce6a0). The shop
+  // consolidation covered the six shop files and missed this one — its indica
+  // happened to equal the new --strain-indica-on-dark, which is how the token
+  // checker found it. This card sits on a dark ground, so it takes the on-dark set.
+  indica: 'var(--strain-indica-on-dark)',
+  sativa: 'var(--strain-sativa-on-dark)',
+  hybrid: 'var(--strain-hybrid-on-dark)',
 }
 
 export default function PopsLineup({ items }: { items: LineupItem[] }) {
@@ -157,7 +161,7 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
           <p data-label className="font-display uppercase leading-none text-white" style={{ fontSize: 'min(10vw, 5.5rem)' }}>
             {items[0].name}
           </p>
-          <p data-sub className="mt-2 text-sm font-extrabold uppercase tracking-[0.38em] text-[var(--pops-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
+          <p data-sub className="mt-2 text-sm font-extrabold uppercase tracking-[0.38em] text-white" style={{ fontFamily: 'var(--font-brand)' }}>
             {items[0].strainType ?? ''}
           </p>
           <p className="mt-3 text-[11px] uppercase tracking-[0.28em] text-white/70" style={{ fontFamily: 'var(--font-brand)' }}>
@@ -174,7 +178,7 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
                 className="mx-auto h-[34vh] w-auto drop-shadow-[0_22px_36px_rgba(0,0,0,0.3)]" />
               <span className="font-display mt-3 block text-3xl uppercase leading-none text-white">
                 {j.name}
-                <span className="mt-1 block text-[10px] font-extrabold tracking-[0.3em] text-[var(--pops-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
+                <span className="mt-1 block text-[10px] font-extrabold tracking-[0.3em] text-white" style={{ fontFamily: 'var(--font-brand)' }}>
                   {j.strainType ?? ''}
                 </span>
               </span>

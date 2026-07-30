@@ -14,16 +14,30 @@ this documents what they are for.** Never retype a value into a component.
 | Token | Value | Use |
 |---|---|---|
 | `--color-ink` | `#0b0b0d` | The generic near-black panel surface. NOT a substitute for the line-specific darks below, which are deliberately tinted. |
-| `--strain-indica` | `#2358d8` | Strain type. Product semantics, not decoration. |
+| `--strain-indica` | `#2358d8` | Strain type on a LIGHT panel. Product semantics, not decoration. |
 | `--strain-sativa` | `#c2410c` | |
 | `--strain-hybrid` | `#157a37` | |
+| `--strain-*-on-dark` | `#6f9bff` / `#ff8a4c` / `#43d16f` | The same hues for a panel that is dark in BOTH themes. |
+| `--strain-*-auto` | resolves per theme | For the one surface whose panel follows the theme (flower-shop). |
+
+**One trio is not enough, and the first version of this file was wrong about
+that.** It claimed a single set worked "as an outline colour on a light panel
+AND as a filled chip with white text". The filled-chip role is fine — hybrid
+measures 5.43:1 white-on-green. But four of the six shop surfaces use strain
+colour as TEXT on a dark card, and a value tuned against white cannot also clear
+4.5:1 against near-black: the trio measures 2.98 / 3.49 / 3.33 on `#161618`.
+Hence three sets, chosen by what the panel actually is:
+
+- **light panel, fixed** → `--strain-*` (line-shop, hash-hole)
+- **dark panel, fixed in both themes** → `--strain-*-on-dark` (gas-tank, pops)
+- **panel follows the theme** → `--strain-*-auto` (flower-shop only)
 
 The strain trio is site-wide on purpose. It was previously duplicated across six
 shop components in **three different palettes**, so the same "INDICA" label
 rendered in three different blues across the site. Two of those palettes also
-failed AA — `#6f9bff` is 2.69:1 on white and `#43d16f` is 1.98:1. The current
-values all clear 4.5:1 against white, which is what lets them work both as an
-outline colour on a light panel and as a filled chip with white text.
+failed AA — `#6f9bff` is 2.69:1 on white and `#43d16f` is 1.98:1. (Those two
+values reappear above in the `-on-dark` set, which is not a contradiction: the
+same hue that fails against white is exactly what passes against near-black.)
 
 Phase 3 commerce will map the Dutchie product shape onto these. Do not add a
 local strain map to a new component.

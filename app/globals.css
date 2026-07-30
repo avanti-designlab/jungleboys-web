@@ -22,6 +22,24 @@
   --strain-sativa: #c2410c;  /* 5.18:1 */
   --strain-hybrid: #157a37;  /* 5.43:1 */
 
+  /* ON DARK. The trio above is tuned against WHITE, and a value tuned against
+     white cannot also clear 4.5:1 against a near-black panel — the originals
+     measure 2.98 / 3.49 / 3.33 on #161618. Four of the six shop surfaces use
+     strain colour as TEXT on a dark card, so they need their own set. These are
+     the same hues lifted in luminance, all >= 6.7:1 across the three dark
+     grounds in use (#161618, --color-ink, --gt-ink). */
+  --strain-indica-on-dark: #6f9bff;  /* 6.72:1 on #161618 */
+  --strain-sativa-on-dark: #ff8a4c;  /* 7.74:1 */
+  --strain-hybrid-on-dark: #43d16f;  /* 9.11:1 */
+
+  /* THEME-AWARE pair, for the one surface whose panel follows the theme
+     (flower-shop sits on --color-background). Fixed brand panels must keep
+     using the explicit sets above — they are dark in BOTH themes, so a
+     theme-aware value would be wrong there half the time. */
+  --strain-indica-auto: var(--strain-indica);
+  --strain-sativa-auto: var(--strain-sativa);
+  --strain-hybrid-auto: var(--strain-hybrid);
+
   /* color — LIGHT theme is the site default (Avanti 2026-07-19) */
   --color-background: #f7f7f7;
   --color-surface: #ffffff;
@@ -212,6 +230,9 @@ body {
   --color-warning: #8a5300;
 }
 [data-theme='dark'] {
+  --strain-indica-auto: var(--strain-indica-on-dark);
+  --strain-sativa-auto: var(--strain-sativa-on-dark);
+  --strain-hybrid-auto: var(--strain-hybrid-on-dark);
   --color-accent-ink: #fecf0e;
   --color-success: #22c55e;
   --color-danger: #ef4444;

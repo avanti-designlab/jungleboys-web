@@ -31,14 +31,15 @@ const TIER_ROW =
 // 82% leaves a slice of the next card showing — that peek IS the affordance
 const TIER_CARD = 'min-w-[82%] snap-start md:min-w-0'
 
-// Strain colour comes from the site-wide --strain-* tokens, not a local map.
+// Strain colour on a DARK card reads from the -on-dark set: the base trio is
+// tuned against white and only reaches ~3:1 here.
 // Six shop files each carried their own, in three different palettes, so the
 // same label rendered in three different blues across the site — and two of
 // those palettes failed AA. See app/globals.css :root.
 const TYPE_COLOR: Record<string, string> = {
-  indica: 'var(--strain-indica)',
-  sativa: 'var(--strain-sativa)',
-  hybrid: 'var(--strain-hybrid)',
+  indica: 'var(--strain-indica-on-dark)',
+  sativa: 'var(--strain-sativa-on-dark)',
+  hybrid: 'var(--strain-hybrid-on-dark)',
 }
 
 function dollars(cents: number) {
@@ -109,8 +110,8 @@ export default async function GtShop() {
                                 className="rounded-full border-2 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest"
                                 style={{
                                   fontFamily: 'var(--font-brand)',
-                                  color: TYPE_COLOR[p.strainType] || 'var(--strain-hybrid)',
-                                  borderColor: TYPE_COLOR[p.strainType] || 'var(--strain-hybrid)',
+                                  color: TYPE_COLOR[p.strainType] || 'var(--strain-hybrid-on-dark)',
+                                  borderColor: TYPE_COLOR[p.strainType] || 'var(--strain-hybrid-on-dark)',
                                 }}
                               >
                                 {p.strainType}
@@ -155,7 +156,7 @@ export default async function GtShop() {
           ))}
 
           <Reveal className="mt-12 text-center">
-            <p className="text-[11px] uppercase tracking-widest text-white/45" style={{ fontFamily: 'var(--font-brand)' }}>
+            <p className="text-[11px] uppercase tracking-widest text-white/60" style={{ fontFamily: 'var(--font-brand)' }}>
               Availability varies by store — live menus &amp; deals connect at launch.
             </p>
           </Reveal>

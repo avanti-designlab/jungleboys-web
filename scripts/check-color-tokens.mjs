@@ -38,7 +38,11 @@ const hits = []
     const p = path.join(dir, f)
     if (fs.statSync(p).isDirectory()) walk(p)
     else if (/\.tsx?$/.test(f) && !SKIP.has(f)) {
+      // Strip comments first. A checker that flags its own documentation —
+      // "this used to be #6f9bff" — is a checker people learn to ignore.
       const src = fs.readFileSync(p, 'utf8')
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/(^|[^:])\/\/[^\n]*/g, '$1')
       for (const m of src.matchAll(/#[0-9a-fA-F]{6}/g)) {
         const hex = m[0].toLowerCase()
         if (tokens[hex]) hits.push(`${p}  ${hex} is ${tokens[hex]}`)
@@ -46,6 +50,21 @@ const hits = []
     }
   }
 })('components')
+;(function walkApp(dir) {
+  for (const f of fs.readdirSync(dir)) {
+    const p = path.join(dir, f)
+    if (fs.statSync(p).isDirectory()) walkApp(p)
+    else if (/\.tsx?$/.test(f)) {
+      const src = fs.readFileSync(p, 'utf8')
+        .replace(/\/\*[\s\S]*?\*\//g, '')
+        .replace(/(^|[^:])\/\/[^\n]*/g, '$1')
+      for (const m of src.matchAll(/#[0-9a-fA-F]{6}/g)) {
+        const hex = m[0].toLowerCase()
+        if (tokens[hex]) hits.push(`${p}  ${hex} is ${tokens[hex]}`)
+      }
+    }
+  }
+})('app')
 
 if (hits.length) {
   console.error(`${hits.length} hard-coded colour(s) duplicate a brand token:`)
