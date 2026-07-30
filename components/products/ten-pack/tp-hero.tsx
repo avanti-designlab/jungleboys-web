@@ -56,6 +56,25 @@ export default function TpHero() {
   const rootRef = useRef<HTMLElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
 
+  // Attach the hero smoke loop only after `load`, so it cannot compete with
+  // the LCP image. Decorative and aria-hidden, so arriving late costs nothing.
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    const attach = () => {
+      if (v.querySelector('source')) return
+      const src = document.createElement('source')
+      src.src = '/products/10-pack/smoke.mp4'
+      src.type = 'video/mp4'
+      v.appendChild(src)
+      v.load()
+      v.play().catch(() => {})
+    }
+    if (document.readyState === 'complete') attach()
+    else window.addEventListener('load', attach, { once: true })
+    return () => window.removeEventListener('load', attach)
+  }, [])
+
   useEffect(() => {
     const root = rootRef.current
     if (!root) return
@@ -135,10 +154,17 @@ export default function TpHero() {
           loop
           muted
           playsInline
-          preload="auto"
+          // `preload` is advisory and autoPlay overrides it — changing auto ->
+          // metadata moved nothing (1565KB before LCP, both ways). The source is
+          // therefore attached AFTER the load event, in the effect below.
+          preload="none"
           className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover mix-blend-screen"
         >
-          <source src="/products/10-pack/smoke.mp4" type="video/mp4" />
+          {/* NO src here. 576KB of decorative smoke was downloading inside the
+              LCP window on a slow pipe, competing with the 52KB jar that IS the
+              LCP element — the biggest single item on this page's critical path
+              by a factor of six. The effect attaches it once the page has
+              loaded, so it costs nothing before first paint. */}
         </video>
 
         {/* electric wash off the bottom */}
