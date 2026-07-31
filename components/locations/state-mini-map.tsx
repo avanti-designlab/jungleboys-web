@@ -18,9 +18,19 @@ export default function StateMiniMap({ stores, label }: { stores: OwnedStore[]; 
     ;(async () => {
       const L = (await import('leaflet')).default
       if (cancelled || !el.current || mapObj.current) return
-      const map = L.map(el.current, { scrollWheelZoom: false, zoomControl: false, attributionControl: false })
+      // attributionControl stays ON: these are OSM data under ODbL served through
+      // CARTO, and both require visible credit. It was disabled here while the
+      // other two maps carried it, so /locations served the tiles with no credit
+      // anywhere on the page. The control is used rather than a hardcoded credit
+      // line so it tracks the tile layer instead of drifting from it, and it
+      // inherits the .jb-map attribution styling the other maps already use.
+      const map = L.map(el.current, { scrollWheelZoom: false, zoomControl: false })
       mapObj.current = map
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19 }).addTo(map)
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        subdomains: 'abcd',
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+      }).addTo(map)
       stores.forEach((s) => {
         // Decorative only — these pins have no click handler, and every store
         // is already a real, focusable HTML card beneath the map. Naming them

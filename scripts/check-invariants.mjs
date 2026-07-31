@@ -71,5 +71,16 @@ console.log('\nrecorded decisions')
     !/x-forwarded-for'\s*\)\s*\?\?\s*'unknown'\s*\)\s*\.split\(','\)\[0\]/.test(route))
 }
 
+// ── A local run cannot write to the production consent ledger ───────────────
+// .env.local holds live keys; five fabricated consents were written from a
+// laptop before this guard existed and had to be deleted by hand.
+{
+  const route = read('app/api/lead/route.ts')
+  const guarded = /!process\.env\.VERCEL_ENV\s*&&\s*process\.env\.ALLOW_LOCAL_LEAD_WRITES !== 'true'/.test(route)
+  const beforeInsert = route.indexOf('ALLOW_LOCAL_LEAD_WRITES') < route.indexOf(".from('leads')\n    .insert")
+    || route.indexOf('ALLOW_LOCAL_LEAD_WRITES') < route.indexOf('.insert(')
+  check('/api/lead refuses to write the consent ledger from a local run', guarded && beforeInsert)
+}
+
 console.log(`\n${failed ? `${failed} INVARIANT(S) BROKEN` : 'all recorded decisions hold'}\n`)
 process.exit(failed ? 1 : 0)

@@ -97,6 +97,24 @@ export async function POST(req: Request) {
     source_page: sourcePage,
     forwarded_status: 'pending',
   }
+  // A laptop must not be able to write to the production consent ledger.
+  //
+  // .env.local holds LIVE keys, so `next dev` or `next start` on a machine
+  // inserts REAL rows into the TCPA ledger. Five were written that way and had
+  // to be deleted by hand — a consent ledger containing fabricated consents is a
+  // records-integrity problem (07 §7), not untidy data. Vercel sets VERCEL_ENV
+  // in every deployed environment, so its absence means we are running locally.
+  // Validation above still runs, so local form testing behaves normally; only
+  // the write is withheld. Set ALLOW_LOCAL_LEAD_WRITES=true ONLY when pointed at
+  // a non-production Supabase project.
+  if (!process.env.VERCEL_ENV && process.env.ALLOW_LOCAL_LEAD_WRITES !== 'true') {
+    return Response.json({
+      ok: true,
+      stored: false,
+      note: 'Local run — validated but deliberately not written to the consent ledger.',
+    })
+  }
+
   const db = supabaseAdmin()
   let ins = await db
     .from('leads')
