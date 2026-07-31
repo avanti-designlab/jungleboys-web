@@ -1,8 +1,19 @@
 // Storyblok content client — SERVER ONLY (token is not NEXT_PUBLIC).
 // Component mapping for @storyblok/react is added as templates are built (Phase 1).
 
-// Space is US-hosted (api-us). Override with STORYBLOK_API_BASE if it ever moves.
-const CDN_API = process.env.STORYBLOK_API_BASE || 'https://api-us.storyblok.com/v2/cdn'
+// The space is EU-hosted. Verified live 2026-07-30 against all four regional
+// endpoints: api.storyblok.com returns 200 with the real `home` story, api-us
+// returns 401.
+//
+// This default used to be api-us, and the comment above it asserted the space
+// was US-hosted. Both were wrong, and the failure was SILENT: getStory() returns
+// null on any error so every caller fell through to its code defaults, which
+// render perfectly. The homepage and /blog were serving fallbacks for a week
+// with nothing to show for it. Region belongs in the default, not in an env var
+// that has to be set identically in local, preview and production — miss one and
+// that environment quietly goes back to fallbacks. STORYBLOK_API_BASE still
+// overrides, for an actual migration.
+const CDN_API = process.env.STORYBLOK_API_BASE || 'https://api.storyblok.com/v2/cdn'
 
 type StoryVersion = 'draft' | 'published'
 
