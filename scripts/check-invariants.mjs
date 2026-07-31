@@ -51,10 +51,16 @@ console.log('\nrecorded decisions')
   check('routes.mjs THEME_INVARIANT === PRODUCT_LINES',
     JSON.stringify(invariant) === JSON.stringify(lines),
     `routes=${invariant.length} product_lines=${lines.length}`)
-  const claude = read('CLAUDE.md')
-  const claimsTen = /ten\s+`?\/products/i.test(claude) || /the ten .{0,24}line pages/i.test(claude)
-  check(`CLAUDE.md's product-line count matches the code (${lines.length})`, !claimsTen || lines.length === 10,
-    claimsTen ? `doc says "ten", code has ${lines.length}` : '')
+  // Grep BOTH the doc and the instrument's own header. The first version of
+  // this check read CLAUDE.md only, and the identical "ten" drift sat unguarded
+  // in routes.mjs — the very file whose scope this check exists to protect.
+  for (const f of ['CLAUDE.md', 'scripts/lib/routes.mjs']) {
+    const txt = read(f)
+    const claimsTen = /ten\s+`?\/products/i.test(txt) || /the ten .{0,24}line pages/i.test(txt)
+    check(`${f} product-line count matches the code (${lines.length})`,
+      !claimsTen || lines.length === 10,
+      claimsTen ? `says "ten", code has ${lines.length}` : '')
+  }
 }
 
 // ── Blog raw-HTML path is gated on OBJECT provenance (SEC-P2-24, 2nd pass) ───

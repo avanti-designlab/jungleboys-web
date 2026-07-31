@@ -29,6 +29,18 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function PremiumFlowerPage() {
   return (
     <main data-nav-theme="dark" className="fl-page bg-black">
+      {/* Preload the ACTUAL LCP element. This page had none, so
+          plant-cutout(-m).webp was discovered by the parser — 277-432ms of
+          discovery against hash-hole's 170ms, on a page that was already
+          transfer-bound. Meanwhile hero-plant.webp (a decorative background,
+          NOT the LCP element) was the only image getting priority and was
+          spending bandwidth the LCP image needed.
+          media= so exactly one of the two downloads, matching the <picture>
+          in flower-hero.tsx and the pattern hash-hole already uses. */}
+      <link rel="preload" as="image" fetchPriority="high" media="(max-width: 767px)"
+        href="/products/flower/plant-cutout-m.webp" />
+      <link rel="preload" as="image" fetchPriority="high" media="(min-width: 768px)"
+        href="/products/flower/plant-cutout.webp" />
       {/* brand surface: dark body + full-bleed footer, no light gutter seam
           (same treatment as /rewards) */}
       <style>{`

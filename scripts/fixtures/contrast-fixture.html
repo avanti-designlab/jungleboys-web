@@ -8,6 +8,11 @@
      theme assertion fires — which is the point. -->
 <script>try{if(localStorage.getItem('jb-theme')==='dark')document.documentElement.dataset.theme='dark'}catch(e){}</script>
 <style>
+  /* The harness asserts a stylesheet actually applied by checking that
+     --color-accent resolves — otherwise a page whose CSS 500'd sweeps clean
+     against browser defaults. The fixture has to satisfy that too, or the
+     self-test cannot exercise the sweep at all. */
+  :root { --color-accent: #fecf0e; }
   html, body { margin: 0; padding: 0; }
   /* MUST stay shorter than the viewport. A --window-size of 1440x900 yields an
      innerHeight of 813 in headless Chrome, so a 900px body scrolls by 87px — and

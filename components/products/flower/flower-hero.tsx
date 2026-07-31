@@ -52,6 +52,10 @@ export default function FlowerHero() {
         <img
           src="/products/flower/hero-plant.webp"
           alt=""
+          // Decorative mural texture, NOT the LCP element — it was completing at
+          // 1049ms and spending bandwidth the LCP image needed. Let it load lazily.
+          loading="lazy"
+          fetchPriority="low"
           aria-hidden
           className="absolute inset-0 h-full w-full object-cover opacity-[0.5]"
         />

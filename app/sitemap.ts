@@ -30,20 +30,38 @@ const STATIC_ROUTES: Array<[path: string, priority: number, freq: MetadataRoute.
 ]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date()
+  // getPublishedBlogPosts() returns CMS posts only — never the samples — so an
+  // empty result is exactly the condition under which /blog renders samples and
+  // carries noindex.
+  const blogShowsSamples = (await getPublishedBlogPosts()).length === 0
 
-  const statics = STATIC_ROUTES.map(([path, priority, changeFrequency]) => ({
-    url: `${SITE_ORIGIN}${path}`,
-    lastModified: now,
-    changeFrequency,
-    priority,
-  }))
+  // NO lastModified on static routes.
+  //
+  // It used to be `new Date()` at render, so all 20 entries carried one
+  // identical timestamp that MOVED on every ISR revalidation — observed
+  // shifting 03:20 -> 03:39 on an untouched build. Google discards lastmod it
+  // judges unreliable, so a value that changes when the content did not costs
+  // the crawl-scheduling signal the field exists to provide. Omitting it is
+  // strictly better than lying: Google falls back to its own heuristics.
+  // Restore it per-route only when something real backs it (a CMS
+  // published_at, a content file mtime).
+  const statics = STATIC_ROUTES
+    // /blog is noindex while it renders sample posts, and a noindex URL in the
+    // sitemap is a Search Console ERROR ("Submitted URL marked noindex"). The
+    // earlier fix landed the noindex and missed this half — and my verification
+    // counted /blog/<slug> post URLs, which said nothing about the index entry.
+    .filter(([path]) => !(path === '/blog' && blogShowsSamples))
+    .map(([path, priority, changeFrequency]) => ({
+      url: `${SITE_ORIGIN}${path}`,
+      changeFrequency,
+      priority,
+    }))
 
   // Rosin and ORC render the generic placeholder and are noindex — a sitemap
   // that advertises a soft-404 is the same mistake as one that advertises a 404.
   const lines = PRODUCT_LINES.filter((l) => !isPlaceholderLine(l.slug)).map((line) => ({
     url: `${SITE_ORIGIN}/products/${line.slug}`,
-    lastModified: now,
+    // no lastModified — see the note above; a render timestamp is not a fact
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }))
@@ -53,7 +71,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // yields an empty list rather than three fabricated articles.
   const posts = (await getPublishedBlogPosts()).map((post) => ({
     url: `${SITE_ORIGIN}/blog/${post.slug}`,
-    lastModified: post.date ? new Date(post.date) : now,
+    // Real publish date only. A post without one gets NO lastmod rather than
+    // a render timestamp — the whole point is that this field is either true or
+    // absent.
+    ...(post.date ? { lastModified: new Date(post.date) } : {}),
     changeFrequency: 'monthly' as const,
     priority: 0.5,
   }))

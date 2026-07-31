@@ -281,7 +281,24 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   so `ava@test.com`, `jane@store.com` and the probe address reached **Klaviyo**. Removing rows
   from Supabase does not touch the marketing list. Prune them there before cutover — bounced
   synthetic addresses cost sender reputation.
-- **Core Web Vitals baseline, 12 templates (2026-07-30).** Measured with
+- **RETRACTED — the 2026-07-30 CWV baseline below is NOT reproducible. Do not cite it.**
+  Two gates found it unreliable by independent routes, and both were right.
+  `scripts/measure-lcp.mjs` waited only **400ms** after `about:blank` before the next timed
+  navigation. On a throttled pipe the PREVIOUS run is still draining and delays the next run's
+  LCP request by ~850ms — discovery jumps ~170ms to ~1030ms. That is not noise around a true
+  value; the run lands on one of TWO values about half the time. `/products/hash-hole` alternated
+  `1872 / 3004 / 1872 / 3028`, and the **2872ms recorded below was a single contaminated sample** —
+  reproduced as run 2 of 5 in the tool itself. **Drained, hash-hole measures 1872ms and PASSES.**
+  It was never a finding. Every number in the 12-template table is contaminated in the pessimistic
+  direction (`/faq` is 796ms, not the range recorded).
+  Compounding it: the tool already computed `spread` and printed it, and **nothing consumed it**,
+  so a median with a 2164ms spread on a 2500ms budget was recorded as a point fact. The same page
+  measured 1928ms over 3 runs and 2820ms over 7.
+  **Fixed:** drain is now 4000ms (`--drain=`), and a spread guard refuses a verdict when spread
+  exceeds 20% of budget — it reports `UNRELIABLE` instead of a number. Re-measure before quoting
+  any CWV figure taken before 2026-07-31. Also: never take performance numbers in a working tree
+  while other agents are active in it; rebuild from `git archive <sha>` into an isolated directory.
+- **Core Web Vitals baseline, 12 templates (2026-07-30) — SUPERSEDED, see retraction above.** Measured with
   `scripts/measure-lcp.mjs` — mobile 390 + 4x CPU + slow4G, median of runs, CLS alongside LCP.
   All content/shell templates pass: LCP 992–1992ms, CLS ≤ 0.042 (worst `/faq`, the text-heaviest
   page and therefore where a font-swap penalty would show first — it does not).

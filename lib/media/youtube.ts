@@ -19,6 +19,11 @@ export type Video = {
   description: string
   thumbnail: string
   publishedAt: string // ISO
+  /** TRUE when publishedAt is a sort key, not a real upload date. Set by the
+   *  channel-page scraper, which cannot read upload times. Anything emitting
+   *  structured data MUST check this — a fabricated uploadDate is worse than
+   *  no VideoObject at all. */
+  synthesizedDate?: boolean
   watchUrl: string
   embedUrl: string // privacy-enhanced nocookie embed
   vertical?: boolean // Short / 9:16
@@ -72,7 +77,13 @@ function base(id: string, i: number): Omit<Video, 'title' | 'description'> {
     thumbnail: youtubeThumb(id),
     // channel order is newest-first; synthesize a descending timestamp so the
     // merge sort keeps that order (exact upload dates need the Data API).
+    //
+    // THIS IS A SORT KEY, NOT A DATE. It is minutes-apart-from-now and is
+    // rewritten on every ISR pass. It must never reach VideoObject.uploadDate —
+    // it did, and produced 12 videos all claiming upload times 60s apart. The
+    // flag below is what lets the schema layer tell a real date from this one.
     publishedAt: new Date(Date.now() - i * 60_000).toISOString(),
+    synthesizedDate: true,
     watchUrl: `https://www.youtube.com/watch?v=${id}`,
     embedUrl: toEmbed(id),
   }

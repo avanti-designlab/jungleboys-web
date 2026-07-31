@@ -121,6 +121,22 @@ export async function launch({
       throw new Error(`theme assertion failed on ${url}: wanted '${theme}', <html data-theme> is '${applied}'`)
     }
 
+    // AND assert the STYLESHEET actually applied. The theme assert above cannot
+    // do this: data-theme is set by a boot script, not by CSS, so it passes
+    // happily on a page whose stylesheet 500'd. That page computes every element
+    // to browser defaults and sweeps it CLEAN — a full 24-route reduced-motion
+    // run reported zero findings against a completely unstyled site that way.
+    // A green run and a broken run must not be indistinguishable.
+    const tok = await evaluate(
+      `getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim()`
+    )
+    if (!tok) {
+      throw new Error(
+        `stylesheet never applied on ${url} — --color-accent is unset, so every ` +
+        `measurement would be against browser defaults, not the design`
+      )
+    }
+
     // hard assert: nothing is covering the page
     return await evaluate(`(() => {
       const o=[...document.querySelectorAll('body *')].filter(e=>{

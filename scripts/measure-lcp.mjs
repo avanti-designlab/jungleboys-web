@@ -94,7 +94,14 @@ for (let i = 0; i < runs; i++) {
   }
 
   await b.send('Page.navigate', { url: 'about:blank' })
-  await wait(400)
+  // DRAIN. 400ms was not enough: on a throttled pipe the PREVIOUS run's
+  // downloads are still in flight and they delay the next run's LCP request by
+  // ~850ms, inflating the discovery segment from ~170ms to ~1030ms. That is not
+  // noise around a true value — it is a second, wrong value the run lands on
+  // roughly half the time. /products/hash-hole alternated 1872/3004/1872/3028,
+  // and the 2872ms figure recorded in CLAUDE.md was one contaminated sample.
+  // Drained, it measures 1872ms and passes.
+  await wait(Number(flag('drain', 4000)))
   await b.send('Page.navigate', { url })
   // Poll the observer rather than waiting on readyState. LCP can still be
   // revised upward after it first reports, so keep going until it stops moving.
@@ -132,6 +139,30 @@ for (let i = 0; i < runs; i++) {
 
 samples.sort((a, b) => a - b)
 const median = samples.length ? samples[Math.floor(samples.length / 2)] : null
+const spread = samples.length ? samples[samples.length - 1] - samples[0] : null
+
+// SPREAD GUARD. This field was already computed and printed, and nothing
+// consumed it — so a median with a 2164ms spread on a 2500ms budget got
+// recorded as a point fact. A median is only a verdict when the runs agree:
+// the same page measured 1928ms over 3 runs and 2820ms over 7. Refuse to
+// report a verdict when the spread is a meaningful fraction of the budget.
+const BUDGET = 2500
+
+// A run that collected NOTHING must not return a verdict. When a refactor left
+// the navigation out, every median came back null and the row still printed
+// "UNRELIABLE — spread too wide" as though something had been measured. Same
+// shape as the unstyled-page trap one layer up: a broken run has to be
+// distinguishable from a clean one, so this throws rather than reports.
+if (!samples.length) {
+  throw new Error(
+    `no LCP samples collected for ${url} — the page never loaded, or the observer ` +
+    `never fired. Check that resources were fetched at all before trusting any number.`
+  )
+}
+
+const RELIABLE = spread != null && spread <= BUDGET * 0.2 // 500ms
+const verdict = !RELIABLE ? 'UNRELIABLE — spread too wide to call'
+  : median <= BUDGET ? 'PASS' : 'FAIL'
 
 console.log(JSON.stringify({
   url,
@@ -140,7 +171,9 @@ console.log(JSON.stringify({
     : `${desktop ? 'desktop 1440' : 'mobile 390'} unthrottled`,
   runs: samples, cls: lastDetail?.cls,
   median,
-  spread: samples.length ? samples[samples.length - 1] - samples[0] : null,
+  spread,
+  verdict,
+  reliable: RELIABLE,
   lcpElement: lastDetail?.lcpEl,
   heaviestResources: lastDetail?.resources,
 }, null, 1))

@@ -108,13 +108,18 @@ export default function LocationsPage() {
                 .map((phrase, i) => (
                   <span key={i} className="flex items-center">
                     <span className="font-display text-6xl uppercase leading-none text-[var(--color-foreground)] md:text-8xl">{phrase}</span>
-                    {/* Separator glyph between marquee phrases — decoration, and
-                        declared as such rather than lifted to AA (WCAG 1.4.3).
-                        NOTE for a design pass: on the LIGHT ground it measures
-                        1.39:1, so the diamonds are close to invisible and the
-                        phrases read as one run. That is a look question, not a
-                        compliance one, and changing a brand accent is Avanti's call. */}
-                    <span aria-hidden="true" className="mx-8 text-4xl text-[var(--color-accent)] md:mx-12 md:text-5xl">◆</span>
+                    {/* --color-accent-ink, NOT --color-accent. MASTER.md:112 is a
+                        frozen rule with no ratio in it: "Accent-yellow TEXT is
+                        forbidden on light — use --color-accent-ink for
+                        yellow-toned text." aria-hidden exempts this from the
+                        CONTRAST gate but not from that rule, so calling it a
+                        taste question for Avanti was wrong — it is a system
+                        violation with a token that already exists (#8a6a00
+                        light / #fecf0e dark), so it stays gold-family in light
+                        and is unchanged in dark. It also fixes the real defect:
+                        at 1.39:1 the diamonds vanished on the light ground and
+                        the marquee read as one run instead of a list. */}
+                    <span aria-hidden="true" className="mx-8 text-4xl text-[var(--color-accent-ink)] md:mx-12 md:text-5xl">◆</span>
                   </span>
                 ))}
             </div>

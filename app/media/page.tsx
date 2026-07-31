@@ -36,16 +36,28 @@ export default async function MediaPage() {
                 { name: 'Home', path: '/' },
                 { name: 'Media', path: '/media' },
               ]),
-              ...videos.slice(0, 12).map((v) =>
-                videoSchema({
-                  title: v.title,
-                  description: v.description,
-                  thumbnailUrl: v.thumbnail,
-                  uploadDate: v.publishedAt,
-                  embedUrl: v.embedUrl,
-                  contentUrl: v.watchUrl,
-                })
-              ),
+              // Only videos with REAL metadata get a VideoObject.
+              //
+              // The channel-page scraper synthesizes publishedAt as a sort key
+              // (minutes apart from render time, rewritten hourly) and leaves
+              // description empty. Both are REQUIRED for VideoObject, so those
+              // entries produced no rich result anyway — we were carrying the
+              // policy exposure of inaccurate structured data for zero benefit.
+              // Emitting nothing is strictly better than emitting a fabricated
+              // uploadDate on a cannabis domain.
+              ...videos
+                .slice(0, 12)
+                .filter((v) => !v.synthesizedDate && v.description && v.publishedAt)
+                .map((v) =>
+                  videoSchema({
+                    title: v.title,
+                    description: v.description,
+                    thumbnailUrl: v.thumbnail,
+                    uploadDate: v.publishedAt,
+                    embedUrl: v.embedUrl,
+                    contentUrl: v.watchUrl,
+                  })
+                ),
             ]),
           }}
         />
