@@ -281,6 +281,18 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   so `ava@test.com`, `jane@store.com` and the probe address reached **Klaviyo**. Removing rows
   from Supabase does not touch the marketing list. Prune them there before cutover — bounced
   synthetic addresses cost sender reputation.
+- **Core Web Vitals baseline, 12 templates (2026-07-30).** Measured with
+  `scripts/measure-lcp.mjs` — mobile 390 + 4x CPU + slow4G, median of runs, CLS alongside LCP.
+  All content/shell templates pass: LCP 992–1992ms, CLS ≤ 0.042 (worst `/faq`, the text-heaviest
+  page and therefore where a font-swap penalty would show first — it does not).
+  **OPEN — two flagship product pages over budget:** `/products/hash-hole` **2872ms**
+  (`hero-mobile-poster.webp`) and `/products/premium-flower` **2864ms** (`plant-cutout-m.webp`).
+  Never previously raised — QA only ever flagged `/products/pre-rolls`, which is now 2464ms.
+  Same hero-image-bound shape, but the font-preload lever that fixed pre-rolls is already spent
+  site-wide, so the remaining lever is image-side and is NOT yet measured. Do not propose a fix
+  without attributing it first.
+  Caveat on the CLS figures: there is no pre-`preload:false` baseline for these ten pages, so the
+  0.042 on `/faq` cannot be attributed to the font swap versus pre-existing. Both are inside budget.
 - **RLS VERIFIED IN THE DATABASE, not just in the migration (Avanti ran it, 2026-07-30).**
   `select relname, relrowsecurity, relforcerowsecurity from pg_class` returns
   **`relrowsecurity = true` for both `leads` and `retailers`**; `relforcerowsecurity = false` on
