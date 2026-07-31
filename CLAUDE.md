@@ -245,6 +245,21 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   centred on a clean page load — "Download the App" read 1.06, then 18.88. Settle-detection alone
   does not catch this; `contrast-verify.mjs` reloads per finding for exactly this reason. Never
   ship a contrast fix off a sweep number that has not been through the verify pass.
+- **RLS VERIFIED IN THE DATABASE, not just in the migration (Avanti ran it, 2026-07-30).**
+  `select relname, relrowsecurity, relforcerowsecurity from pg_class` returns
+  **`relrowsecurity = true` for both `leads` and `retailers`**; `relforcerowsecurity = false` on
+  both. This closes the last unverified line of security invariant §9.3 — previous audits could
+  only observe that GRANTS deny anon (error 42501), which fires *before* RLS and therefore proves
+  nothing about the flag itself.
+  `relforcerowsecurity = false` is correct and should stay: FORCE only subjects the table OWNER to
+  policies, and no application code connects as owner. It does not constrain `service_role`, which
+  has `BYPASSRLS` and ignores policies either way — so enabling it buys nothing here and adds
+  migration friction.
+  **Know which control is load-bearing:** RLS is the backstop for the `anon` role. `/api/lead`
+  writes with the service_role key, which bypasses RLS by design, so the protection on the lead +
+  consent ledger is that the service_role key never leaves the server — verified separately (no
+  client-side Supabase exists in the tree). Do not read "RLS is on" as "the ledger is protected
+  from the app".
 - **BANNERS ARE CMS-EDITABLE — homepage already is; shop/store banners must be built that way
   in Phase 3 (Avanti, 2026-07-30).** The homepage hero deck and quick cards were ALREADY wired to
   Storyblok (`getHomeContent()` reads the `home` story's body, filtering `hero_slide` and
