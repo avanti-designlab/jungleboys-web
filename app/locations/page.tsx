@@ -108,7 +108,13 @@ export default function LocationsPage() {
                 .map((phrase, i) => (
                   <span key={i} className="flex items-center">
                     <span className="font-display text-6xl uppercase leading-none text-[var(--color-foreground)] md:text-8xl">{phrase}</span>
-                    <span className="mx-8 text-4xl text-[var(--color-accent)] md:mx-12 md:text-5xl">◆</span>
+                    {/* Separator glyph between marquee phrases — decoration, and
+                        declared as such rather than lifted to AA (WCAG 1.4.3).
+                        NOTE for a design pass: on the LIGHT ground it measures
+                        1.39:1, so the diamonds are close to invisible and the
+                        phrases read as one run. That is a look question, not a
+                        compliance one, and changing a brand accent is Avanti's call. */}
+                    <span aria-hidden="true" className="mx-8 text-4xl text-[var(--color-accent)] md:mx-12 md:text-5xl">◆</span>
                   </span>
                 ))}
             </div>
