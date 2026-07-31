@@ -82,10 +82,36 @@ export async function getStories(query: string, version: StoryVersion = 'publish
 }
 
 // Storyblok asset field → URL string (falls back to a code default).
+// Hosts next.config.ts allows next/image to optimise. A CMS asset URL from
+// anywhere else cannot render — the optimiser returns 400 — so it must not be
+// allowed to displace a working local default.
+const CMS_ASSET_HOSTS = ['a.storyblok.com', 'a-us.storyblok.com']
+
+/**
+ * A Storyblok asset field is either a real uploaded asset (an absolute URL on a
+ * Storyblok CDN host) or empty. Anything else is leftover seed data.
+ *
+ * This guard exists because correcting the API region made stale values
+ * reachable for the first time and they immediately displaced working assets:
+ * the `home` story's hero slides carried `/hero/gas-tank-beach.jpg` while the
+ * real files are `.webp`, plus one `cdn.prod.website-files.com` URL left over
+ * from Webflow. Five of eight homepage hero images broke — and the failure was
+ * invisible in the diff, because the page HTML looked fine and only the
+ * optimiser 400'd. CMS content is untrusted input (04 §9.5); a bad asset value
+ * now falls back instead of breaking the page.
+ */
 export function assetUrl(asset: unknown, fallback = ''): string {
   if (asset && typeof asset === 'object' && 'filename' in asset) {
     const f = (asset as { filename?: unknown }).filename
-    if (typeof f === 'string' && f) return f
+    if (typeof f === 'string' && f) {
+      try {
+        const u = new URL(f)
+        if (u.protocol === 'https:' && CMS_ASSET_HOSTS.includes(u.hostname)) return f
+      } catch {
+        // not an absolute URL — a relative path in a Storyblok asset field is
+        // never a real upload, so keep the code default
+      }
+    }
   }
   return fallback
 }

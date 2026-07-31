@@ -245,6 +245,24 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   centred on a clean page load — "Download the App" read 1.06, then 18.88. Settle-detection alone
   does not catch this; `contrast-verify.mjs` reloads per finding for exactly this reason. Never
   ship a contrast fix off a sweep number that has not been through the verify pass.
+- **BANNERS ARE CMS-EDITABLE — homepage already is; shop/store banners must be built that way
+  in Phase 3 (Avanti, 2026-07-30).** The homepage hero deck and quick cards were ALREADY wired to
+  Storyblok (`getHomeContent()` reads the `home` story's body, filtering `hero_slide` and
+  `quick_card` bloks with per-field fallbacks). They went live the moment the API region was
+  corrected — 3 hero slides + 4 quick cards, editable now, no build work needed.
+  **Phase 3 requirement: every banner on the shop / store / location-menu surfaces gets the same
+  treatment from the start** — modelled as Storyblok bloks with code fallbacks, never hardcoded.
+  **This REFINES, and does not overturn, "Phase 2 body copy stays hardcoded" (2026-07-28):** that
+  ruling covers the nine product-line landing pages' headlines, claims and section copy. BANNERS
+  are promotional and time-dated — the homepage h1 was literally "JULY DEALS", which goes stale on
+  a date — so they are exactly the content that must not require a deploy.
+  **Asset trap, learned the hard way:** a Storyblok asset field is either a real upload
+  (`https://a.storyblok.com/...`) or empty. The `home` story carried stale relative paths
+  (`/hero/gas-tank-beach.jpg` when the real files are `.webp`) plus one leftover Webflow CDN URL;
+  those had been unreachable, and correcting the region made them override working defaults —
+  **five of eight homepage hero images broke, invisibly**, because the HTML looked fine and only
+  next/image 400'd. `assetUrl()` now ignores anything that is not an absolute URL on an allowed
+  CMS host. When modelling Phase 3 banner bloks, upload assets to Storyblok — do not paste paths.
 - **Product Finder data stays in CODE — provisional, revisit in Phase 3 (Avanti, 2026-07-30).**
   `/find-jb-products` renders 110 retailers (95 CA + 15 FL) from `lib/product-finder/retailers.ts`.
   The Supabase `retailers` table is EMPTY and nothing queries it — the page is not broken, and a
