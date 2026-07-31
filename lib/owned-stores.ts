@@ -4,10 +4,23 @@
 // no menu page yet, so it's omitted until its embed exists. SEPARATE from the
 // Product Finder's 3rd-party stockist list (two-map rule).
 
+export type StoreAddressHours = {
+  street: string
+  city: string
+  zip: string
+  hoursSpec: Array<{ days: string[]; opens: string; closes: string }>
+}
+
 export type OwnedStore = {
   slug: string
   name: string
   address: string
+  /** Parsed address + machine-readable hours, for Store JSON-LD. Required:
+   *  see STRUCTURED below — a store cannot be added without them. */
+  street: string
+  city: string
+  zip: string
+  hoursSpec: Array<{ days: string[]; opens: string; closes: string }>
   phone: string
   hours: string
   state: 'CA' | 'FL'
@@ -23,11 +36,45 @@ export type OwnedStore = {
 const CA_HOURS_OC = '8AM – 8PM Mon–Thu · 8AM–9PM Fri–Sat · 9AM–8PM Sun'
 const FL_HOURS = '8:30AM – 8:30PM Mon–Sat · 10AM – 6PM Sun'
 
+// Machine-readable address + hours, derived ONCE from the display strings above
+// and confirmed correct by Avanti (2026-07-30). Kept as DATA, not parsed at
+// runtime: a regex over hand-written strings works until the day someone writes
+// the 20th one differently, and then it fails silently inside structured data
+// Google is reading. store() throws if a slug is missing here, so a new store
+// cannot ship without its structured pair.
+const STRUCTURED: Record<string, StoreAddressHours> = {
+  'downtown-los-angeles': { street: '1530 S Alameda St #7', city: 'Los Angeles', zip: '90021', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], opens: '09:00', closes: '21:00' }] },
+  'orange-county': { street: '2911 Tech Center Dr', city: 'Santa Ana', zip: '92705', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'], opens: '08:00', closes: '20:00' }, { days: ['Friday', 'Saturday'], opens: '08:00', closes: '21:00' }, { days: ['Sunday'], opens: '09:00', closes: '20:00' }] },
+  'pomona': { street: '196 University Pkwy', city: 'Pomona', zip: '91768', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], opens: '09:00', closes: '21:45' }] },
+  'san-diego': { street: '8160 Parkway Dr', city: 'La Mesa', zip: '91942', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], opens: '07:00', closes: '21:00' }] },
+  'jungle-boys-clothing': { street: '1530 S Alameda St #5', city: 'Los Angeles', zip: '90021', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:30', closes: '20:30' }, { days: ['Sunday'], opens: '10:00', closes: '18:00' }] },
+  'bonita-springs': { street: '28751 S Tamiami Trl', city: 'Bonita Springs', zip: '34134', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:30', closes: '20:30' }, { days: ['Sunday'], opens: '10:00', closes: '18:00' }] },
+  'daytona-beach': { street: '1392 W International Speedway Blvd', city: 'Daytona Beach', zip: '32114', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:30', closes: '20:30' }, { days: ['Sunday'], opens: '10:00', closes: '18:00' }] },
+  'deerfield-beach': { street: '1299 S Military Trail', city: 'Deerfield Beach', zip: '33442', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:30', closes: '20:30' }, { days: ['Sunday'], opens: '10:00', closes: '18:00' }] },
+  'gainesville': { street: '1120 W University Ave', city: 'Gainesville', zip: '32601', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:30', closes: '20:30' }, { days: ['Sunday'], opens: '10:00', closes: '18:00' }] },
+  'jacksonville': { street: '3655 University Blvd W', city: 'Jacksonville', zip: '32217', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:30', closes: '20:30' }, { days: ['Sunday'], opens: '10:00', closes: '18:00' }] },
+  'miami': { street: '8994 SW 40th St', city: 'Miami', zip: '33165', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:30', closes: '20:30' }, { days: ['Sunday'], opens: '10:00', closes: '18:00' }] },
+  'miami-beach': { street: '6958 Collins Ave', city: 'Miami Beach', zip: '33141', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:30', closes: '20:30' }, { days: ['Sunday'], opens: '10:00', closes: '18:00' }] },
+  'north-miami-beach': { street: '3495 NE 163rd St', city: 'North Miami Beach', zip: '33160', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:30', closes: '20:30' }, { days: ['Sunday'], opens: '10:00', closes: '18:00' }] },
+  'ocala': { street: '2301 N Pine Ave', city: 'Ocala', zip: '34475', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:30', closes: '20:30' }, { days: ['Sunday'], opens: '10:00', closes: '18:00' }] },
+  'orlando': { street: '11401 University Blvd', city: 'Orlando', zip: '32817', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:30', closes: '20:30' }, { days: ['Sunday'], opens: '10:00', closes: '18:00' }] },
+  'palm-harbor': { street: '31650 US Hwy 19 N', city: 'Palm Harbor', zip: '34684', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:30', closes: '20:30' }, { days: ['Sunday'], opens: '10:00', closes: '18:00' }] },
+  'tallahassee': { street: '1719 W Tennessee St', city: 'Tallahassee', zip: '32304', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:30', closes: '20:30' }, { days: ['Sunday'], opens: '10:00', closes: '18:00' }] },
+  'tampa': { street: '602 N Dale Mabry Hwy', city: 'Tampa', zip: '33609', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:30', closes: '20:30' }, { days: ['Sunday'], opens: '10:00', closes: '18:00' }] },
+  'west-palm-beach': { street: '4561 Okeechobee Blvd', city: 'West Palm Beach', zip: '33417', hoursSpec: [{ days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:30', closes: '20:30' }, { days: ['Sunday'], opens: '10:00', closes: '18:00' }] },
+}
+
 function store(state: 'CA' | 'FL', slug: string, name: string, address: string, phone: string, hours: string, lat: number, lng: number): OwnedStore {
+  const st = STRUCTURED[slug]
+  if (!st) throw new Error(`owned-stores: no structured address/hours for '${slug}' — add it to STRUCTURED`)
   return {
     slug,
     name,
     address,
+    street: st.street,
+    city: st.city,
+    zip: st.zip,
+    hoursSpec: st.hoursSpec,
     phone,
     hours,
     state,
@@ -48,6 +95,11 @@ export const OWNED_STORES: OwnedStore[] = [
     slug: 'jungle-boys-clothing',
     name: 'Jungle Boys Clothing',
     address: '1530 S Alameda St #5, Los Angeles, CA 90021',
+    // Spread rather than omitted: this is the one entry not built by store(),
+    // and leaving the structured fields optional to accommodate it would remove
+    // the compile-time guarantee that every future store carries them. It is
+    // `external: true` and filtered out of the Store JSON-LD regardless.
+    ...STRUCTURED['jungle-boys-clothing'],
     phone: '(213) 221-4043',
     hours: '8:30AM – 8:30PM Mon–Sat · 10AM – 6PM Sun',
     state: 'CA',

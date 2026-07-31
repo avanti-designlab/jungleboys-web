@@ -56,32 +56,41 @@ export function websiteSchema() {
  * nothing in this repo supplies, which is why it looked complete while being
  * unusable.
  *
- * Deliberately NOT emitted, each for a reason:
- *  - `url`: every /menu/* target is Phase 3 and 404s today. Advertising them
- *    here is the same mistake as advertising them in the sitemap.
- *  - `openingHoursSpecification`: OwnedStore.hours is a DISPLAY STRING
- *    ('9AM – 9PM · Mon–Sun'). There is no structured hours data anywhere in
- *    this repo, so this needs a DATA change in lib/owned-stores.ts first.
- *  - a parsed PostalAddress: `address` is one hand-written line. It happens to
- *    be uniform across all 19 today, which is exactly what makes a regex split
- *    a latent bug rather than a fix — same data change.
+ * Emits the full set that reconciles a Store node with its Google Business
+ * Profile: parsed PostalAddress, geo, telephone and openingHoursSpecification.
+ * The structured address/hours come from STRUCTURED in lib/owned-stores.ts —
+ * data, not a runtime parse of the display strings.
  *
- * `geo` IS emitted: lat/lng are already present and correct for all 19, so it
- * is free. It was dropped in an earlier over-correction alongside the broken
- * `url` — and the comment left behind claimed geo was still there when it was
- * not. geo + telephone are what reconcile a Store node with its Google Business
- * Profile.
+ * `url` is still deliberately absent: every /menu/* target is Phase 3 and 404s
+ * today, and advertising them here is the same mistake as advertising them in
+ * the sitemap. Restore it when the menus exist.
  */
 export function storeSchema(s: {
-  name: string; phone: string; address: string; lat: number; lng: number
+  name: string; phone: string; state: string
+  street: string; city: string; zip: string
+  lat: number; lng: number
+  hoursSpec: Array<{ days: string[]; opens: string; closes: string }>
 }) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Store',
     name: s.name.startsWith('Jungle Boys') ? s.name : `Jungle Boys ${s.name}`,
     telephone: s.phone,
-    address: { '@type': 'PostalAddress', streetAddress: s.address, addressCountry: 'US' },
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: s.street,
+      addressLocality: s.city,
+      addressRegion: s.state,
+      postalCode: s.zip,
+      addressCountry: 'US',
+    },
     geo: { '@type': 'GeoCoordinates', latitude: s.lat, longitude: s.lng },
+    openingHoursSpecification: s.hoursSpec.map((h) => ({
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: h.days,
+      opens: h.opens,
+      closes: h.closes,
+    })),
   }
 }
 
