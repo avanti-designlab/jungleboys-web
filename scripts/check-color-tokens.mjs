@@ -20,7 +20,10 @@ const css = fs.readFileSync('app/globals.css', 'utf8')
 //
 // The theme-varying guard below still applies: tokens declared more than once
 // are skipped, so --color-accent-ink and friends cannot be mis-substituted.
-const BRAND = /^--(tw|tp|gt|pr|pops|hh|fl|strain|color)-/
+// `rw` (rewards tier palette) added 2026-07-30. Without it this script would
+// not have policed the tier tokens even after they were tokenised — the nine
+// hexes it missed had already drifted across two files.
+const BRAND = /^--(tw|tp|gt|pr|pops|hh|fl|rw|strain|color)-/
 const SKIP = new Set(['gt-fire.tsx', 'gt-snow.tsx'])
 
 // NOT ALL REMAINING HITS ARE FALSE POSITIVES — read this before dismissing the

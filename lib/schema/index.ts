@@ -47,7 +47,45 @@ export function websiteSchema() {
   }
 }
 
-// storeSchema() DELETED (2026-07-30). It was dead — /locations hand-rolls its
+/**
+ * Store node for an OWNED dispensary. One implementation — /locations calls
+ * this instead of hand-rolling, so a fix cannot land in only one of two places.
+ *
+ * Typed against `OwnedStore`, which is what /locations actually renders. The
+ * previous generator was typed against the Dutchie `Location` shape that
+ * nothing in this repo supplies, which is why it looked complete while being
+ * unusable.
+ *
+ * Deliberately NOT emitted, each for a reason:
+ *  - `url`: every /menu/* target is Phase 3 and 404s today. Advertising them
+ *    here is the same mistake as advertising them in the sitemap.
+ *  - `openingHoursSpecification`: OwnedStore.hours is a DISPLAY STRING
+ *    ('9AM – 9PM · Mon–Sun'). There is no structured hours data anywhere in
+ *    this repo, so this needs a DATA change in lib/owned-stores.ts first.
+ *  - a parsed PostalAddress: `address` is one hand-written line. It happens to
+ *    be uniform across all 19 today, which is exactly what makes a regex split
+ *    a latent bug rather than a fix — same data change.
+ *
+ * `geo` IS emitted: lat/lng are already present and correct for all 19, so it
+ * is free. It was dropped in an earlier over-correction alongside the broken
+ * `url` — and the comment left behind claimed geo was still there when it was
+ * not. geo + telephone are what reconcile a Store node with its Google Business
+ * Profile.
+ */
+export function storeSchema(s: {
+  name: string; phone: string; address: string; lat: number; lng: number
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Store',
+    name: s.name.startsWith('Jungle Boys') ? s.name : `Jungle Boys ${s.name}`,
+    telephone: s.phone,
+    address: { '@type': 'PostalAddress', streetAddress: s.address, addressCountry: 'US' },
+    geo: { '@type': 'GeoCoordinates', latitude: s.lat, longitude: s.lng },
+  }
+}
+
+// The PREVIOUS storeSchema() was deleted 2026-07-30. It was dead — /locations hand-rolls its
 // own Store nodes — and it still carried the exact `url` bug that was fixed
 // inline there, so the next person to "do it properly" would have reintroduced
 // it. It was also typed against the Dutchie `Location` shape, which nothing

@@ -10,10 +10,10 @@ import { Scrub, SplitHeading } from './motion'
 // (Photo collage removed per Avanti; heading no longer pins.)
 
 const TIER_COLORS: Record<string, string> = {
-  Trimmer: '#37d16b',
-  Grower: '#c9c9d1',
-  'Pheno Hunter': '#fecf0e',
-  'Connoisseur Club': '#c8102e',
+  Trimmer: 'var(--rw-tier-green-ink)',
+  Grower: 'var(--rw-tier-silver-ink)',   // was #c9c9d1 — drifted from tier-cards
+  'Pheno Hunter': 'var(--rw-tier-gold-ink)',   // was #fecf0e — drifted from tier-cards
+  'Connoisseur Club': 'var(--rw-tier-cc-ink)',
 }
 
 export default function EarnMore() {
@@ -60,7 +60,7 @@ export default function EarnMore() {
                       <span
                         aria-hidden
                         className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-extrabold text-black"
-                        style={{ backgroundColor: TIER_COLORS[t.name] ?? '#fecf0e' }}
+                        style={{ backgroundColor: TIER_COLORS[t.name] ?? 'var(--rw-tier-gold-ink)' }}
                       >
                         {i + 1}
                       </span>

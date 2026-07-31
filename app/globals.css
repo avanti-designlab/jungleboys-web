@@ -341,6 +341,30 @@ html.jb-no-intro .jb-intro {
 .hh-sign-thin { paint-order: stroke fill; }
 .pops-word > .pops-word-cell { justify-self: center; }
 
+/* REWARDS TIER PALETTE — one definition per colour.
+   These were nine hardcoded hexes spread across tier-cards.tsx and
+   earn-more.tsx, and they had ALREADY drifted: Silver was #e4e4e8 in one file
+   and #c9c9d1 in the other, Gold #ffe98a vs #fecf0e. Two files, two answers to
+   "what colour is the Silver tier" — exactly what tokens exist to prevent.
+   --rw-tier-gold-via is DARKENED (was #96700a) so the Gold tier name clears AA:
+   it measured 3.02:1 on the old band and 5.65:1 on this one. Text colour alone
+   could not fix it — even pure white was 3.95:1 there. Confirmed by Avanti. */
+:root {
+  --rw-tier-green-from: #1e8a43;
+  --rw-tier-green-via: #0d4423;
+  --rw-tier-green-to: #041b0d;
+  --rw-tier-green-ink: #37d16b;
+  --rw-tier-silver-from: #a9a9ad;
+  --rw-tier-silver-via: #4c4c50;
+  --rw-tier-silver-to: #131315;
+  --rw-tier-silver-ink: #e4e4e8;
+  --rw-tier-gold-from: #f0c419;
+  --rw-tier-gold-via: #4a3705;
+  --rw-tier-gold-to: #241b02;
+  --rw-tier-gold-ink: #ffe98a;
+  --rw-tier-cc-ink: #c8102e;
+}
+
 /* Hoisted OUT of the no-preference query below: these declarations
    describe what the element IS, not how it moves. Inside the query a
    reduced-motion visitor never got them. */

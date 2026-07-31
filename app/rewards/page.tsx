@@ -39,7 +39,11 @@ export default function RewardsPage() {
           '--color-foreground-soft': '#f5f5f5',
           '--color-muted': '#9a9aa0',
           '--color-border': '#231f20',
-          '--color-accent-ink': '#fecf0e',
+          // var(), not the literal: --color-accent is #fecf0e in BOTH themes, so
+          // this is not a forced-dark pin like --color-foreground above it — it
+          // was a genuine token violation hiding inside a block of legitimate
+          // ones. A blanket "RHS of a definition is exempt" rule would launder it.
+          '--color-accent-ink': 'var(--color-accent)',
         } as React.CSSProperties
       }
     >

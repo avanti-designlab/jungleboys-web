@@ -6,22 +6,21 @@ import { Scrub, SplitHeading } from './motion'
 // zones so every row lines up. Mascots are oversized, POP OUT of the card
 // top, and float gently (alive). Pheno Hunter carries the rotating ring.
 
+// Colours come from --rw-tier-* in globals.css. They lived here as hardcoded
+// hexes AND again in earn-more.tsx, and the two copies had already disagreed
+// (Silver #e4e4e8 vs #c9c9d1, Gold #ffe98a vs #fecf0e).
 const themes = {
   green: {
-    card: 'bg-gradient-to-b from-[#1e8a43] via-[#0d4423] to-[#041b0d]',
-    name: 'text-[#37d16b]',
+    card: 'bg-gradient-to-b from-[var(--rw-tier-green-from)] via-[var(--rw-tier-green-via)] to-[var(--rw-tier-green-to)]',
+    name: 'text-[var(--rw-tier-green-ink)]',
   },
   silver: {
-    card: 'bg-gradient-to-b from-[#a9a9ad] via-[#4c4c50] to-[#131315]',
-    name: 'text-[#e4e4e8]',
+    card: 'bg-gradient-to-b from-[var(--rw-tier-silver-from)] via-[var(--rw-tier-silver-via)] to-[var(--rw-tier-silver-to)]',
+    name: 'text-[var(--rw-tier-silver-ink)]',
   },
   gold: {
-    // `via` darkened from #96700a. The tier name lands on this band, where
-    // #ffe98a measured 3.02:1. Text colour alone cannot fix it — even pure
-    // white is only 3.95:1 on the old band, still short of the 4.5 floor for
-    // 18px — so the ground had to move rather than the ink.
-    card: 'bg-gradient-to-b from-[#f0c419] via-[#4a3705] to-[#241b02]',
-    name: 'text-[#ffe98a]',
+    card: 'bg-gradient-to-b from-[var(--rw-tier-gold-from)] via-[var(--rw-tier-gold-via)] to-[var(--rw-tier-gold-to)]',
+    name: 'text-[var(--rw-tier-gold-ink)]',
   },
 } as const
 

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { SITE_ORIGIN } from '@/lib/storyblok/seo'
 import LocationsDirectory from '@/components/locations/locations-directory'
 import { OWNED_STORES } from '@/lib/owned-stores'
-import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
+import { jsonLdHtml, breadcrumbSchema, storeSchema } from '@/lib/schema'
 
 // Locations — Jungle Boys owned dispensaries (/locations). Same banner treatment
 // as the other pages (LOCATIONS wordmark + the Product Finder character), then
@@ -35,17 +35,11 @@ export default function LocationsPage() {
             // prefixed with the origin, emitting
             // `https://www.jungleboys.comhttps://jungleboysclothing.com`, and its
             // name doubled to "Jungle Boys Jungle Boys Clothing".
-            ...OWNED_STORES.filter((s) => !s.external).map((s) => ({
-              '@context': 'https://schema.org',
-              '@type': 'Store',
-              name: s.name.startsWith('Jungle Boys') ? s.name : `Jungle Boys ${s.name}`,
-              // NO `url`. Every /menu/* target is Phase 3 and 404s today —
-              // advertising them in schema is the same mistake as advertising
-              // them in the sitemap, which we deliberately don't. Address, phone
-              // and geo stand on their own. Restore `url` when the menus exist.
-              telephone: s.phone,
-              address: { '@type': 'PostalAddress', streetAddress: s.address, addressCountry: 'US' },
-            })),
+            //
+            // Built by storeSchema() rather than inline: the same node used to
+            // exist in lib/schema typed against a shape nothing supplies, so a
+            // fix here left a broken copy there waiting to be adopted.
+            ...OWNED_STORES.filter((s) => !s.external).map(storeSchema),
           ]),
         }}
       />

@@ -245,6 +245,22 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   centred on a clean page load — "Download the App" read 1.06, then 18.88. Settle-detection alone
   does not catch this; `contrast-verify.mjs` reloads per finding for exactly this reason. Never
   ship a contrast fix off a sweep number that has not been through the verify pass.
+- **Security headers on redirects: middleware.ts TRIED AND REVERTED — evidence, not opinion
+  (2026-07-30).** The security gate ruled "add middleware.ts", and the argument it demolished
+  (the stale `notAccepted` note in `security/audit-exceptions.json`) genuinely was dead. But the
+  fix does not work, and this was MEASURED rather than reasoned:
+  `next.config`'s `redirects()` are matched BEFORE middleware runs, so middleware never sees a
+  redirect response. Built it, served it, measured: **0 security headers on the `/verify` 308, 4
+  on a rendered page** — i.e. it added nothing `headers()` did not already cover.
+  Making it work means moving the redirect map INTO middleware, and three sources are
+  parameterised (`/menu/florida/jungle-boys-:city`, `:path*`, `/menu/arizona/:path*`), so that
+  means re-implementing Next's path matching for 85 live URLs. The exposure being closed is
+  headers on a BODYLESS response, where CSP/XFO/nosniff have nothing to act on and only HSTS
+  meaningfully applies. Not worth that risk at this stage.
+  `lib/security-headers.ts` was kept — one definition of the CSP is right regardless.
+  **Revisit at cutover**, when HSTS on the apex domain is being configured at the Vercel edge
+  anyway; that is the cheaper place to close it. Do not re-raise "add middleware" without also
+  answering the parameterised-source problem.
 - **RLS VERIFIED IN THE DATABASE, not just in the migration (Avanti ran it, 2026-07-30).**
   `select relname, relrowsecurity, relforcerowsecurity from pg_class` returns
   **`relrowsecurity = true` for both `leads` and `retailers`**; `relforcerowsecurity = false` on
