@@ -30,6 +30,8 @@ const lemonMilk = localFont({
     { path: "./fonts/lemon-milk-pro-medium.woff2", weight: "500", style: "normal" },
     { path: "./fonts/lemon-milk-pro-bold.woff2", weight: "700", style: "normal" },
   ],
+  preload: false,
+  display: "swap",
 });
 
 const dmSans = DM_Sans({
