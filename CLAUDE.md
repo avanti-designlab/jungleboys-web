@@ -261,6 +261,26 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   **Revisit at cutover**, when HSTS on the apex domain is being configured at the Vercel edge
   anyway; that is the cheaper place to close it. Do not re-raise "add middleware" without also
   answering the parameterised-source problem.
+- **TCPA consent ledger CLEARED of synthetic rows — done and confirmed by Avanti, 2026-07-30.**
+  All **10** rows in `public.leads` were deleted in a single transaction; `select count(*)` returns
+  **0**. An empty ledger is the correct pre-cutover state — nothing genuine had been submitted.
+  What was removed, so the correction is auditable rather than remembered:
+  - **5** written 2026-07-30 14:02:00–02, `ratelimit-probe@example.invalid` — the Phase 2 security
+    audit's live XFF rate-limit bypass test. Written from localhost against production keys.
+  - **4** explicit test rows, 2026-07-20 → 07-29: two `Pheno hunter (test)`/`a@b.com`, one
+    `Pheno hunter (test answer)`/`ava@test.com` (all `/phenos`), one `Jane Doe`/`jane@store.com`
+    with a 555 number (`/wholesale`).
+  - **1** `Avanti Loussia`/`avantiloussia@gmail.com`, 2026-07-21 — Avanti confirmed this was her
+    own form test, not a real signup. It was deliberately excluded from the first delete list and
+    only removed once she said so; a row carrying a real person's PII and a real consent record is
+    never deleted on inference.
+  **Recurrence is blocked in code**, not by discipline: `/api/lead` refuses to write when
+  `VERCEL_ENV` is absent (see the guard in that route + `check-invariants`). The 5 audit rows are
+  exactly what that guard exists to stop, and they postdate the ruling that prompted it.
+  **Still open, and NOT fixed by the delete:** 7 of the 10 had `forwarded_status = 'forwarded'`,
+  so `ava@test.com`, `jane@store.com` and the probe address reached **Klaviyo**. Removing rows
+  from Supabase does not touch the marketing list. Prune them there before cutover — bounced
+  synthetic addresses cost sender reputation.
 - **RLS VERIFIED IN THE DATABASE, not just in the migration (Avanti ran it, 2026-07-30).**
   `select relname, relrowsecurity, relforcerowsecurity from pg_class` returns
   **`relrowsecurity = true` for both `leads` and `retailers`**; `relforcerowsecurity = false` on
