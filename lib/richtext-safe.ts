@@ -38,7 +38,7 @@
 const ALLOWED_ATTRS = new Set([
   'href', 'target', 'anchor', 'uuid', 'linktype', 'title', 'rel',
   'src', 'alt', 'width', 'height', 'loading', 'decoding',
-  'level', 'class', 'id', 'name', 'start', 'order', 'language',
+  'level', 'id', 'name', 'start', 'order', 'language',
   'colspan', 'rowspan', 'color',
 ])
 
@@ -47,22 +47,30 @@ const ALLOWED_ATTRS = new Set([
 // Hex, rgb()/hsl(), or a bare keyword only — no `;`, no `:`, no url().
 const SAFE_COLOR = /^(#[0-9a-f]{3,8}|(rgb|rgba|hsl|hsla)\([0-9.,%\s/-]+\)|[a-z]+)$/i
 
-// `class` is a VALUE-position risk, exactly like `color` above.
+// `class` IS NOT ALLOWED AT ALL. It is not in ALLOWED_ATTRS above, and that is
+// deliberate — read this before adding it back.
 //
-// Tailwind's utilities are already in the shipped stylesheet, so a CMS author
-// with publish rights can borrow them without adding any CSS of their own:
-// `class="fixed inset-0 z-50 bg-black h-screen w-full"` is a full-viewport
-// overlay — the clickjack the `textStyle`/`color` restriction was added to
-// prevent, smuggled through the attribute sitting next to it. Storyblok's
-// `styled` mark uses class legitimately, so the value is constrained rather
-// than the name dropped: no positioning, stacking, sizing or inset utilities.
-const UNSAFE_CLASS = /^(fixed|absolute|sticky|inset|top|right|bottom|left|z|h|w|min-h|min-w|max-h|max-w|translate|scale|rotate|opacity|pointer-events|overflow|transform)(-|$)/
-
-function safeClassValue(v: unknown): string | null {
-  if (typeof v !== 'string') return null
-  const kept = v.split(/\s+/).filter((c) => c && !UNSAFE_CLASS.test(c))
-  return kept.length ? kept.join(' ') : null
-}
+// The first attempt kept the name and constrained the value with a denylist of
+// unsafe prefixes (`fixed`, `absolute`, `inset`, `z`, `w`, `h`…). A denylist
+// cannot win against a stylesheet that already contains hundreds of positioned
+// classes, and it lost two ways at once:
+//   - it was anchored with ^, so every Tailwind VARIANT prefix walked past it:
+//     `md:absolute md:top-0 md:right-0 md:bottom-0 md:left-0 md:w-full
+//     md:h-screen` survived intact and rendered a 1440x813 black box over the
+//     whole page. Verified live through the real sanitizer and renderer.
+//   - it only reasoned about Tailwind, so component classes were borrowable by
+//     exact name — `leaflet-top` carries z-index:1000, `leaflet-control` 800,
+//     the `prod-*` line-page overlays 20. Enough to cover the nav.
+//
+// The threat model is a CMS author with publish rights, and the payoff is a
+// full-viewport clickjack on /blog and /faq (both render through this
+// sanitizer) — wrap it in a link mark and it is an off-site phishing lure on a
+// jungleboys.com URL. `on*` is still stripped, so this was defacement rather
+// than script execution, but that is not a reason to allow it.
+//
+// If a legitimate need for class ever appears (Storyblok's `styled` mark is the
+// only candidate), add an explicit ALLOWLIST of typography-safe utilities —
+// never a denylist. Anything that can position, size, stack or hide is out.
 
 function cleanAttrs(attrs: Record<string, unknown>): Record<string, unknown> {
   const out: Record<string, unknown> = {}
@@ -70,12 +78,6 @@ function cleanAttrs(attrs: Record<string, unknown>): Record<string, unknown> {
     if (!ALLOWED_ATTRS.has(k)) continue
     if (k === 'color' && !(typeof v === 'string' && SAFE_COLOR.test(v.trim()))) continue
     if ((k === 'href' || k === 'src') && typeof v === 'string' && !isSafeUrl(v)) continue
-    if (k === 'class') {
-      const safe = safeClassValue(v)
-      if (safe === null) continue
-      out[k] = safe
-      continue
-    }
     out[k] = v
   }
   return out

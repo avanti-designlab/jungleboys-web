@@ -17,6 +17,17 @@ export type BlogSummary = {
 export type BlogPost = BlogSummary & {
   body: unknown // Storyblok richtext doc
   seo?: Record<string, unknown>
+  /**
+   * TRUE only on the hardcoded SAMPLE_POSTS below, which are code constants.
+   * This is the provenance signal for the raw-HTML render path — it travels on
+   * the OBJECT, so it cannot be spoofed by a URL.
+   *
+   * The slug could. `isSamplePost(slug)` tested the route param, and
+   * getBlogPost() queries Storyblok BEFORE falling back, so a CMS story
+   * published at `blog/july-deals-are-live` shadowed the sample: the slug check
+   * stayed true while the body was the CMS's. That defeated the gate entirely.
+   */
+  trustedHtml?: true
 }
 
 type SB = { slug: string; full_slug: string; content: Record<string, unknown> }
@@ -96,6 +107,7 @@ export async function getBlogPost(slug: string): Promise<BlogPost | null> {
 // body is HTML here (samples); real posts render Storyblok richtext.
 const SAMPLE_POSTS: BlogPost[] = [
   {
+    trustedHtml: true,
     slug: 'playing-with-fire-since-2006',
     title: 'Playing With Fire Since 2006',
     excerpt: 'Two decades in, the hunt has never stopped. A look at where Jungle Boys started and where the next fire is coming from.',
@@ -111,6 +123,7 @@ const SAMPLE_POSTS: BlogPost[] = [
       "<p>That's the whole game — and it's why we're still here, still <strong>playing with fire</strong>.</p>",
   },
   {
+    trustedHtml: true,
     slug: 'inside-the-pheno-hunt',
     title: 'Inside the Pheno Hunt',
     excerpt: 'How an unnamed seed becomes the next strain everyone is chasing — and how you get a say in it.',
@@ -126,6 +139,7 @@ const SAMPLE_POSTS: BlogPost[] = [
       "<p>Want first look and first taste? That's what the <a href=\"/phenos\">Pheno Hunt</a> is for.</p>",
   },
   {
+    trustedHtml: true,
     slug: 'july-deals-are-live',
     title: 'July Deals Are Live',
     excerpt: 'The mid-summer drop is here — top-shelf flower, all-in-one Gas Tanks, and gold mylars, all month long.',

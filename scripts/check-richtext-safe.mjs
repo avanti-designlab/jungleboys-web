@@ -42,6 +42,16 @@ const ATTR_VECTORS = [
   ['class tailwind-overlay', { type:'doc', content:[
     { type:'paragraph', attrs:{ class:'fixed inset-0 z-50 bg-black h-screen w-full' },
       content:[{ type:'text', text:'FREE DROP — CLICK HERE' }] }]}],
+  // The value-denylist that used to guard `class` was ^-anchored, so every
+  // Tailwind VARIANT prefix walked past it and rendered a full-viewport box.
+  ['class variant-prefix overlay', { type:'doc', content:[
+    { type:'paragraph', attrs:{ class:'md:absolute md:top-0 md:right-0 md:bottom-0 md:left-0 md:w-full md:h-screen bg-black' },
+      content:[{ type:'text', text:'FREE DROP — CLICK HERE' }] }]}],
+  // ...and it only reasoned about Tailwind, so component classes carrying their
+  // own z-index were borrowable by exact name.
+  ['class component-name overlay', { type:'doc', content:[
+    { type:'paragraph', attrs:{ class:'leaflet-top leaflet-control sr-only' },
+      content:[{ type:'text', text:'lure' }] }]}],
 ]
 
 const ATTACKS = [
@@ -74,7 +84,8 @@ for (const [name, d] of ATTR_VECTORS) {
     || /position:\s*fixed/i.test(out) || /<a[^>]*\sq"/i.test(out)
     // positioning/stacking/sizing utilities surviving in a class attribute are
     // an overlay regardless of whether any inline CSS came with them
-    || /class="[^"]*(?:^|\s)(?:fixed|absolute|sticky|inset-\S+|z-\d+|h-screen|w-full)(?:\s|")/i.test(out)
+    // `class` is no longer allowed at ALL, so any surviving class attribute is a leak.
+    || /\sclass="/i.test(out)
   if (leaked) bad++
   console.log(`  ${leaked ? '*** LEAKED ***' : 'BLOCKED'}  ${name.padEnd(28)} -> ${out.slice(0,88)}`)
 }

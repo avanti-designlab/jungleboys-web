@@ -75,7 +75,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   // onerror=...>` survived intact and our CSP's script-src 'unsafe-inline'
   // would run it. Inert only while every CMS call 401s; armed the moment the
   // Storyblok region is corrected.
-  const rawIsTrusted = isSamplePost(slug) && typeof post.body === 'string'
+  // Provenance travels on the OBJECT, never on the slug. isSamplePost(slug)
+  // tested the route param, and getBlogPost() hits Storyblok BEFORE falling
+  // back to the samples — so a CMS story published at `blog/july-deals-are-live`
+  // shadowed the sample and the gate still said "trusted" while the body was
+  // the CMS's. Latent only because the live field is richtext today; one
+  // field-type change in the Storyblok UI would have re-armed script execution.
+  const rawIsTrusted = post.trustedHtml === true && typeof post.body === 'string'
   const html = sanitizeRichTextHtml(
     rawIsTrusted
       ? (post.body as string)

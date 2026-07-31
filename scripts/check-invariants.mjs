@@ -57,11 +57,31 @@ console.log('\nrecorded decisions')
     claimsTen ? `doc says "ten", code has ${lines.length}` : '')
 }
 
-// ── Blog raw-HTML path is gated on provenance, not shape (SEC-P2-24) ─────────
+// ── Blog raw-HTML path is gated on OBJECT provenance (SEC-P2-24, 2nd pass) ───
+// Gating on isSamplePost(slug) was not provenance: it tests the route param,
+// and getBlogPost() queries Storyblok BEFORE falling back, so a CMS story
+// published at `blog/july-deals-are-live` shadowed the sample and inherited its
+// trust. The flag must travel on the object the CMS cannot set.
 {
   const page = read('app/blog/[slug]/page.tsx')
-  check('blog raw-HTML branch is gated on isSamplePost, not typeof',
-    /isSamplePost\(slug\)\s*&&\s*typeof post\.body === 'string'/.test(page))
+  check('blog raw-HTML branch gates on post.trustedHtml, not the slug',
+    /post\.trustedHtml === true\s*&&\s*typeof post\.body === 'string'/.test(page))
+  check('blog raw-HTML branch does NOT gate on isSamplePost(slug)',
+    !/rawIsTrusted\s*=\s*isSamplePost\(slug\)/.test(page))
+  const blog = read('lib/blog.ts')
+  check('trustedHtml is set only on the hardcoded SAMPLE_POSTS',
+    (blog.match(/trustedHtml: true,/g) || []).length === 3
+      && blog.indexOf('trustedHtml: true,') > blog.indexOf('const SAMPLE_POSTS'))
+}
+
+// ── `class` is not an allowed richtext attribute at all ─────────────────────
+// A value-denylist lost twice: ^-anchored, so Tailwind variant prefixes
+// (md:absolute, md:w-full) walked past it, and it only knew Tailwind, so
+// component classes carrying their own z-index were borrowable by name.
+{
+  const rt = read('lib/richtext-safe.ts')
+  const allowed = rt.slice(rt.indexOf('const ALLOWED_ATTRS'), rt.indexOf('])', rt.indexOf('const ALLOWED_ATTRS')))
+  check("richtext ALLOWED_ATTRS does not contain 'class'", !/'class'/.test(allowed))
 }
 
 // ── Rate limiting keys on a value the client cannot choose (SEC-P2-XFF) ──────
