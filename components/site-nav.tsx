@@ -288,7 +288,7 @@ export default function SiteNav() {
               >
                 <UserIcon className="h-5 w-5" />
               </Link>
-              <PillCta label="Shop" href="/products" icon="cart" className="shrink-0" />
+              <PillCta label="Shop" href="/shop" icon="cart" className="shrink-0" />
               <div
                 className={`hidden shrink-0 items-center gap-4 rounded-full border-2 px-5 py-3 transition-colors duration-300 md:flex ${
                   headerDark ? 'border-white text-white' : 'border-black text-black'
@@ -358,7 +358,7 @@ export default function SiteNav() {
             >
               <UserIcon className="h-4 w-4" />
             </Link>
-            <PillCta label="Shop" href="/products" icon="cart" size="sm" className="hidden sm:inline-flex" />
+            <PillCta label="Shop" href="/shop" icon="cart" size="sm" className="hidden sm:inline-flex" />
             <div className="hidden items-center gap-3 sm:flex">
               {HEADER_SOCIALS.map((s) => (
                 <a

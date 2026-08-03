@@ -30,14 +30,12 @@ export const MENU_COLUMNS: { label: string; href: string; external?: boolean }[]
     { label: 'Contact', href: '/contact' },
   ],
   [
-    // NO 'Shop' entry until Phase 3 (Avanti, 2026-07-29). Shop and Products are
-    // two different destinations — Products is the curated JB-only collection,
-    // Shop will be the real Dutchie storefront with live dispensary inventory,
-    // strictly Jungle Boys products. It has no page yet, so listing it here
-    // pointed a second anchor at /products: two <li> with the same React key,
-    // and Google credits only the first anchor's text for a repeated href, so
-    // "Shop" won and "Products" — the term we want to rank — was discarded.
-    // PHASE 3: re-add { label: 'Shop', href: '/shop' } as the FIRST entry.
+    // Shop and Products are two different destinations (Avanti, 2026-07-29):
+    // Products is the curated JB-only collection; Shop is live dispensary
+    // inventory. /shop exists as of Phase 3, so the entry the 2026-07-29 note
+    // promised is now here — first, with its own href, so the two anchors no
+    // longer collide the way the old double-/products listing did.
+    { label: 'Shop', href: '/shop' },
     { label: 'Products', href: '/products' },
     { label: 'Clothing', href: 'https://jungleboysclothing.com/', external: true },
   ],

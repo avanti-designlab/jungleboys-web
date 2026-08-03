@@ -139,12 +139,32 @@ async function checkDrops() {
   }
 }
 
+// ── 3c. /shop is the storefront ENTRY, and the nav actually points at it ─────
+// The user-reported failure this guards: every Shop button led to /products,
+// so nothing built in Phase 3 was reachable by clicking around the site.
+async function checkShopEntry() {
+  const { status, html } = await fetchHtml('/shop')
+  if (status !== 200) return fail('/shop responds 200', `got ${status}`)
+  ok('/shop responds 200')
+
+  const stores = ['downtown-los-angeles', 'orange-county', 'pomona', 'san-diego']
+  for (const s of stores) {
+    if (html.includes(`href="/menu/california/${s}"`)) ok(`/shop links to ${s} menu`)
+    else fail(`/shop links to ${s} menu`, 'store card missing')
+  }
+
+  const home = await fetchHtml('/')
+  if (home.html.includes('href="/shop"')) ok('home nav carries a link to /shop')
+  else fail('home nav carries a link to /shop', 'Shop still points elsewhere')
+}
+
 // ── 4. Sitemap: store surfaces IN, placeholder-slug PDPs OUT ─────────────────
 async function checkSitemap() {
   const { status, html } = await fetchHtml('/sitemap.xml')
   if (status !== 200) return fail('/sitemap.xml responds 200', `got ${status}`)
 
   for (const path of [
+    '/shop',
     `/menu/california/${MENU_STORE}`,
     `/menu/california/${MENU_STORE}/deals`,
     `/menu/california/${MENU_STORE}/drops`,
@@ -167,6 +187,7 @@ try {
   await checkCardLinks(`/menu/california/${DEALS_STORE}/deals`, DEALS_STORE)
   await checkBrands()
   await checkDrops()
+  await checkShopEntry()
   await checkAmendedFields()
   await checkSitemap()
 } catch (e) {

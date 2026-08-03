@@ -1,16 +1,30 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useScanner } from '@/components/scan/scan-provider'
+import { readStore } from '@/lib/store-selection'
 
 // Mobile-only sticky bottom pill: Deals / Drops · [VERIFY scan] · Locations / Contact.
 // The raised center button opens the QR scanner (→ /auth).
+//
+// Deals and Drops are STORE-SCOPED surfaces as of Phase 3, so these two tabs
+// are store-aware: with a chosen CA store they deep-link into that store's
+// deals/drops; without one they land on /shop, where the picker opens and the
+// choice routes onward. The hrefs upgrade in an effect AFTER hydration — the
+// saved store is localStorage, and server HTML must not disagree with the
+// first client paint. (They previously pointed at the interim marketing
+// redirects /710-deals and /drops, which is how every tap ended up on
+// /rewards or /products — the complaint that prompted this.)
 
-const LEFT = [
+type TabItem = { label: string; href: string; surface?: 'deals' | 'drops'; icon: React.ReactNode }
+
+const LEFT: TabItem[] = [
   {
     label: 'Deals',
-    href: '/710-deals',
+    href: '/shop',
+    surface: 'deals',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5" aria-hidden>
         <path d="M4 4h7l9 9-7 7-9-9V4Z" strokeLinejoin="round" />
@@ -20,7 +34,8 @@ const LEFT = [
   },
   {
     label: 'Drops',
-    href: '/drops',
+    href: '/shop',
+    surface: 'drops',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-5 w-5" aria-hidden>
         <path d="M12 3c.9 2.7-1.3 4-1.3 6.1 0 1.1.9 2 2 2 1.2 0 2-1 1.7-2.4 1.7 1.2 2.7 3 2.7 5a5.1 5.1 0 0 1-10.2 0C6.9 10.1 9.6 8 12 3Z" strokeLinejoin="round" />
@@ -29,7 +44,7 @@ const LEFT = [
   },
 ]
 
-const RIGHT = [
+const RIGHT: TabItem[] = [
   {
     label: 'Locations',
     href: '/locations',
@@ -52,7 +67,7 @@ const RIGHT = [
   },
 ]
 
-function TabLink({ item, active }: { item: (typeof LEFT)[number]; active: boolean }) {
+function TabLink({ item, active }: { item: TabItem; active: boolean }) {
   return (
     <Link prefetch={false}
       href={item.href}
@@ -75,13 +90,26 @@ function TabLink({ item, active }: { item: (typeof LEFT)[number]; active: boolea
 export default function MobileTabBar() {
   const pathname = usePathname()
   const { open } = useScanner()
+
+  // CA only: a saved FL store points at /menu/florida/* shells that have not
+  // landed yet, so FL keeps the /shop fallback rather than deep-linking a 404.
+  const [storeBase, setStoreBase] = useState<string | null>(null)
+  useEffect(() => {
+    const saved = readStore()
+    if (saved?.state === 'CA') setStoreBase(`/menu/california/${saved.slug}`)
+  }, [pathname]) // re-read per navigation: the picker may have just chosen a store
+
+  const resolve = (item: TabItem): TabItem =>
+    item.surface && storeBase ? { ...item, href: `${storeBase}/${item.surface}` } : item
+
   return (
     <nav aria-label="Quick navigation" className="fixed inset-x-0 bottom-3 z-30 flex justify-center px-3 lg:hidden">
       <div className="flex w-[22rem] max-w-full items-center rounded-full border border-white/10 bg-[#0b0b0b]/95 px-3 py-3 text-white shadow-2xl backdrop-blur-md">
         <div className="flex flex-1 items-center justify-around">
-          {LEFT.map((item) => (
-            <TabLink key={item.href} item={item} active={pathname === item.href} />
-          ))}
+          {LEFT.map((item) => {
+            const r = resolve(item)
+            return <TabLink key={item.label} item={r} active={pathname === r.href} />
+          })}
         </div>
 
         {/* raised center VERIFY — opens the QR scanner */}

@@ -355,7 +355,20 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   ships with. The menu card labels the brand ONLY on non-JB products — the house brand stays
   unlabelled by design. Do not "clean up" the fixtures to JB-only; the not-JB-only rule
   (2026-07-31) is the point, and check-commerce fails if the brands page goes single-brand.
-- **Fresh Drops LAYOUT shipped with curation STUBBED (Avanti's go-ahead, 2026-08-03).** Avanti
+- **`/shop` is the storefront ENTRY and every Shop button now lands there (Avanti's report,
+  2026-08-03: "shop buttons still direct to products page so I can't see anything we built").**
+  Phase 3 had built the surfaces but no navigation reached them. Now: `/shop` = server-rendered
+  store chooser (CA cards → store menus; FL → /locations honestly, since the FL shells don't
+  exist yet) with a client "Continue at <store>" enhancement off `jb-store`; the picker overlay
+  still auto-opens there for first-timers and routes on choose. Header Shop pills went
+  /products → /shop; the menu-overlay 'Shop' entry promised by the 2026-07-29 note is added
+  (FIRST, own href — the double-/products anchor problem that note records is why it waited);
+  the mobile tab bar's Deals/Drops tabs deep-link into the chosen CA store's
+  deals/drops (fallback /shop; upgraded in an effect AFTER hydration; FL saved store keeps the
+  fallback rather than deep-linking a 404). The Products-vs-Shop rule is untouched — /products
+  remains the curated collection, and the home hero "Shop now" CTAs are CMS-editable banners
+  Avanti can retarget in Storyblok. check-commerce asserts /shop exists, lists all four store
+  menus, and is linked from the home nav. Avanti
   asked for the page design now rather than waiting on the Dutchie verification, so
   `/menu/california/<store>/drops` is live: editorial header ("new heat lands every Friday"),
   featured band rendering Genetics/Taste from `StrainProfile` (what amendment #1 exists for,
