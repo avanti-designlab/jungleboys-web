@@ -2,12 +2,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Location } from '@/lib/dutchie'
 
-// Store masthead — a BRAND surface, dark in both themes like the footer and
-// menu overlay (recorded design-system rule), redesigned per Avanti
-// (2026-08-03): the old three-grey-columns header read "a lot of white and
-// very generic". Now: yellow glow accents over brand black, the store name in
-// the two-tier Bebas treatment, the facts as tappable chips (directions /
-// hours / phone), and the store's illustration framed on the right.
+// Store info band — the compact form of the old masthead. Avanti (2026-08-03,
+// second ruling): the menu page STARTS with the hero banners, so this moved to
+// the page's end. It stays for a reason — these store pages are the site's
+// highest-value local-SEO URLs, and the crawlable h1 + address/hours/phone
+// (NAP) live here. Do not delete it; the JSON-LD store schema is not a
+// substitute for on-page facts.
 
 const DAY_LABEL: Record<string, string> = {
   mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun',
@@ -61,7 +61,7 @@ export default function StoreHeader({
   )}`
 
   return (
-    <header className="relative overflow-hidden bg-[#0b0b0b] px-6 pb-12 pt-10 text-white md:px-12 md:pt-14 lg:px-20">
+    <header className="relative mt-16 overflow-hidden bg-[#0b0b0b] px-6 py-10 text-white md:px-12 lg:px-20">
       {/* glow field — pure decoration, clipped by the header */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div
@@ -73,7 +73,7 @@ export default function StoreHeader({
           style={{ background: 'var(--color-accent)' }}
         />
         {/* oversized watermark, same device as the contact page letters */}
-        <span className="font-display absolute -bottom-10 right-0 select-none text-[16rem] uppercase leading-none text-white/[0.03]">
+        <span className="font-display absolute -bottom-10 right-0 select-none text-[10rem] uppercase leading-none text-white/[0.03]">
           {location.state === 'CA' ? 'CALI' : 'FLA'}
         </span>
       </div>
@@ -88,11 +88,11 @@ export default function StoreHeader({
             ← All locations
           </Link>
 
-          <h1 className="font-display mt-5 uppercase">
-            <span className="block text-2xl leading-none text-[var(--color-accent)] md:text-3xl">
+          <h1 className="font-display mt-4 uppercase">
+            <span className="block text-lg leading-none text-[var(--color-accent)] md:text-xl">
               Jungle Boys
             </span>
-            <span className="mt-1 block text-6xl leading-[0.85] md:text-8xl">{place}</span>
+            <span className="mt-1 block text-4xl leading-[0.85] md:text-5xl">{place}</span>
           </h1>
 
           <p
@@ -139,12 +139,12 @@ export default function StoreHeader({
 
         {/* the store itself, framed. Line art ships on the white media well —
             same treatment as the product photography. */}
-        <div className="relative hidden h-64 w-96 shrink-0 overflow-hidden rounded-3xl border border-white/10 bg-[var(--color-media-well)] lg:block">
+        <div className="relative hidden h-40 w-60 shrink-0 overflow-hidden rounded-3xl border border-white/10 bg-[var(--color-media-well)] lg:block">
           <Image
             src={`/locations/stores/${location.slug}.webp`}
             alt={`${location.name} storefront`}
             fill
-            sizes="384px"
+            sizes="240px"
             className="object-cover"
           />
         </div>

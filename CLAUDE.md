@@ -371,7 +371,14 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   menus, and is linked from the home nav.
 - **THE SHOP PAGES ARE THEIR OWN ECOM SHELL (Avanti, 2026-08-03 — five rulings in one
   session, recorded together).**
-  (a2, later same day) **The nav row is a FLOATING PILL that condenses on scroll** — the same
+  (a3, final same-day form) **ONE combined pill, no masthead on top.** Avanti's last two
+  rulings: the two-row header lost its top bar on scroll — wrong trade — so logo, nav,
+  open-status, Rec/Med, store chip, Sign In and cart all live in a SINGLE always-present
+  pill ("fine if it's wider"); and the menu page now OPENS on the hero banner trio. The
+  dark store masthead became a compact info band at the page's END — kept deliberately:
+  it carries the crawlable h1 + NAP (address/hours/phone) these local-SEO URLs exist to
+  rank on. JSON-LD is not a substitute for on-page facts; do not delete the band.
+  (a2, superseded by a3 above except its two lessons) **The nav row is a FLOATING PILL that condenses on scroll** — the same
   device, classes and 500ms rhythm as the global SiteNav's condensed pill, so the two headers
   read as one system. Locations rides in the pill. Condensed, the black utility bar FADES
   (never a height collapse — that is a scroll-driven CLS hit) and the pill glides up,

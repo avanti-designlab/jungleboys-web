@@ -68,10 +68,9 @@ export default async function CaliforniaMenuPage({
         }}
       />
 
-      <StoreHeader location={location} />
-
-      {/* The merchandised storefront: hero banner trio, hot items, category
-          shelves with promo banners between them. Sells first ... */}
+      {/* The merchandised storefront opens the page (Avanti, 2026-08-03 —
+          no masthead on top): hero banner trio, hot items, category shelves
+          with promo banners between them. Sells first ... */}
       <StoreShop menu={menu} banners={banners} storeSlug={slug} />
 
       {/* ... and the full filterable grid still serves the shopper who knows
@@ -85,6 +84,10 @@ export default async function CaliforniaMenuPage({
         </div>
         <MenuBrowser products={menu.products} storeSlug={slug} />
       </section>
+
+      {/* Store identity + NAP at the page's end — carries the crawlable h1,
+          address, hours and phone this local-SEO URL exists to rank on. */}
+      <StoreHeader location={location} />
     </main>
   )
 }
