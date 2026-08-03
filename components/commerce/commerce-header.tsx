@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { CA_OWNED } from '@/lib/owned-stores'
 import { readStore } from '@/lib/store-selection'
+import { CART_EVENT, cartSubtotal, readCart, removeFromCart, type CartItem } from '@/lib/cart'
+import CartIcon from './cart-icon'
 
 // The ecom shell's own sticky header (Avanti, 2026-08-03): the shop pages live
 // together as their own store, so they carry their own chrome — location chip
@@ -140,10 +142,26 @@ export default function CommerceHeader() {
 
   const pickStore = () => window.dispatchEvent(new CustomEvent('jb:pick-store'))
 
+  // The bag. Count + contents load in an effect (localStorage must not
+  // disagree with server HTML) and follow every jb:cart-changed — including
+  // from other tabs via the storage event.
+  const [cart, setCart] = useState<CartItem[]>([])
+  useEffect(() => {
+    const sync = () => setCart(readCart())
+    sync()
+    window.addEventListener(CART_EVENT, sync)
+    window.addEventListener('storage', sync)
+    return () => {
+      window.removeEventListener(CART_EVENT, sync)
+      window.removeEventListener('storage', sync)
+    }
+  }, [])
+  const count = cart.reduce((n, i) => n + i.qty, 0)
+
   // SHOP / PRODUCTS disclosure menus. Panels live OUTSIDE the pill's
   // horizontal-scroll container (it would clip them) and stay in the DOM when
   // closed (hidden attr) so the options are crawlable and checkable.
-  const [openMenu, setOpenMenu] = useState<null | 'shop' | 'products'>(null)
+  const [openMenu, setOpenMenu] = useState<null | 'shop' | 'products' | 'cart'>(null)
   useEffect(() => setOpenMenu(null), [pathname])
   useEffect(() => {
     if (!openMenu) return
@@ -269,22 +287,18 @@ export default function CommerceHeader() {
           Sign in
         </Link>
 
-        {/* Cart lands with checkout (Dutchie owns it) — designed placeholder,
-            not a dead control */}
+        {/* the bag — count fills the icon's center circle */}
         <button
           type="button"
-          disabled
-          title="Cart arrives with checkout"
-          aria-label="Shopping cart — coming soon"
-          className="relative mr-1 shrink-0 cursor-not-allowed rounded-full border border-white/15 p-2.5 opacity-60"
+          aria-expanded={openMenu === 'cart'}
+          aria-haspopup="dialog"
+          aria-label={`Shopping bag, ${count} item${count === 1 ? '' : 's'}`}
+          onClick={() => setOpenMenu(openMenu === 'cart' ? null : 'cart')}
+          className={`mr-1 shrink-0 rounded-full p-1 transition-colors duration-200 ${
+            openMenu === 'cart' ? 'bg-white/10 text-white' : 'text-white/85 hover:bg-white/10 hover:text-white'
+          }`}
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4" aria-hidden>
-            <path d="M6 8h12l-1 12H7L6 8Z" strokeLinejoin="round" />
-            <path d="M9 8V6a3 3 0 0 1 6 0v2" />
-          </svg>
-          <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--color-accent)] px-1 text-[9px] font-extrabold text-black">
-            0
-          </span>
+          <CartIcon count={count} />
         </button>
       </div>
 
@@ -348,6 +362,66 @@ export default function CommerceHeader() {
             </Link>
           ))}
         </div>
+      </div>
+      {/* BAG panel — a pre-checkout list only. Checkout is DUTCHIE'S: until
+          that wiring lands, the CTA hands off to the store menu. */}
+      <div
+        role="dialog"
+        aria-label="Shopping bag"
+        hidden={openMenu !== 'cart'}
+        className="pointer-events-auto absolute right-3 top-full w-[min(92vw,24rem)] rounded-3xl border border-white/10 bg-[#0b0b0b]/95 p-4 text-white shadow-2xl backdrop-blur-md md:right-[max(0.75rem,calc((100vw-1400px)/2))]"
+      >
+        {cart.length === 0 ? (
+          <p className="px-2 py-6 text-center text-xs font-bold uppercase tracking-[0.16em] text-white/60">
+            Your bag is empty
+          </p>
+        ) : (
+          <>
+            <ul className="max-h-72 space-y-2 overflow-y-auto">
+              {cart.map((i) => (
+                <li key={`${i.storeSlug}-${i.variantId}`} className="flex items-center gap-3 rounded-2xl bg-white/[0.05] px-3 py-2.5">
+                  <span className="min-w-0 flex-1">
+                    <Link
+                      href={`/shop/${i.slug}?store=${i.storeSlug}`}
+                      onClick={() => setOpenMenu(null)}
+                      className="block truncate text-xs font-extrabold uppercase tracking-wider hover:text-[var(--color-accent)]"
+                    >
+                      {i.name}
+                    </Link>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/50">
+                      {i.option} · ×{i.qty}
+                    </span>
+                  </span>
+                  <span className="shrink-0 text-xs font-extrabold">${((i.price * i.qty) / 100).toFixed(2).replace(/\.00$/, '')}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeFromCart(i.variantId, i.storeSlug)}
+                    aria-label={`Remove ${i.name} from bag`}
+                    className="shrink-0 rounded-full p-1.5 text-white/50 transition hover:bg-white/10 hover:text-white"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5" aria-hidden>
+                      <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
+                    </svg>
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-3 flex items-center justify-between border-t border-white/10 px-2 pt-3">
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">Subtotal</span>
+              <span className="text-sm font-extrabold">${(cartSubtotal(cart) / 100).toFixed(2).replace(/\.00$/, '')}</span>
+            </div>
+            <Link
+              href={base ?? '/shop'}
+              onClick={() => setOpenMenu(null)}
+              className="mt-3 flex w-full items-center justify-center rounded-full bg-[var(--color-accent)] px-6 py-3 text-xs font-extrabold uppercase tracking-widest text-black transition hover:opacity-90"
+            >
+              Checkout at {store ? store.name : 'your store'}
+            </Link>
+            <p className="mt-2 px-2 text-center text-[10px] font-bold uppercase tracking-widest text-white/40">
+              Checkout completes on the store menu for now
+            </p>
+          </>
+        )}
       </div>
     </header>
   )

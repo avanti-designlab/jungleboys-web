@@ -146,6 +146,17 @@ async function checkBrands() {
 }
 
 // ── 3. PDP serves the amended contract fields ────────────────────────────────
+// ── 3d. the bag: count circle in SSR, Add to bag on the PDP ──────────────────
+async function checkCart() {
+  const menu = await fetchHtml(`/menu/california/${MENU_STORE}`)
+  if (menu.html.includes('data-cart-count')) ok('header cart icon carries the count circle in SSR')
+  else fail('header cart icon carries the count circle in SSR', 'data-cart-count missing')
+
+  const pdp = await fetchHtml('/shop/zangria-premium-flower-8th')
+  if (pdp.html.includes('Add to bag')) ok('PDP serves the Add to bag control server-side')
+  else fail('PDP serves the Add to bag control server-side', 'not in SSR markup')
+}
+
 async function checkAmendedFields() {
   // Zangria is the designated full-panel placeholder product — it is also the
   // strain the jungleboysflorida.com reference card showed, so its genetics/
@@ -244,6 +255,7 @@ try {
   await checkBrands()
   await checkDrops()
   await checkShopEntry()
+  await checkCart()
   await checkAmendedFields()
   await checkSitemap()
 } catch (e) {

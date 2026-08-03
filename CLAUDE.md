@@ -371,6 +371,17 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   menus, and is linked from the home nav.
 - **THE SHOP PAGES ARE THEIR OWN ECOM SHELL (Avanti, 2026-08-03 — five rulings in one
   session, recorded together).**
+  (a5) **The bag is LIVE, count in the icon's CENTER circle (Avanti, 2026-08-03).**
+  `lib/cart.ts` = a client-side pre-checkout list ONLY (localStorage `jb-cart`,
+  `jb:cart-changed` + storage events): no PII, no payments, no server writes — CHECKOUT IS
+  DUTCHIE'S (invariant §9.2) and the bag panel's CTA hands off to the store menu until that
+  wiring lands, saying so on its face. PDP gains a real "Add to bag" (per selected variant,
+  price captured at add time; store-menu link demoted to secondary). The cart icon's count
+  fills a circle in the BAG'S CENTER, not a corner badge; **Avanti's custom icon is coming
+  as `JB CART ICON.svg` — it goes to `public/shop/icons/cart.svg` + one-line
+  `CART_ICON_SRC` swap in `components/commerce/cart-icon.tsx`; the drawn bag renders until
+  then.** Verified in-browser: two adds → circle reads 2 → panel lists the item ×2 with
+  subtotal. check-commerce asserts the count circle + Add-to-bag are in SSR HTML.
   (a4) **SHOP + PRODUCTS dropdowns in the pill (Avanti, 2026-08-03).** The Menu tab (a
   self-link on its own page) became a SHOP dropdown of shop categories; a PRODUCTS
   dropdown lists the nine JB lines by SUBCATEGORY. Both land on FILTERED LISTS

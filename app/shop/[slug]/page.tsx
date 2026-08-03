@@ -121,7 +121,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           )}
 
           <div className="mt-8">
-            <PdpBuyBox offers={offers} />
+            <PdpBuyBox offers={offers} product={{ slug: product.slug, name: product.name }} />
           </div>
         </div>
       </div>

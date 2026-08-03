@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import type { ProductVariant } from '@/lib/dutchie'
+import { addToCart } from '@/lib/cart'
 import { menuPathFor, readStore, writeStore } from '@/lib/store-selection'
 
 export type StoreOffer = {
@@ -24,7 +25,13 @@ const money = (cents: number) => `$${(cents / 100).toFixed(2).replace(/\.00$/, '
 // Local intent is already owned by the store menu pages, which are the
 // highest-traffic URLs on the site. `?store=` deep-links still work and still
 // resolve here; the canonical stays clean.
-export default function PdpBuyBox({ offers }: { offers: StoreOffer[] }) {
+export default function PdpBuyBox({
+  offers,
+  product,
+}: {
+  offers: StoreOffer[]
+  product: { slug: string; name: string }
+}) {
   // Seeded from the first STOCKED offer so the server renders a real price.
   // Starting at null meant the buy box returned null during SSR — no price in
   // the crawlable HTML at all, on the one page whose entire purpose is ranking
@@ -37,6 +44,7 @@ export default function PdpBuyBox({ offers }: { offers: StoreOffer[] }) {
       null
   )
   const [variantId, setVariantId] = useState<string | null>(null)
+  const [added, setAdded] = useState(false)
 
   // Resolve the store once on the client: ?store= wins (a shared link is an
   // explicit intent), then the visitor's saved choice, then the first store
@@ -143,14 +151,38 @@ export default function PdpBuyBox({ offers }: { offers: StoreOffer[] }) {
         )}
       </p>
 
-      {/* Checkout is Dutchie's, always — we never take payment or hold a cart.
-          Until the Phase 3 cart lands this sends the shopper to the store menu
-          rather than rendering a dead "Add to bag" that does nothing. */}
+      {/* Add to bag fills the local pre-checkout cart (lib/cart.ts) — the
+          count lands in the header icon's center circle. CHECKOUT stays
+          Dutchie's; the secondary link hands off to the store menu. */}
+      {!soldOut && variant && (
+        <button
+          type="button"
+          onClick={() => {
+            addToCart({
+              slug: product.slug,
+              name: product.name,
+              variantId: variant.id,
+              option: variant.option,
+              price: variant.specialPrice ?? variant.price,
+              storeSlug: offer.slug,
+            })
+            setAdded(true)
+            window.setTimeout(() => setAdded(false), 1600)
+          }}
+          className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-[var(--color-accent)] px-8 py-4 text-sm font-extrabold uppercase tracking-widest text-[var(--color-on-accent)] transition hover:opacity-90"
+        >
+          {added ? 'Added to bag ✓' : 'Add to bag'}
+        </button>
+      )}
       <Link
         href={menuPathFor(offer.slug, offer.state)}
-        className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-[var(--color-accent)] px-8 py-4 text-sm font-extrabold uppercase tracking-widest text-[var(--color-on-accent)] transition hover:opacity-90"
+        className={`mt-3 inline-flex w-full items-center justify-center rounded-full px-8 py-4 text-sm font-extrabold uppercase tracking-widest transition ${
+          soldOut
+            ? 'bg-[var(--color-accent)] text-[var(--color-on-accent)] hover:opacity-90'
+            : 'border border-[var(--color-border)] text-[var(--color-foreground)] hover:border-[var(--color-accent)]'
+        }`}
       >
-        {soldOut ? `Browse ${offer.name}` : `Shop at ${offer.name}`}
+        {soldOut ? `Browse ${offer.name}` : `Shop more at ${offer.name}`}
       </Link>
     </div>
   )
