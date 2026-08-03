@@ -7,6 +7,7 @@ import { CA_OWNED } from '@/lib/owned-stores'
 import { readStore } from '@/lib/store-selection'
 import { CART_EVENT, cartSubtotal, readCart, removeFromCart, type CartItem } from '@/lib/cart'
 import { CATEGORY_ICONS } from '@/lib/category-icons'
+import { categoryLabel } from '@/components/menu/labels'
 import CartIcon from './cart-icon'
 
 // The ecom shell's own sticky header (Avanti, 2026-08-03): the shop pages live
@@ -33,11 +34,12 @@ const SURFACES = [
   { key: 'brands', label: 'Brands', path: '/brands' },
 ] as const
 
-// SHOP dropdown — the shop categories, each landing on the filtered list.
-// The frozen ProductCategory set; a category the store does not stock lands
-// on the grid's honest empty state rather than 404ing.
+// SHOP dropdown — Avanti's fixed category set (2026-08-03), matching the
+// storefront tile row; each lands on the filtered list. A category the store
+// does not stock lands on the grid's honest empty state rather than 404ing.
+// Pops left the set — the 5G Pops line lives in the PRODUCTS dropdown.
 const SHOP_CATEGORIES = [
-  'flower', 'pops', 'pre-rolls', 'vape-pens', 'concentrates', 'edibles', 'accessories',
+  'flower', 'pre-rolls', 'vape-pens', 'concentrates', 'edibles', 'cbd', 'accessories', 'apparel',
 ] as const
 
 // PRODUCTS dropdown — the JB lines by SUBCATEGORY, each landing on the
@@ -56,8 +58,6 @@ const JB_LINES = [
   { label: 'Gas Tank · Live Resin', line: 'gas-tank-live-resin' },
   { label: 'Gas Tank · Live Rosin', line: 'gas-tank-live-rosin' },
 ] as const
-
-const label = (c: string) => c.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase())
 
 function storeFromPath(pathname: string): string | null {
   const m = pathname.match(/^\/menu\/california\/([^/]+)/)
@@ -367,11 +367,11 @@ export default function CommerceHeader() {
                       // eslint-disable-next-line @next/next/no-img-element -- brand icon
                       <img src={icon} alt="" className="h-9 w-9 object-contain" />
                     ) : (
-                      <span className="text-[18px] leading-none text-black/70">{label(c).slice(0, 1)}</span>
+                      <span className="text-[18px] leading-none text-black/70">{categoryLabel(c).slice(0, 1)}</span>
                     )}
                   </span>
                   <span className="min-w-0 flex-1 truncate text-[19px] uppercase leading-none tracking-[0.03em] text-white/85 transition-colors duration-200 group-hover/row:text-white">
-                    {label(c)}
+                    {categoryLabel(c)}
                   </span>
                   <RowArrow />
                 </Link>

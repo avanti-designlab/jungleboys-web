@@ -125,37 +125,49 @@ const CATEGORY_ORDER: ProductCategory[] = [
   'flower', 'pops', 'pre-rolls', 'vape-pens', 'concentrates', 'edibles', 'accessories',
 ]
 
-// Avanti's custom category icons (2026-08-03) drop into public/shop/icons/ —
-// set each entry to its file when it lands, e.g. '/shop/icons/flower.svg'.
-// Until then the tile renders the designed letter-mark placeholder; a null
-// here must NEVER render a broken <img> or a stand-in icon we invented.
-// Icon map lives in lib/category-icons — shared with the header's SHOP
-// dropdown so the two cannot drift.
+// The category row is Avanti's FIXED 8 (2026-08-03) — Flower, Pre-Rolls,
+// Vapes, Concentrates, Edibles, CBD, Accessories, Apparel — independent of
+// what the placeholder inventory stocks: a category with nothing in it lands
+// on the grid's honest empty state, which is the recorded philosophy for
+// drifted filters. Pops left the row (still reachable via the PRODUCTS
+// dropdown's 5G Pops line and the grid filters).
+const TILE_ROW: ProductCategory[] = [
+  'flower', 'pre-rolls', 'vape-pens', 'concentrates', 'edibles', 'cbd', 'accessories', 'apparel',
+]
 
-function CategoryTile({ category, count }: { category: ProductCategory; count: number }) {
+// Boxless tiles (Avanti, 2026-08-03): no white card, no product count — the
+// icon floats big on the page with a label pill under it. Icon map lives in
+// lib/category-icons (shared with the header's SHOP dropdown); a category
+// without supplied art renders the letter-mark disc, never an invented icon.
+
+function CategoryTile({ category }: { category: ProductCategory }) {
   const icon = CATEGORY_ICONS[category]
   return (
     <Link
       href={`?category=${category}#browse`}
       data-category-tile={category}
-      className="group flex min-w-36 flex-1 flex-col items-center gap-3 rounded-3xl bg-white px-4 pb-6 pt-5 text-[var(--color-ink)] shadow-[0_10px_40px_rgba(0,0,0,0.08)] transition-transform duration-300 hover:-translate-y-1"
+      className="group flex min-w-24 flex-1 snap-start flex-col items-center gap-4 pt-2 text-[var(--color-ink)]"
     >
-      <span className="text-sm font-extrabold uppercase tracking-[0.14em]" style={{ fontFamily: 'var(--font-brand)' }}>
-        {categoryLabel(category)}
-      </span>
       {icon ? (
-        // eslint-disable-next-line @next/next/no-img-element -- brand SVG icon
-        <img src={icon} alt="" className="h-14 w-14 object-contain transition-transform duration-300 group-hover:scale-110" />
+        // eslint-disable-next-line @next/next/no-img-element -- brand icon
+        <img
+          src={icon}
+          alt=""
+          className="h-20 w-20 object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.12)] transition-transform duration-300 group-hover:-translate-y-1.5 group-hover:scale-105 md:h-24 md:w-24"
+        />
       ) : (
         <span
           aria-hidden
-          className="font-display flex h-14 w-14 items-center justify-center rounded-full border-2 border-[var(--color-ink)]/15 text-2xl leading-none transition-colors duration-300 group-hover:border-[var(--color-accent)]"
+          className="font-display flex h-20 w-20 items-center justify-center rounded-full bg-white text-4xl leading-none text-[var(--color-ink)]/60 shadow-[0_10px_30px_rgba(0,0,0,0.08)] transition-all duration-300 group-hover:-translate-y-1.5 md:h-24 md:w-24"
         >
           {categoryLabel(category).slice(0, 1)}
         </span>
       )}
-      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)]/50" style={{ fontFamily: 'var(--font-brand)' }}>
-        {count} products
+      <span
+        data-category-pill
+        className="font-display rounded-full bg-white px-5 py-2 text-[16px] uppercase leading-none tracking-[0.05em] shadow-[0_8px_24px_rgba(0,0,0,0.08)] transition-colors duration-200 group-hover:bg-[var(--color-accent)] group-hover:text-black md:text-[17px]"
+      >
+        {categoryLabel(category)}
       </span>
     </Link>
   )
@@ -204,9 +216,9 @@ export default function StoreShop({
         >
           Shop by category
         </h2>
-        <div className="mt-4 flex snap-x gap-4 overflow-x-auto pb-2">
-          {shelves.map((s) => (
-            <CategoryTile key={s.category} category={s.category} count={s.products.length} />
+        <div className="mt-5 flex snap-x gap-4 overflow-x-auto pb-3 md:gap-6">
+          {TILE_ROW.map((c) => (
+            <CategoryTile key={c} category={c} />
           ))}
         </div>
       </section>

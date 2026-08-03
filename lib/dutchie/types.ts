@@ -28,6 +28,10 @@ export interface Location {
   hours: BusinessHours[]
 }
 
+// 'cbd' + 'apparel' added 2026-08-03 (additive amendment #3, Avanti's shop
+// category set: Flower, Pre-Rolls, Vapes, Concentrates, Edibles, CBD,
+// Accessories, Apparel). Verify against a real Dutchie payload which category
+// values Dutchie actually emits before mapping its taxonomy onto these.
 export type ProductCategory =
   | 'flower'
   | 'pops'
@@ -35,7 +39,9 @@ export type ProductCategory =
   | 'edibles'
   | 'vape-pens'
   | 'concentrates'
+  | 'cbd'
   | 'accessories'
+  | 'apparel'
 
 export type StrainType = 'indica' | 'sativa' | 'hybrid'
 

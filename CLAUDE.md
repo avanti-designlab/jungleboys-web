@@ -453,6 +453,19 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   INDICA…) are SUBCATEGORY/STRAIN marks with no top-level category slot — deliberately unwired
   until a surface exists for them; unmapped categories keep the letter-mark.
   check-commerce's checkBrandIcons() asserts cart + 3 tile icons in SSR HTML.
+- **CATEGORY ROW = Avanti's FIXED 8, boxless (2026-08-03, local session) + DATA-MODEL
+  AMENDMENT #3.** Her ruling on the tile screenshot: drop the product counts, icons bigger, no
+  boxes — icon floats with a Bebas label PILL under it; categories are Flower, Pre-Rolls, Vapes,
+  Concentrates, Edibles, CBD, Accessories, Apparel. Consequences: `ProductCategory` gains
+  `'cbd' | 'apparel'` (additive; verify against a real Dutchie payload before mapping its
+  taxonomy). The row is FIXED — not derived from inventory; an empty category lands on the
+  grid's honest empty state by design. POPS left the row and the SHOP dropdown (its icon stays
+  on disk; the 5G Pops line lives in the PRODUCTS dropdown). `categoryLabel` gained overrides
+  (`vape-pens`→"Vapes", `cbd`→"CBD") and the header now shares it — no second label helper.
+  SHOP dropdown mirrors the same 8. Six categories await her icons (Vapes, Concentrates,
+  Edibles, CBD, Accessories, Apparel — the old flat-mono Dutchie PNGs deliberately NOT used;
+  they clash with the new illustrated set) and render letter discs until supplied.
+  check-commerce asserts all 8 tiles by slug.
 - **Home story still overrides the /shop retarget — script ready, needs Avanti's token
   (2026-08-03, local session).** Verified against the live draft: hero_slides "GAS TANK" +
   "GOLD MYLARS" and quick_card "Shop" store href `/products`, which overrides the code's /shop

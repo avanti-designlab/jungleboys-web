@@ -94,9 +94,14 @@ async function checkMerchandising() {
   if (shelves >= 3) ok(`${path} carries ${shelves} category shelves`)
   else fail(`${path} carries category shelves`, `found ${shelves}, want >=3`)
 
-  const tiles = (html.match(/data-category-tile=/g) ?? []).length
-  if (tiles >= 3) ok(`${path} carries ${tiles} shop-by-category tiles`)
-  else fail(`${path} carries shop-by-category tiles`, `found ${tiles}, want >=3`)
+  // The category row is Avanti's fixed 8 (2026-08-03) — independent of what
+  // the placeholder inventory stocks; an empty category lands on the grid's
+  // honest empty state. Boxless tiles: icon over a label pill, NO count.
+  const TILE_ROW = ['flower', 'pre-rolls', 'vape-pens', 'concentrates', 'edibles', 'cbd', 'accessories', 'apparel']
+  for (const t of TILE_ROW) {
+    if (html.includes(`data-category-tile="${t}"`)) ok(`${path} carries the ${t} category tile`)
+    else fail(`${path} carries the ${t} category tile`, 'missing from SSR HTML')
+  }
 
   // Header dropdowns (Avanti, 2026-08-03): SHOP lists shop categories,
   // PRODUCTS lists the JB lines — both land on FILTERED LISTS, not the Phase 2
@@ -171,8 +176,10 @@ async function checkBrandIcons() {
   }
 
   // flower is deliberately a WebP — the supplied SVG is 687KB gzipped traced
-  // photo art; the raster carries the same art at 18KB.
-  const tiles = { flower: '/shop/icons/flower.webp', pops: '/shop/icons/pops.svg', 'pre-rolls': '/shop/icons/pre-rolls.svg' }
+  // photo art; the raster carries the same art at 18KB. pops left the category
+  // row with Avanti's fixed 8 (2026-08-03) — its icon stays on disk for the
+  // 5G Pops line, not asserted here.
+  const tiles = { flower: '/shop/icons/flower.webp', 'pre-rolls': '/shop/icons/pre-rolls.svg' }
   for (const [cat, src] of Object.entries(tiles)) {
     if (menu.html.includes(`src="${src}"`)) {
       ok(`category tile ${cat} renders its supplied icon`)
