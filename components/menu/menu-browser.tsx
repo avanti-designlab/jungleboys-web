@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import type { Product, ProductCategory, StrainType } from '@/lib/dutchie'
 
 // Category + strain filtering over a store's menu. Client-side because the whole
@@ -29,7 +30,9 @@ function categoryLabel(c: ProductCategory): string {
   return c.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase())
 }
 
-function ProductCard({ product }: { product: Product }) {
+// Exported because the Brands page renders the same card grouped by brand —
+// one card, one strain palette, one price rule across every commerce surface.
+export function ProductCard({ product, storeSlug }: { product: Product; storeSlug: string }) {
   const inStock = product.variants.filter((v) => (v.quantityAvailable ?? 0) > 0)
   const soldOut = inStock.length === 0
   // Price off the CHEAPEST buyable variant, and the discount is derived from
@@ -77,6 +80,13 @@ function ProductCard({ product }: { product: Product }) {
       </div>
 
       <div className="flex flex-1 flex-col p-4" style={{ fontFamily: 'var(--font-brand)' }}>
+        {/* House-brand products stay unlabelled; on a multi-brand menu the
+            third-party name is the information (Jeeter vs JB at a glance). */}
+        {!/^jungle boys/i.test(product.brand) && (
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]">
+            {product.brand}
+          </span>
+        )}
         {product.strainType && (
           <span
             className="text-[10px] font-bold uppercase tracking-[0.2em]"
@@ -85,7 +95,17 @@ function ProductCard({ product }: { product: Product }) {
             {STRAIN_LABEL[product.strainType]}
           </span>
         )}
-        <h3 className="mt-1 text-base font-extrabold uppercase leading-tight">{product.name}</h3>
+        <h3 className="mt-1 text-base font-extrabold uppercase leading-tight">
+          {/* Stretched link: the whole card is clickable but the ACCESSIBLE
+              name is the product name, not a div soup. ?store= tells the PDP
+              buy box which store's menu the shopper came from. */}
+          <Link
+            href={`/shop/${product.slug}?store=${storeSlug}`}
+            className="after:absolute after:inset-0"
+          >
+            {product.name}
+          </Link>
+        </h3>
 
         {product.labResult?.potency?.thc && (
           <p className="mt-1 text-xs text-[var(--color-muted)]">
@@ -122,7 +142,13 @@ function ProductCard({ product }: { product: Product }) {
   )
 }
 
-export default function MenuBrowser({ products }: { products: Product[] }) {
+export default function MenuBrowser({
+  products,
+  storeSlug,
+}: {
+  products: Product[]
+  storeSlug: string
+}) {
   const [category, setCategory] = useState<ProductCategory | 'all'>('all')
   const [strain, setStrain] = useState<StrainType | 'all'>('all')
 
@@ -186,7 +212,7 @@ export default function MenuBrowser({ products }: { products: Product[] }) {
         ) : (
           <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
             {shown.map((p) => (
-              <ProductCard key={p.id} product={p} />
+              <ProductCard key={p.id} product={p} storeSlug={storeSlug} />
             ))}
           </div>
         )}

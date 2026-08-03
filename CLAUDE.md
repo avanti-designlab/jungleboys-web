@@ -325,6 +325,36 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   populating it hundreds of times and then migrating.
   **Open:** verify against a real Dutchie payload which of these Dutchie actually supplies. If it
   supplies none, they are CMS-authored strain content and belong to the Strains build.
+- **DATA-MODEL AMENDMENT #2: `LabResult.cannabinoids[]` + `StrainProfile.terpenes` (per the
+  Phase 3 handoff, 2026-08-03).** Additive only; nothing existing changed. Both came from
+  inspecting jungleboysflorida.com (the reference for our commerce build):
+  (a) their PDP shows an EIGHT-row cannabinoid panel (THCA 34.9%, CBGA 2.39%, THC-D9, THCVA,
+  CBG, CBDA, CBD, CBC) where our `Potency` models only thc/cbd — so `Cannabinoid
+  { name, value, unit }` and `LabResult.cannabinoids?: Cannabinoid[]`. `potency` stays exactly
+  as frozen: it is the headline summary every card reads; the panel is the detail behind it.
+  (b) `StrainProfile.terpenes?: string[]` carries terpene NAMES — deliberately NOT the
+  `Terpene[]` shape, because `LabResult.terpenes` is measured percentages for one tested batch
+  while a strain profile is batch-independent. **The Strains page lists names; the PDP lists
+  percents.** Collapsing the two would force fabricated percentages onto strain pages.
+  Zangria premium flower is the designated placeholder fixture carrying the full amended shape;
+  `scripts/check-commerce.mjs` asserts the panel is SERVER-rendered (the PDP buy box already
+  taught us a browser check is blind to missing SSR markup). Same open as amendment #1: verify
+  against a real Dutchie payload which of these Dutchie actually supplies.
+- **Sitemap: store commerce surfaces IN, `/shop/` PDPs OUT (2026-08-03).** The nested
+  menu/deals/brands URLs are in the sitemap — they are the canonical targets the legacy
+  `/menu/jungle-boys-*` inventory (DTLA 21k clicks/yr) 301s to, and store slugs are OURS, stable
+  regardless of the GraphQL swap. PDPs are deliberately EXCLUDED: their slugs come from the
+  placeholder provider, and per-product-vs-per-SKU slug stability against real Dutchie data is
+  the recorded open question. A /shop/ URL advertised before that is verified is a future 404 on
+  the highest-value page type. `check-commerce.mjs` enforces both halves; add PDPs the moment
+  slugs are verified against a real payload.
+- **Brands surface shipped multi-brand BY FIXTURE (2026-08-03).** The placeholder catalogue now
+  carries third-party entries (Jeeter, 1904, Barrett Farms — real names from the live CA menus;
+  every other fact placeholder, `images` deliberately EMPTY rather than invented pack art)
+  because a Brands template built against a single-brand catalogue never meets the layout it
+  ships with. The menu card labels the brand ONLY on non-JB products — the house brand stays
+  unlabelled by design. Do not "clean up" the fixtures to JB-only; the not-JB-only rule
+  (2026-07-31) is the point, and check-commerce fails if the brands page goes single-brand.
 - **PHASE 3 COMMERCE SURFACES — scope + URL shape (Avanti, 2026-07-31).**
   Inventory, pricing and specials differ per store, so every commerce surface is
   location-scoped and **nests under the store**: `/menu/california/<store>/<surface>`. Chosen over

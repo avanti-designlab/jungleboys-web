@@ -1,15 +1,23 @@
 import type { MetadataRoute } from 'next'
 import { PRODUCT_LINES, isPlaceholderLine } from '@/lib/products'
 import { getPublishedBlogPosts } from '@/lib/blog'
+import { getLocations } from '@/lib/dutchie'
 import { SITE_ORIGIN } from '@/lib/storyblok/seo'
 
 // Dynamic sitemap. Built from the same PRODUCT_LINES array the routes are
 // generated from, so a new line cannot appear on the site without appearing
 // here — the failure mode a hand-maintained list always eventually hits.
 //
-// Only routes that EXIST today are listed. The Phase 3 surfaces (location
-// menus, the auth suite, /drops, /710-deals) are deliberately absent until they
-// resolve; a sitemap that advertises 404s is worse than a short sitemap.
+// Only routes that EXIST today are listed. Remaining Phase 3 surfaces (the
+// auth suite, /drops, /710-deals) are deliberately absent until they resolve;
+// a sitemap that advertises 404s is worse than a short sitemap.
+//
+// /shop/<slug> PDPs stay OUT for now, deliberately: their slugs come from the
+// placeholder provider, and whether real Dutchie slugs match ours is exactly
+// the open question recorded in the Phase 3 handoff (FL uses per-SKU slugs;
+// ours are per-product). Advertising product URLs that may 404 after the
+// GraphQL swap would burn crawl trust on the highest-value page type. Add them
+// the moment slugs are verified against a real payload.
 //
 // Auth and utility routes stay out entirely — they are noindex by mandate.
 
@@ -79,5 +87,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }))
 
-  return [...statics, ...lines, ...posts]
+  // Store commerce surfaces — the nested URLs the legacy /menu/jungle-boys-*
+  // inventory 301s to. The legacy menus are the highest-traffic URLs on the
+  // whole site (DTLA 21k clicks/yr), so their canonical targets carry menu
+  // priority 0.9. Store slugs are OURS (lib/owned-stores), not Dutchie's, so
+  // these URLs are stable regardless of what the GraphQL swap changes.
+  const stores = (await getLocations()).flatMap((l) => [
+    { url: `${SITE_ORIGIN}/menu/california/${l.slug}`, changeFrequency: 'daily' as const, priority: 0.9 },
+    { url: `${SITE_ORIGIN}/menu/california/${l.slug}/deals`, changeFrequency: 'daily' as const, priority: 0.7 },
+    { url: `${SITE_ORIGIN}/menu/california/${l.slug}/brands`, changeFrequency: 'weekly' as const, priority: 0.6 },
+  ])
+
+  return [...statics, ...lines, ...stores, ...posts]
 }

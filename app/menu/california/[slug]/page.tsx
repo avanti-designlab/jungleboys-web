@@ -5,6 +5,7 @@ import { jsonLdHtml, breadcrumbSchema, storeSchema } from '@/lib/schema'
 import { OWNED_STORES } from '@/lib/owned-stores'
 import MenuBrowser from '@/components/menu/menu-browser'
 import StoreHeader from '@/components/menu/store-header'
+import StoreSubnav from '@/components/menu/store-subnav'
 
 // CA location menu — the NATIVE variant (Avanti, 2026-07-19): only the four
 // California menus are built on the Dutchie Plus API. Florida stays as embeds in
@@ -66,8 +67,10 @@ export default async function CaliforniaMenuPage({
         }}
       />
 
-      <StoreHeader location={location} />
-      <MenuBrowser products={menu.products} />
+      <StoreHeader location={location}>
+        <StoreSubnav storeSlug={slug} active="menu" />
+      </StoreHeader>
+      <MenuBrowser products={menu.products} storeSlug={slug} />
     </main>
   )
 }

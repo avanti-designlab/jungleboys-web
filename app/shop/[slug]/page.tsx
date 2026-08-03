@@ -149,6 +149,32 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             ) : null}
           </dl>
 
+          {/* The full COA panel (2026-08-03 contract amendment). Distinct from
+              the THC/CBD headline above: that is the summary every card reads,
+              this is the eight-row detail the reference PDP carries. Rendered
+              only when the panel exists — thc/cbd alone stays a two-fact dl. */}
+          {lab?.cannabinoids?.length ? (
+            <div
+              className="mt-6 rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-7"
+              style={{ fontFamily: 'var(--font-brand)' }}
+            >
+              <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]">
+                Cannabinoid panel
+              </h2>
+              <dl className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-4">
+                {lab.cannabinoids.map((c) => (
+                  <div key={c.name} className="flex items-baseline justify-between gap-2 border-b border-[var(--color-border)] pb-2">
+                    <dt className="text-xs font-bold uppercase tracking-widest">{c.name}</dt>
+                    <dd className="text-sm font-extrabold">
+                      {c.value}
+                      {c.unit}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          ) : null}
+
           {/* Only rendered when a real COA exists. A lab-results link that goes
               nowhere is worse than none at all on a cannabis product page. */}
           {lab?.coaUrl && (

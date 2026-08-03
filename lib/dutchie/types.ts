@@ -49,11 +49,28 @@ export interface Terpene {
   percentage: number
 }
 
+/**
+ * One row of the full cannabinoid panel from the COA.
+ *
+ * AMENDMENT to the frozen data model (Phase 3 handoff, 2026-08-03) — additive.
+ * The jungleboysflorida.com PDP (the reference for our commerce build) shows
+ * EIGHT cannabinoids per product (THCA 34.9%, CBGA 2.39%, THC-D9, THCVA, CBG,
+ * CBDA, CBD, CBC) where `Potency` models only thc/cbd. `potency` stays exactly
+ * as frozen — it is the headline summary every card reads; this is the detail
+ * panel behind it.
+ */
+export interface Cannabinoid {
+  name: string // "THCA", "CBGA", "THC-D9", …
+  value: number
+  unit: '%' | 'mg'
+}
+
 export interface LabResult {
   lab?: string
   testedAt?: string // ISO date
   coaUrl?: string
   potency?: Potency
+  cannabinoids?: Cannabinoid[] // full COA panel — see the Cannabinoid note
   terpenes?: Terpene[]
 }
 
@@ -85,6 +102,16 @@ export interface StrainProfile {
   genetics?: string // "Cherry Gelato × Lemon Cherry Gelato"
   taste?: string[] // ["cherry", "lemon", "diesel"]
   description?: string // the strain narrative, distinct from the SKU description
+  /**
+   * Terpene NAMES — the strain's signature profile, without numbers.
+   *
+   * AMENDMENT (Phase 3 handoff, 2026-08-03) — additive, and deliberately NOT
+   * the `Terpene[]` shape: `LabResult.terpenes` carries measured percentages
+   * for one tested batch, while a strain's profile is batch-independent. The
+   * Strains page lists names; the PDP lists percents. Collapsing the two would
+   * force fabricated percentages onto strain pages or strip real ones off COAs.
+   */
+  terpenes?: string[] // ["Terpinolene", "Caryophyllene", "Limonene"]
 }
 
 export interface Product {

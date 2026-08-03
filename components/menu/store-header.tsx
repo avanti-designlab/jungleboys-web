@@ -25,7 +25,13 @@ function summarise(hours: Location['hours']): { days: string; time: string }[] {
   return out
 }
 
-export default function StoreHeader({ location }: { location: Location }) {
+export default function StoreHeader({
+  location,
+  children,
+}: {
+  location: Location
+  children?: React.ReactNode
+}) {
   const hours = summarise(location.hours)
 
   return (
@@ -83,6 +89,8 @@ export default function StoreHeader({ location }: { location: Location }) {
             )}
           </div>
         </div>
+
+        {children}
       </div>
     </header>
   )

@@ -307,6 +307,65 @@ function gasTank(
   }
 }
 
+// Third-party brands. Jeeter, 1904 and Barrett Farms are REAL names from the
+// live CA menus — the Brands surface carries every brand stocked, not JB only
+// (recorded decision, 2026-07-31), and a template built against a single-brand
+// catalogue would never meet the layout it actually ships with. Everything else
+// about these entries is placeholder. `images` is deliberately EMPTY: we do not
+// have their pack art, and inventing it is the same mistake as a fabricated
+// licence number — the card and PDP both render cleanly without a shot.
+function thirdParty(
+  slug: string,
+  name: string,
+  brand: string,
+  category: ProductCategory,
+  option: string,
+  price: number,
+  strainType?: Product['strainType']
+): Product {
+  return {
+    id: `prod-3p-${slug}`,
+    slug,
+    name,
+    brand,
+    category,
+    strainType,
+    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    images: [],
+    variants: [{ id: `v-3p-${slug}`, option, price, quantityAvailable: 8 }],
+    retailerId: 'placeholder-dtla',
+  }
+}
+
+// Zangria premium flower is the designated fixture for the 2026-08-03 contract
+// amendment (LabResult.cannabinoids + StrainProfile.terpenes): ONE product that
+// carries the widest data shape, so the PDP meets the full panel before real
+// Dutchie payloads land — and scripts/check-commerce.mjs asserts it is actually
+// server-rendered. Panel names mirror the jungleboysflorida.com reference card;
+// the values are placeholders like every other number in this file.
+const zangriaFlower: Product = (() => {
+  const p = flower('zangria', 'Zangria', 'strain-zangria', 'sativa', 26.7, 'Terpinolene')
+  p.labResult = {
+    ...p.labResult,
+    cannabinoids: [
+      { name: 'THCA', value: 34.9, unit: '%' },
+      { name: 'CBGA', value: 2.39, unit: '%' },
+      { name: 'THC-D9', value: 0.7, unit: '%' },
+      { name: 'THCVA', value: 0.19, unit: '%' },
+      { name: 'CBG', value: 0.17, unit: '%' },
+      { name: 'CBDA', value: 0.1, unit: '%' },
+      { name: 'CBD', value: 0.05, unit: '%' },
+      { name: 'CBC', value: 0.05, unit: '%' },
+    ],
+  }
+  p.strainProfile = {
+    genetics: 'Thin Mint Cookies x Z',
+    taste: ['citrus cherry', 'grape candy', 'gas'],
+    terpenes: ['Terpinolene', 'Caryophyllene', 'Limonene'],
+  }
+  return p
+})()
+
 const products: Product[] = [
   hashHole('gelato-z', 'Gelato Z', 'Gator Breath', 40.9, false, 3200),
   hashHole('private-reserve', 'Private Reserve', 'Rainbow Belts', 45.7, true),
@@ -318,7 +377,7 @@ const products: Product[] = [
   flower('blu-zerdz', 'Blu Zerdz', 'strain-bluzerdz', 'indica', 27.9, 'Myrcene'),
   flower('la-gelato', 'LA Gelato', 'strain-lagelato', 'hybrid', 28.8, 'Caryophyllene'),
   flower('rs1000', 'RS1000', 'strain-rs1000', 'hybrid', 32.6, 'Limonene'),
-  flower('zangria', 'Zangria', 'strain-zangria', 'sativa', 26.7, 'Terpinolene'),
+  zangriaFlower,
   pops('blu-og', 'Blu OG', 'bluog', 'indica', 27.4, 'Myrcene', true),
   pops('blu-zerdz', 'Blu Zerdz', 'bluzerdz', 'indica', 26.8, 'Myrcene', false, 3600),
   pops('all-cherriez', 'All Cherriez', 'cherriez', 'hybrid', 28.1, 'Limonene'),
@@ -362,6 +421,12 @@ const products: Product[] = [
   twins('blu-zerdz', 'Blu Zerdz', 'Blu Frootz x LCG', 'indica', 30.8, 'Linalool', true),
   twins('all-cherriez', 'All Cherriez', 'Cherry Gelato x LCG', 'indica', 31.5, 'Caryophyllene', false, 2000),
   twins('motor-breath', 'Motor Breath', 'SFV OG x Chem D', 'indica', 33.2, 'Myrcene'),
+  // ── Third-party brands (see the note on thirdParty above)
+  thirdParty('jeeter-baby-cannon', 'Baby Cannon', 'Jeeter', 'pre-rolls', '0.5g', 1200, 'indica'),
+  thirdParty('jeeter-honeydew', 'Honeydew', 'Jeeter', 'pre-rolls', '1g', 1800, 'hybrid'),
+  thirdParty('1904-blue-dream', 'Blue Dream', '1904', 'flower', '3.5g', 2500, 'sativa'),
+  thirdParty('1904-wedding-cake', 'Wedding Cake', '1904', 'flower', '3.5g', 2500, 'hybrid'),
+  thirdParty('barrett-farms-gmo', 'GMO', 'Barrett Farms', 'flower', '3.5g', 3000, 'indica'),
 ]
 
 const categories: ProductCategory[] = [
