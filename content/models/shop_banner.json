@@ -1,0 +1,13 @@
+{
+  "name": "shop_banner",
+  "display_name": "Shop Hero Banner",
+  "is_nestable": true,
+  "schema": {
+    "kicker": { "type": "text", "description": "Small line above the title, e.g. EVERY FRIDAY" },
+    "title": { "type": "text" },
+    "cta": { "type": "text", "description": "Button label" },
+    "href": { "type": "text", "description": "Link. Use @store/<surface> for store-relative, e.g. @store/deals" },
+    "image": { "type": "asset", "filetypes": ["images"] },
+    "alt": { "type": "text" }
+  }
+}

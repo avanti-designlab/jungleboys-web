@@ -368,7 +368,39 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   fallback rather than deep-linking a 404). The Products-vs-Shop rule is untouched — /products
   remains the curated collection, and the home hero "Shop now" CTAs are CMS-editable banners
   Avanti can retarget in Storyblok. check-commerce asserts /shop exists, lists all four store
-  menus, and is linked from the home nav. Avanti
+  menus, and is linked from the home nav.
+- **Store menu = MERCHANDISED STOREFRONT (Avanti's redesign brief, 2026-08-03).** Her ruling on
+  the first version ("really bad and generic, just a collection of products"): the shop page is
+  an ECOM surface built to drive sales. Shipped: hero banner TRIO (one large left, two stacked
+  right, rounded) → red-highlighted HOT ITEMS push shelf (`product.featured`, in-stock only,
+  red HOT badges, `--color-danger` accents) → category shelves (horizontal snap, View All →
+  `?category=<c>#browse`) with PROMO BANNERS woven between every second shelf → full filterable
+  grid at `#browse`. All banners are Storyblok-overlaid (`shop` story: `shop_banner` ×3 hero +
+  `shop_promo` rotation; models in `content/models/`) with evergreen code fallbacks —
+  deliberately navigation promos (drops/deals/rewards/brands), NEVER invented discounts, which
+  would be a compliance bug; dated promo copy belongs in the CMS where it can die without a
+  deploy. Banner hrefs support `@store/<surface>` for store-relative targets so one banner set
+  serves all four stores. Everything is SERVER-rendered and `check-commerce.mjs` asserts the
+  structure (3 hero tiles, hot section, ≥3 shelves, ≥1 promo, #browse).
+  **Trap found by the check, worth keeping:** `useSearchParams` inside MenuBrowser made its
+  whole Suspense boundary bail out of static prerender — the deals grid shipped ZERO crawlable
+  PDP links. The hook now lives in a null-rendering child (`CategoryFromQuery`) with its own
+  boundary; the grid stays in server HTML. Do not move it back.
+- **/shop is PICKER-FIRST, and product media wells are WHITE (Avanti, 2026-08-03).** Two
+  rulings from her review: (a) every Shop button leads to the location picker MODAL, which
+  routes into the chosen store's menu — implemented as /shop ALWAYS opening the picker (even
+  with a saved store), while other commerce routes keep opening it only when no store is
+  chosen; the /shop page underneath stays the crawlable no-JS fallback. FL picks route to
+  /locations until the FL embed shells exist (their menu paths would 404 today) — remove that
+  branch when the shells land. (b) Product image wells use `--color-media-well` (white,
+  THEME-INVARIANT, deliberately declared in BOTH theme blocks: the token checker matches
+  single-declaration tokens by value, and a lone #ffffff would claim every white literal in
+  the tree). Reason: Dutchie product shots are white-background JPGs, not transparent PNGs —
+  on ink wells every shot read as a floating white box. Applied to menu cards, the Drops
+  featured band, and the PDP. Fallout fixed in the same pass: card strain labels used the
+  on-dark palette on the now-white surface (2.2–2.7:1) — new themed `--strain-card-*` tokens
+  flip with the theme.
+- **Fresh Drops LAYOUT shipped with curation STUBBED (Avanti's go-ahead, 2026-08-03).** Avanti
   asked for the page design now rather than waiting on the Dutchie verification, so
   `/menu/california/<store>/drops` is live: editorial header ("new heat lands every Friday"),
   featured band rendering Genetics/Taste from `StrainProfile` (what amendment #1 exists for,

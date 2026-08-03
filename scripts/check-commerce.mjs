@@ -72,6 +72,36 @@ async function checkCardLinks(path, store) {
   else ok(`sampled PDP link ${sample} resolves 200`)
 }
 
+// ── 1b. The store menu is a MERCHANDISED storefront, not a bare grid ─────────
+// Avanti's redesign brief (2026-08-03): hero banner trio (one large left, two
+// stacked right), a red "hot items" push section, category shelves with promo
+// banners between them, full browse grid at the bottom. All of it must be in
+// the SERVER HTML — a merch section that only exists after hydration doesn't
+// exist for crawlers.
+async function checkMerchandising() {
+  const path = `/menu/california/${MENU_STORE}`
+  const { status, html } = await fetchHtml(path)
+  if (status !== 200) return fail(`${path} responds 200 (merch)`, `got ${status}`)
+
+  const heroTiles = (html.match(/data-shop-banner=/g) ?? []).length
+  if (heroTiles === 3) ok(`${path} carries the hero banner trio (3 tiles)`)
+  else fail(`${path} carries the hero banner trio`, `found ${heroTiles} data-shop-banner tiles, want 3`)
+
+  if (html.includes('data-hot-items')) ok(`${path} carries the hot-items section`)
+  else fail(`${path} carries the hot-items section`, 'data-hot-items missing')
+
+  const shelves = (html.match(/data-shelf=/g) ?? []).length
+  if (shelves >= 3) ok(`${path} carries ${shelves} category shelves`)
+  else fail(`${path} carries category shelves`, `found ${shelves}, want >=3`)
+
+  const promos = (html.match(/data-shop-promo=/g) ?? []).length
+  if (promos >= 1) ok(`${path} carries ${promos} in-feed promo banner(s)`)
+  else fail(`${path} carries in-feed promo banners`, 'none found')
+
+  if (html.includes('id="browse"')) ok(`${path} keeps the full browse grid`)
+  else fail(`${path} keeps the full browse grid`, 'id="browse" anchor missing')
+}
+
 // ── 2. Brands is real and not JB-only ────────────────────────────────────────
 async function checkBrands() {
   const path = `/menu/california/${BRANDS_STORE}/brands`
@@ -189,6 +219,7 @@ async function checkSitemap() {
 console.log(`check-commerce against ${origin}`)
 try {
   await checkCardLinks(`/menu/california/${MENU_STORE}`, MENU_STORE)
+  await checkMerchandising()
   await checkCardLinks(`/menu/california/${DEALS_STORE}/deals`, DEALS_STORE)
   await checkBrands()
   await checkDrops()

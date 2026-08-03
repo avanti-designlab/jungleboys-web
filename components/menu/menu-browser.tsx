@@ -1,9 +1,11 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { Suspense, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import type { Product, ProductCategory, StrainType } from '@/lib/dutchie'
+import { categoryLabel } from './labels'
 
 // Category + strain filtering over a store's menu. Client-side because the whole
 // menu is already on the page: filtering 13-200 products in the browser is
@@ -27,13 +29,18 @@ const STRAIN_TOKEN: Record<StrainType, string> = {
 
 const money = (cents: number) => `$${(cents / 100).toFixed(2).replace(/\.00$/, '')}`
 
-function categoryLabel(c: ProductCategory): string {
-  return c.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase())
-}
-
 // Exported because the Brands page renders the same card grouped by brand —
 // one card, one strain palette, one price rule across every commerce surface.
-export function ProductCard({ product, storeSlug }: { product: Product; storeSlug: string }) {
+// `hot` adds the red push-badge for the storefront's Hot Items shelf.
+export function ProductCard({
+  product,
+  storeSlug,
+  hot = false,
+}: {
+  product: Product
+  storeSlug: string
+  hot?: boolean
+}) {
   const inStock = product.variants.filter((v) => (v.quantityAvailable ?? 0) > 0)
   const soldOut = inStock.length === 0
   // Price off the CHEAPEST buyable variant, and the discount is derived from
@@ -78,6 +85,14 @@ export function ProductCard({ product, storeSlug }: { product: Product; storeSlu
             style={{ fontFamily: 'var(--font-brand)' }}
           >
             Special
+          </span>
+        )}
+        {hot && !soldOut && (
+          <span
+            className="absolute right-3 top-3 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white"
+            style={{ fontFamily: 'var(--font-brand)', background: 'var(--color-danger-solid)' }}
+          >
+            Hot
           </span>
         )}
       </div>
@@ -145,6 +160,28 @@ export function ProductCard({ product, storeSlug }: { product: Product; storeSlu
   )
 }
 
+// The storefront's shelf "View all" links deep-link a category into the grid
+// via ?category=<c>#browse. useSearchParams makes its whole Suspense boundary
+// bail out of static prerender, so it lives in THIS null-rendering child with
+// its own boundary — putting it in MenuBrowser itself de-SSR'd every browse
+// grid on the site (check-commerce caught the deals page shipping zero PDP
+// links, the exact PDP-buy-box mistake again). The grid stays in server HTML;
+// only the filter nudge is client-side.
+function CategoryFromQuery({
+  categories,
+  onCategory,
+}: {
+  categories: ProductCategory[]
+  onCategory: (c: ProductCategory) => void
+}) {
+  const searchParams = useSearchParams()
+  useEffect(() => {
+    const c = searchParams.get('category')
+    if (c && (categories as string[]).includes(c)) onCategory(c as ProductCategory)
+  }, [searchParams, categories, onCategory])
+  return null
+}
+
 export default function MenuBrowser({
   products,
   storeSlug,
@@ -159,6 +196,7 @@ export default function MenuBrowser({
     () => [...new Set(products.map((p) => p.category))].sort(),
     [products]
   )
+
 
   const shown = useMemo(
     () =>
@@ -180,6 +218,9 @@ export default function MenuBrowser({
   return (
     <section className="px-6 pt-10 md:px-12 lg:px-20">
       <div className="mx-auto max-w-6xl">
+        <Suspense>
+          <CategoryFromQuery categories={categories} onCategory={setCategory} />
+        </Suspense>
         <div className="flex flex-wrap gap-2" style={{ fontFamily: 'var(--font-brand)' }}>
           <button type="button" onClick={() => setCategory('all')} className={pill(category === 'all')}>
             All

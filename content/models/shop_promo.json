@@ -1,0 +1,13 @@
+{
+  "name": "shop_promo",
+  "display_name": "Shop In-Feed Promo",
+  "is_nestable": true,
+  "schema": {
+    "kicker": { "type": "text" },
+    "title": { "type": "text" },
+    "cta": { "type": "text" },
+    "href": { "type": "text", "description": "Link. Use @store/<surface> for store-relative, e.g. @store/brands" },
+    "image": { "type": "asset", "filetypes": ["images"] },
+    "alt": { "type": "text" }
+  }
+}

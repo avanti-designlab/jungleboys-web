@@ -1,0 +1,8 @@
+{
+  "name": "shop",
+  "display_name": "Shop Page Banners",
+  "is_root": true,
+  "schema": {
+    "body": { "type": "bloks", "restrict_components": true, "component_whitelist": ["shop_banner", "shop_promo"], "description": "First 3 shop_banner bloks = hero trio (large, stack top, stack bottom). shop_promo bloks rotate between category shelves." }
+  }
+}
