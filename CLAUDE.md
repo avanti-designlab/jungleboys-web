@@ -435,6 +435,35 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   `CATEGORY_ICONS` (store-shop.tsx); until then a letter-mark placeholder renders — never a
   broken img, never an invented icon.** check-commerce asserts tiles ≥3 alongside the merch
   structure.
+- **COMMERCE SHELL IS FULL BEBAS + designed dropdowns; brand icons wired (Avanti, 2026-08-03,
+  local session).** Her ruling on the pill/dropdown screenshots: "make all the fonts the BEBAS
+  font… make the dropdowns look better, no basic design." The whole CommerceHeader (pill + SHOP/
+  PRODUCTS/bag panels) runs on `--font-display` with sizes up and tracking tightened for the
+  condensed voice; dropdowns got gold eyebrows, icon wells (SHOP), editorial 01–09 numbering
+  (PRODUCTS), a gold glow field, one SHOP ALL CTA, and a 220ms drop-in on an INNER wrapper
+  (a transform keyframe on the positioning element would stomp its centering translate).
+  Icons: `JB CART ICON.svg` → `public/shop/icons/cart.svg`. The art is two-tone #151515/#fff
+  drawn for a LIGHT ground — rendered with CSS `invert` on the dark pill (do not edit the file).
+  It carries its OWN badge circle (77%/48% of the contain box): the count circle anchors there,
+  and at 0 it renders as a badge-sized white dot restoring the drawn art (a "0" ring reads as
+  mud over the inverted badge). Category icons live in `lib/category-icons.ts` — ONE map shared
+  by the tiles and the SHOP dropdown so they cannot drift. flower ships as a 224px WebP because
+  the supplied SVG is vector-traced photo art (2MB / 687KB gzipped — svgo barely dents it);
+  pops + pre-rolls are the supplied SVGs. The other 12 supplied files (HASH HOLE, BUDDER,
+  INDICA…) are SUBCATEGORY/STRAIN marks with no top-level category slot — deliberately unwired
+  until a surface exists for them; unmapped categories keep the letter-mark.
+  check-commerce's checkBrandIcons() asserts cart + 3 tile icons in SSR HTML.
+- **Home story still overrides the /shop retarget — script ready, needs Avanti's token
+  (2026-08-03, local session).** Verified against the live draft: hero_slides "GAS TANK" +
+  "GOLD MYLARS" and quick_card "Shop" store href `/products`, which overrides the code's /shop
+  targets (CMS wins by design). `scripts/storyblok-retarget-shop.mjs` fixes exactly the
+  EXACT-`/products` hrefs (never `/products/*` — the curated collection stays), syncs the
+  shop_banner/shop_promo/shop components, and creates the `shop` story (text prefilled from the
+  code fallbacks, image fields EMPTY per the asset trap) — draft by default, `--publish` to go
+  live. Needs `STORYBLOK_MANAGEMENT_TOKEN` (delivery token in .env.local cannot write).
+  ALSO SEEN THERE: the live hero_slide is "JULY DEALS" → `/710-deals` in August — the stale
+  dated-promo case the CMS exists for; Avanti to edit or the retarget run to be followed by a
+  copy pass in Storyblok.
 - **Store menu = MERCHANDISED STOREFRONT (Avanti's redesign brief, 2026-08-03).** Her ruling on
   the first version ("really bad and generic, just a collection of products"): the shop page is
   an ECOM surface built to drive sales. Shipped: hero banner TRIO (one large left, two stacked
