@@ -56,7 +56,7 @@ function FeaturedDrop({ product, storeSlug }: { product: Product; storeSlug: str
 
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] transition-transform duration-300 hover:-translate-y-1">
-      <div className="relative aspect-[4/3] overflow-hidden bg-[var(--color-ink)]">
+      <div className="relative aspect-[4/3] overflow-hidden bg-[var(--color-media-well)]">
         {shot && (
           <Image
             src={shot.url}

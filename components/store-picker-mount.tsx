@@ -25,8 +25,17 @@ export default function StorePickerMount() {
   const close = useCallback(() => setOpen(false), [])
 
   useEffect(() => {
-    if (!pathname || !COMMERCE.some((re) => re.test(pathname))) return
-    if (readStore()) return
+    if (!pathname) return
+    // /shop is the storefront DOOR, and the picker IS the door (Avanti,
+    // 2026-08-03): every Shop button lands here, the modal opens — even for a
+    // visitor with a saved store — and choosing routes into that store's menu.
+    // The page underneath stays the crawlable no-JS fallback. Other commerce
+    // routes keep the quieter rule: open only when no store is chosen yet.
+    const shopEntry = pathname === '/shop'
+    if (!shopEntry) {
+      if (!COMMERCE.some((re) => re.test(pathname))) return
+      if (readStore()) return
+    }
 
     // Poll briefly for age verification rather than assuming it: the gate
     // resolves asynchronously and a visitor may answer it seconds later.
@@ -34,7 +43,7 @@ export default function StorePickerMount() {
     const tick = () => {
       if (cancelled) return
       if (!isAgeVerified()) { window.setTimeout(tick, 400); return }
-      if (!readStore()) setOpen(true)
+      if (shopEntry || !readStore()) setOpen(true)
     }
     tick()
     return () => { cancelled = true }

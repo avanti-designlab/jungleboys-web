@@ -17,11 +17,12 @@ const STRAIN_LABEL: Record<StrainType, string> = {
 
 // Strain colours are TOKENS, not literals: the same label rendered in three
 // different blues across six shop files before these existed, and two of the
-// palettes failed AA. These are the on-dark set.
+// palettes failed AA. The -card set THEMES: the label sits on --color-surface,
+// which is white in light mode, where the on-dark set measured 2.2–2.7:1.
 const STRAIN_TOKEN: Record<StrainType, string> = {
-  indica: 'var(--strain-indica-on-dark)',
-  sativa: 'var(--strain-sativa-on-dark)',
-  hybrid: 'var(--strain-hybrid-on-dark)',
+  indica: 'var(--strain-card-indica)',
+  sativa: 'var(--strain-card-sativa)',
+  hybrid: 'var(--strain-card-hybrid)',
 }
 
 const money = (cents: number) => `$${(cents / 100).toFixed(2).replace(/\.00$/, '')}`
@@ -51,7 +52,9 @@ export function ProductCard({ product, storeSlug }: { product: Product; storeSlu
         soldOut ? 'opacity-60' : 'hover:-translate-y-1'
       }`}
     >
-      <div className="relative aspect-square overflow-hidden bg-[var(--color-ink)]">
+      {/* media-well, not ink: Dutchie shots are white-background JPGs, and on
+          a dark well every one reads as a floating white box */}
+      <div className="relative aspect-square overflow-hidden bg-[var(--color-media-well)]">
         {shot && (
           <Image
             src={shot.url}

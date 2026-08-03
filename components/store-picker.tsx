@@ -57,7 +57,10 @@ export default function StorePicker({ open, onClose }: { open: boolean; onClose:
   const choose = (slug: string, state: 'CA' | 'FL') => {
     writeStore(slug, state)
     onClose()
-    router.push(menuPathFor(slug, state))
+    // FL menu shells have not landed (blocked on the FL team's embed codes),
+    // so /menu/florida/* would 404 — route FL choices to /locations until the
+    // shells exist. Remove this branch when they do.
+    router.push(state === 'FL' ? '/locations' : menuPathFor(slug, state))
   }
 
   const group = (label: string, stores: typeof CA_OWNED, state: 'CA' | 'FL') => (

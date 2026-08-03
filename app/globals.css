@@ -15,6 +15,15 @@
      TODO and 39 literals accumulated in the meantime. Line-specific darks
      (--tw-black, --pr-black, …) stay separate — they are deliberately tinted. */
   --color-ink: #0b0b0d;
+  /* product-photography well. Dutchie product shots arrive as JPGs with baked
+     WHITE backgrounds, not transparent PNGs (Avanti, 2026-08-03) — a dark well
+     turns every one of them into a floating white box. Theme-INVARIANT white
+     by design: the well must match the photo, and the photo does not theme.
+     Deliberately REDECLARED (same value) in the dark block below — both to
+     state the invariance where a reader looks for dark overrides, and because
+     check-color-tokens matches single-declaration tokens by VALUE, and a
+     single-declaration #ffffff would claim every white literal in the tree. */
+  --color-media-well: #ffffff;
   --strain-indica: #2358d8;
   /* 6.07:1 on white */
   --strain-sativa: #c2410c;
@@ -33,6 +42,13 @@
   /* 7.74:1 */
   --strain-hybrid-on-dark: #43d16f;
   /* 9.11:1 */
+  /* THEMED strain labels for the commerce cards: the card content sits on
+     --color-surface, which is white in light and #111 in dark, so neither
+     fixed set can pass AA in both themes. These flip with the theme —
+     on-white values here, on-dark values in the [data-theme='dark'] block. */
+  --strain-card-indica: var(--strain-indica);
+  --strain-card-sativa: var(--strain-sativa);
+  --strain-card-hybrid: var(--strain-hybrid);
   /* color — LIGHT theme is the site default (Avanti 2026-07-19) */
   --color-background: #f7f7f7;
   --color-surface: #ffffff;
@@ -70,6 +86,11 @@
   --color-foreground-soft: #f5f5f5;
   --color-muted: #9a9aa0;
   --color-border: #231f20;
+  --strain-card-indica: var(--strain-indica-on-dark);
+  --strain-card-sativa: var(--strain-sativa-on-dark);
+  --strain-card-hybrid: var(--strain-hybrid-on-dark);
+  /* same in dark on purpose — see the media-well note in :root */
+  --color-media-well: #ffffff;
 }
 @theme inline {
   --color-background: var(--color-background);
