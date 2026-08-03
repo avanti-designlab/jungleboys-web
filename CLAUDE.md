@@ -310,6 +310,21 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   without attributing it first.
   Caveat on the CLS figures: there is no pre-`preload:false` baseline for these ten pages, so the
   0.042 on `/faq` cannot be attributed to the font swap versus pre-existing. Both are inside budget.
+- **DATA-MODEL AMENDMENT: `StrainProfile` added to `Product` (Avanti approved, 2026-07-31).**
+  The freeze holds; this is the first amendment to it and it is ADDITIVE — two optional fields,
+  no existing field changed, nothing to migrate. Recorded here because the freeze says changes
+  require approval plus a doc update, and an un-recorded contract change is how drift starts.
+  **Why:** inspecting `jungleboysflorida.com/drops/` (the reference for our Drops build) showed
+  each featured card carries **Genetics** ("Thin Mint Cookies x Z") and **Taste** ("Citrus cherry,
+  grape candy, gas"). Neither had anywhere to live: `strain` is a NAME, `effects` is not flavour,
+  and `labResult.terpenes` is chemistry, not tasting notes.
+  **Shape:** a nested `strainProfile?: StrainProfile`, NOT two loose fields. These are
+  strain-level attributes — Zangria has the same genetics as an eighth or a pre-roll — so when
+  the Strains library is built this object lifts out to become the Strain entity and
+  `Product.strain` becomes the key pointing at it. Flattening `genetics` onto Product would mean
+  populating it hundreds of times and then migrating.
+  **Open:** verify against a real Dutchie payload which of these Dutchie actually supplies. If it
+  supplies none, they are CMS-authored strain content and belong to the Strains build.
 - **PHASE 3 COMMERCE SURFACES — scope + URL shape (Avanti, 2026-07-31).**
   Inventory, pricing and specials differ per store, so every commerce surface is
   location-scoped and **nests under the store**: `/menu/california/<store>/<surface>`. Chosen over

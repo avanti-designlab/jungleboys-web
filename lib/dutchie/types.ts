@@ -65,6 +65,28 @@ export interface ProductVariant {
   quantityAvailable?: number
 }
 
+/**
+ * Strain-level identity — the same for every SKU of a strain.
+ *
+ * AMENDMENT to the frozen data model (Avanti approved, 2026-07-31). Added
+ * because the Drops design needs Genetics ("Thin Mint Cookies x Z") and Taste
+ * ("Citrus cherry, grape candy, gas"), and neither had anywhere to live:
+ * `strain` is a NAME, `effects` is not flavour, and `labResult.terpenes` is
+ * chemistry rather than tasting notes.
+ *
+ * Deliberately a nested object rather than two loose fields on Product. These
+ * are strain attributes, not product attributes — Zangria has the same genetics
+ * as an eighth or a pre-roll — so when the Strains library is built this shape
+ * lifts out to become the Strain entity and `Product.strain` becomes the key
+ * that points at it. Flattening genetics onto Product would mean populating it
+ * hundreds of times and migrating later.
+ */
+export interface StrainProfile {
+  genetics?: string // "Cherry Gelato × Lemon Cherry Gelato"
+  taste?: string[] // ["cherry", "lemon", "diesel"]
+  description?: string // the strain narrative, distinct from the SKU description
+}
+
 export interface Product {
   id: string
   slug: string
@@ -73,7 +95,8 @@ export interface Product {
   category: ProductCategory
   subcategory?: string // "premium-flower", "pops", …
   strainType?: StrainType
-  strain?: string // parent strain name for /strains catalog
+  strain?: string // parent strain NAME — becomes the key into the Strains library
+  strainProfile?: StrainProfile // strain-level identity; see the note above
   description?: string
   images: { url: string; alt: string }[]
   variants: ProductVariant[]
