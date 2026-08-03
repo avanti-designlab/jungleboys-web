@@ -115,10 +115,30 @@ export default function CommerceHeader() {
 
   const pickStore = () => window.dispatchEvent(new CustomEvent('jb:pick-store'))
 
+  // Condense on scroll, same trigger and rhythm as the global SiteNav pill —
+  // one design language across the whole site (Avanti, 2026-08-03): the black
+  // utility bar folds away and the nav pill shrinks, keeping the essentials.
+  const [condensed, setCondensed] = useState(false)
+  useEffect(() => {
+    const onScroll = () => setCondensed(window.scrollY > 350)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
-    <header className="sticky top-0 z-40" style={{ fontFamily: 'var(--font-brand)' }}>
-      {/* row 1 — brand black, dark in both themes like the footer */}
-      <div className="bg-[#0b0b0b] text-white">
+    // pointer-events-none on the frame, auto on the rows: the header keeps a
+    // CONSTANT height so condensing never shifts the page (a max-h collapse
+    // here is a scroll-driven CLS hit on the highest-traffic pages) — the
+    // utility bar fades out and the pill glides up into its slot instead.
+    <header className="pointer-events-none sticky top-0 z-40" style={{ fontFamily: 'var(--font-brand)' }}>
+      {/* row 1 — brand black utilities; fades away once condensed */}
+      <div
+        inert={condensed ? true : undefined}
+        className={`bg-[#0b0b0b] text-white transition-all duration-500 ${
+          condensed ? 'pointer-events-none -translate-y-2 opacity-0' : 'pointer-events-auto opacity-100'
+        }`}
+      >
         <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-3 px-4 md:px-6">
           <Link href="/" aria-label="Jungle Boys home" className="shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element -- brand SVG */}
@@ -202,12 +222,26 @@ export default function CommerceHeader() {
         </div>
       </div>
 
-      {/* row 2 — the store surfaces. Theme surface so it works in both modes. */}
-      <nav
-        aria-label="Store sections"
-        className="border-b border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-foreground)] shadow-[0_8px_24px_rgba(0,0,0,0.06)]"
-      >
-        <div className="mx-auto flex max-w-[1400px] items-center gap-1 overflow-x-auto px-4 md:gap-2 md:px-6">
+      {/* row 2 — the store nav as a FLOATING PILL, the same device as the
+          global nav's condensed state, so the two headers read as one system.
+          Expanded it rides under the utility bar; condensed it shrinks and
+          absorbs the essentials (logo, store pin, cart). */}
+      <nav aria-label="Store sections" className="flex justify-center px-3 py-3">
+        <div
+          className={`pointer-events-auto flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#0b0b0b]/90 text-white shadow-2xl backdrop-blur-md transition-all duration-500 ${
+            condensed ? '-translate-y-16 px-2 py-1.5' : 'translate-y-0 px-2.5 py-2'
+          }`}
+        >
+          {condensed && (
+            <>
+              <Link href="/" aria-label="Jungle Boys home" className="ml-1 block h-8 w-11 shrink-0">
+                {/* eslint-disable-next-line @next/next/no-img-element -- brand SVG */}
+                <img src="/brand/jb-stacked-white.svg" alt="" className="h-full w-full object-contain" />
+              </Link>
+              <span aria-hidden className="mx-1 h-5 w-px shrink-0 bg-white/20" />
+            </>
+          )}
+
           {SURFACES.map((s) => {
             const href = base ? `${base}${s.path}` : '/shop'
             const active = base ? pathname === href : false
@@ -216,25 +250,59 @@ export default function CommerceHeader() {
                 key={s.key}
                 href={href}
                 aria-current={active ? 'page' : undefined}
-                className={`relative shrink-0 px-4 py-3.5 text-xs font-extrabold uppercase tracking-[0.16em] transition-colors ${
+                className={`shrink-0 rounded-full text-xs font-extrabold uppercase tracking-[0.14em] transition-colors duration-200 ${
+                  condensed ? 'px-3.5 py-2' : 'px-4 py-2.5'
+                } ${
                   active
-                    ? 'text-[var(--color-foreground)]'
-                    : 'text-[var(--color-muted)] hover:text-[var(--color-foreground)]'
+                    ? 'bg-[var(--color-accent)] text-black'
+                    : 'text-white/75 hover:bg-white/10 hover:text-white'
                 }`}
               >
                 {s.label}
-                {active && (
-                  <span aria-hidden className="absolute inset-x-3 bottom-0 h-0.5 rounded-full bg-[var(--color-accent)]" />
-                )}
               </Link>
             )
           })}
+
+          <span aria-hidden className="mx-1 h-5 w-px shrink-0 bg-white/20" />
           <Link
             href="/locations"
-            className="ml-auto shrink-0 px-4 py-3.5 text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--color-muted)] transition-colors hover:text-[var(--color-foreground)]"
+            className={`shrink-0 rounded-full text-xs font-extrabold uppercase tracking-[0.14em] text-white/75 transition-colors duration-200 hover:bg-white/10 hover:text-white ${
+              condensed ? 'px-3.5 py-2' : 'px-4 py-2.5'
+            }`}
           >
             Locations
           </Link>
+
+          {condensed && (
+            <>
+              <span aria-hidden className="mx-1 h-5 w-px shrink-0 bg-white/20" />
+              <button
+                type="button"
+                onClick={pickStore}
+                aria-label={store ? `Change store — currently ${store.name}` : 'Choose a store'}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/25 transition hover:border-[var(--color-accent)]"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="2" className="h-4 w-4" aria-hidden>
+                  <path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11ZM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                disabled
+                title="Cart arrives with checkout"
+                aria-label="Shopping cart — coming soon"
+                className="relative mr-1 cursor-not-allowed rounded-full border border-white/15 p-2 opacity-60"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4" aria-hidden>
+                  <path d="M6 8h12l-1 12H7L6 8Z" strokeLinejoin="round" />
+                  <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+                </svg>
+                <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--color-accent)] px-1 text-[9px] font-extrabold text-black">
+                  0
+                </span>
+              </button>
+            </>
+          )}
         </div>
       </nav>
     </header>

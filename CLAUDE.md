@@ -371,6 +371,16 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   menus, and is linked from the home nav.
 - **THE SHOP PAGES ARE THEIR OWN ECOM SHELL (Avanti, 2026-08-03 — five rulings in one
   session, recorded together).**
+  (a2, later same day) **The nav row is a FLOATING PILL that condenses on scroll** — the same
+  device, classes and 500ms rhythm as the global SiteNav's condensed pill, so the two headers
+  read as one system. Locations rides in the pill. Condensed, the black utility bar FADES
+  (never a height collapse — that is a scroll-driven CLS hit) and the pill glides up,
+  absorbing logo, store pin and cart; the header frame is pointer-events-none with auto rows
+  so transparent areas pass clicks through. Also: commerce card shots are CONTAINED in a
+  fixed centered square frame, NOT the line pages' bottom-anchored 88%-width treatment —
+  Dutchie uploads are 1:1 at wildly different framings, and width-anchoring rendered tall
+  jars cropped and flat bags tiny. The line pages keep their anchoring (curated cutout art);
+  do not "unify" the two.
   (a) **Own sticky header, global nav stands down**: /menu and /shop layouts mount
   `CommerceHeader` (logo → main site, open/closed in STORE-LOCAL time computed client-side —
   a prerendered "OPEN" is wrong half the day — Recreational/Medical selector, store chip

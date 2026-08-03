@@ -62,18 +62,21 @@ export function ProductCard({
         soldOut ? 'opacity-60' : ''
       }`}
     >
-      {/* stage — the line-page treatment: gold radial glow, pack shot anchored
-          to the bottom, lift on hover. White stage also absorbs the baked-white
-          backgrounds of real Dutchie JPGs. */}
-      <div className="relative aspect-[4/5] overflow-hidden">
-        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_75%_60%_at_50%_68%,rgba(233,193,90,0.28),transparent_72%)]" />
+      {/* stage — the line-page glow, but with the shot CONTAINED in a fixed
+          centered box rather than bottom-anchored at 88% width. The line pages
+          anchor deliberately (their art is curated cutouts); Dutchie uploads
+          are 1:1 at wildly different framings, and width-anchoring rendered a
+          tall jar cropped and a flat bag tiny (Avanti, 2026-08-03). Contain
+          gives every product the SAME visual frame regardless of source. */}
+      <div className="relative aspect-square overflow-hidden">
+        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_75%_60%_at_50%_58%,rgba(233,193,90,0.28),transparent_72%)]" />
         {shot && (
-          // eslint-disable-next-line @next/next/no-img-element -- pack shot, same treatment as the line pages
+          // eslint-disable-next-line @next/next/no-img-element -- pack shot
           <img
             src={shot.url}
             alt={shot.alt}
             loading="lazy"
-            className="absolute bottom-[-3%] left-1/2 w-[88%] -translate-x-1/2 drop-shadow-[0_24px_36px_rgba(0,0,0,0.28)] transition-transform duration-500 ease-out group-hover:-translate-y-2 group-hover:scale-[1.03]"
+            className="absolute inset-0 h-full w-full object-contain p-7 drop-shadow-[0_24px_36px_rgba(0,0,0,0.22)] transition-transform duration-500 ease-out group-hover:-translate-y-2 group-hover:scale-[1.03]"
           />
         )}
         {soldOut ? (
