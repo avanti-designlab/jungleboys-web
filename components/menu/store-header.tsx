@@ -61,7 +61,11 @@ export default function StoreHeader({
   )}`
 
   return (
-    <header className="relative mt-16 overflow-hidden bg-[#0b0b0b] px-6 py-10 text-white md:px-12 lg:px-20">
+    // Pill card matching the FOOTER's inset + radius exactly (Avanti,
+    // 2026-08-03) — same outer gutters, same rounded corners, same #050505,
+    // so the band and the footer below it read as one family of surfaces.
+    <header className="mt-16 px-2 md:px-3">
+      <div className="relative overflow-hidden rounded-[1.75rem] bg-[#050505] px-6 py-10 text-white md:rounded-[2.5rem] md:px-12 lg:px-20">
       {/* glow field — pure decoration, clipped by the header */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div
@@ -147,6 +151,7 @@ export default function StoreHeader({
             sizes="240px"
             className="object-cover"
           />
+        </div>
         </div>
       </div>
     </header>
