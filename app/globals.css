@@ -185,6 +185,28 @@ body {
     animation: none;
   }
 }
+/* Commerce header dropdowns — soft drop-in on open. Transform/opacity only;
+   restarts naturally when the hidden panel is shown. Applied to an INNER
+   wrapper: the positioning element centers with -translate-x-1/2, which a
+   transform keyframe would stomp. */
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.jb-dropdown {
+  animation: dropdown-in 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .jb-dropdown {
+    animation: none;
+  }
+}
 /* Age-gate mascots — one-shot rise out of the pill's bottom line on entry */
 @keyframes mascot-rise {
   from {

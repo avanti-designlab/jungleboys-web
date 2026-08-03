@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { CA_OWNED } from '@/lib/owned-stores'
 import { readStore } from '@/lib/store-selection'
 import { CART_EVENT, cartSubtotal, readCart, removeFromCart, type CartItem } from '@/lib/cart'
+import { CATEGORY_ICONS } from '@/lib/category-icons'
 import CartIcon from './cart-icon'
 
 // The ecom shell's own sticky header (Avanti, 2026-08-03): the shop pages live
@@ -13,6 +14,10 @@ import CartIcon from './cart-icon'
 // with a Change action, Sign In, cart, and the store surfaces as the nav row.
 // The global SiteNav stands down on /menu and /shop; the JB logo here is the
 // way back to the main site.
+//
+// Voice is BEBAS site-wide in this shell (Avanti, 2026-08-03): the whole pill
+// and every panel run on --font-display. Bebas is condensed, so sizes run
+// larger and tracking far tighter than the Lemon Milk values they replace.
 //
 // Store resolution order matters: the URL wins (you are LOOKING at that
 // store's page), then the saved choice. URL resolution happens during render —
@@ -100,6 +105,23 @@ function openStatus(store: (typeof CA_OWNED)[number], now: Date): { open: boolea
 // choice persists so that wiring is a data change, not a UX change.
 const MENU_TYPE_KEY = 'jb-menu-type'
 
+// Shared hover treatment for dropdown rows: quiet ground, label nudges right,
+// gold arrow fades in from the left of its slot.
+function RowArrow() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="var(--color-accent)"
+      strokeWidth="2.5"
+      className="h-4 w-4 shrink-0 -translate-x-1 opacity-0 transition-all duration-200 group-hover/row:translate-x-0 group-hover/row:opacity-100"
+      aria-hidden
+    >
+      <path d="M5 12h14m-6-6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 export default function CommerceHeader() {
   const pathname = usePathname() ?? ''
   const urlStore = storeFromPath(pathname)
@@ -178,7 +200,7 @@ export default function CommerceHeader() {
   return (
     <header
       className="pointer-events-none sticky top-0 z-40 flex justify-center px-3 py-3"
-      style={{ fontFamily: 'var(--font-brand)' }}
+      style={{ fontFamily: 'var(--font-display)' }}
     >
       <div className="pointer-events-auto flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#0b0b0b]/90 py-1.5 pl-2 pr-1.5 text-white shadow-2xl backdrop-blur-md">
         <Link href="/" aria-label="Jungle Boys home" className="ml-1 block h-9 w-12 shrink-0">
@@ -197,10 +219,10 @@ export default function CommerceHeader() {
               aria-expanded={openMenu === menu}
               aria-haspopup="menu"
               onClick={() => setOpenMenu(openMenu === menu ? null : menu)}
-              className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-extrabold uppercase tracking-[0.14em] transition-colors duration-200 ${
+              className={`flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2 text-[17px] uppercase leading-none tracking-[0.05em] transition-colors duration-200 ${
                 activeSurface || openMenu === menu
                   ? 'bg-[var(--color-accent)] text-black'
-                  : 'text-white/75 hover:bg-white/10 hover:text-white'
+                  : 'text-white/80 hover:bg-white/10 hover:text-white'
               }`}
             >
               {menu === 'shop' ? 'Shop' : 'Products'}
@@ -219,10 +241,10 @@ export default function CommerceHeader() {
               key={s.key}
               href={href}
               aria-current={active ? 'page' : undefined}
-              className={`shrink-0 rounded-full px-3.5 py-2 text-xs font-extrabold uppercase tracking-[0.14em] transition-colors duration-200 ${
+              className={`shrink-0 rounded-full px-4 py-2 text-[17px] uppercase leading-none tracking-[0.05em] transition-colors duration-200 ${
                 active
                   ? 'bg-[var(--color-accent)] text-black'
-                  : 'text-white/75 hover:bg-white/10 hover:text-white'
+                  : 'text-white/80 hover:bg-white/10 hover:text-white'
               }`}
             >
               {s.label}
@@ -231,7 +253,7 @@ export default function CommerceHeader() {
         })}
         <Link
           href="/locations"
-          className="shrink-0 rounded-full px-3.5 py-2 text-xs font-extrabold uppercase tracking-[0.14em] text-white/75 transition-colors duration-200 hover:bg-white/10 hover:text-white"
+          className="shrink-0 rounded-full px-4 py-2 text-[17px] uppercase leading-none tracking-[0.05em] text-white/80 transition-colors duration-200 hover:bg-white/10 hover:text-white"
         >
           Locations
         </Link>
@@ -240,7 +262,7 @@ export default function CommerceHeader() {
 
         {/* open/closed in store-local time — empty until the client knows */}
         {status && (
-          <span className="hidden shrink-0 items-center gap-1.5 px-2 text-[11px] font-extrabold uppercase tracking-wider xl:flex">
+          <span className="hidden shrink-0 items-center gap-1.5 px-2 text-[15px] uppercase leading-none tracking-[0.06em] xl:flex">
             <span
               aria-hidden
               className={`h-2 w-2 rounded-full ${status.open ? 'bg-[var(--color-success)]' : 'bg-white/40'}`}
@@ -252,11 +274,12 @@ export default function CommerceHeader() {
         {/* Recreational / Medical — inherited from the Dutchie embed; UI state
             until the GraphQL menuType param is verified (see MENU_TYPE_KEY) */}
         <label className="hidden shrink-0 items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.06] py-1 pl-3 pr-1.5 lg:flex">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-white/60">Menu</span>
+          <span className="text-[13px] uppercase leading-none tracking-[0.14em] text-white/60">Menu</span>
           <select
             value={menuType}
             onChange={(e) => chooseMenuType(e.target.value as 'recreational' | 'medical')}
-            className="cursor-pointer bg-transparent py-1 text-xs font-extrabold uppercase tracking-wider text-white outline-none [&>option]:text-black"
+            className="cursor-pointer bg-transparent py-1 text-[16px] uppercase leading-none tracking-[0.05em] text-white outline-none [&>option]:text-black"
+            style={{ fontFamily: 'var(--font-display)' }}
           >
             <option value="recreational">Recreational</option>
             <option value="medical">Medical</option>
@@ -272,17 +295,17 @@ export default function CommerceHeader() {
           <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="2" className="h-4 w-4 shrink-0" aria-hidden>
             <path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11ZM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span className="max-w-32 truncate text-xs font-extrabold uppercase tracking-wider md:max-w-44">
+          <span className="max-w-32 truncate text-[16px] uppercase leading-none tracking-[0.05em] md:max-w-44">
             {store ? store.name : 'Choose a store'}
           </span>
-          <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)]">
+          <span className="text-[13px] uppercase leading-none tracking-[0.12em] text-[var(--color-accent)]">
             Change
           </span>
         </button>
 
         <Link
           href="/login"
-          className="hidden shrink-0 rounded-full border border-white/25 px-3.5 py-2 text-xs font-extrabold uppercase tracking-widest transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:block"
+          className="hidden shrink-0 rounded-full border border-white/25 px-4 py-2 text-[16px] uppercase leading-none tracking-[0.06em] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:block"
         >
           Sign in
         </Link>
@@ -312,55 +335,101 @@ export default function CommerceHeader() {
         />
       )}
 
-      {/* SHOP panel — categories → filtered list */}
+      {/* SHOP panel — categories → filtered list. Icon wells carry Avanti's
+          category art where supplied; the rest keep the letter-mark. */}
       <div
         role="menu"
         hidden={openMenu !== 'shop'}
-        className="pointer-events-auto absolute left-1/2 top-full w-[min(92vw,26rem)] -translate-x-1/2 rounded-3xl border border-white/10 bg-[#0b0b0b]/95 p-2 text-white shadow-2xl backdrop-blur-md"
+        className="pointer-events-auto absolute left-1/2 top-full w-[min(92vw,30rem)] -translate-x-1/2 pt-1"
       >
-        <div className="grid grid-cols-2 gap-1">
+        <div className="jb-dropdown relative overflow-hidden rounded-[28px] border border-white/10 bg-[#0b0b0b]/95 p-3 text-white shadow-2xl backdrop-blur-md">
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(70%_100%_at_50%_0%,rgba(254,207,14,0.14),transparent_70%)]"
+          />
+          <p className="relative px-3 pb-2 pt-1 text-[13px] uppercase leading-none tracking-[0.24em] text-[var(--color-accent)]">
+            Shop by category
+          </p>
+          <div className="relative grid grid-cols-2 gap-1">
+            {SHOP_CATEGORIES.map((c) => {
+              const icon = CATEGORY_ICONS[c]
+              return (
+                <Link
+                  key={c}
+                  role="menuitem"
+                  data-shop-category={c}
+                  href={`${base ?? '/shop'}?category=${c}#browse`}
+                  onClick={() => setOpenMenu(null)}
+                  className="group/row flex items-center gap-3 rounded-2xl px-3 py-2 transition-colors duration-200 hover:bg-white/[0.07]"
+                >
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white transition-transform duration-200 group-hover/row:scale-105">
+                    {icon ? (
+                      // eslint-disable-next-line @next/next/no-img-element -- brand icon
+                      <img src={icon} alt="" className="h-9 w-9 object-contain" />
+                    ) : (
+                      <span className="text-[18px] leading-none text-black/70">{label(c).slice(0, 1)}</span>
+                    )}
+                  </span>
+                  <span className="min-w-0 flex-1 truncate text-[19px] uppercase leading-none tracking-[0.03em] text-white/85 transition-colors duration-200 group-hover/row:text-white">
+                    {label(c)}
+                  </span>
+                  <RowArrow />
+                </Link>
+              )
+            })}
+          </div>
           <Link
             role="menuitem"
             href={base ?? '/shop'}
             onClick={() => setOpenMenu(null)}
-            className="col-span-2 rounded-2xl bg-white/[0.06] px-4 py-3 text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--color-accent)] transition-colors hover:bg-white/10"
+            className="relative mt-2 flex items-center justify-center gap-2 rounded-2xl bg-[var(--color-accent)] px-4 py-3.5 text-[17px] uppercase leading-none tracking-[0.08em] text-black transition hover:opacity-90"
           >
-            Shop all →
+            Shop all
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4" aria-hidden>
+              <path d="M5 12h14m-6-6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </Link>
-          {SHOP_CATEGORIES.map((c) => (
-            <Link
-              key={c}
-              role="menuitem"
-              data-shop-category={c}
-              href={`${base ?? '/shop'}?category=${c}#browse`}
-              onClick={() => setOpenMenu(null)}
-              className="rounded-2xl px-4 py-3 text-xs font-extrabold uppercase tracking-[0.14em] text-white/80 transition-colors hover:bg-white/10 hover:text-white"
-            >
-              {label(c)}
-            </Link>
-          ))}
         </div>
       </div>
 
-      {/* PRODUCTS panel — JB lines → filtered list (never the landing pages) */}
+      {/* PRODUCTS panel — JB lines → filtered list (never the landing pages).
+          Editorial: gold index numerals, big Bebas labels. */}
       <div
         role="menu"
         hidden={openMenu !== 'products'}
-        className="pointer-events-auto absolute left-1/2 top-full w-[min(92vw,30rem)] -translate-x-1/2 rounded-3xl border border-white/10 bg-[#0b0b0b]/95 p-2 text-white shadow-2xl backdrop-blur-md"
+        className="pointer-events-auto absolute left-1/2 top-full w-[min(92vw,34rem)] -translate-x-1/2 pt-1"
       >
-        <div className="grid grid-cols-2 gap-1">
-          {JB_LINES.map((l) => (
-            <Link
-              key={l.line}
-              role="menuitem"
-              data-jb-line={l.line}
-              href={`${base ?? '/shop'}?line=${l.line}#browse`}
-              onClick={() => setOpenMenu(null)}
-              className="rounded-2xl px-4 py-3 text-xs font-extrabold uppercase tracking-[0.14em] text-white/80 transition-colors hover:bg-white/10 hover:text-white"
-            >
-              {l.label}
-            </Link>
-          ))}
+        <div className="jb-dropdown relative overflow-hidden rounded-[28px] border border-white/10 bg-[#0b0b0b]/95 p-3 text-white shadow-2xl backdrop-blur-md">
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(70%_100%_at_50%_0%,rgba(254,207,14,0.14),transparent_70%)]"
+          />
+          <p className="relative px-3 pb-2 pt-1 text-[13px] uppercase leading-none tracking-[0.24em] text-[var(--color-accent)]">
+            Jungle Boys lines
+          </p>
+          <div className="relative grid grid-cols-2 gap-1">
+            {JB_LINES.map((l, i) => (
+              <Link
+                key={l.line}
+                role="menuitem"
+                data-jb-line={l.line}
+                href={`${base ?? '/shop'}?line=${l.line}#browse`}
+                onClick={() => setOpenMenu(null)}
+                className="group/row flex items-center gap-3 rounded-2xl px-3 py-3 transition-colors duration-200 hover:bg-white/[0.07]"
+              >
+                <span
+                  aria-hidden
+                  className="w-6 shrink-0 text-[13px] leading-none tracking-[0.08em] text-[var(--color-accent)]/80 transition-colors duration-200 group-hover/row:text-[var(--color-accent)]"
+                >
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="min-w-0 flex-1 truncate text-[19px] uppercase leading-none tracking-[0.03em] text-white/85 transition-colors duration-200 group-hover/row:text-white">
+                  {l.label}
+                </span>
+                <RowArrow />
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
       {/* BAG panel — a pre-checkout list only. Checkout is DUTCHIE'S: until
@@ -369,59 +438,61 @@ export default function CommerceHeader() {
         role="dialog"
         aria-label="Shopping bag"
         hidden={openMenu !== 'cart'}
-        className="pointer-events-auto absolute right-3 top-full w-[min(92vw,24rem)] rounded-3xl border border-white/10 bg-[#0b0b0b]/95 p-4 text-white shadow-2xl backdrop-blur-md md:right-[max(0.75rem,calc((100vw-1400px)/2))]"
+        className="pointer-events-auto absolute right-3 top-full w-[min(92vw,24rem)] pt-1 md:right-[max(0.75rem,calc((100vw-1400px)/2))]"
       >
-        {cart.length === 0 ? (
-          <p className="px-2 py-6 text-center text-xs font-bold uppercase tracking-[0.16em] text-white/60">
-            Your bag is empty
-          </p>
-        ) : (
-          <>
-            <ul className="max-h-72 space-y-2 overflow-y-auto">
-              {cart.map((i) => (
-                <li key={`${i.storeSlug}-${i.variantId}`} className="flex items-center gap-3 rounded-2xl bg-white/[0.05] px-3 py-2.5">
-                  <span className="min-w-0 flex-1">
-                    <Link
-                      href={`/shop/${i.slug}?store=${i.storeSlug}`}
-                      onClick={() => setOpenMenu(null)}
-                      className="block truncate text-xs font-extrabold uppercase tracking-wider hover:text-[var(--color-accent)]"
-                    >
-                      {i.name}
-                    </Link>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-white/50">
-                      {i.option} · ×{i.qty}
-                    </span>
-                  </span>
-                  <span className="shrink-0 text-xs font-extrabold">${((i.price * i.qty) / 100).toFixed(2).replace(/\.00$/, '')}</span>
-                  <button
-                    type="button"
-                    onClick={() => removeFromCart(i.variantId, i.storeSlug)}
-                    aria-label={`Remove ${i.name} from bag`}
-                    className="shrink-0 rounded-full p-1.5 text-white/50 transition hover:bg-white/10 hover:text-white"
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5" aria-hidden>
-                      <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
-                    </svg>
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-3 flex items-center justify-between border-t border-white/10 px-2 pt-3">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">Subtotal</span>
-              <span className="text-sm font-extrabold">${(cartSubtotal(cart) / 100).toFixed(2).replace(/\.00$/, '')}</span>
-            </div>
-            <Link
-              href={base ?? '/shop'}
-              onClick={() => setOpenMenu(null)}
-              className="mt-3 flex w-full items-center justify-center rounded-full bg-[var(--color-accent)] px-6 py-3 text-xs font-extrabold uppercase tracking-widest text-black transition hover:opacity-90"
-            >
-              Checkout at {store ? store.name : 'your store'}
-            </Link>
-            <p className="mt-2 px-2 text-center text-[10px] font-bold uppercase tracking-widest text-white/40">
-              Checkout completes on the store menu for now
+        <div className="jb-dropdown rounded-[28px] border border-white/10 bg-[#0b0b0b]/95 p-4 text-white shadow-2xl backdrop-blur-md">
+          {cart.length === 0 ? (
+            <p className="px-2 py-6 text-center text-[15px] uppercase leading-none tracking-[0.12em] text-white/60">
+              Your bag is empty
             </p>
-          </>
-        )}
+          ) : (
+            <>
+              <ul className="max-h-72 space-y-2 overflow-y-auto">
+                {cart.map((i) => (
+                  <li key={`${i.storeSlug}-${i.variantId}`} className="flex items-center gap-3 rounded-2xl bg-white/[0.05] px-3 py-2.5">
+                    <span className="min-w-0 flex-1">
+                      <Link
+                        href={`/shop/${i.slug}?store=${i.storeSlug}`}
+                        onClick={() => setOpenMenu(null)}
+                        className="block truncate text-[16px] uppercase leading-tight tracking-[0.03em] hover:text-[var(--color-accent)]"
+                      >
+                        {i.name}
+                      </Link>
+                      <span className="text-[12px] uppercase leading-none tracking-[0.1em] text-white/50">
+                        {i.option} · ×{i.qty}
+                      </span>
+                    </span>
+                    <span className="shrink-0 text-[16px] leading-none">${((i.price * i.qty) / 100).toFixed(2).replace(/\.00$/, '')}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeFromCart(i.variantId, i.storeSlug)}
+                      aria-label={`Remove ${i.name} from bag`}
+                      className="shrink-0 rounded-full p-1.5 text-white/50 transition hover:bg-white/10 hover:text-white"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5" aria-hidden>
+                        <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
+                      </svg>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-3 flex items-center justify-between border-t border-white/10 px-2 pt-3">
+                <span className="text-[13px] uppercase leading-none tracking-[0.18em] text-white/60">Subtotal</span>
+                <span className="text-[19px] leading-none">${(cartSubtotal(cart) / 100).toFixed(2).replace(/\.00$/, '')}</span>
+              </div>
+              <Link
+                href={base ?? '/shop'}
+                onClick={() => setOpenMenu(null)}
+                className="mt-3 flex w-full items-center justify-center rounded-full bg-[var(--color-accent)] px-6 py-3 text-[16px] uppercase leading-none tracking-[0.08em] text-black transition hover:opacity-90"
+              >
+                Checkout at {store ? store.name : 'your store'}
+              </Link>
+              <p className="mt-2 px-2 text-center text-[12px] uppercase leading-none tracking-[0.1em] text-white/40">
+                Checkout completes on the store menu for now
+              </p>
+            </>
+          )}
+        </div>
       </div>
     </header>
   )
