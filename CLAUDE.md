@@ -310,6 +310,29 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   without attributing it first.
   Caveat on the CLS figures: there is no pre-`preload:false` baseline for these ten pages, so the
   0.042 on `/faq` cannot be attributed to the font swap versus pre-existing. Both are inside budget.
+- **PHASE 3 COMMERCE SURFACES — scope + URL shape (Avanti, 2026-07-31).**
+  Inventory, pricing and specials differ per store, so every commerce surface is
+  location-scoped and **nests under the store**: `/menu/california/<store>/<surface>`. Chosen over
+  global pages so each store can rank on its own local intent — the stated priority for this whole
+  build is visibility and driving online sales, and `/menu/jungle-boys-dtla` (21,227 clicks/yr) +
+  `/menu/jungle-boys-pomona` (17,312) are already the highest-traffic URLs in the inventory.
+  - **DEALS, not Specials.** They are the same thing; the site says Deals. One surface, one word.
+  - **DROPS = "Fresh Drops"** — a CURATED weekly release, dropping every **Friday**. Not a
+    computed "new this week" filter and not the same as Deals: it is editorial, so it needs a
+    curation source (Storyblok) rather than being derived from the menu.
+  - **BRANDS carries ALL brands stocked at a location, not JB only.** Deliberate: the CA stores
+    stock third-party brands (Jeeter, 1904, Barrett Farms…) and the goal is to drive traffic for
+    those too. This is the one commerce surface that is explicitly NOT JB-curated — do not
+    "correct" it to JB-only. Note it does NOT change the Products-vs-Shop rule: `/products/*`
+    stays the curated JB-only collection.
+  - **STRAINS: DEFERRED, and big.** A full genetics library across the whole JB catalogue — a
+    major surface in its own right, not a filter. Build after Deals/Drops/Brands.
+  - **PDP nests per store** (`.../<store>/product/<slug>`) for the same local-SEO reason.
+    ⚠️ RISK RECORDED, not yet resolved: ~45 products × 4 CA stores = ~180 pages that differ only
+    in price and stock. Near-duplicate PDPs can compete with each other for the same product
+    query and dilute rather than add. Decide the canonical strategy BEFORE building the PDP —
+    self-canonical (bet on local intent) vs consolidating to one primary product page. Getting
+    this wrong is expensive to unwind once indexed.
 - **RLS VERIFIED IN THE DATABASE, not just in the migration (Avanti ran it, 2026-07-30).**
   `select relname, relrowsecurity, relforcerowsecurity from pg_class` returns
   **`relrowsecurity = true` for both `leads` and `retailers`**; `relforcerowsecurity = false` on
