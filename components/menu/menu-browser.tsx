@@ -32,10 +32,14 @@ function categoryLabel(c: ProductCategory): string {
 function ProductCard({ product }: { product: Product }) {
   const inStock = product.variants.filter((v) => (v.quantityAvailable ?? 0) > 0)
   const soldOut = inStock.length === 0
-  const from = inStock.length
-    ? Math.min(...inStock.map((v) => v.specialPrice ?? v.price))
-    : Math.min(...product.variants.map((v) => v.specialPrice ?? v.price))
-  const onSale = inStock.some((v) => v.specialPrice != null)
+  // Price off the CHEAPEST buyable variant, and the discount is derived from
+  // that same variant rather than assembled from two different ones — otherwise
+  // the struck-through figure belongs to a size the shopper is not being quoted.
+  const pool = inStock.length ? inStock : product.variants
+  const best = pool.reduce((a, b) => ((b.specialPrice ?? b.price) < (a.specialPrice ?? a.price) ? b : a))
+  const from = best.specialPrice ?? best.price
+  const onSale = best.specialPrice != null && best.specialPrice < best.price
+  const percentOff = onSale ? Math.round((1 - best.specialPrice! / best.price) * 100) : 0
   const shot = product.images[0]
 
   return (
@@ -90,16 +94,29 @@ function ProductCard({ product }: { product: Product }) {
           </p>
         )}
 
-        <p className="mt-auto pt-3 text-sm font-extrabold">
+        <div className="mt-auto pt-3 text-sm font-extrabold">
           {soldOut ? (
             <span className="text-[var(--color-muted)]">Unavailable</span>
+          ) : onSale ? (
+            <span className="flex flex-wrap items-baseline gap-x-2">
+              {/* The original is struck AND labelled for assistive tech: a line
+                  through a number is a visual convention screen readers do not
+                  convey, so "was $45" carries the meaning the strike implies. */}
+              <span className="sr-only">Was </span>
+              <s className="font-bold text-[var(--color-muted)]">{money(best.price)}</s>
+              <span className="sr-only">, now </span>
+              <span>{money(from)}</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-ink)]">
+                {percentOff}% off
+              </span>
+            </span>
           ) : (
             <>
               <span className="text-[var(--color-muted)]">from </span>
               {money(from)}
             </>
           )}
-        </p>
+        </div>
       </div>
     </article>
   )
