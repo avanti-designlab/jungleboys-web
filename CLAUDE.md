@@ -355,6 +355,22 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   ships with. The menu card labels the brand ONLY on non-JB products — the house brand stays
   unlabelled by design. Do not "clean up" the fixtures to JB-only; the not-JB-only rule
   (2026-07-31) is the point, and check-commerce fails if the brands page goes single-brand.
+- **Fresh Drops LAYOUT shipped with curation STUBBED (Avanti's go-ahead, 2026-08-03).** Avanti
+  asked for the page design now rather than waiting on the Dutchie verification, so
+  `/menu/california/<store>/drops` is live: editorial header ("new heat lands every Friday"),
+  featured band rendering Genetics/Taste from `StrainProfile` (what amendment #1 exists for,
+  mirroring the jungleboysflorida.com/drops reference), and THE DROP LIST as the filterable
+  shared grid. **The curation source is the still-open question and `lib/drops.ts` is its
+  seam**: a hand-picked slug list stands in for whichever mechanism wins (handoff says "set in
+  Dutchie" via an UNVERIFIED collection field; the 2026-07-31 scope note said Storyblok —
+  reconcile when a real payload exists). Swapping in the real source is one function body,
+  no template changes. Genetics strings in the fixtures REUSE lineages already in the
+  placeholder file rather than inventing new strain facts. **PRE-CUTOVER CHECK: the slug list
+  must be replaced by the real curation source** — a hardcoded drop list in production is a
+  stale-promo bug by its second Friday. Legacy note: `/drops` is NOT in the 44-URL inventory;
+  its interim 307 → /products stays until the mechanism (and any global-drops chooser) is
+  decided. `check-commerce.mjs` asserts the featured band facts are server-rendered and the
+  store subnav reaches the page.
 - **PHASE 3 COMMERCE SURFACES — scope + URL shape (Avanti, 2026-07-31).**
   Inventory, pricing and specials differ per store, so every commerce surface is
   location-scoped and **nests under the store**: `/menu/california/<store>/<surface>`. Chosen over

@@ -8,7 +8,10 @@ import { spawn } from 'node:child_process'
 import crypto from 'node:crypto'
 import net from 'node:net'
 
-const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+// Overridable because the harness also runs in remote/CI containers where
+// Chrome lives elsewhere (e.g. JB_CHROME=/opt/pw-browsers/chromium). The Mac
+// path stays the default so local runs need no setup.
+const CHROME = process.env.JB_CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 export const wait = (ms) => new Promise((r) => setTimeout(r, ms))
 
 export async function launch({

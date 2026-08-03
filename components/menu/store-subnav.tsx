@@ -1,12 +1,13 @@
 import Link from 'next/link'
 
-// The commerce surfaces of ONE store: menu, deals, brands. All three nest under
-// /menu/california/<store> (recorded decision, 2026-07-31 — location-scoped so
-// each store ranks on its own local intent), so the tabs are the visible shape
-// of that URL decision. Fresh Drops joins this row when it lands.
+// The commerce surfaces of ONE store: menu, deals, drops, brands. All nest
+// under /menu/california/<store> (recorded decision, 2026-07-31 —
+// location-scoped so each store ranks on its own local intent), so the tabs
+// are the visible shape of that URL decision.
 const TABS = [
   { key: 'menu', label: 'Menu', path: '' },
   { key: 'deals', label: 'Deals', path: '/deals' },
+  { key: 'drops', label: 'Drops', path: '/drops' },
   { key: 'brands', label: 'Brands', path: '/brands' },
 ] as const
 

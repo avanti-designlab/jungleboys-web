@@ -343,6 +343,14 @@ function thirdParty(
 // Dutchie payloads land — and scripts/check-commerce.mjs asserts it is actually
 // server-rendered. Panel names mirror the jungleboysflorida.com reference card;
 // the values are placeholders like every other number in this file.
+// Strain-profile fixtures for the Drops featured band: genetics strings are the
+// SAME lineages this file already carries in the pre-roll `strain` fields —
+// reused rather than invented, so no new strain "fact" enters the repo. Taste
+// arrays are placeholder tasting notes like every other sensory value here.
+function withProfile(p: Product, genetics: string, taste: string[]): Product {
+  return { ...p, strainProfile: { genetics, taste } }
+}
+
 const zangriaFlower: Product = (() => {
   const p = flower('zangria', 'Zangria', 'strain-zangria', 'sativa', 26.7, 'Terpinolene')
   p.labResult = {
@@ -404,13 +412,21 @@ const products: Product[] = [
   gasTank('zom', 'ZOM', 'live-rosin', 'indica', 75.8, 'Myrcene'),
   gasTank('sherbanger', 'Sherbanger', 'live-rosin', 'hybrid', 76.4, 'Caryophyllene'),
   // ── 10 Pack Pre-Rolls
-  tenPack('06-og', '06 OG', 'Motor Breath x Gator Breath', 'indica', 31.4, 'Myrcene', true),
+  withProfile(
+    tenPack('06-og', '06 OG', 'Motor Breath x Gator Breath', 'indica', 31.4, 'Myrcene', true),
+    'Motor Breath x Gator Breath',
+    ['gas', 'pine', 'earth']
+  ),
   tenPack('rs1000', 'RS1000', 'RS11 x Obama Runtz', 'hybrid', 29.8, 'Limonene'),
   tenPack('all-cherriez', 'All Cherriez', 'Cherry Gelato x LCG', 'hybrid', 30.2, 'Caryophyllene', false, 5200),
   tenPack('la-gelato', 'LA Gelato', 'Lemon Cherry Gelato x Triangle Kush', 'hybrid', 28.9, 'Limonene'),
   tenPack('motor-breath', 'Motor Breath', 'SFV OG x Chem D', 'indica', 32.1, 'Myrcene'),
   tenPack('blu-zerdz', 'Blu Zerdz', 'Blu Frootz x LCG', 'hybrid', 29.4, 'Linalool'),
-  tenPack('rainbow-belts', 'Rainbow Belts', 'Moonbow x Zkittlez', 'hybrid', 30.7, 'Terpinolene'),
+  withProfile(
+    tenPack('rainbow-belts', 'Rainbow Belts', 'Moonbow x Zkittlez', 'hybrid', 30.7, 'Terpinolene'),
+    'Moonbow x Zkittlez',
+    ['candy', 'berry', 'tropical']
+  ),
   tenPack('vanilla-velvet', 'Vanilla Velvet', 'Gelato 41 x Kush Mints', 'indica', 28.3, 'Linalool'),
   // ── 1G Pre-Rolls
   oneGram('zangria', 'Zangria', 'Thin Mint Cookies x Z', 'sativa', 30.6, 'Terpinolene', true),

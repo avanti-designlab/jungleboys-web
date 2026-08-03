@@ -95,6 +95,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const stores = (await getLocations()).flatMap((l) => [
     { url: `${SITE_ORIGIN}/menu/california/${l.slug}`, changeFrequency: 'daily' as const, priority: 0.9 },
     { url: `${SITE_ORIGIN}/menu/california/${l.slug}/deals`, changeFrequency: 'daily' as const, priority: 0.7 },
+    { url: `${SITE_ORIGIN}/menu/california/${l.slug}/drops`, changeFrequency: 'weekly' as const, priority: 0.7 },
     { url: `${SITE_ORIGIN}/menu/california/${l.slug}/brands`, changeFrequency: 'weekly' as const, priority: 0.6 },
   ])
 

@@ -113,6 +113,32 @@ async function checkAmendedFields() {
   }
 }
 
+// ── 3b. Fresh Drops: layout live, curation stubbed ───────────────────────────
+// The layout ships NOW (Avanti, 2026-08-03) with curation stubbed in
+// lib/drops.ts until the Dutchie collection field is verified. What must hold
+// regardless of mechanism: the page exists, the featured band is SERVER-
+// rendered with the strain-profile facts the amendment exists for (Genetics/
+// Taste), and every card links to the PDP carrying the right store.
+async function checkDrops() {
+  const path = `/menu/california/${MENU_STORE}/drops`
+  await checkCardLinks(path, MENU_STORE)
+
+  const { status, html } = await fetchHtml(path)
+  if (status !== 200) return
+  for (const needle of ['Genetics', 'Thin Mint Cookies x Z', 'Taste']) {
+    if (html.includes(needle)) ok(`${path} featured band carries "${needle}" in SSR HTML`)
+    else fail(`${path} featured band carries "${needle}"`, 'not in server markup')
+  }
+
+  // The surface must be REACHABLE: the store menu's subnav links to it.
+  const menu = await fetchHtml(`/menu/california/${MENU_STORE}`)
+  if (menu.html.includes(`href="/menu/california/${MENU_STORE}/drops"`)) {
+    ok(`store subnav links to ${path}`)
+  } else {
+    fail(`store subnav links to ${path}`, 'drops tab missing from the menu page')
+  }
+}
+
 // ── 4. Sitemap: store surfaces IN, placeholder-slug PDPs OUT ─────────────────
 async function checkSitemap() {
   const { status, html } = await fetchHtml('/sitemap.xml')
@@ -121,6 +147,7 @@ async function checkSitemap() {
   for (const path of [
     `/menu/california/${MENU_STORE}`,
     `/menu/california/${MENU_STORE}/deals`,
+    `/menu/california/${MENU_STORE}/drops`,
     `/menu/california/${MENU_STORE}/brands`,
   ]) {
     if (html.includes(`${path}</loc>`)) ok(`sitemap lists ${path}`)
@@ -139,6 +166,7 @@ try {
   await checkCardLinks(`/menu/california/${MENU_STORE}`, MENU_STORE)
   await checkCardLinks(`/menu/california/${DEALS_STORE}/deals`, DEALS_STORE)
   await checkBrands()
+  await checkDrops()
   await checkAmendedFields()
   await checkSitemap()
 } catch (e) {
