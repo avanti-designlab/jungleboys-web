@@ -98,6 +98,22 @@ async function checkMerchandising() {
   if (tiles >= 3) ok(`${path} carries ${tiles} shop-by-category tiles`)
   else fail(`${path} carries shop-by-category tiles`, `found ${tiles}, want >=3`)
 
+  // Header dropdowns (Avanti, 2026-08-03): SHOP lists shop categories,
+  // PRODUCTS lists the JB lines — both land on FILTERED LISTS, not the Phase 2
+  // landing pages. Panels are in the SSR HTML (hidden until opened), so their
+  // options are checkable and crawlable.
+  const shopOpts = (html.match(/data-shop-category=/g) ?? []).length
+  if (shopOpts >= 4) ok(`${path} header SHOP dropdown lists ${shopOpts} categories`)
+  else fail(`${path} header SHOP dropdown lists categories`, `found ${shopOpts}, want >=4`)
+
+  const lineOpts = [...html.matchAll(/data-jb-line="([^"]+)"/g)].map((m) => m[1])
+  if (lineOpts.length >= 6) ok(`${path} header PRODUCTS dropdown lists ${lineOpts.length} JB lines`)
+  else fail(`${path} header PRODUCTS dropdown lists JB lines`, `found ${lineOpts.length}, want >=6`)
+  // every line target must be a ?line= filter link, never a /products/ landing page
+  const landingLeaks = (html.match(/data-jb-line="[^"]*"[^>]*href="\/products\//g) ?? []).length
+  if (landingLeaks === 0) ok(`${path} PRODUCTS dropdown targets filtered lists, not landing pages`)
+  else fail(`${path} PRODUCTS dropdown targets filtered lists`, `${landingLeaks} link(s) point at /products/*`)
+
   const promos = (html.match(/data-shop-promo=/g) ?? []).length
   if (promos >= 1) ok(`${path} carries ${promos} in-feed promo banner(s)`)
   else fail(`${path} carries in-feed promo banners`, 'none found')

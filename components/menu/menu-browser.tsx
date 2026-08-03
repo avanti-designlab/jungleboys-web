@@ -204,18 +204,25 @@ export function ProductCard({
 // grid on the site (check-commerce caught the deals page shipping zero PDP
 // links, the exact PDP-buy-box mistake again). The grid stays in server HTML;
 // only the filter nudge is client-side.
-function CategoryFromQuery({
+function FiltersFromQuery({
   categories,
   onCategory,
+  onLine,
 }: {
   categories: ProductCategory[]
   onCategory: (c: ProductCategory) => void
+  onLine: (l: string) => void
 }) {
   const searchParams = useSearchParams()
   useEffect(() => {
     const c = searchParams.get('category')
     if (c && (categories as string[]).includes(c)) onCategory(c as ProductCategory)
-  }, [searchParams, categories, onCategory])
+    // ?line= filters by SUBCATEGORY (the JB lines in the header's PRODUCTS
+    // dropdown). Deliberately NOT validated against the catalogue: a drifted
+    // slug must surface as a loudly-empty list, not silently unfilter.
+    const l = searchParams.get('line')
+    if (l) onLine(l)
+  }, [searchParams, categories, onCategory, onLine])
   return null
 }
 
@@ -228,6 +235,7 @@ export default function MenuBrowser({
 }) {
   const [category, setCategory] = useState<ProductCategory | 'all'>('all')
   const [strain, setStrain] = useState<StrainType | 'all'>('all')
+  const [line, setLine] = useState<string | 'all'>('all')
 
   const categories = useMemo(
     () => [...new Set(products.map((p) => p.category))].sort(),
@@ -240,9 +248,10 @@ export default function MenuBrowser({
       products.filter(
         (p) =>
           (category === 'all' || p.category === category) &&
-          (strain === 'all' || p.strainType === strain)
+          (strain === 'all' || p.strainType === strain) &&
+          (line === 'all' || p.subcategory === line)
       ),
-    [products, category, strain]
+    [products, category, strain, line]
   )
 
   const pill = (active: boolean) =>
@@ -256,7 +265,7 @@ export default function MenuBrowser({
     <section className="px-6 pt-10 md:px-12 lg:px-20">
       <div className="mx-auto max-w-[1400px]">
         <Suspense>
-          <CategoryFromQuery categories={categories} onCategory={setCategory} />
+          <FiltersFromQuery categories={categories} onCategory={setCategory} onLine={setLine} />
         </Suspense>
         <div className="flex flex-wrap gap-2" style={{ fontFamily: 'var(--font-brand)' }}>
           <button type="button" onClick={() => setCategory('all')} className={pill(category === 'all')}>
@@ -268,6 +277,16 @@ export default function MenuBrowser({
             </button>
           ))}
         </div>
+
+        {/* active JB-line filter (set by the header's PRODUCTS dropdown) —
+            one chip, one clear action */}
+        {line !== 'all' && (
+          <div className="mt-3" style={{ fontFamily: 'var(--font-brand)' }}>
+            <button type="button" onClick={() => setLine('all')} className={pill(true)}>
+              {line.replace(/-/g, ' ')} ✕
+            </button>
+          </div>
+        )}
 
         <div className="mt-3 flex flex-wrap gap-2" style={{ fontFamily: 'var(--font-brand)' }}>
           <button type="button" onClick={() => setStrain('all')} className={pill(strain === 'all')}>

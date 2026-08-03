@@ -371,6 +371,16 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   menus, and is linked from the home nav.
 - **THE SHOP PAGES ARE THEIR OWN ECOM SHELL (Avanti, 2026-08-03 — five rulings in one
   session, recorded together).**
+  (a4) **SHOP + PRODUCTS dropdowns in the pill (Avanti, 2026-08-03).** The Menu tab (a
+  self-link on its own page) became a SHOP dropdown of shop categories; a PRODUCTS
+  dropdown lists the nine JB lines by SUBCATEGORY. Both land on FILTERED LISTS
+  (`?category=` / new `?line=` → MenuBrowser subcategory filter) — explicitly NOT the
+  Phase 2 landing pages; /products/* stays the curated collection and check-commerce
+  fails if a dropdown line links there. Panels stay in the DOM hidden (crawlable,
+  checkable, and clip-free of the pill's overflow scroll); "Shop all" keeps the plain
+  menu page reachable. `?line=` is deliberately unvalidated: a drifted subcategory slug
+  must surface as a loudly-empty list, never silently unfilter. Verified in-browser:
+  PRODUCTS → Hash Holes → grid shows exactly the 3 hash holes.
   (a3, final same-day form) **ONE combined pill, no masthead on top.** Avanti's last two
   rulings: the two-row header lost its top bar on scroll — wrong trade — so logo, nav,
   open-status, Rec/Med, store chip, Sign In and cart all live in a SINGLE always-present

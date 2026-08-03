@@ -21,11 +21,36 @@ import { readStore } from '@/lib/store-selection'
 // nav item.
 
 const SURFACES = [
-  { key: 'menu', label: 'Menu', path: '' },
   { key: 'deals', label: 'Deals', path: '/deals' },
   { key: 'drops', label: 'Drops', path: '/drops' },
   { key: 'brands', label: 'Brands', path: '/brands' },
 ] as const
+
+// SHOP dropdown — the shop categories, each landing on the filtered list.
+// The frozen ProductCategory set; a category the store does not stock lands
+// on the grid's honest empty state rather than 404ing.
+const SHOP_CATEGORIES = [
+  'flower', 'pops', 'pre-rolls', 'vape-pens', 'concentrates', 'edibles', 'accessories',
+] as const
+
+// PRODUCTS dropdown — the JB lines by SUBCATEGORY, each landing on the
+// filtered product LIST via ?line= (explicitly NOT the Phase 2 landing pages;
+// those stay the curated /products/* collection). Slugs must match the
+// catalogue's subcategory values — check-commerce counts these options and a
+// drifted slug shows up as a loudly-empty list.
+const JB_LINES = [
+  { label: 'Premium Flower', line: 'premium-flower' },
+  { label: 'Hash Holes', line: 'hash-hole' },
+  { label: '5G Pops', line: '5g-pops' },
+  { label: '10-Pack Pre-Rolls', line: '10-pack' },
+  { label: '1G Pre-Rolls', line: '1g-preroll' },
+  { label: 'Twins 2-Pack', line: 'twins-2pack' },
+  { label: 'Gas Tank · Flavors', line: 'gas-tank-flavors' },
+  { label: 'Gas Tank · Live Resin', line: 'gas-tank-live-resin' },
+  { label: 'Gas Tank · Live Rosin', line: 'gas-tank-live-rosin' },
+] as const
+
+const label = (c: string) => c.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase())
 
 function storeFromPath(pathname: string): string | null {
   const m = pathname.match(/^\/menu\/california\/([^/]+)/)
@@ -115,6 +140,18 @@ export default function CommerceHeader() {
 
   const pickStore = () => window.dispatchEvent(new CustomEvent('jb:pick-store'))
 
+  // SHOP / PRODUCTS disclosure menus. Panels live OUTSIDE the pill's
+  // horizontal-scroll container (it would clip them) and stay in the DOM when
+  // closed (hidden attr) so the options are crawlable and checkable.
+  const [openMenu, setOpenMenu] = useState<null | 'shop' | 'products'>(null)
+  useEffect(() => setOpenMenu(null), [pathname])
+  useEffect(() => {
+    if (!openMenu) return
+    const esc = (e: KeyboardEvent) => e.key === 'Escape' && setOpenMenu(null)
+    document.addEventListener('keydown', esc)
+    return () => document.removeEventListener('keydown', esc)
+  }, [openMenu])
+
   // ONE combined pill (Avanti, 2026-08-03): logo, nav and utilities together,
   // always present — the earlier two-row header condensed by hiding the top
   // bar, and losing it on scroll was the wrong trade. Wider is fine, ruled
@@ -132,6 +169,29 @@ export default function CommerceHeader() {
         </Link>
 
         <span aria-hidden className="mx-1 h-5 w-px shrink-0 bg-white/20" />
+
+        {(['shop', 'products'] as const).map((menu) => {
+          const activeSurface = menu === 'shop' && base ? pathname === base : false
+          return (
+            <button
+              key={menu}
+              type="button"
+              aria-expanded={openMenu === menu}
+              aria-haspopup="menu"
+              onClick={() => setOpenMenu(openMenu === menu ? null : menu)}
+              className={`flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-extrabold uppercase tracking-[0.14em] transition-colors duration-200 ${
+                activeSurface || openMenu === menu
+                  ? 'bg-[var(--color-accent)] text-black'
+                  : 'text-white/75 hover:bg-white/10 hover:text-white'
+              }`}
+            >
+              {menu === 'shop' ? 'Shop' : 'Products'}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={`h-3 w-3 transition-transform duration-200 ${openMenu === menu ? 'rotate-180' : ''}`} aria-hidden>
+                <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          )
+        })}
 
         {SURFACES.map((s) => {
           const href = base ? `${base}${s.path}` : '/shop'
@@ -226,6 +286,68 @@ export default function CommerceHeader() {
             0
           </span>
         </button>
+      </div>
+
+      {/* click-away backdrop for the dropdowns */}
+      {openMenu && (
+        <button
+          type="button"
+          aria-label="Close menu"
+          onClick={() => setOpenMenu(null)}
+          className="pointer-events-auto fixed inset-0 -z-10 cursor-default"
+        />
+      )}
+
+      {/* SHOP panel — categories → filtered list */}
+      <div
+        role="menu"
+        hidden={openMenu !== 'shop'}
+        className="pointer-events-auto absolute left-1/2 top-full w-[min(92vw,26rem)] -translate-x-1/2 rounded-3xl border border-white/10 bg-[#0b0b0b]/95 p-2 text-white shadow-2xl backdrop-blur-md"
+      >
+        <div className="grid grid-cols-2 gap-1">
+          <Link
+            role="menuitem"
+            href={base ?? '/shop'}
+            onClick={() => setOpenMenu(null)}
+            className="col-span-2 rounded-2xl bg-white/[0.06] px-4 py-3 text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--color-accent)] transition-colors hover:bg-white/10"
+          >
+            Shop all →
+          </Link>
+          {SHOP_CATEGORIES.map((c) => (
+            <Link
+              key={c}
+              role="menuitem"
+              data-shop-category={c}
+              href={`${base ?? '/shop'}?category=${c}#browse`}
+              onClick={() => setOpenMenu(null)}
+              className="rounded-2xl px-4 py-3 text-xs font-extrabold uppercase tracking-[0.14em] text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+            >
+              {label(c)}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* PRODUCTS panel — JB lines → filtered list (never the landing pages) */}
+      <div
+        role="menu"
+        hidden={openMenu !== 'products'}
+        className="pointer-events-auto absolute left-1/2 top-full w-[min(92vw,30rem)] -translate-x-1/2 rounded-3xl border border-white/10 bg-[#0b0b0b]/95 p-2 text-white shadow-2xl backdrop-blur-md"
+      >
+        <div className="grid grid-cols-2 gap-1">
+          {JB_LINES.map((l) => (
+            <Link
+              key={l.line}
+              role="menuitem"
+              data-jb-line={l.line}
+              href={`${base ?? '/shop'}?line=${l.line}#browse`}
+              onClick={() => setOpenMenu(null)}
+              className="rounded-2xl px-4 py-3 text-xs font-extrabold uppercase tracking-[0.14em] text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </div>
       </div>
     </header>
   )
