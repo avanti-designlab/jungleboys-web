@@ -154,8 +154,13 @@ async function checkShopEntry() {
   }
 
   const home = await fetchHtml('/')
-  if (home.html.includes('href="/shop"')) ok('home nav carries a link to /shop')
-  else fail('home nav carries a link to /shop', 'Shop still points elsewhere')
+  // Nav pills (2) + SHOP quick card + two hero "Shop now" CTAs = 5 on the code
+  // fallbacks. ≥4 tolerates one CMS-retargeted banner without letting the page
+  // regress to a single stray link. CAVEAT: this asserts the FALLBACKS — the
+  // local build has no Storyblok token, and live CMS blok hrefs override these.
+  const shopLinks = (home.html.match(/href="\/shop"/g) ?? []).length
+  if (shopLinks >= 4) ok(`home carries ${shopLinks} links to /shop (nav + banners)`)
+  else fail('home carries the /shop entry links', `only ${shopLinks} found — Shop buttons point elsewhere`)
 }
 
 // ── 4. Sitemap: store surfaces IN, placeholder-slug PDPs OUT ─────────────────

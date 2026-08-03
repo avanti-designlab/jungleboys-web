@@ -24,7 +24,11 @@ export const HERO_SLIDES = [
     kicker: 'NEW! ALL-IN-ONE',
     title: 'GAS TANK',
     cta: 'Shop now',
-    href: '/products',
+    // "Shop now" means the storefront, not the curated collection — /shop is
+    // the commerce entry as of Phase 3. CMS-editable: a hero_slide blok's href
+    // OVERRIDES this, so per-campaign retargeting (e.g. straight to a line
+    // page) is a Storyblok edit, not a deploy.
+    href: '/shop',
     image: '/hero/gas-tank-beach.webp',
     imageMobile: '/hero/gas-tank-mobile.webp',
     alt: 'Jungle Boys Gas Tank all-in-one vapes standing in the sand at the beach',
@@ -34,7 +38,8 @@ export const HERO_SLIDES = [
     kicker: '20 YEAR ANNIVERSARY EDITION',
     title: 'GOLD MYLARS',
     cta: 'Shop now',
-    href: '/products',
+    href: '/shop', // same rule as the Gas Tank slide above
+
     image: '/hero/gold-mylar-skyline.webp',
     imageMobile: '/hero/gold-mylar-mobile.webp',
     alt: 'Gold Jungle Boys mylar bag towering over the LA skyline at sunset',
@@ -56,7 +61,10 @@ export const HERO_SLIDES = [
 export const QUICK_CARDS = [
   {
     title: 'Shop',
-    href: '/products',
+    // The SHOP card is the storefront door, not the collection — Products has
+    // its own route in the nav. Like the hero slides, a quick_card blok href
+    // in Storyblok overrides this fallback.
+    href: '/shop',
     image: '/home/card-products.webp',
     alt: 'Jungle Boys products collage',
   },
