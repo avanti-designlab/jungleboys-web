@@ -42,8 +42,8 @@ export default function ShopEntryPage() {
         }}
       />
 
-      <header className="border-b border-[var(--color-border)] px-6 pb-10 pt-28 md:px-12 md:pt-32 lg:px-20">
-        <div className="mx-auto max-w-6xl">
+      <header className="border-b border-[var(--color-border)] px-6 pb-10 pt-10 md:px-12 md:pt-14 lg:px-20">
+        <div className="mx-auto max-w-[1400px]">
           <h1 className="font-display text-5xl uppercase leading-[0.9] md:text-7xl">Shop</h1>
           <p
             className="mt-3 max-w-xl text-sm text-[var(--color-muted)]"
@@ -56,7 +56,7 @@ export default function ShopEntryPage() {
       </header>
 
       <section className="px-6 pt-10 md:px-12 lg:px-20" aria-labelledby="shop-ca">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-[1400px]">
           <h2
             id="shop-ca"
             className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)]"

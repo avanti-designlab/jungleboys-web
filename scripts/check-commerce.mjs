@@ -94,6 +94,10 @@ async function checkMerchandising() {
   if (shelves >= 3) ok(`${path} carries ${shelves} category shelves`)
   else fail(`${path} carries category shelves`, `found ${shelves}, want >=3`)
 
+  const tiles = (html.match(/data-category-tile=/g) ?? []).length
+  if (tiles >= 3) ok(`${path} carries ${tiles} shop-by-category tiles`)
+  else fail(`${path} carries shop-by-category tiles`, `found ${tiles}, want >=3`)
+
   const promos = (html.match(/data-shop-promo=/g) ?? []).length
   if (promos >= 1) ok(`${path} carries ${promos} in-feed promo banner(s)`)
   else fail(`${path} carries in-feed promo banners`, 'none found')

@@ -369,6 +369,34 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   remains the curated collection, and the home hero "Shop now" CTAs are CMS-editable banners
   Avanti can retarget in Storyblok. check-commerce asserts /shop exists, lists all four store
   menus, and is linked from the home nav.
+- **THE SHOP PAGES ARE THEIR OWN ECOM SHELL (Avanti, 2026-08-03 — five rulings in one
+  session, recorded together).**
+  (a) **Own sticky header, global nav stands down**: /menu and /shop layouts mount
+  `CommerceHeader` (logo → main site, open/closed in STORE-LOCAL time computed client-side —
+  a prerendered "OPEN" is wrong half the day — Recreational/Medical selector, store chip
+  with Change → `jb:pick-store`, Sign In → /login, cart placeholder, and the
+  Menu/Deals/Drops/Brands nav row). SiteNav returns null on those routes — the guard sits
+  AFTER its hooks (Rules of Hooks). Store resolution: URL first (prerendered, crawlable),
+  saved store second. Strains joins the nav when built — no dead links.
+  (b) **Rec/Medical is UI STATE ONLY** (`jb-menu-type`): the frozen provider interface has no
+  menuType param; wiring it is an additive amendment to make ONLY when verified against a
+  real Dutchie payload. Until then both views serve the same menu.
+  (c) **Cart is a designed disabled placeholder** — checkout is Dutchie's; a dead control
+  that navigates nowhere is worse.
+  (d) **Commerce width is `max-w-[1400px]`** (the site's full-bleed measure; 6xl read
+  "narrow and not matching the site"), and the store masthead is the DARK brand band
+  (two-tier Bebas name inside ONE h1, fact chips with a Directions maps link, framed store
+  illustration, glow field) replacing the "generic white" three-column header.
+  (e) **ALL commerce product cards match the Phase 2 line-page card design** (white card,
+  gold radial stage, bottom-anchored shot with hover lift, outlined strain chip in the
+  fixed ON-WHITE strain palette — the card is white in BOTH themes, so the short-lived
+  `--strain-card-*` themed tokens were removed the same day they were added — Bebas
+  name/price, SHOP pill, accent %-off + red price on deals). FeaturedDrop included.
+  StoreSubnav is DELETED — the header nav row replaced it. "Shop by category" icon tiles sit
+  under the hero trio: **Avanti's custom SVGs land in `public/shop/icons/` and wire up in
+  `CATEGORY_ICONS` (store-shop.tsx); until then a letter-mark placeholder renders — never a
+  broken img, never an invented icon.** check-commerce asserts tiles ≥3 alongside the merch
+  structure.
 - **Store menu = MERCHANDISED STOREFRONT (Avanti's redesign brief, 2026-08-03).** Her ruling on
   the first version ("really bad and generic, just a collection of products"): the shop page is
   an ECOM surface built to drive sales. Shipped: hero banner TRIO (one large left, two stacked

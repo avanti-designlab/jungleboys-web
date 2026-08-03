@@ -7,7 +7,6 @@ import { OWNED_STORES } from '@/lib/owned-stores'
 import MenuBrowser from '@/components/menu/menu-browser'
 import StoreHeader from '@/components/menu/store-header'
 import StoreShop from '@/components/menu/store-shop'
-import StoreSubnav from '@/components/menu/store-subnav'
 
 // CA location menu — the NATIVE variant (Avanti, 2026-07-19): only the four
 // California menus are built on the Dutchie Plus API. Florida stays as embeds in
@@ -69,9 +68,7 @@ export default async function CaliforniaMenuPage({
         }}
       />
 
-      <StoreHeader location={location}>
-        <StoreSubnav storeSlug={slug} active="menu" />
-      </StoreHeader>
+      <StoreHeader location={location} />
 
       {/* The merchandised storefront: hero banner trio, hot items, category
           shelves with promo banners between them. Sells first ... */}
@@ -81,7 +78,7 @@ export default async function CaliforniaMenuPage({
           what they came for. Shelf "View all" links land here with a category
           pre-applied via ?category= (read client-side inside MenuBrowser). */}
       <section id="browse" aria-labelledby="browse-heading" className="mt-16 scroll-mt-24">
-        <div className="mx-auto max-w-6xl px-6 md:px-12 lg:px-20">
+        <div className="mx-auto max-w-[1400px] px-6 md:px-12 lg:px-20">
           <h2 id="browse-heading" className="font-display text-3xl uppercase leading-none md:text-4xl">
             Browse everything
           </h2>

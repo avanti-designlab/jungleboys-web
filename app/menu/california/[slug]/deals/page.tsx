@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { getLocations, getLocationBySlug, getMenu } from '@/lib/dutchie'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 import MenuBrowser from '@/components/menu/menu-browser'
-import StoreSubnav from '@/components/menu/store-subnav'
 
 // Deals for one store. "Deals", not "Specials" — they are the same surface and
 // the site says Deals (Avanti, 2026-07-31). Nested under the store because
@@ -72,8 +71,8 @@ export default async function StoreDealsPage({
         }}
       />
 
-      <header className="border-b border-[var(--color-border)] px-6 pb-10 pt-28 md:px-12 md:pt-32 lg:px-20">
-        <div className="mx-auto max-w-6xl">
+      <header className="border-b border-[var(--color-border)] px-6 pb-10 pt-10 md:px-12 md:pt-14 lg:px-20">
+        <div className="mx-auto max-w-[1400px]">
           <Link
             href={`/menu/california/${slug}`}
             className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)] transition hover:opacity-80"
@@ -89,7 +88,6 @@ export default async function StoreDealsPage({
             Live discounts at {location.name}. Prices update with the menu — what you see here is
             what is on the shelf right now.
           </p>
-          <StoreSubnav storeSlug={slug} active="deals" />
         </div>
       </header>
 

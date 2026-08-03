@@ -5,7 +5,6 @@ import type { Product } from '@/lib/dutchie'
 import { getLocations, getLocationBySlug, getMenu } from '@/lib/dutchie'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 import { ProductCard } from '@/components/menu/menu-browser'
-import StoreSubnav from '@/components/menu/store-subnav'
 
 // Brands at one store — EVERY brand on the shelf, not JB only. That is the
 // recorded decision (Avanti, 2026-07-31): the CA stores stock third-party
@@ -79,8 +78,8 @@ export default async function StoreBrandsPage({
         }}
       />
 
-      <header className="border-b border-[var(--color-border)] px-6 pb-10 pt-28 md:px-12 md:pt-32 lg:px-20">
-        <div className="mx-auto max-w-6xl">
+      <header className="border-b border-[var(--color-border)] px-6 pb-10 pt-10 md:px-12 md:pt-14 lg:px-20">
+        <div className="mx-auto max-w-[1400px]">
           <Link
             href={`/menu/california/${slug}`}
             className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)] transition hover:opacity-80"
@@ -96,7 +95,6 @@ export default async function StoreBrandsPage({
             Every brand on the shelf at {location.name} — the house catalogue and the third-party
             brands we stock, straight from the live menu.
           </p>
-          <StoreSubnav storeSlug={slug} active="brands" />
         </div>
       </header>
 
@@ -106,7 +104,7 @@ export default async function StoreBrandsPage({
         className="px-6 pt-8 md:px-12 lg:px-20"
         style={{ fontFamily: 'var(--font-brand)' }}
       >
-        <div className="mx-auto flex max-w-6xl flex-wrap gap-2">
+        <div className="mx-auto flex max-w-[1400px] flex-wrap gap-2">
           {brands.map(([brand, list]) => (
             <a
               key={brand}
@@ -127,7 +125,7 @@ export default async function StoreBrandsPage({
           data-brand={brand}
           className="scroll-mt-28 px-6 pt-12 md:px-12 lg:px-20"
         >
-          <div className="mx-auto max-w-6xl">
+          <div className="mx-auto max-w-[1400px]">
             <div className="flex items-baseline gap-3">
               <h2 className="font-display text-3xl uppercase leading-none md:text-4xl">{brand}</h2>
               <span

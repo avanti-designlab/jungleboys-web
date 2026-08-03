@@ -1,5 +1,13 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import type { Location } from '@/lib/dutchie'
+
+// Store masthead — a BRAND surface, dark in both themes like the footer and
+// menu overlay (recorded design-system rule), redesigned per Avanti
+// (2026-08-03): the old three-grey-columns header read "a lot of white and
+// very generic". Now: yellow glow accents over brand black, the store name in
+// the two-tier Bebas treatment, the facts as tappable chips (directions /
+// hours / phone), and the store's illustration framed on the right.
 
 const DAY_LABEL: Record<string, string> = {
   mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun',
@@ -25,6 +33,17 @@ function summarise(hours: Location['hours']): { days: string; time: string }[] {
   return out
 }
 
+const CHIP =
+  'inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2 text-xs font-bold text-white'
+
+function ChipIcon({ d }: { d: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="2" className="h-3.5 w-3.5 shrink-0" aria-hidden>
+      <path d={d} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 export default function StoreHeader({
   location,
   children,
@@ -33,64 +52,102 @@ export default function StoreHeader({
   children?: React.ReactNode
 }) {
   const hours = summarise(location.hours)
+  // Two-tier name: "JUNGLE BOYS" rides small in yellow, the store rides huge.
+  // Both stay inside the ONE h1 so the heading still reads "Jungle Boys
+  // Downtown Los Angeles" to crawlers and screen readers.
+  const place = location.name.replace(/^Jungle Boys\s+/i, '')
+  const directions = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+    `Jungle Boys ${place}, ${location.address}, ${location.city}, ${location.state} ${location.zip}`
+  )}`
 
   return (
-    <header className="border-b border-[var(--color-border)] px-6 pb-10 pt-28 md:px-12 md:pt-32 lg:px-20">
-      <div className="mx-auto max-w-6xl">
-        <Link
-          href="/locations"
-          className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)] transition hover:opacity-80"
-          style={{ fontFamily: 'var(--font-brand)' }}
-        >
-          ← All locations
-        </Link>
-
-        <h1 className="font-display mt-4 text-5xl uppercase leading-[0.9] md:text-7xl">
-          {location.name}
-        </h1>
-
+    <header className="relative overflow-hidden bg-[#0b0b0b] px-6 pb-12 pt-10 text-white md:px-12 md:pt-14 lg:px-20">
+      {/* glow field — pure decoration, clipped by the header */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
         <div
-          className="mt-6 grid gap-x-10 gap-y-4 text-sm sm:grid-cols-2 lg:grid-cols-3"
-          style={{ fontFamily: 'var(--font-brand)' }}
-        >
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]">Address</p>
-            <p className="mt-1 leading-snug">
-              {location.address}
-              <br />
-              {location.city}, {location.state} {location.zip}
-            </p>
-          </div>
+          className="absolute -right-48 -top-56 h-[34rem] w-[34rem] rounded-full opacity-[0.16] blur-3xl"
+          style={{ background: 'var(--color-accent)' }}
+        />
+        <div
+          className="absolute -bottom-64 -left-40 h-[28rem] w-[28rem] rounded-full opacity-[0.07] blur-3xl"
+          style={{ background: 'var(--color-accent)' }}
+        />
+        {/* oversized watermark, same device as the contact page letters */}
+        <span className="font-display absolute -bottom-10 right-0 select-none text-[16rem] uppercase leading-none text-white/[0.03]">
+          {location.state === 'CA' ? 'CALI' : 'FLA'}
+        </span>
+      </div>
 
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]">Hours</p>
-            <ul className="mt-1 space-y-0.5 leading-snug">
-              {hours.map((h) => (
-                <li key={h.days}>
-                  <span className="text-[var(--color-muted)]">{h.days}</span> {h.time}
-                </li>
-              ))}
-            </ul>
-          </div>
+      <div className="relative mx-auto grid max-w-[1400px] items-end gap-10 lg:grid-cols-[minmax(0,1fr)_auto]">
+        <div className="min-w-0">
+          <Link
+            href="/locations"
+            className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)] transition hover:opacity-80"
+            style={{ fontFamily: 'var(--font-brand)' }}
+          >
+            ← All locations
+          </Link>
 
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]">Contact</p>
-            <p className="mt-1">
-              <a className="underline-offset-4 hover:underline" href={`tel:${location.phone.replace(/[^\d+]/g, '')}`}>
-                {location.phone}
-              </a>
-            </p>
-            {/* Rendered ONLY when a real number exists. The placeholder provider
-                leaves this empty on purpose — a plausible-looking licence number
-                on a cannabis site is fabricated regulatory data, and an empty
-                field is the honest state until Dutchie supplies the real one. */}
+          <h1 className="font-display mt-5 uppercase">
+            <span className="block text-2xl leading-none text-[var(--color-accent)] md:text-3xl">
+              Jungle Boys
+            </span>
+            <span className="mt-1 block text-6xl leading-[0.85] md:text-8xl">{place}</span>
+          </h1>
+
+          <p
+            className="mt-4 text-[11px] font-bold uppercase tracking-[0.24em] text-white/60"
+            style={{ fontFamily: 'var(--font-brand)' }}
+          >
+            {location.city}, California · Adult use 21+ · Est. 2006 · Playing with Fire®
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-2.5" style={{ fontFamily: 'var(--font-brand)' }}>
+            <a
+              href={directions}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`${CHIP} transition hover:border-[var(--color-accent)]`}
+            >
+              <ChipIcon d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11ZM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+              {location.address} · Directions
+            </a>
+            {hours.map((h) => (
+              <span key={h.days} className={CHIP}>
+                <ChipIcon d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM12 7v5l3 2" />
+                <span>
+                  <span className="text-white/60">{h.days}</span> {h.time}
+                </span>
+              </span>
+            ))}
+            <a href={`tel:${location.phone.replace(/[^\d+]/g, '')}`} className={`${CHIP} transition hover:border-[var(--color-accent)]`}>
+              <ChipIcon d="M6 3h4l2 5-2.5 1.5a12 12 0 0 0 5 5L16 12l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 4 5a2 2 0 0 1 2-2Z" />
+              {location.phone}
+            </a>
+            {/* Rendered ONLY when a real number exists — the placeholder
+                provider leaves it empty on purpose; a plausible licence number
+                on a cannabis site is fabricated regulatory data. */}
             {location.licenseNumber && (
-              <p className="mt-1 text-xs text-[var(--color-muted)]">Lic. {location.licenseNumber}</p>
+              <span className={CHIP}>
+                <span className="text-white/60">Lic.</span> {location.licenseNumber}
+              </span>
             )}
           </div>
+
+          {children}
         </div>
 
-        {children}
+        {/* the store itself, framed. Line art ships on the white media well —
+            same treatment as the product photography. */}
+        <div className="relative hidden h-64 w-96 shrink-0 overflow-hidden rounded-3xl border border-white/10 bg-[var(--color-media-well)] lg:block">
+          <Image
+            src={`/locations/stores/${location.slug}.webp`}
+            alt={`${location.name} storefront`}
+            fill
+            sizes="384px"
+            className="object-cover"
+          />
+        </div>
       </div>
     </header>
   )

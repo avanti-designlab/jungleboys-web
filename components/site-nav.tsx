@@ -52,6 +52,12 @@ export default function SiteNav() {
   const pathname = usePathname()
   const onDarkPage = DARK_PAGES.some((p) => pathname?.startsWith(p))
 
+  // The shop pages are their own ecom shell with their own sticky header
+  // (Avanti, 2026-08-03) — the global nav stands down there entirely. The
+  // actual return-null lives AFTER the hooks below (Rules of Hooks: an early
+  // return here would change the hook count between routes).
+  const onCommerce = /^\/(menu|shop)(\/|$)/.test(pathname ?? '')
+
   // sample what's painted behind the header and flip the header color to match
   useEffect(() => {
     let raf = 0
@@ -158,6 +164,9 @@ export default function SiteNav() {
 
   // the bar's left cluster is white over any dark backdrop OR the open menu
   const barDark = open || headerDark
+
+  // after every hook: the ecom shell owns the chrome on commerce routes
+  if (onCommerce) return null
 
   return (
     <>

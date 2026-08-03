@@ -91,7 +91,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         }}
       />
 
-      <div className="mx-auto grid max-w-6xl gap-10 px-6 pt-28 md:grid-cols-2 md:px-12 md:pt-32 lg:px-20">
+      <div className="mx-auto grid max-w-6xl gap-10 px-6 pt-10 md:grid-cols-2 md:px-12 md:pt-14 lg:px-20">
         <div className="relative aspect-square overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-media-well)]">
           {shot && (
             <Image

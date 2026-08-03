@@ -112,7 +112,7 @@ function Shelf({ products, storeSlug, hot = false }: { products: Product[]; stor
   return (
     <div className="-mx-1 mt-5 flex snap-x gap-4 overflow-x-auto px-1 pb-2">
       {products.map((p) => (
-        <div key={p.id} className="w-56 shrink-0 snap-start md:w-64">
+        <div key={p.id} className="w-72 shrink-0 snap-start md:w-80">
           <ProductCard product={p} storeSlug={storeSlug} hot={hot} />
         </div>
       ))}
@@ -123,6 +123,43 @@ function Shelf({ products, storeSlug, hot = false }: { products: Product[]; stor
 const CATEGORY_ORDER: ProductCategory[] = [
   'flower', 'pops', 'pre-rolls', 'vape-pens', 'concentrates', 'edibles', 'accessories',
 ]
+
+// Avanti's custom category icons (2026-08-03) drop into public/shop/icons/ —
+// set each entry to its file when it lands, e.g. '/shop/icons/flower.svg'.
+// Until then the tile renders the designed letter-mark placeholder; a null
+// here must NEVER render a broken <img> or a stand-in icon we invented.
+const CATEGORY_ICONS: Partial<Record<ProductCategory, string>> = {
+  // flower: '/shop/icons/flower.svg',
+}
+
+function CategoryTile({ category, count }: { category: ProductCategory; count: number }) {
+  const icon = CATEGORY_ICONS[category]
+  return (
+    <Link
+      href={`?category=${category}#browse`}
+      data-category-tile={category}
+      className="group flex min-w-36 flex-1 flex-col items-center gap-3 rounded-3xl bg-white px-4 pb-6 pt-5 text-[var(--color-ink)] shadow-[0_10px_40px_rgba(0,0,0,0.08)] transition-transform duration-300 hover:-translate-y-1"
+    >
+      <span className="text-sm font-extrabold uppercase tracking-[0.14em]" style={{ fontFamily: 'var(--font-brand)' }}>
+        {categoryLabel(category)}
+      </span>
+      {icon ? (
+        // eslint-disable-next-line @next/next/no-img-element -- brand SVG icon
+        <img src={icon} alt="" className="h-14 w-14 object-contain transition-transform duration-300 group-hover:scale-110" />
+      ) : (
+        <span
+          aria-hidden
+          className="font-display flex h-14 w-14 items-center justify-center rounded-full border-2 border-[var(--color-ink)]/15 text-2xl leading-none transition-colors duration-300 group-hover:border-[var(--color-accent)]"
+        >
+          {categoryLabel(category).slice(0, 1)}
+        </span>
+      )}
+      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)]/50" style={{ fontFamily: 'var(--font-brand)' }}>
+        {count} products
+      </span>
+    </Link>
+  )
+}
 
 export default function StoreShop({
   menu,
@@ -144,7 +181,7 @@ export default function StoreShop({
 
   return (
     <div className="px-6 md:px-12 lg:px-20">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-[1400px]">
       {/* ── hero banner trio: one large left, two stacked right ── */}
       <section aria-label="Featured" className="mt-8 grid gap-5 lg:grid-cols-3 lg:grid-rows-2">
         <BannerTile
@@ -156,6 +193,22 @@ export default function StoreShop({
         />
         <BannerTile banner={banners.hero[1]} slot="stack-top" storeSlug={storeSlug} className="aspect-[16/8]" />
         <BannerTile banner={banners.hero[2]} slot="stack-bottom" storeSlug={storeSlug} className="aspect-[16/8]" />
+      </section>
+
+      {/* ── shop by category — custom icon tiles (Avanti's SVGs slot in) ── */}
+      <section aria-labelledby="shop-by-category" className="mt-12">
+        <h2
+          id="shop-by-category"
+          className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)]"
+          style={{ fontFamily: 'var(--font-brand)' }}
+        >
+          Shop by category
+        </h2>
+        <div className="mt-4 flex snap-x gap-4 overflow-x-auto pb-2">
+          {shelves.map((s) => (
+            <CategoryTile key={s.category} category={s.category} count={s.products.length} />
+          ))}
+        </div>
       </section>
 
       {/* ── HOT ITEMS — the red push shelf ── */}

@@ -42,13 +42,6 @@
   /* 7.74:1 */
   --strain-hybrid-on-dark: #43d16f;
   /* 9.11:1 */
-  /* THEMED strain labels for the commerce cards: the card content sits on
-     --color-surface, which is white in light and #111 in dark, so neither
-     fixed set can pass AA in both themes. These flip with the theme —
-     on-white values here, on-dark values in the [data-theme='dark'] block. */
-  --strain-card-indica: var(--strain-indica);
-  --strain-card-sativa: var(--strain-sativa);
-  --strain-card-hybrid: var(--strain-hybrid);
   /* color — LIGHT theme is the site default (Avanti 2026-07-19) */
   --color-background: #f7f7f7;
   --color-surface: #ffffff;
@@ -86,9 +79,6 @@
   --color-foreground-soft: #f5f5f5;
   --color-muted: #9a9aa0;
   --color-border: #231f20;
-  --strain-card-indica: var(--strain-indica-on-dark);
-  --strain-card-sativa: var(--strain-sativa-on-dark);
-  --strain-card-hybrid: var(--strain-hybrid-on-dark);
   /* same in dark on purpose — see the media-well note in :root */
   --color-media-well: #ffffff;
 }
