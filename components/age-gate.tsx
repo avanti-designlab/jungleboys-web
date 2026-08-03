@@ -97,7 +97,12 @@ export default function AgeGate() {
       <div
         ref={panelRef}
         tabIndex={-1}
-        className="flex w-full max-w-2xl flex-col items-center gap-8 px-6 text-center md:max-w-4xl"
+        // outline-none: the panel takes initial focus as a script-focus target,
+        // and without this the BROWSER'S default blue ring draws around the
+        // whole gate (the custom focus rule excludes tabindex=-1, so the UA
+        // default applies). Keyboard users are unaffected — Tab moves focus to
+        // the buttons, which keep the real ring.
+        className="flex w-full max-w-2xl flex-col items-center gap-8 px-6 text-center outline-none md:max-w-4xl"
       >
         <div className="flex flex-col items-center gap-5">
           <NeonLogo className="gate-in h-24 w-auto md:h-28" />

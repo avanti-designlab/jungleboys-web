@@ -115,7 +115,9 @@ export default function StorePicker({ open, onClose }: { open: boolean; onClose:
       <div
         ref={panelRef}
         tabIndex={-1}
-        className="flex max-h-[85vh] w-full max-w-xl flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0b0b0b]"
+        // outline-none for the same reason as the age-gate panel: script-focus
+        // target, UA default ring otherwise draws a box around the dialog
+        className="flex max-h-[85vh] w-full max-w-xl flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0b0b0b] outline-none"
       >
         <div className="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-5">
           <h2
