@@ -157,6 +157,31 @@ async function checkCart() {
   else fail('PDP serves the Add to bag control server-side', 'not in SSR markup')
 }
 
+// ── 3e. Avanti's brand icons are wired, not the drawn placeholders ───────────
+// The custom cart SVG replaces the drawn bag (recorded 2026-08-03), and the
+// supplied category SVGs replace the letter-mark tiles for every category she
+// delivered. Only the delivered ones are asserted — unmapped categories keep
+// the letter-mark by design (never an invented icon).
+async function checkBrandIcons() {
+  const menu = await fetchHtml(`/menu/california/${MENU_STORE}`)
+  if (menu.html.includes('src="/shop/icons/cart.svg"')) {
+    ok('header renders the custom cart icon (/shop/icons/cart.svg)')
+  } else {
+    fail('header renders the custom cart icon', 'CART_ICON_SRC not wired in SSR HTML')
+  }
+
+  // flower is deliberately a WebP — the supplied SVG is 687KB gzipped traced
+  // photo art; the raster carries the same art at 18KB.
+  const tiles = { flower: '/shop/icons/flower.webp', pops: '/shop/icons/pops.svg', 'pre-rolls': '/shop/icons/pre-rolls.svg' }
+  for (const [cat, src] of Object.entries(tiles)) {
+    if (menu.html.includes(`src="${src}"`)) {
+      ok(`category tile ${cat} renders its supplied icon`)
+    } else {
+      fail(`category tile ${cat} renders its supplied icon`, `${src} not in SSR HTML`)
+    }
+  }
+}
+
 async function checkAmendedFields() {
   // Zangria is the designated full-panel placeholder product — it is also the
   // strain the jungleboysflorida.com reference card showed, so its genetics/
@@ -256,6 +281,7 @@ try {
   await checkDrops()
   await checkShopEntry()
   await checkCart()
+  await checkBrandIcons()
   await checkAmendedFields()
   await checkSitemap()
 } catch (e) {

@@ -5,6 +5,7 @@ import type { ShopBanner, ShopBanners } from '@/lib/shop-banners'
 import { bannerHref } from '@/lib/shop-banners'
 import { ProductCard } from './menu-browser'
 import { categoryLabel } from './labels'
+import { CATEGORY_ICONS } from '@/lib/category-icons'
 
 // The merchandised storefront (Avanti's redesign brief, 2026-08-03): the store
 // menu is an ECOM page built to sell, not a bare product grid. Structure:
@@ -128,9 +129,8 @@ const CATEGORY_ORDER: ProductCategory[] = [
 // set each entry to its file when it lands, e.g. '/shop/icons/flower.svg'.
 // Until then the tile renders the designed letter-mark placeholder; a null
 // here must NEVER render a broken <img> or a stand-in icon we invented.
-const CATEGORY_ICONS: Partial<Record<ProductCategory, string>> = {
-  // flower: '/shop/icons/flower.svg',
-}
+// Icon map lives in lib/category-icons — shared with the header's SHOP
+// dropdown so the two cannot drift.
 
 function CategoryTile({ category, count }: { category: ProductCategory; count: number }) {
   const icon = CATEGORY_ICONS[category]
