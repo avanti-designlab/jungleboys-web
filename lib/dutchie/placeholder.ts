@@ -1,3 +1,4 @@
+import { CA_OWNED } from '@/lib/owned-stores'
 import type { Location, Menu, Product, ProductCategory, ProductFilter } from './types'
 
 // Placeholder data provider — serves design/dev data through the FROZEN interface
@@ -5,31 +6,38 @@ import type { Location, Menu, Product, ProductCategory, ProductFilter } from './
 // Phase 3 replaces the provider wired in lib/dutchie/index.ts with the GraphQL
 // implementation. Templates never change.
 
-const locations: Location[] = [
-  {
-    id: 'loc-dtla',
-    slug: 'downtown-los-angeles',
-    name: 'Jungle Boys DTLA',
-    state: 'CA',
-    address: '1370 S Flower St',
-    city: 'Los Angeles',
-    zip: '90015',
-    phone: '(213) 000-0000',
-    licenseNumber: 'C10-0000000-LIC',
-    retailerId: 'placeholder-dtla',
-    lat: 34.0326,
-    lng: -118.2687,
-    hours: [
-      { day: 'mon', opens: '09:00', closes: '21:00' },
-      { day: 'tue', opens: '09:00', closes: '21:00' },
-      { day: 'wed', opens: '09:00', closes: '21:00' },
-      { day: 'thu', opens: '09:00', closes: '21:00' },
-      { day: 'fri', opens: '09:00', closes: '22:00' },
-      { day: 'sat', opens: '09:00', closes: '22:00' },
-      { day: 'sun', opens: '10:00', closes: '20:00' },
-    ],
-  },
-]
+// Locations are DERIVED from lib/owned-stores.ts, not re-typed here.
+//
+// Store facts (address, phone, hours, coordinates) already have one source, and
+// a second copy would drift from it — that is the failure this codebase has paid
+// for repeatedly. Phase 3 replaces this provider with the GraphQL one, at which
+// point Dutchie becomes the source for retailerId and licenseNumber; the street
+// facts stay ours.
+//
+// licenseNumber is deliberately EMPTY. It is regulatory data and we do not have
+// the real numbers in the repo — inventing one on a cannabis site is the same
+// mistake as a fabricated uploadDate, and templates must render nothing rather
+// than something plausible. Fill from Dutchie (or Avanti) before cutover.
+const DAY_ORDER = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const
+
+const locations: Location[] = CA_OWNED.filter((s) => !s.external).map((s) => ({
+  id: `loc-${s.slug}`,
+  slug: s.slug,
+  name: s.name.startsWith('Jungle Boys') ? s.name : `Jungle Boys ${s.name}`,
+  state: 'CA' as const,
+  address: s.street,
+  city: s.city,
+  zip: s.zip,
+  phone: s.phone,
+  licenseNumber: '',
+  retailerId: `placeholder-${s.slug}`,
+  lat: s.lat,
+  lng: s.lng,
+  hours: DAY_ORDER.flatMap((day) => {
+    const spec = s.hoursSpec.find((h) => h.days.some((d) => d.toLowerCase().startsWith(day)))
+    return spec ? [{ day, opens: spec.opens, closes: spec.closes }] : []
+  }),
+}))
 
 // Premium-flower lineup — strain names/logos match the Figma flower frame. All
 // prices/THC/terps are PLACEHOLDER values; real data flows from Dutchie (Phase 3).
@@ -388,7 +396,23 @@ export const placeholderProvider = {
     return locations.find((l) => l.slug === slug) ?? null
   },
   async getMenu(retailerId: string): Promise<Menu> {
-    return { retailerId, products: applyFilter(products, { retailerId }), categories }
+    // Every CA store serves the shared catalogue. Real per-store inventory comes
+    // from Dutchie in Phase 3; what matters for design is that the template meets
+    // BOTH in-stock and sold-out variants, so stock varies deterministically by
+    // retailer rather than every store looking identically well-stocked.
+    const seed = [...retailerId].reduce((n, c) => n + c.charCodeAt(0), 0)
+    return {
+      retailerId,
+      products: products.map((p, i) => ({
+        ...p,
+        retailerId,
+        variants: p.variants.map((v, j) => ({
+          ...v,
+          quantityAvailable: (seed + i * 7 + j * 3) % 11 === 0 ? 0 : ((seed + i + j) % 24) + 1,
+        })),
+      })),
+      categories,
+    }
   },
   async getProducts(filter?: ProductFilter): Promise<Product[]> {
     return applyFilter(products, filter)
