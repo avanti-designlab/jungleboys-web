@@ -3,6 +3,7 @@ import { SITE_ORIGIN } from "@/lib/storyblok/seo";
 import { Bebas_Neue, DM_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import AgeGate from "@/components/age-gate";
+import StorePickerMount from "@/components/store-picker-mount";
 import LoadingScreen from "@/components/loading-screen";
 import RevealGate from "@/components/reveal-gate";
 import NewsletterPopupMount from "@/components/newsletter-popup-mount";
@@ -93,6 +94,7 @@ export default function RootLayout({
         <ScanProvider>
           <LoadingScreen />
           <AgeGate />
+          <StorePickerMount />
           <RevealGate />
           <CookieConsent />
           <SiteNav />

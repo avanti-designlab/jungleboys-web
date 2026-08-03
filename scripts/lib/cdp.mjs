@@ -18,6 +18,9 @@ export async function launch({
   // measurable. 'age-gate' deliberately leaves the gate UP and does not click
   // through it, because otherwise that surface can never be measured at all —
   // which is how its 21+ line sat at 4.31:1 in the DEFAULT theme unnoticed.
+  // 'store-picker' does the same for the location picker: seeding jb-store on
+  // every new document makes that surface permanently invisible to the harness,
+  // which is precisely the trap the age gate already taught us.
   overlays = 'closed',
 } = {}) {
   const args = [
@@ -78,6 +81,8 @@ export async function launch({
       : `localStorage.setItem('jb-age-gate', JSON.stringify({verifiedAt: Date.now()}));`}
     localStorage.setItem('jb-theme', ${JSON.stringify(theme)});
     sessionStorage.setItem('jb-intro-done','1');
+    ${overlays === 'store-picker' ? `localStorage.removeItem('jb-store');`
+      : `localStorage.setItem('jb-store', JSON.stringify({slug:'downtown-los-angeles',state:'CA',chosenAt: Date.now()}));`}
   }catch(e){}`
   let seeded = false
 

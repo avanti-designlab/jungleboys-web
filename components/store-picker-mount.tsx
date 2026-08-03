@@ -1,0 +1,53 @@
+'use client'
+
+import { useCallback, useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import StorePicker from './store-picker'
+import { isAgeVerified } from './age-gate'
+import { readStore } from '@/lib/store-selection'
+
+/** Routes that cannot render honestly without knowing the store. */
+const COMMERCE = [/^\/menu(\/|$)/, /^\/shop(\/|$)/, /^\/drops(\/|$)/, /^\/specials(\/|$)/, /^\/strains(\/|$)/, /^\/brands(\/|$)/]
+
+// Opens the location picker when a commerce surface is reached without a store
+// chosen. Deliberately NOT on every first visit to the site: the age gate is
+// already an entry modal, and stacking a second one in front of the homepage
+// makes the brand's first impression two dialogs. A visitor browsing /products
+// or /rewards has no need to pick a store yet.
+//
+// Sequenced BEHIND the age gate (z-1000 vs this at z-1100 — the picker would
+// otherwise render on top of an unanswered 21+ gate, which is a compliance
+// surface). It waits for verification rather than racing it.
+export default function StorePickerMount() {
+  const pathname = usePathname()
+  const [open, setOpen] = useState(false)
+
+  const close = useCallback(() => setOpen(false), [])
+
+  useEffect(() => {
+    if (!pathname || !COMMERCE.some((re) => re.test(pathname))) return
+    if (readStore()) return
+
+    // Poll briefly for age verification rather than assuming it: the gate
+    // resolves asynchronously and a visitor may answer it seconds later.
+    let cancelled = false
+    const tick = () => {
+      if (cancelled) return
+      if (!isAgeVerified()) { window.setTimeout(tick, 400); return }
+      if (!readStore()) setOpen(true)
+    }
+    tick()
+    return () => { cancelled = true }
+  }, [pathname])
+
+  // Any control anywhere can request the picker — the header's store chip, a
+  // "change location" link, an empty menu state. One event, no context provider
+  // threaded through the tree.
+  useEffect(() => {
+    const onRequest = () => setOpen(true)
+    window.addEventListener('jb:pick-store', onRequest)
+    return () => window.removeEventListener('jb:pick-store', onRequest)
+  }, [])
+
+  return <StorePicker open={open} onClose={close} />
+}
