@@ -47,7 +47,13 @@ export default function AgeGate() {
   useEffect(() => {
     if (!open) return
     const panel = panelRef.current
-    panel?.querySelector<HTMLElement>('button')?.focus()
+    // Focus the PANEL, not the YES button. Script-focusing a button on open
+    // counts as :focus-visible, so the global two-tone focus ring drew a
+    // second (yellow) outline around YES for every visitor — Avanti flagged
+    // the double outline (2026-08-03). Dialog pattern: container takes focus
+    // (tabIndex -1, excluded from the ring rule); first Tab lands on YES and
+    // keyboard users still get their ring.
+    panel?.focus()
     const trap = (e: KeyboardEvent) => {
       if (e.key !== 'Tab' || !panel) return
       const items = panel.querySelectorAll<HTMLElement>('button, a')
@@ -90,6 +96,7 @@ export default function AgeGate() {
     >
       <div
         ref={panelRef}
+        tabIndex={-1}
         className="flex w-full max-w-2xl flex-col items-center gap-8 px-6 text-center md:max-w-4xl"
       >
         <div className="flex flex-col items-center gap-5">

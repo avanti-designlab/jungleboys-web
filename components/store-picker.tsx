@@ -25,7 +25,10 @@ export default function StorePicker({ open, onClose }: { open: boolean; onClose:
   useEffect(() => {
     if (!open) return
     const previouslyFocused = document.activeElement as HTMLElement | null
-    closeRef.current?.focus()
+    // Panel takes initial focus, same as the age gate: script-focusing the X
+    // button drew the global focus ring around it on every open. tabIndex -1
+    // is excluded from the ring rule; first Tab lands on the close button.
+    panelRef.current?.focus()
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { onClose(); return }
@@ -111,6 +114,7 @@ export default function StorePicker({ open, onClose }: { open: boolean; onClose:
     >
       <div
         ref={panelRef}
+        tabIndex={-1}
         className="flex max-h-[85vh] w-full max-w-xl flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0b0b0b]"
       >
         <div className="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-5">

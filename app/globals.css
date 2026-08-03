@@ -278,12 +278,16 @@ body {
 /* keyboard focus — visible ring on all interactive elements (unlayered, so it
    wins over Tailwind's outline-none on the form inputs). Pointer clicks are
    unaffected (:focus-visible only). */
+/* tabindex="-1" is excluded: those are script-focus targets (dialog panels
+   taking initial focus), unreachable by Tab — a ring there answers a question
+   no keyboard user asked, and it drew a second outline around the age gate's
+   YES box for every visitor when the button took the initial focus. */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible,
-[tabindex]:focus-visible {
+[tabindex]:not([tabindex='-1']):focus-visible {
   /* TWO-TONE, and it has to be. A single yellow ring is 1.48:1 on white — it
      fails WCAG 1.4.11 on the default theme, which is most of the site. But
      yellow is also the only ring that reads on the dark brand surfaces (menu
