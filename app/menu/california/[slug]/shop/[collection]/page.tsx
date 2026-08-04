@@ -114,10 +114,7 @@ export default async function CollectionPage({
                 Live from the {location.name} menu
               </p>
             </div>
-            {col.icon && (
-              // eslint-disable-next-line @next/next/no-img-element -- brand icon
-              <img src={col.icon} alt="" aria-hidden className="hidden h-32 w-32 object-contain drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)] md:block lg:h-40 lg:w-40" />
-            )}
+            {/* no hero icon — plain headers (Avanti, 2026-08-04) */}
           </div>
         </div>
       </header>
