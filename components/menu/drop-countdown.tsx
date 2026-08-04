@@ -56,9 +56,11 @@ export default function DropCountdown() {
   }, [])
 
   const cell = (value: string, label: string) => (
-    <div className="flex flex-col items-center">
-      <span className="font-display text-5xl leading-none tabular-nums text-black md:text-7xl">{value}</span>
-      <span className="mt-2 text-[10px] font-bold uppercase tracking-[0.24em] text-black/55" style={{ fontFamily: 'var(--font-brand)' }}>
+    <div className="flex flex-col items-center rounded-2xl bg-black/[0.92] py-4 md:py-6">
+      <span className="font-display text-5xl leading-none tabular-nums text-[var(--color-accent)] md:text-7xl">
+        {value}
+      </span>
+      <span className="mt-2 text-[10px] font-bold uppercase tracking-[0.24em] text-white/50" style={{ fontFamily: 'var(--font-brand)' }}>
         {label}
       </span>
     </div>
@@ -67,28 +69,31 @@ export default function DropCountdown() {
   return (
     // outer = the beam track (3px rim the orbiting highlight rides in)
     <div data-drop-clock className="drop-beam relative overflow-hidden rounded-[2rem] p-[3px]">
-      <div className="relative z-10 rounded-[calc(2rem-3px)] bg-[linear-gradient(135deg,#ffe27a_0%,#fecf0e_55%,#eab308_100%)] px-6 py-7 md:px-8 md:py-8">
+      <div className="relative z-10 rounded-[calc(2rem-3px)] bg-[linear-gradient(135deg,#ffe27a_0%,#fecf0e_55%,#eab308_100%)] px-5 py-6 md:px-7 md:py-7">
         {state?.live ? (
-          <div className="flex items-center gap-4">
-            <span aria-hidden className="drop-live-dot h-4 w-4 shrink-0 rounded-full bg-black" />
-            <p className="font-display text-4xl uppercase leading-[0.9] text-black md:text-6xl">
-              Drop day —<br />it&rsquo;s live
+          <div className="flex items-center gap-4 rounded-2xl bg-black/[0.92] px-6 py-7">
+            <span aria-hidden className="drop-live-dot h-4 w-4 shrink-0 rounded-full bg-[var(--color-accent)]" />
+            <p className="font-display text-4xl uppercase leading-[0.9] text-[var(--color-accent)] md:text-5xl">
+              Drop day — it&rsquo;s live
             </p>
           </div>
         ) : (
           <>
-            <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-black/55" style={{ fontFamily: 'var(--font-brand)' }}>
-              Next drop
-            </p>
-            <div className="mt-4 flex items-start gap-5 md:gap-7">
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <p className="text-[12px] font-extrabold uppercase tracking-[0.24em] text-black" style={{ fontFamily: 'var(--font-brand)' }}>
+                Next drop
+              </p>
+              <p className="text-[12px] font-extrabold uppercase tracking-[0.18em] text-black/70" style={{ fontFamily: 'var(--font-brand)' }}>
+                Every Friday{state && !state.live ? ` · ${state.date}` : ''}
+              </p>
+            </div>
+            {/* four segment cells fill the tile edge-to-edge */}
+            <div className="mt-4 grid grid-cols-4 gap-2 md:gap-3">
               {cell(state ? String(state.d) : '—', 'days')}
               {cell(state ? String(state.h).padStart(2, '0') : '—', 'hours')}
               {cell(state ? String(state.m).padStart(2, '0') : '—', 'min')}
               {cell(state ? String(state.s).padStart(2, '0') : '—', 'sec')}
             </div>
-            <p className="mt-5 text-[12px] font-extrabold uppercase tracking-[0.2em] text-black" style={{ fontFamily: 'var(--font-brand)' }}>
-              Every Friday{state && !state.live ? ` · ${state.date}` : ''}
-            </p>
           </>
         )}
       </div>

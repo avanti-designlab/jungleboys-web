@@ -536,6 +536,14 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   **st-petersburg: link ready in the map, but still NO store() entry — Avanti owes the NAP
   facts (the long-standing St. Pete open item); add the entry when they land.** The FL
   embed-shell plan remains the recorded future state; these links are the interim.
+- **DROPS HERO v4 + CARD CTA WRAP (Avanti, 2026-08-04, refinements on v3).** FRESH DROPS on
+  ONE line; the gold clock's counter is now FOUR BLACK SEGMENT CELLS with gold Bebas numerals
+  filling the tile's width ("not just letters and numbers"); the strain tile restructured —
+  badge + designed white/10 chips in one top row (THC value in gold), the shot up to 24rem on
+  a gold glow ring, Genetics/Taste as twin white/[0.07] panels, and Add to cart in the new
+  `tone="gold"` variant (AddToCartButton prop — black pills vanish on dark grounds).
+  ALSO: ProductCard's price/CTA row is now flex-WRAP — on narrow shelf cards the button drops
+  to its own line instead of overflowing the card (her brands-page catch).
 - **DROPS HERO v3 — separate tiles, gold beam clock, CMS strain backdrop (Avanti, 2026-08-04
   latest).** Her notes on v2: separate tiles; counter in a yellow box; strain of the week
   bolder; an image-background option for strain graphics; week-day chips REMOVED (it's Friday

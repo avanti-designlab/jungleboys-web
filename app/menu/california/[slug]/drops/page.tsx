@@ -93,64 +93,69 @@ function StrainOfTheWeek({
       )}
 
       <div className="relative flex flex-1 flex-col">
-        <span className="font-display self-start rounded-full bg-[var(--color-accent)] px-4 py-2 text-[16px] uppercase leading-none tracking-[0.06em] text-black">
-          Strain of the week
-        </span>
+        {/* badge + designed chips in one row */}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="font-display rounded-full bg-[var(--color-accent)] px-4 py-2 text-[16px] uppercase leading-none tracking-[0.06em] text-black">
+            Strain of the week
+          </span>
+          {product.strainType && (
+            <span className="rounded-full border border-white/15 bg-white/10 px-3.5 py-2 text-[11px] font-bold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
+              {STRAIN_LABEL[product.strainType]}
+            </span>
+          )}
+          {thc && (
+            <span className="rounded-full border border-white/15 bg-white/10 px-3.5 py-2 text-[11px] font-bold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
+              THC <span className="text-[var(--color-accent)]">{thc.value}{thc.unit}</span>
+            </span>
+          )}
+        </div>
 
+        {/* the shot, BIG, on a gold glow ring */}
         {shot && (
-          <div className="relative mx-auto mt-6 h-56 w-56 -rotate-2 overflow-hidden rounded-[2rem] bg-white shadow-[0_30px_60px_rgba(0,0,0,0.55)] md:h-72 md:w-72">
-            <Image
-              src={shot.url}
-              alt={shot.alt}
-              fill
-              priority
-              sizes="(max-width: 768px) 60vw, 320px"
-              className="object-contain p-5"
+          <div className="relative mx-auto mt-6">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute left-1/2 top-1/2 h-[130%] w-[130%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(254,207,14,0.28),transparent_72%)]"
             />
+            <div className="relative h-72 w-72 -rotate-2 overflow-hidden rounded-[2.25rem] bg-white shadow-[0_36px_70px_rgba(0,0,0,0.6)] md:h-[24rem] md:w-[24rem]">
+              <Image
+                src={shot.url}
+                alt={shot.alt}
+                fill
+                priority
+                sizes="(max-width: 768px) 75vw, 400px"
+                className="object-contain p-6"
+              />
+            </div>
           </div>
         )}
 
         <h2
-          className="font-display mt-5 text-center uppercase leading-[0.82]"
-          style={{ fontSize: 'min(14vw, 6.5rem)' }}
+          className="font-display mt-6 text-center uppercase leading-[0.82]"
+          style={{ fontSize: 'min(13vw, 6rem)' }}
         >
           <Link href={`/shop/${product.slug}?store=${storeSlug}`} className="hover:text-[var(--color-accent)]">
             {product.name}
           </Link>
         </h2>
 
-        <div className="mt-2 flex flex-wrap justify-center gap-1.5" style={{ fontFamily: 'var(--font-brand)' }}>
-          {product.strainType && (
-            <span className="rounded-full border border-white/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white/85">
-              {STRAIN_LABEL[product.strainType]}
-            </span>
-          )}
-          {thc && (
-            <span className="rounded-full border border-white/30 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white/85">
-              THC {thc.value}{thc.unit}
-            </span>
-          )}
-        </div>
-
-        <dl
-          className="mx-auto mt-5 grid w-full max-w-xl gap-x-8 gap-y-3 text-center sm:grid-cols-2"
-          style={{ fontFamily: 'var(--font-brand)' }}
-        >
+        {/* facts as twin panels, not floating text */}
+        <div className="mx-auto mt-5 grid w-full max-w-2xl gap-2.5 sm:grid-cols-2" style={{ fontFamily: 'var(--font-brand)' }}>
           {profile?.genetics && (
-            <div>
-              <dt className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent)]">Genetics</dt>
-              <dd className="mt-1 text-sm leading-snug text-white/90">{profile.genetics}</dd>
+            <div className="rounded-2xl border border-white/10 bg-white/[0.07] p-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent)]">Genetics</p>
+              <p className="mt-1.5 text-sm leading-snug text-white">{profile.genetics}</p>
             </div>
           )}
           {profile?.taste?.length ? (
-            <div>
-              <dt className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent)]">Taste</dt>
-              <dd className="mt-1 text-sm capitalize leading-snug text-white/90">{profile.taste.join(', ')}</dd>
+            <div className="rounded-2xl border border-white/10 bg-white/[0.07] p-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent)]">Taste</p>
+              <p className="mt-1.5 text-sm capitalize leading-snug text-white">{profile.taste.join(', ')}</p>
             </div>
           ) : null}
-        </dl>
+        </div>
 
-        <div className="mt-auto flex flex-wrap items-center justify-center gap-4 pt-6">
+        <div className="mt-auto flex flex-wrap items-center justify-center gap-5 pt-6">
           {inStock.length === 0 ? (
             <span className="text-sm font-bold uppercase text-white/60" style={{ fontFamily: 'var(--font-brand)' }}>
               Sold out
@@ -158,12 +163,12 @@ function StrainOfTheWeek({
           ) : (
             <>
               <span className="whitespace-nowrap">
-                <span className="font-display text-[2.4rem] leading-none text-white">{money(from)}</span>
+                <span className="font-display text-[2.6rem] leading-none text-white">{money(from)}</span>
                 <span className="ml-1.5 text-xs font-bold uppercase text-white/60" style={{ fontFamily: 'var(--font-brand)' }}>
                   · {best.option}
                 </span>
               </span>
-              <AddToCartButton product={product} variant={best} storeSlug={storeSlug} />
+              <AddToCartButton product={product} variant={best} storeSlug={storeSlug} tone="gold" />
             </>
           )}
         </div>
@@ -233,10 +238,8 @@ export default async function StoreDropsPage({
                 >
                   ← {location.name} menu
                 </Link>
-                <h1 className="font-display mt-3 uppercase leading-[0.85]" style={{ fontSize: 'min(14vw, 7.5rem)' }}>
-                  Fresh
-                  <br />
-                  Drops
+                <h1 className="font-display mt-3 whitespace-nowrap uppercase leading-[0.85]" style={{ fontSize: 'min(9vw, 5.75rem)' }}>
+                  Fresh Drops
                 </h1>
                 <p className="mt-3 max-w-sm text-sm text-white/70" style={{ fontFamily: 'var(--font-brand)' }}>
                   The weekly release at {location.name}. Small batches — gone when they&rsquo;re gone.

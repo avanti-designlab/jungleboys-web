@@ -52,10 +52,13 @@ export function AddToCartButton({
   product,
   variant,
   storeSlug,
+  tone = 'dark',
 }: {
   product: Product
   variant: ProductVariant
   storeSlug: string
+  /** 'gold' for dark grounds where a black pill disappears */
+  tone?: 'dark' | 'gold'
 }) {
   const [added, setAdded] = useState(false)
   const timer = useRef<number | null>(null)
@@ -80,8 +83,12 @@ export function AddToCartButton({
       aria-label={`Add ${product.name} (${variant.option}) to cart`}
       className={`relative z-20 inline-flex shrink-0 items-center rounded-full px-4 py-2 text-[10px] font-extrabold uppercase tracking-widest transition-colors duration-200 ${
         added
-          ? 'bg-[var(--color-accent)] text-black'
-          : 'bg-black text-white hover:bg-[var(--color-accent)] hover:text-black'
+          ? tone === 'gold'
+            ? 'bg-white text-black'
+            : 'bg-[var(--color-accent)] text-black'
+          : tone === 'gold'
+            ? 'bg-[var(--color-accent)] text-black hover:bg-white'
+            : 'bg-black text-white hover:bg-[var(--color-accent)] hover:text-black'
       }`}
       style={{ fontFamily: 'var(--font-brand)' }}
     >
@@ -204,7 +211,9 @@ export function ProductCard({
           </Link>
         </h3>
 
-        <div className="mt-auto flex items-end justify-between gap-3 pt-1">
+        {/* wraps when tight (narrow shelf cards) — the button drops to its own
+            line instead of escaping the card (Avanti, 2026-08-04) */}
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-2 pt-1">
           <p className="leading-none">
             {onSale && (
               <span
