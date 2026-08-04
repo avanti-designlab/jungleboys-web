@@ -516,8 +516,16 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   %-off badge and its member ProductCards. Sale products no special claims land in a synthetic
   "More Markdowns" section per group — nothing discounted hides. check-commerce asserts sections,
   both groups, both doors + a fixture special name in SSR.
-- **COMMERCE HEADER v3 — THREE PIECES (Avanti, 2026-08-04, supersedes the one-combined-pill
-  ruling of 2026-08-03).** Logo on its OWN dark chip outside the pill, left (→ homepage; a
+- **COMMERCE HEADER v4 — ONE PILL AGAIN + bare inverting logo (Avanti, 2026-08-04 FINAL,
+  supersedes v3's three pieces).** "Make it all one again": nav + utilities back in a single
+  pill, keeping v3's gains (SHOP → storefront, CATEGORIES rename, no Locations, 19px type,
+  48px cart). The JB logo sits BARE beside the pill — no chip — and inverts over any ground
+  via mix-blend-difference. **The trap, learned twice now: a sticky container ALWAYS isolates
+  blending (SiteNav's sampler exists for this exact reason), so the logo lives in its own
+  ZERO-HEIGHT sticky sibling layer outside the header element, positioned beside the pill by
+  measuring the pill's left edge (ResizeObserver; hidden until measured).** Verified both
+  ways headless: near-black over the light page, white over the dark drops tile.
+- **COMMERCE HEADER v3 — THREE PIECES (2026-08-04, superseded same day — see v4 above).** Logo on its OWN dark chip outside the pill, left (→ homepage; a
   chip, not filter hacks — the white SVG needs a dark ground in both themes). NAV pill:
   **SHOP** (→ the store's storefront, gold-active there) then **CATEGORIES** (the renamed
   category dropdown) then Products/Deals/Drops/Brands + open-status + Rec-Med — **LOCATIONS

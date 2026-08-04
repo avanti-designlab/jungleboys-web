@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { CA_OWNED } from '@/lib/owned-stores'
@@ -129,6 +129,30 @@ function RowArrow() {
 
 export default function CommerceHeader() {
   const pathname = usePathname() ?? ''
+  // The bare inverting logo lives OUTSIDE the header element: a sticky
+  // container always isolates blending (SiteNav learned this first — its
+  // sampler exists for the same reason), so mix-blend-difference on a child
+  // of the pill's header can never see the page. The logo layer is its own
+  // zero-height sticky sibling, and we measure the pill's left edge to sit
+  // the logo right beside it.
+  const pillRef = useRef<HTMLDivElement>(null)
+  const [logoLeft, setLogoLeft] = useState<number | null>(null)
+  useEffect(() => {
+    const el = pillRef.current
+    if (!el) return
+    const place = () => {
+      const r = el.getBoundingClientRect()
+      setLogoLeft(Math.max(8, r.left - 64 - 14)) // logo width 64 + gap
+    }
+    place()
+    const ro = new ResizeObserver(place)
+    ro.observe(el)
+    window.addEventListener('resize', place)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', place)
+    }
+  }, [])
   const urlStore = storeFromPath(pathname)
 
   // Saved store only fills in when the URL carries none (e.g. on /shop/<pdp>).
@@ -197,31 +221,36 @@ export default function CommerceHeader() {
     return () => document.removeEventListener('keydown', esc)
   }, [openMenu])
 
-  // THREE-PIECE HEADER (Avanti, 2026-08-04, supersedes the one-combined-pill
-  // form): the JB logo stands ALONE on the left (back to the homepage), the
-  // NAV pill carries Shop / Categories / Products / Deals / Drops / Brands
-  // plus open-status and Rec-Med (Locations removed — it left the shopping
-  // flow), and a RIGHT pill holds store chip / Sign in / the bigger cart.
-  // Fewer items = bigger type (19px). Still no height changes on scroll.
+  // ONE PILL again (Avanti, 2026-08-04 final form — "make the sticky header
+  // all one again"): nav + utilities together in a single pill, with the JB
+  // logo BARE beside it — no chip, transparent, mix-blend-difference so the
+  // white mark inverts over whatever scrolls beneath it (the global SiteNav's
+  // established trick). Keeps the v3 gains: SHOP → storefront, CATEGORIES
+  // rename, Locations removed, 19px nav type, 48px cart.
   return (
+    <>
+      {/* logo layer — its own sticky element so the difference blend composites
+          against the PAGE, not the header's isolated group. Hidden until the
+          pill is measured so it never flashes in the wrong spot. */}
+      <div aria-hidden={logoLeft === null} className="pointer-events-none sticky top-0 z-50 h-0 mix-blend-difference">
+        <Link
+          href="/"
+          aria-label="Jungle Boys home"
+          className={`pointer-events-auto absolute top-3 block h-12 w-16 transition-opacity duration-200 ${
+            logoLeft === null ? 'opacity-0' : 'opacity-100'
+          }`}
+          style={{ left: logoLeft ?? 8 }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element -- brand SVG */}
+          <img src="/brand/jb-stacked-white.svg" alt="" className="h-full w-full object-contain" />
+        </Link>
+      </div>
+
     <header
-      className="pointer-events-none sticky top-0 z-40 flex items-center justify-between gap-3 px-3 py-3"
+      className="pointer-events-none sticky top-0 z-40 flex items-center justify-center px-3 py-3"
       style={{ fontFamily: 'var(--font-display)' }}
     >
-      {/* logo — outside the pill, home is one click from anywhere */}
-      <Link
-        href="/"
-        aria-label="Jungle Boys home"
-        className="pointer-events-auto flex h-[3.75rem] w-[4.5rem] shrink-0 items-center justify-center rounded-full border border-white/10 bg-[#0b0b0b]/90 shadow-2xl backdrop-blur-md transition-transform duration-200 hover:-translate-y-0.5"
-      >
-        {/* white logo on its own dark chip — readable in BOTH themes without
-            filter tricks */}
-        {/* eslint-disable-next-line @next/next/no-img-element -- brand SVG */}
-        <img src="/brand/jb-stacked-white.svg" alt="" className="h-10 w-12 object-contain" />
-      </Link>
-
-      {/* ── the NAV pill ── */}
-      <div className="pointer-events-auto flex min-w-0 items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#0b0b0b]/90 px-1.5 py-1.5 text-white shadow-2xl backdrop-blur-md">
+      <div ref={pillRef} className="pointer-events-auto flex min-w-0 max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#0b0b0b]/90 px-1.5 py-1.5 text-white shadow-2xl backdrop-blur-md">
         <Link
           href={base ?? '/shop'}
           aria-current={base && pathname === base ? 'page' : undefined}
@@ -273,9 +302,11 @@ export default function CommerceHeader() {
           )
         })}
 
+        <span aria-hidden className="mx-1 h-5 w-px shrink-0 bg-white/20" />
+
         {/* open/closed in store-local time — empty until the client knows */}
         {status && (
-          <span className="hidden shrink-0 items-center gap-1.5 px-2.5 text-[16px] uppercase leading-none tracking-[0.06em] xl:flex">
+          <span className="hidden shrink-0 items-center gap-1.5 px-2 text-[16px] uppercase leading-none tracking-[0.06em] xl:flex">
             <span
               aria-hidden
               className={`h-2 w-2 rounded-full ${status.open ? 'bg-[var(--color-success)]' : 'bg-white/40'}`}
@@ -298,10 +329,8 @@ export default function CommerceHeader() {
             <option value="medical">Medical</option>
           </select>
         </label>
-      </div>
 
-      {/* ── the UTILITY pill: store / sign in / bag ── */}
-      <div className="pointer-events-auto flex shrink-0 items-center gap-1 rounded-full border border-white/10 bg-[#0b0b0b]/90 px-1.5 py-1.5 text-white shadow-2xl backdrop-blur-md">
+        {/* the store you are shopping; the whole chip opens the picker */}
         <button
           type="button"
           onClick={pickStore}
@@ -325,14 +354,14 @@ export default function CommerceHeader() {
           Sign in
         </Link>
 
-        {/* the bag — bigger (Avanti, 2026-08-04), count on the art's badge */}
+        {/* the bag — count on the art's badge circle */}
         <button
           type="button"
           aria-expanded={openMenu === 'cart'}
           aria-haspopup="dialog"
           aria-label={`Shopping bag, ${count} item${count === 1 ? '' : 's'}`}
           onClick={() => setOpenMenu(openMenu === 'cart' ? null : 'cart')}
-          className={`shrink-0 rounded-full p-1 transition-colors duration-200 ${
+          className={`mr-0.5 shrink-0 rounded-full p-1 transition-colors duration-200 ${
             openMenu === 'cart' ? 'bg-white/10 text-white' : 'text-white/85 hover:bg-white/10 hover:text-white'
           }`}
         >
@@ -513,5 +542,6 @@ export default function CommerceHeader() {
         </div>
       </div>
     </header>
+    </>
   )
 }
