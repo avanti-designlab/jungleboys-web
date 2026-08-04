@@ -516,6 +516,14 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   %-off badge and its member ProductCards. Sale products no special claims land in a synthetic
   "More Markdowns" section per group — nothing discounted hides. check-commerce asserts sections,
   both groups, both doors + a fixture special name in SSR.
+- **COMMERCE HEADER v3 — THREE PIECES (Avanti, 2026-08-04, supersedes the one-combined-pill
+  ruling of 2026-08-03).** Logo on its OWN dark chip outside the pill, left (→ homepage; a
+  chip, not filter hacks — the white SVG needs a dark ground in both themes). NAV pill:
+  **SHOP** (→ the store's storefront, gold-active there) then **CATEGORIES** (the renamed
+  category dropdown) then Products/Deals/Drops/Brands + open-status + Rec-Med — **LOCATIONS
+  REMOVED from this header** (it left the shopping flow); type up to 19px. RIGHT utility
+  pill: store chip / Sign in / the cart at 48px (count circle 20px on the art's badge spot).
+  No height changes on scroll, dropdown/panel anchors unchanged, all SSR checks pass.
 - **FLORIDA SHOPS OFF-SITE "for now" (Avanti, 2026-08-04, JB FL Locations List.docx) —
   SUPERSEDES the picker's FL→/locations branch (2026-08-03).** The picker modal's Florida
   section is ONE full-width gold door → https://www.jungleboysflorida.com (external); /shop's
