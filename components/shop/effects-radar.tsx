@@ -1,7 +1,8 @@
-// Effects radar (Avanti, 2026-08-04, reference: the Leafly-style spider
-// chart) — a dependency-free SVG drawn from StrainProfile.effectScores
-// (amendment #5). Static server markup: the polygon IS the data, crawlable,
-// theme-aware via currentColor and the accent token. Renders nothing without
+// Effects radar v2 (Avanti, 2026-08-04: "rainbow gradient style… moody
+// vibe" — no yellow, no pointer dots). Dependency-free SVG from
+// StrainProfile.effectScores (amendment #5): the polygon IS the data. The
+// shape fills with a moody multi-hue gradient, a blurred copy underneath
+// gives it a glow, and the vertices are unmarked. Renders nothing without
 // scores — no fabricated shape.
 
 const W = 560
@@ -46,12 +47,30 @@ export default function EffectsRadar({ scores }: { scores: { name: string; score
         return <line key={i} x1={CX} y1={CY} x2={x} y2={y} stroke="currentColor" strokeOpacity={0.16} />
       })}
 
-      {/* the measured shape */}
-      <polygon points={polygon} fill="var(--color-accent)" fillOpacity={0.55} stroke="var(--color-accent)" strokeWidth={2.5} strokeLinejoin="round" />
-      {scores.map((s, i) => {
-        const [x, y] = point(i, (Math.min(s.score, MAX) / MAX) * R)
-        return <circle key={s.name} cx={x} cy={y} r={4} fill="currentColor" />
-      })}
+      <defs>
+        {/* moody rainbow — dusk purples through magenta into amber and teal */}
+        <linearGradient id="radar-mood" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#6d28d9" />
+          <stop offset="30%" stopColor="#c026d3" />
+          <stop offset="55%" stopColor="#f43f5e" />
+          <stop offset="78%" stopColor="#f59e0b" />
+          <stop offset="100%" stopColor="#14b8a6" />
+        </linearGradient>
+        <filter id="radar-glow" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="14" />
+        </filter>
+      </defs>
+
+      {/* the measured shape — glow underlay, gradient body, gradient edge */}
+      <polygon points={polygon} fill="url(#radar-mood)" fillOpacity={0.5} filter="url(#radar-glow)" />
+      <polygon
+        points={polygon}
+        fill="url(#radar-mood)"
+        fillOpacity={0.72}
+        stroke="url(#radar-mood)"
+        strokeWidth={2.5}
+        strokeLinejoin="round"
+      />
 
       {/* labels */}
       {scores.map((s, i) => {

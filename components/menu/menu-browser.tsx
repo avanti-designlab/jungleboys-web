@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import type { Product, ProductCategory, ProductVariant, StrainType } from '@/lib/dutchie'
 import { addToCart } from '@/lib/cart'
-import { categoryLabel } from './labels'
+import { categoryLabel, STRAIN_STYLE } from './labels'
 import { CATEGORY_ICONS } from '@/lib/category-icons'
 
 // Category + strain filtering over a store's menu. Client-side because the whole
@@ -18,17 +18,6 @@ const STRAIN_LABEL: Record<StrainType, string> = {
   indica: 'Indica', sativa: 'Sativa', hybrid: 'Hybrid',
 }
 
-// Same card language as the Phase 2 line pages (Avanti, 2026-08-03: "all
-// product cards should match the designs we built on the JB product pages"):
-// white card, outlined strain chip in the strain colour (gold stage removed —
-// Avanti 2026-08-03: no glow around product shots).
-// The card is WHITE IN BOTH THEMES — a brand-light surface like the line
-// pages themselves — so the fixed on-white strain palette is the correct one.
-const STRAIN_STYLE: Record<StrainType, { label: string; cls: string }> = {
-  indica: { label: 'Indica', cls: 'border-[var(--strain-indica)] text-[var(--strain-indica)]' },
-  sativa: { label: 'Sativa', cls: 'border-[var(--strain-sativa)] text-[var(--strain-sativa)]' },
-  hybrid: { label: 'Hybrid', cls: 'border-[var(--strain-hybrid)] text-[var(--strain-hybrid)]' },
-}
 
 const money = (cents: number) => `$${(cents / 100).toFixed(cents % 100 ? 2 : 0)}`
 
@@ -76,12 +65,14 @@ export function AddToCartButton({
     if (timer.current) window.clearTimeout(timer.current)
     timer.current = window.setTimeout(() => setAdded(false), 1400)
   }
+  // PillCta language (Avanti, 2026-08-04): label + the cart icon in a
+  // contrasting circle on the right, like every CTA pill across the site.
   return (
     <button
       type="button"
       onClick={add}
       aria-label={`Add ${product.name} (${variant.option}) to cart`}
-      className={`relative z-20 inline-flex shrink-0 items-center rounded-full px-4 py-2 text-[10px] font-extrabold uppercase tracking-widest transition-colors duration-200 ${
+      className={`group/atc relative z-20 inline-flex shrink-0 items-center gap-2 rounded-full py-1 pl-4 pr-1 text-[10px] font-extrabold uppercase tracking-widest transition-colors duration-200 ${
         added
           ? tone === 'gold'
             ? 'bg-white text-black'
@@ -93,6 +84,19 @@ export function AddToCartButton({
       style={{ fontFamily: 'var(--font-brand)' }}
     >
       {added ? 'Added ✓' : 'Add to cart'}
+      <span
+        className={`flex h-7 w-7 items-center justify-center rounded-full transition-colors duration-200 ${
+          tone === 'gold'
+            ? 'bg-black text-[var(--color-accent)]'
+            : 'bg-white text-black group-hover/atc:bg-black group-hover/atc:text-[var(--color-accent)]'
+        }`}
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5" aria-hidden>
+          <circle cx="9.5" cy="20" r="1.4" />
+          <circle cx="17" cy="20" r="1.4" />
+          <path d="M3 4h2l2.15 11a1 1 0 0 0 1 .8h8.4a1 1 0 0 0 1-.78L20.2 8H6.3" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </span>
     </button>
   )
 }
@@ -121,7 +125,6 @@ export function ProductCard({
   const percentOff = onSale ? Math.round((1 - best.specialPrice! / best.price) * 100) : 0
   const shot = product.images[0]
   const thc = product.labResult?.potency?.thc
-  const terps = product.labResult?.terpenes?.reduce((sum, t) => sum + t.percentage, 0)
   const strain = product.strainType ? STRAIN_STYLE[product.strainType] : null
 
   return (
@@ -192,11 +195,6 @@ export function ProductCard({
               {thc.unit}
             </span>
           )}
-          {terps ? (
-            <span className="rounded-full border border-[var(--color-ink)]/25 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)]/75">
-              Terps {terps.toFixed(1)}%
-            </span>
-          ) : null}
         </div>
 
         <h3 className="font-display text-[2rem] uppercase leading-[0.9]">
