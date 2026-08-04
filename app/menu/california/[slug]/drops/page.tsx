@@ -55,10 +55,9 @@ function FeaturedDrop({ product, storeSlug }: { product: Product; storeSlug: str
 
   return (
     // Same white-card language as every commerce card (Avanti, 2026-08-03) —
-    // gold radial stage, bottom-anchored shot, Bebas name and price.
+    // bottom-anchored shot, Bebas name and price (gold stage removed — Avanti 2026-08-03).
     <article className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white text-[var(--color-ink)] shadow-[0_10px_40px_rgba(0,0,0,0.08)]">
       <div className="relative aspect-[4/3] overflow-hidden">
-        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_75%_60%_at_50%_68%,rgba(233,193,90,0.28),transparent_72%)]" />
         {shot && (
           <Image
             src={shot.url}

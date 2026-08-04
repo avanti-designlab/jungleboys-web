@@ -47,17 +47,19 @@ const SHOP_CATEGORIES = [
 // those stay the curated /products/* collection). Slugs must match the
 // catalogue's subcategory values — check-commerce counts these options and a
 // drifted slug shows up as a loudly-empty list.
-const JB_LINES = [
-  { label: 'Premium Flower', line: 'premium-flower' },
-  { label: 'Hash Holes', line: 'hash-hole' },
-  { label: '5G Pops', line: '5g-pops' },
-  { label: '10-Pack Pre-Rolls', line: '10-pack' },
-  { label: '1G Pre-Rolls', line: '1g-preroll' },
-  { label: 'Twins 2-Pack', line: 'twins-2pack' },
-  { label: 'Gas Tank · Flavors', line: 'gas-tank-flavors' },
-  { label: 'Gas Tank · Live Resin', line: 'gas-tank-live-resin' },
-  { label: 'Gas Tank · Live Rosin', line: 'gas-tank-live-rosin' },
-] as const
+// Gas Tanks is ONE item (Avanti, 2026-08-03): a comma list of the three
+// sibling subcategories, which the browse grid's ?line= filter unions.
+// Icons: the pre-roll family shares the supplied pre-rolls art; Gas Tanks has
+// no supplied vape icon yet → letter-mark, never an invented icon.
+const JB_LINES: readonly { label: string; line: string; icon: string | null }[] = [
+  { label: 'Premium Flower', line: 'premium-flower', icon: '/shop/icons/flower.webp' },
+  { label: 'Hash Holes', line: 'hash-hole', icon: '/shop/icons/hash-hole.webp' },
+  { label: '5G Pops', line: '5g-pops', icon: '/shop/icons/pops.svg' },
+  { label: '10-Pack Pre-Rolls', line: '10-pack', icon: '/shop/icons/pre-rolls.svg' },
+  { label: '1G Pre-Rolls', line: '1g-preroll', icon: '/shop/icons/pre-rolls.svg' },
+  { label: 'Twins 2-Pack', line: 'twins-2pack', icon: '/shop/icons/pre-rolls.svg' },
+  { label: 'Gas Tanks', line: 'gas-tank-flavors,gas-tank-live-resin,gas-tank-live-rosin', icon: null },
+]
 
 function storeFromPath(pathname: string): string | null {
   const m = pathname.match(/^\/menu\/california\/([^/]+)/)
@@ -370,7 +372,7 @@ export default function CommerceHeader() {
                       <span className="text-[18px] leading-none text-black/70">{categoryLabel(c).slice(0, 1)}</span>
                     )}
                   </span>
-                  <span className="min-w-0 flex-1 truncate text-[19px] uppercase leading-none tracking-[0.03em] text-white/85 transition-colors duration-200 group-hover/row:text-white">
+                  <span className="min-w-0 flex-1 truncate text-[22px] uppercase leading-none tracking-[0.03em] text-white/85 transition-colors duration-200 group-hover/row:text-white">
                     {categoryLabel(c)}
                   </span>
                   <RowArrow />
@@ -407,23 +409,26 @@ export default function CommerceHeader() {
           <p className="relative px-3 pb-2 pt-1 text-[13px] uppercase leading-none tracking-[0.24em] text-[var(--color-accent)]">
             Jungle Boys lines
           </p>
+          {/* icon wells + big Bebas labels, no numbering (Avanti, 2026-08-03) */}
           <div className="relative grid grid-cols-2 gap-1">
-            {JB_LINES.map((l, i) => (
+            {JB_LINES.map((l) => (
               <Link
                 key={l.line}
                 role="menuitem"
                 data-jb-line={l.line}
                 href={`${base ?? '/shop'}?line=${l.line}#browse`}
                 onClick={() => setOpenMenu(null)}
-                className="group/row flex items-center gap-3 rounded-2xl px-3 py-3 transition-colors duration-200 hover:bg-white/[0.07]"
+                className="group/row flex items-center gap-3 rounded-2xl px-3 py-2 transition-colors duration-200 hover:bg-white/[0.07]"
               >
-                <span
-                  aria-hidden
-                  className="w-6 shrink-0 text-[13px] leading-none tracking-[0.08em] text-[var(--color-accent)]/80 transition-colors duration-200 group-hover/row:text-[var(--color-accent)]"
-                >
-                  {String(i + 1).padStart(2, '0')}
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white transition-transform duration-200 group-hover/row:scale-105">
+                  {l.icon ? (
+                    // eslint-disable-next-line @next/next/no-img-element -- brand icon
+                    <img src={l.icon} alt="" className="h-9 w-9 object-contain" />
+                  ) : (
+                    <span className="text-[18px] leading-none text-black/70">{l.label.slice(0, 1)}</span>
+                  )}
                 </span>
-                <span className="min-w-0 flex-1 truncate text-[19px] uppercase leading-none tracking-[0.03em] text-white/85 transition-colors duration-200 group-hover/row:text-white">
+                <span className="min-w-0 flex-1 truncate text-[22px] uppercase leading-none tracking-[0.03em] text-white/85 transition-colors duration-200 group-hover/row:text-white">
                   {l.label}
                 </span>
                 <RowArrow />

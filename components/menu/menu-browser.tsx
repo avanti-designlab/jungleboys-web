@@ -1,9 +1,10 @@
 'use client'
 
-import { Suspense, useEffect, useMemo, useState } from 'react'
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import type { Product, ProductCategory, StrainType } from '@/lib/dutchie'
+import type { Product, ProductCategory, ProductVariant, StrainType } from '@/lib/dutchie'
+import { addToCart } from '@/lib/cart'
 import { categoryLabel } from './labels'
 
 // Category + strain filtering over a store's menu. Client-side because the whole
@@ -18,7 +19,8 @@ const STRAIN_LABEL: Record<StrainType, string> = {
 
 // Same card language as the Phase 2 line pages (Avanti, 2026-08-03: "all
 // product cards should match the designs we built on the JB product pages"):
-// white card, gold radial stage, outlined strain chip in the strain colour.
+// white card, outlined strain chip in the strain colour (gold stage removed —
+// Avanti 2026-08-03: no glow around product shots).
 // The card is WHITE IN BOTH THEMES — a brand-light surface like the line
 // pages themselves — so the fixed on-white strain palette is the correct one.
 const STRAIN_STYLE: Record<StrainType, { label: string; cls: string }> = {
@@ -28,6 +30,64 @@ const STRAIN_STYLE: Record<StrainType, { label: string; cls: string }> = {
 }
 
 const money = (cents: number) => `$${(cents / 100).toFixed(cents % 100 ? 2 : 0)}`
+
+// Chip label for the active ?line= filter. A comma list (one dropdown item
+// covering sibling subcategories) reads as the slugs' common prefix —
+// "gas-tank-flavors,gas-tank-live-resin,…" → "gas tank".
+function lineChipLabel(line: string): string {
+  const slugs = line.split(',')
+  if (slugs.length === 1) return line.replace(/-/g, ' ')
+  const tokened = slugs.map((s) => s.split('-'))
+  const prefix: string[] = []
+  for (let i = 0; tokened.every((t) => t[i] && t[i] === tokened[0][i]); i++) prefix.push(tokened[0][i])
+  return prefix.length ? prefix.join(' ') : slugs[0].replace(/-/g, ' ')
+}
+
+// The card CTA is a REAL bag action (Avanti, 2026-08-03: no "Shop" label —
+// every card on the commerce pages adds to cart). Adds the card's displayed
+// variant at its displayed price; flips to "Added ✓" for a beat so the action
+// reads without a panel opening. The header count follows via jb:cart-changed.
+function AddToCartButton({
+  product,
+  variant,
+  storeSlug,
+}: {
+  product: Product
+  variant: ProductVariant
+  storeSlug: string
+}) {
+  const [added, setAdded] = useState(false)
+  const timer = useRef<number | null>(null)
+  useEffect(() => () => { if (timer.current) window.clearTimeout(timer.current) }, [])
+  const add = () => {
+    addToCart({
+      slug: product.slug,
+      name: product.name,
+      variantId: variant.id,
+      option: variant.option,
+      price: variant.specialPrice ?? variant.price,
+      storeSlug,
+    })
+    setAdded(true)
+    if (timer.current) window.clearTimeout(timer.current)
+    timer.current = window.setTimeout(() => setAdded(false), 1400)
+  }
+  return (
+    <button
+      type="button"
+      onClick={add}
+      aria-label={`Add ${product.name} (${variant.option}) to cart`}
+      className={`relative z-20 inline-flex shrink-0 items-center rounded-full px-4 py-2 text-[10px] font-extrabold uppercase tracking-widest transition-colors duration-200 ${
+        added
+          ? 'bg-[var(--color-accent)] text-black'
+          : 'bg-black text-white hover:bg-[var(--color-accent)] hover:text-black'
+      }`}
+      style={{ fontFamily: 'var(--font-brand)' }}
+    >
+      {added ? 'Added ✓' : 'Add to cart'}
+    </button>
+  )
+}
 
 // Exported because the Brands page renders the same card grouped by brand —
 // one card, one strain palette, one price rule across every commerce surface.
@@ -62,14 +122,13 @@ export function ProductCard({
         soldOut ? 'opacity-60' : ''
       }`}
     >
-      {/* stage — the line-page glow, but with the shot CONTAINED in a fixed
+      {/* stage — the shot CONTAINED in a fixed
           centered box rather than bottom-anchored at 88% width. The line pages
           anchor deliberately (their art is curated cutouts); Dutchie uploads
           are 1:1 at wildly different framings, and width-anchoring rendered a
           tall jar cropped and a flat bag tiny (Avanti, 2026-08-03). Contain
           gives every product the SAME visual frame regardless of source. */}
       <div className="relative aspect-square overflow-hidden">
-        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_75%_60%_at_50%_58%,rgba(233,193,90,0.28),transparent_72%)]" />
         {shot && (
           // eslint-disable-next-line @next/next/no-img-element -- pack shot
           <img
@@ -180,17 +239,11 @@ export function ProductCard({
               )}
             </span>
           </p>
-          {/* CTA reads as the line pages' pill; the stretched link above is the
-              real control, so this is presentation only */}
-          {!soldOut && (
-            <span
-              aria-hidden
-              className="inline-flex shrink-0 items-center rounded-full bg-black px-4 py-2 text-[10px] font-extrabold uppercase tracking-widest text-white transition-colors duration-200 group-hover:bg-[var(--color-accent)] group-hover:text-black"
-              style={{ fontFamily: 'var(--font-brand)' }}
-            >
-              Shop
-            </span>
-          )}
+          {/* A REAL add-to-cart, not a Shop link (Avanti, 2026-08-03: every
+              card on these pages carries the add-to-cart button). Adds the
+              displayed variant — the one whose price the shopper is reading —
+              at its shown price. z-20 lifts it above the stretched card link. */}
+          {!soldOut && <AddToCartButton product={product} variant={best} storeSlug={storeSlug} />}
         </div>
       </div>
     </article>
@@ -249,7 +302,11 @@ export default function MenuBrowser({
         (p) =>
           (category === 'all' || p.category === category) &&
           (strain === 'all' || p.strainType === strain) &&
-          (line === 'all' || p.subcategory === line)
+          // ?line= may carry a comma list — one dropdown item covering sibling
+          // subcategories (Gas Tanks = flavors + live resin + live rosin,
+          // Avanti 2026-08-03). Each slug still matches exactly; a drifted one
+          // still yields a loudly-empty list.
+          (line === 'all' || line.split(',').includes(p.subcategory ?? ''))
       ),
     [products, category, strain, line]
   )
@@ -283,7 +340,7 @@ export default function MenuBrowser({
         {line !== 'all' && (
           <div className="mt-3" style={{ fontFamily: 'var(--font-brand)' }}>
             <button type="button" onClick={() => setLine('all')} className={pill(true)}>
-              {line.replace(/-/g, ' ')} ✕
+              {lineChipLabel(line)} ✕
             </button>
           </div>
         )}

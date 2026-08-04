@@ -15,32 +15,36 @@ const CART_ICON_SRC: string | null = '/shop/icons/cart.svg'
 // so the count centers on it; the drawn bag kept the original center spot.
 const COUNT_POS = CART_ICON_SRC ? 'left-[77%] top-[48%]' : 'left-1/2 top-[58%]'
 
+// Proportions (Avanti, 2026-08-03: "the circle takes over the entire cart —
+// make the cart bigger so it's more visible"): the icon runs 40px and the
+// count circle stays SMALL (16px, on the art's badge spot) so the cart art
+// reads first and the number rides it, instead of eclipsing it.
 export default function CartIcon({ count }: { count: number }) {
   return (
-    <span className="relative inline-flex h-8 w-8 items-center justify-center">
+    <span className="relative inline-flex h-10 w-10 items-center justify-center">
       {CART_ICON_SRC ? (
         // The supplied art is two-tone #151515/#fff, drawn for a light ground;
         // the pill is near-black in both themes, so invert renders the same
         // art white-on-dark without editing the file.
         // eslint-disable-next-line @next/next/no-img-element -- brand SVG
-        <img src={CART_ICON_SRC} alt="" className="h-8 w-8 object-contain invert" />
+        <img src={CART_ICON_SRC} alt="" className="h-10 w-10 object-contain invert" />
       ) : (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-8 w-8" aria-hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-10 w-10" aria-hidden>
           <path d="M5.2 8.2h13.6l-1.1 11.2a1.9 1.9 0 0 1-1.9 1.7H8.2a1.9 1.9 0 0 1-1.9-1.7L5.2 8.2Z" strokeLinejoin="round" />
           <path d="M9 8.2V6.5a3 3 0 0 1 6 0v1.7" />
         </svg>
       )}
       <span
         data-cart-count
-        className={`absolute ${COUNT_POS} flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-[12px] leading-none transition-[background-color,opacity] duration-200 ${
+        className={`absolute ${COUNT_POS} flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full text-[11px] leading-none transition-[background-color,opacity] duration-200 ${
           count > 0
-            ? 'h-[1.15rem] w-[1.15rem] bg-[var(--color-accent)] text-black'
+            ? 'h-4 w-4 bg-[var(--color-accent)] text-black'
             : CART_ICON_SRC
               ? // the custom art carries its own badge circle, white in the
                 // original; inverted it becomes a black hole. At 0 a white dot
-                // the badge's own size (~9px of the 32px box) restores the art.
-                'h-[0.55rem] w-[0.55rem] bg-white text-transparent'
-              : 'h-[1.15rem] w-[1.15rem] border border-white/30 text-white/50'
+                // the badge's own size (~10px of the 40px box) restores the art.
+                'h-[0.65rem] w-[0.65rem] bg-white text-transparent'
+              : 'h-4 w-4 border border-white/30 text-white/50'
         }`}
         style={{ fontFamily: 'var(--font-display)' }}
       >
