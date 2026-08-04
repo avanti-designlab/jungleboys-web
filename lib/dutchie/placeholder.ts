@@ -389,7 +389,81 @@ const zangriaFlower: Product = (() => {
   return p
 })()
 
-const products: Product[] = [
+// ── full-shape enrichment (Avanti, 2026-08-04: every PDP shows the Facts /
+// radar / Certified Analysis sections, not just the Zangria fixture) ────────
+// Fills MISSING profile fields with derived placeholder values — the same
+// class of placeholder as every THC number in this file. Rules kept:
+//  · genetics only where a lineage already exists on file (a `strain` value
+//    shaped like "A x B") — never an invented cross
+//  · taste derives from the product's dominant measured terpene
+//  · effectScores use a per-strainType template (placeholder numbers)
+//  · the cannabinoid panel derives arithmetically from the product's own THC
+// Hand-set values (Zangria) always win — enrich only fills gaps.
+const TASTE_BY_TERPENE: Record<string, string[]> = {
+  terpinolene: ['citrus', 'pine', 'sweet'],
+  myrcene: ['earthy', 'mango', 'herbal'],
+  limonene: ['lemon zest', 'sweet citrus'],
+  caryophyllene: ['pepper', 'spice', 'gas'],
+  linalool: ['floral', 'lavender', 'sweet'],
+}
+
+const EFFECT_TEMPLATES: Record<'indica' | 'sativa' | 'hybrid', { name: string; score: number }[]> = {
+  indica: [
+    { name: 'Calm', score: 8 }, { name: 'Clear Mind', score: 4 }, { name: 'Creative', score: 4 },
+    { name: 'Energetic', score: 2 }, { name: 'Focused', score: 3 }, { name: 'Happy', score: 7 },
+    { name: 'Inspired', score: 4 }, { name: 'Relaxed', score: 9 }, { name: 'Sleepy', score: 8 },
+    { name: 'Uplifted', score: 4 },
+  ],
+  sativa: [
+    { name: 'Calm', score: 4 }, { name: 'Clear Mind', score: 5 }, { name: 'Creative', score: 7 },
+    { name: 'Energetic', score: 8 }, { name: 'Focused', score: 6 }, { name: 'Happy', score: 9 },
+    { name: 'Inspired', score: 6 }, { name: 'Relaxed', score: 4 }, { name: 'Sleepy', score: 1 },
+    { name: 'Uplifted', score: 8 },
+  ],
+  hybrid: [
+    { name: 'Calm', score: 6 }, { name: 'Clear Mind', score: 5 }, { name: 'Creative', score: 6 },
+    { name: 'Energetic', score: 5 }, { name: 'Focused', score: 5 }, { name: 'Happy', score: 8 },
+    { name: 'Inspired', score: 6 }, { name: 'Relaxed', score: 7 }, { name: 'Sleepy', score: 4 },
+    { name: 'Uplifted', score: 6 },
+  ],
+}
+
+function enrich(p: Product): Product {
+  const out: Product = { ...p }
+  const thc = out.labResult?.potency?.thc?.value
+  const topTerp = out.labResult?.terpenes?.[0]?.name
+
+  const profile = { ...(out.strainProfile ?? {}) }
+  // lineage reuse only — a strain field shaped like "A x B" is already a cross
+  if (!profile.genetics && out.strain && / x /i.test(out.strain)) profile.genetics = out.strain
+  if (!profile.taste?.length && topTerp) profile.taste = TASTE_BY_TERPENE[topTerp.toLowerCase()] ?? ['earthy', 'sweet']
+  if (!profile.terpenes?.length && out.labResult?.terpenes?.length) {
+    profile.terpenes = out.labResult.terpenes.map((t) => t.name)
+  }
+  if (!profile.effectScores?.length && out.strainType) {
+    profile.effectScores = EFFECT_TEMPLATES[out.strainType]
+  }
+  if (Object.keys(profile).length) out.strainProfile = profile
+
+  if (out.labResult && !out.labResult.cannabinoids?.length && thc != null) {
+    const r1 = (n: number) => Math.round(n * 10) / 10
+    const r2 = (n: number) => Math.round(n * 100) / 100
+    out.labResult = {
+      ...out.labResult,
+      cannabinoids: [
+        { name: 'THCA', value: r1(thc * 1.14), unit: '%' },
+        { name: 'CBGA', value: r2(thc * 0.075), unit: '%' },
+        { name: 'THC-D9', value: 0.6, unit: '%' },
+        { name: 'CBG', value: 0.15, unit: '%' },
+        { name: 'CBDA', value: 0.08, unit: '%' },
+        { name: 'CBD', value: 0.05, unit: '%' },
+      ],
+    }
+  }
+  return out
+}
+
+const rawProducts: Product[] = [
   hashHole('gelato-z', 'Gelato Z', 'Gator Breath', 40.9, false, 3200),
   hashHole('private-reserve', 'Private Reserve', 'Rainbow Belts', 45.7, true),
   hashHole('blu-frootz', 'Blu Frootz', 'G-Ride', 29.7),
@@ -469,6 +543,8 @@ const products: Product[] = [
   thirdParty('kiva-camino-gummies', 'Camino Gummies', 'Kiva', 'edibles', '100mg', 1800),
   thirdParty('wyld-huckleberry', 'Huckleberry Gummies', 'Wyld', 'edibles', '100mg', 1600, undefined, 1280),
 ]
+
+const products: Product[] = rawProducts.map(enrich)
 
 const categories: ProductCategory[] = [
   'flower',

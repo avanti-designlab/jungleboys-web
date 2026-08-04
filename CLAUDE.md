@@ -516,6 +516,15 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   %-off badge and its member ProductCards. Sale products no special claims land in a synthetic
   "More Markdowns" section per group — nothing discounted hides. check-commerce asserts sections,
   both groups, both doors + a fixture special name in SSR.
+- **FIXTURE ENRICHMENT: every placeholder product carries the FULL PDP shape (Avanti,
+  2026-08-04 — "you removed the sections… add them back": the sections were data-driven and
+  only Zangria had the data).** `enrich()` in lib/dutchie/placeholder.ts fills MISSING fields
+  at the seam: genetics only where an on-file `strain` value is already a cross ("A x B" —
+  never an invented lineage, per the drops rule), taste derived from the dominant measured
+  terpene, effectScores from per-strainType templates, and a cannabinoid panel derived
+  arithmetically from the product's own THC. Hand-set values (Zangria) always win. All of it
+  is the same placeholder class as every THC number in that file and is REPLACED WHOLESALE by
+  the real Dutchie payload at cutover.
 - **UNIVERSAL MAIN MENU (Avanti, 2026-08-04): the hamburger + logo cluster now exists on the
   commerce shell too, same sizes/placement as the global SiteNav's left cluster.** The
   full-screen menu was EXTRACTED into `components/main-menu-overlay.tsx` (one overlay, one
