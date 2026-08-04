@@ -77,15 +77,17 @@ export default function MainMenuOverlay({ open, onClose }: { open: boolean; onCl
       role="dialog"
       aria-modal="true"
       aria-label="Main menu"
-      className="menu-overlay fixed inset-0 z-40 h-dvh overflow-y-auto overscroll-contain bg-[#0b0b0b]"
+      className="menu-overlay fixed inset-0 z-40 flex h-dvh flex-col overflow-y-auto overscroll-contain bg-[#0b0b0b]"
     >
-      <nav className="mx-auto grid h-full w-full max-w-[1560px] grid-cols-1 content-start gap-x-10 gap-y-9 px-8 pt-28 md:[grid-template-columns:1fr_1fr_1.35fr] md:gap-y-1 md:pt-40">
+      {/* links grow to fill the height; type sized up to carry the room
+          (Avanti, 2026-08-04: "alot of dead space… make the text bigger") */}
+      <nav className="mx-auto grid w-full max-w-[1560px] flex-1 grid-cols-1 content-start gap-x-10 gap-y-9 px-8 pt-28 md:[grid-template-columns:1fr_1fr_1.35fr] md:content-center md:gap-y-1 md:pt-20">
         {MENU_COLUMNS.map((column, c) => (
-          <ul key={c} className="flex flex-col">
+          <ul key={c} className="flex flex-col md:gap-2">
             {column.map((l) => {
               const delay = `${0.05 + linkIndex++ * 0.03}s`
               const cls =
-                'font-display whitespace-nowrap text-5xl leading-[0.92] md:text-6xl xl:text-7xl uppercase text-white transition-colors duration-200 hover:text-[var(--color-accent)]'
+                'font-display whitespace-nowrap text-5xl leading-[0.92] uppercase text-white transition-colors duration-200 hover:text-[var(--color-accent)] md:text-7xl xl:text-[6.5rem] xl:leading-[0.9]'
               return (
                 <li key={l.label} className="menu-line">
                   {l.external ? (
@@ -104,19 +106,59 @@ export default function MainMenuOverlay({ open, onClose }: { open: boolean; onCl
         ))}
       </nav>
 
-      <div className="menu-socials absolute bottom-8 right-8 flex items-center gap-6 text-white">
-        {OVERLAY_SOCIALS.map((s) => (
-          <a
-            key={s.label}
-            href={s.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={s.label}
-            className="transition-transform duration-200 hover:scale-110 hover:text-[var(--color-accent)] [&_svg]:h-9 [&_svg]:w-9"
-          >
-            {s.icon}
-          </a>
-        ))}
+      {/* promo doors fill the old dead band — evergreen (never stale sale
+          data in a global overlay): the deals + drops doors route each
+          visitor to their own store's live surface. */}
+      <div className="menu-promos mx-auto mb-10 mt-10 grid w-full max-w-[1560px] items-center gap-3 px-8 md:[grid-template-columns:1fr_1fr_auto]">
+        <Link
+          href="/deals"
+          onClick={onClose}
+          className="group flex items-center justify-between gap-4 rounded-3xl bg-[linear-gradient(120deg,#ffe27a_0%,#fecf0e_55%,#e7b30c_100%)] p-6 text-black transition-transform duration-200 hover:-translate-y-0.5 md:p-7"
+        >
+          <span>
+            <span className="block text-[11px] font-extrabold uppercase tracking-[0.24em] text-black/60" style={{ fontFamily: 'var(--font-brand)' }}>
+              Live now
+            </span>
+            <span className="font-display mt-1 block text-3xl uppercase leading-[0.9] md:text-4xl">
+              August deals
+            </span>
+          </span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-6 w-6 shrink-0 transition-transform duration-200 group-hover:translate-x-1" aria-hidden>
+            <path d="M5 12h14m-6-6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </Link>
+        <Link
+          href="/drops"
+          onClick={onClose}
+          className="group flex items-center justify-between gap-4 rounded-3xl border border-white/15 bg-white/[0.05] p-6 text-white transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--color-accent)] md:p-7"
+        >
+          <span>
+            <span className="block text-[11px] font-extrabold uppercase tracking-[0.24em] text-[var(--color-accent)]" style={{ fontFamily: 'var(--font-brand)' }}>
+              Every Friday
+            </span>
+            <span className="font-display mt-1 block text-3xl uppercase leading-[0.9] md:text-4xl">
+              Fresh drops
+            </span>
+          </span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="2.4" className="h-6 w-6 shrink-0 transition-transform duration-200 group-hover:translate-x-1" aria-hidden>
+            <path d="M5 12h14m-6-6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </Link>
+
+        <div className="menu-socials flex items-center justify-end gap-5 px-2 text-white md:pl-6">
+          {OVERLAY_SOCIALS.map((s) => (
+            <a
+              key={s.label}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={s.label}
+              className="transition-transform duration-200 hover:scale-110 hover:text-[var(--color-accent)] [&_svg]:h-8 [&_svg]:w-8"
+            >
+              {s.icon}
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   )
