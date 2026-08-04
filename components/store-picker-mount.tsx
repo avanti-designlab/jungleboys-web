@@ -24,6 +24,14 @@ export default function StorePickerMount() {
 
   const close = useCallback(() => setOpen(false), [])
 
+  // Close on ARRIVAL, not on click: StorePicker keeps itself open through
+  // router.push so the page behind never flashes; this effect is the actual
+  // close. Runs before the open-effect below, which re-opens where required
+  // (e.g. landing back on /shop).
+  useEffect(() => {
+    setOpen(false)
+  }, [pathname])
+
   useEffect(() => {
     if (!pathname) return
     // /shop is the storefront DOOR, and the picker IS the door (Avanti,

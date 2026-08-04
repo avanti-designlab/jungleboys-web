@@ -60,7 +60,11 @@ export default function StorePicker({ open, onClose }: { open: boolean; onClose:
 
   const choose = (slug: string, state: 'CA' | 'FL') => {
     writeStore(slug, state)
-    onClose()
+    // Deliberately NOT closing here: closing before router.push() completes
+    // exposes the page behind for a few frames (on /shop, the chooser list —
+    // Avanti saw it as a flash of the locations page). The mount closes the
+    // picker when the pathname actually changes, so the modal stays up until
+    // the store menu is ready.
     router.push(menuPathFor(slug, state))
   }
 
