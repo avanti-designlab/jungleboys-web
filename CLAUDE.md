@@ -516,6 +516,17 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   %-off badge and its member ProductCards. Sale products no special claims land in a synthetic
   "More Markdowns" section per group — nothing discounted hides. check-commerce asserts sections,
   both groups, both doors + a fixture special name in SSR.
+- **PDP REDESIGNED (Avanti, 2026-08-04 late — reference jungleboysflorida.com PDP: "keep the
+  core elements the same so we know it's all pullable from Dutchie").** Same data elements,
+  new bones: dark hero (media-well stage left w/ HOT badge when featured; brand eyebrow, giant
+  Bebas name, chip row THC/CBD/Terps/type/category, description, and the BUY TICKET — the
+  PdpBuyBox untouched on a surface card so its theme-var styling reads on the dark ground);
+  THE FACTS band (gold tint: Genetics/Taste/Effects, Bebas-large); CERTIFIED ANALYSIS +
+  TERPENES as twin surface cards with PROPORTIONAL GOLD BARS (width = measured value / set
+  max — the visual IS the data), lab + testedAt + COA link only when real; and a shoppable
+  same-category 4-card row ("More <category>", View All → the collection page). Every section
+  renders only when its data exists. ONE-canonical-PDP strategy unchanged; THCA/CBGA +
+  Add-to-bag SSR checks still pass unmodified.
 - **DROPS PAGE REDESIGNED — the brand ritual (Avanti, 2026-08-04 late: "extra special…
   calendar animation… wow factor… shoppable").** Hero = dark card with gold glow: giant FRESH
   DROPS, the DROP CLOCK (DropCountdown — a 7-chip week strip with Friday pulsing gold + a live
