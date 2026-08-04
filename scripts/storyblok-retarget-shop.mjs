@@ -99,7 +99,6 @@ const HERO = [
   { kicker: 'Playing with fire', title: 'PWF Rewards', cta: 'Earn on every visit', href: '/rewards' },
 ]
 const PROMOS = [
-  { kicker: 'Everything on the shelf', title: 'Shop by brand', cta: 'Browse brands', href: '@store/brands' },
   { kicker: 'The collection', title: 'Jungle Boys lines', cta: 'Explore the lines', href: '/products' },
 ]
 

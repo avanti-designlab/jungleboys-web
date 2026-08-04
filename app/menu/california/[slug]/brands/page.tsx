@@ -5,6 +5,7 @@ import type { Product } from '@/lib/dutchie'
 import { getLocations, getLocationBySlug, getMenu } from '@/lib/dutchie'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 import { ProductCard } from '@/components/menu/menu-browser'
+import { brandAnchor } from '@/lib/brands'
 
 // Brands at one store — EVERY brand on the shelf, not JB only. That is the
 // recorded decision (Avanti, 2026-07-31): the CA stores stock third-party
@@ -38,7 +39,8 @@ export async function generateMetadata({
   }
 }
 
-const anchor = (brand: string) => brand.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+// anchor rule shared with the storefront's quick-shop tiles (lib/brands)
+const anchor = brandAnchor
 
 export default async function StoreBrandsPage({
   params,

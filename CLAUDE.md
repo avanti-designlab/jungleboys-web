@@ -466,6 +466,38 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   Edibles, CBD, Accessories, Apparel — the old flat-mono Dutchie PNGs deliberately NOT used;
   they clash with the new illustrated set) and render letter discs until supplied.
   check-commerce asserts all 8 tiles by slug.
+- **FEEDBACK ROUND, six rulings in one sitting (Avanti, 2026-08-03 evening — all shipped
+  together).**
+  (1) **Hash-hole finale scrim REMOVED** — supersedes the 2026-07-30 "hh-finale IS scrimmed"
+  note: the darkened sky read as a black gradient on the scene. Finale gold joins the accepted
+  gold-on-sky pairing (keyline carries it); do not re-add on a contrast sweep.
+  (2) **MoreLines ("More from Jungle Boys") is a floating pill card**, not a full-bleed band —
+  same gutter/radius language as the footer card, page ground showing in the gap. Applies to
+  all nine line pages (shared component).
+  (3) **Cart icon 40px, count circle 16px on the badge spot** — "the circle takes over the
+  entire cart"; the art reads first, the number rides it.
+  (4) **Every commerce card's CTA is a REAL "Add to cart"** (AddToCartButton in
+  menu-browser.tsx) — no "Shop" label. Adds the card's displayed variant at its displayed
+  price, flips to "Added ✓", header count follows via jb:cart-changed. The stretched card
+  link still goes to the PDP.
+  (5) **Gold radial glow behind product shots REMOVED** (cards + drops featured band).
+  (6) **Shelf rows are exact 4-card grids** (2×2 mobile) — the snap scroller's cut-off fifth
+  card was the complaint; View All carries the rest. And the **PRODUCTS dropdown lost its
+  numbering, gained icon wells + 22px labels, and GAS TANKS IS ONE ITEM** — a comma-list
+  ?line= that the browse grid UNIONS (verified: 13 cards vs 5 for flavors alone; chip shows
+  the slugs' common prefix). hash-hole.webp rasterized from her HASH HOLE.svg; pre-roll
+  family shares the pre-rolls icon; Gas Tanks letter-marks until a vape icon is supplied.
+- **SHOP BY BRAND = bespoke quick-shop band; shelf headers WAY bigger, no counts (Avanti,
+  2026-08-03 late).** The 'Shop by brand' CMS promo (photo collage) is replaced by the
+  storefront's own BrandQuickShop section: yellow gradient card (no image), header/CTA left,
+  the store's TOP 8 BRANDS as white tiles right, each anchoring into that brand's Brands-page
+  section. Brands rank by product count so the band is data-derived and cannot go stale; the
+  anchor slug rule is shared via lib/brands.ts (brandAnchor) with the Brands page. **Logos:
+  BRAND_LOGOS in lib/brands.ts, files → public/shop/brands/<anchor-slug>.<ext>** — brand-name
+  wordmark tiles until Avanti supplies them, never an invented logo. 'Shop by brand' left
+  PROMO_FALLBACK + the retarget script's PROMOS. Shelf headings went text-5xl/7xl with the
+  product-count numerals removed (hot heading 4xl/6xl to match). check-commerce asserts the
+  band + ≥3 tiles in SSR.
 - **Home story still overrides the /shop retarget — script ready, needs Avanti's token
   (2026-08-03, local session).** Verified against the live draft: hero_slides "GAS TANK" +
   "GOLD MYLARS" and quick_card "Shop" store href `/products`, which overrides the code's /shop

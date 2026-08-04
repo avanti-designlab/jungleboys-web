@@ -6,6 +6,7 @@ import { bannerHref } from '@/lib/shop-banners'
 import { ProductCard } from './menu-browser'
 import { categoryLabel } from './labels'
 import { CATEGORY_ICONS } from '@/lib/category-icons'
+import { BRAND_LOGOS, brandAnchor } from '@/lib/brands'
 
 // The merchandised storefront (Avanti's redesign brief, 2026-08-03): the store
 // menu is an ECOM page built to sell, not a bare product grid. Structure:
@@ -107,17 +108,79 @@ function PromoBanner({ banner, index, storeSlug }: { banner: ShopBanner; index: 
   )
 }
 
-/** Horizontal snap shelf — cards keep the shared ProductCard, so price rules,
- *  badges and PDP links stay identical to the grid. */
+/** Shelf = an exact 4-card row (Avanti, 2026-08-03: the snap scroller left
+ *  the fifth card as a cut-off strip — no partials). 2×2 on mobile, 4-up on
+ *  desktop; View All carries everything past the first four. Cards keep the
+ *  shared ProductCard, so price rules, badges and PDP links stay identical
+ *  to the grid. */
 function Shelf({ products, storeSlug, hot = false }: { products: Product[]; storeSlug: string; hot?: boolean }) {
   return (
-    <div className="-mx-1 mt-5 flex snap-x gap-4 overflow-x-auto px-1 pb-2">
-      {products.map((p) => (
-        <div key={p.id} className="w-72 shrink-0 snap-start md:w-80">
-          <ProductCard product={p} storeSlug={storeSlug} hot={hot} />
-        </div>
+    <div className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {products.slice(0, 4).map((p) => (
+        <ProductCard key={p.id} product={p} storeSlug={storeSlug} hot={hot} />
       ))}
     </div>
+  )
+}
+
+// SHOP BY BRAND quick-shop band (Avanti, 2026-08-03): yellow gradient card —
+// no photo background — with the header/CTA left and the store's top 8 brands
+// as white quick-shop tiles right, each landing on that brand's section of
+// the Brands page. Brands are ranked by shelf presence (product count), so
+// the band is data-derived and can never go stale; logos come from
+// BRAND_LOGOS as Avanti supplies them, with the brand NAME as the wordmark
+// fallback — never an invented logo.
+function BrandQuickShop({ menu, storeSlug }: { menu: Menu; storeSlug: string }) {
+  const counts = new Map<string, number>()
+  for (const p of menu.products) counts.set(p.brand, (counts.get(p.brand) ?? 0) + 1)
+  const top = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8).map(([b]) => b)
+  if (top.length < 2) return null
+
+  return (
+    <section
+      aria-labelledby="brand-quickshop"
+      data-brand-quickshop
+      className="mt-12 overflow-hidden rounded-3xl bg-[linear-gradient(120deg,#ffe27a_0%,#fecf0e_55%,#e7b30c_100%)] p-6 text-black md:p-10"
+    >
+      <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+        <div className="shrink-0">
+          <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-black/60" style={{ fontFamily: 'var(--font-brand)' }}>
+            Everything on the shelf
+          </p>
+          <h2 id="brand-quickshop" className="font-display mt-1 text-5xl uppercase leading-none md:text-7xl">
+            Shop by brand
+          </h2>
+          <Link
+            href={`/menu/california/${storeSlug}/brands`}
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-[11px] font-extrabold uppercase tracking-[0.16em] text-white transition-opacity duration-200 hover:opacity-85"
+            style={{ fontFamily: 'var(--font-brand)' }}
+          >
+            Browse brands →
+          </Link>
+        </div>
+        <div className="grid w-full grid-cols-2 gap-2.5 sm:grid-cols-4 lg:max-w-2xl">
+          {top.map((brand) => {
+            const slug = brandAnchor(brand)
+            const logo = BRAND_LOGOS[slug]
+            return (
+              <Link
+                key={slug}
+                href={`/menu/california/${storeSlug}/brands#${slug}`}
+                data-brand-tile={slug}
+                className="flex aspect-[7/4] items-center justify-center rounded-2xl bg-white px-3 shadow-[0_8px_24px_rgba(0,0,0,0.10)] transition-transform duration-200 hover:-translate-y-1"
+              >
+                {logo ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- brand logo
+                  <img src={logo} alt={brand} className="max-h-[70%] max-w-[85%] object-contain" />
+                ) : (
+                  <span className="font-display text-center text-[19px] uppercase leading-[0.95]">{brand}</span>
+                )}
+              </Link>
+            )
+          })}
+        </div>
+      </div>
+    </section>
   )
 }
 
@@ -242,7 +305,7 @@ export default function StoreShop({
               >
                 Don&rsquo;t miss
               </span>
-              <h2 id="hot-items" className="font-display text-3xl uppercase leading-none md:text-4xl">
+              <h2 id="hot-items" className="font-display text-4xl uppercase leading-none md:text-6xl">
                 Hot right now
               </h2>
             </div>
@@ -254,19 +317,17 @@ export default function StoreShop({
         </section>
       )}
 
+      <BrandQuickShop menu={menu} storeSlug={storeSlug} />
+
       {/* ── category shelves, promo banners woven between ── */}
       {shelves.map((shelf, i) => (
         <div key={shelf.category}>
           <section aria-labelledby={`shelf-${shelf.category}`} data-shelf={shelf.category} className="mt-12">
+            {/* WAY bigger, no count (Avanti, 2026-08-03) */}
             <div className="flex items-baseline justify-between gap-4">
-              <div className="flex items-baseline gap-3">
-                <h2 id={`shelf-${shelf.category}`} className="font-display text-3xl uppercase leading-none md:text-4xl">
-                  {categoryLabel(shelf.category)}
-                </h2>
-                <span className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
-                  {shelf.products.length}
-                </span>
-              </div>
+              <h2 id={`shelf-${shelf.category}`} className="font-display text-5xl uppercase leading-none md:text-7xl">
+                {categoryLabel(shelf.category)}
+              </h2>
               <Link
                 href={`?category=${shelf.category}#browse`}
                 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-ink)] underline-offset-4 hover:underline"

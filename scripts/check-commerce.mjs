@@ -123,6 +123,14 @@ async function checkMerchandising() {
   if (promos >= 1) ok(`${path} carries ${promos} in-feed promo banner(s)`)
   else fail(`${path} carries in-feed promo banners`, 'none found')
 
+  // Shop-by-Brand quick-shop band (Avanti, 2026-08-03): yellow gradient card
+  // with the store's top brands as tiles. Data-derived, so it must be in SSR.
+  if (html.includes('data-brand-quickshop')) ok(`${path} carries the Shop-by-Brand quick-shop band`)
+  else fail(`${path} carries the Shop-by-Brand quick-shop band`, 'data-brand-quickshop missing')
+  const brandTiles = (html.match(/data-brand-tile=/g) ?? []).length
+  if (brandTiles >= 3) ok(`${path} quick-shop band lists ${brandTiles} brand tiles`)
+  else fail(`${path} quick-shop band lists brand tiles`, `found ${brandTiles}, want >=3`)
+
   if (html.includes('id="browse"')) ok(`${path} keeps the full browse grid`)
   else fail(`${path} keeps the full browse grid`, 'id="browse" anchor missing')
 }

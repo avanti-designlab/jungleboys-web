@@ -63,15 +63,9 @@ const HERO_FALLBACK: [ShopBanner, ShopBanner, ShopBanner] = [
   },
 ]
 
+// 'Shop by brand' left this list 2026-08-03: it is now the storefront's own
+// BrandQuickShop band (yellow gradient + top-8 brand tiles), not a CMS promo.
 const PROMO_FALLBACK: ShopBanner[] = [
-  {
-    kicker: 'Everything on the shelf',
-    title: 'Shop by brand',
-    cta: 'Browse brands',
-    href: '@store/brands',
-    image: '/home/tiles/tile-77.webp',
-    alt: 'Jungle Boys product tile collage',
-  },
   {
     kicker: 'The collection',
     title: 'Jungle Boys lines',
