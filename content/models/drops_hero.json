@@ -1,0 +1,9 @@
+{
+  "name": "drops_hero",
+  "display_name": "Drops Hero — Strain of the Week backdrop",
+  "is_nestable": true,
+  "schema": {
+    "image": { "type": "asset", "filetypes": ["images"], "description": "Background art behind the Strain of the Week tile (strain graphics). Leave empty for the default dark/gold look." },
+    "alt": { "type": "text" }
+  }
+}

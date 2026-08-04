@@ -207,19 +207,39 @@ body {
     animation: none;
   }
 }
-/* Drops clock — the Friday chip breathes a gold ring; the live dot blinks.
-   Transform/opacity + box-shadow only, both stilled under reduced motion. */
-@keyframes drop-friday-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(254, 207, 14, 0.55);
-  }
-  55% {
-    box-shadow: 0 0 0 9px rgba(254, 207, 14, 0);
-  }
+/* Drops clock v3 — a glow ORBITS the gold tile (Avanti, 2026-08-04: "have
+   the glow following around the box"). Border-beam: the tile sits inside a
+   3px rim; a conic white-hot highlight spins behind it and shows only in the
+   rim. Transform-only; the live dot blinks opacity. Both stilled under
+   reduced motion (the rim falls back to a static deep gold). */
+.drop-beam {
+  background: #8a6a06;
+  /* static rim when the beam is stilled */
 }
-.drop-friday-pulse {
-  animation: drop-friday-pulse 2.2s ease-out infinite;
+.drop-beam::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 220%;
+  aspect-ratio: 1;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0 70%,
+    rgba(255, 244, 200, 0.95) 82%,
+    #fff 86%,
+    rgba(255, 244, 200, 0.95) 90%,
+    transparent 98%
+  );
+  animation: drop-orbit 3.2s linear infinite;
+}
+@keyframes drop-orbit {
+  from {
+    transform: translate(-50%, -50%) rotate(0turn);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(1turn);
+  }
 }
 @keyframes drop-live-dot {
   0%,
@@ -234,7 +254,7 @@ body {
   animation: drop-live-dot 1.1s ease-in-out infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  .drop-friday-pulse,
+  .drop-beam::before,
   .drop-live-dot {
     animation: none;
   }

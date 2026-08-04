@@ -102,6 +102,22 @@ const PROMOS = [
   { kicker: 'The collection', title: 'Jungle Boys lines', cta: 'Explore the lines', href: '/products' },
 ]
 
+// Drops page CMS slot (Avanti, 2026-08-04): a `drops` story whose drops_hero
+// blok carries the Strain-of-the-Week backdrop image. Created EMPTY — the
+// tile has a designed fallback, and assets must be real uploads (asset trap).
+async function ensureDropsStory() {
+  const { stories } = await api('GET', '/stories?with_slug=drops')
+  if (stories?.length) {
+    console.log('  drops story: already exists — not touched')
+    return
+  }
+  await api('POST', '/stories', {
+    story: { name: 'Drops', slug: 'drops', content: { component: 'drops', body: [{ component: 'drops_hero', alt: '' }] } },
+    ...(PUBLISH ? { publish: 1 } : {}),
+  })
+  console.log(`  drops story: created (empty backdrop slot)${PUBLISH ? ' + published' : ' (draft)'}`)
+}
+
 async function ensureShopStory() {
   const { stories } = await api('GET', '/stories?with_slug=shop')
   if (stories?.length) {
@@ -124,5 +140,8 @@ await retargetHome()
 await syncComponent('shop_banner')
 await syncComponent('shop_promo')
 await syncComponent('shop')
+await syncComponent('drops_hero')
+await syncComponent('drops')
 await ensureShopStory()
+await ensureDropsStory()
 console.log('done')

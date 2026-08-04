@@ -1,0 +1,9 @@
+{
+  "name": "drops",
+  "display_name": "Drops Page",
+  "is_root": true,
+  "is_nestable": false,
+  "schema": {
+    "body": { "type": "bloks", "restrict_components": true, "component_whitelist": ["drops_hero"] }
+  }
+}

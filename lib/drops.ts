@@ -1,5 +1,6 @@
 import { getMenu } from '@/lib/dutchie'
 import type { Product } from '@/lib/dutchie'
+import { getStory, assetUrl } from '@/lib/storyblok'
 
 // Fresh Drops — the curated weekly release. Drops FRIDAYS; editorial, not a
 // computed "new this week" filter (recorded decision, 2026-07-31).
@@ -54,4 +55,29 @@ export async function getDrops(retailerId: string): Promise<Drops> {
     featured: pick(FEATURED_DROP_SLUGS),
     list: pick(DROP_LIST_SLUGS),
   }
+}
+
+export interface DropsHero {
+  /** CMS strain-graphics backdrop for the Strain of the Week tile — a real
+      Storyblok upload or null (the tile falls back to the dark/gold look).
+      Per the recorded banner rule: CMS-editable with a code fallback, and
+      assetUrl() ignores anything that is not an absolute CMS-host URL. */
+  image: string | null
+  alt: string
+}
+
+export async function getDropsHero(): Promise<DropsHero> {
+  const story = await getStory('drops', 'published')
+  const body = (story?.content as { body?: unknown } | undefined)?.body
+  if (Array.isArray(body)) {
+    const blok = body.find(
+      (b): b is Record<string, unknown> =>
+        !!b && typeof b === 'object' && (b as { component?: string }).component === 'drops_hero'
+    )
+    if (blok) {
+      const url = assetUrl(blok.image, '')
+      if (url) return { image: url, alt: typeof blok.alt === 'string' ? blok.alt : '' }
+    }
+  }
+  return { image: null, alt: '' }
 }
