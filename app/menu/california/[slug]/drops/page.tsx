@@ -225,12 +225,20 @@ export default async function StoreDropsPage({
         <div className="mx-auto grid max-w-[1560px] gap-2 md:gap-3 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
           <div className="flex flex-col gap-2 md:gap-3">
             {/* title tile */}
-            <div className="relative flex-1 overflow-hidden rounded-[1.75rem] bg-[#0b0b0b] p-7 pt-20 text-white md:rounded-[2rem] md:p-10 md:pt-24">
+            <div className="relative flex flex-1 flex-col overflow-hidden rounded-[1.75rem] bg-[#0b0b0b] p-7 pt-20 text-white md:rounded-[2rem] md:p-10 md:pt-24">
               <span
                 aria-hidden
                 className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-[radial-gradient(70%_100%_at_40%_0%,rgba(254,207,14,0.2),transparent_70%)]"
               />
-              <div className="relative">
+              {/* faint brand cart art fills the tile's shoulder — decorative */}
+              {/* eslint-disable-next-line @next/next/no-img-element -- brand SVG */}
+              <img
+                src="/shop/icons/cart.svg"
+                alt=""
+                aria-hidden
+                className="pointer-events-none absolute -bottom-8 -right-6 h-56 w-56 object-contain opacity-[0.08] invert"
+              />
+              <div className="relative flex flex-1 flex-col">
                 <Link
                   href={`/menu/california/${slug}`}
                   className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)] transition hover:opacity-80"
@@ -244,6 +252,37 @@ export default async function StoreDropsPage({
                 <p className="mt-3 max-w-sm text-sm text-white/70" style={{ fontFamily: 'var(--font-brand)' }}>
                   The weekly release at {location.name}. Small batches — gone when they&rsquo;re gone.
                 </p>
+
+                {/* what's IN this week's drop — quick-jump chips per category
+                    (fills the tile with the drop's own facts, Avanti 2026-08-04) */}
+                {byCategory.length > 0 && (
+                  <div className="mt-6" style={{ fontFamily: 'var(--font-brand)' }}>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                      In this week&rsquo;s drop
+                    </p>
+                    <div className="mt-2.5 flex flex-wrap gap-1.5">
+                      {byCategory.map((g) => (
+                        <a
+                          key={g.category}
+                          href={`#drop-${g.category}`}
+                          className="rounded-full border border-white/20 px-3.5 py-2 text-[11px] font-bold uppercase tracking-widest text-white/85 transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                        >
+                          {categoryLabel(g.category)} · {g.products.length}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <a
+                  href="#drop-list"
+                  className="font-display mt-auto inline-flex w-fit items-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-3 pt-3.5 text-[17px] uppercase leading-none tracking-[0.06em] text-black transition-transform duration-200 hover:-translate-y-0.5"
+                >
+                  See the full drop list
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="h-4 w-4" aria-hidden>
+                    <path d="M12 5v14m-6-6 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </a>
               </div>
             </div>
 
@@ -281,7 +320,7 @@ export default async function StoreDropsPage({
                 the Brands page */}
             <div className="mt-8 space-y-10">
               {byCategory.map((g) => (
-                <section key={g.category} data-drop-category={g.category} aria-label={categoryLabel(g.category)}>
+                <section key={g.category} id={`drop-${g.category}`} data-drop-category={g.category} aria-label={categoryLabel(g.category)} className="scroll-mt-28">
                   <div className="flex items-baseline justify-between gap-4">
                     <h3 className="font-display text-3xl uppercase leading-none md:text-5xl">
                       {categoryLabel(g.category)}

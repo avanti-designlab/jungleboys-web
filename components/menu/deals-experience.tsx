@@ -17,6 +17,7 @@ export interface DealRailItem {
   name: string
   count: number
   group: 'jungle-boys' | 'outsource'
+  percentOff?: number
 }
 
 type GroupFilter = 'all' | 'jungle-boys' | 'outsource'
@@ -139,26 +140,41 @@ export default function DealsExperience({
                     .filter((i) => i.group === g)
                     .map((i) => {
                       const current = active === i.slug
+                      // the group heading already says Jungle Boys — repeating
+                      // it on every row was noise (Avanti, 2026-08-04)
+                      const label = i.name.replace(/^Jungle Boys\s*\|\s*/i, '')
                       return (
                         <li key={i.slug}>
                           <a
                             href={`#deal-${i.slug}`}
                             aria-current={current ? 'true' : undefined}
-                            className={`flex items-center justify-between gap-3 rounded-2xl py-2.5 pl-4 pr-3 transition-colors duration-200 ${
+                            title={i.name}
+                            className={`flex items-center justify-between gap-3 rounded-full py-2.5 pl-4 pr-2 transition-colors duration-200 ${
                               current
                                 ? 'bg-[var(--color-accent)] text-black'
                                 : 'text-[var(--color-foreground)]/80 hover:bg-[var(--color-background)] hover:text-[var(--color-foreground)]'
                             }`}
                           >
-                            <span className="font-display text-[16px] uppercase leading-[0.95] tracking-[0.03em]">
-                              {i.name}
+                            <span className="font-display min-w-0 flex-1 truncate text-[16px] uppercase leading-none tracking-[0.03em]">
+                              {label}
                             </span>
-                            <span
-                              className={`text-[10px] font-bold ${current ? 'text-black/60' : 'text-[var(--color-muted)]'}`}
-                              style={{ fontFamily: 'var(--font-brand)' }}
-                            >
-                              {i.count}
-                            </span>
+                            {i.percentOff != null ? (
+                              <span
+                                className={`shrink-0 rounded-full px-2 py-1 text-[10px] font-extrabold leading-none ${
+                                  current ? 'bg-black text-[var(--color-accent)]' : 'bg-[var(--color-accent)] text-black'
+                                }`}
+                                style={{ fontFamily: 'var(--font-brand)' }}
+                              >
+                                {i.percentOff}%
+                              </span>
+                            ) : (
+                              <span
+                                className={`shrink-0 text-[10px] font-bold ${current ? 'text-black/60' : 'text-[var(--color-muted)]'}`}
+                                style={{ fontFamily: 'var(--font-brand)' }}
+                              >
+                                {i.count}
+                              </span>
+                            )}
                           </a>
                         </li>
                       )

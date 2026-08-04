@@ -447,7 +447,7 @@ export default function CommerceHeader() {
             className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[radial-gradient(70%_100%_at_50%_0%,rgba(254,207,14,0.14),transparent_70%)]"
           />
           <p className="relative px-3 pb-2 pt-1 text-[13px] uppercase leading-none tracking-[0.24em] text-[var(--color-accent)]">
-            Jungle Boys lines
+            Jungle Boys products
           </p>
           {/* icon wells + big Bebas labels, no numbering (Avanti, 2026-08-03) */}
           <div className="relative grid grid-cols-2 gap-1">

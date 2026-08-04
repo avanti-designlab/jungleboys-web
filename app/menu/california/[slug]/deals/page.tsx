@@ -153,6 +153,7 @@ export default async function StoreDealsPage({
     name: r.special.name,
     count: r.products.length,
     group: r.special.group,
+    percentOff: r.special.percentOff,
   }))
   const totalProducts = new Set(withStrays.flatMap((r) => r.products.map((p) => p.slug))).size
 
