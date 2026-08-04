@@ -159,7 +159,6 @@ export default async function StoreDealsPage({
     group: r.special.group,
     percentOff: r.special.percentOff,
   }))
-  const totalProducts = new Set(withStrays.flatMap((r) => r.products.map((p) => p.slug))).size
 
   return (
     <main data-nav-theme="dark" className="bg-[var(--color-background)] pb-24 text-[var(--color-foreground)]">
@@ -196,14 +195,10 @@ export default async function StoreDealsPage({
           />
           <div className="relative mx-auto max-w-[1400px] lg:pr-72 xl:pr-80">
             <BackPill href={`/menu/california/${slug}`} label={`${location.name} menu`} />
-            <h1 className="font-display mt-4 uppercase leading-[0.85]" style={{ fontSize: 'min(16vw, 11rem)' }}>
+            {/* no subtext (Avanti, 2026-08-04): the wordmark IS the hero */}
+            <h1 className="font-display mt-4 uppercase leading-[0.85]" style={{ fontSize: 'min(19vw, 14rem)' }}>
               Deals
             </h1>
-            <p className="mt-4 max-w-xl text-sm text-white/70 md:text-base" style={{ fontFamily: 'var(--font-brand)' }}>
-              {withStrays.length} live {withStrays.length === 1 ? 'deal' : 'deals'} · {totalProducts}{' '}
-              products marked down at {location.name}. Straight from the menu — what you see is what
-              is on the shelf right now.
-            </p>
           </div>
         </div>
         </Reveal>
