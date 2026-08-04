@@ -104,7 +104,7 @@ export default async function StoreBrandsPage({
 
       {/* ── HERO — the big bump: dark brand card, giant Bebas wordmark ── */}
       <header className="px-2 pt-2 md:px-3">
-        <div className="relative overflow-hidden rounded-[1.75rem] bg-[#0b0b0b] px-6 pb-12 pt-20 text-white md:rounded-[2.5rem] md:px-12 md:pb-16 md:pt-24 lg:px-20">
+        <div className="relative overflow-hidden rounded-[1.75rem] bg-[#0b0b0b] px-6 pb-8 pt-14 text-white md:rounded-[2.5rem] md:px-12 md:pb-10 md:pt-16 lg:px-20">
           <span
             aria-hidden
             className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-[radial-gradient(70%_100%_at_50%_0%,rgba(254,207,14,0.16),transparent_70%)]"
@@ -118,19 +118,26 @@ export default async function StoreBrandsPage({
               ← {location.name} menu
             </Link>
             <h1
-              className="font-display mt-4 uppercase leading-[0.85]"
-              style={{ fontSize: 'min(16vw, 11rem)' }}
+              className="font-display mt-3 uppercase leading-[0.85]"
+              style={{ fontSize: 'min(11vw, 7rem)' }}
             >
               Brands
             </h1>
-            {/* no subtext — it pushed the quick-shop tiles below the fold
-                (Avanti, 2026-08-04) */}
-            <div className="mt-6 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+            {/* compact hero (Avanti, 2026-08-04): no subtext, shorter tiles,
+                FEATURED BRANDS label — the sections peek above the fold */}
+            <p
+              className="mt-5 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]"
+              style={{ fontFamily: 'var(--font-brand)' }}
+            >
+              Featured brands
+            </p>
+            <div className="mt-2.5 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
               {brands.slice(0, 8).map(([brand]) => (
                 <BrandTile
                   key={brandAnchor(brand)}
                   brand={brand}
                   href={`#${brandAnchor(brand)}`}
+                  compact
                 />
               ))}
             </div>
@@ -159,8 +166,11 @@ export default async function StoreBrandsPage({
       </nav>
 
       {/* ── sticky rail + brand sections ── */}
-      <div className="px-6 pt-8 md:px-12 lg:px-20 lg:pt-12">
-        <div className="mx-auto grid max-w-[1400px] gap-8 lg:grid-cols-[230px_1fr]">
+      <div className="px-6 pt-10 md:px-12 lg:px-20 lg:pt-12">
+        <div className="mx-auto max-w-[1400px]">
+          <h2 className="font-display text-4xl uppercase leading-none md:text-6xl">Shop all brands</h2>
+        </div>
+        <div className="mx-auto mt-6 grid max-w-[1400px] gap-8 lg:grid-cols-[250px_1fr]">
           <BrandSpyNav items={spyItems} />
 
           <div className="min-w-0 space-y-8">

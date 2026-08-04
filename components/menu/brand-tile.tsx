@@ -9,10 +9,13 @@ export default function BrandTile({
   brand,
   href,
   className = '',
+  compact = false,
 }: {
   brand: string
   href: string
   className?: string
+  /** hero rows use the shorter tile so content below stays above the fold */
+  compact?: boolean
 }) {
   const slug = brandAnchor(brand)
   const logo = BRAND_LOGOS[slug]
@@ -20,7 +23,9 @@ export default function BrandTile({
     <Link
       href={href}
       data-brand-tile={slug}
-      className={`flex aspect-[7/4] items-center justify-center rounded-2xl bg-white px-3 text-black shadow-[0_8px_24px_rgba(0,0,0,0.10)] transition-transform duration-200 hover:-translate-y-1 ${className}`}
+      className={`flex items-center justify-center rounded-2xl bg-white px-3 text-black shadow-[0_8px_24px_rgba(0,0,0,0.10)] transition-transform duration-200 hover:-translate-y-1 ${
+        compact ? 'aspect-[3/1]' : 'aspect-[7/4]'
+      } ${className}`}
     >
       {logo ? (
         // eslint-disable-next-line @next/next/no-img-element -- brand logo

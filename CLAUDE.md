@@ -516,6 +516,24 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   %-off badge and its member ProductCards. Sale products no special claims land in a synthetic
   "More Markdowns" section per group — nothing discounted hides. check-commerce asserts sections,
   both groups, both doors + a fixture special name in SSR.
+- **DROPS HERO v3 — separate tiles, gold beam clock, CMS strain backdrop (Avanti, 2026-08-04
+  latest).** Her notes on v2: separate tiles; counter in a yellow box; strain of the week
+  bolder; an image-background option for strain graphics; week-day chips REMOVED (it's Friday
+  every week) and the glow now ORBITS the clock box. Built: hero = tile grid (dark title tile +
+  the GOLD countdown tile with a border-beam — conic white-hot highlight riding a 3px rim,
+  `.drop-beam` in globals, reduced-motion falls back to a static deep-gold rim) beside a
+  dramatic full-height Strain-of-the-Week tile (centered tilted shot in its white well per the
+  media-well rule, name at min(14vw,6.5rem), Genetics/Taste, price + Add to cart). **Backdrop
+  slot: `drops` story → `drops_hero` blok asset (content/models/drops_hero.json + drops.json;
+  getDropsHero() in lib/drops.ts, assetUrl-guarded, scrimmed for AA when set; the retarget
+  script now syncs these + creates the empty story).**
+- **BRANDS PAGE v3 (Avanti, 2026-08-04 latest): hero compacted (smaller BRANDS, FEATURED
+  BRANDS eyebrow, aspect-[3/1] compact tiles) so sections peek above the fold; "SHOP ALL
+  BRANDS" heading over the rail+sections; the sticky rail rows show LOGO + name.** Brand
+  logos: confirmed the live site's third-party logos live INSIDE the client-rendered Dutchie
+  embed (not fetchable HTML) — **they arrive with the Dutchie payload at cutover (map them
+  into the provider then; verification item), BRAND_LOGOS in lib/brands.ts is the interim
+  manual slot** (files → public/shop/brands/<anchor-slug>.<ext>).
 - **PDP REDESIGNED (Avanti, 2026-08-04 late — reference jungleboysflorida.com PDP: "keep the
   core elements the same so we know it's all pullable from Dutchie").** Same data elements,
   new bones: dark hero (media-well stage left w/ HOT badge when featured; brand eyebrow, giant

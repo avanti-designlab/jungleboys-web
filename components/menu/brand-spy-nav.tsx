@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { BRAND_LOGOS } from '@/lib/brands'
 
 // The Brands page's sticky left rail (Avanti, 2026-08-04): the brand list —
 // derived from the store's live menu, the same data the sections render — that
@@ -62,8 +63,16 @@ export default function BrandSpyNav({
                     : 'text-[var(--color-foreground)]/80 hover:bg-[var(--color-background)] hover:text-[var(--color-foreground)]'
                 }`}
               >
-                <span className="font-display truncate text-[17px] uppercase leading-none tracking-[0.03em]">
-                  {i.brand}
+                <span className="flex min-w-0 items-center gap-2.5">
+                  {/* logo beside the name when one is wired (BRAND_LOGOS —
+                      real logos flow from the Dutchie payload at cutover) */}
+                  {BRAND_LOGOS[i.anchor] && (
+                    // eslint-disable-next-line @next/next/no-img-element -- brand logo
+                    <img src={BRAND_LOGOS[i.anchor]} alt="" className="h-6 w-6 shrink-0 rounded-md bg-white object-contain p-0.5" />
+                  )}
+                  <span className="font-display truncate text-[17px] uppercase leading-none tracking-[0.03em]">
+                    {i.brand}
+                  </span>
                 </span>
                 <span
                   className={`text-[10px] font-bold ${current ? 'text-black/60' : 'text-[var(--color-muted)]'}`}
