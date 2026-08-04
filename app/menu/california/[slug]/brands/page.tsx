@@ -8,6 +8,7 @@ import { ProductCard } from '@/components/menu/menu-browser'
 import { brandAnchor } from '@/lib/brands'
 import BrandTile from '@/components/menu/brand-tile'
 import BrandSpyNav from '@/components/menu/brand-spy-nav'
+import BrandShelf from '@/components/menu/brand-shelf'
 
 // Brands at one store — EVERY brand on the shelf, not JB only. That is the
 // recorded decision (Avanti, 2026-07-31): the CA stores stock third-party
@@ -122,16 +123,9 @@ export default async function StoreBrandsPage({
             >
               Brands
             </h1>
-            <p
-              className="mt-4 max-w-xl text-sm text-white/70 md:text-base"
-              style={{ fontFamily: 'var(--font-brand)' }}
-            >
-              Every brand on the shelf at {location.name} — {brands.length} brands,{' '}
-              {menu.products.length} products, straight from the live menu.
-            </p>
-
-            {/* quick shop — the 8 most popular brands, logos when supplied */}
-            <div className="mt-8 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+            {/* no subtext — it pushed the quick-shop tiles below the fold
+                (Avanti, 2026-08-04) */}
+            <div className="mt-6 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
               {brands.slice(0, 8).map(([brand]) => (
                 <BrandTile
                   key={brandAnchor(brand)}
@@ -195,10 +189,14 @@ export default async function StoreBrandsPage({
                       {list.length} {list.length === 1 ? 'product' : 'products'}
                     </span>
                   </div>
-                  <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                    {list.map((p) => (
-                      <ProductCard key={p.id} product={p} storeSlug={slug} />
-                    ))}
+                  {/* one line per brand with arrows; View All expands in
+                      place (Avanti, 2026-08-04). Cards stay SSR children. */}
+                  <div className="mt-2">
+                    <BrandShelf count={list.length}>
+                      {list.map((p) => (
+                        <ProductCard key={p.id} product={p} storeSlug={slug} />
+                      ))}
+                    </BrandShelf>
                   </div>
                 </section>
               )
