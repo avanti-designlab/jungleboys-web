@@ -62,6 +62,16 @@ export function removeFromCart(variantId: string, storeSlug: string): void {
   write(readCart().filter((i) => !(i.variantId === variantId && i.storeSlug === storeSlug)))
 }
 
+/** Set a line's quantity directly; 0 or less removes the line. */
+export function setCartQty(variantId: string, storeSlug: string, qty: number): void {
+  if (qty <= 0) return removeFromCart(variantId, storeSlug)
+  const items = readCart()
+  const hit = items.find((i) => i.variantId === variantId && i.storeSlug === storeSlug)
+  if (!hit) return
+  hit.qty = qty
+  write(items)
+}
+
 export function cartCount(items: CartItem[] = readCart()): number {
   return items.reduce((n, i) => n + i.qty, 0)
 }

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { CA_OWNED } from '@/lib/owned-stores'
 import { readStore } from '@/lib/store-selection'
-import { CART_EVENT, cartSubtotal, readCart, removeFromCart, type CartItem } from '@/lib/cart'
+import { CART_EVENT, cartSubtotal, readCart, removeFromCart, setCartQty, type CartItem } from '@/lib/cart'
 import { CATEGORY_ICONS } from '@/lib/category-icons'
 import { categoryLabel } from '@/components/menu/labels'
 import CartIcon from './cart-icon'
@@ -491,16 +491,57 @@ export default function CommerceHeader() {
         hidden={openMenu !== 'cart'}
         className="pointer-events-auto absolute right-3 top-full w-[min(92vw,24rem)] pt-1 md:right-[max(0.75rem,calc((100vw-1400px)/2))]"
       >
-        <div className="jb-dropdown rounded-[28px] border border-white/10 bg-[#0b0b0b]/95 p-4 text-white shadow-2xl backdrop-blur-md">
+        <div className="jb-dropdown overflow-hidden rounded-[28px] border border-white/10 bg-[#0b0b0b]/95 text-white shadow-2xl backdrop-blur-md">
+          {/* header — title + live counter (Avanti, 2026-08-04: "a header
+              and counter") over the panel's gold field */}
+          <div className="relative border-b border-white/10 px-5 pb-4 pt-5">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 h-full bg-[radial-gradient(70%_100%_at_50%_0%,rgba(254,207,14,0.12),transparent_75%)]"
+            />
+            <div className="relative flex items-center justify-between gap-3">
+              <span className="text-[26px] uppercase leading-none tracking-[0.04em]">Your bag</span>
+              <span
+                className="rounded-full bg-[var(--color-accent)] px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.14em] text-black"
+                style={{ fontFamily: 'var(--font-brand)' }}
+              >
+                {count} {count === 1 ? 'item' : 'items'}
+              </span>
+            </div>
+            {store && (
+              <p className="relative mt-1.5 text-[12px] uppercase leading-none tracking-[0.12em] text-white/50">
+                Shopping at {store.name}
+              </p>
+            )}
+          </div>
+
           {cart.length === 0 ? (
-            <p className="px-2 py-6 text-center text-[15px] uppercase leading-none tracking-[0.12em] text-white/60">
-              Your bag is empty
-            </p>
+            <div className="px-5 py-10 text-center">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="mx-auto h-10 w-10 text-white/30" aria-hidden>
+                <circle cx="9.5" cy="20" r="1.4" />
+                <circle cx="17" cy="20" r="1.4" />
+                <path d="M3 4h2l2.15 11a1 1 0 0 0 1 .8h8.4a1 1 0 0 0 1-.78L20.2 8H6.3" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <p className="mt-3 text-[15px] uppercase leading-none tracking-[0.12em] text-white/60">
+                Your bag is empty
+              </p>
+              <Link
+                href={base ?? '/shop'}
+                onClick={() => setOpenMenu(null)}
+                className="mt-4 inline-block rounded-full border border-white/20 px-5 py-2.5 text-[13px] uppercase leading-none tracking-[0.1em] text-white/80 transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              >
+                Browse the menu
+              </Link>
+            </div>
           ) : (
-            <>
+            <div className="p-4">
               <ul className="max-h-72 space-y-2 overflow-y-auto">
                 {cart.map((i) => (
-                  <li key={`${i.storeSlug}-${i.variantId}`} className="flex items-center gap-3 rounded-2xl bg-white/[0.05] px-3 py-2.5">
+                  <li key={`${i.storeSlug}-${i.variantId}`} className="flex items-center gap-3 rounded-2xl bg-white/[0.05] p-3">
+                    {/* letter tile anchors the row (no images in the local bag) */}
+                    <span className="font-display flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent)] text-xl uppercase text-black">
+                      {i.name.charAt(0)}
+                    </span>
                     <span className="min-w-0 flex-1">
                       <Link
                         href={`/shop/${i.slug}?store=${i.storeSlug}`}
@@ -509,11 +550,31 @@ export default function CommerceHeader() {
                       >
                         {i.name}
                       </Link>
-                      <span className="text-[12px] uppercase leading-none tracking-[0.1em] text-white/50">
-                        {i.option} · ×{i.qty}
+                      <span className="mt-1 flex items-center gap-2">
+                        <span className="text-[12px] uppercase leading-none tracking-[0.1em] text-white/50">{i.option}</span>
+                        {/* qty stepper */}
+                        <span className="inline-flex items-center rounded-full border border-white/15">
+                          <button
+                            type="button"
+                            onClick={() => setCartQty(i.variantId, i.storeSlug, i.qty - 1)}
+                            aria-label={`One less ${i.name}`}
+                            className="px-2 py-1 text-[14px] leading-none text-white/70 transition hover:text-[var(--color-accent)]"
+                          >
+                            −
+                          </button>
+                          <span className="min-w-5 text-center text-[13px] leading-none tabular-nums">{i.qty}</span>
+                          <button
+                            type="button"
+                            onClick={() => setCartQty(i.variantId, i.storeSlug, i.qty + 1)}
+                            aria-label={`One more ${i.name}`}
+                            className="px-2 py-1 text-[14px] leading-none text-white/70 transition hover:text-[var(--color-accent)]"
+                          >
+                            +
+                          </button>
+                        </span>
                       </span>
                     </span>
-                    <span className="shrink-0 text-[16px] leading-none">${((i.price * i.qty) / 100).toFixed(2).replace(/\.00$/, '')}</span>
+                    <span className="shrink-0 text-[17px] leading-none">${((i.price * i.qty) / 100).toFixed(2).replace(/\.00$/, '')}</span>
                     <button
                       type="button"
                       onClick={() => removeFromCart(i.variantId, i.storeSlug)}
@@ -528,20 +589,30 @@ export default function CommerceHeader() {
                 ))}
               </ul>
               <div className="mt-3 flex items-center justify-between border-t border-white/10 px-2 pt-3">
-                <span className="text-[13px] uppercase leading-none tracking-[0.18em] text-white/60">Subtotal</span>
-                <span className="text-[19px] leading-none">${(cartSubtotal(cart) / 100).toFixed(2).replace(/\.00$/, '')}</span>
+                <span className="text-[13px] uppercase leading-none tracking-[0.18em] text-white/60">
+                  Subtotal · {count} {count === 1 ? 'item' : 'items'}
+                </span>
+                <span className="text-[22px] leading-none">${(cartSubtotal(cart) / 100).toFixed(2).replace(/\.00$/, '')}</span>
               </div>
+              {/* PillCta language: label + cart icon in a circle on the right */}
               <Link
                 href={base ?? '/shop'}
                 onClick={() => setOpenMenu(null)}
-                className="mt-3 flex w-full items-center justify-center rounded-full bg-[var(--color-accent)] px-6 py-3 text-[16px] uppercase leading-none tracking-[0.08em] text-black transition hover:opacity-90"
+                className="group/co mt-3 flex w-full items-center justify-between rounded-full bg-[var(--color-accent)] py-1.5 pl-6 pr-1.5 text-[16px] uppercase leading-none tracking-[0.08em] text-black transition-all duration-200 hover:-translate-y-0.5 hover:bg-white"
               >
-                Checkout at {store ? store.name : 'your store'}
+                <span className="truncate">Checkout at {store ? store.name : 'your store'}</span>
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-black text-[var(--color-accent)]">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4" aria-hidden>
+                    <circle cx="9.5" cy="20" r="1.4" />
+                    <circle cx="17" cy="20" r="1.4" />
+                    <path d="M3 4h2l2.15 11a1 1 0 0 0 1 .8h8.4a1 1 0 0 0 1-.78L20.2 8H6.3" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
               </Link>
               <p className="mt-2 px-2 text-center text-[12px] uppercase leading-none tracking-[0.1em] text-white/40">
                 Checkout completes on the store menu for now
               </p>
-            </>
+            </div>
           )}
         </div>
       </div>
