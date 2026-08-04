@@ -72,7 +72,7 @@ export function AddToCartButton({
       type="button"
       onClick={add}
       aria-label={`Add ${product.name} (${variant.option}) to cart`}
-      className={`group/atc relative z-20 inline-flex shrink-0 items-center gap-2 rounded-full py-1 pl-4 pr-1 text-[10px] font-extrabold uppercase tracking-widest transition-colors duration-200 ${
+      className={`group/atc relative z-20 inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full py-1 pl-3 pr-1 text-[10px] font-extrabold uppercase tracking-widest transition-colors duration-200 ${
         added
           ? tone === 'gold'
             ? 'bg-white text-black'
@@ -209,9 +209,9 @@ export function ProductCard({
           </Link>
         </h3>
 
-        {/* wraps when tight (narrow shelf cards) — the button drops to its own
-            line instead of escaping the card (Avanti, 2026-08-04) */}
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-x-3 gap-y-2 pt-1">
+        {/* ONE line always (Avanti, 2026-08-04: "fix all to make them on one
+            line") — sized so price + CTA fit the narrowest shelf card */}
+        <div className="mt-auto flex items-center justify-between gap-2 pt-1">
           <p className="leading-none">
             {onSale && (
               <span
@@ -237,7 +237,7 @@ export function ProductCard({
                       from
                     </span>
                   )}
-                  <span className={`font-display text-[1.9rem] leading-none ${onSale ? 'text-[var(--color-danger-solid)]' : ''}`}>
+                  <span className={`font-display text-[1.7rem] leading-none ${onSale ? 'text-[var(--color-danger-solid)]' : ''}`}>
                     {money(from)}
                   </span>
                   <span className="ml-1 text-xs font-bold uppercase text-[var(--color-ink)]/60" style={{ fontFamily: 'var(--font-brand)' }}>

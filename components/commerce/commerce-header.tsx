@@ -245,17 +245,19 @@ export default function CommerceHeader() {
       </div>
 
     <header
-      className="pointer-events-none sticky top-0 z-40 flex items-center justify-start py-3 pr-3"
-      // the pill's left edge lines up with the content container's left edge
-      // (max-w-[1400px], centered) so it sits flush over the tiles below —
-      // clamped so it never slides under the hamburger/logo cluster
-      style={{ fontFamily: 'var(--font-display)', paddingLeft: 'max(11.5rem, calc((100vw - 1400px) / 2))' }}
+      // the pill spans the hamburger/logo cluster's end to the content
+      // container's right edge (max-w-[1400px], centered), so its right edge
+      // sits flush over the tiles below (Avanti, 2026-08-04: "ends at the end
+      // of the tile underneath"). Left clamp = cluster width + breathing room,
+      // stepped with the cluster's own responsive sizes.
+      className="pointer-events-none sticky top-0 z-40 flex items-center justify-start py-3 pl-[max(9.5rem,calc((100vw-1400px)/2))] pr-[max(0.75rem,calc((100vw-1400px)/2))] sm:pl-[max(11.75rem,calc((100vw-1400px)/2))] md:pl-[max(14.5rem,calc((100vw-1400px)/2))]"
+      style={{ fontFamily: 'var(--font-display)' }}
     >
-      <div className="pointer-events-auto flex min-w-0 max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#0b0b0b]/90 py-1.5 pl-4 pr-3 text-white shadow-2xl backdrop-blur-md">
+      <div className="pointer-events-auto flex min-w-0 max-w-full flex-1 items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#0b0b0b]/90 py-1.5 pl-4 pr-3 text-white shadow-2xl backdrop-blur-md">
         <Link
           href={base ?? '/shop'}
           aria-current={base && pathname === base ? 'page' : undefined}
-          className={`shrink-0 rounded-full px-4 py-2.5 text-[19px] uppercase leading-none tracking-[0.05em] transition-colors duration-200 ${
+          className={`shrink-0 rounded-full px-3 py-2.5 text-[19px] uppercase leading-none tracking-[0.05em] transition-colors duration-200 ${
             base && pathname === base
               ? 'bg-[var(--color-accent)] text-black'
               : 'text-white/80 hover:bg-white/10 hover:text-white'
@@ -271,7 +273,7 @@ export default function CommerceHeader() {
             aria-expanded={openMenu === menu}
             aria-haspopup="menu"
             onClick={() => setOpenMenu(openMenu === menu ? null : menu)}
-            className={`flex shrink-0 items-center gap-1.5 rounded-full px-4 py-2.5 text-[19px] uppercase leading-none tracking-[0.05em] transition-colors duration-200 ${
+            className={`flex shrink-0 items-center gap-1.5 rounded-full px-3 py-2.5 text-[19px] uppercase leading-none tracking-[0.05em] transition-colors duration-200 ${
               openMenu === menu
                 ? 'bg-[var(--color-accent)] text-black'
                 : 'text-white/80 hover:bg-white/10 hover:text-white'
@@ -292,7 +294,7 @@ export default function CommerceHeader() {
               key={s.key}
               href={href}
               aria-current={active ? 'page' : undefined}
-              className={`shrink-0 rounded-full px-4 py-2.5 text-[19px] uppercase leading-none tracking-[0.05em] transition-colors duration-200 ${
+              className={`shrink-0 rounded-full px-3 py-2.5 text-[19px] uppercase leading-none tracking-[0.05em] transition-colors duration-200 ${
                 active
                   ? 'bg-[var(--color-accent)] text-black'
                   : 'text-white/80 hover:bg-white/10 hover:text-white'
@@ -303,11 +305,12 @@ export default function CommerceHeader() {
           )
         })}
 
-        <span aria-hidden className="mx-1 h-5 w-px shrink-0 bg-white/20" />
+        {/* ml-auto: nav packs left, utilities pack right as the pill stretches */}
+        <span aria-hidden className="ml-auto mr-1 h-5 w-px shrink-0 bg-white/20" />
 
         {/* open/closed in store-local time — empty until the client knows */}
         {status && (
-          <span className="hidden shrink-0 items-center gap-1.5 px-2 text-[16px] uppercase leading-none tracking-[0.06em] xl:flex">
+          <span className="hidden shrink-0 items-center gap-1.5 px-2 text-[16px] uppercase leading-none tracking-[0.06em] min-[1700px]:flex">
             <span
               aria-hidden
               className={`h-2 w-2 rounded-full ${status.open ? 'bg-[var(--color-success)]' : 'bg-white/40'}`}
@@ -318,7 +321,7 @@ export default function CommerceHeader() {
 
         {/* Recreational / Medical — inherited from the Dutchie embed; UI state
             until the GraphQL menuType param is verified (see MENU_TYPE_KEY) */}
-        <label className="hidden shrink-0 items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.06] py-1 pl-3 pr-1.5 lg:flex">
+        <label className="hidden shrink-0 items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.06] py-1 pl-3 pr-1.5 min-[1360px]:flex">
           <span className="text-[14px] uppercase leading-none tracking-[0.14em] text-white/60">Menu</span>
           <select
             value={menuType}

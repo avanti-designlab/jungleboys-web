@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import BackPill from '@/components/menu/back-pill'
 import type { Location } from '@/lib/dutchie'
 
 // Store info band — the compact form of the old masthead. Avanti (2026-08-03,
@@ -84,13 +85,7 @@ export default function StoreHeader({
 
       <div className="relative mx-auto grid max-w-[1400px] items-end gap-10 lg:grid-cols-[minmax(0,1fr)_auto]">
         <div className="min-w-0">
-          <Link
-            href="/locations"
-            className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)] transition hover:opacity-80"
-            style={{ fontFamily: 'var(--font-brand)' }}
-          >
-            ← All locations
-          </Link>
+          <BackPill href="/locations" label="All locations" />
 
           <h1 className="font-display mt-4 uppercase">
             <span className="block text-lg leading-none text-[var(--color-accent)] md:text-xl">
