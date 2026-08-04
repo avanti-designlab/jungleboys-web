@@ -647,8 +647,11 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   price + a real AddToCartButton. The Drop List = ONE SHOPPABLE ROW PER CATEGORY using the
   same BrandShelf arrow mechanics as Brands; featured overflow joins its category row so
   nothing curated goes missing. Pulse keyframes reduced-motion-gated per convention. NOTE:
-  the countdown targets START of Friday — if drops actually land at a specific hour, set it
-  then; do not invent one. Curation stub + pre-cutover replacement rule unchanged
+  the drop hour EXISTS now (Avanti, 2026-08-04: "the drop time is opening time for each
+  store") — DropCountdown takes `opensAt` (the store's Friday `opens` from its hours data)
+  and counts to Friday@open store-local; Friday BEFORE opening counts to today's open, the
+  DROP DAY live state starts only at/after opening. The drops page passes
+  `location.hours.find(fri).opens`. Curation stub + pre-cutover replacement rule unchanged
   (lib/drops.ts).
 - **COLLECTION PAGES: every category + JB line is its OWN shopping page (Avanti, 2026-08-04
   late — "these links all click back to the main shop page… should all be individual shopping
@@ -826,6 +829,42 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
 - **Data-model freeze: ✅ PASSED (Orchestrator review 2026-07-19).** Frozen contracts: `lib/dutchie/`
   types + provider interface, Supabase schema (migrations 0001/0002, RLS verified live), Storyblok
   content models (`content/models/`). Interface changes require Orchestrator approval + doc update.
+
+- **Phase-3 motion runs on the SITE'S CSS mechanism, not GSAP (2026-08-04, after Avanti: "still no
+  motion on any of the pages").** `components/reveal.tsx` was rebuilt: IntersectionObserver toggles
+  `.is-in` on `.jb-reveal-block` (opacity+24px) / `.jb-reveal-slide` (transform-ONLY — use on tiles
+  holding the LCP image so the paint is never invisible), with the 2.6s failsafe, same as
+  `.media-reveal`. WHY: the GSAP ScrollTrigger version verified headlessly but never animated in
+  Avanti's preview pane (frozen ticker — recorded), which read as "no motion"; CSS transitions run
+  anywhere. Dropdown panels' `.jb-dropdown` drop-in strengthened to 0.45s/−16px (0.22s read as
+  nothing). Reveals now wrap heroes/boxes on shop door, /deals door, collections, deals, brands,
+  drops, login.
+- **Commerce header pill final geometry (Avanti, 2026-08-04: "ends at the end of the tile
+  underneath").** The pill is `flex-1` between `pl-[max(...)]` (steps 9.5/11.75/14.5rem with the
+  cluster's responsive sizes — never under the hamburger/logo) and `pr-[max(0.75rem,(100vw−1400px)/2)]`
+  so its RIGHT edge sits flush over the 1400px content edge; the divider carries `ml-auto` (nav
+  left, utilities right). Content was slimmed to fit all widths with ZERO overflow-x (probed
+  1280/1440/1600/1920): nav px-3, open-status ≥1700px, Rec/Med ≥1360px. Don't re-widen without
+  re-probing scrollWidth.
+- **Card buy row is ONE LINE everywhere (Avanti, 2026-08-04: "fix all to make them on one line").**
+  ProductCard price+CTA row is nowrap `justify-between`; price 1.7rem; AddToCartButton compacted
+  (gap-1.5, pl-3, whitespace-nowrap). Supersedes the same-day flex-wrap fix.
+- **Back links are pills (`components/menu/back-pill.tsx`)** — gold arrow-in-circle LEFT, hover
+  lift; swapped on brands/deals/drops/collections/store-header. Strain of the Week: badge alone up
+  top; strain+THC pills moved DOWN to a ruled buy line (pills left, price+ATC right); the shot is a
+  Link to the PDP (hover un-rotates).
+- **/deals is the evergreen deals DOOR (Avanti, 2026-08-04: "lead to the store picker modal…then
+  routes to the deals page").** `app/deals/page.tsx` = crawlable chooser (4 CA deals links + FL gold
+  door); store-picker-mount treats it like /shop but with `dest='deals'` (StorePicker routes a CA
+  pick to `<store>/deals`); saved CA store skips the modal via `DealsForward` router.replace. Month
+  redirect rotations (/420-deals, /april…/june-deals, /710-deals) now land on /deals; sitemap lists
+  it. Home hero fallback slide = "AUGUST DEALS" → /deals (kicker LIVE NOW, art still the July asset
+  until a CMS upload); `storyblok-retarget-shop.mjs` retargetHome() renames the JULY DEALS slide
+  idempotently — Avanti re-runs with her token, then `--publish`.
+- **St. Petersburg FL store entry added (2026-08-04)** — NAP read off the LIVE jungleboys.com
+  /locations listing (4500 4th St N, St. Petersburg, FL 33703 · (727) 390-3840 · FL_HOURS); its
+  hand-drawn illustration is still owed, so the directory StoreCard falls back to the brand mark
+  `onError` instead of a broken image.
 
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
