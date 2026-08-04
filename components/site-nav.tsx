@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { MENU_COLUMNS, BRAND_ASSETS } from '@/lib/site-config'
+import { BRAND_ASSETS } from '@/lib/site-config'
+import MainMenuOverlay from './main-menu-overlay'
 import { SocialIcons } from './social-icons'
 import ThemeToggle from './theme-toggle'
 import PillCta from './pill-cta'
@@ -19,13 +20,6 @@ const HEADER_SOCIALS = [
   { label: 'Instagram', href: 'https://www.instagram.com/jungleboys', icon: SocialIcons.instagram },
   { label: 'Weedmaps', href: 'https://weedmaps.com/brands/jungleboys/products', icon: SocialIcons.weedmaps },
   { label: 'YouTube', href: 'https://www.youtube.com/@JungleBoysfilms', icon: SocialIcons.youtube },
-]
-
-const OVERLAY_SOCIALS = [
-  { label: 'Instagram', href: 'https://www.instagram.com/jungleboys', icon: SocialIcons.instagram },
-  { label: 'X', href: 'https://x.com/jungleboysdrops', icon: SocialIcons.x },
-  { label: 'YouTube', href: 'https://www.youtube.com/@JungleBoysfilms', icon: SocialIcons.youtube },
-  { label: 'Facebook', href: 'https://www.facebook.com/JungleBoysDrops/', icon: SocialIcons.facebook },
 ]
 
 // Routes that pin themselves dark regardless of theme — the condensed pill
@@ -107,61 +101,6 @@ export default function SiteNav() {
     }
   }, [])
 
-  // The overlay is a modal, so it has to behave like one. It renders BEFORE
-  // <header> in the DOM, so without a trap forward-Tab walked straight past its
-  // 14 links into the page behind — which the visitor cannot see. The menu was
-  // only reachable by Shift+Tab, in reverse. Mirrors components/age-gate.tsx.
-  useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : ''
-    const esc = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
-    document.addEventListener('keydown', esc)
-
-    if (!open) {
-      document.body.style.overflow = ''
-      document.removeEventListener('keydown', esc)
-      return () => document.removeEventListener('keydown', esc)
-    }
-
-    const overlay = overlayRef.current
-    const focusables = () =>
-      overlay ? [...overlay.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')] : []
-
-    // move focus in
-    focusables()[0]?.focus()
-
-    const trap = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab' || !overlay) return
-      const items = focusables()
-      if (!items.length) return
-      const first = items[0]
-      const last = items[items.length - 1]
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault()
-        last.focus()
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault()
-        first.focus()
-      } else if (!overlay.contains(document.activeElement)) {
-        // focus escaped to the header or the page behind — pull it back
-        e.preventDefault()
-        first.focus()
-      }
-    }
-    document.addEventListener('keydown', trap)
-
-    return () => {
-      document.body.style.overflow = ''
-      document.removeEventListener('keydown', esc)
-      document.removeEventListener('keydown', trap)
-      // Restore focus to the toggle, explicitly. Reading document.activeElement
-      // on open is not reliable — a click does not always leave focus on the
-      // button — and closing with focus on <body> loses the visitor's place.
-      document.querySelector<HTMLElement>('[data-menu-toggle]')?.focus()
-    }
-  }, [open])
-
-  let linkIndex = 0 // running index for the stagger delay across all columns
-
   // the bar's left cluster is white over any dark backdrop OR the open menu
   const barDark = open || headerDark
 
@@ -170,68 +109,8 @@ export default function SiteNav() {
 
   return (
     <>
-      {/* full-screen menu (under the header, above everything else) */}
-      {open && (
-        <div
-          ref={overlayRef}
-          data-nav-overlay
-          role="dialog"
-          aria-modal="true"
-          aria-label="Main menu"
-          className="menu-overlay fixed inset-0 z-40 h-dvh overflow-y-auto overscroll-contain bg-[#0b0b0b]"
-        >
-          <nav className="mx-auto grid h-full w-full max-w-[1560px] grid-cols-1 content-start gap-x-10 gap-y-9 px-8 pt-28 md:[grid-template-columns:1fr_1fr_1.35fr] md:gap-y-1 md:pt-40">
-            {MENU_COLUMNS.map((column, c) => (
-              <ul key={c} className="flex flex-col">
-                {column.map((l) => {
-                  const delay = `${0.05 + linkIndex++ * 0.03}s`
-                  const cls =
-                    'font-display whitespace-nowrap text-5xl leading-[0.92] md:text-6xl xl:text-7xl uppercase text-white transition-colors duration-200 hover:text-[var(--color-accent)]'
-                  return (
-                    <li key={l.label} className="menu-line">
-                      {l.external ? (
-                        <a
-                          href={l.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ animationDelay: delay }}
-                          className={cls}
-                        >
-                          {l.label}
-                        </a>
-                      ) : (
-                        <Link
-                          href={l.href}
-                          onClick={() => setOpen(false)}
-                          style={{ animationDelay: delay }}
-                          className={cls}
-                        >
-                          {l.label}
-                        </Link>
-                      )}
-                    </li>
-                  )
-                })}
-              </ul>
-            ))}
-          </nav>
-
-          <div className="menu-socials absolute bottom-8 right-8 flex items-center gap-6 text-white">
-            {OVERLAY_SOCIALS.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={s.label}
-                className="transition-transform duration-200 hover:scale-110 hover:text-[var(--color-accent)] [&_svg]:h-9 [&_svg]:w-9"
-              >
-                {s.icon}
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* full-screen menu — shared with the commerce shell (main-menu-overlay) */}
+      <MainMenuOverlay open={open} onClose={() => setOpen(false)} />
 
       {/* sticky header — expanded bar morphs into a floating pill on scroll */}
       <header className="fixed inset-x-0 top-0 z-50">

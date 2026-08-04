@@ -9,6 +9,7 @@ import { CART_EVENT, cartSubtotal, readCart, removeFromCart, type CartItem } fro
 import { CATEGORY_ICONS } from '@/lib/category-icons'
 import { categoryLabel } from '@/components/menu/labels'
 import CartIcon from './cart-icon'
+import MainMenuOverlay from '@/components/main-menu-overlay'
 
 // The ecom shell's own sticky header (Avanti, 2026-08-03): the shop pages live
 // together as their own store, so they carry their own chrome — location chip
@@ -129,30 +130,13 @@ function RowArrow() {
 
 export default function CommerceHeader() {
   const pathname = usePathname() ?? ''
-  // The bare inverting logo lives OUTSIDE the header element: a sticky
-  // container always isolates blending (SiteNav learned this first — its
-  // sampler exists for the same reason), so mix-blend-difference on a child
-  // of the pill's header can never see the page. The logo layer is its own
-  // zero-height sticky sibling, and we measure the pill's left edge to sit
-  // the logo right beside it.
-  const pillRef = useRef<HTMLDivElement>(null)
-  const [logoLeft, setLogoLeft] = useState<number | null>(null)
-  useEffect(() => {
-    const el = pillRef.current
-    if (!el) return
-    const place = () => {
-      const r = el.getBoundingClientRect()
-      setLogoLeft(Math.max(8, r.left - 80 - 16)) // logo width 80 + gap
-    }
-    place()
-    const ro = new ResizeObserver(place)
-    ro.observe(el)
-    window.addEventListener('resize', place)
-    return () => {
-      ro.disconnect()
-      window.removeEventListener('resize', place)
-    }
-  }, [])
+  // The inverting left cluster (hamburger + logo) lives OUTSIDE the header
+  // element: a sticky container always isolates blending (SiteNav learned
+  // this first), so the difference layer is its own zero-height sticky
+  // sibling. Placement/sizes mirror the global SiteNav's left cluster —
+  // Avanti 2026-08-04: one universal top-left across the whole site.
+  const [mainOpen, setMainOpen] = useState(false)
+  useEffect(() => setMainOpen(false), [pathname])
   const urlStore = storeFromPath(pathname)
 
   // Saved store only fills in when the URL carries none (e.g. on /shop/<pdp>).
@@ -229,28 +213,42 @@ export default function CommerceHeader() {
   // rename, Locations removed, 19px nav type, 48px cart.
   return (
     <>
-      {/* logo layer — its own sticky element so the difference blend composites
-          against the PAGE, not the header's isolated group. Hidden until the
-          pill is measured so it never flashes in the wrong spot. */}
-      <div aria-hidden={logoLeft === null} className="pointer-events-none sticky top-0 z-50 h-0 mix-blend-difference">
-        <Link
-          href="/"
-          aria-label="Jungle Boys home"
-          className={`pointer-events-auto absolute top-3 block h-16 w-20 transition-opacity duration-200 ${
-            logoLeft === null ? 'opacity-0' : 'opacity-100'
-          }`}
-          style={{ left: logoLeft ?? 8 }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element -- brand SVG */}
-          <img src="/brand/jb-stacked-white.svg" alt="" className="h-full w-full object-contain" />
-        </Link>
+      {/* the shared full-screen menu — same overlay as the main site */}
+      <MainMenuOverlay open={mainOpen} onClose={() => setMainOpen(false)} />
+
+      {/* left cluster layer — hamburger + logo at the global SiteNav's sizes
+          and placement, difference-blended so both invert over any ground.
+          Its own sticky element: a sticky container isolates child blending. */}
+      <div className="pointer-events-none sticky top-0 z-50 h-0 mix-blend-difference">
+        <div className="absolute left-4 top-4 flex items-center gap-4 text-white sm:left-8 md:left-12">
+          <button
+            aria-expanded={mainOpen}
+            aria-label={mainOpen ? 'Close menu' : 'Open menu'}
+            data-menu-toggle
+            onClick={() => setMainOpen((o) => !o)}
+            className="pointer-events-auto flex cursor-pointer flex-col items-start gap-[7px] p-2"
+          >
+            <span className={`block h-[2px] rounded bg-current transition-all duration-300 ${mainOpen ? 'w-8 translate-y-[9px] rotate-45' : 'w-9'}`} />
+            <span className={`block h-[2px] rounded bg-current transition-all duration-200 ${mainOpen ? 'w-8 opacity-0' : 'w-6'}`} />
+            <span className={`block h-[2px] rounded bg-current transition-all duration-300 ${mainOpen ? 'w-8 -translate-y-[9px] -rotate-45' : 'w-[30px]'}`} />
+          </button>
+          <Link
+            href="/"
+            aria-label="Jungle Boys home"
+            onClick={() => setMainOpen(false)}
+            className="pointer-events-auto block h-12 w-16 transition-transform duration-200 hover:scale-105 sm:h-14 sm:w-20 md:h-16 md:w-24"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element -- brand SVG */}
+            <img src="/brand/jb-stacked-white.svg" alt="" className="h-full w-full object-contain" />
+          </Link>
+        </div>
       </div>
 
     <header
-      className="pointer-events-none sticky top-0 z-40 flex items-center justify-center px-3 py-3"
+      className="pointer-events-none sticky top-0 z-40 flex items-center justify-center py-3 pl-44 pr-3 md:pl-52"
       style={{ fontFamily: 'var(--font-display)' }}
     >
-      <div ref={pillRef} className="pointer-events-auto flex min-w-0 max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#0b0b0b]/90 py-1.5 pl-4 pr-3 text-white shadow-2xl backdrop-blur-md">
+      <div className="pointer-events-auto flex min-w-0 max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#0b0b0b]/90 py-1.5 pl-4 pr-3 text-white shadow-2xl backdrop-blur-md">
         <Link
           href={base ?? '/shop'}
           aria-current={base && pathname === base ? 'page' : undefined}
