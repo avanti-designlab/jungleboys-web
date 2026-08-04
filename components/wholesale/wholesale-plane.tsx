@@ -2,10 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-// The JB fighter plane flies across the section right→left and drops parachutes
-// from its tail. Triggers when the section scrolls into view (not on the hero,
-// so it never covers the mascot). Pure CSS (.ws-plane / .ws-chute in globals),
-// gated on .is-flying; reduced-motion stills it.
+// The JB fighter plane flies across right→left and drops parachutes from its
+// tail. Pure CSS (.ws-plane / .ws-chute in globals), gated on .is-flying;
+// reduced-motion stills it.
+//
+// Two mounts (Avanti, 2026-08-04): DESKTOP flies across the HERO banner
+// (startOn="reveal" — waits for the intro/age-gate to clear, else the flight
+// finishes unseen behind the overlay, the recorded ungated-hero-anim trap);
+// MOBILE keeps the original intro-section flyover (startOn="visible", IO).
 
 // left = where each parachute lands; delay is staggered so each drops as the
 // plane's tail passes that point (right→left). w = size in px.
@@ -18,13 +22,44 @@ const CHUTES = [
   { left: '10%', top: '70%', w: 48, delay: 2.75 },
 ]
 
-export default function WholesalePlane() {
+export default function WholesalePlane({
+  startOn = 'visible',
+  className = '',
+}: {
+  startOn?: 'visible' | 'reveal'
+  className?: string
+}) {
   const ref = useRef<HTMLDivElement>(null)
   const [flying, setFlying] = useState(false)
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
+
+    if (startOn === 'reveal') {
+      // hero mount: take off once the intro + age gate have cleared (same
+      // pattern as hh-hero's video start), with a beat for the hero to settle
+      let timer: number | null = null
+      const start = () => {
+        timer = window.setTimeout(() => setFlying(true), 700)
+      }
+      let cleared = false
+      try {
+        cleared = sessionStorage.getItem('jb-intro-done') === '1' && !!localStorage.getItem('jb-age-gate')
+      } catch {}
+      if (cleared || document.documentElement.classList.contains('jb-reveal')) {
+        start()
+      } else {
+        window.addEventListener('jb:intro-done', start, { once: true })
+        window.addEventListener('jb:gate-passed', start, { once: true })
+      }
+      return () => {
+        if (timer) window.clearTimeout(timer)
+        window.removeEventListener('jb:intro-done', start)
+        window.removeEventListener('jb:gate-passed', start)
+      }
+    }
+
     const io = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -36,13 +71,13 @@ export default function WholesalePlane() {
     )
     io.observe(el)
     return () => io.disconnect()
-  }, [])
+  }, [startOn])
 
   return (
     <div
       ref={ref}
       aria-hidden
-      className={`ws-flyzone pointer-events-none absolute inset-0 z-20 overflow-hidden ${flying ? 'is-flying' : ''}`}
+      className={`ws-flyzone pointer-events-none absolute inset-0 z-20 overflow-hidden ${flying ? 'is-flying' : ''} ${className}`}
     >
       {CHUTES.map((c, i) => (
         <div

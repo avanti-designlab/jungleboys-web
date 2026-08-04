@@ -3,6 +3,7 @@ import path from 'node:path'
 import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/storyblok/seo'
 import WholesaleBody from '@/components/wholesale/wholesale-body'
+import WholesalePlane from '@/components/wholesale/wholesale-plane'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
 // Wholesale — "Become a Retailer". Same banner treatment as /contact and /media
@@ -75,6 +76,9 @@ export default async function WholesalePage() {
             alt="Jungle Boys Wholesale"
             className="hero-alive relative z-10 origin-bottom scale-[1.18] drop-shadow-[0_30px_70px_rgba(0,0,0,0.7)] md:scale-100"
           />
+          {/* desktop flyover happens HERE (Avanti, 2026-08-04); mobile keeps
+              the intro-section pass in WholesaleBody */}
+          <WholesalePlane startOn="reveal" className="hidden md:block" />
         </div>
       </section>
 

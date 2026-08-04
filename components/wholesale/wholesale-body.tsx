@@ -134,9 +134,10 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
   return (
     <div ref={rootRef}>
       <input ref={honeypotRef} name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
-      {/* intro: info pill (left) + media pill (right) — plane flies across on scroll-in */}
+      {/* intro: info pill (left) + media pill (right) — MOBILE keeps the
+          plane flyover here; desktop's happens over the hero (page.tsx) */}
       <section className="relative px-4 pt-16 md:px-8 md:pt-24 lg:px-12">
-        <WholesalePlane />
+        <WholesalePlane className="md:hidden" />
         <div className="relative mx-auto grid max-w-[1280px] items-stretch gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
           {/* LEFT — info pill */}
           <div className="media-reveal flex flex-col justify-center rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface)] p-8 md:p-12">
