@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import BackPill from '@/components/menu/back-pill'
 import type { Product } from '@/lib/dutchie'
 import { getLocations, getLocationBySlug, getMenu } from '@/lib/dutchie'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
@@ -105,19 +106,14 @@ export default async function StoreBrandsPage({
 
       {/* ── HERO — the big bump: dark brand card, giant Bebas wordmark ── */}
       <header className="px-2 pt-2 md:px-3">
+        <Reveal slide>
         <div className="relative overflow-hidden rounded-[1.75rem] bg-[#0b0b0b] px-6 pb-8 pt-14 text-white md:rounded-[2.5rem] md:px-12 md:pb-10 md:pt-16 lg:px-20">
           <span
             aria-hidden
             className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-[radial-gradient(70%_100%_at_50%_0%,rgba(254,207,14,0.16),transparent_70%)]"
           />
           <div className="relative mx-auto max-w-[1400px]">
-            <Link
-              href={`/menu/california/${slug}`}
-              className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)] transition hover:opacity-80"
-              style={{ fontFamily: 'var(--font-brand)' }}
-            >
-              ← {location.name} menu
-            </Link>
+            <BackPill href={`/menu/california/${slug}`} label={`${location.name} menu`} />
             <h1
               className="font-display mt-3 uppercase leading-[0.85]"
               style={{ fontSize: 'min(11vw, 7rem)' }}
@@ -144,6 +140,7 @@ export default async function StoreBrandsPage({
             </div>
           </div>
         </div>
+        </Reveal>
       </header>
 
       {/* mobile jump list — the sticky rail is desktop-only */}

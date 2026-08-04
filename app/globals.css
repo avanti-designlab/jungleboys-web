@@ -192,7 +192,7 @@ body {
 @keyframes dropdown-in {
   from {
     opacity: 0;
-    transform: translateY(-8px) scale(0.985);
+    transform: translateY(-16px) scale(0.97);
   }
   to {
     opacity: 1;
@@ -200,7 +200,7 @@ body {
   }
 }
 .jb-dropdown {
-  animation: dropdown-in 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: dropdown-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @media (prefers-reduced-motion: reduce) {
   .jb-dropdown {
@@ -736,6 +736,38 @@ html.jb-no-intro .jb-intro {
 @media (prefers-reduced-motion: reduce) {
   .media-reveal {
     opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+/* Phase-3 scroll reveal (components/reveal.tsx) — Standard tier tokens:
+   24px, 0.7s, cinematic ease. Same .is-in mechanism as .media-reveal. */
+.jb-reveal-block {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.jb-reveal-block.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .jb-reveal-block {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+/* transform-only sibling for LCP-bearing tiles: visible from first paint */
+.jb-reveal-slide {
+  transform: translateY(24px);
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.jb-reveal-slide.is-in {
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .jb-reveal-slide {
     transform: none;
     transition: none;
   }

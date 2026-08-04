@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import BackPill from '@/components/menu/back-pill'
 import { getLocations, getLocationBySlug, getMenu } from '@/lib/dutchie'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
+import Reveal from '@/components/reveal'
 import MenuBrowser, { type CategoryNavItem } from '@/components/menu/menu-browser'
 import { CATEGORY_COLLECTIONS, COLLECTIONS, collectionPath, getCollection } from '@/lib/collections'
 
@@ -91,6 +93,7 @@ export default async function CollectionPage({
       {/* hero — same big-bump language as Deals/Brands: dark card, gold glow,
           giant Bebas title, the collection icon standing beside it */}
       <header className="px-2 pt-2 md:px-3">
+        <Reveal slide>
         <div className="relative overflow-hidden rounded-[1.75rem] bg-[#0b0b0b] px-6 pb-10 pt-20 text-white md:rounded-[2.5rem] md:px-12 md:pb-12 md:pt-24 lg:px-20">
           <span
             aria-hidden
@@ -98,13 +101,7 @@ export default async function CollectionPage({
           />
           <div className="relative mx-auto flex max-w-[1400px] flex-wrap items-end justify-between gap-6">
             <div>
-              <Link
-                href={`/menu/california/${slug}`}
-                className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)] transition hover:opacity-80"
-                style={{ fontFamily: 'var(--font-brand)' }}
-              >
-                ← {location.name} menu
-              </Link>
+              <BackPill href={`/menu/california/${slug}`} label={`${location.name} menu`} />
               <h1 className="font-display mt-3 uppercase leading-[0.85]" style={{ fontSize: 'min(14vw, 9rem)' }}>
                 {col.title}
               </h1>
@@ -117,6 +114,7 @@ export default async function CollectionPage({
             {/* no hero icon — plain headers (Avanti, 2026-08-04) */}
           </div>
         </div>
+        </Reveal>
       </header>
 
       {products.length === 0 ? (
@@ -133,7 +131,9 @@ export default async function CollectionPage({
           </Link>
         </section>
       ) : (
-        <MenuBrowser products={products} storeSlug={slug} heading={null} categoryNav={nav} />
+        <Reveal delay={0.08}>
+          <MenuBrowser products={products} storeSlug={slug} heading={null} categoryNav={nav} />
+        </Reveal>
       )}
     </main>
   )

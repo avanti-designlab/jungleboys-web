@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import BackPill from '@/components/menu/back-pill'
 import type { Product, Special } from '@/lib/dutchie'
 import { getLocations, getLocationBySlug, getMenu, getSpecials } from '@/lib/dutchie'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
@@ -178,6 +179,7 @@ export default async function StoreDealsPage({
 
       {/* ── HERO — the big bump ── */}
       <header className="px-2 pt-2 md:px-3">
+        <Reveal slide>
         <div className="relative overflow-hidden rounded-[1.75rem] bg-[#0b0b0b] px-6 pb-12 pt-20 text-white md:rounded-[2.5rem] md:px-12 md:pb-14 md:pt-24 lg:px-20">
           <span
             aria-hidden
@@ -193,13 +195,7 @@ export default async function StoreDealsPage({
             className="pointer-events-none absolute bottom-0 right-2 hidden h-full w-auto object-contain object-bottom lg:block xl:right-10"
           />
           <div className="relative mx-auto max-w-[1400px] lg:pr-72 xl:pr-80">
-            <Link
-              href={`/menu/california/${slug}`}
-              className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)] transition hover:opacity-80"
-              style={{ fontFamily: 'var(--font-brand)' }}
-            >
-              ← {location.name} menu
-            </Link>
+            <BackPill href={`/menu/california/${slug}`} label={`${location.name} menu`} />
             <h1 className="font-display mt-4 uppercase leading-[0.85]" style={{ fontSize: 'min(16vw, 11rem)' }}>
               Deals
             </h1>
@@ -210,6 +206,7 @@ export default async function StoreDealsPage({
             </p>
           </div>
         </div>
+        </Reveal>
       </header>
 
       {withStrays.length === 0 ? (

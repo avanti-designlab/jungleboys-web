@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import LoginActions from '@/components/shop/login-actions'
+import Reveal from '@/components/reveal'
 
 // /login — the styled AUTH SHELL (locked stack: Dutchie/Dovetail OWNS auth;
 // we brand the doorway, never the credentials). Until the Dutchie account
@@ -22,6 +23,7 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <main data-nav-theme="dark" className="bg-[var(--color-background)] px-2 pb-24 pt-2 text-[var(--color-foreground)] md:px-3">
+      <Reveal slide>
       <div className="relative overflow-hidden rounded-[1.75rem] bg-[#0b0b0b] px-6 pb-16 pt-28 text-white md:rounded-[2.5rem] md:pb-20 md:pt-36">
         <span
           aria-hidden
@@ -51,6 +53,7 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
+      </Reveal>
     </main>
   )
 }
