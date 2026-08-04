@@ -4,9 +4,9 @@
 // here. The utm_source=jbca params are theirs — keep them intact so the FL
 // team can see traffic we send. Keys are OUR store slugs (lib/owned-stores).
 //
-// st-petersburg has a link but NO owned-stores entry yet (no address/phone on
-// record — the long-standing St. Pete open item). Add the store() entry when
-// Avanti supplies the NAP facts; the link is ready here.
+// st-petersburg's store() entry landed 2026-08-04 — NAP read off the live
+// jungleboys.com/locations listing. Its hand-drawn illustration is still
+// owed; the directory card falls back to the brand mark until it arrives.
 export const FL_SHOP_LINKS: Record<string, string> = {
   'bonita-springs':
     'https://jungleboysflorida.com/locations/jungle-boys-bonita-springs/?retailer=jungle-boys-bonita-springs&utm_source=jbca&utm_campaign=bonita-springs&utm_content=website',

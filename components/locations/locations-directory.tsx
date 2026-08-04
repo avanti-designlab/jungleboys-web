@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { CA_OWNED, FL_OWNED, type OwnedStore } from '@/lib/owned-stores'
 import StateMiniMap from './state-mini-map'
 
@@ -14,6 +14,9 @@ import StateMiniMap from './state-mini-map'
 function StoreCard({ s }: { s: OwnedStore }) {
   // external flag (clothing) OR an absolute URL (the FL shop links) both leave the site
   const linkProps = s.external || s.menuUrl.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {}
+  // a store can exist before its hand-drawn illustration does (St. Pete,
+  // 2026-08-04) — fall back to the brand mark instead of a broken image
+  const [noArt, setNoArt] = useState(false)
   return (
     <div className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.6rem] border border-[var(--color-border)] bg-[var(--color-surface)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[var(--color-accent)] hover:shadow-[0_36px_90px_-32px_rgba(254,207,14,0.5)]">
       {/* neutral light canvas so the black line-art illustration reads */}
@@ -23,13 +26,23 @@ function StoreCard({ s }: { s: OwnedStore }) {
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
           style={{ background: 'radial-gradient(circle at 50% 45%, rgba(254,207,14,0.22), transparent 62%)' }}
         />
-        <Image
-          src={s.image}
-          alt={`${s.name} — Jungle Boys`}
-          fill
-          sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
-          className={`relative object-cover ${s.imageInset ? 'scale-[0.8]' : ''}`}
-        />
+        {noArt ? (
+          /* eslint-disable-next-line @next/next/no-img-element -- brand SVG */
+          <img
+            src="/brand/jb-stacked-white.svg"
+            alt={`${s.name} — Jungle Boys`}
+            className="absolute left-1/2 top-1/2 h-2/5 w-2/5 -translate-x-1/2 -translate-y-1/2 object-contain invert"
+          />
+        ) : (
+          <Image
+            src={s.image}
+            alt={`${s.name} — Jungle Boys`}
+            fill
+            sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
+            className={`relative object-cover ${s.imageInset ? 'scale-[0.8]' : ''}`}
+            onError={() => setNoArt(true)}
+          />
+        )}
       </div>
       <div className="flex flex-1 flex-col p-5">
         <h3 className="font-display text-2xl uppercase leading-none text-[var(--color-foreground)] md:text-3xl">{s.name}</h3>
