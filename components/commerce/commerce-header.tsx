@@ -142,7 +142,7 @@ export default function CommerceHeader() {
     if (!el) return
     const place = () => {
       const r = el.getBoundingClientRect()
-      setLogoLeft(Math.max(8, r.left - 64 - 14)) // logo width 64 + gap
+      setLogoLeft(Math.max(8, r.left - 80 - 16)) // logo width 80 + gap
     }
     place()
     const ro = new ResizeObserver(place)
@@ -236,7 +236,7 @@ export default function CommerceHeader() {
         <Link
           href="/"
           aria-label="Jungle Boys home"
-          className={`pointer-events-auto absolute top-3 block h-12 w-16 transition-opacity duration-200 ${
+          className={`pointer-events-auto absolute top-3 block h-16 w-20 transition-opacity duration-200 ${
             logoLeft === null ? 'opacity-0' : 'opacity-100'
           }`}
           style={{ left: logoLeft ?? 8 }}
@@ -250,7 +250,7 @@ export default function CommerceHeader() {
       className="pointer-events-none sticky top-0 z-40 flex items-center justify-center px-3 py-3"
       style={{ fontFamily: 'var(--font-display)' }}
     >
-      <div ref={pillRef} className="pointer-events-auto flex min-w-0 max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#0b0b0b]/90 px-1.5 py-1.5 text-white shadow-2xl backdrop-blur-md">
+      <div ref={pillRef} className="pointer-events-auto flex min-w-0 max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#0b0b0b]/90 py-1.5 pl-4 pr-3 text-white shadow-2xl backdrop-blur-md">
         <Link
           href={base ?? '/shop'}
           aria-current={base && pathname === base ? 'page' : undefined}
