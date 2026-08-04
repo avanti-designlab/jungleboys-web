@@ -19,11 +19,13 @@ export default function MoreLines({ current }: { current: string }) {
   )
 
   return (
-    // A strip, not a section. This is a navigational footnote at the end of a
-    // page whose whole job was the product above it — at display size it read
-    // as a third act. Generous pb keeps it off the footer's rounded shoulder.
-    <section className="relative z-10 bg-[#0b0b0b] px-4 pb-24 pt-12 md:px-6 md:pb-32 md:pt-14">
-      <div className="mx-auto w-full max-w-[1240px]">
+    // A floating pill card, not a full-bleed band (Avanti, 2026-08-03: the
+    // black strip read as attached to the footer). Same gutter + radius
+    // language as the footer card below it, with the page ground showing in
+    // the gap so the two read as separate cards.
+    <section className="relative z-10 px-2 pb-2 md:px-3 md:pb-3">
+      <div className="mx-auto w-full overflow-hidden rounded-[1.75rem] bg-[#0b0b0b] px-6 py-10 md:rounded-[2.5rem] md:px-10 md:py-12">
+        <div className="mx-auto w-full max-w-[1240px]">
         <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
           <div>
             <p
@@ -74,6 +76,7 @@ export default function MoreLines({ current }: { current: string }) {
             </li>
           ))}
         </ul>
+        </div>
       </div>
     </section>
   )
