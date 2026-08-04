@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
+import BackPill from '@/components/menu/back-pill'
 import type { Product, ProductCategory, StrainType } from '@/lib/dutchie'
 import { getLocations, getLocationBySlug } from '@/lib/dutchie'
 import { getDrops, getDropsHero, type DropsHero } from '@/lib/drops'
@@ -78,7 +79,7 @@ function StrainOfTheWeek({
   return (
     <div
       data-strain-of-week
-      className="relative flex min-h-[560px] flex-col overflow-hidden rounded-[1.75rem] bg-[#0b0b0b] p-6 text-white md:rounded-[2rem] md:p-9"
+      className="relative flex min-h-[560px] w-full flex-col overflow-hidden rounded-[1.75rem] bg-[#0b0b0b] p-6 text-white md:rounded-[2rem] md:p-9"
     >
       {bg.image ? (
         <>
@@ -94,24 +95,12 @@ function StrainOfTheWeek({
       )}
 
       <div className="relative flex flex-1 flex-col">
-        {/* badge + designed chips in one row */}
-        <div className="flex flex-wrap items-center gap-2">
+        {/* badge alone up top — strain/THC live on the buy line below
+            (Avanti, 2026-08-04: "move sativa and thc to the bottom") */}
+        <div className="flex items-center">
           <span className="font-display rounded-full bg-[var(--color-accent)] px-4 py-2 text-[16px] uppercase leading-none tracking-[0.06em] text-black">
             Strain of the week
           </span>
-          {product.strainType && (
-            <span
-              className={`rounded-full border-2 bg-white/90 px-3.5 py-2 text-[11px] font-extrabold uppercase tracking-widest ${STRAIN_STYLE[product.strainType].cls}`}
-              style={{ fontFamily: 'var(--font-brand)' }}
-            >
-              {STRAIN_STYLE[product.strainType].label}
-            </span>
-          )}
-          {thc && (
-            <span className="rounded-full border border-white/15 bg-white/10 px-3.5 py-2 text-[11px] font-bold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
-              THC <span className="text-[var(--color-accent)]">{thc.value}{thc.unit}</span>
-            </span>
-          )}
         </div>
 
         {/* the shot, BIG, on a gold glow ring */}
@@ -121,7 +110,11 @@ function StrainOfTheWeek({
               aria-hidden
               className="pointer-events-none absolute left-1/2 top-1/2 h-[130%] w-[130%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(254,207,14,0.28),transparent_72%)]"
             />
-            <div className="relative h-72 w-72 -rotate-2 overflow-hidden rounded-[2.25rem] bg-white shadow-[0_36px_70px_rgba(0,0,0,0.6)] md:h-[24rem] md:w-[24rem]">
+            <Link
+              href={`/shop/${product.slug}?store=${storeSlug}`}
+              aria-label={product.name}
+              className="relative block h-72 w-72 -rotate-2 overflow-hidden rounded-[2.25rem] bg-white shadow-[0_36px_70px_rgba(0,0,0,0.6)] transition-transform duration-300 hover:rotate-0 md:h-[24rem] md:w-[24rem]"
+            >
               <Image
                 src={shot.url}
                 alt={shot.alt}
@@ -130,7 +123,7 @@ function StrainOfTheWeek({
                 sizes="(max-width: 768px) 75vw, 400px"
                 className="object-contain p-6"
               />
-            </div>
+            </Link>
           </div>
         )}
 
@@ -159,13 +152,27 @@ function StrainOfTheWeek({
           ) : null}
         </div>
 
-        <div className="mt-auto flex flex-wrap items-center justify-center gap-5 pt-6">
+        {/* the buy line — strain facts left, money + action right, one
+            organized bar instead of a centered float */}
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-t border-white/12 pt-5">
+          <div className="flex flex-wrap items-center gap-2" style={{ fontFamily: 'var(--font-brand)' }}>
+            {product.strainType && (
+              <span className={`rounded-full border-2 bg-white/90 px-3.5 py-2 text-[11px] font-extrabold uppercase tracking-widest ${STRAIN_STYLE[product.strainType].cls}`}>
+                {STRAIN_STYLE[product.strainType].label}
+              </span>
+            )}
+            {thc && (
+              <span className="rounded-full border border-white/15 bg-white/10 px-3.5 py-2 text-[11px] font-bold uppercase tracking-widest text-white">
+                THC <span className="text-[var(--color-accent)]">{thc.value}{thc.unit}</span>
+              </span>
+            )}
+          </div>
           {inStock.length === 0 ? (
             <span className="text-sm font-bold uppercase text-white/60" style={{ fontFamily: 'var(--font-brand)' }}>
               Sold out
             </span>
           ) : (
-            <>
+            <div className="flex items-center gap-4">
               <span className="whitespace-nowrap">
                 <span className="font-display text-[2.6rem] leading-none text-white">{money(from)}</span>
                 <span className="ml-1.5 text-xs font-bold uppercase text-white/60" style={{ fontFamily: 'var(--font-brand)' }}>
@@ -173,7 +180,7 @@ function StrainOfTheWeek({
                 </span>
               </span>
               <AddToCartButton product={product} variant={best} storeSlug={storeSlug} tone="gold" />
-            </>
+            </div>
           )}
         </div>
       </div>
@@ -229,7 +236,8 @@ export default async function StoreDropsPage({
         <div className="mx-auto grid max-w-[1560px] gap-2 md:gap-3 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
           <div className="flex flex-col gap-2 md:gap-3">
             {/* title tile */}
-            <div className="relative flex flex-1 flex-col overflow-hidden rounded-[1.75rem] bg-[#0b0b0b] p-7 pt-20 text-white md:rounded-[2rem] md:p-10 md:pt-24">
+            <Reveal slide className="flex flex-1">
+            <div className="relative flex flex-1 flex-col overflow-hidden rounded-[1.75rem] bg-[#0b0b0b] p-7 pt-16 text-white md:rounded-[2rem] md:p-10 md:pt-20">
               <span
                 aria-hidden
                 className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-[radial-gradient(70%_100%_at_40%_0%,rgba(254,207,14,0.2),transparent_70%)]"
@@ -243,13 +251,7 @@ export default async function StoreDropsPage({
                 className="pointer-events-none absolute -bottom-8 -right-6 h-56 w-56 object-contain opacity-[0.08] invert"
               />
               <div className="relative flex flex-1 flex-col">
-                <Link
-                  href={`/menu/california/${slug}`}
-                  className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)] transition hover:opacity-80"
-                  style={{ fontFamily: 'var(--font-brand)' }}
-                >
-                  ← {location.name} menu
-                </Link>
+                <BackPill href={`/menu/california/${slug}`} label={`${location.name} menu`} />
                 <h1 className="font-display mt-3 whitespace-nowrap uppercase leading-[0.85]" style={{ fontSize: 'min(9vw, 5.75rem)' }}>
                   Fresh Drops
                 </h1>
@@ -290,11 +292,19 @@ export default async function StoreDropsPage({
               </div>
             </div>
 
+            </Reveal>
+
             {/* the gold clock tile — glow orbits the box */}
-            <DropCountdown />
+            <Reveal delay={0.1}>
+              <DropCountdown opensAt={location.hours.find((h) => h.day === 'fri')?.opens ?? '00:00'} />
+            </Reveal>
           </div>
 
-          {strainOfWeek && <StrainOfTheWeek product={strainOfWeek} storeSlug={slug} bg={dropsHero} />}
+          {strainOfWeek && (
+            <Reveal slide delay={0.05} className="flex">
+              <StrainOfTheWeek product={strainOfWeek} storeSlug={slug} bg={dropsHero} />
+            </Reveal>
+          )}
         </div>
       </header>
 

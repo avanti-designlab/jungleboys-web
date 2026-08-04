@@ -18,16 +18,27 @@ function storeNow(): Date {
   return new Date(new Date().toLocaleString('en-US', { timeZone: TZ }))
 }
 
-function nextFriday(from: Date): Date {
+// Next Friday at the store's opening time (Avanti, 2026-08-04: "the drop
+// time is opening time for each store"). If it's Friday before opening, the
+// target is TODAY's opening; Friday after opening is the live state.
+function nextDrop(from: Date, opensAt: string): Date {
+  const [oh, om] = opensAt.split(':').map(Number)
   const d = new Date(from)
-  d.setHours(0, 0, 0, 0)
+  d.setHours(oh || 0, om || 0, 0, 0)
   const day = d.getDay() // 5 = Friday
-  const ahead = (5 - day + 7) % 7 || 7
+  let ahead = (5 - day + 7) % 7
+  if (ahead === 0 && from.getTime() >= d.getTime()) ahead = 7
   d.setDate(d.getDate() + ahead)
   return d
 }
 
-export default function DropCountdown() {
+const clockLabel = (opensAt: string) => {
+  const [h, m] = opensAt.split(':').map(Number)
+  const hour = h % 12 === 0 ? 12 : h % 12
+  return `${hour}${m ? `:${String(m).padStart(2, '0')}` : ''}${h >= 12 ? 'PM' : 'AM'}`
+}
+
+export default function DropCountdown({ opensAt = '00:00' }: { opensAt?: string }) {
   const [state, setState] = useState<
     { live: true } | { live: false; d: number; h: number; m: number; s: number; date: string } | null
   >(null)
@@ -35,11 +46,15 @@ export default function DropCountdown() {
   useEffect(() => {
     const tick = () => {
       const now = storeNow()
-      if (now.getDay() === 5) {
+      const [oh, om] = opensAt.split(':').map(Number)
+      const openedToday = new Date(now)
+      openedToday.setHours(oh || 0, om || 0, 0, 0)
+      // live = it's Friday and the store has opened
+      if (now.getDay() === 5 && now.getTime() >= openedToday.getTime()) {
         setState({ live: true })
         return
       }
-      const target = nextFriday(now)
+      const target = nextDrop(now, opensAt)
       const ms = target.getTime() - now.getTime()
       setState({
         live: false,
@@ -53,7 +68,7 @@ export default function DropCountdown() {
     tick()
     const id = window.setInterval(tick, 1_000)
     return () => window.clearInterval(id)
-  }, [])
+  }, [opensAt])
 
   const cell = (value: string, label: string) => (
     <div className="flex flex-col items-center rounded-2xl bg-black/[0.92] py-4 md:py-6">
@@ -85,6 +100,7 @@ export default function DropCountdown() {
               </p>
               <p className="text-[12px] font-extrabold uppercase tracking-[0.18em] text-black/70" style={{ fontFamily: 'var(--font-brand)' }}>
                 Every Friday{state && !state.live ? ` · ${state.date}` : ''}
+                {opensAt !== '00:00' ? ` · ${clockLabel(opensAt)}` : ''}
               </p>
             </div>
             {/* four segment cells fill the tile edge-to-edge */}
