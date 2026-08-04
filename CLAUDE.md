@@ -861,6 +861,17 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   it. Home hero fallback slide = "AUGUST DEALS" → /deals (kicker LIVE NOW, art still the July asset
   until a CMS upload); `storyblok-retarget-shop.mjs` retargetHome() renames the JULY DEALS slide
   idempotently — Avanti re-runs with her token, then `--publish`.
+- **Phase 3 page scope CLOSED by Avanti (2026-08-04): "Lets do 1, 3 and 4. 5 is going to stay
+  like this. 2 is going to be a seperate phase after we launch the site."** Meaning: (1) the
+  global /drops door ships (deals-door pattern — StoreForward + picker dest='drops', interim
+  /drops→/products redirect REMOVED, sitemap lists /drops); (3) the full auth suite ships
+  (/reset-password, /delete-account, /callback join login/signup/forgot on the same
+  transmit-nothing stub contract; /callback forwards to the saved store's menu); (4) /profile +
+  /profile-reward ship as signed-out dashboard shells (points/collectibles/referrals tiles per
+  the Designer-confirmed inventory row; both noindex + robots-disallowed while unlinked).
+  (5) FLORIDA STAYS OFF-SITE — the jungleboysflorida.com links are the long-term answer, no FL
+  embed shells. (2) STRAINS is a SEPARATE POST-LAUNCH PHASE — do not build it in Phase 3; the
+  header nav note ("Strains joins the nav row when built") now points at that phase.
 - **/login is a REAL sign-in page (Avanti, 2026-08-04: "this actually needs to be a sign in
   page" — supersedes the same-day CTA-only shell; login-actions.tsx deleted).** The boundary
   holds: Dutchie owns auth — LoginForm/AuthStubForm are real, validated UI whose submit

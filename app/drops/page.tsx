@@ -5,26 +5,24 @@ import { FL_SITE_URL } from '@/lib/fl-shop-links'
 import StoreForward from '@/components/shop/store-forward'
 import Reveal from '@/components/reveal'
 
-// /deals — the GLOBAL deals door. Deals are per-store (each menu prices its
-// own), so an evergreen link (the home hero's AUGUST DEALS slide) needs a
-// stable target that routes people to THEIR store's deals. The flow (Avanti,
-// 2026-08-04): landing here opens the store picker with a deals destination —
-// picking a CA store routes to that store's deals page; a visitor with a
-// saved CA store skips the modal (DealsForward fast-forwards); Florida goes
-// to the FL team's site. This server HTML is the crawlable no-JS fallback,
-// same pattern as the /shop door.
+// /drops — the GLOBAL drops door (Avanti, 2026-08-04: same treatment as
+// /deals). Drops are per-store, so the evergreen URL routes people to THEIR
+// store's Friday drop: landing here opens the store picker with a drops
+// destination; a saved CA store skips the modal (StoreForward); Florida goes
+// to the FL team's site. This server HTML is the crawlable no-JS fallback.
+// Replaces the interim /drops → /products redirect.
 
 export const metadata: Metadata = {
-  title: 'Deals',
+  title: 'Fresh Drops',
   description:
-    'Live Jungle Boys deals — pick your store to see every markdown running right now, straight from the menu.',
-  alternates: { canonical: '/deals' },
+    'The weekly Jungle Boys drop — new heat lands every Friday. Pick your store to see this week’s list.',
+  alternates: { canonical: '/drops' },
 }
 
-export default function DealsDoorPage() {
+export default function DropsDoorPage() {
   return (
     <main data-nav-theme="dark" className="bg-[var(--color-background)] px-2 pb-24 pt-2 text-[var(--color-foreground)] md:px-3">
-      <StoreForward surface="deals" />
+      <StoreForward surface="drops" />
       <Reveal slide>
       <div className="relative overflow-hidden rounded-[1.75rem] bg-[#0b0b0b] px-6 pb-16 pt-28 text-white md:rounded-[2.5rem] md:pb-20 md:pt-36">
         <span
@@ -33,19 +31,19 @@ export default function DealsDoorPage() {
         />
         <div className="relative mx-auto max-w-3xl">
           <div className="text-center">
-            <h1 className="font-display uppercase leading-[0.85]" style={{ fontSize: 'min(16vw, 9rem)' }}>
-              Deals
+            <h1 className="font-display uppercase leading-[0.85]" style={{ fontSize: 'min(14vw, 9rem)' }}>
+              Fresh Drops
             </h1>
             <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-white/70" style={{ fontFamily: 'var(--font-brand)' }}>
-              Every markdown, straight from the live menu. Deals differ by store —
-              pick yours to see what&rsquo;s running right now.
+              New heat lands every Friday — small batches, gone when they&rsquo;re gone.
+              Pick your store to see this week&rsquo;s drop.
             </p>
           </div>
 
           {/* no-JS / crawler fallback: the same choice the picker offers */}
-          <section aria-labelledby="deals-ca" className="mt-10">
+          <section aria-labelledby="drops-ca" className="mt-10">
             <h2
-              id="deals-ca"
+              id="drops-ca"
               className="px-1 pb-2 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]"
               style={{ fontFamily: 'var(--font-brand)' }}
             >
@@ -55,7 +53,7 @@ export default function DealsDoorPage() {
               {CA_OWNED.filter((s) => !s.external).map((s) => (
                 <li key={s.slug}>
                   <Link
-                    href={`/menu/california/${s.slug}/deals`}
+                    href={`/menu/california/${s.slug}/drops`}
                     className="group flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4 transition hover:border-[var(--color-accent)] hover:bg-white/[0.08]"
                   >
                     <span>
@@ -75,9 +73,9 @@ export default function DealsDoorPage() {
             </ul>
           </section>
 
-          <section aria-labelledby="deals-fl" className="mt-6">
+          <section aria-labelledby="drops-fl" className="mt-6">
             <h2
-              id="deals-fl"
+              id="drops-fl"
               className="px-1 pb-2 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]"
               style={{ fontFamily: 'var(--font-brand)' }}
             >

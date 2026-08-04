@@ -62,7 +62,7 @@ export const redirects: Redirect[] = [
   // links honest and stops the crawl budget draining into dead ends.
   // RESTORE all three to their real destinations when Phase 3 ships.
   { source: '/710-deals', destination: '/deals', permanent: false },
-  { source: '/drops', destination: '/products', permanent: false },
+  // /drops interim removed 2026-08-04 — the evergreen drops door exists now.
   // /login RESTORED (2026-08-04): the styled auth shell exists now — the
   // interim /rewards pointer is gone. /signup etc. stay pending.
 

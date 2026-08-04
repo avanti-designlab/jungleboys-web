@@ -25,8 +25,9 @@ export default function StorePicker({
 }: {
   open: boolean
   onClose: () => void
-  /** 'deals' routes a chosen CA store to its deals page (the /deals door) */
-  dest?: 'deals'
+  /** door destination: routes a chosen CA store to that surface (the
+      /deals and /drops evergreen doors) */
+  dest?: 'deals' | 'drops'
 }) {
   const router = useRouter()
   const panelRef = useRef<HTMLDivElement>(null)
@@ -75,7 +76,7 @@ export default function StorePicker({
     // picker when the pathname actually changes, so the modal stays up until
     // the store menu is ready.
     router.push(
-      dest === 'deals' && state === 'CA' ? `/menu/california/${slug}/deals` : menuPathFor(slug, state)
+      dest && state === 'CA' ? `/menu/california/${slug}/${dest}` : menuPathFor(slug, state)
     )
   }
 

@@ -10,7 +10,7 @@ import { SITE_ORIGIN } from '@/lib/storyblok/seo'
 // here — the failure mode a hand-maintained list always eventually hits.
 //
 // Only routes that EXIST today are listed. Remaining Phase 3 surfaces (the
-// auth suite, /drops, /710-deals) are deliberately absent until they resolve;
+// auth suite, /710-deals) are deliberately absent until they resolve;
 // a sitemap that advertises 404s is worse than a short sitemap.
 //
 // /shop/<slug> PDPs stay OUT for now, deliberately: their slugs come from the
@@ -26,6 +26,7 @@ const STATIC_ROUTES: Array<[path: string, priority: number, freq: MetadataRoute.
   ['', 1, 'weekly'],
   ['/shop', 0.9, 'daily'],
   ['/deals', 0.8, 'daily'],
+  ['/drops', 0.8, 'weekly'],
   ['/products', 0.9, 'weekly'],
   ['/locations', 0.8, 'monthly'],
   ['/find-jb-products', 0.8, 'monthly'],
