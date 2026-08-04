@@ -7,6 +7,7 @@ import { ProductCard } from './menu-browser'
 import { categoryLabel } from './labels'
 import { CATEGORY_ICONS } from '@/lib/category-icons'
 import { brandAnchor } from '@/lib/brands'
+import { collectionPath } from '@/lib/collections'
 import BrandTile from './brand-tile'
 
 // The merchandised storefront (Avanti's redesign brief, 2026-08-03): the store
@@ -192,11 +193,11 @@ const TILE_ROW: ProductCategory[] = [
 // lib/category-icons (shared with the header's SHOP dropdown); a category
 // without supplied art renders the letter-mark disc, never an invented icon.
 
-function CategoryTile({ category }: { category: ProductCategory }) {
+function CategoryTile({ category, storeSlug }: { category: ProductCategory; storeSlug: string }) {
   const icon = CATEGORY_ICONS[category]
   return (
     <Link
-      href={`?category=${category}#browse`}
+      href={collectionPath(storeSlug, category)}
       data-category-tile={category}
       className="group flex min-w-24 flex-1 snap-start flex-col items-center gap-4 pt-2 text-[var(--color-ink)]"
     >
@@ -270,7 +271,7 @@ export default function StoreShop({
         </h2>
         <div className="mt-5 flex snap-x gap-4 overflow-x-auto pb-3 md:gap-6">
           {TILE_ROW.map((c) => (
-            <CategoryTile key={c} category={c} />
+            <CategoryTile key={c} category={c} storeSlug={storeSlug} />
           ))}
         </div>
       </section>
@@ -318,7 +319,7 @@ export default function StoreShop({
                 {categoryLabel(shelf.category)}
               </h2>
               <Link
-                href={`?category=${shelf.category}#browse`}
+                href={collectionPath(storeSlug, shelf.category)}
                 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-ink)] underline-offset-4 hover:underline"
                 style={{ fontFamily: 'var(--font-brand)' }}
               >

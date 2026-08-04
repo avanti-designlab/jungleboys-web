@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 import { PRODUCT_LINES, isPlaceholderLine } from '@/lib/products'
 import { getPublishedBlogPosts } from '@/lib/blog'
 import { getLocations } from '@/lib/dutchie'
+import { CATEGORY_COLLECTIONS } from '@/lib/collections'
 import { SITE_ORIGIN } from '@/lib/storyblok/seo'
 
 // Dynamic sitemap. Built from the same PRODUCT_LINES array the routes are
@@ -98,6 +99,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_ORIGIN}/menu/california/${l.slug}/deals`, changeFrequency: 'daily' as const, priority: 0.7 },
     { url: `${SITE_ORIGIN}/menu/california/${l.slug}/drops`, changeFrequency: 'weekly' as const, priority: 0.7 },
     { url: `${SITE_ORIGIN}/menu/california/${l.slug}/brands`, changeFrequency: 'weekly' as const, priority: 0.6 },
+    // Category collection pages (Avanti, 2026-08-04): primary categories are
+    // indexable store-scoped shopping pages. LINE collections are deliberately
+    // absent — subcategory facets, noindex, canonical to the store menu.
+    ...CATEGORY_COLLECTIONS.map((c) => ({
+      url: `${SITE_ORIGIN}/menu/california/${l.slug}/shop/${c.slug}`,
+      changeFrequency: 'daily' as const,
+      priority: 0.6,
+    })),
   ])
 
   return [...statics, ...lines, ...stores, ...posts]

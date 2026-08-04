@@ -516,6 +516,21 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   %-off badge and its member ProductCards. Sale products no special claims land in a synthetic
   "More Markdowns" section per group — nothing discounted hides. check-commerce asserts sections,
   both groups, both doors + a fixture special name in SSR.
+- **COLLECTION PAGES: every category + JB line is its OWN shopping page (Avanti, 2026-08-04
+  late — "these links all click back to the main shop page… should all be individual shopping
+  pages").** New route `/menu/california/<store>/shop/<collection>`; `lib/collections.ts` is the
+  ONE registry (9 category collections incl. pops + 7 line collections; gas-tanks unions the
+  three gas-tank subcats by prefix). Every entry point retargeted: SHOP dropdown, PRODUCTS
+  dropdown (JB_LINES.line now = collection slug), storefront category tiles, shelf View All.
+  Pages: dark hero (giant Bebas title, collection icon, store back-link) + MenuBrowser in
+  collection mode (`heading={null}`, `categoryNav` = rail tiles as LINKS to sibling pages).
+  **SEO per the URL mandate's faceted-filter rule: category collections = primary categories →
+  indexable, self-canonical, IN the sitemap; line collections = subcategory facets → noindex,
+  canonical to the store menu, NOT in the sitemap.** The sitemap PDP-exclusion check now matches
+  TOP-LEVEL /shop/<slug> only. ALSO same session: brand sections on /brands are one-line arrow
+  shelves (BrandShelf — snap row, round arrows, gold "View all N products" pill expanding in
+  place; gold not black, the JB section is near-black) and the brands hero lost its subtext so
+  the 8 quick-shop tiles sit above the fold.
 - **RAIL SYSTEM v2 (Avanti, 2026-08-04 late): one card design for every sticky rail; browse
   filters ALL live in it on desktop.** Her notes: the "Browse everything" eyebrow was a stray
   (removed — MenuBrowser's big header is the section heading now), categories/types move OFF the

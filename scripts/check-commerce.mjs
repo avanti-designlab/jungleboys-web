@@ -170,6 +170,32 @@ async function checkSpecials() {
   else fail(`${path} serves a named special's title server-side`, 'fixture special name not in SSR HTML')
 }
 
+// ── 1d. Collection pages: every category/line is its own shopping page ──────
+// Avanti (2026-08-04): dropdown + tile targets must be dedicated pages, not
+// the main grid with a filter. Category pages index; line pages noindex.
+async function checkCollections() {
+  await checkCardLinks(`/menu/california/${MENU_STORE}/shop/flower`, MENU_STORE)
+
+  const line = await fetchHtml(`/menu/california/${MENU_STORE}/shop/gas-tanks`)
+  if (line.status !== 200) fail('/shop/gas-tanks line collection responds 200', `got ${line.status}`)
+  else ok('gas-tanks line collection responds 200')
+  if (line.html.includes('noindex')) ok('line collection carries noindex (subcategory facet rule)')
+  else fail('line collection carries noindex', 'robots meta missing')
+
+  // the header dropdowns must point AT the collection pages now
+  const menu = await fetchHtml(`/menu/california/${MENU_STORE}`)
+  if (menu.html.includes(`href="/menu/california/${MENU_STORE}/shop/flower"`)) {
+    ok('SHOP dropdown links the flower collection page')
+  } else {
+    fail('SHOP dropdown links the flower collection page', 'still a ?category= filter link?')
+  }
+  if (menu.html.includes(`href="/menu/california/${MENU_STORE}/shop/hash-holes"`)) {
+    ok('PRODUCTS dropdown links the hash-holes collection page')
+  } else {
+    fail('PRODUCTS dropdown links the hash-holes collection page', 'still a ?line= filter link?')
+  }
+}
+
 // ── 2. Brands is real and not JB-only ────────────────────────────────────────
 async function checkBrands() {
   const path = `/menu/california/${BRANDS_STORE}/brands`
@@ -317,9 +343,18 @@ async function checkSitemap() {
 
   // Deliberate exclusion: PDP slugs are the placeholder provider's, and slug
   // stability against real Dutchie payloads is an OPEN question. A /shop/ URL
-  // in the sitemap before that is verified advertises a future 404.
-  if (html.includes('/shop/')) fail('sitemap excludes /shop/ PDPs until slugs are verified')
-  else ok('sitemap excludes /shop/ PDPs (slug stability unverified — recorded)')
+  // in the sitemap before that is verified advertises a future 404. TOP-LEVEL
+  // /shop/<slug> only — the nested <store>/shop/<category> collection pages
+  // are OUR slugs and belong in the sitemap (2026-08-04).
+  const pdpLocs = [...html.matchAll(/<loc>https?:\/\/[^/<]+\/shop\/[^<]*<\/loc>/g)]
+  if (pdpLocs.length) fail('sitemap excludes top-level /shop/ PDPs until slugs are verified', pdpLocs[0][0])
+  else ok('sitemap excludes top-level /shop/ PDPs (slug stability unverified — recorded)')
+
+  if (html.includes(`/menu/california/${MENU_STORE}/shop/flower</loc>`)) {
+    ok('sitemap lists the flower category collection page')
+  } else {
+    fail('sitemap lists the flower category collection page')
+  }
 }
 
 console.log(`check-commerce against ${origin}`)
@@ -328,6 +363,7 @@ try {
   await checkMerchandising()
   await checkCardLinks(`/menu/california/${DEALS_STORE}/deals`, DEALS_STORE)
   await checkSpecials()
+  await checkCollections()
   await checkBrands()
   await checkDrops()
   await checkShopEntry()

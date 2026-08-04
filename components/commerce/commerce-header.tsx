@@ -51,14 +51,17 @@ const SHOP_CATEGORIES = [
 // sibling subcategories, which the browse grid's ?line= filter unions.
 // Icons: the pre-roll family shares the supplied pre-rolls art; Gas Tanks has
 // no supplied vape icon yet → letter-mark, never an invented icon.
+// `line` is the COLLECTION slug — each entry is its own shopping page at
+// <store>/shop/<line> (Avanti, 2026-08-04); lib/collections owns the mapping
+// to subcategories (gas-tanks unions its three siblings there).
 const JB_LINES: readonly { label: string; line: string; icon: string | null }[] = [
   { label: 'Premium Flower', line: 'premium-flower', icon: '/shop/icons/flower.webp' },
-  { label: 'Hash Holes', line: 'hash-hole', icon: '/shop/icons/hash-hole.webp' },
+  { label: 'Hash Holes', line: 'hash-holes', icon: '/shop/icons/hash-hole.webp' },
   { label: '5G Pops', line: '5g-pops', icon: '/shop/icons/pops.svg' },
-  { label: '10-Pack Pre-Rolls', line: '10-pack', icon: '/shop/icons/pre-rolls.svg' },
-  { label: '1G Pre-Rolls', line: '1g-preroll', icon: '/shop/icons/pre-rolls.svg' },
-  { label: 'Twins 2-Pack', line: 'twins-2pack', icon: '/shop/icons/pre-rolls.svg' },
-  { label: 'Gas Tanks', line: 'gas-tank-flavors,gas-tank-live-resin,gas-tank-live-rosin', icon: null },
+  { label: '10-Pack Pre-Rolls', line: '10-pack-pre-rolls', icon: '/shop/icons/pre-rolls.svg' },
+  { label: '1G Pre-Rolls', line: '1g-pre-rolls', icon: '/shop/icons/pre-rolls.svg' },
+  { label: 'Twins 2-Pack', line: 'twins-2-pack', icon: '/shop/icons/pre-rolls.svg' },
+  { label: 'Gas Tanks', line: 'gas-tanks', icon: null },
 ]
 
 function storeFromPath(pathname: string): string | null {
@@ -360,7 +363,7 @@ export default function CommerceHeader() {
                   key={c}
                   role="menuitem"
                   data-shop-category={c}
-                  href={`${base ?? '/shop'}?category=${c}#browse`}
+                  href={base ? `${base}/shop/${c}` : '/shop'}
                   onClick={() => setOpenMenu(null)}
                   className="group/row flex items-center gap-3 rounded-2xl px-3 py-2 transition-colors duration-200 hover:bg-white/[0.07]"
                 >
@@ -416,7 +419,7 @@ export default function CommerceHeader() {
                 key={l.line}
                 role="menuitem"
                 data-jb-line={l.line}
-                href={`${base ?? '/shop'}?line=${l.line}#browse`}
+                href={base ? `${base}/shop/${l.line}` : '/shop'}
                 onClick={() => setOpenMenu(null)}
                 className="group/row flex items-center gap-3 rounded-2xl px-3 py-2 transition-colors duration-200 hover:bg-white/[0.07]"
               >

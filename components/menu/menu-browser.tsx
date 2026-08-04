@@ -280,12 +280,26 @@ function FiltersFromQuery({
   return null
 }
 
+export interface CategoryNavItem {
+  href: string
+  label: string
+  icon?: string | null
+  active?: boolean
+}
+
 export default function MenuBrowser({
   products,
   storeSlug,
+  heading,
+  categoryNav,
 }: {
   products: Product[]
   storeSlug: string
+  /** collection pages pass null — their hero already carries the title */
+  heading?: string | null
+  /** collection pages: category tiles become LINKS to sibling pages
+      (Avanti, 2026-08-04 — every category/line is its own shopping page) */
+  categoryNav?: CategoryNavItem[]
 }) {
   const [category, setCategory] = useState<ProductCategory | 'all'>('all')
   const [strain, setStrain] = useState<StrainType | 'all'>('all')
@@ -409,11 +423,14 @@ export default function MenuBrowser({
           <FiltersFromQuery categories={categories} onCategory={setCategory} onLine={setLine} />
         </Suspense>
 
-        {/* header — big Bebas, live count riding it */}
+        {/* header — big Bebas, live count riding it; collection pages pass
+            heading={null} because their hero already says it */}
         <div className="flex flex-wrap items-baseline justify-between gap-4">
-          <h2 className="font-display text-5xl uppercase leading-none md:text-7xl">
-            {category === 'all' ? 'Shop all' : categoryLabel(category)}
-          </h2>
+          {heading !== null && (
+            <h2 className="font-display text-5xl uppercase leading-none md:text-7xl">
+              {heading ?? (category === 'all' ? 'Shop all' : categoryLabel(category))}
+            </h2>
+          )}
           <p aria-live="polite" className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
             {shown.length} {shown.length === 1 ? 'product' : 'products'}
           </p>
@@ -422,14 +439,24 @@ export default function MenuBrowser({
         {/* MOBILE keeps the one-tap pill rows; on desktop categories + types
             live in the rail (Avanti, 2026-08-04) */}
         <div className="mt-5 flex flex-wrap gap-2 lg:hidden" style={{ fontFamily: 'var(--font-brand)' }}>
-          <button type="button" onClick={() => setCategory('all')} className={pill(category === 'all')}>
-            All
-          </button>
-          {categories.map((c) => (
-            <button key={c} type="button" onClick={() => setCategory(c)} className={pill(category === c)}>
-              {categoryLabel(c)}
-            </button>
-          ))}
+          {categoryNav ? (
+            categoryNav.map((n) => (
+              <Link key={n.href} href={n.href} aria-current={n.active ? 'page' : undefined} className={pill(!!n.active)}>
+                {n.label}
+              </Link>
+            ))
+          ) : (
+            <>
+              <button type="button" onClick={() => setCategory('all')} className={pill(category === 'all')}>
+                All
+              </button>
+              {categories.map((c) => (
+                <button key={c} type="button" onClick={() => setCategory(c)} className={pill(category === c)}>
+                  {categoryLabel(c)}
+                </button>
+              ))}
+            </>
+          )}
         </div>
 
         {/* active JB-line filter (set by the header's PRODUCTS dropdown) —
@@ -462,48 +489,76 @@ export default function MenuBrowser({
             data-facet-rail
             className="sticky top-24 hidden max-h-[calc(100vh-8rem)] self-start overflow-y-auto rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 lg:block"
           >
-            {/* categories as icon tiles */}
+            {/* categories as icon tiles — client filters on the store menu,
+                LINKS to sibling pages on collection pages */}
             <p className="px-1 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
               Categories
             </p>
             <div className="mb-4 mt-2.5 grid grid-cols-2 gap-1.5">
-              <button
-                type="button"
-                aria-pressed={category === 'all'}
-                onClick={() => setCategory('all')}
-                className={`font-display col-span-2 rounded-2xl py-2.5 text-[16px] uppercase leading-none tracking-[0.04em] transition-colors duration-150 ${
-                  category === 'all' ? 'bg-[var(--color-accent)] text-black' : 'bg-[var(--color-background)] hover:bg-[var(--color-accent)]/20'
-                }`}
-              >
-                All products
-              </button>
-              {categories.map((c) => {
-                const icon = CATEGORY_ICONS[c]
-                const on = category === c
-                return (
-                  <button
-                    key={c}
-                    type="button"
-                    aria-pressed={on}
-                    onClick={() => setCategory(on ? 'all' : c)}
+              {categoryNav ? (
+                categoryNav.map((n) => (
+                  <Link
+                    key={n.href}
+                    href={n.href}
+                    aria-current={n.active ? 'page' : undefined}
                     className={`flex flex-col items-center gap-1.5 rounded-2xl px-2 pb-2.5 pt-3 transition-colors duration-150 ${
-                      on ? 'bg-[var(--color-accent)] text-black' : 'bg-[var(--color-background)] hover:bg-[var(--color-accent)]/20'
+                      n.active ? 'bg-[var(--color-accent)] text-black' : 'bg-[var(--color-background)] hover:bg-[var(--color-accent)]/20'
                     }`}
                   >
-                    {icon ? (
+                    {n.icon ? (
                       // eslint-disable-next-line @next/next/no-img-element -- brand icon
-                      <img src={icon} alt="" className="h-9 w-9 object-contain" />
+                      <img src={n.icon} alt="" className="h-9 w-9 object-contain" />
                     ) : (
                       <span aria-hidden className="font-display flex h-9 w-9 items-center justify-center rounded-full bg-white text-[16px] leading-none text-black/60">
-                        {categoryLabel(c).slice(0, 1)}
+                        {n.label.slice(0, 1)}
                       </span>
                     )}
-                    <span className="font-display text-[13px] uppercase leading-none tracking-[0.04em]">
-                      {categoryLabel(c)}
+                    <span className="font-display text-center text-[13px] uppercase leading-none tracking-[0.04em]">
+                      {n.label}
                     </span>
+                  </Link>
+                ))
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    aria-pressed={category === 'all'}
+                    onClick={() => setCategory('all')}
+                    className={`font-display col-span-2 rounded-2xl py-2.5 text-[16px] uppercase leading-none tracking-[0.04em] transition-colors duration-150 ${
+                      category === 'all' ? 'bg-[var(--color-accent)] text-black' : 'bg-[var(--color-background)] hover:bg-[var(--color-accent)]/20'
+                    }`}
+                  >
+                    All products
                   </button>
-                )
-              })}
+                  {categories.map((c) => {
+                    const icon = CATEGORY_ICONS[c]
+                    const on = category === c
+                    return (
+                      <button
+                        key={c}
+                        type="button"
+                        aria-pressed={on}
+                        onClick={() => setCategory(on ? 'all' : c)}
+                        className={`flex flex-col items-center gap-1.5 rounded-2xl px-2 pb-2.5 pt-3 transition-colors duration-150 ${
+                          on ? 'bg-[var(--color-accent)] text-black' : 'bg-[var(--color-background)] hover:bg-[var(--color-accent)]/20'
+                        }`}
+                      >
+                        {icon ? (
+                          // eslint-disable-next-line @next/next/no-img-element -- brand icon
+                          <img src={icon} alt="" className="h-9 w-9 object-contain" />
+                        ) : (
+                          <span aria-hidden className="font-display flex h-9 w-9 items-center justify-center rounded-full bg-white text-[16px] leading-none text-black/60">
+                            {categoryLabel(c).slice(0, 1)}
+                          </span>
+                        )}
+                        <span className="font-display text-[13px] uppercase leading-none tracking-[0.04em]">
+                          {categoryLabel(c)}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </>
+              )}
             </div>
 
             {/* type pills */}
