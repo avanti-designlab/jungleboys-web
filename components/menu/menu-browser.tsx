@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation'
 import type { Product, ProductCategory, ProductVariant, StrainType } from '@/lib/dutchie'
 import { addToCart } from '@/lib/cart'
 import { categoryLabel } from './labels'
+import { CATEGORY_ICONS } from '@/lib/category-icons'
 
 // Category + strain filtering over a store's menu. Client-side because the whole
 // menu is already on the page: filtering 13-200 products in the browser is
@@ -357,6 +358,9 @@ export default function MenuBrowser({
         : 'border-[var(--color-border)] text-[var(--color-foreground)] hover:border-[var(--color-accent)]'
     }`
 
+  // Facet group = eyebrow + PILL ROWS (Avanti, 2026-08-04: pills over
+  // checkboxes across every sticky rail). Multi-select: a tapped pill goes
+  // gold; the count rides the right edge.
   const facetGroup = (
     title: string,
     options: [string, number][],
@@ -365,27 +369,35 @@ export default function MenuBrowser({
     label: (v: string) => string = (v) => v
   ) =>
     options.length > 1 ? (
-      <div data-facet={title.toLowerCase()} className="border-t border-[var(--color-border)] py-4 first:border-t-0 first:pt-0">
-        <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
+      <div data-facet={title.toLowerCase()} className="border-t border-[var(--color-border)] pt-4">
+        <p className="px-1 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
           {title}
         </p>
-        <ul className="mt-3 space-y-1.5">
-          {options.map(([v, n]) => (
-            <li key={v}>
-              <label className="flex cursor-pointer items-center gap-2.5 text-sm text-[var(--color-foreground)]/85 hover:text-[var(--color-foreground)]">
-                <input
-                  type="checkbox"
-                  checked={set.has(v)}
-                  onChange={() => toggle(set, apply, v)}
-                  className="h-4 w-4 accent-[var(--color-accent)]"
-                />
-                <span className="min-w-0 flex-1 truncate">{label(v)}</span>
-                <span className="text-[11px] text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
-                  {n}
-                </span>
-              </label>
-            </li>
-          ))}
+        <ul className="mb-4 mt-2.5 space-y-1">
+          {options.map(([v, n]) => {
+            const on = set.has(v)
+            return (
+              <li key={v}>
+                <button
+                  type="button"
+                  aria-pressed={on}
+                  onClick={() => toggle(set, apply, v)}
+                  className={`flex w-full items-center justify-between gap-3 rounded-full py-2 pl-4 pr-3 text-left transition-colors duration-150 ${
+                    on
+                      ? 'bg-[var(--color-accent)] text-black'
+                      : 'text-[var(--color-foreground)]/85 hover:bg-[var(--color-background)]'
+                  }`}
+                >
+                  <span className="font-display min-w-0 flex-1 truncate text-[16px] uppercase leading-none tracking-[0.03em]">
+                    {label(v)}
+                  </span>
+                  <span className={`text-[10px] font-bold ${on ? 'text-black/60' : 'text-[var(--color-muted)]'}`} style={{ fontFamily: 'var(--font-brand)' }}>
+                    {n}
+                  </span>
+                </button>
+              </li>
+            )
+          })}
         </ul>
       </div>
     ) : null
@@ -407,7 +419,9 @@ export default function MenuBrowser({
           </p>
         </div>
 
-        <div className="mt-5 flex flex-wrap gap-2" style={{ fontFamily: 'var(--font-brand)' }}>
+        {/* MOBILE keeps the one-tap pill rows; on desktop categories + types
+            live in the rail (Avanti, 2026-08-04) */}
+        <div className="mt-5 flex flex-wrap gap-2 lg:hidden" style={{ fontFamily: 'var(--font-brand)' }}>
           <button type="button" onClick={() => setCategory('all')} className={pill(category === 'all')}>
             All
           </button>
@@ -428,8 +442,7 @@ export default function MenuBrowser({
           </div>
         )}
 
-        {/* strain pills stay up top on every viewport — the one-tap filter */}
-        <div className="mt-3 flex flex-wrap gap-2" style={{ fontFamily: 'var(--font-brand)' }}>
+        <div className="mt-3 flex flex-wrap gap-2 lg:hidden" style={{ fontFamily: 'var(--font-brand)' }}>
           <button type="button" onClick={() => setStrain('all')} className={pill(strain === 'all')}>
             Any type
           </button>
@@ -441,23 +454,89 @@ export default function MenuBrowser({
         </div>
 
         {/* ── sticky facet rail (desktop) + grid ──
-            Facets mirror the Dutchie embed's rail — subcategories, weights,
-            brands, deals — every option derived from the live menu with a
-            count, so nothing filters to a surprise. */}
-        <div className="mt-8 grid gap-8 lg:grid-cols-[250px_1fr]">
+            The rail is the whole filter story on desktop: category TILES,
+            type pills, on-sale toggle, then Dutchie-style facets — every
+            option derived from the live menu with a count. */}
+        <div className="mt-8 grid gap-8 lg:grid-cols-[270px_1fr]">
           <aside
             data-facet-rail
-            className="sticky top-24 hidden max-h-[calc(100vh-8rem)] self-start overflow-y-auto pr-2 lg:block"
+            className="sticky top-24 hidden max-h-[calc(100vh-8rem)] self-start overflow-y-auto rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 lg:block"
           >
-            <label className="mb-4 flex cursor-pointer items-center gap-2.5 rounded-2xl border border-[var(--color-border)] px-4 py-3 text-sm font-semibold text-[var(--color-foreground)]">
-              <input
-                type="checkbox"
-                checked={dealsOnly}
-                onChange={() => setDealsOnly((d) => !d)}
-                className="h-4 w-4 accent-[var(--color-accent)]"
-              />
-              On sale only
-            </label>
+            {/* categories as icon tiles */}
+            <p className="px-1 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
+              Categories
+            </p>
+            <div className="mb-4 mt-2.5 grid grid-cols-2 gap-1.5">
+              <button
+                type="button"
+                aria-pressed={category === 'all'}
+                onClick={() => setCategory('all')}
+                className={`font-display col-span-2 rounded-2xl py-2.5 text-[16px] uppercase leading-none tracking-[0.04em] transition-colors duration-150 ${
+                  category === 'all' ? 'bg-[var(--color-accent)] text-black' : 'bg-[var(--color-background)] hover:bg-[var(--color-accent)]/20'
+                }`}
+              >
+                All products
+              </button>
+              {categories.map((c) => {
+                const icon = CATEGORY_ICONS[c]
+                const on = category === c
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => setCategory(on ? 'all' : c)}
+                    className={`flex flex-col items-center gap-1.5 rounded-2xl px-2 pb-2.5 pt-3 transition-colors duration-150 ${
+                      on ? 'bg-[var(--color-accent)] text-black' : 'bg-[var(--color-background)] hover:bg-[var(--color-accent)]/20'
+                    }`}
+                  >
+                    {icon ? (
+                      // eslint-disable-next-line @next/next/no-img-element -- brand icon
+                      <img src={icon} alt="" className="h-9 w-9 object-contain" />
+                    ) : (
+                      <span aria-hidden className="font-display flex h-9 w-9 items-center justify-center rounded-full bg-white text-[16px] leading-none text-black/60">
+                        {categoryLabel(c).slice(0, 1)}
+                      </span>
+                    )}
+                    <span className="font-display text-[13px] uppercase leading-none tracking-[0.04em]">
+                      {categoryLabel(c)}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* type pills */}
+            <p className="px-1 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
+              Type
+            </p>
+            <div className="mb-4 mt-2.5 flex flex-wrap gap-1.5">
+              {(['all', 'indica', 'sativa', 'hybrid'] as const).map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  aria-pressed={strain === s}
+                  onClick={() => setStrain(s as StrainType | 'all')}
+                  className={`font-display rounded-full px-3.5 py-2 text-[14px] uppercase leading-none tracking-[0.04em] transition-colors duration-150 ${
+                    strain === s ? 'bg-[var(--color-accent)] text-black' : 'bg-[var(--color-background)] hover:bg-[var(--color-accent)]/20'
+                  }`}
+                >
+                  {s === 'all' ? 'Any' : STRAIN_LABEL[s as StrainType]}
+                </button>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              aria-pressed={dealsOnly}
+              onClick={() => setDealsOnly((d) => !d)}
+              className={`font-display mb-4 w-full rounded-full py-2.5 text-[15px] uppercase leading-none tracking-[0.05em] transition-colors duration-150 ${
+                dealsOnly ? 'bg-[var(--color-accent)] text-black' : 'bg-[var(--color-background)] hover:bg-[var(--color-accent)]/20'
+              }`}
+            >
+              {dealsOnly ? 'On sale only ✓' : 'On sale only'}
+            </button>
+
             {facetGroup('Subcategories', subcatOptions, subcatSet, setSubcatSet, (v) => v.replace(/-/g, ' '))}
             {facetGroup('Weights', weightOptions, weightSet, setWeightSet)}
             {facetGroup('Brands', brandOptions, brandSet, setBrandSet)}

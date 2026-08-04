@@ -40,10 +40,10 @@ export default function BrandSpyNav({
     <nav
       aria-label="Brands on the menu"
       data-brand-spy
-      className="sticky top-24 hidden max-h-[calc(100vh-8rem)] self-start overflow-y-auto pr-2 lg:block"
+      className="sticky top-24 hidden max-h-[calc(100vh-8rem)] self-start overflow-y-auto rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-4 lg:block"
     >
       <p
-        className="px-4 pb-2 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-muted)]"
+        className="px-1 pb-2 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)]"
         style={{ fontFamily: 'var(--font-brand)' }}
       >
         Brands
@@ -59,7 +59,7 @@ export default function BrandSpyNav({
                 className={`flex items-center justify-between gap-3 rounded-full py-2.5 pl-4 pr-3 transition-colors duration-200 ${
                   current
                     ? 'bg-[var(--color-accent)] text-black'
-                    : 'text-[var(--color-foreground)]/80 hover:bg-[var(--color-surface)] hover:text-[var(--color-foreground)]'
+                    : 'text-[var(--color-foreground)]/80 hover:bg-[var(--color-background)] hover:text-[var(--color-foreground)]'
                 }`}
               >
                 <span className="font-display truncate text-[17px] uppercase leading-none tracking-[0.03em]">

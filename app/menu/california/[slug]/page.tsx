@@ -76,12 +76,10 @@ export default async function CaliforniaMenuPage({
       {/* ... and the full filterable grid still serves the shopper who knows
           what they came for. Shelf "View all" links land here with a category
           pre-applied via ?category= (read client-side inside MenuBrowser). */}
-      <section id="browse" aria-labelledby="browse-heading" className="mt-16 scroll-mt-24">
-        <div className="mx-auto max-w-[1400px] px-6 md:px-12 lg:px-20">
-          <h2 id="browse-heading" className="font-display text-3xl uppercase leading-none md:text-4xl">
-            Browse everything
-          </h2>
-        </div>
+      {/* MenuBrowser carries its own big header (SHOP ALL / the active
+          category) — a second small heading here read as a stray eyebrow
+          (Avanti, 2026-08-04). */}
+      <section id="browse" aria-label="Browse the full menu" className="mt-16 scroll-mt-24">
         <MenuBrowser products={menu.products} storeSlug={slug} />
       </section>
 

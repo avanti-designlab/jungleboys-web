@@ -516,6 +516,14 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   %-off badge and its member ProductCards. Sale products no special claims land in a synthetic
   "More Markdowns" section per group — nothing discounted hides. check-commerce asserts sections,
   both groups, both doors + a fixture special name in SSR.
+- **RAIL SYSTEM v2 (Avanti, 2026-08-04 late): one card design for every sticky rail; browse
+  filters ALL live in it on desktop.** Her notes: the "Browse everything" eyebrow was a stray
+  (removed — MenuBrowser's big header is the section heading now), categories/types move OFF the
+  top into the rail, and all rails get properly designed. Every sticky rail (browse facets,
+  brands spy, deals) is now the same rounded-3xl surface card with gold Bebas eyebrows;
+  categories render as ICON TILES (2-col, gold when active, tapping the active one returns to
+  All), types + on-sale as pills, facet options as full-width pill rows with counts — pills
+  everywhere, no checkboxes. Mobile keeps the top pill rows (rail is lg+).
 - **BROWSE GRID grew the Dutchie-style FACET RAIL + bigger header (Avanti, 2026-08-04, same
   "CRO at the forefront" brief).** MenuBrowser: big Bebas header (SHOP ALL / category name) with
   live count, and a sticky desktop rail — On-sale toggle, Subcategories, Weights, Brands — every
