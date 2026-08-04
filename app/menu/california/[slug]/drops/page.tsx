@@ -7,9 +7,10 @@ import { getLocations, getLocationBySlug } from '@/lib/dutchie'
 import { getDrops, getDropsHero, type DropsHero } from '@/lib/drops'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 import { AddToCartButton, ProductCard } from '@/components/menu/menu-browser'
-import { categoryLabel } from '@/components/menu/labels'
+import { categoryLabel, STRAIN_STYLE } from '@/components/menu/labels'
 import BrandShelf from '@/components/menu/brand-shelf'
 import DropCountdown from '@/components/menu/drop-countdown'
+import Reveal from '@/components/reveal'
 
 // Fresh Drops for one store — the curated weekly release, dropping FRIDAYS.
 // Editorial by design (recorded decision, 2026-07-31): a person picks the drop,
@@ -99,8 +100,11 @@ function StrainOfTheWeek({
             Strain of the week
           </span>
           {product.strainType && (
-            <span className="rounded-full border border-white/15 bg-white/10 px-3.5 py-2 text-[11px] font-bold uppercase tracking-widest text-white" style={{ fontFamily: 'var(--font-brand)' }}>
-              {STRAIN_LABEL[product.strainType]}
+            <span
+              className={`rounded-full border-2 bg-white/90 px-3.5 py-2 text-[11px] font-extrabold uppercase tracking-widest ${STRAIN_STYLE[product.strainType].cls}`}
+              style={{ fontFamily: 'var(--font-brand)' }}
+            >
+              {STRAIN_STYLE[product.strainType].label}
             </span>
           )}
           {thc && (
@@ -320,7 +324,8 @@ export default async function StoreDropsPage({
                 the Brands page */}
             <div className="mt-8 space-y-10">
               {byCategory.map((g) => (
-                <section key={g.category} id={`drop-${g.category}`} data-drop-category={g.category} aria-label={categoryLabel(g.category)} className="scroll-mt-28">
+                <Reveal key={g.category}>
+                <section id={`drop-${g.category}`} data-drop-category={g.category} aria-label={categoryLabel(g.category)} className="scroll-mt-28">
                   <div className="flex items-baseline justify-between gap-4">
                     <h3 className="font-display text-3xl uppercase leading-none md:text-5xl">
                       {categoryLabel(g.category)}
@@ -332,6 +337,7 @@ export default async function StoreDropsPage({
                     ))}
                   </BrandShelf>
                 </section>
+                </Reveal>
               ))}
             </div>
           </div>

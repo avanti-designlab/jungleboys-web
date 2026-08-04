@@ -7,9 +7,10 @@ import { getLocations, getMenu, getProductBySlug, getProducts, getSpecials } fro
 import { jsonLdHtml, breadcrumbSchema, productSchema } from '@/lib/schema'
 import PdpBuyBox, { type StoreOffer } from '@/components/shop/pdp-buy-box'
 import { ProductCard } from '@/components/menu/menu-browser'
-import { categoryLabel } from '@/components/menu/labels'
+import { categoryLabel, STRAIN_STYLE } from '@/components/menu/labels'
 import { EffectPills, TerpenePills } from '@/components/shop/trait-pills'
 import EffectsRadar from '@/components/shop/effects-radar'
+import Reveal from '@/components/reveal'
 
 // Product detail — ONE canonical page per product, store switched in the buy box.
 //
@@ -202,7 +203,16 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </h1>
 
             <div className="mt-4 flex flex-wrap gap-1.5">
-              {product.strainType && chip(product.strainType, 'type')}
+              {/* the ONE site-wide strain palette (Avanti, 2026-08-04) —
+                  indica blue / sativa red / hybrid green, outlined */}
+              {product.strainType && (
+                <span
+                  className={`rounded-full border-2 px-4 py-2 text-[13px] font-extrabold uppercase tracking-widest ${STRAIN_STYLE[product.strainType].cls}`}
+                  style={{ fontFamily: 'var(--font-brand)' }}
+                >
+                  {STRAIN_STYLE[product.strainType].label}
+                </span>
+              )}
               {thc && chip(<>THC <span className="text-[var(--color-accent-ink)]">{thc.value}{thc.unit}</span></>, 'thc')}
               {cbd && chip(<>CBD <span className="text-[var(--color-accent-ink)]">{cbd.value}{cbd.unit}</span></>, 'cbd')}
               {terpTotal ? chip(<>Terps <span className="text-[var(--color-accent-ink)]">{terpTotal.toFixed(1)}%</span></>, 'terps') : null}
@@ -222,9 +232,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             {/* the named special, in yellow (Avanti: "the specials in purple
                 will showcase the deal from dutchie, made in yellow") — links
                 straight to that deal's section on the Deals page */}
-            {special && (
+            {(special || onSale) && (
               <Link
-                href={`/menu/california/${relatedStore}/deals#deal-${special.slug}`}
+                href={special ? `/menu/california/${relatedStore}/deals#deal-${special.slug}` : `/menu/california/${relatedStore}/deals`}
                 className="group mt-4 flex items-center gap-3.5 rounded-2xl border-2 border-[var(--color-accent)] bg-[var(--color-accent)]/15 px-4 py-3.5 transition-colors duration-200 hover:bg-[var(--color-accent)]/25"
                 style={{ fontFamily: 'var(--font-brand)' }}
               >
@@ -235,8 +245,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 </span>
                 <span className="min-w-0">
                   <span className="block text-[12px] font-extrabold uppercase tracking-[0.12em] text-[var(--color-foreground)]">
-                    <span className="text-[var(--color-accent-ink)]">Special:</span> {special.name}
-                    {special.percentOff != null ? ` — ${special.percentOff}% off` : ''}
+                    <span className="text-[var(--color-accent-ink)]">Special:</span>{' '}
+                    {special
+                      ? `${special.name}${special.percentOff != null ? ` — ${special.percentOff}% off` : ''}`
+                      : `${percentOff}% off right now`}
                   </span>
                   <span className="mt-0.5 block text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-accent-ink)] underline-offset-4 group-hover:underline">
                     Shop this special →
@@ -267,6 +279,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
       {/* ── THE FACTS — Genetics / Taste / Effects on the gold tint ── */}
       {(profile?.genetics || profile?.taste?.length || product.effects?.length) && (
+        <Reveal>
         <section aria-label="The facts" className="px-6 pt-10 md:px-12 lg:px-20">
           <div
             className="mx-auto grid max-w-[1400px] gap-8 rounded-[2rem] border border-[var(--color-border)] p-7 sm:grid-cols-3 md:p-10"
@@ -300,10 +313,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             ) : null}
           </div>
         </section>
+        </Reveal>
       )}
 
       {/* ── CERTIFIED ANALYSIS + TERPENES, as measured ── */}
       {(lab?.cannabinoids?.length || lab?.terpenes?.length) && (
+        <Reveal>
         <section aria-labelledby="certified-analysis" className="px-6 pt-8 md:px-12 lg:px-20">
           <div className="mx-auto grid max-w-[1400px] gap-6 lg:grid-cols-2">
             {lab?.cannabinoids?.length ? (
@@ -347,36 +362,37 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 </div>
               </div>
             ) : null}
+
+            {/* PWF Rewards fills the fourth slot (Avanti, 2026-08-04: no
+                empty space) — evergreen navigation promo, never an invented
+                discount */}
+            <Link
+              href="/rewards"
+              className="group flex flex-col justify-between gap-6 rounded-[2rem] bg-[linear-gradient(120deg,#ffe27a_0%,#fecf0e_55%,#e7b30c_100%)] p-7 text-black transition-transform duration-200 hover:-translate-y-0.5 md:p-9"
+            >
+              <span>
+                <span className="block text-[11px] font-bold uppercase tracking-[0.24em] text-black/60" style={{ fontFamily: 'var(--font-brand)' }}>
+                  Playing with fire
+                </span>
+                <span className="font-display mt-1 block text-4xl uppercase leading-[0.9] md:text-5xl">
+                  Earn points on every order
+                </span>
+              </span>
+              <span
+                className="inline-flex w-fit items-center gap-2 rounded-full bg-black px-5 py-3 text-[12px] font-extrabold uppercase tracking-[0.16em] text-white"
+                style={{ fontFamily: 'var(--font-brand)' }}
+              >
+                Join PWF Rewards →
+              </span>
+            </Link>
           </div>
         </section>
+        </Reveal>
       )}
-
-      {/* ── PWF Rewards band — evergreen navigation promo (never an invented
-          discount; dated promo copy belongs in the CMS) ── */}
-      <section aria-label="Rewards" className="px-6 pt-10 md:px-12 lg:px-20">
-        <Link
-          href="/rewards"
-          className="group mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-4 rounded-[2rem] bg-[linear-gradient(120deg,#ffe27a_0%,#fecf0e_55%,#e7b30c_100%)] p-7 text-black transition-transform duration-200 hover:-translate-y-0.5 md:p-9"
-        >
-          <span>
-            <span className="block text-[11px] font-bold uppercase tracking-[0.24em] text-black/60" style={{ fontFamily: 'var(--font-brand)' }}>
-              Playing with fire
-            </span>
-            <span className="font-display mt-1 block text-3xl uppercase leading-[0.9] md:text-5xl">
-              Earn points on every order
-            </span>
-          </span>
-          <span
-            className="inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-[12px] font-extrabold uppercase tracking-[0.16em] text-white"
-            style={{ fontFamily: 'var(--font-brand)' }}
-          >
-            Join PWF Rewards →
-          </span>
-        </Link>
-      </section>
 
       {/* ── same-category row ── */}
       {related.length > 0 && (
+        <Reveal>
         <section aria-labelledby="pdp-related" className="px-6 pt-10 md:px-12 lg:px-20">
           {/* its own pill card (Avanti, 2026-08-04) */}
           <div className="mx-auto max-w-[1400px] rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-9">
@@ -399,6 +415,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </div>
           </div>
         </section>
+        </Reveal>
       )}
     </main>
   )
