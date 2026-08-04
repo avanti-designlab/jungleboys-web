@@ -9,6 +9,7 @@ import { CATEGORY_ICONS } from '@/lib/category-icons'
 import { brandAnchor } from '@/lib/brands'
 import { collectionPath } from '@/lib/collections'
 import BrandTile from './brand-tile'
+import Reveal from '@/components/reveal'
 
 // The merchandised storefront (Avanti's redesign brief, 2026-08-03): the store
 // menu is an ECOM page built to sell, not a bare product grid. Structure:
@@ -278,6 +279,7 @@ export default function StoreShop({
 
       {/* ── HOT ITEMS — the red push shelf ── */}
       {hot.length > 0 && (
+        <Reveal>
         <section
           aria-labelledby="hot-items"
           data-hot-items
@@ -308,13 +310,17 @@ export default function StoreShop({
           </div>
           <Shelf products={hot} storeSlug={storeSlug} hot />
         </section>
+        </Reveal>
       )}
 
-      <BrandQuickShop menu={menu} storeSlug={storeSlug} />
+      <Reveal>
+        <BrandQuickShop menu={menu} storeSlug={storeSlug} />
+      </Reveal>
 
       {/* ── category shelves, promo banners woven between ── */}
       {shelves.map((shelf, i) => (
         <div key={shelf.category}>
+          <Reveal>
           <section aria-labelledby={`shelf-${shelf.category}`} data-shelf={shelf.category} className="mt-12">
             {/* WAY bigger, no count (Avanti, 2026-08-03) */}
             <div className="flex items-baseline justify-between gap-4">
@@ -331,6 +337,7 @@ export default function StoreShop({
             </div>
             <Shelf products={shelf.products.slice(0, 8)} storeSlug={storeSlug} />
           </section>
+          </Reveal>
 
           {/* a promo slot after every second shelf — brand discounts, JB deals,
               whatever the CMS carries that week */}

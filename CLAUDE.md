@@ -516,6 +516,22 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   %-off badge and its member ProductCards. Sale products no special claims land in a synthetic
   "More Markdowns" section per group — nothing discounted hides. check-commerce asserts sections,
   both groups, both doors + a fixture special name in SSR.
+- **POLISH BATCH (Avanti, 2026-08-04 evening).** (1) Terps chip REMOVED from all product
+  cards; card Add-to-cart now carries the CART ICON IN A CIRCLE on the right — the PillCta
+  language — in both tones. (2) Effects radar v2: moody multi-hue gradient (dusk purple →
+  magenta → rose → amber → teal), blurred glow underlay, NO vertex dots. (3) The PWF Rewards
+  band moved INTO the analysis grid's fourth slot (no empty space); the SPECIALS yellow box
+  gained a fallback — any discounted product without a named special shows "X% off right now"
+  → the Deals page (it was never removed; it is deal-driven and Zangria carries no discount).
+  (4) STRAIN CHIPS UNIFIED site-wide: PDP + drops strain-of-week use the one STRAIN_STYLE
+  palette (indica blue / sativa red / hybrid green, outlined; white/90 backing on the dark
+  drops tile). **TRAP FIXED + moved: STRAIN_STYLE now lives in components/menu/labels.ts —
+  importing a VALUE from a 'use client' module into a server component yields a broken client
+  reference (the pop-rockets PDP prerender crash).** (5) MOTION: the Phase 3 surfaces now use
+  the site's Reveal (GSAP Standard tier, once, reduced-motion-gated) on their major sections —
+  storefront bands/shelves, deal sections, drop category rows, brand sections, PDP bands.
+  Verified headless: below-fold sections animate 0→1 on scroll. (6) HOT shelf: red MOVING
+  FAST pill; collection heroes are plain (no icon).
 - **FIXTURE ENRICHMENT: every placeholder product carries the FULL PDP shape (Avanti,
   2026-08-04 — "you removed the sections… add them back": the sections were data-driven and
   only Zangria had the data).** `enrich()` in lib/dutchie/placeholder.ts fills MISSING fields

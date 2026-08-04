@@ -6,6 +6,7 @@ import { getLocations, getLocationBySlug, getMenu, getSpecials } from '@/lib/dut
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 import { ProductCard } from '@/components/menu/menu-browser'
 import DealsExperience, { type DealRailItem } from '@/components/menu/deals-experience'
+import Reveal from '@/components/reveal'
 
 // Deals for one store. "Deals", not "Specials" — same surface, the site says
 // Deals (Avanti, 2026-07-31). Nested under the store because discounts are
@@ -54,6 +55,7 @@ function DealSection({
 }) {
   const jb = special.group === 'jungle-boys'
   return (
+    <Reveal>
     <section
       id={`deal-${special.slug}`}
       data-deal={special.slug}
@@ -95,6 +97,7 @@ function DealSection({
         ))}
       </div>
     </section>
+    </Reveal>
   )
 }
 

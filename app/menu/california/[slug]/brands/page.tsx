@@ -9,6 +9,7 @@ import { brandAnchor } from '@/lib/brands'
 import BrandTile from '@/components/menu/brand-tile'
 import BrandSpyNav from '@/components/menu/brand-spy-nav'
 import BrandShelf from '@/components/menu/brand-shelf'
+import Reveal from '@/components/reveal'
 
 // Brands at one store — EVERY brand on the shelf, not JB only. That is the
 // recorded decision (Avanti, 2026-07-31): the CA stores stock third-party
@@ -177,8 +178,8 @@ export default async function StoreBrandsPage({
             {brands.map(([brand, list], i) => {
               const dark = i === 0
               return (
+                <Reveal key={brand}>
                 <section
-                  key={brand}
                   id={brandAnchor(brand)}
                   data-brand={brand}
                   className={`scroll-mt-28 rounded-[2rem] p-6 md:p-9 ${
@@ -209,6 +210,7 @@ export default async function StoreBrandsPage({
                     </BrandShelf>
                   </div>
                 </section>
+                </Reveal>
               )
             })}
           </div>
