@@ -126,7 +126,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const chip = (label: ReactNode, key: string) => (
     <span
       key={key}
-      className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-widest text-[var(--color-foreground)]/85"
+      className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2 text-[13px] font-bold uppercase tracking-widest text-[var(--color-foreground)]/85"
       style={{ fontFamily: 'var(--font-brand)' }}
     >
       {label}
@@ -245,37 +245,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               </Link>
             )}
 
-            {/* availability across the stores that stock it — real offer data */}
-            {offers.length > 0 && (
-              <div className="mt-5" style={{ fontFamily: 'var(--font-brand)' }}>
-                <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-muted)]">
-                  Availability
-                </p>
-                <ul className="mt-2 flex flex-wrap gap-1.5">
-                  {offers.map((o) => {
-                    const inStock = o.variants.some((v) => (v.quantityAvailable ?? 0) > 0)
-                    return (
-                      <li key={o.slug}>
-                        <Link
-                          href={`/menu/california/${o.slug}`}
-                          className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest transition hover:border-[var(--color-accent)] ${
-                            inStock
-                              ? 'border-[var(--color-border)] text-[var(--color-foreground)]/85'
-                              : 'border-[var(--color-border)] text-[var(--color-muted)] line-through'
-                          }`}
-                        >
-                          <span
-                            aria-hidden
-                            className={`h-1.5 w-1.5 rounded-full ${inStock ? 'bg-[var(--color-success)]' : 'bg-[var(--color-border)]'}`}
-                          />
-                          {o.name.replace(/^Jungle Boys\s*/i, '')}
-                        </Link>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
-            )}
 
             {/* lab line — only real facts, only when present */}
             {(lab?.lab || lab?.testedAt || lab?.coaUrl) && (

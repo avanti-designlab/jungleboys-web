@@ -89,21 +89,22 @@ export default function PdpBuyBox({
 
   return (
     <div style={{ fontFamily: 'var(--font-brand)' }}>
-      <label htmlFor="pdp-store" className="block text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]">
-        Store
-      </label>
-      <select
-        id="pdp-store"
-        value={offer.slug}
-        onChange={(e) => chooseStore(e.target.value)}
-        className="mt-1 w-full rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm font-bold text-[var(--color-foreground)]"
-      >
-        {offers.map((o) => (
-          <option key={o.slug} value={o.slug}>
-            {o.name} — {o.city}
-          </option>
-        ))}
-      </select>
+      {/* no store dropdown (Avanti, 2026-08-04): the shopper arrives from a
+          store's menu, so the context is already chosen. The line states it;
+          Change opens the site's one picker. chooseStore stays for the
+          ?store= deep-link resolution above. */}
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]">
+          Shopping at <span className="text-[var(--color-foreground)]">{offer.name}</span>
+        </p>
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent('jb:pick-store'))}
+          className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--color-accent-ink)] underline-offset-4 hover:underline"
+        >
+          Change
+        </button>
+      </div>
 
       {offer.variants.length > 1 && (
         <fieldset className="mt-5">
@@ -133,21 +134,21 @@ export default function PdpBuyBox({
         </fieldset>
       )}
 
-      <p className="mt-5 text-2xl font-extrabold" aria-live="polite">
+      <p className="mt-5" aria-live="polite">
         {!variant ? null : soldOut ? (
-          <span className="text-[var(--color-muted)]">Sold out at {offer.name}</span>
+          <span className="text-xl font-extrabold text-[var(--color-muted)]">Sold out at {offer.name}</span>
         ) : onSale ? (
-          <span className="flex flex-wrap items-baseline gap-x-3">
+          <span className="flex flex-wrap items-baseline gap-x-4">
             <span className="sr-only">Was </span>
-            <s className="text-base font-bold text-[var(--color-muted)]">{money(variant.price)}</s>
+            <s className="text-xl font-bold text-[var(--color-muted)]">{money(variant.price)}</s>
             <span className="sr-only">, now </span>
-            <span>{money(variant.specialPrice!)}</span>
-            <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-accent-ink)]">
+            <span className="font-display text-[3.6rem] leading-none text-[var(--color-danger-solid)]">{money(variant.specialPrice!)}</span>
+            <span className="rounded-full bg-[var(--color-accent)] px-3 py-1.5 text-xs font-extrabold uppercase tracking-widest text-black">
               {pct}% off
             </span>
           </span>
         ) : (
-          money(variant.price)
+          <span className="font-display text-[3.6rem] leading-none">{money(variant.price)}</span>
         )}
       </p>
 
@@ -169,8 +170,12 @@ export default function PdpBuyBox({
             setAdded(true)
             window.setTimeout(() => setAdded(false), 1600)
           }}
-          className="mt-5 inline-flex w-full items-center justify-center rounded-full bg-[var(--color-accent)] px-8 py-4 text-sm font-extrabold uppercase tracking-widest text-[var(--color-on-accent)] transition hover:opacity-90"
+          className="group mt-5 inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[var(--color-accent)] px-8 py-4 text-sm font-extrabold uppercase tracking-widest text-[var(--color-on-accent)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-black hover:text-[var(--color-accent)] hover:shadow-xl"
         >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4.5 w-4.5 transition-transform duration-200 group-hover:-translate-y-0.5" aria-hidden>
+            <path d="M5.2 8.2h13.6l-1.1 11.2a1.9 1.9 0 0 1-1.9 1.7H8.2a1.9 1.9 0 0 1-1.9-1.7L5.2 8.2Z" strokeLinejoin="round" />
+            <path d="M9 8.2V6.5a3 3 0 0 1 6 0v1.7" />
+          </svg>
           {added ? 'Added to bag ✓' : 'Add to bag'}
         </button>
       )}
