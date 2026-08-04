@@ -207,6 +207,38 @@ body {
     animation: none;
   }
 }
+/* Drops clock — the Friday chip breathes a gold ring; the live dot blinks.
+   Transform/opacity + box-shadow only, both stilled under reduced motion. */
+@keyframes drop-friday-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(254, 207, 14, 0.55);
+  }
+  55% {
+    box-shadow: 0 0 0 9px rgba(254, 207, 14, 0);
+  }
+}
+.drop-friday-pulse {
+  animation: drop-friday-pulse 2.2s ease-out infinite;
+}
+@keyframes drop-live-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+.drop-live-dot {
+  animation: drop-live-dot 1.1s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .drop-friday-pulse,
+  .drop-live-dot {
+    animation: none;
+  }
+}
 /* Age-gate mascots — one-shot rise out of the pill's bottom line on entry */
 @keyframes mascot-rise {
   from {

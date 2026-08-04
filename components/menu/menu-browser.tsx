@@ -48,7 +48,7 @@ function lineChipLabel(line: string): string {
 // every card on the commerce pages adds to cart). Adds the card's displayed
 // variant at its displayed price; flips to "Added ✓" for a beat so the action
 // reads without a panel opening. The header count follows via jb:cart-changed.
-function AddToCartButton({
+export function AddToCartButton({
   product,
   variant,
   storeSlug,

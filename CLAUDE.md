@@ -516,6 +516,19 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   %-off badge and its member ProductCards. Sale products no special claims land in a synthetic
   "More Markdowns" section per group — nothing discounted hides. check-commerce asserts sections,
   both groups, both doors + a fixture special name in SSR.
+- **DROPS PAGE REDESIGNED — the brand ritual (Avanti, 2026-08-04 late: "extra special…
+  calendar animation… wow factor… shoppable").** Hero = dark card with gold glow: giant FRESH
+  DROPS, the DROP CLOCK (DropCountdown — a 7-chip week strip with Friday pulsing gold + a live
+  store-local countdown to next Friday 00:00 America/Los_Angeles; on Fridays it flips to a
+  "DROP DAY — it's live" badge instead of counting; SSR renders dashes, the interval fills
+  after mount), and STRAIN OF THE WEEK = drops.featured[0] with the amendment-#1
+  Genetics/Taste facts (the check strings moved HERE from the old featured band), THC chip,
+  price + a real AddToCartButton. The Drop List = ONE SHOPPABLE ROW PER CATEGORY using the
+  same BrandShelf arrow mechanics as Brands; featured overflow joins its category row so
+  nothing curated goes missing. Pulse keyframes reduced-motion-gated per convention. NOTE:
+  the countdown targets START of Friday — if drops actually land at a specific hour, set it
+  then; do not invent one. Curation stub + pre-cutover replacement rule unchanged
+  (lib/drops.ts).
 - **COLLECTION PAGES: every category + JB line is its OWN shopping page (Avanti, 2026-08-04
   late — "these links all click back to the main shop page… should all be individual shopping
   pages").** New route `/menu/california/<store>/shop/<collection>`; `lib/collections.ts` is the
