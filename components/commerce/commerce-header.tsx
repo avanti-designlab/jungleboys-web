@@ -245,8 +245,11 @@ export default function CommerceHeader() {
       </div>
 
     <header
-      className="pointer-events-none sticky top-0 z-40 flex items-center justify-center py-3 pl-44 pr-3 md:pl-52"
-      style={{ fontFamily: 'var(--font-display)' }}
+      className="pointer-events-none sticky top-0 z-40 flex items-center justify-start py-3 pr-3"
+      // the pill's left edge lines up with the content container's left edge
+      // (max-w-[1400px], centered) so it sits flush over the tiles below —
+      // clamped so it never slides under the hamburger/logo cluster
+      style={{ fontFamily: 'var(--font-display)', paddingLeft: 'max(11.5rem, calc((100vw - 1400px) / 2))' }}
     >
       <div className="pointer-events-auto flex min-w-0 max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#0b0b0b]/90 py-1.5 pl-4 pr-3 text-white shadow-2xl backdrop-blur-md">
         <Link
