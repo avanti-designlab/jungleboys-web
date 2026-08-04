@@ -299,8 +299,11 @@ export default function StoreShop({
                 Hot right now
               </h2>
             </div>
-            <span className="text-xs text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
-              Staff picks, moving fast
+            <span
+              className="rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white"
+              style={{ fontFamily: 'var(--font-brand)', background: 'var(--color-danger-solid)' }}
+            >
+              Moving fast
             </span>
           </div>
           <Shelf products={hot} storeSlug={storeSlug} hot />
