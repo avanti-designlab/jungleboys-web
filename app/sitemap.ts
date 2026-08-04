@@ -25,6 +25,7 @@ import { SITE_ORIGIN } from '@/lib/storyblok/seo'
 const STATIC_ROUTES: Array<[path: string, priority: number, freq: MetadataRoute.Sitemap[number]['changeFrequency']]> = [
   ['', 1, 'weekly'],
   ['/shop', 0.9, 'daily'],
+  ['/deals', 0.8, 'daily'],
   ['/products', 0.9, 'weekly'],
   ['/locations', 0.8, 'monthly'],
   ['/find-jb-products', 0.8, 'monthly'],

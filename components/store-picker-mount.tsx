@@ -40,7 +40,13 @@ export default function StorePickerMount() {
     // The page underneath stays the crawlable no-JS fallback. Other commerce
     // routes keep the quieter rule: open only when no store is chosen yet.
     const shopEntry = pathname === '/shop'
-    if (!shopEntry) {
+    // /deals is the same kind of DOOR (Avanti, 2026-08-04: "lead to the store
+    // picker popup, once they select location, routes to the deals page") —
+    // except a saved CA store skips the modal entirely: DealsForward on the
+    // page is already replacing the route with that store's deals.
+    const dealsEntry = pathname === '/deals'
+    if (dealsEntry && readStore()?.state === 'CA') return
+    if (!shopEntry && !dealsEntry) {
       if (!COMMERCE.some((re) => re.test(pathname))) return
       if (readStore()) return
     }
@@ -51,7 +57,7 @@ export default function StorePickerMount() {
     const tick = () => {
       if (cancelled) return
       if (!isAgeVerified()) { window.setTimeout(tick, 400); return }
-      if (shopEntry || !readStore()) setOpen(true)
+      if (shopEntry || dealsEntry || !readStore()) setOpen(true)
     }
     tick()
     return () => { cancelled = true }
@@ -66,5 +72,6 @@ export default function StorePickerMount() {
     return () => window.removeEventListener('jb:pick-store', onRequest)
   }, [])
 
-  return <StorePicker open={open} onClose={close} />
+  // picking from the /deals door routes into the store's DEALS page
+  return <StorePicker open={open} onClose={close} dest={pathname === '/deals' ? 'deals' : undefined} />
 }

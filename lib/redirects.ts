@@ -46,13 +46,13 @@ export const redirects: Redirect[] = [
   { source: '/menu/tlc-collective', destination: '/locations', permanent: true },
   { source: '/menu/tlc-collective/:path*', destination: '/locations', permanent: true },
 
-  // Deal-page rotations — flattened, single hop. INTERIM: /710-deals is a Phase-2
-  // (Dutchie) page that doesn't exist yet, so these point at /rewards (live) to
-  // avoid a soft-404. RESTORE destination to '/710-deals' once that page ships.
-  { source: '/420-deals', destination: '/rewards', permanent: false },
-  { source: '/april-deals', destination: '/rewards', permanent: false },
-  { source: '/may-deals', destination: '/rewards', permanent: false },
-  { source: '/june-deals', destination: '/rewards', permanent: false },
+  // Deal-page rotations — flattened, single hop. The evergreen /deals door
+  // shipped 2026-08-04 (routes visitors to their store's live deals), so the
+  // month rotations land there instead of the /rewards interim.
+  { source: '/420-deals', destination: '/deals', permanent: false },
+  { source: '/april-deals', destination: '/deals', permanent: false },
+  { source: '/may-deals', destination: '/deals', permanent: false },
+  { source: '/june-deals', destination: '/deals', permanent: false },
 
   // INTERIM, same pattern as the deal rotations above: these three are linked
   // from live chrome (mobile tab bar, /products "explore more" cards, the
@@ -61,7 +61,7 @@ export const redirects: Redirect[] = [
   // all seven line pages. Pointing them at the nearest live surface keeps the
   // links honest and stops the crawl budget draining into dead ends.
   // RESTORE all three to their real destinations when Phase 3 ships.
-  { source: '/710-deals', destination: '/rewards', permanent: false },
+  { source: '/710-deals', destination: '/deals', permanent: false },
   { source: '/drops', destination: '/products', permanent: false },
   // /login RESTORED (2026-08-04): the styled auth shell exists now — the
   // interim /rewards pointer is gone. /signup etc. stay pending.

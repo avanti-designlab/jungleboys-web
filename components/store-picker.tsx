@@ -18,7 +18,16 @@ import { menuPathFor, writeStore } from '@/lib/store-selection'
 // ground, which made the age gate's own copy change contrast with the theme and
 // fail AA in light. Do not lower it.
 
-export default function StorePicker({ open, onClose }: { open: boolean; onClose: () => void }) {
+export default function StorePicker({
+  open,
+  onClose,
+  dest,
+}: {
+  open: boolean
+  onClose: () => void
+  /** 'deals' routes a chosen CA store to its deals page (the /deals door) */
+  dest?: 'deals'
+}) {
   const router = useRouter()
   const panelRef = useRef<HTMLDivElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
@@ -65,7 +74,9 @@ export default function StorePicker({ open, onClose }: { open: boolean; onClose:
     // Avanti saw it as a flash of the locations page). The mount closes the
     // picker when the pathname actually changes, so the modal stays up until
     // the store menu is ready.
-    router.push(menuPathFor(slug, state))
+    router.push(
+      dest === 'deals' && state === 'CA' ? `/menu/california/${slug}/deals` : menuPathFor(slug, state)
+    )
   }
 
   const group = (label: string, stores: typeof CA_OWNED, state: 'CA' | 'FL') => (

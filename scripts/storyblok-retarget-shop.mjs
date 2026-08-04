@@ -71,6 +71,20 @@ async function retargetHome() {
       blok.href = '/shop'
       changed++
     }
+    // The monthly deals slide rolls over (Avanti, 2026-08-04): "AUGUST DEALS",
+    // pointed at the evergreen /deals door (routes visitors to their store's
+    // live deals). Matches by title so a re-run after a manual rename is a
+    // clean no-op.
+    if (blok.component === 'hero_slide' && /^july deals$/i.test(blok.title ?? '')) {
+      console.log(`  home: hero_slide "JULY DEALS" → "AUGUST DEALS", href ${blok.href} → /deals`)
+      blok.title = 'AUGUST DEALS'
+      blok.href = '/deals'
+      changed++
+    } else if (blok.component === 'hero_slide' && /^august deals$/i.test(blok.title ?? '') && blok.href !== '/deals') {
+      console.log(`  home: hero_slide "AUGUST DEALS" href ${blok.href} → /deals`)
+      blok.href = '/deals'
+      changed++
+    }
   }
   if (!changed) {
     console.log('  home: nothing to retarget (no exact /products hrefs)')

@@ -9,13 +9,18 @@ import { getStory, assetUrl } from '@/lib/storyblok'
 // imageMobile falls back to the desktop art until vertical crops are supplied.
 export const HERO_SLIDES = [
   {
-    kicker: 'JULY 13–31',
-    title: 'JULY DEALS',
-    cta: 'Learn more',
-    href: '/710-deals',
+    // Rolled over for August (Avanti, 2026-08-04): the slide points at the
+    // evergreen /deals door, which routes visitors to their store's live
+    // deals. Kicker stays date-free — the door shows whatever is actually
+    // running. Art is still the July asset until a new upload lands in
+    // Storyblok (CMS overlay wins over this fallback).
+    kicker: 'LIVE NOW',
+    title: 'AUGUST DEALS',
+    cta: 'See the deals',
+    href: '/deals',
     image: '/hero/july-deals-fireworks.webp',
     imageMobile: '/hero/july-deals-mobile.webp',
-    alt: 'Fourth of July fireworks over the downtown LA skyline and the 6th Street Viaduct',
+    alt: 'Fireworks over the downtown LA skyline and the 6th Street Viaduct',
     // bright fireworks stay crisp; a bottom scrim keeps the headline legible
     // over the lit bridge arches
     overlay: 'scrim',
