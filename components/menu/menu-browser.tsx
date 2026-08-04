@@ -289,26 +289,65 @@ export default function MenuBrowser({
   const [category, setCategory] = useState<ProductCategory | 'all'>('all')
   const [strain, setStrain] = useState<StrainType | 'all'>('all')
   const [line, setLine] = useState<string | 'all'>('all')
+  // Facet rail selections (Avanti, 2026-08-04) — multi-select sets, all
+  // derived from the live menu the way the Dutchie embed's rail is.
+  const [brandSet, setBrandSet] = useState<Set<string>>(new Set())
+  const [subcatSet, setSubcatSet] = useState<Set<string>>(new Set())
+  const [weightSet, setWeightSet] = useState<Set<string>>(new Set())
+  const [dealsOnly, setDealsOnly] = useState(false)
 
   const categories = useMemo(
     () => [...new Set(products.map((p) => p.category))].sort(),
     [products]
   )
 
-
-  const shown = useMemo(
+  // The pool the facets describe: category + line narrowed, before the rail's
+  // own selections — so option counts stay stable as you tick them.
+  const pool = useMemo(
     () =>
       products.filter(
         (p) =>
           (category === 'all' || p.category === category) &&
-          (strain === 'all' || p.strainType === strain) &&
           // ?line= may carry a comma list — one dropdown item covering sibling
           // subcategories (Gas Tanks = flavors + live resin + live rosin,
           // Avanti 2026-08-03). Each slug still matches exactly; a drifted one
           // still yields a loudly-empty list.
           (line === 'all' || line.split(',').includes(p.subcategory ?? ''))
       ),
-    [products, category, strain, line]
+    [products, category, line]
+  )
+
+  const facet = (values: (string | undefined)[]) => {
+    const m = new Map<string, number>()
+    for (const v of values) if (v) m.set(v, (m.get(v) ?? 0) + 1)
+    return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+  }
+  const brandOptions = useMemo(() => facet(pool.map((p) => p.brand)), [pool])
+  const subcatOptions = useMemo(() => facet(pool.map((p) => p.subcategory)), [pool])
+  const weightOptions = useMemo(() => {
+    const opts = facet(pool.flatMap((p) => p.variants.map((v) => v.option)))
+    const grams = (o: string) => parseFloat(o.replace(/[^\d.]/g, '')) || 0
+    return opts.sort((a, b) => grams(a[0]) - grams(b[0]))
+  }, [pool])
+
+  const toggle = (set: Set<string>, apply: (s: Set<string>) => void, v: string) => {
+    const next = new Set(set)
+    if (next.has(v)) next.delete(v)
+    else next.add(v)
+    apply(next)
+  }
+
+  const shown = useMemo(
+    () =>
+      pool.filter(
+        (p) =>
+          (strain === 'all' || p.strainType === strain) &&
+          (brandSet.size === 0 || brandSet.has(p.brand)) &&
+          (subcatSet.size === 0 || subcatSet.has(p.subcategory ?? '')) &&
+          (weightSet.size === 0 || p.variants.some((v) => weightSet.has(v.option))) &&
+          (!dealsOnly || p.variants.some((v) => v.specialPrice != null && v.specialPrice < v.price))
+      ),
+    [pool, strain, brandSet, subcatSet, weightSet, dealsOnly]
   )
 
   const pill = (active: boolean) =>
@@ -318,13 +357,57 @@ export default function MenuBrowser({
         : 'border-[var(--color-border)] text-[var(--color-foreground)] hover:border-[var(--color-accent)]'
     }`
 
+  const facetGroup = (
+    title: string,
+    options: [string, number][],
+    set: Set<string>,
+    apply: (s: Set<string>) => void,
+    label: (v: string) => string = (v) => v
+  ) =>
+    options.length > 1 ? (
+      <div data-facet={title.toLowerCase()} className="border-t border-[var(--color-border)] py-4 first:border-t-0 first:pt-0">
+        <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
+          {title}
+        </p>
+        <ul className="mt-3 space-y-1.5">
+          {options.map(([v, n]) => (
+            <li key={v}>
+              <label className="flex cursor-pointer items-center gap-2.5 text-sm text-[var(--color-foreground)]/85 hover:text-[var(--color-foreground)]">
+                <input
+                  type="checkbox"
+                  checked={set.has(v)}
+                  onChange={() => toggle(set, apply, v)}
+                  className="h-4 w-4 accent-[var(--color-accent)]"
+                />
+                <span className="min-w-0 flex-1 truncate">{label(v)}</span>
+                <span className="text-[11px] text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
+                  {n}
+                </span>
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ) : null
+
   return (
-    <section className="px-6 pt-10 md:px-12 lg:px-20">
+    <section className="px-6 pt-12 md:px-12 lg:px-20">
       <div className="mx-auto max-w-[1400px]">
         <Suspense>
           <FiltersFromQuery categories={categories} onCategory={setCategory} onLine={setLine} />
         </Suspense>
-        <div className="flex flex-wrap gap-2" style={{ fontFamily: 'var(--font-brand)' }}>
+
+        {/* header — big Bebas, live count riding it */}
+        <div className="flex flex-wrap items-baseline justify-between gap-4">
+          <h2 className="font-display text-5xl uppercase leading-none md:text-7xl">
+            {category === 'all' ? 'Shop all' : categoryLabel(category)}
+          </h2>
+          <p aria-live="polite" className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
+            {shown.length} {shown.length === 1 ? 'product' : 'products'}
+          </p>
+        </div>
+
+        <div className="mt-5 flex flex-wrap gap-2" style={{ fontFamily: 'var(--font-brand)' }}>
           <button type="button" onClick={() => setCategory('all')} className={pill(category === 'all')}>
             All
           </button>
@@ -345,6 +428,7 @@ export default function MenuBrowser({
           </div>
         )}
 
+        {/* strain pills stay up top on every viewport — the one-tap filter */}
         <div className="mt-3 flex flex-wrap gap-2" style={{ fontFamily: 'var(--font-brand)' }}>
           <button type="button" onClick={() => setStrain('all')} className={pill(strain === 'all')}>
             Any type
@@ -356,23 +440,43 @@ export default function MenuBrowser({
           ))}
         </div>
 
-        {/* aria-live so a filter change is announced; the grid is the only thing
-            that moves and a sighted user sees it immediately. */}
-        <p aria-live="polite" className="mt-6 text-xs text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
-          {shown.length} {shown.length === 1 ? 'product' : 'products'}
-        </p>
+        {/* ── sticky facet rail (desktop) + grid ──
+            Facets mirror the Dutchie embed's rail — subcategories, weights,
+            brands, deals — every option derived from the live menu with a
+            count, so nothing filters to a surprise. */}
+        <div className="mt-8 grid gap-8 lg:grid-cols-[250px_1fr]">
+          <aside
+            data-facet-rail
+            className="sticky top-24 hidden max-h-[calc(100vh-8rem)] self-start overflow-y-auto pr-2 lg:block"
+          >
+            <label className="mb-4 flex cursor-pointer items-center gap-2.5 rounded-2xl border border-[var(--color-border)] px-4 py-3 text-sm font-semibold text-[var(--color-foreground)]">
+              <input
+                type="checkbox"
+                checked={dealsOnly}
+                onChange={() => setDealsOnly((d) => !d)}
+                className="h-4 w-4 accent-[var(--color-accent)]"
+              />
+              On sale only
+            </label>
+            {facetGroup('Subcategories', subcatOptions, subcatSet, setSubcatSet, (v) => v.replace(/-/g, ' '))}
+            {facetGroup('Weights', weightOptions, weightSet, setWeightSet)}
+            {facetGroup('Brands', brandOptions, brandSet, setBrandSet)}
+          </aside>
 
-        {shown.length === 0 ? (
-          <p className="py-16 text-center text-[var(--color-muted)]">
-            Nothing matches that combination right now.
-          </p>
-        ) : (
-          <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-            {shown.map((p) => (
-              <ProductCard key={p.id} product={p} storeSlug={storeSlug} />
-            ))}
+          <div className="min-w-0">
+            {shown.length === 0 ? (
+              <p className="py-16 text-center text-[var(--color-muted)]">
+                Nothing matches that combination right now.
+              </p>
+            ) : (
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+                {shown.map((p) => (
+                  <ProductCard key={p.id} product={p} storeSlug={storeSlug} />
+                ))}
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </section>
   )

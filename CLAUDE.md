@@ -502,6 +502,27 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   yet verified against the live JB menus — **PRE-CUTOVER CHECK: confirm against the real
   Dutchie payload and swap any JB does not stock.** check-commerce asserts the band + 8
   tiles in SSR (relax only if a real store genuinely stocks fewer brands).
+- **DATA-MODEL AMENDMENT #4: `Special` + `getSpecials()` (Avanti, 2026-08-04) — DEALS PAGE
+  REVAMPED around it.** Additive: a Special is a NAMED deal from the Dutchie backend (the live
+  embed's specials path — reference https://www.jungleboys.com/menu/california/downtown-los-angeles?dtche%5Bpath%5D=specials),
+  with JB CA's two groups: **Jungle Boys Deals and Outsource Deals**. ⚠ OPEN: verify the wire
+  shape against a real payload, ESPECIALLY how the two groups are distinguished (name prefix vs
+  section vs flag) — `group` models the split, not Dutchie's format. Fixture specials follow the
+  live "BRAND | X% OFF THING" naming; outsource percents mirror the live page (1904 40%,
+  Barrett 50%, Jeeter 30%); every percent matches its member's price/specialPrice pair. The page:
+  giant dark hero (gold+red glow, live counts), SPLIT DOORS (gold JB card vs dark Outsource card;
+  click focuses a group, click again shows all — sections all in SSR, doors only FILTER), sticky
+  scrollspy rail grouped by the two sets, each deal a bold Bebas section on gold/red tint with a
+  %-off badge and its member ProductCards. Sale products no special claims land in a synthetic
+  "More Markdowns" section per group — nothing discounted hides. check-commerce asserts sections,
+  both groups, both doors + a fixture special name in SSR.
+- **BROWSE GRID grew the Dutchie-style FACET RAIL + bigger header (Avanti, 2026-08-04, same
+  "CRO at the forefront" brief).** MenuBrowser: big Bebas header (SHOP ALL / category name) with
+  live count, and a sticky desktop rail — On-sale toggle, Subcategories, Weights, Brands — every
+  option DERIVED from the live menu with counts (facet pool = category+line scope, so counts
+  stay stable while ticking). Mobile keeps the pill rows. check-commerce asserts the rail + ≥2
+  facet groups in SSR. STILL OPEN from her brief: the PDP is the one shop surface not yet
+  revamped — get her direction before redesigning it.
 - **Home story still overrides the /shop retarget — script ready, needs Avanti's token
   (2026-08-03, local session).** Verified against the live draft: hero_slides "GAS TANK" +
   "GOLD MYLARS" and quick_card "Shop" store href `/products`, which overrides the code's /shop
