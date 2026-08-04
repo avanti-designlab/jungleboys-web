@@ -51,22 +51,18 @@ export default function ProductFinderPage() {
             className="pointer-events-none absolute inset-0"
             style={{ background: 'radial-gradient(ellipse 90% 100% at 50% 60%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.72) 100%)' }}
           />
-          {/* giant wordmark — stacked PRODUCT / FINDER, drops in letter-by-letter */}
+          {/* giant wordmark — ONE line (Avanti, 2026-08-04), sized to span
+              the banner width, drops in letter-by-letter */}
           <span
             aria-hidden
-            className="font-display pointer-events-none absolute left-1/2 top-[40px] z-0 flex -translate-x-1/2 flex-col items-center whitespace-nowrap uppercase leading-[0.82] text-white/90 md:top-[64px]"
-            style={{ fontSize: 'min(26vw, 290px)' }}
+            className="font-display pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap uppercase leading-none text-white/90"
+            style={{ fontSize: 'min(11.5vw, 170px)' }}
           >
-            <span className="block">
-              {'PRODUCT'.split('').map((ch, i) => (
-                <span key={i} className="contact-letter" style={{ animationDelay: `${0.15 + i * 0.05}s` }}>{ch}</span>
-              ))}
-            </span>
-            <span className="block">
-              {'FINDER'.split('').map((ch, i) => (
-                <span key={i} className="contact-letter" style={{ animationDelay: `${0.5 + i * 0.05}s` }}>{ch}</span>
-              ))}
-            </span>
+            {'PRODUCT FINDER'.split('').map((ch, i) => (
+              <span key={i} className="contact-letter" style={{ animationDelay: `${0.15 + i * 0.04}s` }}>
+                {ch === ' ' ? '\u00A0' : ch}
+              </span>
+            ))}
           </span>
           {/* eslint-disable-next-line @next/next/no-img-element -- character art */}
           <img

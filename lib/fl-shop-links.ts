@@ -5,8 +5,8 @@
 // team can see traffic we send. Keys are OUR store slugs (lib/owned-stores).
 //
 // st-petersburg's store() entry landed 2026-08-04 — NAP read off the live
-// jungleboys.com/locations listing. Its hand-drawn illustration is still
-// owed; the directory card falls back to the brand mark until it arrives.
+// jungleboys.com/locations listing, illustration pulled from the same page
+// (Webflow CDN) later that day.
 export const FL_SHOP_LINKS: Record<string, string> = {
   'bonita-springs':
     'https://jungleboysflorida.com/locations/jungle-boys-bonita-springs/?retailer=jungle-boys-bonita-springs&utm_source=jbca&utm_campaign=bonita-springs&utm_content=website',

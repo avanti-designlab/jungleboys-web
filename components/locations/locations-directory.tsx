@@ -85,7 +85,7 @@ function StoreCard({ s }: { s: OwnedStore }) {
   )
 }
 
-function StateSection({ postcard, alt, stores }: { postcard: string; alt: string; stores: OwnedStore[] }) {
+function StateSection({ postcard, alt, stores, map = true }: { postcard: string; alt: string; stores: OwnedStore[]; map?: boolean }) {
   return (
     <section className="px-4 pt-16 md:px-8 md:pt-24 lg:px-12">
       <div className="mx-auto max-w-[1400px]">
@@ -97,10 +97,13 @@ function StateSection({ postcard, alt, stores }: { postcard: string; alt: string
           {stores.map((s) => (
             <StoreCard key={s.slug} s={s} />
           ))}
-          {/* fills the empty grid slot + adds life: a mini map of this state's stores */}
-          <div className="media-reveal">
-            <StateMiniMap stores={stores} label={`${alt} Stores`} />
-          </div>
+          {/* fills the empty grid slot + adds life: a mini map of this
+              state's stores. Florida opted out (Avanti, 2026-08-04). */}
+          {map && (
+            <div className="media-reveal">
+              <StateMiniMap stores={stores} label={`${alt} Stores`} />
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -140,7 +143,7 @@ export default function LocationsDirectory() {
   return (
     <div ref={rootRef}>
       <StateSection postcard="/locations/california.webp" alt="California" stores={CA_OWNED} />
-      <StateSection postcard="/locations/florida.webp" alt="Florida" stores={FL_OWNED} />
+      <StateSection postcard="/locations/florida.webp" alt="Florida" stores={FL_OWNED} map={false} />
     </div>
   )
 }

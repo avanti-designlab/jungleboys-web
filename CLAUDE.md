@@ -882,9 +882,12 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   disallowed+linked recipe). Still owed: /reset-password, /delete-account, /callback,
   /profile(-reward) — those stay disallowed until built.
 - **St. Petersburg FL store entry added (2026-08-04)** — NAP read off the LIVE jungleboys.com
-  /locations listing (4500 4th St N, St. Petersburg, FL 33703 · (727) 390-3840 · FL_HOURS); its
-  hand-drawn illustration is still owed, so the directory StoreCard falls back to the brand mark
-  `onError` instead of a broken image.
+  /locations listing (4500 4th St N, St. Petersburg, FL 33703 · (727) 390-3840 · FL_HOURS); the
+  hand-drawn illustration was pulled from the same Webflow page's CDN the same day (Avanti: "St
+  petersberg image is on our current webflow site. pull from there") → 900×900 webp matching the
+  set. The StoreCard onError brand-mark fallback stays for any future artless store. Also that
+  day: the FLORIDA StateMiniMap at the end of /locations REMOVED (map={false}; CA keeps its map),
+  and the /find-jb-products hero wordmark is ONE LINE ("PRODUCT FINDER", centered mid-banner).
 
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 

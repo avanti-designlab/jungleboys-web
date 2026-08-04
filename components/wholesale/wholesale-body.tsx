@@ -44,6 +44,16 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
   // payload from state rather than FormData, so this reads through a ref.
   const honeypotRef = useRef<HTMLInputElement>(null)
   const [step, setStep] = useState(0)
+  // Focus the answer field on STEP ADVANCE only — the old autoFocus attr
+  // fired on page load too, and the browser scrolled the focused input into
+  // view, skipping the whole hero (Avanti, 2026-08-04: "it skips to the form
+  // section right away").
+  const answerRef = useRef<HTMLInputElement>(null)
+  const steppedRef = useRef(false)
+  useEffect(() => {
+    if (steppedRef.current) answerRef.current?.focus()
+    else steppedRef.current = true
+  }, [step])
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
   const [error, setError] = useState('')
@@ -228,7 +238,7 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
                           US +1
                         </span>
                         <input
-                          autoFocus
+                          ref={answerRef}
                           type="tel"
                           inputMode="numeric"
                           aria-label={q.label}
@@ -241,7 +251,7 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
                       </div>
                     ) : (
                       <input
-                        autoFocus
+                        ref={answerRef}
                         type={q.type}
                         aria-label={q.label}
                         value={value}
