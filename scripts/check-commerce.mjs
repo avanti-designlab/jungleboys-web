@@ -136,6 +136,38 @@ async function checkMerchandising() {
 
   if (html.includes('id="browse"')) ok(`${path} keeps the full browse grid`)
   else fail(`${path} keeps the full browse grid`, 'id="browse" anchor missing')
+
+  // Facet rail (Avanti, 2026-08-04): Dutchie-style filters derived from the
+  // menu — must render in SSR alongside the grid.
+  if (html.includes('data-facet-rail')) ok(`${path} carries the browse facet rail`)
+  else fail(`${path} carries the browse facet rail`, 'data-facet-rail missing')
+  const facets = (html.match(/data-facet="/g) ?? []).length
+  if (facets >= 2) ok(`${path} facet rail carries ${facets} facet groups`)
+  else fail(`${path} facet rail carries facet groups`, `found ${facets}, want >=2`)
+}
+
+// ── 1c. Deals = named specials in two groups, all in SSR ─────────────────────
+// Avanti (2026-08-04): deals are the NAMED specials from the Dutchie backend,
+// split into Jungle Boys Deals and Outsource Deals. Sections, both group
+// doors, and the rail must be server HTML — the split selector only FILTERS.
+async function checkSpecials() {
+  const path = `/menu/california/${DEALS_STORE}/deals`
+  const { status, html } = await fetchHtml(path)
+  if (status !== 200) return fail(`${path} responds 200`, `got ${status}`)
+
+  const deals = [...new Set([...html.matchAll(/data-deal="([^"]+)"/g)].map((m) => m[1]))]
+  if (deals.length >= 3) ok(`${path} carries ${deals.length} named deal sections in SSR`)
+  else fail(`${path} carries named deal sections`, `found ${deals.length}, want >=3`)
+
+  for (const g of ['jungle-boys', 'outsource']) {
+    if (html.includes(`data-deal-group="${g}"`)) ok(`${path} carries the ${g} deals group`)
+    else fail(`${path} carries the ${g} deals group`, 'no sections with that group in SSR')
+    if (html.includes(`data-deals-door="${g}"`)) ok(`${path} split selector has the ${g} door`)
+    else fail(`${path} split selector has the ${g} door`, 'door missing from SSR')
+  }
+
+  if (html.includes('Gold Mylar Markdowns')) ok(`${path} serves a named special's title server-side`)
+  else fail(`${path} serves a named special's title server-side`, 'fixture special name not in SSR HTML')
 }
 
 // ── 2. Brands is real and not JB-only ────────────────────────────────────────
@@ -295,6 +327,7 @@ try {
   await checkCardLinks(`/menu/california/${MENU_STORE}`, MENU_STORE)
   await checkMerchandising()
   await checkCardLinks(`/menu/california/${DEALS_STORE}/deals`, DEALS_STORE)
+  await checkSpecials()
   await checkBrands()
   await checkDrops()
   await checkShopEntry()

@@ -17,3 +17,4 @@ export const getMenu = provider.getMenu
 export const getProducts = provider.getProducts
 export const getProductBySlug = provider.getProductBySlug
 export const getCategories = provider.getCategories
+export const getSpecials = provider.getSpecials

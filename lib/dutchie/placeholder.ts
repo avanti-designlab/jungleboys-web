@@ -1,5 +1,5 @@
 import { CA_OWNED } from '@/lib/owned-stores'
-import type { Location, Menu, Product, ProductCategory, ProductFilter } from './types'
+import type { Location, Menu, Product, ProductCategory, ProductFilter, Special } from './types'
 
 // Placeholder data provider — serves design/dev data through the FROZEN interface
 // so Phases 1–2 build every template without Dutchie credentials (05 Phase 2).
@@ -321,7 +321,8 @@ function thirdParty(
   category: ProductCategory,
   option: string,
   price: number,
-  strainType?: Product['strainType']
+  strainType?: Product['strainType'],
+  deal?: number // specialPrice in cents — the Outsource Deals group draws on these
 ): Product {
   return {
     id: `prod-3p-${slug}`,
@@ -332,7 +333,7 @@ function thirdParty(
     strainType,
     description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
     images: [],
-    variants: [{ id: `v-3p-${slug}`, option, price, quantityAvailable: 8 }],
+    variants: [{ id: `v-3p-${slug}`, option, price, ...(deal ? { specialPrice: deal } : {}), quantityAvailable: 8 }],
     retailerId: 'placeholder-dtla',
   }
 }
@@ -438,21 +439,21 @@ const products: Product[] = [
   twins('all-cherriez', 'All Cherriez', 'Cherry Gelato x LCG', 'indica', 31.5, 'Caryophyllene', false, 2000),
   twins('motor-breath', 'Motor Breath', 'SFV OG x Chem D', 'indica', 33.2, 'Myrcene'),
   // ── Third-party brands (see the note on thirdParty above)
-  thirdParty('jeeter-baby-cannon', 'Baby Cannon', 'Jeeter', 'pre-rolls', '0.5g', 1200, 'indica'),
+  thirdParty('jeeter-baby-cannon', 'Baby Cannon', 'Jeeter', 'pre-rolls', '0.5g', 1200, 'indica', 840),
   thirdParty('jeeter-honeydew', 'Honeydew', 'Jeeter', 'pre-rolls', '1g', 1800, 'hybrid'),
-  thirdParty('1904-blue-dream', 'Blue Dream', '1904', 'flower', '3.5g', 2500, 'sativa'),
+  thirdParty('1904-blue-dream', 'Blue Dream', '1904', 'flower', '3.5g', 2500, 'sativa', 1500),
   thirdParty('1904-wedding-cake', 'Wedding Cake', '1904', 'flower', '3.5g', 2500, 'hybrid'),
-  thirdParty('barrett-farms-gmo', 'GMO', 'Barrett Farms', 'flower', '3.5g', 3000, 'indica'),
+  thirdParty('barrett-farms-gmo', 'GMO', 'Barrett Farms', 'flower', '3.5g', 3000, 'indica', 1500),
   // Four more REAL CA brand names so the storefront's 8-tile Shop-by-Brand
   // band meets the layout it ships with (Avanti, 2026-08-04). Unlike the three
   // above, these are widely-known CA brands NOT yet verified against the live
   // JB menus — PRE-CUTOVER CHECK: confirm against the real Dutchie payload and
   // swap any that JB does not actually stock. Every fact but the name is
   // placeholder, images deliberately empty, one product each.
-  thirdParty('stiiizy-blue-burst', 'Blue Burst Pod', 'STIIIZY', 'vape-pens', '1g', 3500, 'indica'),
+  thirdParty('stiiizy-blue-burst', 'Blue Burst Pod', 'STIIIZY', 'vape-pens', '1g', 3500, 'indica', 2800),
   thirdParty('raw-garden-slymer', 'Slymer Sauce', 'Raw Garden', 'concentrates', '1g', 2800, 'sativa'),
   thirdParty('kiva-camino-gummies', 'Camino Gummies', 'Kiva', 'edibles', '100mg', 1800),
-  thirdParty('wyld-huckleberry', 'Huckleberry Gummies', 'Wyld', 'edibles', '100mg', 1600),
+  thirdParty('wyld-huckleberry', 'Huckleberry Gummies', 'Wyld', 'edibles', '100mg', 1600, undefined, 1280),
 ]
 
 const categories: ProductCategory[] = [
@@ -513,6 +514,24 @@ export const placeholderProvider = {
   },
   async getCategories(): Promise<ProductCategory[]> {
     return categories
+  },
+  // Amendment #4 fixtures: named deals in the two JB CA groups. Names follow
+  // the live embed's "BRAND | X% OFF THING" convention; every productSlug
+  // references a fixture above and every percent matches that product's
+  // actual price/specialPrice pair — a special that lies about its member
+  // prices is the bug this page exists to avoid.
+  async getSpecials(_retailerId: string): Promise<Special[]> {
+    return [
+      { id: 'sp-jb-hash-holes', slug: 'jb-20-off-hash-holes', name: 'Jungle Boys | 20% Off Hash Holes', percentOff: 20, group: 'jungle-boys', productSlugs: ['gelato-z-hash-hole'] },
+      { id: 'sp-jb-gold-mylar', slug: 'jb-gold-mylar-markdowns', name: 'Jungle Boys | Gold Mylar Markdowns', group: 'jungle-boys', productSlugs: ['motor-breath-premium-flower-8th', 'blam-premium-flower-8th'] },
+      { id: 'sp-jb-pops', slug: 'jb-20-off-5g-pops', name: 'Jungle Boys | 20% Off 5G Pops', percentOff: 20, group: 'jungle-boys', productSlugs: ['blu-zerdz-pops', 'gator-breath-pops'] },
+      { id: 'sp-jb-gas-tanks', slug: 'jb-gas-tank-deals', name: 'Jungle Boys | Gas Tank Deals', group: 'jungle-boys', productSlugs: ['strawnana-gas-tank', 'strawcooler-gas-tank'] },
+      { id: 'sp-jb-packs', slug: 'jb-pre-roll-deals', name: 'Jungle Boys | Pre-Roll Deals', group: 'jungle-boys', productSlugs: ['all-cherriez-10-pack', 'all-cherriez-twins-2pack', 'cherry-gelato-1g-preroll'] },
+      { id: 'sp-os-1904', slug: 'os-40-off-1904', name: '1904 | 40% Off', percentOff: 40, group: 'outsource', productSlugs: ['1904-blue-dream'] },
+      { id: 'sp-os-barrett', slug: 'os-50-off-barrett-farms', name: 'Barrett Farms | 50% Off', percentOff: 50, group: 'outsource', productSlugs: ['barrett-farms-gmo'] },
+      { id: 'sp-os-jeeter', slug: 'os-30-off-jeeter', name: 'Jeeter | 30% Off Pre-Rolls', percentOff: 30, group: 'outsource', productSlugs: ['jeeter-baby-cannon'] },
+      { id: 'sp-os-vapes-gummies', slug: 'os-20-off-vapes-gummies', name: '20% Off Vapes & Gummies', percentOff: 20, group: 'outsource', productSlugs: ['stiiizy-blue-burst', 'wyld-huckleberry'] },
+    ]
   },
 }
 

@@ -153,3 +153,20 @@ export interface Menu {
   products: Product[]
   categories: ProductCategory[]
 }
+
+// DATA-MODEL AMENDMENT #4 (Avanti, 2026-08-04) — additive. A Special is a
+// NAMED deal set up in the Dutchie backend (the live embed's "specials" path:
+// "JUNGLE BOYS | 15% OFF HASH HOLES" → its member products). JB CA runs two
+// groups — Jungle Boys Deals and Outsource Deals (everything else on the
+// shelf). ⚠ OPEN, verify against a real Dutchie payload: the specials field
+// shapes, and HOW the two groups are distinguished there (name prefix vs a
+// menu section vs a flag) — `group` models the split, not Dutchie's wire form.
+export interface Special {
+  id: string
+  slug: string
+  name: string
+  /** headline discount when uniform across the set, e.g. 15 */
+  percentOff?: number
+  group: 'jungle-boys' | 'outsource'
+  productSlugs: string[]
+}
