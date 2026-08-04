@@ -6,7 +6,8 @@ import { bannerHref } from '@/lib/shop-banners'
 import { ProductCard } from './menu-browser'
 import { categoryLabel } from './labels'
 import { CATEGORY_ICONS } from '@/lib/category-icons'
-import { BRAND_LOGOS, brandAnchor } from '@/lib/brands'
+import { brandAnchor } from '@/lib/brands'
+import BrandTile from './brand-tile'
 
 // The merchandised storefront (Avanti's redesign brief, 2026-08-03): the store
 // menu is an ECOM page built to sell, not a bare product grid. Structure:
@@ -159,25 +160,13 @@ function BrandQuickShop({ menu, storeSlug }: { menu: Menu; storeSlug: string }) 
           </Link>
         </div>
         <div className="grid w-full grid-cols-2 gap-2.5 sm:grid-cols-4 lg:max-w-2xl">
-          {top.map((brand) => {
-            const slug = brandAnchor(brand)
-            const logo = BRAND_LOGOS[slug]
-            return (
-              <Link
-                key={slug}
-                href={`/menu/california/${storeSlug}/brands#${slug}`}
-                data-brand-tile={slug}
-                className="flex aspect-[7/4] items-center justify-center rounded-2xl bg-white px-3 shadow-[0_8px_24px_rgba(0,0,0,0.10)] transition-transform duration-200 hover:-translate-y-1"
-              >
-                {logo ? (
-                  // eslint-disable-next-line @next/next/no-img-element -- brand logo
-                  <img src={logo} alt={brand} className="max-h-[70%] max-w-[85%] object-contain" />
-                ) : (
-                  <span className="font-display text-center text-[19px] uppercase leading-[0.95]">{brand}</span>
-                )}
-              </Link>
-            )
-          })}
+          {top.map((brand) => (
+            <BrandTile
+              key={brandAnchor(brand)}
+              brand={brand}
+              href={`/menu/california/${storeSlug}/brands#${brandAnchor(brand)}`}
+            />
+          ))}
         </div>
       </div>
     </section>

@@ -6,6 +6,8 @@ import { getLocations, getLocationBySlug, getMenu } from '@/lib/dutchie'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 import { ProductCard } from '@/components/menu/menu-browser'
 import { brandAnchor } from '@/lib/brands'
+import BrandTile from '@/components/menu/brand-tile'
+import BrandSpyNav from '@/components/menu/brand-spy-nav'
 
 // Brands at one store — EVERY brand on the shelf, not JB only. That is the
 // recorded decision (Avanti, 2026-07-31): the CA stores stock third-party
@@ -13,6 +15,12 @@ import { brandAnchor } from '@/lib/brands'
 // those too. This is the one commerce surface that is explicitly NOT
 // JB-curated; do not "correct" it. It does not touch the Products-vs-Shop
 // rule — /products/* stays the curated JB-only collection.
+//
+// REIMAGINED (Avanti, 2026-08-04): big dark hero, an 8-tile quick-shop of the
+// most popular brands (logos when supplied), a sticky left rail that follows
+// the scroll (BrandSpyNav — list derived from the live menu, enhancement
+// only), and each brand as a BOLD Bebas section on its own tinted card —
+// the house section dark, the rest rotating through theme-aware tints.
 //
 // Derived entirely from product.brand on the store's menu. No brand list is
 // maintained anywhere: a brand exists here exactly as long as the store
@@ -39,8 +47,16 @@ export async function generateMetadata({
   }
 }
 
-// anchor rule shared with the storefront's quick-shop tiles (lib/brands)
-const anchor = brandAnchor
+// Section tint rotation — "some brand sections can be different colors"
+// (Avanti, 2026-08-04). color-mix from theme vars so every tint works in both
+// modes; the FIRST (largest, in practice the house brand) section is the dark
+// brand card, like every other brand surface on the site.
+const SECTION_TINTS = [
+  'color-mix(in srgb, var(--color-accent) 9%, var(--color-surface))',
+  'var(--color-surface)',
+  'color-mix(in srgb, var(--color-success) 8%, var(--color-surface))',
+  'color-mix(in srgb, var(--color-danger) 6%, var(--color-surface))',
+]
 
 export default async function StoreBrandsPage({
   params,
@@ -63,6 +79,11 @@ export default async function StoreBrandsPage({
   const brands = [...byBrand.entries()].sort(
     (a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0])
   )
+  const spyItems = brands.map(([brand, list]) => ({
+    brand,
+    anchor: brandAnchor(brand),
+    count: list.length,
+  }))
 
   return (
     <main data-nav-theme="dark" className="bg-[var(--color-background)] pb-24 text-[var(--color-foreground)]">
@@ -80,71 +101,111 @@ export default async function StoreBrandsPage({
         }}
       />
 
-      <header className="border-b border-[var(--color-border)] px-6 pb-10 pt-10 md:px-12 md:pt-14 lg:px-20">
-        <div className="mx-auto max-w-[1400px]">
-          <Link
-            href={`/menu/california/${slug}`}
-            className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)] transition hover:opacity-80"
-            style={{ fontFamily: 'var(--font-brand)' }}
-          >
-            ← {location.name} menu
-          </Link>
-          <h1 className="font-display mt-4 text-5xl uppercase leading-[0.9] md:text-7xl">Brands</h1>
-          <p
-            className="mt-3 max-w-xl text-sm text-[var(--color-muted)]"
-            style={{ fontFamily: 'var(--font-brand)' }}
-          >
-            Every brand on the shelf at {location.name} — the house catalogue and the third-party
-            brands we stock, straight from the live menu.
-          </p>
+      {/* ── HERO — the big bump: dark brand card, giant Bebas wordmark ── */}
+      <header className="px-2 pt-2 md:px-3">
+        <div className="relative overflow-hidden rounded-[1.75rem] bg-[#0b0b0b] px-6 pb-12 pt-20 text-white md:rounded-[2.5rem] md:px-12 md:pb-16 md:pt-24 lg:px-20">
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-[radial-gradient(70%_100%_at_50%_0%,rgba(254,207,14,0.16),transparent_70%)]"
+          />
+          <div className="relative mx-auto max-w-[1400px]">
+            <Link
+              href={`/menu/california/${slug}`}
+              className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)] transition hover:opacity-80"
+              style={{ fontFamily: 'var(--font-brand)' }}
+            >
+              ← {location.name} menu
+            </Link>
+            <h1
+              className="font-display mt-4 uppercase leading-[0.85]"
+              style={{ fontSize: 'min(16vw, 11rem)' }}
+            >
+              Brands
+            </h1>
+            <p
+              className="mt-4 max-w-xl text-sm text-white/70 md:text-base"
+              style={{ fontFamily: 'var(--font-brand)' }}
+            >
+              Every brand on the shelf at {location.name} — {brands.length} brands,{' '}
+              {menu.products.length} products, straight from the live menu.
+            </p>
+
+            {/* quick shop — the 8 most popular brands, logos when supplied */}
+            <div className="mt-8 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
+              {brands.slice(0, 8).map(([brand]) => (
+                <BrandTile
+                  key={brandAnchor(brand)}
+                  brand={brand}
+                  href={`#${brandAnchor(brand)}`}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </header>
 
-      {/* Brand jump list — one pill per brand, mirroring the section order. */}
+      {/* mobile jump list — the sticky rail is desktop-only */}
       <nav
         aria-label="Brands on the menu"
-        className="px-6 pt-8 md:px-12 lg:px-20"
+        className="px-6 pt-8 lg:hidden"
         style={{ fontFamily: 'var(--font-brand)' }}
       >
         <div className="mx-auto flex max-w-[1400px] flex-wrap gap-2">
-          {brands.map(([brand, list]) => (
+          {spyItems.map((i) => (
             <a
-              key={brand}
-              href={`#${anchor(brand)}`}
+              key={i.anchor}
+              href={`#${i.anchor}`}
               className="rounded-full border border-[var(--color-border)] px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--color-foreground)] transition hover:border-[var(--color-accent)]"
             >
-              {brand}
-              <span className="ml-2 text-[var(--color-muted)]">{list.length}</span>
+              {i.brand}
+              <span className="ml-2 text-[var(--color-muted)]">{i.count}</span>
             </a>
           ))}
         </div>
       </nav>
 
-      {brands.map(([brand, list]) => (
-        <section
-          key={brand}
-          id={anchor(brand)}
-          data-brand={brand}
-          className="scroll-mt-28 px-6 pt-12 md:px-12 lg:px-20"
-        >
-          <div className="mx-auto max-w-[1400px]">
-            <div className="flex items-baseline gap-3">
-              <h2 className="font-display text-3xl uppercase leading-none md:text-4xl">{brand}</h2>
-              <span
-                className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]"
-                style={{ fontFamily: 'var(--font-brand)' }}
-              >
-                {list.length} {list.length === 1 ? 'product' : 'products'}
-              </span>
-            </div>
-            <div className="mt-5 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-              {list.map((p) => (
-                <ProductCard key={p.id} product={p} storeSlug={slug} />
-              ))}
-            </div>
+      {/* ── sticky rail + brand sections ── */}
+      <div className="px-6 pt-8 md:px-12 lg:px-20 lg:pt-12">
+        <div className="mx-auto grid max-w-[1400px] gap-8 lg:grid-cols-[230px_1fr]">
+          <BrandSpyNav items={spyItems} />
+
+          <div className="min-w-0 space-y-8">
+            {brands.map(([brand, list], i) => {
+              const dark = i === 0
+              return (
+                <section
+                  key={brand}
+                  id={brandAnchor(brand)}
+                  data-brand={brand}
+                  className={`scroll-mt-28 rounded-[2rem] p-6 md:p-9 ${
+                    dark ? 'bg-[#0b0b0b] text-white' : 'border border-[var(--color-border)]'
+                  }`}
+                  style={dark ? undefined : { background: SECTION_TINTS[(i - 1) % SECTION_TINTS.length] }}
+                >
+                  <div className="flex flex-wrap items-baseline justify-between gap-3">
+                    <h2 className="font-display text-5xl uppercase leading-[0.9] md:text-7xl">
+                      {brand}
+                    </h2>
+                    <span
+                      className={`text-xs font-bold uppercase tracking-[0.2em] ${
+                        dark ? 'text-[var(--color-accent)]' : 'text-[var(--color-muted)]'
+                      }`}
+                      style={{ fontFamily: 'var(--font-brand)' }}
+                    >
+                      {list.length} {list.length === 1 ? 'product' : 'products'}
+                    </span>
+                  </div>
+                  <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                    {list.map((p) => (
+                      <ProductCard key={p.id} product={p} storeSlug={slug} />
+                    ))}
+                  </div>
+                </section>
+              )
+            })}
           </div>
-        </section>
-      ))}
+        </div>
+      </div>
     </main>
   )
 }
