@@ -78,6 +78,20 @@ export default function PdpBuyBox({
   const onSale = variant?.specialPrice != null && variant.specialPrice < variant.price
   const pct = onSale ? Math.round((1 - variant!.specialPrice! / variant!.price) * 100) : 0
 
+  const doAdd = () => {
+    if (!variant) return
+    addToCart({
+      slug: product.slug,
+      name: product.name,
+      variantId: variant.id,
+      option: variant.option,
+      price: variant.specialPrice ?? variant.price,
+      storeSlug: offer.slug,
+    })
+    setAdded(true)
+    window.setTimeout(() => setAdded(false), 1600)
+  }
+
   const chooseStore = (next: string) => {
     setSlug(next)
     setVariantId(null)
@@ -158,18 +172,7 @@ export default function PdpBuyBox({
       {!soldOut && variant && (
         <button
           type="button"
-          onClick={() => {
-            addToCart({
-              slug: product.slug,
-              name: product.name,
-              variantId: variant.id,
-              option: variant.option,
-              price: variant.specialPrice ?? variant.price,
-              storeSlug: offer.slug,
-            })
-            setAdded(true)
-            window.setTimeout(() => setAdded(false), 1600)
-          }}
+          onClick={doAdd}
           className="group mt-5 inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[var(--color-accent)] px-8 py-4 text-sm font-extrabold uppercase tracking-widest text-[var(--color-on-accent)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-black hover:text-[var(--color-accent)] hover:shadow-xl"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4.5 w-4.5 transition-transform duration-200 group-hover:-translate-y-0.5" aria-hidden>
@@ -178,6 +181,31 @@ export default function PdpBuyBox({
           </svg>
           {added ? 'Added to bag ✓' : 'Add to bag'}
         </button>
+      )}
+      {/* mobile sticky buy bar (CRO, Avanti 2026-08-04): the CURRENT
+          selection's price + Add stay on screen while scrolling. Sits above
+          the mobile tab bar (bottom-3, z-30); hidden once the desktop
+          two-column layout keeps the ticket in view. */}
+      {!soldOut && variant && (
+        <div className="fixed inset-x-3 bottom-20 z-40 lg:hidden">
+          <div className="mx-auto flex max-w-md items-center justify-between gap-3 rounded-full border border-black/10 bg-[#0b0b0b]/95 py-1.5 pl-5 pr-1.5 text-white shadow-2xl backdrop-blur-md">
+            <span className="min-w-0">
+              <span className="font-display block text-2xl leading-none">
+                {money(variant.specialPrice ?? variant.price)}
+              </span>
+              <span className="block truncate text-[10px] font-bold uppercase tracking-[0.14em] text-white/55">
+                {variant.option} · {offer.name}
+              </span>
+            </span>
+            <button
+              type="button"
+              onClick={doAdd}
+              className="shrink-0 rounded-full bg-[var(--color-accent)] px-6 py-3.5 text-xs font-extrabold uppercase tracking-widest text-black transition hover:bg-white"
+            >
+              {added ? 'Added ✓' : 'Add to bag'}
+            </button>
+          </div>
+        </div>
       )}
       <Link
         href={menuPathFor(offer.slug, offer.state)}

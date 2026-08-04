@@ -42,12 +42,15 @@ export function AddToCartButton({
   variant,
   storeSlug,
   tone = 'dark',
+  fit,
 }: {
   product: Product
   variant: ProductVariant
   storeSlug: string
   /** 'gold' for dark grounds where a black pill disappears */
   tone?: 'dark' | 'gold'
+  /** 'card' = full-width centered inside a narrow @container card row */
+  fit?: 'card'
 }) {
   const [added, setAdded] = useState(false)
   const timer = useRef<number | null>(null)
@@ -72,7 +75,7 @@ export function AddToCartButton({
       type="button"
       onClick={add}
       aria-label={`Add ${product.name} (${variant.option}) to cart`}
-      className={`group/atc relative z-20 inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full py-1 pl-3 pr-1 text-[10px] font-extrabold uppercase tracking-widest transition-colors duration-200 ${
+      className={`group/atc relative z-20 inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full py-1 pl-3 pr-1 text-[10px] font-extrabold uppercase tracking-widest transition-colors duration-200 ${fit === 'card' ? 'w-full justify-center @[16rem]:w-auto @[16rem]:justify-start' : ''} ${
         added
           ? tone === 'gold'
             ? 'bg-white text-black'
@@ -129,7 +132,7 @@ export function ProductCard({
 
   return (
     <article
-      className={`group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white text-[var(--color-ink)] shadow-[0_10px_40px_rgba(0,0,0,0.08)] ${
+      className={`group @container relative flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white text-[var(--color-ink)] shadow-[0_10px_40px_rgba(0,0,0,0.08)] ${
         soldOut ? 'opacity-60' : ''
       }`}
     >
@@ -209,9 +212,12 @@ export function ProductCard({
           </Link>
         </h3>
 
-        {/* ONE line always (Avanti, 2026-08-04: "fix all to make them on one
-            line") — sized so price + CTA fit the narrowest shelf card */}
-        <div className="mt-auto flex items-center justify-between gap-2 pt-1">
+        {/* ONE line on desktop-width cards (Avanti: "on one line"); on
+            narrow mobile 2-col cards the pill goes FULL WIDTH below the
+            price (Avanti, 2026-08-04 mobile pass) — container query on the
+            CARD, not the viewport, so shelf and grid cards each do the
+            right thing */}
+        <div className="mt-auto flex flex-col gap-2 pt-1 @[16rem]:flex-row @[16rem]:items-center @[16rem]:justify-between">
           <p className="leading-none">
             {onSale && (
               <span
@@ -251,7 +257,7 @@ export function ProductCard({
               card on these pages carries the add-to-cart button). Adds the
               displayed variant — the one whose price the shopper is reading —
               at its shown price. z-20 lifts it above the stretched card link. */}
-          {!soldOut && <AddToCartButton product={product} variant={best} storeSlug={storeSlug} />}
+          {!soldOut && <AddToCartButton product={product} variant={best} storeSlug={storeSlug} fit="card" />}
         </div>
       </div>
     </article>

@@ -156,7 +156,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <div className="mx-auto grid max-w-[1400px] items-start gap-8 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:gap-12">
           {/* media stage + badges */}
           <div className="lg:sticky lg:top-24 lg:self-start">
-            <div className="relative aspect-square overflow-hidden rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-media-well)] shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+            {/* mobile: the shot stays compact so price + Add to bag land
+                above the fold (Avanti, 2026-08-04 CRO pass); full size from lg */}
+            <div className="relative mx-auto aspect-square w-full max-w-[300px] overflow-hidden rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-media-well)] shadow-[0_20px_60px_rgba(0,0,0,0.08)] sm:max-w-[380px] lg:max-w-none">
               {shot && (
                 <Image
                   src={shot.url}
@@ -185,7 +187,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               )}
             </div>
             {/* badge strip — the reference PDP's marks, from real fields only */}
-            <div className="mt-4 flex flex-wrap gap-1.5">
+            <div className="mt-4 flex flex-wrap justify-center gap-1.5 lg:justify-start">
               {chip(categoryLabel(product.category), 'cat')}
               {product.subcategory && chip(product.subcategory.replace(/-/g, ' '), 'sub')}
               {!/^jungle boys/i.test(product.brand) && chip(product.brand, 'brand')}
@@ -219,13 +221,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </div>
 
             {product.description && (
-              <p className="mt-5 max-w-xl text-sm leading-relaxed text-[var(--color-foreground-soft)]">
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-[var(--color-foreground-soft)] line-clamp-3 lg:mt-5 lg:line-clamp-none">
                 {product.description}
               </p>
             )}
 
             {/* buy ticket — bordered surface card on the light ground */}
-            <div className="mt-7 rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[0_16px_50px_rgba(0,0,0,0.07)] md:p-7">
+            <div className="mt-5 rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-[0_16px_50px_rgba(0,0,0,0.07)] md:p-7 lg:mt-7">
               <PdpBuyBox offers={offers} product={{ slug: product.slug, name: product.name }} />
             </div>
 

@@ -81,13 +81,13 @@ export default function MainMenuOverlay({ open, onClose }: { open: boolean; onCl
     >
       {/* links grow to fill the height; type sized up to carry the room
           (Avanti, 2026-08-04: "alot of dead space… make the text bigger") */}
-      <nav className="mx-auto grid w-full max-w-[1560px] flex-1 grid-cols-1 content-start gap-x-10 gap-y-9 px-8 pt-28 md:[grid-template-columns:1fr_1fr_1.35fr] md:content-center md:gap-y-1 md:pt-20">
+      <nav className="mx-auto grid w-full max-w-[1560px] flex-1 grid-cols-1 content-start gap-x-10 gap-y-6 px-6 pt-24 md:gap-y-1 md:px-8 md:pt-20 md:content-center md:[grid-template-columns:1fr_1fr_1.35fr]">
         {MENU_COLUMNS.map((column, c) => (
           <ul key={c} className="flex flex-col md:gap-2">
             {column.map((l) => {
               const delay = `${0.05 + linkIndex++ * 0.03}s`
               const cls =
-                'font-display whitespace-nowrap text-5xl leading-[0.92] uppercase text-white transition-colors duration-200 hover:text-[var(--color-accent)] md:text-7xl xl:text-[6.5rem] xl:leading-[0.9]'
+                'font-display whitespace-nowrap text-[2.4rem] leading-[1.02] uppercase text-white transition-colors duration-200 hover:text-[var(--color-accent)] md:text-7xl md:leading-[0.95] xl:text-[6.5rem] xl:leading-[0.9]'
               return (
                 <li key={l.label} className="menu-line">
                   {l.external ? (
@@ -109,17 +109,17 @@ export default function MainMenuOverlay({ open, onClose }: { open: boolean; onCl
       {/* promo doors fill the old dead band — evergreen (never stale sale
           data in a global overlay): the deals + drops doors route each
           visitor to their own store's live surface. */}
-      <div className="menu-promos mx-auto mb-10 mt-10 grid w-full max-w-[1560px] items-center gap-3 px-8 md:[grid-template-columns:1fr_1fr_auto]">
+      <div className="menu-promos mx-auto mb-6 mt-4 grid w-full max-w-[1560px] grid-cols-2 items-center gap-2 px-6 md:mb-10 md:mt-10 md:gap-3 md:px-8 md:[grid-template-columns:1fr_1fr_auto]">
         <Link
           href="/deals"
           onClick={onClose}
-          className="group flex items-center justify-between gap-4 rounded-3xl bg-[linear-gradient(120deg,#ffe27a_0%,#fecf0e_55%,#e7b30c_100%)] p-6 text-black transition-transform duration-200 hover:-translate-y-0.5 md:p-7"
+          className="group flex items-center justify-between gap-3 rounded-2xl bg-[linear-gradient(120deg,#ffe27a_0%,#fecf0e_55%,#e7b30c_100%)] p-4 text-black transition-transform duration-200 hover:-translate-y-0.5 md:rounded-3xl md:p-7"
         >
           <span>
             <span className="block text-[11px] font-extrabold uppercase tracking-[0.24em] text-black/60" style={{ fontFamily: 'var(--font-brand)' }}>
               Live now
             </span>
-            <span className="font-display mt-1 block text-3xl uppercase leading-[0.9] md:text-4xl">
+            <span className="font-display mt-1 block text-xl uppercase leading-[0.9] md:text-4xl">
               August deals
             </span>
           </span>
@@ -130,13 +130,13 @@ export default function MainMenuOverlay({ open, onClose }: { open: boolean; onCl
         <Link
           href="/drops"
           onClick={onClose}
-          className="group flex items-center justify-between gap-4 rounded-3xl border border-white/15 bg-white/[0.05] p-6 text-white transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--color-accent)] md:p-7"
+          className="group flex items-center justify-between gap-3 rounded-2xl border border-white/15 bg-white/[0.05] p-4 text-white transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--color-accent)] md:rounded-3xl md:p-7"
         >
           <span>
             <span className="block text-[11px] font-extrabold uppercase tracking-[0.24em] text-[var(--color-accent)]" style={{ fontFamily: 'var(--font-brand)' }}>
               Every Friday
             </span>
-            <span className="font-display mt-1 block text-3xl uppercase leading-[0.9] md:text-4xl">
+            <span className="font-display mt-1 block text-xl uppercase leading-[0.9] md:text-4xl">
               Fresh drops
             </span>
           </span>
@@ -145,7 +145,7 @@ export default function MainMenuOverlay({ open, onClose }: { open: boolean; onCl
           </svg>
         </Link>
 
-        <div className="menu-socials flex items-center justify-end gap-5 px-2 text-white md:pl-6">
+        <div className="menu-socials col-span-2 flex items-center justify-center gap-5 px-2 pt-1 text-white md:col-span-1 md:justify-end md:pt-0 md:pl-6">
           {OVERLAY_SOCIALS.map((s) => (
             <a
               key={s.label}

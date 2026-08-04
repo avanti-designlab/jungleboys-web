@@ -250,10 +250,47 @@ export default function CommerceHeader() {
       // sits flush over the tiles below (Avanti, 2026-08-04: "ends at the end
       // of the tile underneath"). Left clamp = cluster width + breathing room,
       // stepped with the cluster's own responsive sizes.
-      className="pointer-events-none sticky top-0 z-40 flex items-center justify-start py-3 pl-[max(9.5rem,calc((100vw-1400px)/2))] pr-[max(0.75rem,calc((100vw-1400px)/2))] sm:pl-[max(11.75rem,calc((100vw-1400px)/2))] md:pl-[max(14.5rem,calc((100vw-1400px)/2))]"
+      className="pointer-events-none sticky top-0 z-40 flex flex-col gap-2 py-3 pl-3 pr-3 md:flex-row md:items-center md:justify-start md:gap-0 md:pl-[max(14.5rem,calc((100vw-1400px)/2))] md:pr-[max(0.75rem,calc((100vw-1400px)/2))]"
       style={{ fontFamily: 'var(--font-display)' }}
     >
-      <div className="pointer-events-auto flex min-w-0 max-w-full flex-1 items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#0b0b0b]/90 py-1.5 pl-4 pr-3 text-white shadow-2xl backdrop-blur-md">
+      {/* ── MOBILE (Avanti, 2026-08-04: "mobile header is messed up") — the
+          desktop pill crushed at phone width, so phones get their own two
+          rows: a compact utility pill clear of the hamburger/logo cluster,
+          and a full-width swipeable nav strip beneath it. ── */}
+      <div className="flex justify-end md:hidden">
+        <div className="pointer-events-auto flex items-center gap-0.5 rounded-full border border-white/10 bg-[#0b0b0b]/90 p-1 text-white shadow-2xl backdrop-blur-md">
+          <button
+            type="button"
+            onClick={pickStore}
+            className="flex items-center gap-1.5 rounded-full px-2.5 py-2"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="2" className="h-4 w-4 shrink-0" aria-hidden>
+              <path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11ZM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span className="max-w-[7.5rem] truncate text-[14px] uppercase leading-none tracking-[0.05em]">
+              {store ? store.name : 'Choose a store'}
+            </span>
+          </button>
+          <Link href="/login" aria-label="Sign in" className="rounded-full p-2 text-white/80">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4.5 w-4.5" aria-hidden>
+              <circle cx="12" cy="8" r="3.6" />
+              <path d="M5 20a7 7 0 0 1 14 0" strokeLinecap="round" />
+            </svg>
+          </Link>
+          <button
+            type="button"
+            aria-expanded={openMenu === 'cart'}
+            aria-haspopup="dialog"
+            aria-label={`Shopping bag, ${count} item${count === 1 ? '' : 's'}`}
+            onClick={() => setOpenMenu(openMenu === 'cart' ? null : 'cart')}
+            className="rounded-full p-1"
+          >
+            <CartIcon count={count} />
+          </button>
+        </div>
+      </div>
+      {/* nav lives in the mobile tab bar (commerce mode) — no second strip */}
+      <div className="pointer-events-auto hidden min-w-0 max-w-full flex-1 items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-[#0b0b0b]/90 py-1.5 pl-4 pr-3 text-white shadow-2xl backdrop-blur-md md:flex">
         <Link
           href={base ?? '/shop'}
           aria-current={base && pathname === base ? 'page' : undefined}

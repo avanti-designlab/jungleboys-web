@@ -889,6 +889,22 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   day: the FLORIDA StateMiniMap at the end of /locations REMOVED (map={false}; CA keeps its map),
   and the /find-jb-products hero wordmark is ONE LINE ("PRODUCT FINDER", centered mid-banner).
 
+- **MOBILE PASS (Avanti, 2026-08-04 evening — a run of phone screenshots).** (1) Card buy row:
+  one line on wide cards, but on narrow cards the ATC pill goes FULL WIDTH under the price —
+  via @container on the card (`@[16rem]:` variants), scoped with AddToCartButton's `fit="card"`
+  prop so non-card call sites (drops buy line) never stretch. (2) Commerce header on phones =
+  its own layout: compact utility pill (store chip / sign-in / cart) right of the cluster —
+  the desktop pill is hidden md:flex; NO nav strip. (3) Shop navigation lives in the MOBILE TAB
+  BAR's commerce mode ("the menu at the shopping pages is very important… figure out another
+  option"): on /menu|/shop|/deals|/drops routes the bar swaps to Shop/Deals·[CATEGORIES]·Drops/
+  Brands, store-scoped (URL store wins over saved), and the raised center opens a category
+  SHEET (8 tiles, real icons or letter marks — never invented icons); VERIFY keeps the center
+  elsewhere. (4) PDP mobile CRO: 300px media, centered badges, line-clamp-3 description, and a
+  STICKY BUY BAR (inside PdpBuyBox — it owns the selected variant) fixed at bottom-20 above the
+  tab bar showing the live price + Add to bag; the PDP top section must stay OUT of Reveal
+  wrappers or the transformed ancestor breaks the fixed bar. (5) Main menu overlay fits h-dvh
+  on phones with NO scroll (2.4rem links, 2-up compact promo tiles, socials spanning beneath) —
+  it overflowed 194px and scrolling it read as "the logo and menu button are gone."
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
