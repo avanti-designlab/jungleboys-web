@@ -127,9 +127,12 @@ async function checkMerchandising() {
   // with the store's top brands as tiles. Data-derived, so it must be in SSR.
   if (html.includes('data-brand-quickshop')) ok(`${path} carries the Shop-by-Brand quick-shop band`)
   else fail(`${path} carries the Shop-by-Brand quick-shop band`, 'data-brand-quickshop missing')
+  // 8 tiles is the ruling (Avanti, 2026-08-04) — the fixture carries 8 brands
+  // so the band meets its layout. If a REAL store payload stocks fewer, this
+  // failing is the signal to surface it, not to silently show a thin band.
   const brandTiles = (html.match(/data-brand-tile=/g) ?? []).length
-  if (brandTiles >= 3) ok(`${path} quick-shop band lists ${brandTiles} brand tiles`)
-  else fail(`${path} quick-shop band lists brand tiles`, `found ${brandTiles}, want >=3`)
+  if (brandTiles >= 8) ok(`${path} quick-shop band lists ${brandTiles} brand tiles`)
+  else fail(`${path} quick-shop band lists 8 brand tiles`, `found ${brandTiles}`)
 
   if (html.includes('id="browse"')) ok(`${path} keeps the full browse grid`)
   else fail(`${path} keeps the full browse grid`, 'id="browse" anchor missing')

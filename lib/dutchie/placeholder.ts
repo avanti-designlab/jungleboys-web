@@ -443,6 +443,16 @@ const products: Product[] = [
   thirdParty('1904-blue-dream', 'Blue Dream', '1904', 'flower', '3.5g', 2500, 'sativa'),
   thirdParty('1904-wedding-cake', 'Wedding Cake', '1904', 'flower', '3.5g', 2500, 'hybrid'),
   thirdParty('barrett-farms-gmo', 'GMO', 'Barrett Farms', 'flower', '3.5g', 3000, 'indica'),
+  // Four more REAL CA brand names so the storefront's 8-tile Shop-by-Brand
+  // band meets the layout it ships with (Avanti, 2026-08-04). Unlike the three
+  // above, these are widely-known CA brands NOT yet verified against the live
+  // JB menus — PRE-CUTOVER CHECK: confirm against the real Dutchie payload and
+  // swap any that JB does not actually stock. Every fact but the name is
+  // placeholder, images deliberately empty, one product each.
+  thirdParty('stiiizy-blue-burst', 'Blue Burst Pod', 'STIIIZY', 'vape-pens', '1g', 3500, 'indica'),
+  thirdParty('raw-garden-slymer', 'Slymer Sauce', 'Raw Garden', 'concentrates', '1g', 2800, 'sativa'),
+  thirdParty('kiva-camino-gummies', 'Camino Gummies', 'Kiva', 'edibles', '100mg', 1800),
+  thirdParty('wyld-huckleberry', 'Huckleberry Gummies', 'Wyld', 'edibles', '100mg', 1600),
 ]
 
 const categories: ProductCategory[] = [

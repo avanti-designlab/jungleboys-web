@@ -496,8 +496,12 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   BRAND_LOGOS in lib/brands.ts, files → public/shop/brands/<anchor-slug>.<ext>** — brand-name
   wordmark tiles until Avanti supplies them, never an invented logo. 'Shop by brand' left
   PROMO_FALLBACK + the retarget script's PROMOS. Shelf headings went text-5xl/7xl with the
-  product-count numerals removed (hot heading 4xl/6xl to match). check-commerce asserts the
-  band + ≥3 tiles in SSR.
+  product-count numerals removed (hot heading 4xl/6xl to match). **8 TILES is the ruling
+  (2026-08-04)** — the fixture gained four more real CA brand names (STIIIZY, Raw Garden,
+  Kiva, Wyld) so the band meets its layout; unlike Jeeter/1904/Barrett Farms these are NOT
+  yet verified against the live JB menus — **PRE-CUTOVER CHECK: confirm against the real
+  Dutchie payload and swap any JB does not stock.** check-commerce asserts the band + 8
+  tiles in SSR (relax only if a real store genuinely stocks fewer brands).
 - **Home story still overrides the /shop retarget — script ready, needs Avanti's token
   (2026-08-03, local session).** Verified against the live draft: hero_slides "GAS TANK" +
   "GOLD MYLARS" and quick_card "Shop" store href `/products`, which overrides the code's /shop
