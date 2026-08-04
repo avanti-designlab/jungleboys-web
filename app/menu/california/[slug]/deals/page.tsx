@@ -183,7 +183,16 @@ export default async function StoreDealsPage({
             aria-hidden
             className="pointer-events-none absolute inset-x-0 top-0 h-64 bg-[radial-gradient(50%_100%_at_30%_0%,rgba(254,207,14,0.18),transparent_70%),radial-gradient(50%_100%_at_75%_0%,color-mix(in_srgb,var(--color-danger-solid)_28%,transparent),transparent_70%)]"
           />
-          <div className="relative mx-auto max-w-[1400px]">
+          {/* Avanti's DEALS character (DEALS HEADER.svg → webp) rides the
+              right edge, full height, behind nothing that matters on mobile */}
+          {/* eslint-disable-next-line @next/next/no-img-element -- brand character */}
+          <img
+            src="/deals/deals-character.webp"
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute bottom-0 right-2 hidden h-full w-auto object-contain object-bottom lg:block xl:right-10"
+          />
+          <div className="relative mx-auto max-w-[1400px] lg:pr-72 xl:pr-80">
             <Link
               href={`/menu/california/${slug}`}
               className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)] transition hover:opacity-80"

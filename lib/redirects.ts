@@ -63,7 +63,8 @@ export const redirects: Redirect[] = [
   // RESTORE all three to their real destinations when Phase 3 ships.
   { source: '/710-deals', destination: '/rewards', permanent: false },
   { source: '/drops', destination: '/products', permanent: false },
-  { source: '/login', destination: '/rewards', permanent: false },
+  // /login RESTORED (2026-08-04): the styled auth shell exists now — the
+  // interim /rewards pointer is gone. /signup etc. stay pending.
 
   // Rewards consolidation — /rewards is the loyalty landing (supersedes /loyalty)
   { source: '/app', destination: '/rewards', permanent: true },

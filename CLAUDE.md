@@ -516,6 +516,16 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   %-off badge and its member ProductCards. Sale products no special claims land in a synthetic
   "More Markdowns" section per group — nothing discounted hides. check-commerce asserts sections,
   both groups, both doors + a fixture special name in SSR.
+- **DEALS CHARACTER + /login SHELL RESTORED (Avanti, 2026-08-04 late).** Her "DEALS HEADER.svg"
+  character (559KB traced art → public/deals/deals-character.webp at 91KB) rides the deals
+  hero's right edge full-height (lg+; content gets right padding). AND: the header's Sign In /
+  user icon both target /login, which was still the recorded INTERIM 307 → /rewards — the
+  redirect map's own note said "restore when Phase 3 ships", so it shipped: **/login is now
+  the styled AUTH SHELL** (locked stack: Dutchie/Dovetail owns auth — branded doorway, NO
+  credential form before the real integration exists). It explains sign-in happens in the
+  store-menu checkout, CTAs to the saved store's menu (else the picker) + /shop, links
+  /rewards; noindex, out of the sitemap. redirect-qa: 85 URLs green, pending-Phase-3 count
+  36 (one restored). /signup and the rest of the auth suite stay pending.
 - **POLISH BATCH (Avanti, 2026-08-04 evening).** (1) Terps chip REMOVED from all product
   cards; card Add-to-cart now carries the CART ICON IN A CIRCLE on the right — the PillCta
   language — in both tones. (2) Effects radar v2: moody multi-hue gradient (dusk purple →
