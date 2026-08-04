@@ -3,7 +3,8 @@
 import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { CA_OWNED, FL_OWNED } from '@/lib/owned-stores'
+import { CA_OWNED } from '@/lib/owned-stores'
+import { FL_SITE_URL } from '@/lib/fl-shop-links'
 import { menuPathFor, writeStore } from '@/lib/store-selection'
 
 // "Select a location" — the gateway to every commerce surface.
@@ -60,10 +61,7 @@ export default function StorePicker({ open, onClose }: { open: boolean; onClose:
   const choose = (slug: string, state: 'CA' | 'FL') => {
     writeStore(slug, state)
     onClose()
-    // FL menu shells have not landed (blocked on the FL team's embed codes),
-    // so /menu/florida/* would 404 — route FL choices to /locations until the
-    // shells exist. Remove this branch when they do.
-    router.push(state === 'FL' ? '/locations' : menuPathFor(slug, state))
+    router.push(menuPathFor(slug, state))
   }
 
   const group = (label: string, stores: typeof CA_OWNED, state: 'CA' | 'FL') => (
@@ -141,7 +139,37 @@ export default function StorePicker({ open, onClose }: { open: boolean; onClose:
 
         <div className="overflow-y-auto px-6 pb-6">
           {group('California', CA_OWNED, 'CA')}
-          {group('Florida', FL_OWNED, 'FL')}
+
+          {/* FLORIDA = one door (Avanti, 2026-08-04): the FL stores shop on
+              the FL team's site for now, so the picker sends the whole state
+              there instead of listing stores whose menus live off-site. */}
+          <section aria-labelledby="sp-FL">
+            <h3
+              id="sp-FL"
+              className="px-1 pb-2 pt-5 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]"
+              style={{ fontFamily: 'var(--font-brand)' }}
+            >
+              Florida
+            </h3>
+            <a
+              href={FL_SITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex w-full items-center justify-between gap-4 rounded-2xl bg-[linear-gradient(120deg,#ffe27a_0%,#fecf0e_55%,#e7b30c_100%)] p-5 text-left text-black transition-transform duration-200 hover:-translate-y-0.5"
+            >
+              <span>
+                <span className="font-display block text-2xl uppercase leading-[0.9] md:text-3xl">
+                  Shop Jungle Boys Florida
+                </span>
+                <span className="mt-1 block text-xs font-bold uppercase tracking-[0.14em] text-black/60" style={{ fontFamily: 'var(--font-brand)' }}>
+                  jungleboysflorida.com
+                </span>
+              </span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-5 w-5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden>
+                <path d="M5 12h14m-6-6 6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </a>
+          </section>
         </div>
       </div>
     </div>

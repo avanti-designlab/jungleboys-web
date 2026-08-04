@@ -1,3 +1,4 @@
+import { FL_SHOP_LINKS } from '@/lib/fl-shop-links'
 // Jungle Boys owned dispensaries for /locations — the store directory grouped by
 // state (CA native menus + FL embed menus). Hand-drawn store illustrations live
 // in public/locations/stores/<slug>.webp. St. Petersburg is a live listing with
@@ -81,7 +82,11 @@ function store(state: 'CA' | 'FL', slug: string, name: string, address: string, 
     lat,
     lng,
     image: `/locations/stores/${slug}.webp`,
-    menuUrl: `/menu/${state === 'CA' ? 'california' : 'florida'}/${slug}`,
+    // FL shops OFF-SITE for now (Avanti, 2026-08-04): direct per-store links
+    // to jungleboysflorida.com with their utm_source=jbca tracking intact.
+    // Falls back to the (future) embed-shell path if a slug has no link.
+    menuUrl:
+      state === 'CA' ? `/menu/california/${slug}` : FL_SHOP_LINKS[slug] ?? `/menu/florida/${slug}`,
   }
 }
 

@@ -12,7 +12,8 @@ import StateMiniMap from './state-mini-map'
 // that store's menu. SEPARATE from the Product Finder (two-map rule).
 
 function StoreCard({ s }: { s: OwnedStore }) {
-  const linkProps = s.external ? { target: '_blank', rel: 'noopener noreferrer' } : {}
+  // external flag (clothing) OR an absolute URL (the FL shop links) both leave the site
+  const linkProps = s.external || s.menuUrl.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {}
   return (
     <div className="media-reveal group relative flex flex-col overflow-hidden rounded-[1.6rem] border border-[var(--color-border)] bg-[var(--color-surface)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[var(--color-accent)] hover:shadow-[0_36px_90px_-32px_rgba(254,207,14,0.5)]">
       {/* neutral light canvas so the black line-art illustration reads */}

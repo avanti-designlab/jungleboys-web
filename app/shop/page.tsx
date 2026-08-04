@@ -93,20 +93,20 @@ export default function ShopEntryPage() {
             ))}
           </div>
 
-          {/* Florida stays honest: those menus are Dutchie embeds that have not
-              landed on the new site yet, so this links to the locations page
-              rather than to routes that would 404 today. */}
+          {/* Florida shops on the FL team's site for now (Avanti, 2026-08-04) */}
           <p
             className="mt-10 max-w-xl text-sm text-[var(--color-muted)]"
             style={{ fontFamily: 'var(--font-brand)' }}
           >
             In Florida?{' '}
-            <Link
-              href="/locations"
+            <a
+              href="https://www.jungleboysflorida.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="font-bold text-[var(--color-accent-ink)] underline-offset-4 hover:underline"
             >
-              Find your store on the locations page →
-            </Link>
+              Shop Jungle Boys Florida →
+            </a>
           </p>
         </div>
       </section>

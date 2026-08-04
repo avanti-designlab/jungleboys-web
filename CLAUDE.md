@@ -516,6 +516,18 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   %-off badge and its member ProductCards. Sale products no special claims land in a synthetic
   "More Markdowns" section per group — nothing discounted hides. check-commerce asserts sections,
   both groups, both doors + a fixture special name in SSR.
+- **FLORIDA SHOPS OFF-SITE "for now" (Avanti, 2026-08-04, JB FL Locations List.docx) —
+  SUPERSEDES the picker's FL→/locations branch (2026-08-03).** The picker modal's Florida
+  section is ONE full-width gold door → https://www.jungleboysflorida.com (external); /shop's
+  FL note links there too. /locations FL store cards now link to their DIRECT per-store shop
+  pages on jungleboysflorida.com — `lib/fl-shop-links.ts` holds all 15 links with the FL
+  team's `utm_source=jbca` params KEPT INTACT (they track traffic we send; do not strip).
+  owned-stores' FL `menuUrl` resolves through that map (falls back to the future
+  /menu/florida/* embed path); the directory opens absolute URLs in a new tab. The
+  `external` flag stays clothing-only so FL stores KEEP their LocalBusiness schema.
+  **st-petersburg: link ready in the map, but still NO store() entry — Avanti owes the NAP
+  facts (the long-standing St. Pete open item); add the entry when they land.** The FL
+  embed-shell plan remains the recorded future state; these links are the interim.
 - **DROPS HERO v3 — separate tiles, gold beam clock, CMS strain backdrop (Avanti, 2026-08-04
   latest).** Her notes on v2: separate tiles; counter in a yellow box; strain of the week
   bolder; an image-background option for strain graphics; week-day chips REMOVED (it's Friday
