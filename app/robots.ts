@@ -25,9 +25,11 @@ export default function robots(): MetadataRoute.Robots {
           // links, is forbidden to fetch the URL, and so never learns about the
           // redirect. Crawlable-but-noindex is the correct treatment; when the
           // real auth shell lands it carries robots: noindex itself.
-          '/signup',
+          // NOT '/signup' or '/forgot-password' anymore (2026-08-04): both
+          // pages exist now and are LINKED from /login — same recipe as
+          // above, so they went crawlable-but-noindex (each page carries
+          // robots: noindex itself).
           '/callback',
-          '/forgot-password',
           '/reset-password',
           '/delete-account',
           '/profile-reward',

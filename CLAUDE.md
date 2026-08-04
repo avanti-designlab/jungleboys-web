@@ -861,6 +861,15 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   it. Home hero fallback slide = "AUGUST DEALS" → /deals (kicker LIVE NOW, art still the July asset
   until a CMS upload); `storyblok-retarget-shop.mjs` retargetHome() renames the JULY DEALS slide
   idempotently — Avanti re-runs with her token, then `--publish`.
+- **/login is a REAL sign-in page (Avanti, 2026-08-04: "this actually needs to be a sign in
+  page" — supersedes the same-day CTA-only shell; login-actions.tsx deleted).** The boundary
+  holds: Dutchie owns auth — LoginForm/AuthStubForm are real, validated UI whose submit
+  TRANSMITS NOTHING until the live account API is wired (the handler answers honestly that
+  sign-in happens at checkout today). Wiring = swap the stub for the provider call, nothing
+  else. /signup + /forgot-password shipped on the same contract; both are linked from /login,
+  so they moved OUT of robots.txt disallow to crawlable-but-noindex (the recorded
+  disallowed+linked recipe). Still owed: /reset-password, /delete-account, /callback,
+  /profile(-reward) — those stay disallowed until built.
 - **St. Petersburg FL store entry added (2026-08-04)** — NAP read off the LIVE jungleboys.com
   /locations listing (4500 4th St N, St. Petersburg, FL 33703 · (727) 390-3840 · FL_HOURS); its
   hand-drawn illustration is still owed, so the directory StoreCard falls back to the brand mark
