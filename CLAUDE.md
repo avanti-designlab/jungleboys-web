@@ -516,6 +516,27 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   %-off badge and its member ProductCards. Sale products no special claims land in a synthetic
   "More Markdowns" section per group — nothing discounted hides. check-commerce asserts sections,
   both groups, both doors + a fixture special name in SSR.
+- **UNIVERSAL MAIN MENU (Avanti, 2026-08-04): the hamburger + logo cluster now exists on the
+  commerce shell too, same sizes/placement as the global SiteNav's left cluster.** The
+  full-screen menu was EXTRACTED into `components/main-menu-overlay.tsx` (one overlay, one
+  link list, one focus trap) — SiteNav and CommerceHeader both mount it and own only their
+  toggles. The commerce cluster rides the difference-blend sticky layer (hamburger bars +
+  logo both invert); the pill gained left padding to clear it. Verified headless: the
+  commerce hamburger opens the same overlay (Media/Phenos/Wholesale/Contact/Shop…).
+- **PDP v3 (Avanti, 2026-08-04 — "missing a lot… the black pill tile shouldn't be black…
+  really redo this entire page").** LIGHT layout on the theme ground: sticky media stage +
+  badge strip left; identity, designed chips, buy ticket, the NAMED-SPECIAL CALLOUT (yellow —
+  her Dutchie-reference showed purple; ours renders the amendment-#4 special covering this
+  product and deep-links to its Deals section), per-store AVAILABILITY chips from real offer
+  data, and the lab/COA line right. THE FACTS band: Genetics/Taste + EFFECTS AS ICON PILLS
+  (`trait-pills.tsx` — generic pictograms for the known terpene/effect vocabulary with hover
+  notes; unmapped names get the neutral leaf, never nothing). Analysis grid: Certified
+  Analysis bars + **EFFECTS RADAR (amendment #5: `StrainProfile.effectScores` 0–10, Leafly-
+  style; dependency-free SVG, polygon = the data, renders only when scores exist — ⚠ verify
+  whether Dutchie supplies effect scoring; else it is CMS strain content for the Strains
+  build)** + Primary Terpenes (icon pills over measured bars). PWF Rewards evergreen band;
+  "Current top sellers" as its own pill card (featured-first, same category). Zangria stays
+  the designated widest-shape fixture.
 - **COMMERCE HEADER v4 — ONE PILL AGAIN + bare inverting logo (Avanti, 2026-08-04 FINAL,
   supersedes v3's three pieces).** "Make it all one again": nav + utilities back in a single
   pill, keeping v3's gains (SHOP → storefront, CATEGORIES rename, no Locations, 19px type,

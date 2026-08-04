@@ -118,6 +118,13 @@ export interface StrainProfile {
    * force fabricated percentages onto strain pages or strip real ones off COAs.
    */
   terpenes?: string[] // ["Terpinolene", "Caryophyllene", "Limonene"]
+  /**
+   * AMENDMENT #5 (Avanti, 2026-08-04): per-effect intensity 0–10 for the
+   * effects radar. Strain-level like genetics/taste. ⚠ verify against a real
+   * Dutchie payload whether effect scoring is supplied at all — if not, this
+   * is CMS-authored strain content and belongs to the Strains build.
+   */
+  effectScores?: { name: string; score: number }[]
 }
 
 export interface Product {

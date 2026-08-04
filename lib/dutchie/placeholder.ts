@@ -371,6 +371,20 @@ const zangriaFlower: Product = (() => {
     genetics: 'Thin Mint Cookies x Z',
     taste: ['citrus cherry', 'grape candy', 'gas'],
     terpenes: ['Terpinolene', 'Caryophyllene', 'Limonene'],
+    // amendment #5 radar shape — placeholder numbers like every value here;
+    // the radar renders only when this exists
+    effectScores: [
+      { name: 'Calm', score: 4 },
+      { name: 'Clear Mind', score: 5 },
+      { name: 'Creative', score: 7 },
+      { name: 'Energetic', score: 7 },
+      { name: 'Focused', score: 6 },
+      { name: 'Happy', score: 9 },
+      { name: 'Inspired', score: 6 },
+      { name: 'Relaxed', score: 4 },
+      { name: 'Sleepy', score: 1 },
+      { name: 'Uplifted', score: 8 },
+    ],
   }
   return p
 })()
