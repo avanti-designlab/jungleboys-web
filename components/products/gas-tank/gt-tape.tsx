@@ -10,7 +10,7 @@
 // exactly one horizontal period, so they run full width and never cut off — the
 // previous version translated an oversized element and clipped at the edges.
 
-const WORDS = ['All Gas. No Brakes.', 'Handle With Fire', 'All-In-One Gas Tank', 'Caution: Loud']
+const WORDS = ['All Gas. No Brakes.', 'Playing With Fire\u00AE', 'All-In-One Gas Tank', 'Caution: Loud']
 
 function Row() {
   return (

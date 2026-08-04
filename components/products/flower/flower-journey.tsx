@@ -48,11 +48,11 @@ export default function FlowerJourney() {
       >
         {/* three lines, not two: "Jungle Boys Genetics" was the longest run and
             it alone set the size ceiling. Split off "Genetics" and the widest
-            line becomes "From Seed to Fire", which buys the whole lockup a jump
+            line becomes "From Seed to Sale" (Avanti, 2026-08-04 — was "to Fire"), buying the lockup a jump
             in size and fills the black band it sits in. */}
         <span className="fl-stroke-accent block whitespace-nowrap">Jungle Boys</span>
         <span className="fl-stroke-accent block whitespace-nowrap">Genetics</span>
-        <span className="fl-stroke-accent block whitespace-nowrap">From Seed to Fire</span>
+        <span className="fl-stroke-accent block whitespace-nowrap">From Seed to Sale</span>
       </div>
 
       {/* frosty nug cutout blows up to fill */}

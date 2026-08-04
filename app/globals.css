@@ -2106,7 +2106,22 @@ body:has(.gt-page) footer {
    describe what the element IS, not how it moves. Inside the query a
    reduced-motion visitor never got them. */
 .gt-stripe {
+  /* the moving stripes live on an oversized ::before that slides by ONE
+     period via transform — animating background-position repainted during
+     scroll and sheared at the left/right viewport edges (Avanti,
+     2026-08-04) */
+  position: relative;
+  overflow: hidden;
+}
+.gt-stripe::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: calc(100% + 56.5685px);
   background-image: repeating-linear-gradient(45deg, #0a0908 0 20px, #fbcd03 20px 40px);
+  will-change: transform;
 }
 .gt-tape-band {
   background-image: repeating-linear-gradient(
@@ -2146,7 +2161,7 @@ body:has(.gt-page) footer {
       url('/products/gas-tank/tri-soft-red.svg');
 }
 @media (prefers-reduced-motion: reduce) {
-  .gt-tape-band, .gt-heat, .gt-ember, .gt-stripe, .gt-tri-pulse {
+  .gt-tape-band, .gt-heat, .gt-ember, .gt-stripe, .gt-stripe::before, .gt-tri-pulse {
     animation: none;
   }
 }
@@ -2296,10 +2311,10 @@ body:has(.pops-page) footer {
      made the old stripe cut off at the edges. */
   @keyframes gt-stripe {
     to {
-      background-position: 56.5685px 0;
+      transform: translateX(-56.5685px);
     }
   }
-  .gt-stripe {
+  .gt-stripe::before {
     animation: gt-stripe 1.4s linear infinite;
   }
   /* the flame triangle breathing inside the tape */
