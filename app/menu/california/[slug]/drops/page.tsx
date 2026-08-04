@@ -154,7 +154,7 @@ function StrainOfTheWeek({
 
         {/* the buy line — strain facts left, money + action right, one
             organized bar instead of a centered float */}
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-t border-white/12 pt-5">
+        <div className="mx-auto mt-auto flex w-full max-w-2xl flex-wrap items-center justify-between gap-x-4 gap-y-3 border-t border-white/12 pt-5">
           <div className="flex flex-wrap items-center gap-2" style={{ fontFamily: 'var(--font-brand)' }}>
             {product.strainType && (
               <span className={`rounded-full border-2 bg-white/90 px-3.5 py-2 text-[11px] font-extrabold uppercase tracking-widest ${STRAIN_STYLE[product.strainType].cls}`}>

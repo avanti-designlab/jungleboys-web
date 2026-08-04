@@ -93,15 +93,17 @@ const EFFECT_META: Record<string, { icon: ReactNode; note: string }> = {
   focused: { icon: I.pine, note: 'Clear-headed attention' },
 }
 
-function Pill({ label, meta }: { label: string; meta?: { icon: ReactNode; note: string } }) {
+function Pill({ label, meta, size = 'md' }: { label: string; meta?: { icon: ReactNode; note: string }; size?: 'md' | 'lg' }) {
   return (
     <span className="group/trait relative inline-flex">
       <span
-        className="inline-flex items-center gap-2.5 rounded-full border-2 border-[var(--color-ink)]/70 py-2 pl-3 pr-4 transition-all duration-200 group-hover/trait:-translate-y-0.5 group-hover/trait:border-[var(--color-accent)] group-hover/trait:bg-[var(--color-accent)]"
+        className={`inline-flex items-center rounded-full border-2 border-[var(--color-ink)]/70 transition-all duration-200 group-hover/trait:-translate-y-0.5 group-hover/trait:border-[var(--color-accent)] group-hover/trait:bg-[var(--color-accent)] ${
+          size === 'lg' ? 'gap-3 py-3 pl-4 pr-5 [&_svg]:h-6 [&_svg]:w-6' : 'gap-2.5 py-2 pl-3 pr-4'
+        }`}
         style={{ fontFamily: 'var(--font-brand)' }}
       >
         <span className="text-[var(--color-ink)]">{meta?.icon ?? I.herb}</span>
-        <span className="text-[12px] font-extrabold uppercase tracking-[0.14em] text-[var(--color-ink)]">{label}</span>
+        <span className={`font-extrabold uppercase tracking-[0.14em] text-[var(--color-ink)] ${size === 'lg' ? 'text-[15px]' : 'text-[12px]'}`}>{label}</span>
       </span>
       {meta?.note && (
         <span
@@ -125,11 +127,11 @@ export function TerpenePills({ names }: { names: string[] }) {
   )
 }
 
-export function EffectPills({ effects }: { effects: string[] }) {
+export function EffectPills({ effects, size = 'md' }: { effects: string[]; size?: 'md' | 'lg' }) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className={`flex flex-wrap ${size === 'lg' ? 'gap-2.5' : 'gap-2'}`}>
       {effects.map((e) => (
-        <Pill key={e} label={e} meta={EFFECT_META[e.toLowerCase()]} />
+        <Pill key={e} label={e} meta={EFFECT_META[e.toLowerCase()]} size={size} />
       ))}
     </div>
   )

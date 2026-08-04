@@ -289,18 +289,12 @@ export default function StoreShop({
             background: 'color-mix(in srgb, var(--color-danger) 5%, transparent)',
           }}
         >
+          {/* title alone, flush left (Avanti, 2026-08-04: red pill removed);
+              MOVING FAST keeps the urgency on the right */}
           <div className="flex flex-wrap items-baseline justify-between gap-3">
-            <div className="flex items-baseline gap-3">
-              <span
-                className="rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white"
-                style={{ fontFamily: 'var(--font-brand)', background: 'var(--color-danger-solid)' }}
-              >
-                Don&rsquo;t miss
-              </span>
-              <h2 id="hot-items" className="font-display text-4xl uppercase leading-none md:text-6xl">
-                Hot right now
-              </h2>
-            </div>
+            <h2 id="hot-items" className="font-display text-4xl uppercase leading-none md:text-6xl">
+              Hot right now
+            </h2>
             <span
               className="rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white"
               style={{ fontFamily: 'var(--font-brand)', background: 'var(--color-danger-solid)' }}

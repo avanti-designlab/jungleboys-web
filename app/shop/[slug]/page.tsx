@@ -281,33 +281,36 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       {(profile?.genetics || profile?.taste?.length || product.effects?.length) && (
         <Reveal>
         <section aria-label="The facts" className="px-6 pt-10 md:px-12 lg:px-20">
+          {/* auto-fit columns: two facts fill the band 50/50, three split it
+              in thirds — no dead space when genetics is absent (Avanti,
+              2026-08-04). Type and pills sized UP to carry the row. */}
           <div
-            className="mx-auto grid max-w-[1400px] gap-8 rounded-[2rem] border border-[var(--color-border)] p-7 sm:grid-cols-3 md:p-10"
+            className="mx-auto grid max-w-[1400px] items-center gap-x-12 gap-y-8 rounded-[2rem] border border-[var(--color-border)] p-7 md:p-10 lg:grid-cols-[repeat(auto-fit,minmax(280px,1fr))]"
             style={{ background: 'color-mix(in srgb, var(--color-accent) 9%, var(--color-surface))' }}
           >
             {profile?.genetics && (
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
+                <p className="text-[12px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
                   Genetics
                 </p>
-                <p className="font-display mt-2 text-[26px] uppercase leading-[0.95] md:text-[30px]">{profile.genetics}</p>
+                <p className="font-display mt-2.5 text-[34px] uppercase leading-[0.95] md:text-[42px]">{profile.genetics}</p>
               </div>
             )}
             {profile?.taste?.length ? (
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
+                <p className="text-[12px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
                   Taste
                 </p>
-                <p className="font-display mt-2 text-[26px] uppercase leading-[0.95] md:text-[30px]">{profile.taste.join(' · ')}</p>
+                <p className="font-display mt-2.5 text-[34px] uppercase leading-[0.95] md:text-[42px]">{profile.taste.join(' · ')}</p>
               </div>
             ) : null}
             {product.effects?.length ? (
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
+                <p className="text-[12px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
                   Anticipated effects
                 </p>
-                <div className="mt-3">
-                  <EffectPills effects={product.effects} />
+                <div className="mt-3.5">
+                  <EffectPills effects={product.effects} size="lg" />
                 </div>
               </div>
             ) : null}
