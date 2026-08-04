@@ -56,7 +56,7 @@ export default function ProductFinderPage() {
           <span
             aria-hidden
             className="font-display pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap uppercase leading-none text-white/90"
-            style={{ fontSize: 'min(11.5vw, 170px)' }}
+            style={{ fontSize: '19.5vw' }}
           >
             {'PRODUCT FINDER'.split('').map((ch, i) => (
               <span key={i} className="contact-letter" style={{ animationDelay: `${0.15 + i * 0.04}s` }}>
