@@ -6,8 +6,9 @@ import type { ProductCategory } from '@/lib/dutchie/types'
 // cbd, accessories) ship as 224px WebP rasters for their ~56px render; true
 // small vectors (vapes 20KB) stay SVG. The remaining supplied files
 // (HASH HOLE, BUDDER, INDICA…) are subcategory/strain marks with no category
-// slot; unmapped categories (apparel — no icon supplied yet) render a
-// letter-mark, never an invented icon.
+// slot; an unmapped category would render a letter-mark, never an invented
+// icon. Apparel's icon landed 2026-08-04 (jb-apparel.png) — the set is
+// complete.
 export const CATEGORY_ICONS: Partial<Record<ProductCategory, string>> = {
   flower: '/shop/icons/flower.webp',
   pops: '/shop/icons/pops.svg',
@@ -17,6 +18,7 @@ export const CATEGORY_ICONS: Partial<Record<ProductCategory, string>> = {
   edibles: '/shop/icons/edibles.webp',
   cbd: '/shop/icons/cbd.webp',
   accessories: '/shop/icons/accessories.webp',
+  apparel: '/shop/icons/apparel.webp',
 }
 
 // Visual-mass equalizer for the storefront tile row: tall-skinny (cbd) and
@@ -26,4 +28,5 @@ export const CATEGORY_ICONS: Partial<Record<ProductCategory, string>> = {
 export const CATEGORY_ICON_TILE_SCALE: Partial<Record<ProductCategory, string>> = {
   cbd: 'scale-[1.3]',
   edibles: 'scale-[1.2]',
+  apparel: 'scale-[1.15]',
 }
