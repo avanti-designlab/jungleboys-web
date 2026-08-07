@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useScanner } from '@/components/scan/scan-provider'
 import { readStore } from '@/lib/store-selection'
-import { CATEGORY_ICONS } from '@/lib/category-icons'
+import { CATEGORY_ICONS, iconScale } from '@/lib/category-icons'
 import { categorySlug } from '@/lib/collections'
 import { categoryLabel } from '@/components/menu/labels'
 import type { ProductCategory } from '@/lib/dutchie'
@@ -204,7 +204,7 @@ export default function MobileTabBar() {
                   >
                     {icon ? (
                       /* eslint-disable-next-line @next/next/no-img-element -- category art */
-                      <img src={icon} alt="" aria-hidden className="h-8 w-8 object-contain" />
+                      <img src={icon} alt="" aria-hidden className={`h-8 w-8 object-contain ${iconScale(icon)}`} />
                     ) : (
                       <span className="font-display flex h-8 w-8 items-center justify-center text-xl text-[var(--color-accent)]">
                         {categoryLabel(c as ProductCategory).charAt(0)}

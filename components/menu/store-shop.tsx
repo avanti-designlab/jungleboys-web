@@ -5,7 +5,7 @@ import type { ShopBanner, ShopBanners } from '@/lib/shop-banners'
 import { bannerHref } from '@/lib/shop-banners'
 import { ProductCard } from './menu-browser'
 import { categoryLabel } from './labels'
-import { CATEGORY_ICONS, CATEGORY_ICON_TILE_SCALE } from '@/lib/category-icons'
+import { CATEGORY_ICONS, iconScale } from '@/lib/category-icons'
 import { brandAnchor } from '@/lib/brands'
 import { collectionPath } from '@/lib/collections'
 import BrandTile from './brand-tile'
@@ -210,7 +210,7 @@ function CategoryTile({ category, storeSlug }: { category: ProductCategory; stor
           <img
             src={icon}
             alt=""
-            className={`h-full w-full object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.12)] ${CATEGORY_ICON_TILE_SCALE[category] ?? ''}`}
+            className={`h-full w-full object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.12)] ${iconScale(icon)}`}
           />
         </span>
       ) : (

@@ -61,17 +61,17 @@ export default async function CollectionPage({
 
   // Rail nav = the primary category pages for this store, current one lit.
   // Only categories the store stocks (or the current page) get a tile.
-  const stocked = new Set(menu.products.map((p) => p.category))
+  // FIXED set (Avanti, 2026-08-04: "make sure on all the submenus all
+  // categories show") — never derived from stock; an empty category lands
+  // on the grid's honest empty state, same rule as the tile row.
   const nav: CategoryNavItem[] = [
     { href: `/menu/california/${slug}#browse`, label: 'All products' },
-    ...CATEGORY_COLLECTIONS.filter((c) => stocked.has(c.slug as never) || c.slug === col.slug).map(
-      (c) => ({
-        href: collectionPath(slug, c.slug),
-        label: c.title,
-        icon: c.icon,
-        active: c.slug === col.slug,
-      })
-    ),
+    ...CATEGORY_COLLECTIONS.map((c) => ({
+      href: collectionPath(slug, c.slug),
+      label: c.title,
+      icon: c.icon,
+      active: c.slug === col.slug,
+    })),
   ]
 
   return (

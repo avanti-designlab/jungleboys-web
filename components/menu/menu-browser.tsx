@@ -6,7 +6,8 @@ import { useSearchParams } from 'next/navigation'
 import type { Product, ProductCategory, ProductVariant, StrainType } from '@/lib/dutchie'
 import { addToCart } from '@/lib/cart'
 import { categoryLabel, STRAIN_STYLE } from './labels'
-import { CATEGORY_ICONS } from '@/lib/category-icons'
+import { CATEGORY_ICONS, iconScale } from '@/lib/category-icons'
+import { FIXED_CATEGORIES } from '@/lib/collections'
 
 // Category + strain filtering over a store's menu. Client-side because the whole
 // menu is already on the page: filtering 13-200 products in the browser is
@@ -324,10 +325,9 @@ export default function MenuBrowser({
   const [weightSet, setWeightSet] = useState<Set<string>>(new Set())
   const [dealsOnly, setDealsOnly] = useState(false)
 
-  const categories = useMemo(
-    () => [...new Set(products.map((p) => p.category))].sort(),
-    [products]
-  )
+  // FIXED set (Avanti, 2026-08-04) — never derived from what happens to be
+  // stocked; an empty pick shows the honest empty state.
+  const categories = FIXED_CATEGORIES
 
   // The pool the facets describe: category + line narrowed, before the rail's
   // own selections — so option counts stay stable as you tick them.
@@ -520,7 +520,7 @@ export default function MenuBrowser({
                   >
                     {n.icon ? (
                       // eslint-disable-next-line @next/next/no-img-element -- brand icon
-                      <img src={n.icon} alt="" className="h-9 w-9 object-contain" />
+                      <img src={n.icon} alt="" className={`h-9 w-9 object-contain ${iconScale(n.icon)}`} />
                     ) : (
                       <span aria-hidden className="font-display flex h-9 w-9 items-center justify-center rounded-full bg-white text-[16px] leading-none text-black/60">
                         {n.label.slice(0, 1)}
@@ -558,7 +558,7 @@ export default function MenuBrowser({
                       >
                         {icon ? (
                           // eslint-disable-next-line @next/next/no-img-element -- brand icon
-                          <img src={icon} alt="" className="h-9 w-9 object-contain" />
+                          <img src={icon} alt="" className={`h-9 w-9 object-contain ${iconScale(icon)}`} />
                         ) : (
                           <span aria-hidden className="font-display flex h-9 w-9 items-center justify-center rounded-full bg-white text-[16px] leading-none text-black/60">
                             {categoryLabel(c).slice(0, 1)}

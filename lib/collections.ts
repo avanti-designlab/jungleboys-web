@@ -23,9 +23,10 @@ export interface Collection {
 
 // The fixed 8 (recorded 2026-08-03) plus pops — pops products exist and its
 // shelf needs a landing page even though it left the tile row.
-const CATEGORY_SLUGS: ProductCategory[] = [
+export const FIXED_CATEGORIES: ProductCategory[] = [
   'flower', 'pre-rolls', 'vape-pens', 'concentrates', 'edibles', 'cbd', 'accessories', 'apparel', 'pops',
 ]
+const CATEGORY_SLUGS = FIXED_CATEGORIES
 
 // URL slugs where the display name diverges from the Dutchie category key
 // (Avanti, 2026-08-04: cbd reads AND routes as "wellness"; the frozen

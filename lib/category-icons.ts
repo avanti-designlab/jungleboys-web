@@ -21,12 +21,14 @@ export const CATEGORY_ICONS: Partial<Record<ProductCategory, string>> = {
   apparel: '/shop/icons/apparel.webp',
 }
 
-// Visual-mass equalizer for the storefront tile row: tall-skinny (cbd) and
-// wide-short (edibles) art reads smaller than the square-ish marks at the
-// same contain box, so those two render scaled up (Avanti, 2026-08-04).
-// Tailwind-safe static class strings — do not compute these.
-export const CATEGORY_ICON_TILE_SCALE: Partial<Record<ProductCategory, string>> = {
-  cbd: 'scale-[1.3]',
-  edibles: 'scale-[1.35]',
-  apparel: 'scale-[1.15]',
+// Visual-mass equalizer: tall-skinny (cbd) and wide-short (edibles, apparel)
+// art reads smaller than the square-ish marks in the same contain box, so
+// those render scaled up wherever icons appear — tile row, facet rails,
+// mobile sheet (Avanti, 2026-08-04). Keyed by icon PATH so every renderer
+// shares it. Tailwind-safe static class strings — do not compute these.
+const ICON_MASS_SCALE: Record<string, string> = {
+  '/shop/icons/cbd.webp': 'scale-[1.3]',
+  '/shop/icons/edibles.webp': 'scale-[1.35]',
+  '/shop/icons/apparel.webp': 'scale-[1.15]',
 }
+export const iconScale = (src?: string | null): string => (src ? ICON_MASS_SCALE[src] ?? '' : '')
