@@ -27,6 +27,6 @@ export const CATEGORY_ICONS: Partial<Record<ProductCategory, string>> = {
 // Tailwind-safe static class strings — do not compute these.
 export const CATEGORY_ICON_TILE_SCALE: Partial<Record<ProductCategory, string>> = {
   cbd: 'scale-[1.3]',
-  edibles: 'scale-[1.2]',
+  edibles: 'scale-[1.35]',
   apparel: 'scale-[1.15]',
 }
