@@ -5,7 +5,7 @@ import type { ShopBanner, ShopBanners } from '@/lib/shop-banners'
 import { bannerHref } from '@/lib/shop-banners'
 import { ProductCard } from './menu-browser'
 import { categoryLabel } from './labels'
-import { CATEGORY_ICONS } from '@/lib/category-icons'
+import { CATEGORY_ICONS, CATEGORY_ICON_TILE_SCALE } from '@/lib/category-icons'
 import { brandAnchor } from '@/lib/brands'
 import { collectionPath } from '@/lib/collections'
 import BrandTile from './brand-tile'
@@ -203,12 +203,16 @@ function CategoryTile({ category, storeSlug }: { category: ProductCategory; stor
       className="group flex min-w-24 flex-1 snap-start flex-col items-center gap-4 pt-2 text-[var(--color-ink)]"
     >
       {icon ? (
-        // eslint-disable-next-line @next/next/no-img-element -- brand icon
-        <img
-          src={icon}
-          alt=""
-          className="h-20 w-20 object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.12)] transition-transform duration-300 group-hover:-translate-y-1.5 group-hover:scale-105 md:h-24 md:w-24"
-        />
+        // hover motion on the WRAPPER so the per-icon mass scale (a static
+        // transform class on the img) never fights the hover transform
+        <span className="flex h-20 w-20 items-center justify-center transition-transform duration-300 group-hover:-translate-y-1.5 group-hover:scale-105 md:h-24 md:w-24">
+          {/* eslint-disable-next-line @next/next/no-img-element -- brand icon */}
+          <img
+            src={icon}
+            alt=""
+            className={`h-full w-full object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.12)] ${CATEGORY_ICON_TILE_SCALE[category] ?? ''}`}
+          />
+        </span>
       ) : (
         <span
           aria-hidden

@@ -18,3 +18,12 @@ export const CATEGORY_ICONS: Partial<Record<ProductCategory, string>> = {
   cbd: '/shop/icons/cbd.webp',
   accessories: '/shop/icons/accessories.webp',
 }
+
+// Visual-mass equalizer for the storefront tile row: tall-skinny (cbd) and
+// wide-short (edibles) art reads smaller than the square-ish marks at the
+// same contain box, so those two render scaled up (Avanti, 2026-08-04).
+// Tailwind-safe static class strings — do not compute these.
+export const CATEGORY_ICON_TILE_SCALE: Partial<Record<ProductCategory, string>> = {
+  cbd: 'scale-[1.3]',
+  edibles: 'scale-[1.2]',
+}
