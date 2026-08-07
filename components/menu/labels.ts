@@ -2,10 +2,11 @@ import type { ProductCategory, StrainType } from '@/lib/dutchie'
 
 // Shared by the client browser (filter pills) and the server storefront
 // (shelf headings) — one spelling of every category label. Overrides carry
-// Avanti's namings (2026-08-03: "Vapes", not "Vape Pens"; CBD is an acronym).
+// Avanti's namings (2026-08-03: "Vapes", not "Vape Pens"; 2026-08-04: the
+// cbd category reads "Wellness" — the CANNABINOID stays "CBD" in lab panels).
 const LABEL_OVERRIDES: Partial<Record<ProductCategory, string>> = {
   'vape-pens': 'Vapes',
-  cbd: 'CBD',
+  cbd: 'Wellness',
 }
 
 export function categoryLabel(c: ProductCategory): string {
