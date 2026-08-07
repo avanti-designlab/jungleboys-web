@@ -7,6 +7,7 @@ import { CA_OWNED } from '@/lib/owned-stores'
 import { readStore } from '@/lib/store-selection'
 import { CART_EVENT, cartSubtotal, readCart, removeFromCart, setCartQty, type CartItem } from '@/lib/cart'
 import { CATEGORY_ICONS } from '@/lib/category-icons'
+import { categorySlug } from '@/lib/collections'
 import { categoryLabel } from '@/components/menu/labels'
 import CartIcon from './cart-icon'
 import MainMenuOverlay from '@/components/main-menu-overlay'
@@ -444,7 +445,7 @@ export default function CommerceHeader() {
                   key={c}
                   role="menuitem"
                   data-shop-category={c}
-                  href={base ? `${base}/shop/${c}` : '/shop'}
+                  href={base ? `${base}/shop/${categorySlug(c)}` : '/shop'}
                   onClick={() => setOpenMenu(null)}
                   className="group/row flex items-center gap-3 rounded-2xl px-3 py-2 transition-colors duration-200 hover:bg-white/[0.07]"
                 >

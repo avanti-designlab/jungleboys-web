@@ -27,8 +27,18 @@ const CATEGORY_SLUGS: ProductCategory[] = [
   'flower', 'pre-rolls', 'vape-pens', 'concentrates', 'edibles', 'cbd', 'accessories', 'apparel', 'pops',
 ]
 
+// URL slugs where the display name diverges from the Dutchie category key
+// (Avanti, 2026-08-04: cbd reads AND routes as "wellness"; the frozen
+// ProductCategory value stays 'cbd' — that is Dutchie's taxonomy, not ours).
+const CATEGORY_URL_SLUGS: Partial<Record<ProductCategory, string>> = {
+  cbd: 'wellness',
+}
+
+/** category key → the collection URL slug it routes to */
+export const categorySlug = (c: ProductCategory): string => CATEGORY_URL_SLUGS[c] ?? c
+
 export const CATEGORY_COLLECTIONS: Collection[] = CATEGORY_SLUGS.map((c) => ({
-  slug: c,
+  slug: categorySlug(c),
   title: categoryLabel(c),
   kind: 'category',
   icon: CATEGORY_ICONS[c] ?? null,
@@ -68,4 +78,5 @@ export const getCollection = (slug: string): Collection | undefined =>
   COLLECTIONS.find((c) => c.slug === slug)
 
 export const collectionPath = (storeSlug: string, collection: string): string =>
-  `/menu/california/${storeSlug}/shop/${collection}`
+  // accepts a category key too — maps it to its URL slug (cbd → wellness)
+  `/menu/california/${storeSlug}/shop/${CATEGORY_URL_SLUGS[collection as ProductCategory] ?? collection}`

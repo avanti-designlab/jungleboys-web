@@ -88,6 +88,14 @@ export const redirects: Redirect[] = [
   // a "Phase 3" label has been removed.
   { source: '/about', destination: '/', permanent: false },
 
+  // cbd category renamed to wellness in URLs (Avanti, 2026-08-04) — the
+  // collection slug moved; the Dutchie category key stays 'cbd' internally.
+  {
+    source: '/menu/california/:store/shop/cbd',
+    destination: '/menu/california/:store/shop/wellness',
+    permanent: true,
+  },
+
   // Product-line landings nest under /products (Avanti decision)
   { source: '/hash-hole', destination: '/products/hash-hole', permanent: true },
   { source: '/pre-rolls', destination: '/products/pre-rolls', permanent: true },

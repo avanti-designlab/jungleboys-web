@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useScanner } from '@/components/scan/scan-provider'
 import { readStore } from '@/lib/store-selection'
 import { CATEGORY_ICONS } from '@/lib/category-icons'
+import { categorySlug } from '@/lib/collections'
 import { categoryLabel } from '@/components/menu/labels'
 import type { ProductCategory } from '@/lib/dutchie'
 
@@ -197,7 +198,7 @@ export default function MobileTabBar() {
                   <Link
                     prefetch={false}
                     key={c}
-                    href={storeSlug ? `/menu/california/${storeSlug}/shop/${c}` : '/shop'}
+                    href={storeSlug ? `/menu/california/${storeSlug}/shop/${categorySlug(c)}` : '/shop'}
                     onClick={() => setSheetOpen(false)}
                     className="flex flex-col items-center gap-1.5 rounded-2xl border border-white/10 bg-white/[0.05] px-1 py-3 transition hover:border-[var(--color-accent)]"
                   >
