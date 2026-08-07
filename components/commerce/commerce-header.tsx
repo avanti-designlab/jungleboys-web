@@ -50,8 +50,8 @@ const SHOP_CATEGORIES = [
 // drifted slug shows up as a loudly-empty list.
 // Gas Tanks is ONE item (Avanti, 2026-08-03): a comma list of the three
 // sibling subcategories, which the browse grid's ?line= filter unions.
-// Icons: the pre-roll family shares the supplied pre-rolls art; Gas Tanks has
-// no supplied vape icon yet → letter-mark, never an invented icon.
+// Icons: the pre-roll family shares the supplied pre-rolls art; Gas Tanks
+// carries the supplied Gas Tank.svg (2026-08-04 batch).
 // `line` is the COLLECTION slug — each entry is its own shopping page at
 // <store>/shop/<line> (Avanti, 2026-08-04); lib/collections owns the mapping
 // to subcategories (gas-tanks unions its three siblings there).
@@ -62,7 +62,7 @@ const JB_LINES: readonly { label: string; line: string; icon: string | null }[] 
   { label: '10-Pack Pre-Rolls', line: '10-pack-pre-rolls', icon: '/shop/icons/pre-rolls.svg' },
   { label: '1G Pre-Rolls', line: '1g-pre-rolls', icon: '/shop/icons/pre-rolls.svg' },
   { label: 'Twins 2-Pack', line: 'twins-2-pack', icon: '/shop/icons/pre-rolls.svg' },
-  { label: 'Gas Tanks', line: 'gas-tanks', icon: null },
+  { label: 'Gas Tanks', line: 'gas-tanks', icon: '/shop/icons/gas-tank.svg' },
 ]
 
 function storeFromPath(pathname: string): string | null {
