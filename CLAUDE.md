@@ -905,6 +905,17 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   wrappers or the transformed ancestor breaks the fixed bar. (5) Main menu overlay fits h-dvh
   on phones with NO scroll (2.4rem links, 2-up compact promo tiles, socials spanning beneath) —
   it overflowed 194px and scrolling it read as "the logo and menu button are gone."
+- **DUTCHIE PLUS WIRE FACTS (from Dutchie via Avanti, 2026-08-07).** ONE shared GraphQL
+  endpoint for every store: `https://plus.dutchie.com/plus/2021-07/graphql` (prod). The STORE is
+  identified by the PLUS API key in the `Authorization` header — same URL for all four CA
+  stores, key swapped per request; NO retailer id needs to be sent (most PLUS users never use
+  the retail API keys). Consequence for the provider: the graphqlProvider maps store slug → env
+  key (`DUTCHIE_PLUS_KEY_<STORE>` in .env.example; Avanti holds all four production keys and
+  enters them herself — never pasted into chat, per invariant §9.1). Sandbox keys REQUESTED,
+  pending; build/test against sandbox first when they land. Rate limits + menu-change webhook:
+  Dutchie is still finding out — until known, ISR (60s) is the load shield and /api/revalidate
+  stands ready for the webhook. The `Location.retailerId` field in the frozen types stays as an
+  internal identifier (fixtures use it); it just never goes over the wire.
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
