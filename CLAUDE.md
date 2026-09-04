@@ -905,6 +905,20 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   wrappers or the transformed ancestor breaks the fixed bar. (5) Main menu overlay fits h-dvh
   on phones with NO scroll (2.4rem links, 2-up compact promo tiles, socials spanning beneath) —
   it overflowed 194px and scrolling it read as "the logo and menu button are gone."
+- **DUTCHIE PROBE RUN #1 (2026-08-07, scripts/dutchie-probe.mjs — keys REJECTED, schema
+  VERIFIED).** All four supplied 32-char keys return UNAUTHENTICATED on every auth form (Bearer /
+  raw / x-dutchie-key) — consistent with the Dutchie contact's own distinction ("Luis has all the
+  internal API keys… most PLUS users only use the PLUS API keys"): these are almost certainly the
+  INTERNAL/RETAIL keys, and the PLUS keys are still owed. Meanwhile schema INTROSPECTION (public)
+  verified, closing several recorded opens: `menu(retailerId!, menuType: MenuType, filter, sort,
+  pagination, showOutOfStock)` — **menuType EXISTS → the Rec/Med toggle wiring is real**;
+  `specials(retailerId!) → [Special]` + `specialMenuCards(retailerId, specialId)` — **amendment
+  #4's named specials are a first-class API**; `collection(retailerId!, slug!)` — **the drops
+  "collection field" curation path exists as a query**; `productAvailabilityByRetailer(
+  enterpriseProductId!)` — cross-store availability for the PDP; also product/retailers/orders/
+  customers/checkout. NOTE the correction to the wire facts below: queries DO take `retailerId`
+  as an argument — the key scopes ACCESS; retailerId comes from the key's own `retailers` query
+  at provider boot. The probe script never prints key values (presence + length only).
 - **DUTCHIE PLUS WIRE FACTS (from Dutchie via Avanti, 2026-08-07).** ONE shared GraphQL
   endpoint for every store: `https://plus.dutchie.com/plus/2021-07/graphql` (prod). The STORE is
   identified by the PLUS API key in the `Authorization` header — same URL for all four CA
