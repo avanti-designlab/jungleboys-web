@@ -6,10 +6,16 @@
 // the same DutchieProvider shape and swap it in below. Nothing else changes.
 
 import { placeholderProvider, type DutchieProvider } from './placeholder'
+import { graphqlProvider } from './graphql'
 
 export type * from './types'
 
-const provider: DutchieProvider = placeholderProvider // Phase 3: graphqlProvider
+// EXPLICIT opt-in (DUTCHIE_PLUS_PROVIDER=graphql) rather than key-presence
+// detection: keys can be present but wrong (the 2026-08-07 retail-key batch),
+// and a provider that silently activates on bad keys takes the whole shop
+// down. Flip the env var when the PLUS keys verify via scripts/dutchie-probe.
+const provider: DutchieProvider =
+  process.env.DUTCHIE_PLUS_PROVIDER === 'graphql' ? graphqlProvider : placeholderProvider
 
 export const getLocations = provider.getLocations
 export const getLocationBySlug = provider.getLocationBySlug

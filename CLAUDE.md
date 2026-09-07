@@ -919,6 +919,19 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   customers/checkout. NOTE the correction to the wire facts below: queries DO take `retailerId`
   as an argument — the key scopes ACCESS; retailerId comes from the key's own `retailers` query
   at provider boot. The probe script never prints key values (presence + length only).
+- **graphqlProvider BUILT against the documented schema (2026-08-07, docs.dutchie.com read
+  while the PLUS keys are pending).** `lib/dutchie/graphql.ts` implements the frozen
+  DutchieProvider: Bearer auth, retailerId resolved per key via `retailers` and cached, menu
+  paginated to completion (offset/limit — docs default 20/page), documented product selection
+  (brand/images/potency ranges/variants med+rec+special prices/staffPick→featured/effects),
+  specials mapped with the name-prefix group heuristic. Switched by EXPLICIT
+  `DUTCHIE_PLUS_PROVIDER=graphql` — never key-presence detection, because present-but-wrong keys
+  (the retail-key batch) must not take the shop down; placeholder remains the default. Every
+  mapper carries a ⚠ VERIFY-ON-FIRST-PAYLOAD note (category enums, money units assumed dollars→
+  cents, terpene/cannabinoid row shapes, slug stability, special membership via the menuSection
+  filter). RATE LIMITS (docs): 5 req/s sustained, 18,000 burst, per IP+key, 429 + X-RateLimit-*
+  headers — ISR 60s makes our load negligible. Locations stay OUR data; only menus/specials come
+  over the wire.
 - **DUTCHIE PLUS WIRE FACTS (from Dutchie via Avanti, 2026-08-07).** ONE shared GraphQL
   endpoint for every store: `https://plus.dutchie.com/plus/2021-07/graphql` (prod). The STORE is
   identified by the PLUS API key in the `Authorization` header — same URL for all four CA
