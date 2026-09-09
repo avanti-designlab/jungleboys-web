@@ -1079,6 +1079,19 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   checkout can be white-labeled to a jungleboys.com subdomain (Avanti 2026-09-08: "i'd rather it
   not go to batch"), and whether the GA4 integration fires on the Batch-hosted checkout the Plus
   redirectUrl points to.
+- **CHECKOUT WHITE-LABEL: YES (Dutchie support, 2026-09-09).** The hosted checkout CAN move off
+  batchsys.com onto our domain: Avanti creates a CNAME per store — `checkout-<store>` (her
+  naming choice) → `connect.dutchiemenus.com` — then tells support, who configure their end;
+  support confirmed the GA4 measurement ID is supported there too. CONSEQUENCES: (a) zero code
+  changes for us — the site never hardcodes the checkout domain, it follows the API's
+  `redirectUrl`, which starts returning the new domain once Dutchie flips it; (b) checkout on a
+  jungleboys.com subdomain means FIRST-PARTY cookies — the GA4 cross-domain "Configure your
+  domains" step becomes belt-and-suspenders instead of critical; (c) VERIFY after the flip: run
+  a live bag→Checkout and confirm the landing domain + that loyalty still shows on the checkout
+  page (shopper accounts/PWF continuity when leaving the Batch-branded checkout — asked but not
+  yet explicitly confirmed). Recommended names: checkout-dtla / checkout-pomona / checkout-oc /
+  checkout-sd .jungleboys.com (short forms, not the long site slugs). Adding these CNAMEs is
+  safe pre-cutover — subdomains don't touch the Webflow apex.
 
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
