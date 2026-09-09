@@ -1061,6 +1061,25 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   ci.yml exists; sitemap/robots/JSON-LD/canonical rules all live. Superseded-by-ruling (not
   gaps): DOB gate→yes/no, /loyalty→/rewards, /specials→/deals naming, /sign-in paths→real
   auth paths, 10 products→9, Strains→post-launch, FL embeds→pending verdict.
+- **DUTCHIE SUPPORT ANSWERS ×3 (2026-09-09, via Avanti's support thread).** (1) **Webhooks: NO** —
+  Plus has no webhooks, period. /api/revalidate stays as a manual/secret-gated tool but Dutchie
+  will never call it; menu freshness is ISR polling ALONE (verify the revalidate interval on all
+  menu-data routes at cutover), and NO server-side order-completion events will ever arrive —
+  purchase tracking must come from GA4 on the checkout itself (see 3). (2) **Loyalty/accounts:
+  full shopper account access ("log in using our system… all that information for loyalty") is
+  Dutchie PRO, not Plus. On Plus the shopper only sees the loyalty section ON THE CHECKOUT PAGE.**
+  Consequence: the styled auth/profile shells CANNOT be wired to real points/orders through Plus
+  — DECISION OWED (Avanti): what does sign-in/profile show at launch (link out to the JB app /
+  checkout loyalty, or hide the points/orders panels)? (3) **GA4: Dutchie admin has a native
+  integration — Integrations > Google Analytics > enter the GA4 ID (G-39SKNEFHPB).** ACTION
+  (Avanti, her admin): enter it, then verify purchase events arrive in the GA4 property; also add
+  the checkout domain to GA4 cross-domain measurement (GA4 Admin > Data Streams > Configure tag
+  settings > Configure your domains) so sessions survive the redirect and conversions attribute
+  to the site, not to "batchsys.com / referral". Still open with Dutchie: whether the hosted
+  checkout can be white-labeled to a jungleboys.com subdomain (Avanti 2026-09-08: "i'd rather it
+  not go to batch"), and whether the GA4 integration fires on the Batch-hosted checkout the Plus
+  redirectUrl points to.
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
