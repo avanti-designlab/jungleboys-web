@@ -1001,6 +1001,22 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   1 tag script + config; add_to_cart lands in dataLayer with clean payload. STILL TODO at
   cutover: Vercel Analytics toggle (her dashboard); GSC sitemap submit; GA4 property's "Data
   collection isn't active" warning clears when the tagged site ships.
+- **GSC 12-MONTH BASELINE CAPTURED + FL REDIRECT GAP CLOSED (2026-09-08).** Avanti exported the
+  real Search performance (seo/gsc-baseline-2026-09-08/ — 35k clicks; top queries "jungle boys"
+  54k, "jungle boys pomona" 6k @pos 1.5; top pages home 68k, DTLA 17k, Pomona 14k, OC 11k, SD
+  7.6k). Probing EVERY traffic-carrying path against the build found the biggest pre-cutover
+  catch so far: **all /menu/florida/* URLs (~7.9k clicks/yr) 404'd** — the legacy
+  jungle-boys-:city normalization pointed at FL menu pages that will never exist under the
+  FL-off-site ruling. FIX: redirects are now GENERATED from FL_SHOP_LINKS — every legacy FL form
+  (city, jungle-boys-city, + deep links) 308s single-hop to that store's jungleboysflorida.com
+  page (utm_source=jbca kept); unmapped FL cities → /locations. /drop-list → /drops (was in the
+  baseline). redirect-qa now treats an OFF-SITE Location as a terminal state, not a hop:
+  85 URLs, 0 failures, pending-Phase-3 down 29 → 1. Two junk baseline URLs accepted as 404s
+  (a malformed backlink gluing another domain onto /menu/jungle-boys-san-diego, and a literal
+  "/menu/[retailer]/product/[slug]" template string; 53 clicks/yr combined — not representable
+  as redirect sources). ALSO: @vercel/analytics mounted (cookieless/anonymous — deliberately NOT
+  consent-gated, unlike GA4) after Avanti enabled it in the dashboard; GSC property confirmed a
+  DOMAIN property (DNS-verified — survives the Webflow→Vercel move untouched).
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before

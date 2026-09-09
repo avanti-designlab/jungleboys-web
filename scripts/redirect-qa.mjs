@@ -78,6 +78,12 @@ for (const u of urls) {
     if (status >= 300 && status < 400) {
       const loc = res.headers.get('location')
       chain.push(`${cur} -${status}-> ${loc}`)
+      // an OFF-SITE destination is a terminal state, not a hop to follow —
+      // the FL menus 308 to jungleboysflorida.com by ruling (2026-09-08)
+      if (/^https?:\/\//.test(loc) && !loc.startsWith(BASE)) {
+        status = 200
+        break
+      }
       cur = loc.replace(BASE, '')
       continue
     }

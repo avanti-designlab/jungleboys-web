@@ -9,6 +9,7 @@ import RevealGate from "@/components/reveal-gate";
 import NewsletterPopupMount from "@/components/newsletter-popup-mount";
 import CookieConsent from "@/components/cookie-consent";
 import Analytics from "@/components/analytics";
+import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
 import MobileTabBar from "@/components/mobile-tab-bar";
 import SiteNav from "@/components/site-nav";
 import SiteFooter from "@/components/site-footer";
@@ -99,6 +100,8 @@ export default function RootLayout({
           <RevealGate />
           <CookieConsent />
           <Analytics />
+          {/* cookieless + anonymous — no consent gate needed, unlike GA4 */}
+          <VercelAnalytics />
           <SiteNav />
           <div className="flex-1">{children}</div>
           <SiteFooter />

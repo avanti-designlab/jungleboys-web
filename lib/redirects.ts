@@ -3,6 +3,8 @@
 // SEO/Schema agent; changes require an inventory row. QA'd against staging
 // before cutover by the redirect QA script.
 
+import { FL_SHOP_LINKS } from './fl-shop-links'
+
 type Redirect = {
   source: string
   destination: string
@@ -29,17 +31,21 @@ export const redirects: Redirect[] = [
     permanent: true,
   })),
 
-  // Legacy FL menu format — one param rule covers all cities (+ deep links)
-  {
-    source: '/menu/florida/jungle-boys-:city',
-    destination: '/menu/florida/:city',
-    permanent: true,
-  },
-  {
-    source: '/menu/florida/jungle-boys-:city/:path*',
-    destination: '/menu/florida/:city',
-    permanent: true,
-  },
+  // FLORIDA MENUS GO OFF-SITE, single-hop (2026-09-08 — found by probing the
+  // GSC 12-month baseline: the old jungle-boys-:city → /menu/florida/:city
+  // normalization landed on pages that will never exist under the FL-stays-
+  // off-site ruling, 404ing ~7.9k clicks/yr). Every legacy FL form now 308s
+  // DIRECTLY to that store's jungleboysflorida.com page (utm_source=jbca
+  // kept — the FL team tracks traffic we send). Generated from the ONE link
+  // map so a new FL store cannot ship without its redirect.
+  ...Object.entries(FL_SHOP_LINKS).flatMap(([slug, url]) => [
+    { source: `/menu/florida/${slug}`, destination: url, permanent: true },
+    { source: `/menu/florida/${slug}/:path*`, destination: url, permanent: true },
+    { source: `/menu/florida/jungle-boys-${slug}`, destination: url, permanent: true },
+    { source: `/menu/florida/jungle-boys-${slug}/:path*`, destination: url, permanent: true },
+  ]),
+  // any FL city NOT in the map (misspellings, closed stores) → locations
+  { source: '/menu/florida/:path*', destination: '/locations', permanent: false },
 
   // Closed stores → locations index (confirmed by Avanti)
   { source: '/menu/arizona/:path*', destination: '/locations', permanent: true },
@@ -63,6 +69,8 @@ export const redirects: Redirect[] = [
   // RESTORE all three to their real destinations when Phase 3 ships.
   { source: '/710-deals', destination: '/deals', permanent: false },
   // /drops interim removed 2026-08-04 — the evergreen drops door exists now.
+  // /drop-list: 8 clicks/yr in the GSC baseline (2026-09-08) — same intent.
+  { source: '/drop-list', destination: '/drops', permanent: true },
   // /login RESTORED (2026-08-04): the styled auth shell exists now — the
   // interim /rewards pointer is gone. /signup etc. stay pending.
 
