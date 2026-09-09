@@ -38,11 +38,16 @@ export const redirects: Redirect[] = [
   // DIRECTLY to that store's jungleboysflorida.com page (utm_source=jbca
   // kept — the FL team tracks traffic we send). Generated from the ONE link
   // map so a new FL store cannot ship without its redirect.
+  // TEMPORARY (307), not permanent (2026-09-08, Avanti: "there is a chance we
+  // might use embeds from Dutchie for the Florida locations… final verdict
+  // before cutover") — a 308 tells Google/browsers the FL menu URLs are gone
+  // FOREVER, which becomes a fight if the embed shells return. Flip to
+  // permanent:true only when the off-site answer is confirmed final.
   ...Object.entries(FL_SHOP_LINKS).flatMap(([slug, url]) => [
-    { source: `/menu/florida/${slug}`, destination: url, permanent: true },
-    { source: `/menu/florida/${slug}/:path*`, destination: url, permanent: true },
-    { source: `/menu/florida/jungle-boys-${slug}`, destination: url, permanent: true },
-    { source: `/menu/florida/jungle-boys-${slug}/:path*`, destination: url, permanent: true },
+    { source: `/menu/florida/${slug}`, destination: url, permanent: false },
+    { source: `/menu/florida/${slug}/:path*`, destination: url, permanent: false },
+    { source: `/menu/florida/jungle-boys-${slug}`, destination: url, permanent: false },
+    { source: `/menu/florida/jungle-boys-${slug}/:path*`, destination: url, permanent: false },
   ]),
   // any FL city NOT in the map (misspellings, closed stores) → locations
   { source: '/menu/florida/:path*', destination: '/locations', permanent: false },

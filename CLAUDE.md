@@ -869,8 +869,13 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   transmit-nothing stub contract; /callback forwards to the saved store's menu); (4) /profile +
   /profile-reward ship as signed-out dashboard shells (points/collectibles/referrals tiles per
   the Designer-confirmed inventory row; both noindex + robots-disallowed while unlinked).
-  (5) FLORIDA STAYS OFF-SITE — the jungleboysflorida.com links are the long-term answer, no FL
-  embed shells. (2) STRAINS is a SEPARATE POST-LAUNCH PHASE — do not build it in Phase 3; the
+  (5) FLORIDA STAYS OFF-SITE — ⚠ SOFTENED 2026-09-08 (Avanti: "there is a chance we might use
+  embeds from Dutchie for the Florida locations, I'm waiting for the final verdict and will let
+  you know before we cut over") — the off-site links remain the CURRENT behavior, but the FL
+  menu redirects were downgraded 308→307 so the embed-shell path stays cheap to reopen; the
+  FL embed template variant (recorded Phase-3 future state) is the build if the verdict flips.
+  CUTOVER GATE: get the verdict, then either flip the FL redirects permanent:true (off-site
+  final) or build the 15 embed shells at /menu/florida/<city>. (2) STRAINS is a SEPARATE POST-LAUNCH PHASE — do not build it in Phase 3; the
   header nav note ("Strains joins the nav row when built") now points at that phase.
 - **/login is a REAL sign-in page (Avanti, 2026-08-04: "this actually needs to be a sign in
   page" — supersedes the same-day CTA-only shell; login-actions.tsx deleted).** The boundary
