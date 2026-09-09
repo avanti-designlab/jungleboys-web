@@ -87,7 +87,11 @@ youtube-nocookie lightbox; VideoObject JSON-LD; CSP frame-src opened for the emb
 templates: contact, wholesale, phenos, verify shell, terms/privacy. Lead pipeline LIVE end-to-end
 (Klaviyo forwarding verified). Known mobile-header nit: VERIFY PRODUCTS pill can crowd the theme
 toggle at 375px — global nav polish item, not page-specific.
-Open: LEAD_NOTIFY_EMAIL delivery mechanism (no email provider — Klaviyo flow vs Resend, Avanti decides).
+RESOLVED 2026-09-08: LEAD_NOTIFY_EMAIL delivery is LIVE via Resend — sending domain
+contact.jungleboys.com (verified subdomain; RESEND_FROM needs no real inbox), recipient
+seo@jungleboys.com (a watched inbox Avanti controls; hello@contact.jungleboys.com may take over
+once that inbox exists — a 30-second env edit). Test inquiry delivered end-to-end from the live
+/contact form. Contact/wholesale/phenos inquiries all reach a human from day one.
 **Lemon Milk Pro PURCHASED + WIRED (2026-07-19):** licensed OTFs → woff2 in `app/fonts/`, self-hosted
 via next/font/local (400/500/700), `--font-brand` → `--font-lemon-milk`. Stand-in retired.
 
