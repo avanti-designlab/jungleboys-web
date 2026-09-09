@@ -1026,6 +1026,19 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   as redirect sources). ALSO: @vercel/analytics mounted (cookieless/anonymous — deliberately NOT
   consent-gated, unlike GA4) after Avanti enabled it in the dashboard; GSC property confirmed a
   DOMAIN property (DNS-verified — survives the Webflow→Vercel move untouched).
+- **API CHECKOUT HANDOFF SHIPPED + VERIFIED (2026-09-08, Avanti: "yes to this").** The bag's
+  Checkout now POSTs /api/checkout — a server route (per-instance rate limit + unspoofable
+  client key + full input validation, the /api/lead pattern) that runs Dutchie's
+  `createCheckout(retailerId, PICKUP, pricingType-from-jb-menu-type)` + `addItem` per line
+  (variantId splits as productId~option — the verified live id format) with the PUBLIC key, and
+  returns the hosted-checkout `redirectUrl` (jungleboys-<store>.batchsys.com — batchsys is the
+  JB app vendor). VERIFIED headless end-to-end on live data: add real product → bag → Checkout →
+  browser lands on Dutchie's hosted checkout carrying the cart. PAYMENT/PII stay Dutchie's
+  (§9.2) — the route sees product ids and quantities only. Fixture mode: the route answers 503
+  and the CTA falls back to the store-menu handoff (progressive enhancement); the CTA is a
+  button with a Starting-checkout state, footer line now "Secure checkout by Dutchie". priceSummary
+  amounts are CENTS on the wire (subtotal 1208 = $12.08). NOTE for cutover: the route activates
+  with the same DUTCHIE_PLUS_PROVIDER=graphql + PUBLIC key envs as the provider — nothing extra.
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before

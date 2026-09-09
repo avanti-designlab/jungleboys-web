@@ -139,6 +139,7 @@ export default function CommerceHeader() {
   // sibling. Placement/sizes mirror the global SiteNav's left cluster —
   // Avanti 2026-08-04: one universal top-left across the whole site.
   const [mainOpen, setMainOpen] = useState(false)
+  const [checkingOut, setCheckingOut] = useState(false)
   useEffect(() => setMainOpen(false), [pathname])
   const urlStore = storeFromPath(pathname)
 
@@ -634,16 +635,49 @@ export default function CommerceHeader() {
                 </span>
                 <span className="text-[22px] leading-none">${(cartSubtotal(cart) / 100).toFixed(2).replace(/\.00$/, '')}</span>
               </div>
-              {/* PillCta language: label + cart icon in a circle on the right */}
-              <Link
-                href={base ?? '/shop'}
-                onClick={() => {
-                  setOpenMenu(null)
+              {/* PillCta language: label + cart icon in a circle on the right.
+                  API HANDOFF (Avanti approved 2026-09-08): tries /api/checkout
+                  — Dutchie builds the cart and hands back its hosted checkout
+                  URL — and falls back to the store-menu handoff whenever the
+                  API isn't active (fixture mode) or errors. */}
+              <button
+                type="button"
+                disabled={checkingOut}
+                onClick={async () => {
                   track('begin_checkout', { currency: 'USD', value: cartSubtotal(cart) / 100 })
+                  setCheckingOut(true)
+                  try {
+                    const storeSlug = store?.slug ?? cart[0]?.storeSlug
+                    const res = await fetch('/api/checkout', {
+                      method: 'POST',
+                      headers: { 'content-type': 'application/json' },
+                      body: JSON.stringify({
+                        storeSlug,
+                        menuType,
+                        items: cart
+                          .filter((i) => i.storeSlug === storeSlug)
+                          .map((i) => ({ variantId: i.variantId, qty: i.qty })),
+                      }),
+                    })
+                    if (res.ok) {
+                      const { url } = (await res.json()) as { url?: string }
+                      if (url) {
+                        window.location.assign(url)
+                        return
+                      }
+                    }
+                  } catch {
+                    // fall through to the menu handoff
+                  }
+                  setCheckingOut(false)
+                  setOpenMenu(null)
+                  window.location.assign(base ?? '/shop')
                 }}
-                className="group/co mt-3 flex w-full items-center justify-between rounded-full bg-[var(--color-accent)] py-1.5 pl-6 pr-1.5 text-[16px] uppercase leading-none tracking-[0.08em] text-black transition-all duration-200 hover:-translate-y-0.5 hover:bg-white"
+                className="group/co mt-3 flex w-full items-center justify-between rounded-full bg-[var(--color-accent)] py-1.5 pl-6 pr-1.5 text-[16px] uppercase leading-none tracking-[0.08em] text-black transition-all duration-200 hover:-translate-y-0.5 hover:bg-white disabled:cursor-wait disabled:opacity-70"
               >
-                <span className="truncate">Checkout at {store ? store.name : 'your store'}</span>
+                <span className="truncate">
+                  {checkingOut ? 'Starting checkout…' : `Checkout at ${store ? store.name : 'your store'}`}
+                </span>
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-black text-[var(--color-accent)]">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-4 w-4" aria-hidden>
                     <circle cx="9.5" cy="20" r="1.4" />
@@ -651,9 +685,9 @@ export default function CommerceHeader() {
                     <path d="M3 4h2l2.15 11a1 1 0 0 0 1 .8h8.4a1 1 0 0 0 1-.78L20.2 8H6.3" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </span>
-              </Link>
+              </button>
               <p className="mt-2 px-2 text-center text-[12px] uppercase leading-none tracking-[0.1em] text-white/40">
-                Checkout completes on the store menu for now
+                Secure checkout by Dutchie
               </p>
             </div>
           )}
