@@ -1039,6 +1039,28 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   button with a Starting-checkout state, footer line now "Secure checkout by Dutchie". priceSummary
   amounts are CENTS on the wire (subtotal 1208 = $12.08). NOTE for cutover: the route activates
   with the same DUTCHIE_PLUS_PROVIDER=graphql + PUBLIC key envs as the provider — nothing extra.
+- **FULL BRIEF AUDIT RUN (2026-09-08, after Avanti: "how do I know we aren't missing any other
+  items?").** All 8 brief docs were exhaustively extracted (agent sweep) and diffed against the
+  build + the live Webflow sitemap + the recorded rulings. METHOD LESSON: the pending list had
+  been compiled from the decision log, which only contains what was TOUCHED — GA4/checkout/email
+  were missed because untouched scope generates no notes. RESULTS — confirmed covered or
+  formally superseded: everything except the following. FIXED IMMEDIATELY: /420-pre-game (live
+  sitemap URL, inventory keep, 404 in build) → /deals 307. NEW DECISIONS FOR AVANTI (brief
+  promises, never built, never descoped): (1) /careers — brief lists it as a NEW page; build or
+  formally descope; (2) /about — interim 307→/ stands, inventory still intends a real About
+  page; build before cutover or accept the interim at launch; (3) /coa — brief wanted a
+  Testing-Results template; never a live URL, and COA data already flows onto PDPs — recommend
+  recording "per-product COA is the surface" and dropping the standalone page. SMALL ADDS to
+  the pre-cutover list: key-rotation doc (04 §3 requires; security/ has none); Supabase
+  backups + MFA + Vercel team MFA verification (her dashboards); Vercel Deployment Protection
+  decision — brief §E6.4 wants previews protected, but the team live-preview wants a shareable
+  link (conflict to resolve deliberately); compliance sweep must explicitly verify government
+  warning language + footer license numbers (07 §1). POST-LAUNCH LIST gains from 03 §11: rank
+  tracking set, periodic redirect re-crawl, schema-health monitoring, AEO answer monitoring,
+  daily GSC watch for 2 weeks. Verified present (audit false alarms): public/llms.txt exists;
+  ci.yml exists; sitemap/robots/JSON-LD/canonical rules all live. Superseded-by-ruling (not
+  gaps): DOB gate→yes/no, /loyalty→/rewards, /specials→/deals naming, /sign-in paths→real
+  auth paths, 10 products→9, Strains→post-launch, FL embeds→pending verdict.
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before

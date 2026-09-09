@@ -61,6 +61,10 @@ export const redirects: Redirect[] = [
   // shipped 2026-08-04 (routes visitors to their store's live deals), so the
   // month rotations land there instead of the /rewards interim.
   { source: '/420-deals', destination: '/deals', permanent: false },
+  // /420-pre-game: on the LIVE Webflow sitemap today, inventory says keep,
+  // 404'd in our build until the 2026-09-08 brief audit caught it — same
+  // promo-rotation intent as the others
+  { source: '/420-pre-game', destination: '/deals', permanent: false },
   { source: '/april-deals', destination: '/deals', permanent: false },
   { source: '/may-deals', destination: '/deals', permanent: false },
   { source: '/june-deals', destination: '/deals', permanent: false },
