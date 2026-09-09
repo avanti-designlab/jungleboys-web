@@ -1092,6 +1092,17 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   yet explicitly confirmed). Recommended names: checkout-dtla / checkout-pomona / checkout-oc /
   checkout-sd .jungleboys.com (short forms, not the long site slugs). Adding these CNAMEs is
   safe pre-cutover — subdomains don't touch the Webflow apex.
+- **GA4 ON DUTCHIE CHECKOUT: CONNECTED ALL 4 STORES + VERIFIED LIVE (2026-09-09).** Avanti
+  entered G-39SKNEFHPB via Dutchie admin (Integrations > Google Analytics) for DTLA, Pomona,
+  OC, SD. Headless-verified on a throwaway DTLA checkout (createCheckout+addItem via API, no
+  order placed): the checkout page loads gtag with G-39SKNEFHPB and SENT page_view +
+  begin_checkout hits to analytics.google.com with tid=G-39SKNEFHPB; _ga_39SKNEFHPB cookie set.
+  The page also fires two pre-existing properties (G-FZN7LD29Z4, G-ZNEV4RY2MG — Batch/Dutchie's
+  own) + GTM-5RH9Q95; harmless to ours. She also added the checkout domains to GA4 cross-domain
+  "Configure your domains" AND the 4 CNAMEs at DNS; awaiting Dutchie's white-label config.
+  KNOWN DOUBLE-COUNT: begin_checkout now fires TWICE per handoff (our bag CTA + Dutchie's
+  checkout page-load). Decide at cutover: drop/rename our begin_checkout (Dutchie's is now the
+  canonical funnel source since purchase lives with theirs) or accept the inflation knowingly.
 
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
