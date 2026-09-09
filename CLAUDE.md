@@ -919,6 +919,19 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   customers/checkout. NOTE the correction to the wire facts below: queries DO take `retailerId`
   as an argument — the key scopes ACCESS; retailerId comes from the key's own `retailers` query
   at provider boot. The probe script never prints key values (presence + length only).
+- **LINE MAPPING + CHECK MODES DONE (2026-09-08, same session as the key verification —
+  punch-list items 4 + 6).** `lib/collections.ts` line matchers are DUAL-MODE: fixture
+  subcategory OR live NAME pattern, every name branch guarded by `JB_BRAND`
+  (`/^jungle boys(?!\s+clothing)/i` — admits the Pistil Whip collabs, excludes JB Clothing) —
+  live catch: third-party AIOs (Micro Bar/Plug Play/Sluggers) carry ALL_IN_ONE too, so
+  gas-tanks requires the brand on BOTH branches. The pops CATEGORY page matches live
+  FLOWER+"Pops"-named products (Dutchie has no POPS category). Live counts @DTLA: gas-tanks 21,
+  premium-flower 12, 5g-pops 3, 1g-pre-rolls 3, twins 1, hash-holes 0 (REAL: only OC 3 + SD 1
+  stock them today), 10-packs 0 (none live anywhere — honest empty states by design).
+  `check-commerce` gained `--mode=live` (or CHECK_MODE=live): fixture-name assertions
+  (Gold Mylar Markdowns, zangria PDP, drops Genetics, hot-items presence) swap for structural
+  live equivalents (discovered-PDP price+Add-to-bag SSR, any named specials in SSR, drops page
+  stands on its empty state). BOTH modes pass green against their builds.
 - **🔑 LIVE PAYLOAD VERIFIED END-TO-END (2026-09-08) — the PLUS key pair works.** One PUBLIC key
   (371 chars, Bearer) covers the whole org: `retailers` returns 6 — the four live CA stores
   (DTLA 424cdaa7…, Pomona 56cb2515…, San Diego cc6d479c…, OC f16e78db…) + a SANDBOX retailer
