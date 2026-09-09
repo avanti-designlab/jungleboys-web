@@ -37,7 +37,9 @@ import { placeholderProvider } from './placeholder'
 const ENDPOINT =
   process.env.DUTCHIE_PLUS_ENDPOINT ?? 'https://plus.dutchie.com/plus/2021-07/graphql'
 
-/** our store slug → env var carrying that store's PLUS key */
+// VERIFIED 2026-09-08: ONE public key covers the whole org (returns six
+// retailers: the four live CA stores + a Sandbox + the closed TLC). The
+// per-store key slots stay as an override in case Dutchie ever re-scopes.
 const KEY_ENV: Record<string, string> = {
   'downtown-los-angeles': 'DUTCHIE_PLUS_KEY_DOWNTOWN_LOS_ANGELES',
   'orange-county': 'DUTCHIE_PLUS_KEY_ORANGE_COUNTY',
@@ -46,8 +48,20 @@ const KEY_ENV: Record<string, string> = {
 }
 
 function keyForSlug(slug: string): string | null {
+  // the VERIFIED org-wide public key wins; per-store slots are the fallback
+  // (the 2026-08 retail-key batch still occupies them, invalid)
   const env = KEY_ENV[slug]
-  return env ? (process.env[env] ?? null) : null
+  const perStore = env ? process.env[env] : null
+  return process.env.DUTCHIE_PLUS_PUBLIC_KEY || perStore || null
+}
+
+// which wire retailer belongs to which of OUR stores — matched on the
+// VERIFIED retailer names (never [0]: that is the Sandbox)
+const RETAILER_MATCH: Record<string, RegExp> = {
+  'downtown-los-angeles': /dtla/i,
+  'orange-county': /\boc\b|orange/i,
+  pomona: /pomona/i,
+  'san-diego': /san diego/i,
 }
 
 async function gql<T>(key: string, query: string, variables: Record<string, unknown> = {}): Promise<T> {
@@ -70,24 +84,33 @@ async function gql<T>(key: string, query: string, variables: Record<string, unkn
   return json.data
 }
 
-// ── retailer-id resolution: one per key, cached for the process ─────────────
-const retailerIdByKey = new Map<string, string>()
+// ── retailer-id resolution: per key+store, cached for the process ───────────
+const retailerIdCache = new Map<string, string>()
 
-async function resolveRetailerId(key: string): Promise<string> {
-  const hit = retailerIdByKey.get(key)
+async function resolveRetailerId(key: string, storeSlug: string): Promise<string> {
+  const cacheKey = `${key.slice(-8)}:${storeSlug}`
+  const hit = retailerIdCache.get(cacheKey)
   if (hit) return hit
-  const data = await gql<{ retailers: { id: string }[] }>(key, `{ retailers { id } }`)
-  const id = data.retailers?.[0]?.id
-  if (!id) throw new Error('dutchie: key sees no retailers')
-  retailerIdByKey.set(key, id)
+  const data = await gql<{ retailers: { id: string; name: string }[] }>(
+    key,
+    `{ retailers { id name } }`
+  )
+  const match = RETAILER_MATCH[storeSlug]
+  const found = match
+    ? data.retailers?.find((r) => match.test(r.name) && !/sandbox/i.test(r.name))
+    : undefined
+  const id = found?.id ?? (data.retailers?.length === 1 ? data.retailers[0].id : undefined)
+  if (!id) throw new Error(`dutchie: no retailer matches store '${storeSlug}'`)
+  retailerIdCache.set(cacheKey, id)
   return id
 }
 
 // ── mappers (⚠ every one carries a verify note) ─────────────────────────────
 
-/** ⚠ VERIFY: Dutchie's category enum set. VAPORIZERS is documented; the rest
- *  follow the embed's known taxonomy. Unknowns land in 'accessories' rather
- *  than vanishing — a miscategorised product is visible, a dropped one is not. */
+/** VERIFIED 2026-09-08 (introspection): ACCESSORIES APPAREL CBD CLONES
+ *  CONCENTRATES EDIBLES FLOWER NOT_APPLICABLE ORALS PRE_ROLLS SEEDS TINCTURES
+ *  TOPICALS VAPORIZERS. Unknowns land in 'accessories' rather than vanishing —
+ *  a miscategorised product is visible, a dropped one is not. */
 const CATEGORY_MAP: Record<string, ProductCategory> = {
   FLOWER: 'flower',
   PRE_ROLLS: 'pre-rolls',
@@ -102,14 +125,18 @@ const CATEGORY_MAP: Record<string, ProductCategory> = {
   ORALS: 'edibles',
 }
 
+// VERIFIED 2026-09-08 (introspection): full enum also carries INDICA_HYBRID /
+// SATIVA_HYBRID (mapped to hybrid — accurate, revisit if Avanti wants
+// lean-labels) and ratio/THC/CBD/NOT_APPLICABLE values (no chip).
 const STRAIN_MAP: Record<string, StrainType> = {
   INDICA: 'indica',
   SATIVA: 'sativa',
   HYBRID: 'hybrid',
+  INDICA_HYBRID: 'hybrid',
+  SATIVA_HYBRID: 'hybrid',
 }
 
-/** ⚠ VERIFY: docs show med/rec prices without stating units; DOLLARS assumed
- *  (the embed displays $ floats). Our contract is integer cents. */
+/** VERIFIED 2026-09-08: prices are dollar floats on the wire (12.08). */
 const cents = (n: unknown): number | undefined =>
   typeof n === 'number' && Number.isFinite(n) ? Math.round(n * 100) : undefined
 
@@ -152,6 +179,8 @@ const PRODUCT_SELECTION = `
   image
   potencyThc { formatted range unit }
   potencyCbd { formatted range unit }
+  terpenes { name unitSymbol value }
+  cannabinoids { value unit cannabinoid { name } }
   variants { id option priceRec priceMed specialPriceRec specialPriceMed quantity }
 `
 
@@ -189,20 +218,54 @@ function mapProduct(w: WireProduct, retailerId: string): Product | null {
   if (!images.length && typeof w.image === 'string' && w.image) {
     images.push({ url: w.image, alt: w.name })
   }
+  // VERIFIED 2026-09-08: real subcategory enums (DEFAULT, ALL_IN_ONE,
+  // SMALL_BUDS, SINGLES, PACKS, GUMMIES…) differ from the fixture taxonomy the
+  // JB line collections match on. ALL_IN_ONE→gas-tank is unambiguous (the
+  // collections' prefix union); the rest keep kebab-case until the line
+  // mapping pass with Avanti. DEFAULT carries no signal → dropped.
+  const subcategory =
+    w.subcategory === 'ALL_IN_ONE'
+      ? 'gas-tank'
+      : w.subcategory && w.subcategory !== 'DEFAULT'
+        ? w.subcategory.toLowerCase().replace(/_/g, '-')
+        : undefined
   return {
     id: w.id,
-    // ⚠ VERIFY slug stability + per-product-vs-per-SKU shape — the recorded
-    // sitemap/PDP open question hangs on this field
+    // VERIFIED 2026-09-08: slugs are per-product and human-readable
+    // ("cannabiotix-white-walker-og-3-5g-flower") — the sitemap/PDP open
+    // question resolves; add PDPs to the sitemap at cutover.
     slug: w.slug || w.id,
     name: w.name,
     brand: w.brand?.name || 'Jungle Boys',
     category,
-    ...(w.subcategory ? { subcategory: w.subcategory.toLowerCase().replace(/_/g, '-') } : {}),
+    ...(subcategory ? { subcategory } : {}),
     ...(STRAIN_MAP[w.strainType ?? ''] ? { strainType: STRAIN_MAP[w.strainType ?? ''] } : {}),
     ...(w.description ? { description: w.description } : {}),
     images,
     variants,
-    ...(thc || cbd ? { labResult: { potency: { ...(thc ? { thc } : {}), ...(cbd ? { cbd } : {}) } } } : {}),
+    ...(() => {
+      // VERIFIED 2026-09-08 row shapes: terpenes [{name,unitSymbol,value}],
+      // cannabinoids [{value,unit:'PERCENTAGE',cannabinoid:{name:'CBD (Cannabidiol)'}}]
+      const terpenes = (w.terpenes ?? [])
+        .filter((t): t is { name: string; value: number } => typeof t?.name === 'string' && typeof t?.value === 'number' && t.value > 0)
+        .map((t) => ({ name: t.name, percentage: t.value }))
+      const cannabinoids = (w.cannabinoids ?? [])
+        .filter((c): c is { value: number; unit?: string; cannabinoid?: { name?: string } } => typeof c?.value === 'number' && c.value > 0 && !!c?.cannabinoid?.name)
+        .map((c) => ({
+          name: (c.cannabinoid!.name ?? '').replace(/\s*\(.*\)\s*$/, ''),
+          value: c.value,
+          unit: (c.unit === 'MILLIGRAMS' ? 'mg' : '%') as 'mg' | '%',
+        }))
+      const potency = thc || cbd ? { ...(thc ? { thc } : {}), ...(cbd ? { cbd } : {}) } : undefined
+      if (!potency && !terpenes.length && !cannabinoids.length) return {}
+      return {
+        labResult: {
+          ...(potency ? { potency } : {}),
+          ...(terpenes.length ? { terpenes } : {}),
+          ...(cannabinoids.length ? { cannabinoids } : {}),
+        },
+      }
+    })(),
     ...(w.effects?.length ? { effects: w.effects.map((e) => lower(e)!).filter(Boolean) } : {}),
     ...(w.staffPick ? { featured: true } : {}),
     retailerId,
@@ -239,50 +302,55 @@ async function storeContext(ourRetailerId: string): Promise<{ key: string; retai
   const locations = await placeholderProvider.getLocations()
   const loc = locations.find((l) => l.retailerId === ourRetailerId || l.slug === ourRetailerId)
   const key = loc ? keyForSlug(loc.slug) : null
-  if (!key) return null
-  return { key, retailerId: await resolveRetailerId(key) }
+  if (!key || !loc) return null
+  return { key, retailerId: await resolveRetailerId(key, loc.slug) }
 }
 
 const CATEGORY_ORDER: ProductCategory[] = [
   'flower', 'pops', 'pre-rolls', 'vape-pens', 'concentrates', 'edibles', 'cbd', 'accessories', 'apparel',
 ]
 
+// standalone functions, never `this` — index.ts exports each method detached
+// (`export const getMenu = provider.getMenu`), which strips `this` at the
+// call site (the live-build crash that taught us).
+async function getMenu(retailerId: string): Promise<Menu> {
+  const ctx = await storeContext(retailerId)
+  if (!ctx) return placeholderProvider.getMenu(retailerId) // un-keyed store: honest fixture
+  const products = await fetchAllProducts(ctx.key, ctx.retailerId)
+  const categories = CATEGORY_ORDER.filter((c) => products.some((p) => p.category === c))
+  return { retailerId, products, categories }
+}
+
+async function getProducts(filter?: ProductFilter): Promise<Product[]> {
+  // catalogue-wide reads (PDP availability) aggregate the keyed stores
+  const locations = await placeholderProvider.getLocations()
+  const keyed = locations.filter((l) => keyForSlug(l.slug))
+  const all: Product[] = []
+  for (const l of keyed) {
+    const menu = await getMenu(l.retailerId)
+    all.push(...menu.products)
+  }
+  if (!filter) return all
+  return all.filter(
+    (p) =>
+      (!filter.retailerId || p.retailerId === filter.retailerId) &&
+      (!filter.category || p.category === filter.category) &&
+      (!filter.subcategory || p.subcategory === filter.subcategory) &&
+      (!filter.strainType || p.strainType === filter.strainType) &&
+      (filter.featured === undefined || p.featured === filter.featured) &&
+      (!filter.search || p.name.toLowerCase().includes(filter.search.toLowerCase()))
+  )
+}
+
 export const graphqlProvider: typeof placeholderProvider = {
   // Locations are OUR data (NAP, hours, slugs) — never Dutchie's.
   getLocations: placeholderProvider.getLocations,
   getLocationBySlug: placeholderProvider.getLocationBySlug,
-
-  async getMenu(retailerId: string): Promise<Menu> {
-    const ctx = await storeContext(retailerId)
-    if (!ctx) return placeholderProvider.getMenu(retailerId) // un-keyed store: honest fixture
-    const products = await fetchAllProducts(ctx.key, ctx.retailerId)
-    const categories = CATEGORY_ORDER.filter((c) => products.some((p) => p.category === c))
-    return { retailerId, products, categories }
-  },
-
-  async getProducts(filter?: ProductFilter): Promise<Product[]> {
-    // catalogue-wide reads (PDP availability) aggregate the keyed stores
-    const locations = await placeholderProvider.getLocations()
-    const keyed = locations.filter((l) => keyForSlug(l.slug))
-    const all: Product[] = []
-    for (const l of keyed) {
-      const menu = await this.getMenu(l.retailerId)
-      all.push(...menu.products)
-    }
-    if (!filter) return all
-    return all.filter(
-      (p) =>
-        (!filter.retailerId || p.retailerId === filter.retailerId) &&
-        (!filter.category || p.category === filter.category) &&
-        (!filter.subcategory || p.subcategory === filter.subcategory) &&
-        (!filter.strainType || p.strainType === filter.strainType) &&
-        (filter.featured === undefined || p.featured === filter.featured) &&
-        (!filter.search || p.name.toLowerCase().includes(filter.search.toLowerCase()))
-    )
-  },
+  getMenu,
+  getProducts,
 
   async getProductBySlug(slug: string): Promise<Product | null> {
-    const all = await this.getProducts()
+    const all = await getProducts()
     return all.find((p) => p.slug === slug) ?? null
   },
 

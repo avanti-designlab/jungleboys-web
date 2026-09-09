@@ -16,6 +16,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "i.ytimg.com" }, // YouTube thumbnails (Media hub)
       { protocol: "https", hostname: "a.storyblok.com" }, // Storyblok assets (EU)
       { protocol: "https", hostname: "a-us.storyblok.com" }, // Storyblok assets (US — our space)
+      { protocol: "https", hostname: "images.dutchie.com" }, // Dutchie product shots (verified on the live payload)
+      { protocol: "https", hostname: "s3-us-west-2.amazonaws.com", pathname: "/dutchie-images/**" }, // Dutchie brand logos
     ],
   },
   async headers() {

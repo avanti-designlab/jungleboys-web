@@ -919,6 +919,38 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   customers/checkout. NOTE the correction to the wire facts below: queries DO take `retailerId`
   as an argument — the key scopes ACCESS; retailerId comes from the key's own `retailers` query
   at provider boot. The probe script never prints key values (presence + length only).
+- **🔑 LIVE PAYLOAD VERIFIED END-TO-END (2026-09-08) — the PLUS key pair works.** One PUBLIC key
+  (371 chars, Bearer) covers the whole org: `retailers` returns 6 — the four live CA stores
+  (DTLA 424cdaa7…, Pomona 56cb2515…, San Diego cc6d479c…, OC f16e78db…) + a SANDBOX retailer
+  (83873d27…) + the closed TLC. The SECRET key is for order ops later; never used for menus.
+  Provider updated accordingly: `DUTCHIE_PLUS_PUBLIC_KEY` WINS over the per-store slots (which
+  still hold the invalid 2026-08 retail keys), and retailers are matched BY NAME per store —
+  never `[0]`, that is the Sandbox. **The site BUILT AND SERVED on live data**
+  (`DUTCHIE_PLUS_PROVIDER=graphql npm run build` → 2,292 pages, real DTLA storefront verified by
+  screenshot: real shots, THC %, strain chips, real brand tiles). VERIFIED FACTS: prices =
+  dollar floats (cents conversion correct); slugs per-product + human-readable (**PDP sitemap
+  question RESOLVED — add PDPs to the sitemap at cutover**); category enum exactly as mapped;
+  strainType adds INDICA_HYBRID/SATIVA_HYBRID (→hybrid) + THC/CBD/ratio values (no chip);
+  terpene rows {name,unitSymbol,value} / cannabinoid rows {value,unit,cannabinoid{name
+  "CBD (Cannabidiol)" → parenthetical stripped}}; brand.imageUrl = REAL LOGOS (s3 dutchie-images
+  — map into the brands surfaces next); effects enums as expected; DTLA = 235 products, 39 REAL
+  specials in the exact "BRAND | THING" convention (JUNGLE BOYS |-prefix group heuristic
+  verified; "BUILD A BAG |" lands outsource — refine with Avanti). next.config allows
+  images.dutchie.com + s3 dutchie-images. `this`-binding trap: index.ts exports methods
+  DETACHED, so the provider uses standalone closures, never `this`.
+  **LIVE-DATA GAPS (expected, not bugs — the go-live punch list):** (1) drops curation stub
+  matches no real slugs → drops render empty; set up the Dutchie COLLECTION and wire
+  `collection(retailerId, slug)`; (2) no staffPick set in the POS → HOT shelf hides — JB team
+  flags staff picks in Dutchie; (3) strainProfile (genetics/taste/effectScores) NOT supplied by
+  Dutchie → PDP facts band + effects radar hide on live data (CMS strain content, the recorded
+  Strains-phase expectation); (4) JB line collections match fixture subcats — real enums are
+  DEFAULT/ALL_IN_ONE/SMALL_BUDS/SINGLES/PACKS/GUMMIES…; ALL_IN_ONE→gas-tank mapped, the rest
+  need the line-mapping pass; (5) fixture brand names (Jeeter/1904/Barrett/STIIIZY/Raw Garden/
+  Kiva/Wyld) are NOT on the real DTLA shelf — real top brands: JB 39, ORC 19, JB Clothing 19,
+  Cure Injoy 16, Sluggers 14, Plug Play 13, Pusha 12, Cannabiotix 11. check-commerce's
+  fixture-tied assertions (hot section, fixture special names, drops Genetics strings) FAIL on
+  live data by design — split into fixture-mode vs live-mode checks before cutover.
+  DUTCHIE_PLUS_PROVIDER stays UNSET (placeholder default) until the punch list clears.
 - **graphqlProvider BUILT against the documented schema (2026-08-07, docs.dutchie.com read
   while the PLUS keys are pending).** `lib/dutchie/graphql.ts` implements the frozen
   DutchieProvider: Bearer auth, retailerId resolved per key via `retailers` and cached, menu

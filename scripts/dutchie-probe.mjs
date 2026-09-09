@@ -22,13 +22,14 @@ const env = Object.fromEntries(
 )
 
 const ENDPOINT = env.DUTCHIE_PLUS_ENDPOINT || 'https://plus.dutchie.com/plus/2021-07/graphql'
-const KEY = env[`DUTCHIE_PLUS_KEY_${STORE}`]
+// the 2026-09 key PAIR wins when present; the per-store slots stay as fallback
+const KEY = env.DUTCHIE_PLUS_PUBLIC_KEY || env[`DUTCHIE_PLUS_KEY_${STORE}`]
 if (!KEY) {
-  console.error(`✗ DUTCHIE_PLUS_KEY_${STORE} is empty in .env.local`)
+  console.error(`✗ neither DUTCHIE_PLUS_PUBLIC_KEY nor DUTCHIE_PLUS_KEY_${STORE} is set in .env.local`)
   process.exit(1)
 }
 console.log(`endpoint: ${ENDPOINT}`)
-console.log(`key ${STORE}: present (${KEY.length} chars)\n`)
+console.log(`key: ${env.DUTCHIE_PLUS_PUBLIC_KEY ? 'PUBLIC pair key' : STORE} present (${KEY.length} chars)\n`)
 
 async function gql(query, variables = {}, auth = `Bearer ${KEY}`) {
   const res = await fetch(ENDPOINT, {
@@ -88,7 +89,7 @@ if (step === 'menu') {
     `query ($id: ID!) { menu(retailerId: $id) { products {
         id slug name brand { name imageUrl } category subcategory strainType
         potencyThc { formatted range unit } potencyCbd { formatted range unit }
-        effects image images description
+        effects image images { url label description } description staffPick tags
         variants { id option priceMed priceRec specialPriceMed specialPriceRec quantity }
       } } }`,
     { id: retailerId }
