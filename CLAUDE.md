@@ -988,6 +988,19 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   Dutchie is still finding out — until known, ISR (60s) is the load shield and /api/revalidate
   stands ready for the webhook. The `Location.retailerId` field in the frozen types stays as an
   internal identifier (fixtures use it); it just never goes over the wire.
+- **GA4 WIRED, CONSENT-GATED (2026-09-08; property "Jungle Boys - GA4", stream jungleboys.com,
+  id G-39SKNEFHPB — public by nature, baked as the fallback in components/analytics.tsx with
+  NEXT_PUBLIC_GA_MEASUREMENT_ID as the override).** The tag loads ONLY after "Accept All" on the
+  cookie card (07 §3) — never before a choice, never on "Necessary Only"; cookie-consent now
+  dispatches jb:consent-changed so acceptance starts collection without a reload. Manual
+  page_view per App Router navigation (send_page_view false); ecommerce events at the choke
+  points: add_to_cart in lib/cart.addToCart (every add flows through it), begin_checkout on the
+  bag CTA, view_item via PdpAnalytics — product facts only, NEVER PII (07 §7). lib/analytics.ts
+  track() is a guarded no-op without gtag. CSP opened for www.googletagmanager.com (script) +
+  *.google-analytics.com (connect). Headless-verified: no tag pre-consent/declined; accept →
+  1 tag script + config; add_to_cart lands in dataLayer with clean payload. STILL TODO at
+  cutover: Vercel Analytics toggle (her dashboard); GSC sitemap submit; GA4 property's "Data
+  collection isn't active" warning clears when the tagged site ships.
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before

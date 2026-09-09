@@ -9,6 +9,7 @@ import { CART_EVENT, cartSubtotal, readCart, removeFromCart, setCartQty, type Ca
 import { CATEGORY_ICONS } from '@/lib/category-icons'
 import { categorySlug } from '@/lib/collections'
 import { categoryLabel } from '@/components/menu/labels'
+import { track } from '@/lib/analytics'
 import CartIcon from './cart-icon'
 import MainMenuOverlay from '@/components/main-menu-overlay'
 
@@ -636,7 +637,10 @@ export default function CommerceHeader() {
               {/* PillCta language: label + cart icon in a circle on the right */}
               <Link
                 href={base ?? '/shop'}
-                onClick={() => setOpenMenu(null)}
+                onClick={() => {
+                  setOpenMenu(null)
+                  track('begin_checkout', { currency: 'USD', value: cartSubtotal(cart) / 100 })
+                }}
                 className="group/co mt-3 flex w-full items-center justify-between rounded-full bg-[var(--color-accent)] py-1.5 pl-6 pr-1.5 text-[16px] uppercase leading-none tracking-[0.08em] text-black transition-all duration-200 hover:-translate-y-0.5 hover:bg-white"
               >
                 <span className="truncate">Checkout at {store ? store.name : 'your store'}</span>

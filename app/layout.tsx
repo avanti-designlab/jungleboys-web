@@ -8,6 +8,7 @@ import LoadingScreen from "@/components/loading-screen";
 import RevealGate from "@/components/reveal-gate";
 import NewsletterPopupMount from "@/components/newsletter-popup-mount";
 import CookieConsent from "@/components/cookie-consent";
+import Analytics from "@/components/analytics";
 import MobileTabBar from "@/components/mobile-tab-bar";
 import SiteNav from "@/components/site-nav";
 import SiteFooter from "@/components/site-footer";
@@ -97,6 +98,7 @@ export default function RootLayout({
           <StorePickerMount />
           <RevealGate />
           <CookieConsent />
+          <Analytics />
           <SiteNav />
           <div className="flex-1">{children}</div>
           <SiteFooter />

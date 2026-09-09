@@ -11,6 +11,7 @@ import { categoryLabel, STRAIN_STYLE } from '@/components/menu/labels'
 import { EffectPills, TerpenePills } from '@/components/shop/trait-pills'
 import EffectsRadar from '@/components/shop/effects-radar'
 import Reveal from '@/components/reveal'
+import PdpAnalytics from '@/components/shop/pdp-analytics'
 
 // Product detail — ONE canonical page per product, store switched in the buy box.
 //
@@ -148,6 +149,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             productSchema(product),
           ]),
         }}
+      />
+
+      <PdpAnalytics
+        slug={product.slug}
+        name={product.name}
+        price={product.variants[0]?.specialPrice ?? product.variants[0]?.price ?? 0}
+        category={product.category}
       />
 
       {/* ── TOP — stage left (sticky), identity + buy right. LIGHT, on the

@@ -8,13 +8,14 @@ export const isDev = process.env.NODE_ENV === 'development'
 
 export const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}`,
+  // googletagmanager: the consent-gated GA4 tag (components/analytics.tsx)
+  `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com${isDev ? " 'unsafe-eval'" : ''}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   // blob: — three.js GLTFLoader creates ephemeral same-origin blob URLs for the
   // embedded 3D-model textures (Pops jar viewer); worker-src for its decoders.
-  `connect-src 'self' blob: https://api.storyblok.com https://api-us.storyblok.com https://nominatim.openstreetmap.org${isDev ? ' ws:' : ''}`,
+  `connect-src 'self' blob: https://api.storyblok.com https://api-us.storyblok.com https://nominatim.openstreetmap.org https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com${isDev ? ' ws:' : ''}`,
   "worker-src 'self' blob:",
   'frame-src \'self\' https://www.youtube-nocookie.com https://www.youtube.com',
   "frame-ancestors 'self'",

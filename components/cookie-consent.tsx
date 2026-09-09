@@ -38,6 +38,8 @@ export default function CookieConsent() {
     try {
       localStorage.setItem(KEY, value)
     } catch {}
+    // analytics (components/analytics.tsx) starts the moment consent lands
+    window.dispatchEvent(new CustomEvent('jb:consent-changed', { detail: value }))
     setVisible(false)
   }
 

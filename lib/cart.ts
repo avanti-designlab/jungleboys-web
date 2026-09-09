@@ -11,6 +11,8 @@
 // restates totals from these; live repricing against the menu happens when
 // real checkout wiring exists.
 
+import { track } from './analytics'
+
 export const CART_KEY = 'jb-cart'
 export const CART_EVENT = 'jb:cart-changed'
 
@@ -56,6 +58,12 @@ export function addToCart(item: Omit<CartItem, 'qty'>): void {
   if (hit) hit.qty += 1
   else items.push({ ...item, qty: 1 })
   write(items)
+  // GA4 ecommerce (consent-gated no-op otherwise); product facts only, no PII
+  track('add_to_cart', {
+    currency: 'USD',
+    value: item.price / 100,
+    items: [{ item_id: item.slug, item_name: item.name, item_variant: item.option }],
+  })
 }
 
 export function removeFromCart(variantId: string, storeSlug: string): void {
