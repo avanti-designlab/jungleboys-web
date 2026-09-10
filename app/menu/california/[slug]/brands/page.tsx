@@ -4,6 +4,7 @@ import Link from 'next/link'
 import BackPill from '@/components/menu/back-pill'
 import type { Product } from '@/lib/dutchie'
 import { getLocations, getLocationBySlug, getMenu } from '@/lib/dutchie'
+import { toCardProducts } from '@/lib/dutchie/card'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 import { ProductCard } from '@/components/menu/menu-browser'
 import { brandAnchor } from '@/lib/brands'
@@ -73,7 +74,7 @@ export default async function StoreBrandsPage({
   const menu = await getMenu(location.retailerId)
 
   const byBrand = new Map<string, Product[]>()
-  for (const p of menu.products) {
+  for (const p of toCardProducts(menu.products)) {
     byBrand.set(p.brand, [...(byBrand.get(p.brand) ?? []), p])
   }
   // Largest shelf first, then alphabetical — the house brand leads naturally by

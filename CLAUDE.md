@@ -1119,6 +1119,27 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   in-app ordering or only web checkout. GA4 needs nothing — both domains are in the
   cross-domain list already.
 
+- **FIRST LIVE-DATA DEPLOY FAILURE DIAGNOSED + FIXED; SPECIAL MEMBERSHIP NOW REAL (2026-09-10).**
+  Avanti flipped Production to live data (DUTCHIE_PLUS_PROVIDER=graphql + PUBLIC key, Production
+  scope) — deploy FAILED: San Diego deals page 22.9→27 MB, over Vercel's ~19.07 MB ISR ceiling
+  (FALLBACK_BODY_TOO_LARGE; old fixture deployment stayed live, no downtime). ROOT CAUSES, both
+  fixed: (1) list surfaces serialized the ENTIRE Product per card into the client payload —
+  lib/dutchie/card.ts `toCardProduct` now trims at every server→ProductCard/MenuBrowser boundary
+  (store landing, collections, deals, brands, drops, PDP-related); PDPs keep the full Product.
+  (2) getSpecials' discounted-superset placeholder put every markdown in ALL ~48 SD specials →
+  6,960 cards. **Membership is now REAL — VERIFIED live: `menu(filter: { menuSection: { type:
+  SPECIALS, specialId: [id] } })` returns exactly that special's members; specialId is [String];
+  MenuSectionFilterType = CUSTOM_SECTION | SPECIALS | STAFF_PICKS.** (STAFF_PICKS filter exists
+  and works — DTLA returns 0 because none are flagged in POS yet; the "where do staff picks come
+  from" question is answered: flag in POS, filter is ready.) Deals page: onSale gate REMOVED for
+  named sections (bundle deals — "2 FOR $87", "BUILD A BAG" — price at checkout, not on the
+  variant, and vanished under the gate); strays sweep still requires a visible markdown;
+  SECTION_CAP=60 guardrail with "Showing X of N → browse the full menu" overflow stays as the
+  hard bound. Group prefix widened: JUNGLE BOYS | JB | JBSD/JBLA/JBOC etc. MEASURED after fix
+  (local live build): SD deals 27→2.3 MB / 47 sections / 578 cards; DTLA 0.9 MB / 23 sections;
+  all stores' pages far under the ceiling. FOR AVANTI: "BUILD A BAG" and "ORC" specials group as
+  outsource (no JB prefix) — say the word and they move to the house group.
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before

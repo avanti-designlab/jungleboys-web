@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getLocations, getLocationBySlug, getMenu } from '@/lib/dutchie'
+import { toCardProducts } from '@/lib/dutchie/card'
 import { getShopBanners } from '@/lib/shop-banners'
 import { jsonLdHtml, breadcrumbSchema, storeSchema } from '@/lib/schema'
 import { OWNED_STORES } from '@/lib/owned-stores'
@@ -47,7 +48,10 @@ export default async function CaliforniaMenuPage({
   const location = await getLocationBySlug(slug)
   if (!location) notFound()
 
-  const [menu, banners] = await Promise.all([getMenu(location.retailerId), getShopBanners()])
+  const [fullMenu, banners] = await Promise.all([getMenu(location.retailerId), getShopBanners()])
+  // Card-trimmed ONCE for the whole page: StoreShop's shelves and MenuBrowser's
+  // grid both serialize per-card props to the client (see lib/dutchie/card.ts).
+  const menu = { ...fullMenu, products: toCardProducts(fullMenu.products) }
   // Store facts for schema come from OWNED_STORES, the same source /locations
   // uses — one Store node shape across the site rather than two that drift.
   const owned = OWNED_STORES.find((s) => s.slug === slug)

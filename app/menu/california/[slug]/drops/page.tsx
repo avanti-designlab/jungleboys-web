@@ -5,6 +5,7 @@ import Link from 'next/link'
 import BackPill from '@/components/menu/back-pill'
 import type { Product, ProductCategory, StrainType } from '@/lib/dutchie'
 import { getLocations, getLocationBySlug } from '@/lib/dutchie'
+import { toCardProduct } from '@/lib/dutchie/card'
 import { getDrops, getDropsHero, type DropsHero } from '@/lib/drops'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 import { AddToCartButton, ProductCard } from '@/components/menu/menu-browser'
@@ -208,7 +209,7 @@ export default async function StoreDropsPage({
   const alsoFeatured = drops.featured.slice(1)
   // The drop list, one row per category (Avanti, 2026-08-04) — featured
   // overflow joins its category row so nothing curated goes missing.
-  const listPool = [...alsoFeatured, ...drops.list]
+  const listPool = [...alsoFeatured, ...drops.list].map(toCardProduct)
   const byCategory = CATEGORY_ORDER.map((c) => ({
     category: c,
     products: listPool.filter((p) => p.category === c),

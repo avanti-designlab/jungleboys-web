@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import BackPill from '@/components/menu/back-pill'
 import { getLocations, getLocationBySlug, getMenu } from '@/lib/dutchie'
+import { toCardProducts } from '@/lib/dutchie/card'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 import Reveal from '@/components/reveal'
 import MenuBrowser, { type CategoryNavItem } from '@/components/menu/menu-browser'
@@ -132,7 +133,7 @@ export default async function CollectionPage({
         </section>
       ) : (
         <Reveal delay={0.08}>
-          <MenuBrowser products={products} storeSlug={slug} heading={null} categoryNav={nav} />
+          <MenuBrowser products={toCardProducts(products)} storeSlug={slug} heading={null} categoryNav={nav} />
         </Reveal>
       )}
     </main>

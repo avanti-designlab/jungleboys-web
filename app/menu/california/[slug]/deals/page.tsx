@@ -4,6 +4,7 @@ import Link from 'next/link'
 import BackPill from '@/components/menu/back-pill'
 import type { Product, Special } from '@/lib/dutchie'
 import { getLocations, getLocationBySlug, getMenu, getSpecials } from '@/lib/dutchie'
+import { toCardProduct } from '@/lib/dutchie/card'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 import { ProductCard } from '@/components/menu/menu-browser'
 import DealsExperience, { type DealRailItem } from '@/components/menu/deals-experience'
@@ -45,6 +46,14 @@ export async function generateMetadata({
 const onSale = (p: Product) =>
   p.variants.some((v) => v.specialPrice != null && v.specialPrice < v.price)
 
+// Size guardrail: a section renders at most SECTION_CAP cards, with an
+// explicit "showing X of N" escape hatch. Exists because the provider's old
+// superset membership put San Diego's every markdown into all ~48 specials —
+// 6,960 cards, 27 MB of HTML, over Vercel's ~19 MB ISR ceiling (deploys
+// failed 2026-09-10). Membership is real now, but the cap stays: it is the
+// hard bound that keeps a future storewide special from sinking deploys.
+const SECTION_CAP = 60
+
 function DealSection({
   special,
   products,
@@ -55,6 +64,7 @@ function DealSection({
   storeSlug: string
 }) {
   const jb = special.group === 'jungle-boys'
+  const shown = products.slice(0, SECTION_CAP)
   return (
     <Reveal>
     <section
@@ -93,10 +103,24 @@ function DealSection({
         {special.name}
       </h2>
       <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
-        {products.map((p) => (
+        {shown.map((p) => (
           <ProductCard key={p.id} product={p} storeSlug={storeSlug} />
         ))}
       </div>
+      {products.length > shown.length && (
+        <p
+          className="mt-6 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-muted)]"
+          style={{ fontFamily: 'var(--font-brand)' }}
+        >
+          Showing {shown.length} of {products.length} —{' '}
+          <Link
+            href={`/menu/california/${storeSlug}#browse`}
+            className="text-[var(--color-accent-ink)] underline-offset-4 hover:underline"
+          >
+            browse the full menu →
+          </Link>
+        </p>
+      )}
     </section>
     </Reveal>
   )
@@ -118,20 +142,26 @@ export default async function StoreDealsPage({
   const bySlug = new Map(menu.products.map((p) => [p.slug, p]))
 
   // Resolve each named special against the live menu; a special whose products
-  // are all gone renders nothing rather than an empty promise.
+  // are all gone renders nothing rather than an empty promise. Membership is
+  // now REAL per special (menuSection filter), so a product legitimately
+  // appears in every special that includes it — no dedupe. Bundle specials
+  // ("2 FOR $87", "BUILD A BAG") price at checkout, not on the variant, so
+  // members keep their section without the onSale gate; the strays sweep
+  // below still requires a visible markdown.
   const resolved = specials
     .map((s) => ({
       special: s,
       products: s.productSlugs
         .map((ps) => bySlug.get(ps))
-        .filter((p): p is Product => !!p && onSale(p)),
+        .filter((p): p is Product => !!p)
+        .map(toCardProduct),
     }))
     .filter((r) => r.products.length > 0)
 
   // Anything discounted on the menu that no named special claims — grouped by
   // house vs outsource so the split still covers it.
   const claimed = new Set(resolved.flatMap((r) => r.products.map((p) => p.slug)))
-  const stray = menu.products.filter((p) => onSale(p) && !claimed.has(p.slug))
+  const stray = menu.products.filter((p) => onSale(p) && !claimed.has(p.slug)).map(toCardProduct)
   const strayJb = stray.filter((p) => /^jungle boys/i.test(p.brand))
   const strayOs = stray.filter((p) => !/^jungle boys/i.test(p.brand))
   const withStrays: { special: Special; products: Product[] }[] = [

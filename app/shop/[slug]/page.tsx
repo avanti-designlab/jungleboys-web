@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getLocations, getMenu, getProductBySlug, getProducts, getSpecials } from '@/lib/dutchie'
+import { toCardProduct } from '@/lib/dutchie/card'
 import { jsonLdHtml, breadcrumbSchema, productSchema } from '@/lib/schema'
 import PdpBuyBox, { type StoreOffer } from '@/components/shop/pdp-buy-box'
 import { ProductCard } from '@/components/menu/menu-browser'
@@ -124,6 +125,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     .filter((p) => p.slug !== slug)
     .sort((a, b) => Number(b.featured ?? false) - Number(a.featured ?? false))
     .slice(0, 4)
+    .map(toCardProduct)
 
   const chip = (label: ReactNode, key: string) => (
     <span

@@ -372,26 +372,50 @@ export const graphqlProvider: typeof placeholderProvider = {
       `query ($id: ID!) { specials(retailerId: $id) { id name menuDisplayConfiguration { name } } }`,
       { id: ctx.retailerId }
     )
-    const products = await fetchAllProducts(ctx.key, ctx.retailerId)
-    return (data.specials ?? []).map((s) => {
+    // Membership is REAL, per special, via the menuSection filter — VERIFIED
+    // live 2026-09-10: menu(filter: { menuSection: { type: SPECIALS,
+    // specialId: [id] } }) returns exactly that special's members (DTLA
+    // "MICRO BAR | 30% OFF" → 8, "BUILD A BAG | $75" → 20). specialId is
+    // [String]. This replaced the discounted-superset placeholder, which on
+    // San Diego's live menu put every markdown in all ~48 specials and built
+    // a 6,960-card deals page. Slugs only — the deals page joins them back
+    // onto its own menu fetch. Sequential (~1 req/special) stays inside the
+    // 5 req/s budget the way fetchAllProducts does.
+    const specials: Special[] = []
+    for (const s of data.specials ?? []) {
       const display = s.menuDisplayConfiguration?.name || s.name
       const pct = display.match(/(\d{1,2})\s*%/)?.[1]
-      return {
+      const slugs: string[] = []
+      const limit = 100
+      for (let offset = 0; offset < 2000; offset += limit) {
+        const page = await gql<{ menu: { products: { slug: string }[] } }>(
+          ctx.key,
+          `query ($id: ID!, $sid: [String], $offset: Int!, $limit: Int!) {
+             menu(retailerId: $id, pagination: { offset: $offset, limit: $limit },
+                  filter: { menuSection: { type: SPECIALS, specialId: $sid } }) {
+               products { slug }
+             }
+           }`,
+          { id: ctx.retailerId, sid: [s.id], offset, limit }
+        )
+        const rows = page.menu?.products ?? []
+        slugs.push(...rows.map((r) => r.slug))
+        if (rows.length < limit) break
+      }
+      specials.push({
         id: s.id,
         slug: display.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
         name: display,
         ...(pct ? { percentOff: Number(pct) } : {}),
-        // ⚠ VERIFY the group signal on real data — name-prefix heuristic
-        // mirrors the live embed's "JUNGLE BOYS | …" convention
-        group: /^\s*jungle\s*boys/i.test(display) ? ('jungle-boys' as const) : ('outsource' as const),
-        // ⚠ VERIFY: special→product membership needs the menuSection filter
-        // (docs: "Using filters" under Menu Operations). Until that shape is
-        // confirmed on a real payload, members = discounted products — the
-        // same honest superset the deals page's "More Markdowns" absorbs.
-        productSlugs: products
-          .filter((p) => p.variants.some((v) => v.specialPrice != null))
-          .map((p) => p.slug),
-      }
-    })
+        // House-deal prefixes seen on live data (2026-09-10): "JUNGLE BOYS |"
+        // (DTLA convention), "JB:" and "JBSD:" (San Diego's shorthand +
+        // store-suffixed variants).
+        group: /^\s*(jungle\s*boys|jb(sd|la|oc|dtla|pomona)?)\b/i.test(display)
+          ? ('jungle-boys' as const)
+          : ('outsource' as const),
+        productSlugs: slugs,
+      })
+    }
+    return specials
   },
 }
