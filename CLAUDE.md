@@ -1138,7 +1138,12 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   hard bound. Group prefix widened: JUNGLE BOYS | JB | JBSD/JBLA/JBOC etc. MEASURED after fix
   (local live build): SD deals 27→2.3 MB / 47 sections / 578 cards; DTLA 0.9 MB / 23 sections;
   all stores' pages far under the ceiling. FOR AVANTI: "BUILD A BAG" and "ORC" specials group as
-  outsource (no JB prefix) — say the word and they move to the house group.
+  outsource (no JB prefix) — say the word and they move to the house group. RESOLVED same day:
+  Avanti ruled BUILD A BAG + ORC are house deals (heuristic widened), and asked for tagging
+  instead of name-guessing. **DEAL GROUP TAG CONVENTION (team-facing):** the API has no tag
+  field on specials, so the team adds `[JB]` or `[OS]` anywhere in the INTERNAL special name in
+  the Dutchie admin (the Menu Display Name stays clean for shoppers; a leaked tag is stripped
+  before display). A tag always beats the prefix heuristic, which remains the untagged fallback.
 
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
