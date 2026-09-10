@@ -1103,6 +1103,21 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   KNOWN DOUBLE-COUNT: begin_checkout now fires TWICE per handoff (our bag CTA + Dutchie's
   checkout page-load). Decide at cutover: drop/rename our begin_checkout (Dutchie's is now the
   canonical funnel source since purchase lives with theirs) or accept the inflation knowingly.
+- **WHITE-LABEL = CUTOVER-DAY TASK; LOYALTY CONTINUITY CONFIRMED (Dutchie support "Lily",
+  2026-09-09).** (1) "Customer accounts and loyalty points will indeed copy over on the new
+  checkout without issue. The only thing that will change is the URL" — the account-continuity
+  risk is CLEARED in writing. (2) BUT the domain switch "won't be able to be fully configured
+  until you're ready to switch over" — configuring it CHANGES THE EXISTING URLs on Dutchie's
+  end, i.e. it is a flip, not a parallel run: the current batchsys.com checkout (live Webflow
+  menus + possibly the JB app flow) would move at the same moment. CONSEQUENCES: the checkout
+  domain flip joins the CUTOVER-DAY runbook (coordinate a scheduled time with Dutchie support —
+  they asked for an expected date); NO pre-cutover testing on checkout-*.jungleboys.com is
+  possible (acceptable: the handoff is domain-agnostic and verified E2E on batchsys; verify
+  again on the new domains cutover day). CNAMEs stay in place, idle until then. STILL ASK
+  support: (a) how much lead time they need + can it be scheduled same-day with our DNS flip,
+  (b) is it quickly reversible if we roll back, (c) does the URL change affect the JB app's
+  in-app ordering or only web checkout. GA4 needs nothing — both domains are in the
+  cross-domain list already.
 
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
