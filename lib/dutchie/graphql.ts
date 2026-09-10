@@ -383,7 +383,19 @@ export const graphqlProvider: typeof placeholderProvider = {
     // 5 req/s budget the way fetchAllProducts does.
     const specials: Special[] = []
     for (const s of data.specials ?? []) {
-      const display = s.menuDisplayConfiguration?.name || s.name
+      // EXPLICIT GROUP TAGS (Avanti, 2026-09-10): the team tags the INTERNAL
+      // special name in the Dutchie admin with [JB] or [OS] — the API has no
+      // tag field on specials, but the internal name never reaches shoppers
+      // when a Menu Display Name is set, and we strip the tag if it leaks
+      // through the fallback. A tag beats the name heuristic below.
+      const tag = /\[\s*jb\s*\]/i.test(s.name)
+        ? ('jungle-boys' as const)
+        : /\[\s*os\s*\]/i.test(s.name)
+          ? ('outsource' as const)
+          : null
+      const display = (s.menuDisplayConfiguration?.name || s.name)
+        .replace(/\s*\[\s*(jb|os)\s*\]\s*/gi, ' ')
+        .trim()
       const pct = display.match(/(\d{1,2})\s*%/)?.[1]
       const slugs: string[] = []
       const limit = 100
@@ -407,14 +419,16 @@ export const graphqlProvider: typeof placeholderProvider = {
         slug: display.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
         name: display,
         ...(pct ? { percentOff: Number(pct) } : {}),
-        // House-deal prefixes seen on live data (2026-09-10): "JUNGLE BOYS |"
-        // (DTLA convention), "JB:"/"JBSD:" (San Diego's shorthand +
-        // store-suffixed variants), plus the house programs that don't carry
-        // the JB name — BUILD A BAG and ORC are Jungle Boys deals (Avanti,
-        // 2026-09-10).
-        group: /^\s*(jungle\s*boys|jb(sd|la|oc|dtla|pomona)?|build\s*a\s*bag|orc)\b/i.test(display)
-          ? ('jungle-boys' as const)
-          : ('outsource' as const),
+        // Untagged fallback — house-deal prefixes seen on live data
+        // (2026-09-10): "JUNGLE BOYS |" (DTLA convention), "JB:"/"JBSD:"
+        // (San Diego's shorthand + store-suffixed variants), plus the house
+        // programs that don't carry the JB name — BUILD A BAG and ORC are
+        // Jungle Boys deals (Avanti, 2026-09-10).
+        group:
+          tag ??
+          (/^\s*(jungle\s*boys|jb(sd|la|oc|dtla|pomona)?|build\s*a\s*bag|orc)\b/i.test(display)
+            ? ('jungle-boys' as const)
+            : ('outsource' as const)),
         productSlugs: slugs,
       })
     }
