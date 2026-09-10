@@ -408,9 +408,11 @@ export const graphqlProvider: typeof placeholderProvider = {
         name: display,
         ...(pct ? { percentOff: Number(pct) } : {}),
         // House-deal prefixes seen on live data (2026-09-10): "JUNGLE BOYS |"
-        // (DTLA convention), "JB:" and "JBSD:" (San Diego's shorthand +
-        // store-suffixed variants).
-        group: /^\s*(jungle\s*boys|jb(sd|la|oc|dtla|pomona)?)\b/i.test(display)
+        // (DTLA convention), "JB:"/"JBSD:" (San Diego's shorthand +
+        // store-suffixed variants), plus the house programs that don't carry
+        // the JB name — BUILD A BAG and ORC are Jungle Boys deals (Avanti,
+        // 2026-09-10).
+        group: /^\s*(jungle\s*boys|jb(sd|la|oc|dtla|pomona)?|build\s*a\s*bag|orc)\b/i.test(display)
           ? ('jungle-boys' as const)
           : ('outsource' as const),
         productSlugs: slugs,
