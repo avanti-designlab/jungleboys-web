@@ -1,7 +1,8 @@
-import { getProducts } from '@/lib/dutchie'
-import type { ProductFilter } from '@/lib/dutchie'
+import { getLineProducts, LINE_FALLBACK } from '@/lib/product-lines'
 import PillCta from '@/components/pill-cta'
 import Reveal from '@/components/reveal'
+import ShopSimilarCta from '@/components/products/shop-similar-cta'
+import { displayName } from '@/lib/product-name'
 
 // ONE shop section for the gradient-card product lines (Twins / 1G Pre-Rolls /
 // 10-Pack). Those three were separate files that differed in ~45 of ~130 lines,
@@ -35,7 +36,8 @@ export type LineShopProps = {
       /products/twins#tw-shop. NOT wired to an on-page CTA: none of the seven
       line pages has one, and the previous wording here claimed otherwise. */
   id: string
-  filter: ProductFilter
+  /** LINE_DEFS slug — resolved through lib/product-lines (live-safe) */
+  line: string
   kicker: string
   /** heading renders as `Shop <accent>titleAccent</accent>` */
   title: string
@@ -62,12 +64,12 @@ export type LineShopProps = {
 }
 
 export default async function LineShop({
-  id, filter, kicker, title, titleAccent,
+  id, line, kicker, title, titleAccent,
   panel, ink, cardFrom, cardMid, cardTo,
   accent, accentHot, shotTo, strainText, shadow, featuredBg,
   cols = 3,
 }: LineShopProps) {
-  const items = await getProducts(filter)
+  const items = await getLineProducts(line)
 
   return (
     <section id={id} className="relative z-10 scroll-mt-24 px-2 pb-4 md:px-3">
@@ -91,13 +93,30 @@ export default async function LineShop({
             </h2>
           </Reveal>
 
+          {items.length === 0 && (
+            // honest empty state — the line can genuinely be sold out
+            // storewide (live 2026-09-10: zero JB 10-packs on any menu).
+            // The CTA routes to the nearest live category (Avanti: "shop a
+            // similar item or category so it's not just empty").
+            <Reveal className="mt-10 text-center md:mt-14">
+              <p className="text-sm font-bold uppercase tracking-widest opacity-80" style={{ fontFamily: 'var(--font-brand)', color: ink }}>
+                Sold out everywhere right now — fresh batch on the way.
+              </p>
+              <div className="mt-5 flex justify-center">
+                <ShopSimilarCta
+                  category={LINE_FALLBACK[line]?.category ?? 'flower'}
+                  label={LINE_FALLBACK[line]?.label ?? 'the menu'}
+                />
+              </div>
+            </Reveal>
+          )}
           <div
             className={`mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 md:mt-14 ${
               cols === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
             }`}
           >
             {items.map((p, i) => {
-              const v = p.variants[0]
+              const v = p.variants.find((x) => (x.quantityAvailable ?? 0) > 0) ?? p.variants[0]
               const thc = p.labResult?.potency?.thc
               const deal = v.specialPrice
               const pctOff = deal ? Math.round((1 - deal / v.price) * 100) : 0
@@ -129,7 +148,9 @@ export default async function LineShop({
                         src={p.images[0].url}
                         alt={p.images[0].alt}
                         loading="lazy"
-                        className="absolute inset-0 z-10 h-full w-full object-contain p-4 drop-shadow-[0_18px_26px_rgba(0,0,0,0.26)] transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-[1.04]"
+                        // multiply melts Dutchie's baked studio box into the
+                        // light shot pill; the shadow outlined that box
+                        className="absolute inset-0 z-10 h-full w-full object-contain p-4 mix-blend-multiply transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-[1.04]"
                       />
                     </div>
 
@@ -152,10 +173,12 @@ export default async function LineShop({
                           </span>
                         )}
                       </div>
-                      <h3 className="font-display text-[2.1rem] uppercase leading-[0.85]">{p.name}</h3>
-                      <p className="text-xs font-bold uppercase tracking-wide" style={{ fontFamily: 'var(--font-brand)', color: strainText }}>
-                        {p.strain}
-                      </p>
+                      <h3 className="font-display line-clamp-3 text-[2.1rem] uppercase leading-[0.85]">{displayName(p)}</h3>
+                      {p.strain && (
+                        <p className="text-xs font-bold uppercase tracking-wide" style={{ fontFamily: 'var(--font-brand)', color: strainText }}>
+                          {p.strain}
+                        </p>
+                      )}
                       <div className="mt-auto flex items-end justify-between gap-3 pt-2">
                         <p className="leading-none">
                           {deal ? (
@@ -173,7 +196,9 @@ export default async function LineShop({
                             </span>
                           )}
                         </p>
-                        <PillCta label="Add to Cart" size="sm" icon="cart" hover="black" href="/locations" className="shrink-0 whitespace-nowrap" />
+                        {/* live now: straight to the PDP, where the real
+                            per-store buy box lives */}
+                        <PillCta label="Shop" size="sm" icon="cart" hover="black" href={`/shop/${p.slug}`} className="shrink-0 whitespace-nowrap" />
                       </div>
                     </div>
                   </article>
@@ -184,7 +209,7 @@ export default async function LineShop({
 
           <Reveal className="mt-12 text-center">
             <p className="text-[11px] uppercase tracking-widest opacity-80" style={{ fontFamily: 'var(--font-brand)', color: ink }}>
-              Availability varies by store — live menus &amp; deals connect at launch.
+              Live from the menus — availability and pricing vary by store.
             </p>
           </Reveal>
         </div>

@@ -1,6 +1,8 @@
-import { getProducts } from '@/lib/dutchie'
 import PillCta from '@/components/pill-cta'
 import Reveal from '@/components/reveal'
+import { getLineProducts } from '@/lib/product-lines'
+import ShopSimilarCta from '@/components/products/shop-similar-cta'
+import { displayName } from '@/lib/product-name'
 
 // The shop — the journey lands in a familiar light pill panel with the flower
 // lineup as white Dutchie-style cards. Data comes ONLY through the frozen
@@ -20,7 +22,7 @@ const STRAIN_STYLE = {
 } as const
 
 export default async function FlowerShop() {
-  const products = await getProducts({ category: 'flower', subcategory: 'premium-flower' })
+  const products = await getLineProducts('premium-flower')
 
   return (
     <section className="bg-black px-3 pb-16 md:px-4 md:pb-24">
@@ -35,6 +37,16 @@ export default async function FlowerShop() {
             </h2>
           </Reveal>
 
+          {products.length === 0 && (
+            <div className="mt-12 text-center md:mt-16">
+              <p className="text-sm font-bold uppercase tracking-widest opacity-80" style={{ fontFamily: 'var(--font-brand)' }}>
+                Sold out everywhere right now — fresh batch on the way.
+              </p>
+              <div className="mt-5 flex justify-center">
+                <ShopSimilarCta category="flower" label="Flower" />
+              </div>
+            </div>
+          )}
           <div className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 md:mt-16 lg:grid-cols-4">
             {products.map((p, i) => {
               const v = p.variants[0]
@@ -65,7 +77,7 @@ export default async function FlowerShop() {
                         src={p.images[0].url}
                         alt={p.images[0].alt}
                         loading="lazy"
-                        className="absolute bottom-[-3%] left-1/2 w-[94%] -translate-x-1/2 drop-shadow-[0_24px_36px_rgba(0,0,0,0.28)] transition-transform duration-500 ease-out group-hover:-translate-y-2 group-hover:scale-[1.03]"
+                        className="absolute bottom-[-3%] left-1/2 w-[94%] -translate-x-1/2 mix-blend-multiply transition-transform duration-500 ease-out group-hover:-translate-y-2 group-hover:scale-[1.03]"
                       />
                     </div>
                     {/* info */}
@@ -87,7 +99,7 @@ export default async function FlowerShop() {
                           </span>
                         ) : null}
                       </div>
-                      <h3 className="font-display text-[2.5rem] uppercase leading-[0.9]">{p.name}</h3>
+                      <h3 className="font-display text-[2.5rem] uppercase leading-[0.9]">{displayName(p)}</h3>
                       <div className="mt-auto flex items-end justify-between gap-3 pt-1">
                         {/* struck price sits on its own line so deal cards keep
                             the same row shape as the rest */}

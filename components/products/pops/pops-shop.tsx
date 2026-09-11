@@ -1,7 +1,9 @@
-import { getProducts } from '@/lib/dutchie'
 import PillCta from '@/components/pill-cta'
 import Reveal from '@/components/reveal'
+import { getLineProducts } from '@/lib/product-lines'
 import PopsSectionSpray from './pops-spray'
+import ShopSimilarCta from '@/components/products/shop-similar-cta'
+import { displayName } from '@/lib/product-name'
 
 // Shop 5G Pops — the SAME card structure as the flower and hash-hole shops on
 // the frozen lib/dutchie interface, so all three stay in sync when Phase 3
@@ -26,7 +28,7 @@ function dollars(cents: number) {
 }
 
 export default async function PopsShop() {
-  const products = await getProducts({ category: 'pops', subcategory: '5g-pops' })
+  const products = await getLineProducts('5g-pops')
 
   return (
     <section id="pops-shop" className="pops-slide scroll-mt-24 px-3 pb-16 md:px-4 md:pb-24">
@@ -39,6 +41,16 @@ export default async function PopsShop() {
             </h2>
           </Reveal>
 
+          {products.length === 0 && (
+            <div className="mt-12 text-center md:mt-16">
+              <p className="text-sm font-bold uppercase tracking-widest opacity-80" style={{ fontFamily: 'var(--font-brand)' }}>
+                Sold out everywhere right now — fresh batch on the way.
+              </p>
+              <div className="mt-5 flex justify-center">
+                <ShopSimilarCta category="pops" label="Pops" />
+              </div>
+            </div>
+          )}
           <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 md:mt-16 lg:grid-cols-3">
             {products.map((p, i) => {
               const v = p.variants[0]
@@ -86,7 +98,7 @@ export default async function PopsShop() {
                           </span>
                         )}
                       </div>
-                      <h3 className="font-display text-[2.3rem] uppercase leading-[0.85]">{p.name}</h3>
+                      <h3 className="font-display text-[2.3rem] uppercase leading-[0.85]">{displayName(p)}</h3>
                       <p className="text-xs font-bold uppercase tracking-wide text-[var(--pops-red-on-dark)]" style={{ fontFamily: 'var(--font-brand)' }}>
                         Small nug indoor flower
                       </p>

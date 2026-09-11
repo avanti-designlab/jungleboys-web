@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { displayName } from '@/lib/product-name'
 import type { Product, ProductCategory, ProductVariant, StrainType } from '@/lib/dutchie'
 import { addToCart } from '@/lib/cart'
 import { categoryLabel, STRAIN_STYLE } from './labels'
@@ -110,19 +111,9 @@ export function AddToCartButton({
   )
 }
 
-// Live Dutchie names lead with the brand ("CANNABIOTIX | WHITE WALKER OG -
-// 3.5G FLOWER") — the chip row already names the brand, so the card strips
-// the prefix and the heading carries only the product (Avanti, 2026-09-10:
-// live names blew up the cards fixture names never stressed). Cart, PDP link
-// and aria keep the full name.
-function cardName(p: Product): string {
-  const brand = p.brand.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  const stripped = p.name
-    .replace(new RegExp(`^\\s*${brand}\\s*[|:]\\s*`, 'i'), '')
-    .replace(/^\s*jungle\s*boys\s*[|:]\s*/i, '')
-    .trim()
-  return stripped || p.name
-}
+// Prefix-stripping moved to lib/product-name (2026-09-10) so the /products
+// line strips share the exact same display rule as these cards.
+const cardName = displayName
 
 // Exported because the Brands page renders the same card grouped by brand —
 // one card, one strain palette, one price rule across every commerce surface.

@@ -7,7 +7,7 @@ export default function TpShop() {
   return (
     <LineShop
       id="tp-shop"
-      filter={{ category: 'pre-rolls', subcategory: '10-pack' }}
+      line="10-pack-pre-rolls"
       kicker="Ten in every jar"
       title="Shop"
       titleAccent="10PK Pre-Rolls"

@@ -9,7 +9,7 @@ export default function PrShop() {
   return (
     <LineShop
       id="pr-shop"
-      filter={{ category: 'pre-rolls', subcategory: '1g-preroll' }}
+      line="1g-pre-rolls"
       kicker="One gram, one strain"
       title="Shop"
       titleAccent="1G Pre-Rolls"

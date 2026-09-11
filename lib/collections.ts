@@ -64,10 +64,15 @@ const LINE_DEFS: { slug: string; title: string; icon: string | null; match: (p: 
     slug: 'premium-flower',
     title: 'Premium Flower',
     icon: CATEGORY_ICONS.flower ?? null,
+    // JB_BRAND on EVERY branch (2026-09-10 live catch, the gas-tanks lesson
+    // again): 'premium' is a REAL live subcategory that third-party flower
+    // carries too — an unguarded subcat branch put Decibel Gardens in the
+    // Gold Mylars strip.
     match: (p) =>
-      p.subcategory === 'premium-flower' ||
-      p.subcategory === 'premium' ||
-      (JB_BRAND.test(p.brand) && p.category === 'flower' && !/\bpops\b/i.test(p.name)),
+      JB_BRAND.test(p.brand) &&
+      (p.subcategory === 'premium-flower' ||
+        p.subcategory === 'premium' ||
+        (p.category === 'flower' && !/\bpops\b/i.test(p.name))),
   },
   {
     slug: 'hash-holes',
@@ -120,6 +125,12 @@ const LINE_DEFS: { slug: string; title: string; icon: string | null; match: (p: 
 ]
 
 export const LINE_COLLECTIONS: Collection[] = LINE_DEFS.map((d) => ({ ...d, kind: 'line' as const }))
+
+/** The dual-mode matcher for one JB line — the /products landing pages run
+    their shop strips through this so live data works exactly like the shop
+    line pages do (fixture subcategory OR live name/brand regex). */
+export const lineMatcher = (slug: string): ((p: Product) => boolean) | undefined =>
+  LINE_DEFS.find((d) => d.slug === slug)?.match
 
 export const COLLECTIONS: Collection[] = [...CATEGORY_COLLECTIONS, ...LINE_COLLECTIONS]
 

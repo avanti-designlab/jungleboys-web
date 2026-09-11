@@ -1,6 +1,8 @@
-import { getProducts } from '@/lib/dutchie'
 import PillCta from '@/components/pill-cta'
 import Reveal from '@/components/reveal'
+import { getLineProducts } from '@/lib/product-lines'
+import ShopSimilarCta from '@/components/products/shop-similar-cta'
+import { displayName } from '@/lib/product-name'
 
 // Shop Gas Tanks — the SAME card structure as the flower / hash-hole / pops
 // shops on the frozen lib/dutchie interface, split into the three tiers
@@ -47,12 +49,20 @@ function dollars(cents: number) {
 }
 
 export default async function GtShop() {
-  const tiers = await Promise.all(
-    TIERS.map(async (t) => ({
-      ...t,
-      items: (await getProducts({ category: 'vape-pens', subcategory: `gas-tank-${t.key}` })).slice(0, PER_TIER),
-    }))
-  )
+  // ONE line fetch (dual-mode matcher — live data has no gas-tank-* subcats),
+  // tiers split by name: fixture subcategory first, live name regex second,
+  // anything unmatched lands in Flavors so no tank hides.
+  const all = await getLineProducts('gas-tanks', 40)
+  const tierOf = (p: (typeof all)[number]) => {
+    const sub = p.subcategory ?? ''
+    if (sub === 'gas-tank-live-rosin' || /live ?rosin/i.test(p.name)) return 'live-rosin'
+    if (sub === 'gas-tank-live-resin' || /live ?resin/i.test(p.name)) return 'live-resin'
+    return 'flavors'
+  }
+  const tiers = TIERS.map((t) => ({
+    ...t,
+    items: all.filter((p) => tierOf(p) === t.key).slice(0, PER_TIER),
+  }))
 
   return (
     <section id="gt-shop" className="relative z-10 scroll-mt-24 px-3 pb-16 md:px-4 md:pb-24">
@@ -64,7 +74,17 @@ export default async function GtShop() {
             </h2>
           </Reveal>
 
-          {tiers.map((tier) => (
+          {all.length === 0 && (
+            <div className="mt-4 text-center">
+              <p className="text-sm font-bold uppercase tracking-widest text-white/80" style={{ fontFamily: 'var(--font-brand)' }}>
+                Sold out everywhere right now — fresh batch on the way.
+              </p>
+              <div className="mt-5 flex justify-center">
+                <ShopSimilarCta category="vape-pens" label="Vapes" />
+              </div>
+            </div>
+          )}
+          {tiers.filter((t) => t.items.length > 0).map((tier) => (
             <div key={tier.key} className="mt-14 md:mt-20">
               {/* tier header, cut by a hazard rule */}
               <Reveal className="flex items-center gap-4">
@@ -123,7 +143,7 @@ export default async function GtShop() {
                               </span>
                             )}
                           </div>
-                          <h4 className="font-display text-[2.3rem] uppercase leading-[0.85]">{p.name}</h4>
+                          <h4 className="font-display text-[2.3rem] uppercase leading-[0.85]">{displayName(p)}</h4>
                           <p className="text-xs font-bold uppercase tracking-wide text-[var(--gt-yellow)]" style={{ fontFamily: 'var(--font-brand)' }}>
                             {tier.label} · All-in-one
                           </p>

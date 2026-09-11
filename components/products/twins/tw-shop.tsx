@@ -9,7 +9,7 @@ export default function TwShop() {
   return (
     <LineShop
       id="tw-shop"
-      filter={{ category: 'pre-rolls', subcategory: 'twins-2pack' }}
+      line="twins-2-pack"
       kicker="Two in every tube"
       title="Shop"
       titleAccent="Twins"

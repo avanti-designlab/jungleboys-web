@@ -7,8 +7,8 @@ import PopsFacts from '@/components/products/pops/pops-facts'
 import PopsMarquee from '@/components/products/pops/pops-marquee'
 import PopsLineup from '@/components/products/pops/pops-lineup'
 import PopsShop from '@/components/products/pops/pops-shop'
+import { getLineProducts } from '@/lib/product-lines'
 import PopsReveal from '@/components/products/pops/pops-reveal'
-import { getProducts } from '@/lib/dutchie'
 import type { LineupItem } from '@/components/products/pops/pops-lineup'
 import MoreLines from '@/components/products/more-lines'
 
@@ -33,7 +33,7 @@ export default async function PopsPage() {
   // The lineup runs off the frozen lib/dutchie interface, so Phase 3 populates
   // it for real. IN-STOCK ONLY — filtered on variant quantityAvailable rather
   // than a new ProductFilter field, because that interface is frozen.
-  const products = await getProducts({ category: 'pops', subcategory: '5g-pops' })
+  const products = await getLineProducts('5g-pops')
   const items: LineupItem[] = products
     .filter((p) => p.variants.some((v) => (v.quantityAvailable ?? 0) > 0))
     .map((p) => {

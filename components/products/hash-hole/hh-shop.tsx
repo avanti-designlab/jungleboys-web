@@ -1,6 +1,8 @@
-import { getProducts } from '@/lib/dutchie'
 import PillCta from '@/components/pill-cta'
 import Reveal from '@/components/reveal'
+import { getLineProducts } from '@/lib/product-lines'
+import ShopSimilarCta from '@/components/products/shop-similar-cta'
+import { displayName } from '@/lib/product-name'
 
 // Shop Hash Holes — elevated white cards on the same frozen lib/dutchie
 // interface as the flower shop (placeholder now; Phase 3 swaps the provider).
@@ -11,7 +13,7 @@ function dollars(cents: number) {
 }
 
 export default async function HhShop() {
-  const products = await getProducts({ category: 'pre-rolls', subcategory: 'hash-hole' })
+  const products = await getLineProducts('hash-holes')
 
   return (
     <section className="px-3 pb-16 md:px-4 md:pb-24">
@@ -22,6 +24,16 @@ export default async function HhShop() {
             <img src="/products/hash-hole/wm-strains.webp" alt="Available Strains" className="mx-auto w-[min(82vw,640px)]" />
           </Reveal>
 
+          {products.length === 0 && (
+            <div className="mt-12 text-center md:mt-16">
+              <p className="text-sm font-bold uppercase tracking-widest opacity-80" style={{ fontFamily: 'var(--font-brand)' }}>
+                Sold out everywhere right now — fresh batch on the way.
+              </p>
+              <div className="mt-5 flex justify-center">
+                <ShopSimilarCta category="pre-rolls" label="Pre-Rolls" />
+              </div>
+            </div>
+          )}
           <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 md:mt-16 lg:grid-cols-3">
             {products.map((p, i) => {
               const v = p.variants[0]
@@ -48,7 +60,7 @@ export default async function HhShop() {
                         src={p.images[0].url}
                         alt={p.images[0].alt}
                         loading="lazy"
-                        className="absolute inset-0 h-full w-full object-contain p-3 drop-shadow-[0_24px_36px_rgba(0,0,0,0.25)] transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-[1.04]"
+                        className="absolute inset-0 h-full w-full object-contain p-3 mix-blend-multiply transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-[1.04]"
                       />
                     </div>
                     <div className="flex flex-1 flex-col gap-2 p-5">
@@ -62,7 +74,7 @@ export default async function HhShop() {
                           </span>
                         )}
                       </div>
-                      <h3 className="font-display text-[2.3rem] uppercase leading-[0.85]">{p.name}</h3>
+                      <h3 className="font-display text-[2.3rem] uppercase leading-[0.85]">{displayName(p)}</h3>
                       {p.strain && (
                         <p className="text-xs font-bold uppercase tracking-wide text-[var(--hh-green)]" style={{ fontFamily: 'var(--font-brand)' }}>
                           × {p.strain} live rosin
