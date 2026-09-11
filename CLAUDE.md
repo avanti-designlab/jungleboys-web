@@ -1167,6 +1167,28 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   FALSE ALARM logged: ZANGRIA/LA GELATO/COCHINO on the live DTLA menu are REAL strains —
   fixture names were modeled on real JB strains; not a fixture leak.
 
+- **/products LANDING STRIPS WIRED TO LIVE DATA (2026-09-10, Avanti: "none of the products are
+  generating in those areas").** The Phase-2 promise ("flip the provider and pages light up")
+  was FALSE for the line pages: they filtered on fixture subcategories ('premium-flower',
+  'hash-hole', '5g-pops', 'gas-tank-<tier>') that live data never emits. Now:
+  lib/product-lines.getLineProducts(lineSlug) routes them through the dual-mode LINE_DEFS
+  matchers (lib/collections exports lineMatcher) — aggregated across all keyed stores, DEDUPED
+  by slug (in-stock imaged entry wins), in-stock+featured first, capped (12 default / GT 40).
+  GT tiers split by name (live rosin / live resin / else flavors); empty tiers hide. VERIFIED
+  live per page: flower 12, hash-hole 4, pops 18, all-in-one 6, pre-rolls 7, twins 5,
+  10-pack 0 — the zero is REAL (no JB 10-packs on any live menu) and renders the sold-out
+  state. **Empty-state ruling (Avanti: "shop a similar item or category so it's not just
+  empty"):** ShopSimilarCta (client) — server paint links the /shop door; after mount a saved
+  CA store upgrades it to /menu/california/<store>?category=<cat>#browse ("Shop Pre-Rolls at
+  San Diego"), mapping in LINE_FALLBACK. Wired into LineShop + flower/hh/pops shops + GT
+  all-empty. TWO MORE LIVE CATCHES: 'premium' is a REAL live subcategory that third parties
+  carry — premium-flower matcher now requires JB_BRAND on every branch (Decibel Gardens had
+  leaked into the Gold Mylars strip); displayName (brand-prefix strip) moved to
+  lib/product-name, shared by ProductCard AND all line strips; strip Add-to-Cart pills now go
+  to the PDP (/shop/<slug>) instead of /locations; flower+hh strip images get
+  mix-blend-multiply (white-card family only — pops/GT cards are dark, multiply would eat the
+  shots there). rosin + orc pages remain deliberate placeholders (no shop strips — her call).
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
