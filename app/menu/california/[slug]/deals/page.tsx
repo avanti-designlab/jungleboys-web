@@ -71,7 +71,10 @@ function DealSection({
       id={`deal-${special.slug}`}
       data-deal={special.slug}
       data-deal-group={special.group}
-      className="scroll-mt-28 rounded-[2rem] border border-[var(--color-border)] p-6 md:p-9"
+      // p-4 on phones (2026-09-10): p-6 stacked on the page padding left
+      // 2-col mobile cards 138px wide — under the add-to-cart pill's
+      // minimum — and the pill clipped at the card edge.
+      className="scroll-mt-28 rounded-[2rem] border border-[var(--color-border)] p-4 md:p-9"
       style={{
         background: jb
           ? 'color-mix(in srgb, var(--color-accent) 9%, var(--color-surface))'

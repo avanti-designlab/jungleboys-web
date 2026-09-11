@@ -76,7 +76,10 @@ export function AddToCartButton({
       type="button"
       onClick={add}
       aria-label={`Add ${product.name} (${variant.option}) to cart`}
-      className={`group/atc relative z-20 inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full py-1 pl-3 pr-1 text-[10px] font-extrabold uppercase tracking-widest transition-colors duration-200 ${fit === 'card' ? 'w-full justify-center @[16rem]:w-auto @[16rem]:justify-start' : ''} ${
+      // fit='card' compresses below @[10rem]: ultra-narrow cards (mobile
+      // 2-col inside padded deal sections ≈ 8.6rem) clipped the pill's
+      // intrinsic width at the card edge (2026-09-10).
+      className={`group/atc relative z-20 inline-flex shrink-0 items-center whitespace-nowrap rounded-full py-1 pr-1 text-[10px] font-extrabold uppercase tracking-widest transition-colors duration-200 ${fit === 'card' ? 'w-full justify-center gap-1 pl-2 tracking-wider @[10rem]:gap-1.5 @[10rem]:pl-3 @[10rem]:tracking-widest @[19rem]:w-auto @[19rem]:justify-start' : 'gap-1.5 pl-3'} ${
         added
           ? tone === 'gold'
             ? 'bg-white text-black'
@@ -89,7 +92,9 @@ export function AddToCartButton({
     >
       {added ? 'Added ✓' : 'Add to cart'}
       <span
-        className={`flex h-7 w-7 items-center justify-center rounded-full transition-colors duration-200 ${
+        className={`flex items-center justify-center rounded-full transition-colors duration-200 ${
+          fit === 'card' ? 'h-6 w-6 @[10rem]:h-7 @[10rem]:w-7' : 'h-7 w-7'
+        } ${
           tone === 'gold'
             ? 'bg-black text-[var(--color-accent)]'
             : 'bg-white text-black group-hover/atc:bg-black group-hover/atc:text-[var(--color-accent)]'
@@ -103,6 +108,20 @@ export function AddToCartButton({
       </span>
     </button>
   )
+}
+
+// Live Dutchie names lead with the brand ("CANNABIOTIX | WHITE WALKER OG -
+// 3.5G FLOWER") — the chip row already names the brand, so the card strips
+// the prefix and the heading carries only the product (Avanti, 2026-09-10:
+// live names blew up the cards fixture names never stressed). Cart, PDP link
+// and aria keep the full name.
+function cardName(p: Product): string {
+  const brand = p.brand.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const stripped = p.name
+    .replace(new RegExp(`^\\s*${brand}\\s*[|:]\\s*`, 'i'), '')
+    .replace(/^\s*jungle\s*boys\s*[|:]\s*/i, '')
+    .trim()
+  return stripped || p.name
 }
 
 // Exported because the Brands page renders the same card grouped by brand —
@@ -150,7 +169,12 @@ export function ProductCard({
             src={shot.url}
             alt={shot.alt}
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-contain p-7 drop-shadow-[0_24px_36px_rgba(0,0,0,0.22)] transition-transform duration-500 ease-out group-hover:-translate-y-2 group-hover:scale-[1.03]"
+            // mix-blend-multiply melts the white/grey studio box Dutchie
+            // bakes into most shots onto the white stage (Avanti, 2026-09-10:
+            // "you can see the box of the images"). The old drop-shadow is
+            // gone WITH it — on a baked-background image the shadow outlined
+            // the whole rectangle, which is what made the box visible.
+            className="absolute inset-0 h-full w-full object-contain p-7 mix-blend-multiply transition-transform duration-500 ease-out group-hover:-translate-y-2 group-hover:scale-[1.03]"
           />
         )}
         {soldOut ? (
@@ -181,7 +205,13 @@ export function ProductCard({
       {/* info — chip row, Bebas name, Bebas price. Identical bones to the
           flower/pops/line shop cards. */}
       <div className="flex flex-1 flex-col gap-3 p-5">
-        <div className="flex flex-wrap items-center gap-1.5" style={{ fontFamily: 'var(--font-brand)' }}>
+        {/* Chip zone is a FIXED-HEIGHT slot (exactly two chip rows,
+            overflow clipped) so every card's title starts on the same line
+            no matter how the chips wrap (Avanti, 2026-09-10: "titles… all
+            at different levels and heights… flush and uniform. same with
+            the pills"). On very narrow cards a third-row chip (THC, last)
+            hides instead of shoving the title — the PDP still carries it. */}
+        <div className="flex h-[3.65rem] flex-wrap content-start items-start gap-1.5 overflow-hidden" style={{ fontFamily: 'var(--font-brand)' }}>
           {/* House brand stays unlabelled; a third-party chip is information */}
           {!/^jungle boys/i.test(product.brand) && (
             <span className="rounded-full border border-[var(--color-ink)]/25 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)]/75">
@@ -201,24 +231,27 @@ export function ProductCard({
           )}
         </div>
 
-        <h3 className="font-display text-[2rem] uppercase leading-[0.9]">
+        <h3 className="font-display line-clamp-3 text-[1.5rem] uppercase leading-[0.95] [overflow-wrap:anywhere]">
           {/* Stretched link: the whole card is clickable but the ACCESSIBLE
-              name is the product name. ?store= tells the PDP buy box which
-              store's menu the shopper came from. */}
+              name is the FULL product name (aria-label) even though the
+              visible heading drops the brand prefix. ?store= tells the PDP
+              buy box which store's menu the shopper came from. */}
           <Link
             href={`/shop/${product.slug}?store=${storeSlug}`}
+            aria-label={product.name}
             className="after:absolute after:inset-0 after:z-10"
           >
-            {product.name}
+            {cardName(product)}
           </Link>
         </h3>
 
-        {/* ONE line on desktop-width cards (Avanti: "on one line"); on
-            narrow mobile 2-col cards the pill goes FULL WIDTH below the
-            price (Avanti, 2026-08-04 mobile pass) — container query on the
-            CARD, not the viewport, so shelf and grid cards each do the
-            right thing */}
-        <div className="mt-auto flex flex-col gap-2 pt-1 @[16rem]:flex-row @[16rem]:items-center @[16rem]:justify-between">
+        {/* ONE line on cards wide enough to actually hold it; otherwise the
+            pill goes FULL WIDTH below the price (Avanti's 2026-08-04 mobile
+            pattern). Threshold raised 16rem→19rem (2026-09-10): live prices
+            like "$140.35 · 1/2OZ" overflowed the old one-line cards and the
+            pill clipped at the card edge. flex-wrap is the last-resort
+            guard so an extreme price can never clip the pill again. */}
+        <div className="mt-auto flex flex-col gap-2 pt-1 @[19rem]:flex-row @[19rem]:flex-wrap @[19rem]:items-center @[19rem]:justify-between">
           <p className="leading-none">
             {onSale && (
               <span
@@ -232,7 +265,10 @@ export function ProductCard({
                 <span className="sr-only">, now</span>
               </span>
             )}
-            <span className="whitespace-nowrap">
+            {/* No nowrap on the pair (2026-09-10): "$12.80 · 100MG" is wider
+                than an ultra-narrow deal card, so the option may wrap UNDER
+                the price — each half stays atomic via its own nowrap. */}
+            <span>
               {soldOut ? (
                 <span className="text-sm font-bold uppercase text-[var(--color-ink)]/60" style={{ fontFamily: 'var(--font-brand)' }}>
                   Unavailable here
@@ -244,10 +280,10 @@ export function ProductCard({
                       from
                     </span>
                   )}
-                  <span className={`font-display text-[1.7rem] leading-none ${onSale ? 'text-[var(--color-danger-solid)]' : ''}`}>
+                  <span className={`font-display whitespace-nowrap text-[1.7rem] leading-none ${onSale ? 'text-[var(--color-danger-solid)]' : ''}`}>
                     {money(from)}
                   </span>
-                  <span className="ml-1 text-xs font-bold uppercase text-[var(--color-ink)]/60" style={{ fontFamily: 'var(--font-brand)' }}>
+                  <span className="ml-1 inline-block whitespace-nowrap text-xs font-bold uppercase text-[var(--color-ink)]/60" style={{ fontFamily: 'var(--font-brand)' }}>
                     · {best.option}
                   </span>
                 </>
@@ -377,6 +413,18 @@ export default function MenuBrowser({
       ),
     [pool, strain, brandSet, subcatSet, weightSet, dealsOnly]
   )
+
+  // Long-menu pagination (Avanti, 2026-09-10: "show more button to load
+  // more") — San Diego's live menu is ~1,500 products, and rendering every
+  // card at once is a wall of DOM. PAGE is a multiple of 2/3/4 so every
+  // grid breakpoint ends on a full row. The count header stays the FILTERED
+  // total; any filter change snaps back to the first page.
+  const PAGE = 48
+  const [limit, setLimit] = useState(PAGE)
+  useEffect(() => {
+    setLimit(PAGE)
+  }, [category, line, strain, brandSet, subcatSet, weightSet, dealsOnly])
+  const visible = shown.slice(0, limit)
 
   const pill = (active: boolean) =>
     `rounded-full border px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] transition ${
@@ -616,11 +664,30 @@ export default function MenuBrowser({
                 Nothing matches that combination right now.
               </p>
             ) : (
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
-                {shown.map((p) => (
-                  <ProductCard key={p.id} product={p} storeSlug={storeSlug} />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+                  {visible.map((p) => (
+                    <ProductCard key={p.id} product={p} storeSlug={storeSlug} />
+                  ))}
+                </div>
+                {shown.length > visible.length && (
+                  <div className="mt-10 flex flex-col items-center gap-3">
+                    <p
+                      className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-muted)]"
+                      style={{ fontFamily: 'var(--font-brand)' }}
+                    >
+                      Showing {visible.length} of {shown.length}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setLimit((l) => l + PAGE)}
+                      className="font-display rounded-full bg-[var(--color-accent)] px-10 py-3.5 text-[19px] uppercase leading-none tracking-[0.05em] text-black transition hover:opacity-85"
+                    >
+                      Show more
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
