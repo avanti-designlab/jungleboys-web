@@ -1,15 +1,13 @@
 import type { Product } from './dutchie'
 
-// Display name for product CARDS: live Dutchie names lead with the brand
-// ("JUNGLE BOYS | ZOURZ - 3.5G GOLD MYLAR") — surfaces that already state
-// the brand (chip row, or a Jungle Boys line page) strip the prefix so the
-// heading carries only the product. Cart, PDP link and aria keep the full
-// name. Shared by ProductCard and the /products line strips — one rule.
+// Display name for product CARDS — the ONE choke point every card heading
+// renders through (ProductCard + all /products line strips).
+//
+// RULING (Avanti, 2026-09-10): "the names should be displayed how they are
+// from Dutchie, not edited." A brand-prefix strip shipped here briefly the
+// same day and was reverted within hours — the menu name is what the team
+// wrote in the POS, verbatim. Do not get clever with it again without her
+// explicit say-so.
 export function displayName(p: Product): string {
-  const brand = p.brand.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  const stripped = p.name
-    .replace(new RegExp(`^\\s*${brand}\\s*[|:]\\s*`, 'i'), '')
-    .replace(/^\s*jungle\s*boys\s*[|:]\s*/i, '')
-    .trim()
-  return stripped || p.name
+  return p.name
 }

@@ -1188,6 +1188,12 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   to the PDP (/shop/<slug>) instead of /locations; flower+hh strip images get
   mix-blend-multiply (white-card family only — pops/GT cards are dark, multiply would eat the
   shots there). rosin + orc pages remain deliberate placeholders (no shop strips — her call).
+- **PRODUCT NAMES ARE DUTCHIE-VERBATIM (Avanti, 2026-09-10 — SUPERSEDES the brand-prefix
+  strip that shipped earlier the same day):** "the names should be displayed how they are from
+  Dutchie, not edited." lib/product-name.displayName now returns p.name untouched and stays
+  as the single choke point every card heading renders through — any future name treatment
+  goes there, only with her explicit say-so. The rest of the card sweep (1.5rem clamp-3
+  titles, fixed chip slot, image melt, pill fixes) stands.
 
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
