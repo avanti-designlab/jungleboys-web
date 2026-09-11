@@ -1195,6 +1195,28 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   goes there, only with her explicit say-so. The rest of the card sweep (1.5rem clamp-3
   titles, fixed chip slot, image melt, pill fixes) stands.
 
+- **ORC FLAGSHIP SHIPPED v1 (2026-09-10, Avanti: "completely reimagine it like we did with all
+  the other landing pages… remove any mentions of Live Rosin… Only: Live Resin, Batter, Budder,
+  Sugar Trim").** /products/orc replaces the placeholder (PLACEHOLDER_LINES now ['rosin'] only
+  — leaving the list auto-flips indexable + sitemap + ItemList). Refinery-at-night surface:
+  --orc-yellow/#ffd400 + molten gold on black, scoped .orc-* in globals (orc-molten shine,
+  orc-float, orc-hazard CSS tape, orc-pipe gold-fill on .is-in). Sections (components/products/
+  orc/): reveal-root (hh pattern, [data-orc-plx]), hero (skyline-drip art + molten headline +
+  ONE CTA→#orc-lineup), hazard marquee dividers (marquee-track needs DUPLICATED halves —
+  0→-50%), manifesto ("we chase terpenes" + barrel mascot), hunt (6 quality chips + drifting
+  nug macros), 8-station pipeline, fresh-frozen (EST-2014 badge), lineup = the FOUR forms with
+  the Figma's "which is right for you" table folded into per-card "Best for" lines, why-ORC
+  (3 yellow pillars, inline SVGs), built (worker mascot; rosin sentence rewritten), live shop
+  strip via PAGE_ONLY_MATCHERS.orc in lib/product-lines (brand /^oil refinery/i — NOT a
+  LINE_DEFS shop line; the 7-line shop set is closed), form pill parsed from NAME (live POS
+  subcats unreliable: sugar trims arrive as SHATTER). Assets from her Figma
+  (EaXjrN6lyVsoKlMG7y5Jjk) as verified-alpha cutouts → public/products/orc/ 1.1MB (skyline,
+  badge 4x, mascots, 4 texture/pack shots, 5 nugs, script watermark). VERIFIED live build:
+  16 shop cards, 0 "live rosin" occurrences, hero/lineup/shop screenshots to Avanti.
+  Figma copy deviations on purpose: "BADDER"→"Batter" (her spelling + live product names),
+  "SUGAR"→"Sugar Trim" (the retail product). AWAITING her feedback round (flagships always
+  iterate).
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
