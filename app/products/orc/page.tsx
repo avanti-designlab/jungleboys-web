@@ -35,7 +35,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function OrcPage() {
   return (
-    <main className="orc-page relative overflow-x-clip bg-[var(--orc-ink)] text-white">
+    // data-nav-theme="dark": the header samples the page under the bar to
+    // pick its ink — without a region it went BLACK content on this black
+    // page and read as "missing" (Avanti caught it on v2).
+    <main data-nav-theme="dark" className="orc-page relative overflow-x-clip bg-[var(--orc-ink)] text-white">
       {/* brand surface: black to the page edges, footer flush (the flower
           page pattern) */}
       <style>{`body{background:#0b0a07} footer{padding:0} footer>div{border-radius:0;background:#0b0a07}`}</style>
