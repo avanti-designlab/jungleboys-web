@@ -1229,6 +1229,15 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   per-station prompts, 4:3, 4K reminder) — her renders swap into the STEPS art map
   file-for-file (public/products/orc/). Current station art = existing brand assets
   (nugs/jar/textures; Fresh Frozen nug gets a CSS hue-rotate frost).
+- **ORC v2.1 FIXES (same day, Avanti: header "missing" + drips "unrealistic").** (1) Any
+  ALL-DARK brand page MUST set data-nav-theme="dark" on its main — the site-nav samples
+  elementsFromPoint(80,42) and with NO region defaults to BLACK header content (invisible on
+  black; this is how the ORC header "disappeared"). (2) Drip curtain = one hand-built SVG
+  melted sheet (orc-drips.tsx path generator: sagging edge + teardrop tongues, amber→gold
+  gradient dark-to-glowing, gloss streaks + bulb beads, 14s viscous scaleY breathe, droplets
+  on 12s offset cycles). TRAP recorded: CSS animation transforms OVERRIDE an SVG node's own
+  transform ATTRIBUTE — position animated SVG bits via a parent <g transform> and animate the
+  child. Curtain marked data-nav-ignore so the header probe looks through it.
 
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
