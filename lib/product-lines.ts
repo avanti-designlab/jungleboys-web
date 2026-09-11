@@ -29,8 +29,15 @@ export const LINE_FALLBACK: Record<string, { category: string; label: string }> 
   'gas-tanks': { category: 'vape-pens', label: 'Vapes' },
 }
 
+// Landing-page-only lines that are NOT store-shop LINE_DEFS collections —
+// ORC is a brand page, not a shop line (the 7-line shop set is a closed
+// decision). Live names: "Oil Refinery Co. | <Strain> - <size> <Type>".
+const PAGE_ONLY_MATCHERS: Record<string, (p: Product) => boolean> = {
+  orc: (p) => /^\s*oil\s*refinery/i.test(p.brand) || /^\s*(oil\s*refinery|orc\b)/i.test(p.name),
+}
+
 export async function getLineProducts(lineSlug: string, cap = 12): Promise<Product[]> {
-  const match = lineMatcher(lineSlug)
+  const match = lineMatcher(lineSlug) ?? PAGE_ONLY_MATCHERS[lineSlug]
   if (!match) return []
   const all = await getProducts()
   const bySlug = new Map<string, Product>()

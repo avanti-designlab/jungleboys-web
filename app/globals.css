@@ -2777,3 +2777,68 @@ body:has(.tw-page) footer {
     min-height: 0;
   }
 }
+
+/* ── ORC / Oil Refinery Co. (/products/orc) — scoped, Phase 3 flagship ─────
+   Industrial refinery: black crude + hazard yellow + molten gold. Palette
+   lifted from the Figma brand art (skyline drips, EST-2014 derrick badge). */
+.orc-page {
+  --orc-yellow: #ffd400;
+  --orc-gold: #e9b13c;
+  --orc-amber: #f5a300;
+  --orc-ink: #0b0a07;
+  --orc-panel: #12100a;
+  --orc-card: #17140d;
+}
+/* hazard tape band — pure CSS so it never blurs; the drip edge is the art's job */
+.orc-hazard {
+  background: repeating-linear-gradient(-45deg, var(--orc-yellow) 0 22px, var(--orc-ink) 22px 44px);
+}
+/* molten shimmer on gold display type (flower's gold-text pattern, re-tuned) */
+.orc-molten {
+  background: linear-gradient(100deg, #b57e18, var(--orc-yellow) 38%, #fff2b8 50%, var(--orc-yellow) 62%, #b57e18);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: orc-shine 7s linear infinite;
+}
+@keyframes orc-shine {
+  from { background-position: 0% 0; }
+  to { background-position: 220% 0; }
+}
+/* slow float for cutout art (barrel, badge, nugs) */
+@keyframes orc-float {
+  0%, 100% { transform: translateY(0) rotate(var(--orc-rot, 0deg)); }
+  50% { transform: translateY(-14px) rotate(var(--orc-rot, 0deg)); }
+}
+.orc-float { animation: orc-float 6.5s ease-in-out infinite; }
+/* pipeline stations: the pipe fills gold as each station arrives */
+.orc-pipe {
+  position: relative;
+}
+.orc-pipe::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 3px;
+  width: 100%;
+  background: color-mix(in srgb, var(--orc-yellow) 16%, transparent);
+}
+.orc-pipe::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 3px;
+  width: 0;
+  background: var(--orc-yellow);
+  transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--orc-step-delay, 0s);
+}
+.jb-reveal-block.is-in .orc-pipe::after { width: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  .orc-float { animation: none; }
+  .orc-molten { animation: none; }
+  .orc-pipe::after { width: 100%; transition: none; }
+}

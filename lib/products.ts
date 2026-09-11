@@ -53,7 +53,10 @@ const POPS_NUGS = [1, 2, 3, 4, 5, 6].map((n) => `/products/fx/pops-${n}.webp`)
 // noindex, so they must also stay out of the sitemap AND the ItemList — which
 // are two different files, which is exactly how the two lists drifted apart.
 // One definition, both consumers.
-export const PLACEHOLDER_LINES = ['rosin', 'orc'] as const
+// 'orc' left this list 2026-09-10 — the real ORC flagship page shipped
+// (app/products/orc). Leaving the list flips it indexable + into the
+// sitemap + ItemList automatically (one definition, both consumers).
+export const PLACEHOLDER_LINES = ['rosin'] as const
 export const isPlaceholderLine = (slug: string) =>
   (PLACEHOLDER_LINES as readonly string[]).includes(slug)
 
