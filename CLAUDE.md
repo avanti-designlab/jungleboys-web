@@ -1145,6 +1145,28 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   the Dutchie admin (the Menu Display Name stays clean for shoppers; a leaked tag is stripped
   before display). A tag always beats the prefix heuristic, which remains the untagged fallback.
 
+- **SHOPPING-CARD SWEEP + LONG-MENU PAGINATION (2026-09-10, Avanti's live-data punch list:
+  cut-off add-to-cart, oversized names, visible image boxes, non-uniform title/pill levels,
+  "show more" for long menus).** ProductCard (ONE card, every commerce surface): visible title
+  strips the leading "<brand> |/:" prefix via cardName() (chips carry the brand; aria-label +
+  cart keep the FULL name), 2rem→1.5rem line-clamp-3; chip zone is a FIXED h-[3.65rem]
+  overflow-hidden slot (exactly two chip rows — titles start flush on every card; on ultra-
+  narrow cards a third-row chip hides, PDP still shows it); pack shots use mix-blend-multiply
+  (melts the white/grey studio box Dutchie bakes into most shots) and the box-outlining
+  drop-shadow is GONE with it; buy-row one-line threshold 16rem→19rem + flex-wrap guard; the
+  add-to-cart pill compresses below @[10rem] containers; price+option pair wraps as two atomic
+  nowrap halves. Deals sections p-4 on phones (p-6 over page padding made 138px cards, under
+  the pill's minimum). MenuBrowser: "Show more" pagination — PAGE=48 (full rows at 2/3/4
+  cols), filter/facet changes reset to page one, count header stays the filtered total.
+  VERIFICATION METHOD (the pane lies here — frozen clock leaves .is-in reveals at opacity 0
+  and screenshots black; headless CDP is the truth): scratchpad sweep.mjs audits every
+  surface (landings, SD flower grid, both deals pages, drops, brands, PDP, bag) desktop
+  1440 + mobile 390 — final run: 0 overflowing cards, 0 clipped pills, one title level per
+  card size. SEED SHAPES that bit twice: jb-age-gate={verifiedAt:Date.now()},
+  jb-intro-done='1' in SESSIONstorage, jb-store state must be 'CA' not 'california'.
+  FALSE ALARM logged: ZANGRIA/LA GELATO/COCHINO on the live DTLA menu are REAL strains —
+  fixture names were modeled on real JB strains; not a fixture leak.
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
