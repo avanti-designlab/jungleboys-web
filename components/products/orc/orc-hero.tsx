@@ -1,15 +1,12 @@
 import PillCta from '@/components/pill-cta'
 import Reveal from '@/components/reveal'
-import OrcDrips from '@/components/products/orc/orc-drips'
 
-// Hero v2 (Avanti): kicker line REMOVED, CTA renamed, rosin drip curtain
-// hangs from the top of the screen, skyline bigger over a breathing molten
-// glow. Less text — art and the one line carry it.
+// Hero v3 (Avanti): drip curtain REMOVED (two attempts, both read fake —
+// if honey ever returns here it comes as a photoreal generated asset, not
+// vectors). Skyline floats over the breathing molten glow; one line; one CTA.
 export default function OrcHero() {
   return (
     <header className="relative flex min-h-[96vh] flex-col items-center justify-center overflow-hidden px-6 pb-24 pt-40 text-center">
-      <OrcDrips />
-
       {/* molten glow rising from the bottom edge + faint script watermark */}
       <span
         aria-hidden

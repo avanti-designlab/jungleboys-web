@@ -2844,27 +2844,6 @@ body:has(.tw-page) footer {
 }
 
 /* ── ORC v2 (2026-09-10, Avanti: "transform this into WOW") ──────────────── */
-/* honey/rosin curtain v3: the SVG sheet breathes like something viscous, and
-   single droplets form at a tongue tip, elongate, drop and fade */
-.orc-curtain {
-  transform-origin: top;
-  animation: orc-curtain-breathe 14s ease-in-out infinite;
-}
-@keyframes orc-curtain-breathe {
-  0%, 100% { transform: scaleY(0.985); }
-  50% { transform: scaleY(1.02); }
-}
-.orc-droplet {
-  opacity: 0;
-  animation: orc-droplet-fall 12s ease-in infinite;
-}
-@keyframes orc-droplet-fall {
-  0%, 55% { opacity: 0; transform: scale(0.4); }
-  60% { opacity: 1; transform: scale(0.75, 1.05); }
-  65% { transform: translateY(4px) scale(0.9, 1.2); }
-  92% { opacity: 0.9; }
-  100% { opacity: 0; transform: translateY(520px) scale(0.8, 1.15); }
-}
 /* pipeline rail: 3D image stations on a snap rail; cards straighten as they land */
 .orc-rail {
   perspective: 1200px;
@@ -2889,28 +2868,7 @@ body:has(.tw-page) footer {
   from { background-position: 0 0; }
   to { background-position: 44px 0; }
 }
-/* full-screen extract panels stack over each other (CSS sticky — the mobile-
-   safe pin) */
-.orc-panel-stage {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  overflow: hidden;
-}
-.orc-panel-name {
-  position: absolute;
-  inset-inline: 0;
-  top: 12svh;
-  text-align: center;
-  line-height: 0.8;
-  font-size: min(22vw, 15rem);
-  letter-spacing: -0.02em;
-  color: color-mix(in srgb, var(--orc-yellow) 14%, transparent);
-  -webkit-text-stroke: 1px color-mix(in srgb, var(--orc-yellow) 40%, transparent);
-}
 @media (prefers-reduced-motion: reduce) {
-  .orc-curtain, .orc-droplet { animation: none; }
-  .orc-droplet { opacity: 0; }
   .orc-pipe-flow { animation: none; }
   .orc-station { transform: none; opacity: 1; transition: none; }
 }
