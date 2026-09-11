@@ -43,7 +43,13 @@ export default async function HhShop() {
               return (
                 <Reveal key={p.id} delay={Math.min(i, 2) * 0.08}>
                   <article className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white text-[var(--color-ink)] shadow-[0_10px_40px_rgba(0,0,0,0.1)]">
-                    <div className="relative aspect-square overflow-hidden bg-[linear-gradient(180deg,#8fd4f7_0%,#bfe8fb_100%)]">
+                    {/* WHITE stage (Avanti, 2026-09-10: "the blue can be in
+                        the background but not on top of the images") — the
+                        image melt multiplies the shot against its ground, so
+                        any colour here tints the product itself. The old
+                        sky-gradient stage was designed for fixture cutouts;
+                        live Dutchie shots are white-boxed photos. */}
+                    <div className="relative aspect-square overflow-hidden bg-white">
                       {deal ? (
                         <span className="absolute left-4 top-4 z-20 rounded-full bg-[var(--hh-gold)] px-3 py-1 text-[11px] font-extrabold uppercase tracking-widest text-[var(--hh-ink)]" style={{ fontFamily: 'var(--font-brand)' }}>
                           {pctOff}% off
