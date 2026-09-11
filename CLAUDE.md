@@ -1238,6 +1238,19 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   on 12s offset cycles). TRAP recorded: CSS animation transforms OVERRIDE an SVG node's own
   transform ATTRIBUTE — position animated SVG bits via a parent <g transform> and animate the
   child. Curtain marked data-nav-ignore so the header probe looks through it.
+- **ORC v3 (2026-09-11, Avanti: drips out, page needs motion, pipeline "stuck", real step
+  imagery via Higgsfield, extracts as pill boxes).** (1) Drip curtain DELETED — vectors read
+  fake twice; honey returns only as a photoreal generated asset if ever. (2) orc-pipeline is
+  now a PINNED SCRUB: 340vh outer, sticky h-screen inner, rAF scroll handler drives the rail's
+  translate3d + fills the pipe — TRAP: a w-max track never overflows itself; measure travel
+  against the clipped PARENT's clientWidth. (3) Station art = REAL Higgsfield series generated
+  IN-SESSION via the connected MCP (generate_image_batch, model nano_banana_pro→nano_banana_2,
+  8×4:3, 2 credits each, ~16 total of her ~1,224; series style block in prompts; step-1..8.webp
+  356KB total). The MCP server id 2a6adc36… = her Higgsfield account — generation is
+  authorized when she asks for imagery. (4) Lineup v3 = pill-style rounded content boxes
+  (rounded-[2.5rem], alternating sides via md:[&>*:first-child]:order-2, number pill, chip
+  pills, Best-for pill) — supersedes the sticky full-screen panels. Scrub verified headless:
+  rail -446px→-1784px across the pin, pipe 67%.
 
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
