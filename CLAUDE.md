@@ -1216,6 +1216,19 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   Figma copy deviations on purpose: "BADDER"→"Batter" (her spelling + live product names),
   "SUGAR"→"Sugar Trim" (the retail product). AWAITING her feedback round (flagships always
   iterate).
+- **ORC v2 SAME DAY (Avanti: "transform this into WOW" — kicker gone, CTA "Explore Oil
+  Refinery Co.", hero drips, bigger banners, immersive extracts, 3D plant-to-product with
+  Higgsfield art, less text).** Shipped: orc-drips.tsx honey curtain (CSS divs, stretch +
+  falling-droplet keyframes; pooled top edge); hazard marquee at display size (Bebas
+  min(9vw,3.4rem) black on solid yellow, tape stripes edging); lineup = FULL-SCREEN sticky
+  panels (100svh, each opaque bg stacks over the last — CSS sticky is the mobile-safe pin),
+  ghost wordmark (.orc-panel-name), per-form glow, texture floating, 01/04 counter; pipeline =
+  horizontal snap rail, 8 image stations swinging in via perspective (.orc-station rotateY →
+  0 on .is-in) over a flowing-gold pipe (.orc-pipe-flow); manifesto/hunt copy cut to a line
+  each. HIGGSFIELD PROMPT PACK for the 8 stations delivered to Avanti (series style block +
+  per-station prompts, 4:3, 4K reminder) — her renders swap into the STEPS art map
+  file-for-file (public/products/orc/). Current station art = existing brand assets
+  (nugs/jar/textures; Fresh Frozen nug gets a CSS hue-rotate frost).
 
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
