@@ -49,12 +49,11 @@ export default function OrcHunt() {
         </Reveal>
         <Reveal delay={0.1}>
           <p
-            className="mx-auto mt-7 max-w-2xl text-sm leading-relaxed text-white/70 md:text-base"
+            className="mx-auto mt-7 max-w-xl text-sm leading-relaxed text-white/70 md:text-base"
             style={{ fontFamily: 'var(--font-brand)' }}
           >
-            Before an extract ever reaches the lab, it begins in the garden. Every year, Jungle
-            Boys hunts through thousands of unique phenotypes searching for the rare plants that
-            stand above the rest. We&rsquo;re looking for cultivars with:
+            Every year, thousands of phenotypes get hunted for the rare plants that stand above
+            the rest. What makes the cut:
           </p>
         </Reveal>
 

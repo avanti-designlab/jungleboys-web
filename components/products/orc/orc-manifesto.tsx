@@ -15,18 +15,9 @@ export default function OrcManifesto() {
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
+            {/* v2 copy cut (Avanti: "a lot of text… simplified") — one line */}
             <p
-              className="mt-7 max-w-xl text-sm leading-relaxed text-white/70 md:text-base"
-              style={{ fontFamily: 'var(--font-brand)' }}
-            >
-              Since 2014, Oil Refinery Co. has transformed Jungle Boys&rsquo; world-class genetics
-              into premium cannabis extracts built around one thing above all else &mdash; flavor.
-              Every extract begins with the same flower that built the Jungle Boys name.
-            </p>
-          </Reveal>
-          <Reveal delay={0.18}>
-            <p
-              className="mt-5 max-w-xl text-sm font-extrabold uppercase tracking-[0.18em] text-[var(--orc-gold)]"
+              className="mt-7 max-w-xl text-sm font-extrabold uppercase tracking-[0.18em] text-[var(--orc-gold)] md:text-base"
               style={{ fontFamily: 'var(--font-brand)' }}
             >
               Better flower doesn&rsquo;t just smoke better. It makes better extracts.

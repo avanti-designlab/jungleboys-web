@@ -2842,3 +2842,89 @@ body:has(.tw-page) footer {
   .orc-molten { animation: none; }
   .orc-pipe::after { width: 100%; transition: none; }
 }
+
+/* ── ORC v2 (2026-09-10, Avanti: "transform this into WOW") ──────────────── */
+/* honey/rosin drip curtain hanging from the top of the hero */
+.orc-drip {
+  position: absolute;
+  top: 0;
+  border-radius: 0 0 999px 999px;
+  background: linear-gradient(180deg, #b57e18 0%, #f5a300 45%, #ffd400 100%);
+  box-shadow: inset -6px 0 10px rgba(0, 0, 0, 0.25), inset 4px 0 8px rgba(255, 255, 255, 0.18);
+  transform-origin: top;
+  animation: orc-drip-stretch 9s ease-in-out infinite;
+}
+.orc-drip::after {
+  /* the droplet that breaks off and falls */
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  width: 12px;
+  height: 16px;
+  margin-left: -6px;
+  border-radius: 50% 50% 60% 60%;
+  background: #ffd400;
+  opacity: 0;
+  animation: orc-droplet 9s ease-in infinite;
+  animation-delay: inherit;
+}
+@keyframes orc-drip-stretch {
+  0%, 100% { transform: scaleY(0.92); }
+  45% { transform: scaleY(1.06); }
+  55% { transform: scaleY(1.04); }
+}
+@keyframes orc-droplet {
+  0%, 48% { opacity: 0; transform: translateY(0) scale(0.6); }
+  52% { opacity: 1; transform: translateY(4px) scale(1); }
+  88% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(46vh) scale(0.85); }
+}
+/* pipeline rail: 3D image stations on a snap rail; cards straighten as they land */
+.orc-rail {
+  perspective: 1200px;
+}
+.orc-station {
+  transform: rotateY(-14deg) translateY(24px);
+  opacity: 0;
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s ease-out;
+  transition-delay: var(--orc-step-delay, 0s);
+}
+.jb-reveal-block.is-in .orc-station {
+  transform: rotateY(0deg) translateY(0);
+  opacity: 1;
+}
+/* flowing gold inside the pipe under the rail */
+.orc-pipe-flow {
+  background: repeating-linear-gradient(90deg, #ffd400 0 34px, #7a5a10 34px 44px);
+  background-size: 44px 100%;
+  animation: orc-flow 1.6s linear infinite;
+}
+@keyframes orc-flow {
+  from { background-position: 0 0; }
+  to { background-position: 44px 0; }
+}
+/* full-screen extract panels stack over each other (CSS sticky — the mobile-
+   safe pin) */
+.orc-panel-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+.orc-panel-name {
+  position: absolute;
+  inset-inline: 0;
+  top: 12svh;
+  text-align: center;
+  line-height: 0.8;
+  font-size: min(22vw, 15rem);
+  letter-spacing: -0.02em;
+  color: color-mix(in srgb, var(--orc-yellow) 14%, transparent);
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--orc-yellow) 40%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .orc-drip, .orc-drip::after { animation: none; }
+  .orc-pipe-flow { animation: none; }
+  .orc-station { transform: none; opacity: 1; transition: none; }
+}
