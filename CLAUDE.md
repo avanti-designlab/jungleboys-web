@@ -1251,6 +1251,22 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   (rounded-[2.5rem], alternating sides via md:[&>*:first-child]:order-2, number pill, chip
   pills, Best-for pill) — supersedes the sticky full-screen panels. Scrub verified headless:
   rail -446px→-1784px across the pin, pipe 67%.
+- **ORC v4 (2026-09-24, Avanti: "look at the other product pages… revamp it and make it
+  wow").** The flagship-parity pass: (1) OrcAtmosphere — FIXED z-0 molten layer behind the
+  whole page (hh-sky pattern: 2 drifting furnace glows, 14 rising embers, script watermark;
+  content wrapped relative z-10; solid section panels became rgba(18,16,10,0.82) so it
+  breathes through). (2) reveal-root grew a GENERIC PIN ENGINE: [data-orc-pin] sections get
+  --p (0..1 across their scroll span) and children animate with pure CSS calc() — scrub-true,
+  no clock; plus [data-orc-rot]/[data-orc-rot-base] scroll-spin for cutouts. (3) Hero pins
+  190vh: skyline recedes/dims, glow blooms, "REFINING FLAVOR SINCE 2014" stamp burns in
+  TOP-center (bottom slot collided with the CTA at short viewports — caught in verification).
+  (4) Manifesto = word-by-word .orc-word stagger (CSS twin of rewards SplitHeading). (5) Hunt
+  nugs bigger + scroll-rotation. (6) OrcOutlineMarquee — ghost-outline Bebas band of the four
+  forms (every 4th solid), between lineup and why. (7) OrcFinale — 220vh pin, step-8 jar
+  scene zooms 1.28→1.04 + brightens with "FLAVOR FIRST. EVERY JAR. EVERY BATCH." burning in;
+  placed before the shop. NOTE: scratchpad wiped again in the 13-day session gap — the CDP
+  shot harness is now STITCHED from scripts/verify-scroll-motion.mjs's helper block each time
+  (don't hunt for old scratch scripts).
 
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
