@@ -8,10 +8,19 @@ export default function OrcManifesto() {
       <div className="mx-auto grid max-w-[1280px] items-center gap-12 lg:grid-cols-[1.5fr_1fr]">
         <div>
           <Reveal>
+            {/* word-by-word drop-in (.orc-word), the rewards SplitHeading move */}
             <h2 className="font-display uppercase leading-[0.86]" style={{ fontSize: 'min(11vw, 5.5rem)' }}>
-              We don&rsquo;t chase trends&nbsp;&mdash;
+              {["We", "don\u2019t", "chase", "trends\u00a0\u2014"].map((w, i) => (
+                <span key={w} className="orc-word" style={{ '--d': `${i * 0.09}s` } as React.CSSProperties}>
+                  {w}&nbsp;
+                </span>
+              ))}
               <br />
-              <span className="text-[var(--orc-yellow)]">we chase terpenes.</span>
+              {["we", "chase", "terpenes."].map((w, i) => (
+                <span key={w} className="orc-word text-[var(--orc-yellow)]" style={{ '--d': `${0.4 + i * 0.11}s` } as React.CSSProperties}>
+                  {w}&nbsp;
+                </span>
+              ))}
             </h2>
           </Reveal>
           <Reveal delay={0.1}>

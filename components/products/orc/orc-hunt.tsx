@@ -11,16 +11,16 @@ const QUALITIES = [
   'Memorable effects',
 ]
 
-const NUGS: { src: string; cls: string; plx: string; rot: string }[] = [
-  { src: 'nug-1', cls: 'left-[-3%] top-[8%] w-[min(26vw,220px)]', plx: '0.06', rot: '-8deg' },
-  { src: 'nug-3', cls: 'right-[-2%] top-[30%] w-[min(20vw,170px)]', plx: '-0.05', rot: '10deg' },
-  { src: 'nug-4', cls: 'left-[4%] bottom-[6%] w-[min(18vw,150px)]', plx: '-0.04', rot: '14deg' },
-  { src: 'nug-2', cls: 'right-[6%] bottom-[14%] w-[min(22vw,180px)]', plx: '0.05', rot: '-12deg' },
+const NUGS: { src: string; cls: string; plx: string; rot: string; spin: string }[] = [
+  { src: 'nug-1', cls: 'left-[-4%] top-[6%] w-[min(30vw,280px)]', plx: '0.07', rot: '-8', spin: '22' },
+  { src: 'nug-3', cls: 'right-[-3%] top-[26%] w-[min(24vw,210px)]', plx: '-0.06', rot: '10', spin: '-18' },
+  { src: 'nug-4', cls: 'left-[3%] bottom-[4%] w-[min(22vw,190px)]', plx: '-0.05', rot: '14', spin: '26' },
+  { src: 'nug-2', cls: 'right-[5%] bottom-[12%] w-[min(26vw,230px)]', plx: '0.06', rot: '-12', spin: '-24' },
 ]
 
 export default function OrcHunt() {
   return (
-    <section className="relative overflow-hidden bg-[var(--orc-panel)] px-6 py-24 md:px-12 md:py-32 lg:px-20">
+    <section className="relative overflow-hidden bg-[rgba(18,16,10,0.82)] px-6 py-24 md:px-12 md:py-32 lg:px-20">
       {NUGS.map((n) => (
         // eslint-disable-next-line @next/next/no-img-element -- macro nug cutouts
         <img
@@ -30,8 +30,9 @@ export default function OrcHunt() {
           aria-hidden
           loading="lazy"
           data-orc-plx={n.plx}
-          className={`pointer-events-none absolute opacity-90 ${n.cls}`}
-          style={{ rotate: n.rot }}
+          data-orc-rot={n.spin}
+          data-orc-rot-base={n.rot}
+          className={`pointer-events-none absolute opacity-90 drop-shadow-[0_24px_44px_rgba(0,0,0,0.6)] ${n.cls}`}
         />
       ))}
 

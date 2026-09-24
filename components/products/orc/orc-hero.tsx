@@ -1,51 +1,61 @@
 import PillCta from '@/components/pill-cta'
 import Reveal from '@/components/reveal'
 
-// Hero v3 (Avanti): drip curtain REMOVED (two attempts, both read fake —
-// if honey ever returns here it comes as a photoreal generated asset, not
-// vectors). Skyline floats over the breathing molten glow; one line; one CTA.
+// Hero v4 — pinned cinema (the flower-page recede, ORC-flavored). 190vh
+// outer pins a full screen: as you scroll, the skyline recedes and dims
+// while the molten glow blooms up from below and the headline holds the
+// stage; a SINCE 2014 stamp fades in late. All driven by the pin's --p via
+// pure CSS calc — no clock, scrub-true.
 export default function OrcHero() {
   return (
-    <header className="relative flex min-h-[96vh] flex-col items-center justify-center overflow-hidden px-6 pb-24 pt-40 text-center">
-      {/* molten glow rising from the bottom edge + faint script watermark */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[60vh] bg-[radial-gradient(60%_100%_at_50%_100%,rgba(245,163,0,0.26),transparent_70%)]"
-      />
-      {/* eslint-disable-next-line @next/next/no-img-element -- brand watermark */}
-      <img
-        src="/products/orc/script-drip.webp"
-        alt=""
-        aria-hidden
-        data-orc-plx="0.05"
-        className="pointer-events-none absolute -right-16 top-16 w-[min(48vw,540px)] opacity-[0.08]"
-      />
-
-      <Reveal className="relative w-full">
+    <header data-orc-pin className="relative h-[190vh]">
+      <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden px-6 text-center">
+        {/* molten glow blooms with progress */}
         <span
           aria-hidden
-          className="absolute left-1/2 top-1/2 h-[110%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(255,212,0,0.14),transparent_70%)]"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[70vh] bg-[radial-gradient(60%_100%_at_50%_100%,rgba(245,163,0,0.5),transparent_72%)]"
+          style={{ opacity: 'calc(0.45 + var(--p, 0) * 0.55)' }}
         />
-        {/* eslint-disable-next-line @next/next/no-img-element -- hero brand art */}
-        <img
-          src="/products/orc/skyline.webp"
-          alt="Oil Refinery Co. — refinery skyline dripping oil"
-          fetchPriority="high"
-          className="orc-float relative mx-auto w-[min(88vw,720px)]"
-        />
-      </Reveal>
 
-      <Reveal delay={0.14} className="relative mt-8">
-        <h1 className="font-display uppercase leading-[0.86]" style={{ fontSize: 'min(11vw, 6.5rem)' }}>
-          From the best flower
-          <br />
-          comes <span className="orc-molten">the best oil.</span>
-        </h1>
-      </Reveal>
+        <Reveal className="relative w-full" slide>
+          {/* eslint-disable-next-line @next/next/no-img-element -- hero brand art */}
+          <img
+            src="/products/orc/skyline.webp"
+            alt="Oil Refinery Co. — refinery skyline dripping oil"
+            fetchPriority="high"
+            className="orc-float relative mx-auto w-[min(88vw,720px)]"
+            style={{
+              transform: 'translateY(calc(var(--p, 0) * -5vh)) scale(calc(1 - var(--p, 0) * 0.16))',
+              opacity: 'calc(1 - var(--p, 0) * 0.35)',
+            }}
+          />
+        </Reveal>
 
-      <Reveal delay={0.22} className="relative mt-9">
-        <PillCta label="Explore Oil Refinery Co." href="#orc-lineup" hover="black" />
-      </Reveal>
+        <Reveal delay={0.14} className="relative mt-8">
+          <h1 className="font-display uppercase leading-[0.86]" style={{ fontSize: 'min(11vw, 6.5rem)' }}>
+            From the best flower
+            <br />
+            comes <span className="orc-molten">the best oil.</span>
+          </h1>
+        </Reveal>
+
+        <Reveal delay={0.22} className="relative mt-9">
+          <PillCta label="Explore Oil Refinery Co." href="#orc-lineup" hover="black" />
+        </Reveal>
+
+        {/* the stamp burns in up top as the scene bottoms out (bottom slot
+            collided with the CTA at short viewports) */}
+        <p
+          aria-hidden
+          className="font-display absolute top-[11vh] left-1/2 -translate-x-1/2 whitespace-nowrap text-xl uppercase tracking-[0.34em] text-[var(--orc-gold)] md:text-2xl"
+          style={{
+            opacity: 'calc((var(--p, 0) - 0.45) * 2.2)',
+            transform: 'translateX(-50%) translateY(calc((1 - var(--p, 0)) * -2vh))',
+          }}
+        >
+          Refining flavor since 2014
+        </p>
+      </div>
     </header>
   )
 }

@@ -2872,3 +2872,50 @@ body:has(.tw-page) footer {
   .orc-pipe-flow { animation: none; }
   .orc-station { transform: none; opacity: 1; transition: none; }
 }
+
+/* ── ORC v4 (2026-09-24, Avanti: match the other flagships' wow) ─────────── */
+/* fixed molten atmosphere behind the whole page (the hash-hole sky pattern) */
+@keyframes orc-glow-drift {
+  0%, 100% { transform: translate(-6%, 0) scale(1); opacity: 0.7; }
+  50% { transform: translate(6%, -4%) scale(1.15); opacity: 1; }
+}
+.orc-glow { animation: orc-glow-drift 16s ease-in-out infinite; }
+@keyframes orc-ember-rise {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  8% { opacity: var(--e-o, 0.5); }
+  85% { opacity: var(--e-o, 0.5); }
+  100% { transform: translateY(-105vh) scale(0.4); opacity: 0; }
+}
+.orc-ember {
+  position: absolute;
+  bottom: -2vh;
+  border-radius: 9999px;
+  background: radial-gradient(circle, #ffe484 0%, #f5a300 55%, transparent 75%);
+  animation: orc-ember-rise var(--e-t, 14s) linear infinite;
+  animation-delay: var(--e-d, 0s);
+}
+/* word-by-word statement reveal (CSS twin of the rewards SplitHeading) */
+.orc-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease-out;
+  transition-delay: var(--d, 0s);
+}
+.jb-reveal-block.is-in .orc-word {
+  opacity: 1;
+  transform: none;
+}
+/* ghost outline type for the lineup marquee */
+.orc-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px color-mix(in srgb, var(--orc-yellow) 45%, transparent);
+}
+.orc-outline-solid {
+  color: var(--orc-yellow);
+}
+@media (prefers-reduced-motion: reduce) {
+  .orc-glow, .orc-ember { animation: none; }
+  .orc-ember { opacity: 0; }
+  .orc-word { opacity: 1; transform: none; transition: none; }
+}

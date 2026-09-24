@@ -2,6 +2,9 @@ import type { Metadata } from 'next'
 import { pageMetadata } from '@/lib/storyblok/seo'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 import OrcRevealRoot from '@/components/products/orc/orc-reveal-root'
+import OrcAtmosphere from '@/components/products/orc/orc-atmosphere'
+import OrcOutlineMarquee from '@/components/products/orc/orc-outline-marquee'
+import OrcFinale from '@/components/products/orc/orc-finale'
 import OrcHero from '@/components/products/orc/orc-hero'
 import OrcHazard from '@/components/products/orc/orc-hazard'
 import OrcManifesto from '@/components/products/orc/orc-manifesto'
@@ -55,21 +58,28 @@ export default function OrcPage() {
         }}
       />
       <OrcRevealRoot />
-      <OrcHero />
-      <OrcHazard />
-      <OrcManifesto />
-      <OrcHunt />
-      <OrcPipeline />
-      <OrcHazard text="FROM THE BEST FLOWER COMES THE BEST OIL" />
-      <OrcFreshFrozen />
-      <OrcLineup />
-      <OrcWhy />
-      <OrcBuilt />
-      <OrcHazard />
-      <OrcShop />
-      <div className="px-6 pb-24 md:px-12 lg:px-20">
-        <div className="mx-auto max-w-[1240px]">
-          <MoreLines current="orc" />
+      {/* fixed molten atmosphere behind everything (hash-hole sky pattern);
+          all content rides z-10 above it */}
+      <OrcAtmosphere />
+      <div className="relative z-10">
+        <OrcHero />
+        <OrcHazard />
+        <OrcManifesto />
+        <OrcHunt />
+        <OrcPipeline />
+        <OrcHazard text="FROM THE BEST FLOWER COMES THE BEST OIL" />
+        <OrcFreshFrozen />
+        <OrcLineup />
+        <OrcOutlineMarquee />
+        <OrcWhy />
+        <OrcBuilt />
+        <OrcFinale />
+        <OrcHazard />
+        <OrcShop />
+        <div className="px-6 pb-24 md:px-12 lg:px-20">
+          <div className="mx-auto max-w-[1240px]">
+            <MoreLines current="orc" />
+          </div>
         </div>
       </div>
     </main>
