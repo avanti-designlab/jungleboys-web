@@ -108,10 +108,13 @@ function openStatus(store: (typeof CA_OWNED)[number], now: Date): { open: boolea
 }
 
 // Recreational / Medical — inherited from the Dutchie embed's MENU dropdown.
-// UI STATE ONLY for now: the frozen provider interface has no menuType param,
-// so both views serve the same placeholder menu until the GraphQL provider
-// lands and the (additive) param is verified against a real payload. The
-// choice persists so that wiring is a data change, not a UX change.
+// FULLY CONNECTED as of the live flip: the choice rides the checkout POST and
+// Dutchie prices the cart with the matching pricingType (medical tax
+// treatment happens on their checkout). The MENUS deliberately do not switch:
+// verified against every live variant at all four stores (2,533 on
+// 2026-09-25), JB's med and rec shelf prices are IDENTICAL — a menu swap
+// would repaint the same numbers. Revisit only if the POS ever starts
+// publishing different med prices (re-run the probe in CLAUDE.md's note).
 const MENU_TYPE_KEY = 'jb-menu-type'
 
 // Shared hover treatment for dropdown rows: quiet ground, label nudges right,

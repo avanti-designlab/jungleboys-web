@@ -1279,6 +1279,17 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   scroll") — ORC keeps two pins (hero recede + pipeline); built→shop got more air
   (built pb-32/44, shop pt-20/28).
 
+- **MENU-TYPE TOGGLE: FULLY CONNECTED, MENUS DELIBERATELY DON'T SWITCH (2026-09-25, closes the
+  "menuType wiring" pending item).** Avanti asked if REC/MED is live. Findings: (1) the wire
+  already carries BOTH price sets on every variant (priceRec/priceMed/specialPriceRec/
+  specialPriceMed in PRODUCT_SELECTION) — no per-type menu fetch exists or is needed; (2)
+  probed EVERY live variant at all 4 stores (2,533 total): med price == rec price on 100% —
+  JB prices shelves identically, medical differs only in checkout tax treatment; (3) that part
+  IS live — the toggle rides the /api/checkout POST as pricingType MEDICAL|RECREATIONAL.
+  Ruling: menus don't switch (would repaint identical numbers); the stale "UI STATE ONLY"
+  comment in commerce-header is corrected. Re-probe (script shape in the git history of this
+  entry's date) only if the POS ever publishes differing med prices.
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
