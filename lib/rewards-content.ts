@@ -186,7 +186,8 @@ export const REWARDS_FAQ = [
   },
   {
     question: 'How do I redeem points?',
-    answer: 'Points can be redeemed at checkout in-store or online.',
+    answer:
+      'Points can be redeemed at checkout in-store or online. Verification Bonus Rewards can only be redeemed in the Jungle Boys App store for merch purchases.',
   },
   {
     question: 'Do points expire?',
