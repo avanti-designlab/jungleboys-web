@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Reveal from '@/components/reveal'
+import { APP_LINKS } from '@/lib/rewards-content'
 
 // /profile-reward — the logged-in PWF Rewards dashboard, as a SIGNED-OUT
 // styled shell (URL inventory: keep — Designer-confirmed feature set:
@@ -64,7 +65,8 @@ export default function ProfileRewardPage() {
             Your rewards
           </h1>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-white/70" style={{ fontFamily: 'var(--font-brand)' }}>
-            Points, collectibles and referrals, sign in to see where you stand.
+            Points land automatically when you check out. Track where you stand any time in the
+            Jungle Boys app.
           </p>
 
           <div className="mt-9 grid gap-3 sm:grid-cols-3" style={{ fontFamily: 'var(--font-brand)' }}>
@@ -80,13 +82,15 @@ export default function ProfileRewardPage() {
           </div>
 
           <div className="mt-9 flex flex-col items-center gap-3">
-            <Link
-              href="/login"
+            <a
+              href={APP_LINKS.appStore}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex w-full max-w-sm items-center justify-center rounded-full bg-[var(--color-accent)] px-8 py-4 text-sm font-extrabold uppercase tracking-widest text-black transition-all duration-200 hover:-translate-y-0.5 hover:bg-white"
               style={{ fontFamily: 'var(--font-brand)' }}
             >
-              Sign in to see your points
-            </Link>
+              Track your points in the app
+            </a>
             <Link
               href="/rewards"
               className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/60 underline-offset-4 transition hover:text-[var(--color-accent)] hover:underline"

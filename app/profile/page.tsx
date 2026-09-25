@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Reveal from '@/components/reveal'
+import { APP_LINKS } from '@/lib/rewards-content'
 
-// /profile — the account home, as a SIGNED-OUT styled shell (URL inventory:
-// keep). Orders and account details render once Dutchie accounts are wired;
-// until then the page says what lives here and routes to /login. noindex +
-// robots disallow (unlinked utility route).
+// /profile — the account home as a REWARDS HUB (Avanti Option A, 2026-09-25:
+// Dutchie Plus exposes no consumer accounts API, so this page never pretends
+// orders/points render here. It says where they actually live: the JB app,
+// and the loyalty section on checkout). Sign-in stays available in the
+// header per her call. noindex + robots disallow (unlinked utility route).
 
 export const metadata: Metadata = {
   title: 'Your Account',
@@ -29,15 +31,26 @@ export default function ProfilePage() {
             Your account
           </h1>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-white/70" style={{ fontFamily: 'var(--font-brand)' }}>
-            Orders, account details and PWF Rewards live here once you&rsquo;re signed in.
+            Your points, orders and PWF Rewards ride with you in the Jungle Boys app, and your
+            loyalty shows up right on the checkout page when you order.
           </p>
           <div className="mt-8 flex flex-col items-center gap-3" style={{ fontFamily: 'var(--font-brand)' }}>
-            <Link
-              href="/login"
+            <a
+              href={APP_LINKS.appStore}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex w-full max-w-sm items-center justify-center rounded-full bg-[var(--color-accent)] px-8 py-4 text-sm font-extrabold uppercase tracking-widest text-black transition-all duration-200 hover:-translate-y-0.5 hover:bg-white"
             >
-              Sign in
-            </Link>
+              Get the app on iPhone
+            </a>
+            <a
+              href={APP_LINKS.googlePlay}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex w-full max-w-sm items-center justify-center rounded-full border border-white/25 px-8 py-4 text-sm font-extrabold uppercase tracking-widest text-white transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+            >
+              Get the app on Android
+            </a>
             <Link
               href="/profile-reward"
               className="inline-flex w-full max-w-sm items-center justify-center rounded-full border border-white/25 px-8 py-4 text-sm font-extrabold uppercase tracking-widest text-white transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
