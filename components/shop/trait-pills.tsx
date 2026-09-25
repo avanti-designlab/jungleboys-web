@@ -70,21 +70,21 @@ const I = {
 }
 
 const TERPENE_META: Record<string, { icon: ReactNode; note: string }> = {
-  caryophyllene: { icon: I.pepper, note: 'Spicy, peppery — also found in black pepper and cloves' },
-  limonene: { icon: I.citrus, note: 'Bright citrus — also found in lemon and orange peel' },
-  myrcene: { icon: I.mango, note: 'Earthy, fruity — also found in mango and hops' },
-  terpinolene: { icon: I.pine, note: 'Fresh and piney — also found in apples and conifers' },
-  linalool: { icon: I.lavender, note: 'Floral — also found in lavender' },
-  pinene: { icon: I.pine, note: 'Sharp pine — also found in rosemary and pine needles' },
-  humulene: { icon: I.herb, note: 'Hoppy, woody — also found in hops and sage' },
+  caryophyllene: { icon: I.pepper, note: 'Spicy, peppery, also found in black pepper and cloves' },
+  limonene: { icon: I.citrus, note: 'Bright citrus, also found in lemon and orange peel' },
+  myrcene: { icon: I.mango, note: 'Earthy, fruity, also found in mango and hops' },
+  terpinolene: { icon: I.pine, note: 'Fresh and piney, also found in apples and conifers' },
+  linalool: { icon: I.lavender, note: 'Floral, also found in lavender' },
+  pinene: { icon: I.pine, note: 'Sharp pine, also found in rosemary and pine needles' },
+  humulene: { icon: I.herb, note: 'Hoppy, woody, also found in hops and sage' },
 }
 
 const EFFECT_META: Record<string, { icon: ReactNode; note: string }> = {
-  relaxed: { icon: I.wave, note: 'Ease off — settled body, quiet mind' },
-  euphoric: { icon: I.smile, note: 'Mood lift — bright and elevated' },
+  relaxed: { icon: I.wave, note: 'Ease off, settled body, quiet mind' },
+  euphoric: { icon: I.smile, note: 'Mood lift, bright and elevated' },
   sleepy: { icon: I.moon, note: 'Winds down toward rest' },
   sedating: { icon: I.moon, note: 'Heavy, night-time weight' },
-  energetic: { icon: I.bolt, note: 'Up and moving — daytime pace' },
+  energetic: { icon: I.bolt, note: 'Up and moving, daytime pace' },
   happy: { icon: I.smile, note: 'Easy smiles' },
   calm: { icon: I.lotus, note: 'Still and centered' },
   soothing: { icon: I.wave, note: 'Gentle on body and mind' },

@@ -100,7 +100,7 @@ export default async function LineShop({
             // similar item or category so it's not just empty").
             <Reveal className="mt-10 text-center md:mt-14">
               <p className="text-sm font-bold uppercase tracking-widest opacity-80" style={{ fontFamily: 'var(--font-brand)', color: ink }}>
-                Sold out everywhere right now — fresh batch on the way.
+                Sold out everywhere right now, fresh batch on the way.
               </p>
               <div className="mt-5 flex justify-center">
                 <ShopSimilarCta
@@ -209,7 +209,7 @@ export default async function LineShop({
 
           <Reveal className="mt-12 text-center">
             <p className="text-[11px] uppercase tracking-widest opacity-80" style={{ fontFamily: 'var(--font-brand)', color: ink }}>
-              Live from the menus — availability and pricing vary by store.
+              Live from the menus, availability and pricing vary by store.
             </p>
           </Reveal>
         </div>

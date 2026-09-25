@@ -65,7 +65,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     slug: 'all-in-one',
     name: 'All-In-One Gas Tank',
     tag: 'Vapes',
-    blurb: 'Ready-to-go all-in-one devices — charged, filled, and done. No cart, no hassle.',
+    blurb: 'Ready-to-go all-in-one devices, charged, filled, and done. No cart, no hassle.',
     image: '/products/fx/gas-tank-still.webp', // = the hover video's first frame (poster)
     isNew: true,
     hoverVideo: '/products/fx/gas-tank-hover-2.mp4',
@@ -100,7 +100,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     slug: 'premium-flower',
     name: '3.5G Gold Mylars',
     tag: 'Premium Indoor Flower',
-    blurb: 'Top-shelf, hand-trimmed indoor — sealed fresh in the gold pouch.',
+    blurb: 'Top-shelf, hand-trimmed indoor, sealed fresh in the gold pouch.',
     image: '/products/v11/premium-flower.webp',
     popOut: [
       { src: '/phenos/nug-1.png', x: 25, y: 50, rot: -15, w: 38 },
@@ -119,7 +119,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     slug: '10-pack-prerolls',
     name: '10PK Pre-Rolls',
     tag: 'Multipack',
-    blurb: 'Ten mini pre-rolls to a pack — the everyday carry for when one is never enough.',
+    blurb: 'Ten mini pre-rolls to a pack, the everyday carry for when one is never enough.',
     image: '/products/v11/10-pack-prerolls.webp',
     fan: {
       src: '/products/fx/mini-preroll.webp',
@@ -139,7 +139,7 @@ export const PRODUCT_LINES: ProductLine[] = [
     slug: 'orc',
     name: 'Oil Refinery Co.',
     tag: 'Concentrates',
-    blurb: 'Our concentrate line — potent, terp-forward extracts for the connoisseur.',
+    blurb: 'Our concentrate line, potent, terp-forward extracts for the connoisseur.',
     image: '/products/v11/orc.webp',
   },
 ]

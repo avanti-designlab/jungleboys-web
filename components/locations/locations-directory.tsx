@@ -30,13 +30,13 @@ function StoreCard({ s }: { s: OwnedStore }) {
           /* eslint-disable-next-line @next/next/no-img-element -- brand SVG */
           <img
             src="/brand/jb-stacked-white.svg"
-            alt={`${s.name} — Jungle Boys`}
+            alt={`${s.name}. Jungle Boys`}
             className="absolute left-1/2 top-1/2 h-2/5 w-2/5 -translate-x-1/2 -translate-y-1/2 object-contain invert"
           />
         ) : (
           <Image
             src={s.image}
-            alt={`${s.name} — Jungle Boys`}
+            alt={`${s.name}. Jungle Boys`}
             fill
             sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
             className={`relative object-cover ${s.imageInset ? 'scale-[0.8]' : ''}`}

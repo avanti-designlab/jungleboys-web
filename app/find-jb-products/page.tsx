@@ -8,7 +8,7 @@ import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 // treatment as /contact + /media + /wholesale, then a searchable full-width map.
 
 export const metadata: Metadata = {
-  title: 'Product Finder — Find Jungle Boys Near You',
+  title: 'Product Finder | Find Jungle Boys Near You',
   description:
     'Find Jungle Boys products near you. Search your address or ZIP, or use your location, to find dispensaries that carry Jungle Boys across California and Florida.',
   // Every other route gets this from pageMetadata(); these four declare
@@ -31,7 +31,7 @@ export default function ProductFinderPage() {
         }}
       />
 
-      <h1 className="sr-only">Product Finder — Find Jungle Boys Products Near You</h1>
+      <h1 className="sr-only">Product Finder. Find Jungle Boys Products Near You</h1>
 
       {/* character banner — same treatment as /contact + /media + /wholesale */}
       <section data-pf-banner className="px-2 pt-2 md:px-3">

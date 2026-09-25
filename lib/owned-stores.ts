@@ -68,7 +68,7 @@ const STRUCTURED: Record<string, StoreAddressHours> = {
 
 function store(state: 'CA' | 'FL', slug: string, name: string, address: string, phone: string, hours: string, lat: number, lng: number): OwnedStore {
   const st = STRUCTURED[slug]
-  if (!st) throw new Error(`owned-stores: no structured address/hours for '${slug}' — add it to STRUCTURED`)
+  if (!st) throw new Error(`owned-stores: no structured address/hours for '${slug}', add it to STRUCTURED`)
   return {
     slug,
     name,

@@ -48,7 +48,7 @@ export default function HhHero() {
         {/* The hero is deliberately art-only — a film, no type over it. The page
             still needs exactly one h1, so it is visually hidden rather than
             drawn. Nothing on screen changes. */}
-        <h1 className="sr-only">Jungle Boys Hash Hole — Infused Pre-Roll</h1>
+        <h1 className="sr-only">Jungle Boys Hash Hole. Infused Pre-Roll</h1>
         {/* The poster is a real <picture>, not a video attribute: the attribute
             was picked from client state, so the server always emitted the
             DESKTOP poster and both variants downloaded. This gives the browser

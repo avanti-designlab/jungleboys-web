@@ -4,7 +4,7 @@ import Reveal from '@/components/reveal'
 // without Live Rosin (not an ORC product — Avanti, 2026-09-10).
 export default function OrcBuilt() {
   return (
-    <section className="relative overflow-hidden bg-[rgba(18,16,10,0.82)] px-6 py-24 md:px-12 md:py-32 lg:px-20">
+    <section className="relative overflow-hidden bg-[rgba(18,16,10,0.82)] px-6 pb-32 pt-24 md:px-12 md:pb-44 md:pt-32 lg:px-20">
       <div className="mx-auto grid max-w-[1240px] items-center gap-12 lg:grid-cols-[1fr_1.6fr]">
         <Reveal className="relative order-2 mx-auto lg:order-1">
           {/* eslint-disable-next-line @next/next/no-img-element -- brand mascot */}

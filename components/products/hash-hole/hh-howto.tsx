@@ -37,7 +37,7 @@ const STEPS = [
     video: '/products/hash-hole/howto-4.mp4',
     poster: '/products/hash-hole/howto-4-poster.webp',
     title: 'Let Ash Fall Naturally',
-    body: 'Let the cherry fall naturally into the ashtray instead of tapping too hard — this helps the hash line burn through.',
+    body: 'Let the cherry fall naturally into the ashtray instead of tapping too hard, this helps the hash line burn through.',
   },
 ]
 

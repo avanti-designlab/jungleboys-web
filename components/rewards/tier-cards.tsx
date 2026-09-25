@@ -65,7 +65,7 @@ export default function TierCards() {
                   <div className="pointer-events-none relative h-48 md:h-44">
                     <Image
                       src={t.mascot}
-                      alt={`${t.tier} — ${t.color} ${t.name} mascot`}
+                      alt={`${t.tier}, ${t.color} ${t.name} mascot`}
                       width={373}
                       height={464}
                       sizes="(max-width: 768px) 80vw, 380px"

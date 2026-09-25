@@ -22,7 +22,7 @@ export default function DesignCheck() {
       {/* Type */}
       <section className="flex flex-col gap-6">
         <p className="text-sm uppercase tracking-widest text-[var(--color-muted)]">
-          Type — frozen roles
+          Type, frozen roles
         </p>
         <h1
           className="text-7xl md:text-8xl leading-none uppercase"
@@ -42,7 +42,7 @@ export default function DesignCheck() {
         <p className="max-w-2xl text-lg leading-relaxed text-[var(--color-foreground-soft)]">
           Body text in DM Sans. The Jungle Boys started as a small group of
           growers in Los Angeles and built one of the most recognized cannabis
-          brands in the world — this paragraph exists to judge long-form
+          brands in the world, this paragraph exists to judge long-form
           readability at real sizes, line-height 1.65, on the near-black
           background.
         </p>
@@ -51,7 +51,7 @@ export default function DesignCheck() {
       {/* Color */}
       <section className="flex flex-col gap-6">
         <p className="text-sm uppercase tracking-widest text-[var(--color-muted)]">
-          Color — global palette (category accents live only on product pages)
+          Color, global palette (category accents live only on product pages)
         </p>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {swatches.map((s) => (
@@ -72,7 +72,7 @@ export default function DesignCheck() {
       {/* Interactive */}
       <section className="flex flex-col gap-6">
         <p className="text-sm uppercase tracking-widest text-[var(--color-muted)]">
-          Buttons — accent pairing rules
+          Buttons, accent pairing rules
         </p>
         <div className="flex flex-wrap gap-4">
           <button

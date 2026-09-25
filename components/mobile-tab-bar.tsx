@@ -252,7 +252,7 @@ export default function MobileTabBar() {
         ) : (
           <button
             onClick={open}
-            aria-label="Verify a product — open scanner"
+            aria-label="Verify a product, open scanner"
             className="group -mt-8 flex shrink-0 flex-col items-center"
           >
             <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-accent)] text-black shadow-lg ring-4 ring-[#0b0b0b] transition-transform duration-200 group-hover:scale-105 group-active:scale-95">

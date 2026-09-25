@@ -36,12 +36,12 @@ export async function generateMetadata({
   const base = `/menu/california/${slug}`
   return col.kind === 'category'
     ? {
-        title: `${col.title} — ${location.name}, ${location.city} CA`,
+        title: `${col.title} | ${location.name}, ${location.city} CA`,
         description: `Shop ${col.title.toLowerCase()} at ${location.name}, ${location.address}, ${location.city}. Live menu, pricing and availability.`,
         alternates: { canonical: `${base}/shop/${col.slug}` },
       }
     : {
-        title: `${col.title} — ${location.name}, ${location.city} CA`,
+        title: `${col.title} | ${location.name}, ${location.city} CA`,
         robots: { index: false },
         alternates: { canonical: base },
       }

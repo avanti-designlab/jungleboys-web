@@ -146,7 +146,7 @@ export default function PopsLineup({ items }: { items: LineupItem[] }) {
                 data-jar={i}
                 type="button"
                 onClick={() => setOpen(j)}
-                aria-label={`${j.name} — quick facts`}
+                aria-label={`${j.name}, quick facts`}
                 className="pointer-events-auto absolute left-1/2 top-1/2 h-full -translate-y-1/2 cursor-pointer border-0 bg-transparent p-0 will-change-transform"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element -- jar art */}

@@ -17,9 +17,9 @@ import MoreLines from '@/components/products/more-lines'
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('products/pre-rolls', {
-    title: '1G Pre-Rolls — Single-Strain, Rolled from Whole Nugs',
+    title: '1G Pre-Rolls | Single-Strain, Rolled from Whole Nugs',
     description:
-      'One gram, one strain, rolled from the same indoor flower we jar — never trim, never shake. Even burn, smooth draw, lab-tested every batch.',
+      'One gram, one strain, rolled from the same indoor flower we jar, never trim, never shake. Even burn, smooth draw, lab-tested every batch.',
   })
 }
 

@@ -15,7 +15,7 @@ const STEPS: { n: string; title: string; blurb: string }[] = [
   { n: '01', title: 'Pheno Hunting', blurb: 'Thousands of seedlings. A handful of keepers.' },
   { n: '02', title: 'Elite Genetics', blurb: 'Only award-winning cultivars make the cut.' },
   { n: '03', title: 'Cultivation', blurb: 'Grown indoors to Jungle Boys spec.' },
-  { n: '04', title: 'Peak Harvest', blurb: 'Cut at full maturity — never early, never late.' },
+  { n: '04', title: 'Peak Harvest', blurb: 'Cut at full maturity | never early, never late.' },
   { n: '05', title: 'Fresh Frozen', blurb: 'Frozen within hours. Terpenes locked in.' },
   { n: '06', title: 'Precision Extraction', blurb: 'The lab lets the genetics do the talking.' },
   { n: '07', title: 'Post Processing', blurb: 'Whipped, cured and finished by hand.' },

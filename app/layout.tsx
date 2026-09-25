@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     template: "%s | Jungle Boys",
   },
   description:
-    "Jungle Boys — premium cannabis cultivated in Los Angeles since 2006. Playing With Fire®.",
+    "Jungle Boys, premium cannabis cultivated in Los Angeles since 2006. Playing With Fire®.",
 };
 
 export default function RootLayout({

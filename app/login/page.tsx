@@ -33,7 +33,7 @@ export default function LoginPage() {
             Sign in
           </h1>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-white/70" style={{ fontFamily: 'var(--font-brand)' }}>
-            Accounts, orders and PWF Rewards — all in one place.
+            Accounts, orders and PWF Rewards, all in one place.
           </p>
 
           <div className="mt-8">

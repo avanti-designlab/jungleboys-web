@@ -28,7 +28,7 @@ export default function NewsletterForm({ consentText }: { consentText: string })
       })
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
-        throw new Error(body.error ?? 'Something went wrong — please try again.')
+        throw new Error(body.error ?? 'Something went wrong, please try again.')
       }
       setState('done')
       form.reset()

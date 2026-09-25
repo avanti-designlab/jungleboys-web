@@ -20,9 +20,9 @@ import Reveal from '@/components/reveal'
 // dispensary inventory. Do not merge them.
 
 export const metadata: Metadata = {
-  title: 'Shop — Live Jungle Boys Menus',
+  title: 'Shop | Live Jungle Boys Menus',
   description:
-    'Shop Jungle Boys California — live menus, pricing and deals at Downtown LA, Orange County, Pomona and San Diego. Florida menus via our locations page.',
+    'Shop Jungle Boys California, live menus, pricing and deals at Downtown LA, Orange County, Pomona and San Diego. Florida menus via our locations page.',
   alternates: { canonical: '/shop' },
 }
 
@@ -50,7 +50,7 @@ export default function ShopEntryPage() {
             className="mt-3 max-w-xl text-sm text-[var(--color-muted)]"
             style={{ fontFamily: 'var(--font-brand)' }}
           >
-            Pick your store — menus, pricing and deals are live per location.
+            Pick your store, menus, pricing and deals are live per location.
           </p>
           <ContinueAtStore />
         </Reveal>

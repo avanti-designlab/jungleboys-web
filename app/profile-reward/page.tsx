@@ -11,7 +11,7 @@ import Reveal from '@/components/reveal'
 
 export const metadata: Metadata = {
   title: 'Your Rewards',
-  description: 'Your PWF Rewards — points, collectibles and referrals.',
+  description: 'Your PWF Rewards, points, collectibles and referrals.',
   robots: { index: false, follow: false },
 }
 
@@ -28,7 +28,7 @@ const TILES = [
   },
   {
     title: 'Collectibles',
-    body: 'Campaign drops you have collected — and the ones still out there.',
+    body: 'Campaign drops you have collected, and the ones still out there.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-6 w-6" aria-hidden>
         <path d="M12 3l2.7 5.5 6 .9-4.3 4.2 1 6-5.4-2.8L6.6 19.6l1-6L3.3 9.4l6-.9L12 3Z" strokeLinejoin="round" />
@@ -37,7 +37,7 @@ const TILES = [
   },
   {
     title: 'Referrals',
-    body: 'Bring a friend into the jungle — you both earn when they shop.',
+    body: 'Bring a friend into the jungle, you both earn when they shop.',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-6 w-6" aria-hidden>
         <circle cx="9" cy="8" r="3.2" />
@@ -64,7 +64,7 @@ export default function ProfileRewardPage() {
             Your rewards
           </h1>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-white/70" style={{ fontFamily: 'var(--font-brand)' }}>
-            Points, collectibles and referrals — sign in to see where you stand.
+            Points, collectibles and referrals, sign in to see where you stand.
           </p>
 
           <div className="mt-9 grid gap-3 sm:grid-cols-3" style={{ fontFamily: 'var(--font-brand)' }}>

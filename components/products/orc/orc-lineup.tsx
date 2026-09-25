@@ -15,7 +15,7 @@ const EXTRACTS: {
   {
     name: 'Live Resin',
     image: 'live-resin',
-    copy: 'Fresh frozen flower, extracted immediately after harvest — the terpenes curing burns away, locked in.',
+    copy: 'Fresh frozen flower, extracted immediately after harvest, the terpenes curing burns away, locked in.',
     chips: ['Fresh Frozen', 'High Terpenes', 'Full Spectrum'],
     bestFor: 'Maximum flavor. True to the flower.',
   },
@@ -29,7 +29,7 @@ const EXTRACTS: {
   {
     name: 'Budder',
     image: 'budder',
-    copy: 'Whipped creamy — smooth, flavorful, and easy to work with.',
+    copy: 'Whipped creamy, smooth, flavorful, and easy to work with.',
     chips: ['Creamy Texture', 'Stable Consistency', 'High Potency'],
     bestFor: 'A smooth, forgiving consistency for every rig.',
   },
@@ -70,7 +70,7 @@ export default function OrcLineup() {
                   {/* eslint-disable-next-line @next/next/no-img-element -- extract macro */}
                   <img
                     src={`/products/orc/${x.image}.webp`}
-                    alt={`${x.name} — Oil Refinery Co. extract`}
+                    alt={`${x.name} extract by Oil Refinery Co.`}
                     loading="lazy"
                     data-orc-plx="-0.03"
                     className="max-h-[80%] w-auto max-w-[72%] object-contain drop-shadow-[0_30px_50px_rgba(0,0,0,0.6)]"

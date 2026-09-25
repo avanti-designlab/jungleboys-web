@@ -53,7 +53,7 @@ export default function LocationsMap() {
           title: store.name,
           alt: store.name,
         }).addTo(map)
-        marker.getElement()?.setAttribute('aria-label', `${store.name} — view details`)
+        marker.getElement()?.setAttribute('aria-label', `${store.name}, view details`)
         marker.on('click', () => setActive(store))
         return marker
       })

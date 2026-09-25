@@ -40,7 +40,7 @@ export default async function FlowerShop() {
           {products.length === 0 && (
             <div className="mt-12 text-center md:mt-16">
               <p className="text-sm font-bold uppercase tracking-widest opacity-80" style={{ fontFamily: 'var(--font-brand)' }}>
-                Sold out everywhere right now — fresh batch on the way.
+                Sold out everywhere right now, fresh batch on the way.
               </p>
               <div className="mt-5 flex justify-center">
                 <ShopSimilarCta category="flower" label="Flower" />
@@ -125,7 +125,7 @@ export default async function FlowerShop() {
 
           <Reveal className="mt-10 text-center">
             <p className="text-[11px] uppercase tracking-widest text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
-              Availability varies by store — live menus &amp; deals connect at launch.
+              Availability varies by store, live menus &amp; deals connect at launch.
             </p>
           </Reveal>
         </div>

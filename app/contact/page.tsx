@@ -12,9 +12,9 @@ import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('contact', {
-    title: 'Contact — Get in Touch',
+    title: 'Contact | Get in Touch',
     description:
-      'Questions, collabs, wholesale, press or feedback? Get in touch with Jungle Boys — pick a lane and send a message. Playing With Fire® since 2006.',
+      'Questions, collabs, wholesale, press or feedback? Get in touch with Jungle Boys, pick a lane and send a message. Playing With Fire® since 2006.',
   })
 }
 

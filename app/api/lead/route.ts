@@ -47,7 +47,7 @@ function clientKey(req: Request): string {
 export async function POST(req: Request) {
   const ip = clientKey(req)
   if (rateLimited(ip)) {
-    return Response.json({ error: 'Too many requests — try again shortly.' }, { status: 429 })
+    return Response.json({ error: 'Too many requests, try again shortly.' }, { status: 429 })
   }
 
   let body: Record<string, unknown>
@@ -111,7 +111,7 @@ export async function POST(req: Request) {
     return Response.json({
       ok: true,
       stored: false,
-      note: 'Local run — validated but deliberately not written to the consent ledger.',
+      note: 'Local run, validated but deliberately not written to the consent ledger.',
     })
   }
 
@@ -125,7 +125,7 @@ export async function POST(req: Request) {
     ins = await db.from('leads').insert(base).select('id').single()
   }
   if (ins.error || !ins.data) {
-    return Response.json({ error: 'Could not save signup — try again.' }, { status: 500 })
+    return Response.json({ error: 'Could not save signup, try again.' }, { status: 500 })
   }
 
   // 2) route by form type (best-effort, outcome recorded):

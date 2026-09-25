@@ -21,7 +21,7 @@ export default function OrcHero() {
           {/* eslint-disable-next-line @next/next/no-img-element -- hero brand art */}
           <img
             src="/products/orc/skyline.webp"
-            alt="Oil Refinery Co. — refinery skyline dripping oil"
+            alt="Oil Refinery Co., refinery skyline dripping oil"
             fetchPriority="high"
             className="orc-float relative mx-auto w-[min(88vw,720px)]"
             style={{
@@ -43,18 +43,6 @@ export default function OrcHero() {
           <PillCta label="Explore Oil Refinery Co." href="#orc-lineup" hover="black" />
         </Reveal>
 
-        {/* the stamp burns in up top as the scene bottoms out (bottom slot
-            collided with the CTA at short viewports) */}
-        <p
-          aria-hidden
-          className="font-display absolute top-[11vh] left-1/2 -translate-x-1/2 whitespace-nowrap text-xl uppercase tracking-[0.34em] text-[var(--orc-gold)] md:text-2xl"
-          style={{
-            opacity: 'calc((var(--p, 0) - 0.45) * 2.2)',
-            transform: 'translateX(-50%) translateY(calc((1 - var(--p, 0)) * -2vh))',
-          }}
-        >
-          Refining flavor since 2014
-        </p>
       </div>
     </header>
   )

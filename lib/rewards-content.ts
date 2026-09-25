@@ -17,7 +17,7 @@ export const VALUE_PROPS = [
   {
     icon: '/rewards/icon-unlock.svg',
     title: 'Unlock Rewards',
-    body: 'Turn points into real discounts — up to $25 back per transaction.',
+    body: 'Turn points into real discounts, up to $25 back per transaction.',
   },
   {
     icon: '/rewards/icon-climb.svg',
@@ -45,7 +45,7 @@ export const STEPS = [
   {
     icon: '/rewards/icon-step-3.svg',
     title: 'Redeem Rewards',
-    body: 'Use points at checkout — in-store, in-app or online at jungleboys.com.',
+    body: 'Use points at checkout, in-store, in-app or online at jungleboys.com.',
   },
   {
     icon: '/rewards/icon-step-4.svg',

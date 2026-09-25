@@ -13,9 +13,9 @@ import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('wholesale', {
-    title: 'Wholesale — Carry Jungle Boys',
+    title: 'Wholesale | Carry Jungle Boys',
     description:
-      'Carry Jungle Boys products at your dispensary. From exclusive genetics to top-shelf flower, our products move fast and speak for themselves. Become a retailer — order through Nabis.',
+      'Carry Jungle Boys products at your dispensary. From exclusive genetics to top-shelf flower, our products move fast and speak for themselves. Become a retailer, order through Nabis.',
   })
 }
 
@@ -38,7 +38,7 @@ export default async function WholesalePage() {
         }}
       />
 
-      <h1 className="sr-only">Wholesale — Carry Jungle Boys</h1>
+      <h1 className="sr-only">Wholesale. Carry Jungle Boys</h1>
 
       {/* character banner — same treatment as /contact + /media */}
       <section data-wholesale-banner className="px-2 pt-2 md:px-3">

@@ -20,9 +20,9 @@ import MoreLines from '@/components/products/more-lines'
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('products/twins', {
-    title: 'Twins 2 Pack Pre-Rolls — Two 0.75g Rolls, 1.5g Total',
+    title: 'Twins 2 Pack Pre-Rolls | Two 0.75g Rolls, 1.5g Total',
     description:
-      'Two 0.75g pre-rolls in every tube — 1.5g total. Premium indoor flower, no cones, all natural unrefined paper and crutch. Perfect solo or shared.',
+      'Two 0.75g pre-rolls in every tube, 1.5g total. Premium indoor flower, no cones, all natural unrefined paper and crutch. Perfect solo or shared.',
   })
 }
 

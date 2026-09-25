@@ -15,9 +15,9 @@ import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('phenos', {
-    title: 'Pheno Hunt — Hunt With Us',
+    title: 'Pheno Hunt | Hunt With Us',
     description:
-      'Hunt with us. Small-batch drops of unnamed, unreleased Jungle Boys genetics straight from our cultivation rooms — first look, first taste, and a say in what becomes the next strain. Join the pheno hunt.',
+      'Hunt with us. Small-batch drops of unnamed, unreleased Jungle Boys genetics straight from our cultivation rooms, first look, first taste, and a say in what becomes the next strain. Join the pheno hunt.',
   })
 }
 
@@ -59,7 +59,7 @@ export default async function PhenosPage() {
         }}
       />
 
-      <h1 className="sr-only">Pheno Hunt — Hunt With Us</h1>
+      <h1 className="sr-only">Pheno Hunt. Hunt With Us</h1>
 
       {/* full-page diagonal HUNT WITH US texture (no gradient — just the scroll) */}
       <HuntField />

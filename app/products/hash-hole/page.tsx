@@ -21,9 +21,9 @@ import MoreLines from '@/components/products/more-lines'
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('products/hash-hole', {
-    title: 'Hash Hole — Infused Pre-Roll',
+    title: 'Hash Hole | Infused Pre-Roll',
     description:
-      '2g premium indoor flower, a .5g live hash rosin core, organic wood tip, all-natural paper. One perfect hole. Shop Jungle Boys Hash Holes — Gelato Z, Private Reserve, Blu Frootz.',
+      '2g premium indoor flower, a .5g live hash rosin core, organic wood tip, all-natural paper. One perfect hole. Shop Jungle Boys Hash Holes. Gelato Z, Private Reserve, Blu Frootz.',
   })
 }
 

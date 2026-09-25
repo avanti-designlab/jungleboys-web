@@ -49,7 +49,7 @@ export async function generateMetadata({
   const product = await getProductBySlug(slug)
   if (!product) return {}
   return {
-    title: `${product.name} — ${product.brand}`,
+    title: `${product.name} | ${product.brand}`,
     description:
       product.description?.slice(0, 155) ??
       `Shop ${product.name} by ${product.brand} at Jungle Boys California. Live pricing and availability by store.`,
@@ -259,7 +259,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                   <span className="block text-[12px] font-extrabold uppercase tracking-[0.12em] text-[var(--color-foreground)]">
                     <span className="text-[var(--color-accent-ink)]">Special:</span>{' '}
                     {special
-                      ? `${special.name}${special.percentOff != null ? ` — ${special.percentOff}% off` : ''}`
+                      ? `${special.name}${special.percentOff != null ? `, ${special.percentOff}% off` : ''}`
                       : `${percentOff}% off right now`}
                   </span>
                   <span className="mt-0.5 block text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-accent-ink)] underline-offset-4 group-hover:underline">
@@ -365,7 +365,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               <div className="rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface)] p-7 md:p-9">
                 <h2 className="font-display text-3xl uppercase leading-none md:text-4xl">Primary terpenes</h2>
                 <p className="mt-2 text-sm text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
-                  The key to the smell and the taste — measured for this batch.
+                  The key to the smell and the taste, measured for this batch.
                 </p>
                 <div className="mt-5">
                   <TerpenePills names={lab.terpenes.map((t) => t.name)} />

@@ -6,7 +6,7 @@ import path from 'node:path'
 // on brand near-black. This file convention makes it the default share card for
 // every route, so shared links no longer auto-grab a random hero image.
 
-export const alt = 'Jungle Boys — Playing With Fire®'
+export const alt = 'Jungle Boys | Playing With Fire®'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 

@@ -59,7 +59,7 @@ export default function StrainMarquee() {
         </div>
       </div>
       <p className="sr-only">
-        Small batch, hand-trimmed, gold standard, exotic genetics — Jungle Boys strains including Motorbreath, 06 OG,
+        Small batch, hand-trimmed, gold standard, exotic genetics. Jungle Boys strains including Motorbreath, 06 OG,
         Zudz, Blam, Blu Zerdz, LA Gelato, RS1000 and Zangria.
       </p>
     </section>

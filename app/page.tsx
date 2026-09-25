@@ -7,9 +7,9 @@ import { pageMetadata } from '@/lib/storyblok/seo'
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('home', {
-    title: 'Jungle Boys | Premium Cannabis — Los Angeles',
+    title: 'Jungle Boys | Premium Cannabis | Los Angeles',
     description:
-      'Jungle Boys — premium cannabis cultivated in Los Angeles since 2006. Shop flower, pre-rolls, vapes and more at our California dispensaries. Playing With Fire®.',
+      'Jungle Boys, premium cannabis cultivated in Los Angeles since 2006. Shop flower, pre-rolls, vapes and more at our California dispensaries. Playing With Fire®.',
   })
 }
 
@@ -25,7 +25,7 @@ export default async function Home() {
       />
       {/* The homepage's one h1. The hero slides are rotating promos and now use
           h2 — same sr-only pattern already used on /locations. */}
-      <h1 className="sr-only">Jungle Boys — Premium Cannabis Flower, Pre-Rolls &amp; Hash Holes</h1>
+      <h1 className="sr-only">Jungle Boys. Premium Cannabis Flower, Pre-Rolls &amp; Hash Holes</h1>
 
       <HeroDeck slides={heroSlides} />
       <QuickCards cards={quickCards} />

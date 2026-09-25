@@ -116,17 +116,17 @@ const SAMPLE_POSTS: BlogPost[] = [
     date: '2026-07-18',
     category: 'Culture',
     body:
-      "<p>It started in a backyard in LA and turned into a movement. Twenty years later, the standard hasn't moved — it's only gotten higher.</p>" +
+      "<p>It started in a backyard in LA and turned into a movement. Twenty years later, the standard hasn't moved, it's only gotten higher.</p>" +
       "<h2>The standard</h2>" +
       "<p>Every batch that carries the Jungle Boys name goes through the same question: is this the best version of itself? If the answer is anything but yes, it doesn't leave the room.</p>" +
       "<ul><li>Small-batch, indoor, hand-trimmed</li><li>Genetics hunted and proven in-house</li><li>Nothing rushed to market</li></ul>" +
-      "<p>That's the whole game — and it's why we're still here, still <strong>playing with fire</strong>.</p>",
+      "<p>That's the whole game, and it's why we're still here, still <strong>playing with fire</strong>.</p>",
   },
   {
     trustedHtml: true,
     slug: 'inside-the-pheno-hunt',
     title: 'Inside the Pheno Hunt',
-    excerpt: 'How an unnamed seed becomes the next strain everyone is chasing — and how you get a say in it.',
+    excerpt: 'How an unnamed seed becomes the next strain everyone is chasing, and how you get a say in it.',
     image: '/home/card-snl.webp',
     imageAlt: 'Trichome macro of a Jungle Boys pheno',
     date: '2026-07-10',
@@ -142,13 +142,13 @@ const SAMPLE_POSTS: BlogPost[] = [
     trustedHtml: true,
     slug: 'july-deals-are-live',
     title: 'July Deals Are Live',
-    excerpt: 'The mid-summer drop is here — top-shelf flower, all-in-one Gas Tanks, and gold mylars, all month long.',
+    excerpt: 'The mid-summer drop is here, top-shelf flower, all-in-one Gas Tanks, and gold mylars, all month long.',
     image: '/hero/july-deals-fireworks.webp',
     imageAlt: 'Fireworks over the downtown LA skyline',
     date: '2026-07-13',
     category: 'Drops',
     body:
-      "<p>July is stacked. From the 13th through the 31st we're running deals across the whole lineup — while supplies last.</p>" +
+      "<p>July is stacked. From the 13th through the 31st we're running deals across the whole lineup, while supplies last.</p>" +
       "<h2>What's in it</h2>" +
       "<ul><li>Premium indoor flower in the gold mylars</li><li>All-In-One Gas Tanks</li><li>Infused pre-rolls and Hash Holes</li></ul>" +
       "<p>Find your nearest store on the <a href=\"/locations\">locations</a> page and come pull up.</p>",

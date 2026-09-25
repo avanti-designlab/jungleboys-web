@@ -139,7 +139,7 @@ export default function PhenosHero() {
         {/* eslint-disable-next-line @next/next/no-img-element -- crisp vector lockup */}
         <img
           src="/phenos/pheno-logo.svg"
-          alt="Pheno — Hunt With Us"
+          alt="Pheno. Hunt With Us"
           fetchPriority="high"
           className="pheno-logo-in relative z-10 mx-auto w-[min(92vw,1000px)]"
         />

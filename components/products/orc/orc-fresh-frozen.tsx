@@ -41,7 +41,7 @@ export default function OrcFreshFrozen() {
           {/* eslint-disable-next-line @next/next/no-img-element -- EST 2014 badge */}
           <img
             src="/products/orc/badge.webp"
-            alt="Oil Refinery Co. — established 2014"
+            alt="Oil Refinery Co., established 2014"
             loading="lazy"
             className="orc-float relative w-[min(60vw,380px)]"
           />

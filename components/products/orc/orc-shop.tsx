@@ -30,7 +30,7 @@ export default async function OrcShop() {
   const products = await getLineProducts('orc')
 
   return (
-    <section id="orc-shop" className="relative scroll-mt-24 px-6 pb-24 md:px-12 md:pb-32 lg:px-20">
+    <section id="orc-shop" className="relative scroll-mt-24 px-6 pb-24 pt-20 md:px-12 md:pb-32 md:pt-28 lg:px-20">
       <div className="mx-auto max-w-[1240px]">
         <Reveal className="text-center">
           <p
@@ -50,7 +50,7 @@ export default async function OrcShop() {
               className="text-sm font-bold uppercase tracking-widest text-white/80"
               style={{ fontFamily: 'var(--font-brand)' }}
             >
-              Sold out everywhere right now — fresh batch on the way.
+              Sold out everywhere right now, fresh batch on the way.
             </p>
             <div className="mt-5 flex justify-center">
               <ShopSimilarCta category="concentrates" label="Concentrates" />
@@ -141,7 +141,7 @@ export default async function OrcShop() {
         {products.length > 0 && (
           <Reveal className="mt-12 text-center">
             <p className="text-[11px] uppercase tracking-widest text-white/60" style={{ fontFamily: 'var(--font-brand)' }}>
-              Live from the menus — availability and pricing vary by store.
+              Live from the menus, availability and pricing vary by store.
             </p>
           </Reveal>
         )}

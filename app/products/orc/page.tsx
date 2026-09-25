@@ -4,7 +4,6 @@ import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 import OrcRevealRoot from '@/components/products/orc/orc-reveal-root'
 import OrcAtmosphere from '@/components/products/orc/orc-atmosphere'
 import OrcOutlineMarquee from '@/components/products/orc/orc-outline-marquee'
-import OrcFinale from '@/components/products/orc/orc-finale'
 import OrcHero from '@/components/products/orc/orc-hero'
 import OrcHazard from '@/components/products/orc/orc-hazard'
 import OrcManifesto from '@/components/products/orc/orc-manifesto'
@@ -30,9 +29,9 @@ export const revalidate = 60
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('products/orc', {
-    title: 'Oil Refinery Co. — Jungle Boys Extracts',
+    title: 'Oil Refinery Co. | Jungle Boys Extracts',
     description:
-      'From the best flower comes the best oil. Oil Refinery Co. turns Jungle Boys genetics into flavor-first extracts — Live Resin, Batter, Budder and Sugar Trim. Est 2014.',
+      'From the best flower comes the best oil. Oil Refinery Co. turns Jungle Boys genetics into flavor-first extracts. Live Resin, Batter, Budder and Sugar Trim. Est 2014.',
   })
 }
 
@@ -73,7 +72,6 @@ export default function OrcPage() {
         <OrcOutlineMarquee />
         <OrcWhy />
         <OrcBuilt />
-        <OrcFinale />
         <OrcHazard />
         <OrcShop />
         <div className="px-6 pb-24 md:px-12 lg:px-20">

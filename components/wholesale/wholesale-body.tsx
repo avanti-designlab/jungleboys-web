@@ -124,7 +124,7 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
           message: [
             `Store: ${answers.storeName ?? ''}`,
             `Address: ${answers.storeAddress ?? ''}`,
-            `Website: ${answers.website || '—'}`,
+            `Website: ${answers.website || ', '}`,
             `CA License: ${answers.license ?? ''}`,
           ].join('\n'),
           sourcePage: '/wholesale',
@@ -132,7 +132,7 @@ export default function WholesaleBody({ consentText }: { consentText: string }) 
       })
       if (!res.ok) {
         const b = await res.json().catch(() => ({}))
-        throw new Error(b.error ?? 'Something went wrong — please try again.')
+        throw new Error(b.error ?? 'Something went wrong, please try again.')
       }
       setState('done')
     } catch (err) {

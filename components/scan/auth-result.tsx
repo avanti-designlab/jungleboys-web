@@ -56,7 +56,7 @@ export default function AuthResult({ result }: { result: VerifyResult }) {
             Authentic Product
           </h1>
           <p className="mx-auto mt-5 max-w-md text-base leading-relaxed text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-body)' }}>
-            This is a genuine {product?.name || 'Jungle Boys'} product — never imitated, never duplicated.
+            This is a genuine {product?.name || 'Jungle Boys'} product, never imitated, never duplicated.
           </p>
 
           <div className="mt-8 w-full max-w-sm rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">

@@ -186,11 +186,11 @@ export default function Anniversary() {
           {/* condensed story — brand voice, staggered rise */}
           <div className="media-reveal fl-stag mx-auto max-w-xl space-y-5 text-left text-[15px] leading-relaxed text-white/75 md:text-base" style={{ fontFamily: 'var(--font-brand)' }}>
             <p className="uppercase tracking-wide">
-              Twenty years in, the foundation hasn&apos;t moved — same small, dedicated team, still led by the hunt.
+              Twenty years in, the foundation hasn&apos;t moved, same small, dedicated team, still led by the hunt.
             </p>
             <p className="uppercase tracking-wide">
               From the iconic gold vials of our early days to today&apos;s 3.5g gold mylars: hand-trimmed, full, frosty
-              top nugs only. <span className="text-[var(--fl-gold,var(--fl-gold))]">Gold is the standard</span> — what&apos;s inside earns the bag.
+              top nugs only. <span className="text-[var(--fl-gold,var(--fl-gold))]">Gold is the standard</span>, what&apos;s inside earns the bag.
             </p>
           </div>
         </div>

@@ -22,7 +22,7 @@ import MoreLines from '@/components/products/more-lines'
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('products/all-in-one', {
-    title: 'All-In-One Gas Tank — Flavors, Live Resin & Live Rosin',
+    title: 'All-In-One Gas Tank | Flavors, Live Resin & Live Rosin',
     description:
       'The new All-In-One Gas Tank: bigger vapor, smoother pulls and a longer-lasting battery, powered by CCELL. Available in Flavors, Live Resin and Live Rosin.',
   })

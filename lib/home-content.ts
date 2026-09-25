@@ -104,7 +104,7 @@ export const MARQUEE_TILES = [
 export const MEDIA_BANNER = {
   kicker: 'As seen on',
   title: 'The culture runs deep',
-  copy: 'Documentaries, drops, and two decades of the hunt — straight from the jungle.',
+  copy: 'Documentaries, drops, and two decades of the hunt, straight from the jungle.',
   cta: 'Watch on Media',
   href: '/media',
   image: '/home/deals-bg.webp',

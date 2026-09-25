@@ -77,7 +77,7 @@ export default async function GtShop() {
           {all.length === 0 && (
             <div className="mt-4 text-center">
               <p className="text-sm font-bold uppercase tracking-widest text-white/80" style={{ fontFamily: 'var(--font-brand)' }}>
-                Sold out everywhere right now — fresh batch on the way.
+                Sold out everywhere right now, fresh batch on the way.
               </p>
               <div className="mt-5 flex justify-center">
                 <ShopSimilarCta category="vape-pens" label="Vapes" />
@@ -177,7 +177,7 @@ export default async function GtShop() {
 
           <Reveal className="mt-12 text-center">
             <p className="text-[11px] uppercase tracking-widest text-white/60" style={{ fontFamily: 'var(--font-brand)' }}>
-              Availability varies by store — live menus &amp; deals connect at launch.
+              Availability varies by store, live menus &amp; deals connect at launch.
             </p>
           </Reveal>
         </div>

@@ -16,9 +16,9 @@ import MoreLines from '@/components/products/more-lines'
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('products/10-pack-prerolls', {
-    title: '10 Pack Pre-Rolls — Ten 0.7g Mini Joints, 7g Total',
+    title: '10 Pack Pre-Rolls | Ten 0.7g Mini Joints, 7g Total',
     description:
-      'Ten 0.7g pre-rolls in every jar. Strain-specific packs rolled in small batches from indoor nugs — no trim, no shake, no shortcuts.',
+      'Ten 0.7g pre-rolls in every jar. Strain-specific packs rolled in small batches from indoor nugs, no trim, no shake, no shortcuts.',
   })
 }
 

@@ -15,7 +15,7 @@ import Reveal from '@/components/reveal'
 export const metadata: Metadata = {
   title: 'Fresh Drops',
   description:
-    'The weekly Jungle Boys drop — new heat lands every Friday. Pick your store to see this week’s list.',
+    'The weekly Jungle Boys drop, new heat lands every Friday. Pick your store to see this week’s list.',
   alternates: { canonical: '/drops' },
 }
 
@@ -35,7 +35,7 @@ export default function DropsDoorPage() {
               Fresh Drops
             </h1>
             <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-white/70" style={{ fontFamily: 'var(--font-brand)' }}>
-              New heat lands every Friday — small batches, gone when they&rsquo;re gone.
+              New heat lands every Friday, small batches, gone when they&rsquo;re gone.
               Pick your store to see this week&rsquo;s drop.
             </p>
           </div>

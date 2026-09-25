@@ -9,9 +9,9 @@ import { jsonLdHtml, breadcrumbSchema, itemListSchema } from '@/lib/schema'
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('products', {
-    title: 'Products — The Jungle Boys Collection',
+    title: 'Products | The Jungle Boys Collection',
     description:
-      'Every Jungle Boys product line in one place — Hash Holes, premium indoor flower, pre-rolls, 10-packs, Twins and Pops. Playing with fire, in every format.',
+      'Every Jungle Boys product line in one place. Hash Holes, premium indoor flower, pre-rolls, 10-packs, Twins and Pops. Playing with fire, in every format.',
   })
 }
 

@@ -164,7 +164,7 @@ export default function ProductsCollection() {
       </section>
 
       {/* sr-only intro (the banner is decorative) */}
-      <h1 className="sr-only">Products — The Jungle Boys Collection</h1>
+      <h1 className="sr-only">Products. The Jungle Boys Collection</h1>
 
       {/* ===== category grid ===== */}
       <section className="px-4 pt-16 md:px-8 md:pt-24 lg:px-12">
@@ -174,7 +174,7 @@ export default function ProductsCollection() {
               Shop the lineup
             </h2>
             <p className="max-w-sm text-sm uppercase tracking-wide text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
-              Every Jungle Boys line — pick your format. Full menus live at each store.
+              Every Jungle Boys line, pick your format. Full menus live at each store.
             </p>
           </div>
 

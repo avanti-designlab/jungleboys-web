@@ -140,7 +140,7 @@ export default function ProductFinderMap() {
           const badge = el.querySelector('.jb-cluster')
           if (!badge) return
           const n = badge.textContent?.trim() ?? ''
-          el.setAttribute('aria-label', `${n} stockists in this area — activate to zoom in`)
+          el.setAttribute('aria-label', `${n} stockists in this area, activate to zoom in`)
         })
       }
       labelClusters()
@@ -230,7 +230,7 @@ export default function ProductFinderMap() {
   function useMyLocation() {
     setGeoError('')
     if (!navigator.geolocation) {
-      setGeoError('Location isn’t available on this device — search your address instead.')
+      setGeoError('Location isn’t available on this device, search your address instead.')
       return
     }
     setLocating(true)
@@ -243,8 +243,8 @@ export default function ProductFinderMap() {
         setLocating(false)
         setGeoError(
           err.code === err.PERMISSION_DENIED
-            ? 'Location access was blocked — allow it in your browser, or search your address.'
-            : 'Couldn’t get your location — search your address instead.'
+            ? 'Location access was blocked, allow it in your browser, or search your address.'
+            : 'Couldn’t get your location, search your address instead.'
         )
       },
       { enableHighAccuracy: true, timeout: 10000 }

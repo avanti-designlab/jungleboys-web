@@ -1268,6 +1268,17 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   shot harness is now STITCHED from scripts/verify-scroll-motion.mjs's helper block each time
   (don't hunt for old scratch scripts).
 
+- **NO EM DASHES IN COPY (Avanti, 2026-09-25: "remove any and all long dashes from text copy
+  so it doesn't look AI").** Site-wide rule, swept same day (~183 instances): user-visible
+  strings never carry — or – (JSX text, meta titles/descriptions, alt/aria, error messages,
+  email bodies). Rewrite with comma/period/colon; titles use " | ". Code comments exempt.
+  SWEEP TRAP: data-placeholder glyphs are not prose — the drop-countdown's pre-hydration '—'
+  cells became ', ' in the blind pass and had to be restored as '-'. ALSO same round: ORC
+  finale REMOVED (she read the full-screen jar as a "hero banner" and disliked it) and the
+  hero's "REFINING FLAVOR SINCE 2014" scrub stamp REMOVED ("random text appears when u
+  scroll") — ORC keeps two pins (hero recede + pipeline); built→shop got more air
+  (built pb-32/44, shop pt-20/28).
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before

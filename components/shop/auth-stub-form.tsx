@@ -27,7 +27,7 @@ export default function AuthStubForm({
         forgot:
           'Online accounts activate with ordering. Password resets for checkout accounts are handled on your store’s menu.',
         reset:
-          'Online accounts activate with ordering. Use the link from your reset email once accounts are live — nothing was changed.',
+          'Online accounts activate with ordering. Use the link from your reset email once accounts are live, nothing was changed.',
         delete:
           'Account deletion requests are handled with our dispensary system. Until online accounts activate, reach us through the contact page and we’ll take care of it.',
       }[kind]

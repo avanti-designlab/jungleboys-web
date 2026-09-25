@@ -25,14 +25,14 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ line: string }> }): Promise<Metadata> {
   const { line } = await params
   const item = PRODUCT_LINES.find((l) => l.slug === line)
-  if (!item) return { title: 'Products — Jungle Boys' }
+  if (!item) return { title: 'Products | Jungle Boys' }
   // NOINDEX while the body is "coming soon". These stay 200 by decision, but a
   // canonical-less thin page that the sitemap and the /products ItemList both
   // point at is an invitation to index a stub. follow: true so the links out of
   // it still pass through.
   return {
     ...(await pageMetadata(`products/${line}`, {
-      title: `${item.name} — Jungle Boys`,
+      title: `${item.name} | Jungle Boys`,
       description: item.blurb,
     })),
     robots: { index: false, follow: true },
@@ -69,7 +69,7 @@ export default async function ProductLinePage({ params }: { params: Promise<{ li
         {item.blurb}
       </p>
       <span className="mt-8 rounded-full border border-white/20 px-5 py-2 text-[11px] font-bold uppercase tracking-widest text-[var(--color-accent)]" style={{ fontFamily: 'var(--font-brand)' }}>
-        Full line page — coming soon
+        Full line page, coming soon
       </span>
       <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
         <Link href="/products" className="rounded-full border border-white/20 px-7 py-3.5 text-xs font-extrabold uppercase tracking-widest text-white transition hover:border-[var(--color-accent)]" style={{ fontFamily: 'var(--font-brand)' }}>

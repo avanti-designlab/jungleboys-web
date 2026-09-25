@@ -20,7 +20,7 @@ import MoreLines from '@/components/products/more-lines'
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('products/premium-flower', {
-    title: '3.5G Gold Mylars — Premium Cannabis Flower',
+    title: '3.5G Gold Mylars | Premium Cannabis Flower',
     description:
       'Top-shelf, hand-trimmed indoor flower sealed fresh in the 20th-anniversary gold mylar. 100% in-house grown, exotic genetics, lab-tested. Playing with fire since 2006.',
   })

@@ -9,7 +9,7 @@ import Reveal from '@/components/reveal'
 
 export const metadata: Metadata = {
   title: 'Your Account',
-  description: 'Your Jungle Boys account — orders, details and rewards.',
+  description: 'Your Jungle Boys account, orders, details and rewards.',
   robots: { index: false, follow: false },
 }
 

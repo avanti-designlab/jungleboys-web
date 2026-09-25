@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
   // it back until real posts exist. Clears itself when the CMS returns posts.
   const showingSamples = (await getBlogPosts()).some((p) => isSamplePost(p.slug))
   const meta = await pageMetadata('blog', {
-    title: 'Blog — Jungle Boys',
+    title: 'Blog | Jungle Boys',
     description: 'Stories, drops, and culture straight from the jungle. Playing With Fire® since 2006.',
   })
   // Applied to the RESULT, not passed into pageMetadata: that helper only reads

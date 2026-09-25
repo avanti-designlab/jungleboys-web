@@ -18,7 +18,7 @@ export default function CallbackPage() {
       <div>
         <h1 className="font-display text-4xl uppercase leading-none md:text-5xl">Signing you in…</h1>
         <p className="mt-3 text-sm text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-brand)' }}>
-          One second — taking you back to the shop.
+          One second, taking you back to the shop.
         </p>
       </div>
     </main>

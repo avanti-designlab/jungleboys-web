@@ -38,8 +38,8 @@ const ALL_Q: Q[] = [
   { key: 'buyAgain', label: 'Would you buy it again?', type: 'yesno_note', required: true },
   { key: 'recommend', label: 'Would you recommend this strain to a friend?', type: 'yesno', required: true },
   { key: 'suggestName', label: 'Suggest a name for this pheno', type: 'text', placeholder: 'Your name idea…', required: false },
-  { key: 'logo', label: 'Describe what you think the logo should look like', hint: 'Optional — paint us a picture', type: 'textarea', placeholder: 'Your vision…', required: false },
-  { key: 'email', label: 'Last thing — where can we reach you?', hint: 'So we can follow up on the hunt', type: 'email', placeholder: 'you@email.com', required: true },
+  { key: 'logo', label: 'Describe what you think the logo should look like', hint: 'Optional, paint us a picture', type: 'textarea', placeholder: 'Your vision…', required: false },
+  { key: 'email', label: 'Last thing, where can we reach you?', hint: 'So we can follow up on the hunt', type: 'email', placeholder: 'you@email.com', required: true },
 ]
 
 export default function PhenosJoin({ consentText }: { consentText: string }) {
@@ -167,17 +167,17 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
             `Smell: ${answers.smell ?? ''}`,
             `Taste: ${answers.taste ?? ''}`,
             `Effects: ${answers.effects ?? ''}`,
-            `Buy again: ${answers.buyAgain ?? ''}${answers.buyAgainNote ? ` — ${answers.buyAgainNote}` : ''}`,
+            `Buy again: ${answers.buyAgain ?? ''}${answers.buyAgainNote ? `, ${answers.buyAgainNote}` : ''}`,
             `Recommend: ${answers.recommend ?? ''}`,
-            `Suggested name: ${answers.suggestName || '—'}`,
-            `Logo idea: ${answers.logo || '—'}`,
+            `Suggested name: ${answers.suggestName || ', '}`,
+            `Logo idea: ${answers.logo || ', '}`,
           ].join('\n'),
           sourcePage: '/phenos',
         }),
       })
       if (!res.ok) {
         const b = await res.json().catch(() => ({}))
-        throw new Error(b.error ?? 'Something went wrong — please try again.')
+        throw new Error(b.error ?? 'Something went wrong, please try again.')
       }
       setState('done')
     } catch (err) {
@@ -196,12 +196,12 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
         {/* ===== two yellow pitch pills on top ===== */}
         <div className="grid gap-5 md:grid-cols-2 md:gap-6">
           <PitchPill className={yellowPill} num="01" tag="Exclusive Access" heading="Straight from the cultivation rooms">
-            Small-batch drops of unnamed, unreleased genetics — pulled from our latest pheno hunts before they
+            Small-batch drops of unnamed, unreleased genetics, pulled from our latest pheno hunts before they
             earn a name and a spot in the Jungle Boys genetics library. Each 3.5g jar is premium indoor flower:
             a first look and taste at what could become the next Jungle Boys strain.
           </PitchPill>
           <PitchPill className={yellowPill} num="02" tag="Your Call" heading="You decide what makes the cut">
-            Tell us how it looks, tastes, and smokes — and even help name it. Your feedback decides what makes the
+            Tell us how it looks, tastes, and smokes, and even help name it. Your feedback decides what makes the
             final cut, moves into full production, and lands in the hands of consumers. This is your chance to be a
             part of Jungle Boys history.
           </PitchPill>
@@ -220,7 +220,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
               </span>
               <h3 className="font-display text-6xl uppercase leading-none md:text-8xl">You&apos;re part of the hunt</h3>
               <p className="max-w-xl text-sm font-medium uppercase leading-relaxed tracking-wide text-black/70 md:text-base" style={{ fontFamily: 'var(--font-brand)' }}>
-                Thanks for weighing in — your take now helps decide what makes the final cut. Keep an eye out for
+                Thanks for weighing in, your take now helps decide what makes the final cut. Keep an eye out for
                 the next pheno drop.
               </p>
             </div>
@@ -307,7 +307,7 @@ export default function PhenosJoin({ consentText }: { consentText: string }) {
                         ))}
                       </div>
                       <textarea
-                        aria-label={`${q.label} — additional comment (optional)`}
+                        aria-label={`${q.label}, additional comment (optional)`}
                         value={answers[`${q.key}Note`] ?? ''}
                         onChange={(e) => setAnswers((a) => ({ ...a, [`${q.key}Note`]: e.target.value }))}
                         placeholder="Add a comment (optional)"

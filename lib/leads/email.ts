@@ -56,7 +56,7 @@ export async function notifyByEmail(lead: NotifyPayload): Promise<EmailResult> {
         from,
         to: [to],
         reply_to: lead.email || undefined,
-        subject: `New ${kind} submission${lead.name ? ` — ${lead.name}` : ''}`,
+        subject: `New ${kind} submission${lead.name ? `, ${lead.name}` : ''}`,
         html,
       }),
     })

@@ -45,8 +45,8 @@ export async function generateMetadata({
   const location = await getLocationBySlug(slug)
   if (!location) return {}
   return {
-    title: `Brands — ${location.name}, ${location.city} CA`,
-    description: `Every cannabis brand stocked at ${location.name}, ${location.address}, ${location.city} — Jungle Boys and the third-party brands on the shelf, with live availability.`,
+    title: `Brands | ${location.name}, ${location.city} CA`,
+    description: `Every cannabis brand stocked at ${location.name}, ${location.address}, ${location.city}. Jungle Boys and the third-party brands on the shelf, with live availability.`,
     alternates: { canonical: `/menu/california/${slug}/brands` },
   }
 }

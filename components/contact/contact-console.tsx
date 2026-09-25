@@ -88,7 +88,7 @@ export default function ContactConsole({ consentText }: { consentText: string })
       })
       if (!res.ok) {
         const b = await res.json().catch(() => ({}))
-        throw new Error(b.error ?? 'Something went wrong — please try again.')
+        throw new Error(b.error ?? 'Something went wrong, please try again.')
       }
       setState('done')
       form.reset()
@@ -112,7 +112,7 @@ export default function ContactConsole({ consentText }: { consentText: string })
           className="mt-6 max-w-sm text-sm uppercase leading-relaxed tracking-wide text-[var(--color-muted)] md:text-base"
           style={{ fontFamily: 'var(--font-brand)' }}
         >
-          Questions, collabs, or business? Pick a lane and tap in — we read every message.
+          Questions, collabs, or business? Pick a lane and tap in, we read every message.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
@@ -196,7 +196,7 @@ export default function ContactConsole({ consentText }: { consentText: string })
             </span>
             <h3 className="font-display text-3xl uppercase text-white">Message sent</h3>
             <p className="max-w-sm text-sm text-white/55">
-              Thanks for reaching out — the team will get back to you. Welcome to the jungle. 🌴
+              Thanks for reaching out, the team will get back to you. Welcome to the jungle. 🌴
             </p>
             <button
               type="button"

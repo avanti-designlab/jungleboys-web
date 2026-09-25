@@ -37,7 +37,7 @@ export async function generateMetadata({
   const location = await getLocationBySlug(slug)
   if (!location) return {}
   return {
-    title: `Deals — ${location.name}, ${location.city} CA`,
+    title: `Deals | ${location.name}, ${location.city} CA`,
     description: `Current cannabis deals and discounts at ${location.name}, ${location.address}, ${location.city}. Live pricing on flower, pre-rolls, vapes and more.`,
     alternates: { canonical: `/menu/california/${slug}/deals` },
   }
@@ -115,7 +115,7 @@ function DealSection({
           className="mt-6 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-muted)]"
           style={{ fontFamily: 'var(--font-brand)' }}
         >
-          Showing {shown.length} of {products.length} —{' '}
+          Showing {shown.length} of {products.length}, {' '}
           <Link
             href={`/menu/california/${storeSlug}#browse`}
             className="text-[var(--color-accent-ink)] underline-offset-4 hover:underline"

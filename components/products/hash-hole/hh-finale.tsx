@@ -13,7 +13,7 @@ export default function HhFinale() {
       {/* eslint-disable-next-line @next/next/no-img-element -- finale scene */}
       <img
         src="/products/hash-hole/golf-scene.webp"
-        alt="Jungle Boys — Hash Hole on the course"
+        alt="Jungle Boys. Hash Hole on the course"
         className="absolute inset-x-0 bottom-0 top-[22vh] w-full select-none object-cover object-top md:top-0"
       />
       {/* NO scrim — Avanti removed it (2026-08-03): the darkened sky read as

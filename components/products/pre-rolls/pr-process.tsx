@@ -25,7 +25,7 @@ const CARDS: Card[] = [
   {
     step: '01',
     title: 'Whole nugs, never trim',
-    copy: 'Every roll starts from the same jarred flower we sell by the eighth — broken down by hand, never sweepings off the floor.',
+    copy: 'Every roll starts from the same jarred flower we sell by the eighth, broken down by hand, never sweepings off the floor.',
     src: null,
   },
   {

@@ -61,7 +61,7 @@ function flower(
     subcategory: 'premium-flower',
     strainType,
     strain: name,
-    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    description: 'Placeholder description, real copy flows from Dutchie in Phase 3.',
     images: [
       { url: '/products/flower/gold-mylar-bag.webp', alt: `${name} 3.5g gold mylar` },
       { url: `/products/flower/${logo}.webp`, alt: `${name} strain art` },
@@ -102,7 +102,7 @@ function hashHole(
     subcategory: 'hash-hole',
     strainType: 'hybrid',
     strain: rosinStrain, // the live hash rosin pairing (shown on the card)
-    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    description: 'Placeholder description, real copy flows from Dutchie in Phase 3.',
     images: [{ url: '/products/hash-hole/product.webp', alt: `${flowerStrain} Hash Hole` }],
     variants: [{ id: `v-hh-${slug}`, option: '2.5g', price: 4000, ...(deal ? { specialPrice: deal } : {}), quantityAvailable: 10 }],
     labResult: {
@@ -141,7 +141,7 @@ function pops(
     subcategory: '5g-pops',
     strainType,
     strain,
-    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    description: 'Placeholder description, real copy flows from Dutchie in Phase 3.',
     images: [{ url: `/products/pops/jar-${jar}.webp`, alt: `${strain} Pops 5g jar` }],
     variants: [{ id: `v-pops-${slug}`, option: '5g', price: 4500, ...(deal ? { specialPrice: deal } : {}), quantityAvailable: 12 }],
     labResult: {
@@ -184,7 +184,7 @@ function tenPack(
     subcategory: '10-pack',
     strainType,
     strain: lineage,
-    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    description: 'Placeholder description, real copy flows from Dutchie in Phase 3.',
     images: [{ url: `/products/10-pack/jar-${slug}.webp`, alt: `${strain} 10 Pack Pre-Rolls` }],
     variants: [{ id: `v-tp-${slug}`, option: '7g', price: 6000, ...(deal ? { specialPrice: deal } : {}), quantityAvailable: 10 }],
     labResult: {
@@ -219,7 +219,7 @@ function oneGram(
     subcategory: '1g-preroll',
     strainType,
     strain: lineage,
-    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    description: 'Placeholder description, real copy flows from Dutchie in Phase 3.',
     images: [{ url: `/products/pre-rolls/tube-${slug}.webp`, alt: `${strain} 1G Pre-Roll` }],
     variants: [{ id: `v-1g-${slug}`, option: '1g', price: 1800, ...(deal ? { specialPrice: deal } : {}), quantityAvailable: 10 }],
     labResult: {
@@ -253,7 +253,7 @@ function twins(
     subcategory: 'twins-2pack',
     strainType,
     strain: lineage,
-    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    description: 'Placeholder description, real copy flows from Dutchie in Phase 3.',
     images: [{ url: `/products/twins/tube-${slug}.webp`, alt: `${strain} Twins 2 Pack Pre-Rolls` }],
     // two 0.75g rolls per tube — 1.5g total, which is the whole point of the line
     variants: [{ id: `v-tw-${slug}`, option: '1.5g', price: 2400, ...(deal ? { specialPrice: deal } : {}), quantityAvailable: 10 }],
@@ -290,7 +290,7 @@ function gasTank(
     subcategory: `gas-tank-${tier}`,
     strainType,
     strain: label,
-    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    description: 'Placeholder description, real copy flows from Dutchie in Phase 3.',
     // `-n`: the straight-on masters, one shared body width. The plain files are
     // the angled three-quarter shots and made the three tiers look unrelated.
     images: [{ url: `/products/gas-tank/device-${device}-n.webp`, alt: `${strain} Gas Tank ${label}` }],
@@ -331,7 +331,7 @@ function thirdParty(
     brand,
     category,
     strainType,
-    description: 'Placeholder description — real copy flows from Dutchie in Phase 3.',
+    description: 'Placeholder description, real copy flows from Dutchie in Phase 3.',
     images: [],
     variants: [{ id: `v-3p-${slug}`, option, price, ...(deal ? { specialPrice: deal } : {}), quantityAvailable: 8 }],
     retailerId: 'placeholder-dtla',

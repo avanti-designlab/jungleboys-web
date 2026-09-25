@@ -110,7 +110,7 @@ export default function NewsletterPopup({ consentText }: { consentText: string }
       })
       if (!res.ok) {
         const body = await res.json().catch(() => ({}))
-        throw new Error(body.error ?? 'Something went wrong — please try again.')
+        throw new Error(body.error ?? 'Something went wrong, please try again.')
       }
       try {
         localStorage.setItem(SEEN_KEY, '1')
@@ -159,7 +159,7 @@ export default function NewsletterPopup({ consentText }: { consentText: string }
             <div className="py-8 text-center">
               <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-accent)] text-2xl text-black">🌴</div>
               <h2 className="font-display text-4xl uppercase leading-none">You&apos;re in</h2>
-              <p className="mx-auto mt-3 max-w-xs text-sm text-white/60">Welcome to the jungle. Watch your phone — the fire drops first here.</p>
+              <p className="mx-auto mt-3 max-w-xs text-sm text-white/60">Welcome to the jungle. Watch your phone, the fire drops first here.</p>
               <button onClick={dismiss} className="mt-6 rounded-full bg-white/10 px-6 py-2.5 text-xs font-extrabold uppercase tracking-widest ring-1 ring-white/15 transition-colors hover:bg-white/20" style={{ fontFamily: 'var(--font-brand)' }}>
                 Close
               </button>
@@ -172,7 +172,7 @@ export default function NewsletterPopup({ consentText }: { consentText: string }
                 </p>
                 <h2 className="font-display mt-1 text-4xl uppercase leading-[0.9] md:text-[2.75rem]">Never miss the fire</h2>
                 <p className="mt-2 text-sm leading-relaxed text-white/60">
-                  Sign up for the latest drops, deals, and announcements — and never miss out on the fire.
+                  Sign up for the latest drops, deals, and announcements, and never miss out on the fire.
                 </p>
               </div>
 

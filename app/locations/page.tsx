@@ -10,9 +10,9 @@ import { jsonLdHtml, breadcrumbSchema, storeSchema } from '@/lib/schema'
 // Owned stores only — SEPARATE from the Product Finder stockist map.
 
 export const metadata: Metadata = {
-  title: 'Locations — Jungle Boys Dispensaries',
+  title: 'Locations | Jungle Boys Dispensaries',
   description:
-    'Visit a Jungle Boys dispensary. Find our stores across California and Florida — addresses, hours, and menus. Playing With Fire® since 2006.',
+    'Visit a Jungle Boys dispensary. Find our stores across California and Florida, addresses, hours, and menus. Playing With Fire® since 2006.',
   // Every other route gets this from pageMetadata(); these four declare
   // metadata by hand, so the canonical has to be declared with them.
   alternates: { canonical: `${SITE_ORIGIN}/locations` },
@@ -44,7 +44,7 @@ export default function LocationsPage() {
         }}
       />
 
-      <h1 className="sr-only">Jungle Boys Locations — California & Florida Dispensaries</h1>
+      <h1 className="sr-only">Jungle Boys Locations. California & Florida Dispensaries</h1>
 
       {/* character banner — same treatment as the other pages */}
       <section data-loc-banner className="px-2 pt-2 md:px-3">

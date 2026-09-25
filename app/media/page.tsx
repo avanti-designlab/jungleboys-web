@@ -13,9 +13,9 @@ import { jsonLdHtml, breadcrumbSchema, videoSchema } from '@/lib/schema'
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('media', {
-    title: 'Media — Jungle Boys Films & Documentaries',
+    title: 'Media | Jungle Boys Films & Documentaries',
     description:
-      'Watch Jungle Boys documentaries, pheno-hunt series, and drops — two decades of the hunt, straight from the jungle. New episodes from @JungleBoysfilms.',
+      'Watch Jungle Boys documentaries, pheno-hunt series, and drops, two decades of the hunt, straight from the jungle. New episodes from @JungleBoysfilms.',
   })
 }
 
@@ -63,7 +63,7 @@ export default async function MediaPage() {
         />
       )}
 
-      <h1 className="sr-only">Media — Jungle Boys Films</h1>
+      <h1 className="sr-only">Media. Jungle Boys Films</h1>
 
       {/* full-width character banner — same treatment as /contact: graffiti mural,
           a giant MEDIA wordmark that drops in letter-by-letter behind the character
@@ -120,7 +120,7 @@ export default async function MediaPage() {
             className="media-reveal text-sm uppercase leading-relaxed tracking-wide text-[var(--color-muted)] md:text-base"
             style={{ fontFamily: 'var(--font-brand)' }}
           >
-            Documentaries, drops, and the hunt — straight from the jungle. New
+            Documentaries, drops, and the hunt, straight from the jungle. New
             episodes land here automatically from{' '}
             <a
               href={JB_CHANNEL_URL}

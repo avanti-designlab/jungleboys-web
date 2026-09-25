@@ -10,7 +10,7 @@ export default function OrcManifesto() {
           <Reveal>
             {/* word-by-word drop-in (.orc-word), the rewards SplitHeading move */}
             <h2 className="font-display uppercase leading-[0.86]" style={{ fontSize: 'min(11vw, 5.5rem)' }}>
-              {["We", "don\u2019t", "chase", "trends\u00a0\u2014"].map((w, i) => (
+              {["We", "don\u2019t", "chase", "trends."].map((w, i) => (
                 <span key={w} className="orc-word" style={{ '--d': `${i * 0.09}s` } as React.CSSProperties}>
                   {w}&nbsp;
                 </span>

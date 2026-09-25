@@ -31,7 +31,7 @@ export async function generateMetadata({
   const { slug } = await params
   const location = await getLocationBySlug(slug)
   if (!location) return {}
-  const title = `${location.name} Menu — ${location.city}, CA`
+  const title = `${location.name} Menu, ${location.city}, CA`
   return {
     title,
     description: `Shop the live Jungle Boys menu at ${location.name}, ${location.address}, ${location.city}. Premium flower, pre-rolls, Hash Holes and more.`,

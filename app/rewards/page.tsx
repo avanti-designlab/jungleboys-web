@@ -20,7 +20,7 @@ import { jsonLdHtml, breadcrumbSchema, faqSchema } from '@/lib/schema'
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('rewards', {
-    title: 'PWF Rewards — Jungle Boys Loyalty Program',
+    title: 'PWF Rewards | Jungle Boys Loyalty Program',
     description:
       'Playing With Fire Rewards: earn points on every Jungle Boys purchase, climb tiers from Trimmer to Pheno Hunter, and unlock exclusive drops, discounts and perks. Download the app to start earning.',
   })

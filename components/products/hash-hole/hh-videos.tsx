@@ -14,7 +14,7 @@ import { useEffect, useRef } from 'react'
 type Card = { src: string | null; kicker: string; title: string; blurb: string }
 
 const CARDS: Card[] = [
-  { src: null, kicker: 'Watch', title: 'The Roll', blurb: 'How the Hash Hole gets built — flower, rosin rope, wood tip.' },
+  { src: null, kicker: 'Watch', title: 'The Roll', blurb: 'How the Hash Hole gets built | flower, rosin rope, wood tip.' },
   { src: null, kicker: 'Watch', title: 'The Smoke', blurb: 'One clean, even burn from spark to finish.' },
 ]
 

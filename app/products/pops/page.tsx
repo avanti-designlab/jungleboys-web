@@ -19,9 +19,9 @@ import MoreLines from '@/components/products/more-lines'
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('products/pops', {
-    title: '5G Pops — Small Nug Indoor Flower',
+    title: '5G Pops | Small Nug Indoor Flower',
     description:
-      'Five grams of small-nug indoor flower in the candy-striped jar. The same premium exotic strains and terpene-rich profiles, hand-selected from the top of each harvest — better value, nothing sacrificed.',
+      'Five grams of small-nug indoor flower in the candy-striped jar. The same premium exotic strains and terpene-rich profiles, hand-selected from the top of each harvest, better value, nothing sacrificed.',
   })
 }
 

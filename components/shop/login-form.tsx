@@ -28,7 +28,7 @@ export default function LoginForm() {
     const s = readStore()
     setNotice(
       s?.state === 'CA'
-        ? 'Online accounts activate with ordering. Right now, sign-in happens during checkout on your store’s menu — your bag is waiting there.'
+        ? 'Online accounts activate with ordering. Right now, sign-in happens during checkout on your store’s menu, your bag is waiting there.'
         : 'Online accounts activate with ordering. Pick your store and sign in during checkout on its menu.'
     )
   }

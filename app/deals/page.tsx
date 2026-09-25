@@ -17,7 +17,7 @@ import Reveal from '@/components/reveal'
 export const metadata: Metadata = {
   title: 'Deals',
   description:
-    'Live Jungle Boys deals — pick your store to see every markdown running right now, straight from the menu.',
+    'Live Jungle Boys deals, pick your store to see every markdown running right now, straight from the menu.',
   alternates: { canonical: '/deals' },
 }
 
@@ -37,7 +37,7 @@ export default function DealsDoorPage() {
               Deals
             </h1>
             <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-white/70" style={{ fontFamily: 'var(--font-brand)' }}>
-              Every markdown, straight from the live menu. Deals differ by store —
+              Every markdown, straight from the live menu. Deals differ by store -
               pick yours to see what&rsquo;s running right now.
             </p>
           </div>

@@ -89,7 +89,7 @@ export default function DropCountdown({ opensAt = '00:00' }: { opensAt?: string 
           <div className="flex items-center gap-4 rounded-2xl bg-black/[0.92] px-6 py-7">
             <span aria-hidden className="drop-live-dot h-4 w-4 shrink-0 rounded-full bg-[var(--color-accent)]" />
             <p className="font-display text-4xl uppercase leading-[0.9] text-[var(--color-accent)] md:text-5xl">
-              Drop day — it&rsquo;s live
+              Drop day, it&rsquo;s live
             </p>
           </div>
         ) : (
@@ -105,10 +105,10 @@ export default function DropCountdown({ opensAt = '00:00' }: { opensAt?: string 
             </div>
             {/* four segment cells fill the tile edge-to-edge */}
             <div className="mt-4 grid grid-cols-4 gap-2 md:gap-3">
-              {cell(state ? String(state.d) : '—', 'days')}
-              {cell(state ? String(state.h).padStart(2, '0') : '—', 'hours')}
-              {cell(state ? String(state.m).padStart(2, '0') : '—', 'min')}
-              {cell(state ? String(state.s).padStart(2, '0') : '—', 'sec')}
+              {cell(state ? String(state.d) : '-', 'days')}
+              {cell(state ? String(state.h).padStart(2, '0') : '-', 'hours')}
+              {cell(state ? String(state.m).padStart(2, '0') : '-', 'min')}
+              {cell(state ? String(state.s).padStart(2, '0') : '-', 'sec')}
             </div>
           </>
         )}

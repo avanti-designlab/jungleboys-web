@@ -171,7 +171,7 @@ export default function TwHero() {
       >
         {/* The TWINS mark is artwork, not type, so the page had no h1 at all.
             Hidden heading supplies one without touching the design. */}
-        <h1 className="sr-only">Jungle Boys Twins — 2 Pack Pre-Rolls</h1>
+        <h1 className="sr-only">Jungle Boys Twins, 2 Pack Pre-Rolls</h1>
 
         {/* the two brand colours drifting against each other */}
         <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">

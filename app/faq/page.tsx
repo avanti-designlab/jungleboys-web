@@ -7,8 +7,8 @@ export const revalidate = 60
 
 export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata('faq', {
-    title: 'FAQ — Jungle Boys',
-    description: 'Answers to common questions about Jungle Boys — products, rewards, verification and more.',
+    title: 'FAQ | Jungle Boys',
+    description: 'Answers to common questions about Jungle Boys, products, rewards, verification and more.',
   })
 }
 

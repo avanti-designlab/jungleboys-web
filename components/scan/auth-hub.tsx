@@ -6,7 +6,7 @@ import { useScanner } from './scan-provider'
 import { extractCode } from '@/lib/auth/verify'
 
 const STEPS = [
-  'Scan the QR code on your product label — or tap the phone to it.',
+  'Scan the QR code on your product label, or tap the phone to it.',
   'We confirm your product is genuine Jungle Boys.',
   'Get the details on what you’re holding, straight from the source.',
 ]
@@ -43,7 +43,7 @@ export default function AuthHub() {
         }
       }
     } catch {
-      setNfcMsg('Tap didn’t start — try Scan instead.')
+      setNfcMsg('Tap didn’t start, try Scan instead.')
     }
   }
 
@@ -56,7 +56,7 @@ export default function AuthHub() {
         Verify Your Product
       </h1>
       <p className="mx-auto mt-5 max-w-md text-base leading-relaxed text-[var(--color-muted)]" style={{ fontFamily: 'var(--font-body)' }}>
-        Confirm your Jungle Boys product is the real thing. Scan the QR on the label — never imitated, never duplicated.
+        Confirm your Jungle Boys product is the real thing. Scan the QR on the label, never imitated, never duplicated.
       </p>
 
       {/* scan visual */}

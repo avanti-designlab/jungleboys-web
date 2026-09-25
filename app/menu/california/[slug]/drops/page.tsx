@@ -42,8 +42,8 @@ export async function generateMetadata({
   const location = await getLocationBySlug(slug)
   if (!location) return {}
   return {
-    title: `Fresh Drops — ${location.name}, ${location.city} CA`,
-    description: `This week's Jungle Boys drop at ${location.name}, ${location.city}. New heat lands every Friday — small batches, live pricing and availability.`,
+    title: `Fresh Drops | ${location.name}, ${location.city} CA`,
+    description: `This week's Jungle Boys drop at ${location.name}, ${location.city}. New heat lands every Friday, small batches, live pricing and availability.`,
     alternates: { canonical: `/menu/california/${slug}/drops` },
   }
 }
@@ -257,7 +257,7 @@ export default async function StoreDropsPage({
                   Fresh Drops
                 </h1>
                 <p className="mt-3 max-w-sm text-sm text-white/70" style={{ fontFamily: 'var(--font-brand)' }}>
-                  The weekly release at {location.name}. Small batches — gone when they&rsquo;re gone.
+                  The weekly release at {location.name}. Small batches, gone when they&rsquo;re gone.
                 </p>
 
                 {/* what's IN this week's drop — quick-jump chips per category
