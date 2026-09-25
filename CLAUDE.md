@@ -1316,6 +1316,25 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   fallback. Drop all Dovetail/Shop-Like-a-Pro questions from the vendor emails. Launch state
   stays Option A (rewards-hub shells).
 
+- **LAUNCH DECISIONS, ROUND TWO (Avanti, 2026-09-25).** (1) /about: KEEP the 307→/ at launch
+  ("working on some custom art scene for this page") — real page post-launch when her art
+  lands. (2) /careers: BUILT same day — footer link ONLY (not main menu), phenos-pattern
+  wizard (role/store/experience/basics/pitch + resume drop: PDF-Word 5MB, magic-byte checked),
+  /api/careers mirrors the lead hardening, resume rides the Resend email as an attachment
+  (lib/leads/email gained optional attachments), applications in the leads ledger with a
+  hiring-use consent line (NOT TCPA); sitemap entry added. (3) SD menu size is REAL ("they do
+  have alot more inventory") — her ask became performance: measured all SD surfaces (landing
+  161KB / deals 122KB / flower 44KB compressed — fine); brands was the offender (6.2MB raw)
+  → brand shelves cap at 12 + "View all N" deep links via NEW ?brand= MenuBrowser prefilter;
+  now 3.3MB raw ≈ 180KB wire. (4) ORC signed off ("good for now"; she'll swap some AI images
+  for real ones later — station art swaps file-for-file). (5) REWARDS FAQ: her PWF REWARDS.docx
+  (Downloads) is the canonical source — 7/8 answers were already verbatim; the redeem answer's
+  "Verification Bonus Rewards…" sentence was restored. Item CLOSED (no review needed — the
+  copy is hers). (6) STALE-NOTE CORRECTION: st-petersburg's full store() entry has existed in
+  owned-stores since 2026-08-04 (4500 4th St N, (727) 390-3840) and renders on /locations —
+  the earlier "Avanti owes the NAP facts" note is DEAD; do not re-ask. STILL OPEN: preview
+  protection decision + LAUNCH DATE.
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
