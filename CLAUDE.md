@@ -1290,6 +1290,32 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   comment in commerce-header is corrected. Re-probe (script shape in the git history of this
   entry's date) only if the POS ever publishes differing med prices.
 
+- **FL VERDICT FOR LAUNCH: "leaving as is for now" (Avanti, 2026-09-25).** Florida launches
+  OFF-SITE: legacy /menu/florida/* keeps 307ing to jungleboysflorida.com per-store pages, NO
+  embed shells get built. "For now" is NOT a forever ruling — the 307s deliberately stay
+  temporary (do NOT flip permanent:true) so embeds can return post-launch without an SEO
+  fight. This closes the launch-list fork #1; revisit only if she reopens it.
+
+- **LAUNCH DECISIONS, ROUND ONE (Avanti, 2026-09-25).** (1) SIGN-IN/PROFILE = OPTION A: sign-in
+  stays in the header; /profile and /profile-reward reworked same day into an honest REWARDS
+  HUB (no "sign in to see your points" promises the Plus API can't keep) — copy now says
+  points/orders live in the JB app + on the checkout page, with App Store / Google Play CTAs
+  from lib/rewards-content APP_LINKS. (2) /coa CLOSED: "per page is better" — COA data lives
+  on each PDP, no standalone Testing-Results page, ever-brief item formally descoped.
+  (FL verdict recorded separately above: off-site as-is, 307s stay temporary.)
+
+- **DOVETAIL RULED OUT FOR CA (Avanti, 2026-09-25).** Investigating FL's signed-in loyalty
+  dashboard (jungleboysflorida.com "The Collective": tiers, points→$ rewards, Buy It Again,
+  MMUR allotments) revealed it runs on DOVETAIL's plugin suite (dovetail-auth/-ecommerce/
+  -loyalty/-klaviyo on FL's WordPress). Avanti: Dovetail is a separate PAID full-service
+  vendor who "designed the entire website and hosts it and does all that for them. we dont
+  want that though." CONSEQUENCE: the brief's "Auth/Accounts: Dutchie/Dovetail" line is
+  SUPERSEDED for CA — the post-launch accounts phase should pursue BATCHSYS first (they
+  already hold CA's PWF accounts/loyalty via the JB app; same vendor as the pending /auth
+  verify API), with own-build (Supabase + Batch data, no payments/PII beyond §9.2) as the
+  fallback. Drop all Dovetail/Shop-Like-a-Pro questions from the vendor emails. Launch state
+  stays Option A (rewards-hub shells).
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
