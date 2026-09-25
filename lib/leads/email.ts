@@ -13,6 +13,9 @@ export type NotifyPayload = {
   message?: string
   location?: string
   sourcePage?: string | null
+  /** base64 file attachments (careers resumes). Resend caps the whole
+      message at 40MB; callers validate size/type before this. */
+  attachments?: { filename: string; contentBase64: string }[]
 }
 
 function esc(s: string): string {
@@ -58,6 +61,9 @@ export async function notifyByEmail(lead: NotifyPayload): Promise<EmailResult> {
         reply_to: lead.email || undefined,
         subject: `New ${kind} submission${lead.name ? `, ${lead.name}` : ''}`,
         html,
+        attachments: lead.attachments?.length
+          ? lead.attachments.map((a) => ({ filename: a.filename, content: a.contentBase64 }))
+          : undefined,
       }),
     })
     return res.ok ? 'sent' : 'failed'

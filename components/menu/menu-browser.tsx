@@ -321,6 +321,18 @@ function FiltersFromQuery({
   return null
 }
 
+// ?brand=<name>#browse — the brands page's "View all" deep link (2026-09-25:
+// SD's real menu made full brand shelves a 6MB page; shelves cap and the
+// grid takes over). Same unvalidated-on-purpose stance as ?line=.
+function BrandParam({ onBrand }: { onBrand: (b: string) => void }) {
+  const searchParams = useSearchParams()
+  useEffect(() => {
+    const b = searchParams.get('brand')
+    if (b) onBrand(b)
+  }, [searchParams, onBrand])
+  return null
+}
+
 export interface CategoryNavItem {
   href: string
   label: string
@@ -473,6 +485,7 @@ export default function MenuBrowser({
       <div className="mx-auto max-w-[1400px]">
         <Suspense>
           <FiltersFromQuery categories={categories} onCategory={setCategory} onLine={setLine} />
+          <BrandParam onBrand={(b) => setBrandSet(new Set([b]))} />
         </Suspense>
 
         {/* header — big Bebas, live count riding it; collection pages pass

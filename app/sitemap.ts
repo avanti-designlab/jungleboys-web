@@ -34,6 +34,7 @@ const STATIC_ROUTES: Array<[path: string, priority: number, freq: MetadataRoute.
   ['/media', 0.7, 'weekly'],
   ['/phenos', 0.6, 'monthly'],
   ['/wholesale', 0.6, 'monthly'],
+  ['/careers', 0.5, 'monthly'],
   ['/contact', 0.6, 'monthly'],
   ['/blog', 0.6, 'weekly'],
   ['/faq', 0.5, 'monthly'],

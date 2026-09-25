@@ -199,13 +199,28 @@ export default async function StoreBrandsPage({
                     </span>
                   </div>
                   {/* one line per brand with arrows; View All expands in
-                      place (Avanti, 2026-08-04). Cards stay SSR children. */}
+                      place (Avanti, 2026-08-04). Cards stay SSR children.
+                      SHELF CAP 12 (2026-09-25, the SD reality check): San
+                      Diego's ~1,540-product menu made uncapped shelves a
+                      6MB page. Overflow goes to the store grid with the
+                      brand facet pre-applied (?brand=). */}
                   <div className="mt-2">
-                    <BrandShelf count={list.length}>
-                      {list.map((p) => (
+                    <BrandShelf count={Math.min(list.length, 12)}>
+                      {list.slice(0, 12).map((p) => (
                         <ProductCard key={p.id} product={p} storeSlug={slug} />
                       ))}
                     </BrandShelf>
+                    {list.length > 12 && (
+                      <p className="mt-3">
+                        <Link
+                          href={`/menu/california/${slug}?brand=${encodeURIComponent(brand)}#browse`}
+                          className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-ink)] underline-offset-4 hover:underline"
+                          style={{ fontFamily: 'var(--font-brand)' }}
+                        >
+                          View all {list.length} from {brand} →
+                        </Link>
+                      </p>
+                    )}
                   </div>
                 </section>
                 </Reveal>

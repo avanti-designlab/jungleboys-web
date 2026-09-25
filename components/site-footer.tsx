@@ -97,6 +97,10 @@ export default async function SiteFooter() {
               <Link href="/privacy" className="text-white/85 transition-colors duration-200 hover:text-[var(--color-accent)]">
                 Privacy
               </Link>
+              {/* footer-only by ruling (Avanti, 2026-09-25) — not main menu */}
+              <Link href="/careers" className="text-white/85 transition-colors duration-200 hover:text-[var(--color-accent)]">
+                Careers
+              </Link>
             </div>
           </div>
 
