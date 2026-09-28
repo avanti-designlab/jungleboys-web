@@ -1352,6 +1352,15 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   stores without a section render the honest empty state (verified at SD). REMAINING: team
   replicates the Custom section at Pomona/OC/SD.
 
+- **DUTCHIE CDN HAS AI BACKGROUND REMOVAL (discovered 2026-09-28, Avanti: "remove the white
+  box behind the product image" on the drops hero).** images.dutchie.com is imgix with the
+  bg-remove add-on ENABLED: `?bg-remove=true&fm=png[&w=]` returns TRUE alpha cutouts (verified
+  on the live Zourz shot — clean edges). Helper: lib/dutchie/img.cutoutUrl. RULE: cutouts are
+  for DARK grounds only (drops SOW hero uses it; white tile + box shadow removed, silhouette
+  drop-shadow instead); LIGHT/white stages keep mix-blend-multiply (cheaper, no AI edge risk).
+  Candidates if she wants more: ORC shop cards, gt-shop cards (dark stages where baked boxes
+  still show).
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
