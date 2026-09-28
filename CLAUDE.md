@@ -1335,6 +1335,23 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   the earlier "Avanti owes the NAP facts" note is DEAD; do not re-ask. STILL OPEN: preview
   protection decision + LAUNCH DATE.
 
+- **FRESH DROPS CURATION RESOLVED + WIRED (2026-09-28, closes the oldest open commerce
+  question).** The source is a CUSTOM HOMEPAGE SECTION named exactly "Fresh Drops" per store
+  (Dutchie E-Commerce admin: Customize > Homepage > Add Sections > Custom), read via
+  menu(filter:{menuSection:{type:CUSTOM_SECTION,name:"Fresh Drops"}}) — VERIFIED live at DTLA
+  (7 products, team drag order preserved, ~15min publish→API lag). CRITICAL VENDOR FINDING:
+  the NEW-generation "Collections" sidebar screen (and its homepage "Collection" section type)
+  NEVER reaches the 2021-07 Plus API — Avanti built the Collection first (13 products,
+  nav+badges enabled) and collection(slug:'fresh-drops') stayed Not Found across 30+ minutes
+  while the embed URL (?dtche[path]=collections/fresh-drops) proved the slug; the legacy
+  Custom section synced in ~15min. Both now exist at DTLA (Collection drives Dutchie's own
+  menu nav; Custom section feeds OUR site). TEAM CONVENTION: position 1 = Strain of the Week;
+  drop day = edit the section, site updates within ~2min of their sync. IMPLEMENTATION:
+  additive provider amendment getDropProducts (placeholder keeps the fixture slug list so
+  fixture mode + check-commerce stand); lib/drops.getDrops → featured=[first], list=rest;
+  stores without a section render the honest empty state (verified at SD). REMAINING: team
+  replicates the Custom section at Pomona/OC/SD.
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
