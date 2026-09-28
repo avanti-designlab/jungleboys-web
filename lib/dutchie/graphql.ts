@@ -342,12 +342,44 @@ async function getProducts(filter?: ProductFilter): Promise<Product[]> {
   )
 }
 
+// Fresh Drops = the CUSTOM homepage section named "Fresh Drops" the team
+// curates per store in the Dutchie E-Commerce admin (Customize > Homepage >
+// Add Sections > Custom). VERIFIED live 2026-09-28 at DTLA: the section's
+// products come back through menu(filter: { menuSection: { type:
+// CUSTOM_SECTION, name } }) in the team's drag order — position 1 is the
+// Strain of the Week by convention. The NEW-generation "Collections" screen
+// (left sidebar) never reaches this 2021-07 API — the team must use the
+// homepage Custom section, not a Collection.
+const DROPS_SECTION_NAME = 'Fresh Drops'
+
+async function getDropProducts(ourRetailerId: string): Promise<Product[]> {
+  const ctx = await storeContext(ourRetailerId)
+  if (!ctx) return []
+  const data = await gql<{ menu: { products: WireProduct[] } }>(
+    ctx.key,
+    `query ($id: ID!, $name: String!) {
+       menu(retailerId: $id, menuType: RECREATIONAL, pagination: { offset: 0, limit: 100 },
+            filter: { menuSection: { type: CUSTOM_SECTION, name: $name } }) {
+         products { ${PRODUCT_SELECTION} }
+       }
+     }`,
+    { id: ctx.retailerId, name: DROPS_SECTION_NAME }
+  )
+  const out: Product[] = []
+  for (const w of data.menu?.products ?? []) {
+    const p = mapProduct(w, ourRetailerId)
+    if (p) out.push(p)
+  }
+  return out
+}
+
 export const graphqlProvider: typeof placeholderProvider = {
   // Locations are OUR data (NAP, hours, slugs) — never Dutchie's.
   getLocations: placeholderProvider.getLocations,
   getLocationBySlug: placeholderProvider.getLocationBySlug,
   getMenu,
   getProducts,
+  getDropProducts,
 
   async getProductBySlug(slug: string): Promise<Product | null> {
     const all = await getProducts()

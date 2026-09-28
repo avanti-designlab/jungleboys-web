@@ -1,11 +1,13 @@
-import { getMenu } from '@/lib/dutchie'
+import { getDropProducts } from '@/lib/dutchie'
 import type { Product } from '@/lib/dutchie'
 import { getStory, assetUrl } from '@/lib/storyblok'
 
 // Fresh Drops — the curated weekly release. Drops FRIDAYS; editorial, not a
 // computed "new this week" filter (recorded decision, 2026-07-31).
 //
-// THE CURATION MECHANISM IS THE OPEN QUESTION, AND THIS FILE IS ITS SEAM.
+// CURATION RESOLVED (2026-09-28): the Dutchie CUSTOM homepage section named
+// "Fresh Drops" per store (see lib/dutchie/graphql.ts getDropProducts). The
+// note below is history:
 // The Phase 3 handoff says the drop is "set in Dutchie so it pulls through" —
 // but the collection field has never been verified against a real payload
 // (we have no Dutchie API access yet), and the 2026-07-31 scope note said
@@ -14,27 +16,7 @@ import { getStory, assetUrl } from '@/lib/storyblok'
 // for whichever source wins, and swapping it in means rewriting getDrops()'s
 // body only — no template changes, same as the provider freeze.
 //
-// PRE-CUTOVER CHECK: this list must be replaced by the real curation source.
-// A hardcoded drop list live in production is a stale-promo bug waiting for
-// its second Friday.
-
-// This week's drop, in display order. Slugs are the placeholder provider's.
-const FEATURED_DROP_SLUGS = [
-  'zangria-premium-flower-8th',
-  '06-og-10-pack',
-  'rainbow-belts-10-pack',
-]
-
-const DROP_LIST_SLUGS = [
-  'motor-breath-premium-flower-8th',
-  'rs1000-premium-flower-8th',
-  'private-reserve-hash-hole',
-  'blu-frootz-gas-tank',
-  'apple-jam-gas-tank',
-  'blu-og-pops',
-  'cherry-gelato-1g-preroll',
-  'blu-zerdz-twins-2pack',
-]
+// (Resolved — the fixture slug list moved into the placeholder provider.)
 
 export interface Drops {
   featured: Product[]
@@ -47,13 +29,14 @@ export interface Drops {
  * carry simply drops out rather than rendering an unbuyable card.
  */
 export async function getDrops(retailerId: string): Promise<Drops> {
-  const menu = await getMenu(retailerId)
-  const bySlug = new Map(menu.products.map((p) => [p.slug, p]))
-  const pick = (slugs: string[]) =>
-    slugs.map((s) => bySlug.get(s)).filter((p): p is Product => p != null)
+  // The real curation source (RESOLVED 2026-09-28): the store's "Fresh
+  // Drops" CUSTOM homepage section in the Dutchie E-Commerce admin, in the
+  // team's drag order. Position 1 = Strain of the Week. A store with no
+  // section (or an empty one) gets the page's honest empty state.
+  const products = await getDropProducts(retailerId)
   return {
-    featured: pick(FEATURED_DROP_SLUGS),
-    list: pick(DROP_LIST_SLUGS),
+    featured: products.slice(0, 1),
+    list: products.slice(1),
   }
 }
 

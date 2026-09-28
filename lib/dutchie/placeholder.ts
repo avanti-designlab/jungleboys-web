@@ -623,6 +623,30 @@ export const placeholderProvider = {
       { id: 'sp-os-vapes-gummies', slug: 'os-20-off-vapes-gummies', name: '20% Off Vapes & Gummies', percentOff: 20, group: 'outsource', productSlugs: ['stiiizy-blue-burst', 'wyld-huckleberry'] },
     ]
   },
+
+  // Fresh Drops curation (ADDITIVE amendment, 2026-09-28 — resolves the
+  // long-open "curation mechanism" question): the JB team maintains a
+  // CUSTOM homepage section named "Fresh Drops" per store in the Dutchie
+  // E-Commerce admin; position 1 is the Strain of the Week. The fixture
+  // mirrors that as an ordered slug list off its own menu.
+  async getDropProducts(retailerId: string): Promise<Product[]> {
+    const slugs = [
+      'zangria-premium-flower-8th',
+      '06-og-10-pack',
+      'rainbow-belts-10-pack',
+      'motor-breath-premium-flower-8th',
+      'rs1000-premium-flower-8th',
+      'private-reserve-hash-hole',
+      'blu-frootz-gas-tank',
+      'apple-jam-gas-tank',
+      'blu-og-pops',
+      'cherry-gelato-1g-preroll',
+      'blu-zerdz-twins-2pack',
+    ]
+    const menu = await placeholderProvider.getMenu(retailerId)
+    const bySlug = new Map(menu.products.map((p) => [p.slug, p]))
+    return slugs.map((s) => bySlug.get(s)).filter((p): p is Product => p != null)
+  },
 }
 
 export type DutchieProvider = typeof placeholderProvider
