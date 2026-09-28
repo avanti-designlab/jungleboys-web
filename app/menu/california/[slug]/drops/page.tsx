@@ -6,6 +6,7 @@ import BackPill from '@/components/menu/back-pill'
 import type { Product, ProductCategory, StrainType } from '@/lib/dutchie'
 import { getLocations, getLocationBySlug } from '@/lib/dutchie'
 import { toCardProduct } from '@/lib/dutchie/card'
+import { cutoutUrl } from '@/lib/dutchie/img'
 import { getDrops, getDropsHero, type DropsHero } from '@/lib/drops'
 import { jsonLdHtml, breadcrumbSchema } from '@/lib/schema'
 import { AddToCartButton, ProductCard } from '@/components/menu/menu-browser'
@@ -111,18 +112,21 @@ function StrainOfTheWeek({
               aria-hidden
               className="pointer-events-none absolute left-1/2 top-1/2 h-[130%] w-[130%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(254,207,14,0.28),transparent_72%)]"
             />
+            {/* CDN cutout floats free on the dark hero (Avanti, 2026-09-28:
+                "remove the white box behind the product image") — the white
+                tile is gone and the drop shadow rides the bag's own silhouette */}
             <Link
               href={`/shop/${product.slug}?store=${storeSlug}`}
               aria-label={product.name}
-              className="relative block h-72 w-72 -rotate-2 overflow-hidden rounded-[2.25rem] bg-white shadow-[0_36px_70px_rgba(0,0,0,0.6)] transition-transform duration-300 hover:rotate-0 md:h-[24rem] md:w-[24rem]"
+              className="relative block h-72 w-72 -rotate-2 transition-transform duration-300 hover:rotate-0 md:h-[24rem] md:w-[24rem]"
             >
               <Image
-                src={shot.url}
+                src={cutoutUrl(shot.url)}
                 alt={shot.alt}
                 fill
                 priority
                 sizes="(max-width: 768px) 75vw, 400px"
-                className="object-contain p-6"
+                className="object-contain drop-shadow-[0_36px_70px_rgba(0,0,0,0.6)]"
               />
             </Link>
           </div>
