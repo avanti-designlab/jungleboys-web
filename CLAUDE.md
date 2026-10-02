@@ -1361,6 +1361,20 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   Candidates if she wants more: ORC shop cards, gt-shop cards (dark stages where baked boxes
   still show).
 
+- **DUTCHIE PLUS LONGEVITY (Avanti intel, 2026-10-02).** Agency blogs claim a "Plus sunset
+  end of 2026"; Avanti, from the relationship directly: Dutchie expects Plus to drift toward
+  Pro eventually BUT told JB they have big clients who won't move, so Plus "technically might
+  not ever go away completely" — and JB has a strong relationship with them. POSTURE: no
+  alarm, no migration planning; keep ONE low-drama line in the next Dutchie email asking for
+  the Plus support horizon in writing (relationship is not a contract). If a written horizon
+  ever lands, revisit. App research same day: Dutchie's NEW branded native app product is
+  deeply brandable (own store listings, home-screen control, wallet loyalty, Pay by Bank) —
+  the "generic app" fix may be an upgrade conversation; a CUSTOM app on Plus is technically a
+  straight reuse of our web integration (React Native + hosted checkout in-app), gated on
+  Apple licensed-entity/geofence rules and Google Play's no-in-app-THC-checkout pattern.
+  Dutchie "Extensions SDK" (React/TS components inside Pro storefronts) noted as ecosystem
+  intel for the platform venture.
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
