@@ -65,14 +65,23 @@ const RETAILER_MATCH: Record<string, RegExp> = {
 }
 
 async function gql<T>(key: string, query: string, variables: Record<string, unknown> = {}): Promise<T> {
-  const res = await fetch(ENDPOINT, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', authorization: `Bearer ${key}` },
-    body: JSON.stringify({ query, variables }),
-    // ISR-aligned: menu data may be 60s stale, same as the pages that show it
-    next: { revalidate: 60 },
-  })
-  if (res.status === 429) throw new Error('dutchie: rate limited (429)')
+  // 429s get three polite retries with backoff (1s/3s/7s). A build
+  // prerendering 2,200 PDPs died to a momentary rate-limit spike on
+  // 2026-10-02 — a transient 429 must degrade to slower, never to a failed
+  // deploy. Persistent 429s still throw so real abuse surfaces.
+  let res: Response
+  for (let attempt = 0; ; attempt++) {
+    res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', authorization: `Bearer ${key}` },
+      body: JSON.stringify({ query, variables }),
+      // ISR-aligned: menu data may be 60s stale, same as the pages that show it
+      next: { revalidate: 60 },
+    })
+    if (res.status !== 429) break
+    if (attempt >= 3) throw new Error('dutchie: rate limited (429)')
+    await new Promise((r) => setTimeout(r, [1000, 3000, 7000][attempt]))
+  }
   const json = (await res.json().catch(() => null)) as {
     data?: T
     errors?: { message: string }[]
