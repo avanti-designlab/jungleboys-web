@@ -1393,8 +1393,38 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   orders queries are SECRET-key only (public key verified Forbidden — correct) → post-launch
   order-status page possible server-side. (8) Minor unused product fields: descriptionHtml,
   effects, tags/inventoryTags, subcategoryDisplayName, totalTerpenes, posMetaData.
-  createCheckout metadata/trackedCartMetaData unused (attribution hooks). Awaiting her go on
-  (1)+(3).
+  createCheckout metadata/trackedCartMetaData unused (attribution hooks). RESOLVED same day:
+  Avanti greenlit "Let's build 1,2,3,5,8" — see the next entry. (2-full/4/6/7 stay post-launch.)
+- **FEATURE BATCH 1/2/3/5/8 SHIPPED + LIVE-VERIFIED (2026-10-05, commit 4eba772).**
+  (1) PDP cross-store availability from the EXISTING offers array (no extra API call): quiet
+  "Also at <stores>" links, or a gold rescue box ("Sold out here, in stock at") when the chosen
+  store is dry; chips reuse chooseStore so the whole page follows. Verified: Shabang 3.5g Gold
+  Mylar shows "Also at Orange County, Pomona". (2-lite) LIVE BAG QUOTE: /api/cart-quote runs an
+  ephemeral real Dutchie checkout (createCheckout+addItem+priceSummary read) and the bag panel
+  shows exact Discounts / Taxes & fees / Total before handoff (debounced 600ms, keyed
+  store|menuType|items; Checkout reuses the quoted redirectUrl while the key matches; /api/checkout
+  hardening family; 503 in fixture mode → panel falls back to the plain subtotal). Verified live:
+  2-item DTLA bag, subtotal $24.16 / taxes $9.38 / total $33.54. LOCAL-TEST NOTE: quotes need
+  DUTCHIE_PLUS_PROVIDER=graphql AT RUNTIME (env deliberately not in .env.local — pass it inline
+  when starting the server). (3) NEW badges: Product.createdAt on the wire; grid cards wear an
+  ink/gold NEW pill ≤14 days after POS add (Hot outranks on the right-top slot). Live counts that
+  day: DTLA 76 / SD 162 / OC 46 / Pomona 0 recent products. (5) NEAREST STORE in the picker:
+  client-side haversine vs our own coordinates (no location data leaves the device), rows sort by
+  distance with NEAREST pill + miles; denied/unavailable degrades to a one-line notice. TRAP FIXED
+  IN VERIFICATION: CA_OWNED includes the EXTERNAL clothing store, which sat closer than the DTLA
+  dispensary and silently won nearestSlug for a row that is filtered from display — locate() now
+  skips external entries. (8) PDP minor fields: subcategoryDisplayName preferred for the category
+  chip, totalTerpenes fallback chip when no terp rows, effects as title-cased chips;
+  createdAt/enterpriseProductId/tags/subcategoryDisplayName/totalTerpenes carried through types +
+  card trim + both providers (additive; placeholder returns fixtures/[]). ALSO: gql client retries
+  429s (3 attempts, 1s/3s/7s backoff) — a 2,200-page live build had died to one transient 429.
+  getProductAvailability(enterpriseProductId) exists in the provider (built for feature 1 before
+  the offers-array approach won) — kept as the cross-store primitive for any future surface.
+  PROBE LESSON (harness, recorded so the next sweep doesn't relearn it): CSS text-transform
+  UPPERCASES innerText — case-sensitive includes('Subtotal') reads a working panel as absent;
+  match case-insensitively. And headless CDP geolocation is unreliable even with
+  Browser.grantPermissions + Emulation.setGeolocationOverride — stub navigator.geolocation via
+  Page.addScriptToEvaluateOnNewDocument instead.
 
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
