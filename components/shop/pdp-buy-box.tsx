@@ -148,6 +148,54 @@ export default function PdpBuyBox({
         </fieldset>
       )}
 
+      {/* Cross-store availability (2026-10-05 feature audit): the offers
+          array has every store's stock already — this surfaces it. A quiet
+          "Also at" row normally; a loud rescue when the chosen store is dry.
+          Chips reuse chooseStore, so the whole page follows the switch. */}
+      {(() => {
+        const others = offers.filter(
+          (o) => o.slug !== offer.slug && o.state === 'CA' && o.variants.some((v) => (v.quantityAvailable ?? 0) > 0)
+        )
+        if (!others.length) return null
+        if (soldOut) {
+          return (
+            <div className="mt-5 rounded-2xl border border-[var(--color-accent)]/50 bg-[var(--color-accent)]/10 p-4">
+              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted)]">
+                Sold out here, in stock at
+              </p>
+              <div className="mt-2.5 flex flex-wrap gap-2">
+                {others.map((o) => (
+                  <button
+                    key={o.slug}
+                    type="button"
+                    onClick={() => chooseStore(o.slug)}
+                    className="rounded-full bg-[var(--color-accent)] px-4 py-2 text-xs font-extrabold uppercase tracking-widest text-black transition hover:-translate-y-0.5"
+                  >
+                    {o.name} →
+                  </button>
+                ))}
+              </div>
+            </div>
+          )
+        }
+        return (
+          <p className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--color-muted)]">
+            Also at
+            {others.map((o, i) => (
+              <button
+                key={o.slug}
+                type="button"
+                onClick={() => chooseStore(o.slug)}
+                className="text-[var(--color-accent-ink)] underline-offset-4 hover:underline"
+              >
+                {o.name}
+                {i < others.length - 1 ? ',' : ''}
+              </button>
+            ))}
+          </p>
+        )
+      })()}
+
       <p className="mt-5" aria-live="polite">
         {!variant ? null : soldOut ? (
           <span className="text-xl font-extrabold text-[var(--color-muted)]">Sold out at {offer.name}</span>

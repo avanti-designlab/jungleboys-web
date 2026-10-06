@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { CA_OWNED } from '@/lib/owned-stores'
@@ -18,6 +18,16 @@ import { menuPathFor, writeStore } from '@/lib/store-selection'
 // ground, which made the age gate's own copy change contrast with the theme and
 // fail AA in light. Do not lower it.
 
+// straight-line distance in miles — plenty for "which store is closest"
+function miles(aLat: number, aLng: number, bLat: number, bLng: number): number {
+  const rad = (d: number) => (d * Math.PI) / 180
+  const dLat = rad(bLat - aLat)
+  const dLng = rad(bLng - aLng)
+  const h =
+    Math.sin(dLat / 2) ** 2 + Math.cos(rad(aLat)) * Math.cos(rad(bLat)) * Math.sin(dLng / 2) ** 2
+  return 3958.8 * 2 * Math.asin(Math.sqrt(h))
+}
+
 export default function StorePicker({
   open,
   onClose,
@@ -32,6 +42,28 @@ export default function StorePicker({
   const router = useRouter()
   const panelRef = useRef<HTMLDivElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
+  // nearest-store (2026-10-05 feature audit): computed CLIENT-SIDE against
+  // our own store coordinates — no API, no location data ever leaves the
+  // device. null = not asked, 'denied' = blocked/failed.
+  const [near, setNear] = useState<Record<string, number> | 'denied' | null>(null)
+  const locate = () => {
+    if (!navigator.geolocation) { setNear('denied'); return }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const d: Record<string, number> = {}
+        // external entries (the clothing store) are filtered out of the list
+        // below — leaving them in here let an invisible row win NEAREST
+        for (const st of CA_OWNED) {
+          if (!st.external) d[st.slug] = miles(pos.coords.latitude, pos.coords.longitude, st.lat, st.lng)
+        }
+        setNear(d)
+      },
+      () => setNear('denied'),
+      { maximumAge: 300000, timeout: 8000 }
+    )
+  }
+  const nearestSlug =
+    near && near !== 'denied' ? Object.entries(near).sort((a, b) => a[1] - b[1])[0]?.[0] : null
 
   useEffect(() => {
     if (!open) return
@@ -90,7 +122,13 @@ export default function StorePicker({
         {label}
       </h3>
       <ul className="space-y-2">
-        {stores.filter((s) => !s.external).map((s) => (
+        {stores
+          .filter((s) => !s.external)
+          .slice()
+          .sort((a, b) =>
+            near && near !== 'denied' && state === 'CA' ? (near[a.slug] ?? 1e9) - (near[b.slug] ?? 1e9) : 0
+          )
+          .map((s) => (
           <li key={s.slug}>
             <button
               type="button"
@@ -106,6 +144,16 @@ export default function StorePicker({
                   style={{ fontFamily: 'var(--font-brand)' }}
                 >
                   {s.name}
+                  {state === 'CA' && s.slug === nearestSlug && (
+                    <span className="ml-2 rounded-full bg-[var(--color-accent)] px-2 py-0.5 align-middle text-[9px] font-extrabold tracking-[0.18em] text-black">
+                      NEAREST
+                    </span>
+                  )}
+                  {state === 'CA' && near && near !== 'denied' && near[s.slug] != null && (
+                    <span className="ml-2 align-middle text-[10px] font-bold tracking-wide text-white/50">
+                      {near[s.slug] < 10 ? near[s.slug].toFixed(1) : Math.round(near[s.slug])} mi
+                    </span>
+                  )}
                 </span>
                 <span className="mt-0.5 block text-xs leading-snug text-white/70">
                   {s.street}, {s.city}, {s.state} {s.zip}
@@ -134,12 +182,33 @@ export default function StorePicker({
         className="flex max-h-[85vh] w-full max-w-xl flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0b0b0b] outline-none"
       >
         <div className="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-5">
-          <h2
-            id="store-picker-title"
-            className="font-display text-3xl uppercase leading-none text-white md:text-4xl"
-          >
-            Select a location
-          </h2>
+          <div>
+            <h2
+              id="store-picker-title"
+              className="font-display text-3xl uppercase leading-none text-white md:text-4xl"
+            >
+              Select a location
+            </h2>
+            {near === null && (
+              <button
+                type="button"
+                onClick={locate}
+                className="mt-2 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)] underline-offset-4 hover:underline"
+                style={{ fontFamily: 'var(--font-brand)' }}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3.5 w-3.5" aria-hidden>
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M12 2v3m0 14v3M2 12h3m14 0h3" strokeLinecap="round" />
+                </svg>
+                Find my nearest store
+              </button>
+            )}
+            {near === 'denied' && (
+              <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.16em] text-white/50" style={{ fontFamily: 'var(--font-brand)' }}>
+                Location unavailable, pick a store below
+              </p>
+            )}
+          </div>
           <button
             ref={closeRef}
             type="button"

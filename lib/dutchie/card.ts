@@ -24,6 +24,8 @@ export function toCardProduct(p: Product): Product {
     strainType: p.strainType,
     featured: p.featured,
     retailerId: p.retailerId,
+    createdAt: p.createdAt,
+    tags: p.tags,
     images: p.images.slice(0, 1),
     variants: p.variants,
     labResult: p.labResult?.potency?.thc

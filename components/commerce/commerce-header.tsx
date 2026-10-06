@@ -204,6 +204,43 @@ export default function CommerceHeader() {
   // horizontal-scroll container (it would clip them) and stay in the DOM when
   // closed (hidden attr) so the options are crawlable and checkable.
   const [openMenu, setOpenMenu] = useState<null | 'shop' | 'products' | 'cart'>(null)
+  // Live Dutchie quote for the open bag (2026-10-05 feature audit #2): real
+  // discounts/taxes/total from an ephemeral checkout, debounced while the
+  // panel is open. Keyed so stale quotes never price a changed bag; the
+  // quoted redirectUrl lets Checkout skip the rebuild. Fails silent — the
+  // local subtotal is always the floor.
+  type Quote = {
+    key: string
+    summary: { subtotal: number; discounts: number; taxes: number; fees: number; total: number }
+    url: string | null
+  }
+  const [quote, setQuote] = useState<Quote | 'loading' | null>(null)
+
+  useEffect(() => {
+    if (openMenu !== 'cart') return
+    const storeSlug = store?.slug ?? cart[0]?.storeSlug
+    const items = cart.filter((i) => i.storeSlug === storeSlug).map((i) => ({ variantId: i.variantId, qty: i.qty }))
+    if (!storeSlug || !items.length) { setQuote(null); return }
+    const key = `${storeSlug}|${menuType}|${items.map((i) => `${i.variantId}x${i.qty}`).join(',')}`
+    if (quote && quote !== 'loading' && quote.key === key) return
+    const t = setTimeout(async () => {
+      setQuote('loading')
+      try {
+        const res = await fetch('/api/cart-quote', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ storeSlug, menuType, items }),
+        })
+        if (!res.ok) throw new Error()
+        const data = (await res.json()) as { summary: Quote['summary']; url: string | null }
+        setQuote({ key, summary: data.summary, url: data.url })
+      } catch {
+        setQuote(null)
+      }
+    }, 600)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openMenu, cart, menuType, store?.slug])
   useEffect(() => setOpenMenu(null), [pathname])
   useEffect(() => {
     if (!openMenu) return
@@ -632,11 +669,46 @@ export default function CommerceHeader() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-3 flex items-center justify-between border-t border-white/10 px-2 pt-3">
-                <span className="text-[13px] uppercase leading-none tracking-[0.18em] text-white/60">
-                  Subtotal · {count} {count === 1 ? 'item' : 'items'}
-                </span>
-                <span className="text-[22px] leading-none">${(cartSubtotal(cart) / 100).toFixed(2).replace(/\.00$/, '')}</span>
+              <div className="mt-3 space-y-1.5 border-t border-white/10 px-2 pt-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[13px] uppercase leading-none tracking-[0.18em] text-white/60">
+                    Subtotal · {count} {count === 1 ? 'item' : 'items'}
+                  </span>
+                  <span className={quote && quote !== 'loading' ? 'text-[15px] leading-none text-white/80' : 'text-[22px] leading-none'}>
+                    ${(((quote && quote !== 'loading' ? quote.summary.subtotal : null) ?? cartSubtotal(cart)) / 100).toFixed(2).replace(/\.00$/, '')}
+                  </span>
+                </div>
+                {quote === 'loading' && (
+                  <p className="text-[11px] uppercase leading-none tracking-[0.18em] text-white/40">
+                    Getting your exact total…
+                  </p>
+                )}
+                {quote && quote !== 'loading' && (
+                  <>
+                    {quote.summary.discounts > 0 && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-[12px] uppercase leading-none tracking-[0.18em] text-[var(--color-accent)]">Discounts</span>
+                        <span className="text-[15px] leading-none text-[var(--color-accent)]">
+                          -${(quote.summary.discounts / 100).toFixed(2).replace(/\.00$/, '')}
+                        </span>
+                      </div>
+                    )}
+                    {quote.summary.taxes + quote.summary.fees > 0 && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-[12px] uppercase leading-none tracking-[0.18em] text-white/60">Taxes &amp; fees</span>
+                        <span className="text-[15px] leading-none text-white/80">
+                          ${((quote.summary.taxes + quote.summary.fees) / 100).toFixed(2).replace(/\.00$/, '')}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-[13px] font-bold uppercase leading-none tracking-[0.18em] text-white">Total</span>
+                      <span className="text-[24px] leading-none">
+                        ${(quote.summary.total / 100).toFixed(2).replace(/\.00$/, '')}
+                      </span>
+                    </div>
+                  </>
+                )}
               </div>
               {/* PillCta language: label + cart icon in a circle on the right.
                   API HANDOFF (Avanti approved 2026-09-08): tries /api/checkout
@@ -649,6 +721,17 @@ export default function CommerceHeader() {
                 onClick={async () => {
                   track('begin_checkout', { currency: 'USD', value: cartSubtotal(cart) / 100 })
                   setCheckingOut(true)
+                  // a fresh quote already built this exact cart on Dutchie's
+                  // side; its redirectUrl skips the rebuild round-trip
+                  if (quote && quote !== 'loading' && quote.url) {
+                    const storeSlug = store?.slug ?? cart[0]?.storeSlug
+                    const items = cart.filter((i) => i.storeSlug === storeSlug).map((i) => ({ variantId: i.variantId, qty: i.qty }))
+                    const key = `${storeSlug}|${menuType}|${items.map((i) => `${i.variantId}x${i.qty}`).join(',')}`
+                    if (quote.key === key) {
+                      window.location.assign(quote.url)
+                      return
+                    }
+                  }
                   try {
                     const storeSlug = store?.slug ?? cart[0]?.storeSlug
                     const res = await fetch('/api/checkout', {

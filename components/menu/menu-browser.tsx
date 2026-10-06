@@ -140,6 +140,11 @@ export function ProductCard({
   const shot = product.images[0]
   const thc = product.labResult?.potency?.thc
   const strain = product.strainType ? STRAIN_STYLE[product.strainType] : null
+  // NEW = added to the POS catalog in the last 14 days (2026-10-05 feature
+  // audit: createdAt was on the wire all along). Hot outranks it on the
+  // right-top slot; sale/sold-out keep the left.
+  const isNew =
+    !!product.createdAt && Date.now() - Date.parse(product.createdAt) < 14 * 864e5
 
   return (
     <article
@@ -183,14 +188,21 @@ export function ProductCard({
             {percentOff}% off
           </span>
         ) : null}
-        {hot && !soldOut && (
+        {hot && !soldOut ? (
           <span
             className="absolute right-4 top-4 z-20 rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white"
             style={{ fontFamily: 'var(--font-brand)', background: 'var(--color-danger-solid)' }}
           >
             Hot
           </span>
-        )}
+        ) : isNew && !soldOut ? (
+          <span
+            className="absolute right-4 top-4 z-20 rounded-full bg-[var(--color-ink)] px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-[var(--color-accent)]"
+            style={{ fontFamily: 'var(--font-brand)' }}
+          >
+            New
+          </span>
+        ) : null}
       </div>
 
       {/* info — chip row, Bebas name, Bebas price. Identical bones to the

@@ -25,3 +25,4 @@ export const getProductBySlug = provider.getProductBySlug
 export const getCategories = provider.getCategories
 export const getSpecials = provider.getSpecials
 export const getDropProducts = provider.getDropProducts
+export const getProductAvailability = provider.getProductAvailability

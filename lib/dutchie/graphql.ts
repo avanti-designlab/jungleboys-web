@@ -157,6 +157,11 @@ interface WireProduct {
   id: string
   slug?: string
   name: string
+  createdAt?: string
+  enterpriseProductId?: string
+  tags?: string[]
+  subcategoryDisplayName?: string
+  totalTerpenes?: { formatted?: string; range?: number[]; unit?: string }
   category?: string
   subcategory?: string
   strainType?: string
@@ -183,6 +188,8 @@ interface WireProduct {
 
 const PRODUCT_SELECTION = `
   id slug name category subcategory strainType description staffPick effects
+  createdAt enterpriseProductId tags subcategoryDisplayName
+  totalTerpenes { formatted range unit }
   brand { name imageUrl }
   images { url label }
   image
@@ -250,6 +257,14 @@ function mapProduct(w: WireProduct, retailerId: string): Product | null {
     ...(subcategory ? { subcategory } : {}),
     ...(STRAIN_MAP[w.strainType ?? ''] ? { strainType: STRAIN_MAP[w.strainType ?? ''] } : {}),
     ...(w.description ? { description: w.description } : {}),
+    ...(w.createdAt ? { createdAt: w.createdAt } : {}),
+    ...(w.enterpriseProductId ? { enterpriseProductId: w.enterpriseProductId } : {}),
+    ...(w.tags?.length ? { tags: w.tags } : {}),
+    ...(w.subcategoryDisplayName ? { subcategoryDisplayName: w.subcategoryDisplayName } : {}),
+    ...(() => {
+      const tt = mapPotency(w.totalTerpenes)
+      return tt ? { totalTerpenes: tt } : {}
+    })(),
     images,
     variants,
     ...(() => {
@@ -382,6 +397,37 @@ async function getDropProducts(ourRetailerId: string): Promise<Product[]> {
   return out
 }
 
+// Cross-store availability (2026-10-05 feature audit, verified live):
+// one call answers which JB stores carry a product. Dutchie retailers map
+// back to OUR slugs through RETAILER_MATCH; sandbox/closed stores drop out.
+async function getProductAvailability(
+  enterpriseProductId: string
+): Promise<{ slug: string; isAvailable: boolean }[]> {
+  const key = process.env.DUTCHIE_PLUS_PUBLIC_KEY?.trim()
+  if (!key || !enterpriseProductId) return []
+  try {
+    const data = await gql<{
+      productAvailabilityByRetailer: { isAvailable: boolean; retailer: { name: string } }[]
+    }>(
+      key,
+      `query ($e: ID!) {
+         productAvailabilityByRetailer(enterpriseProductId: $e) { isAvailable retailer { name } }
+       }`,
+      { e: enterpriseProductId }
+    )
+    const out = new Map<string, boolean>()
+    for (const row of data.productAvailabilityByRetailer ?? []) {
+      const slug = Object.keys(RETAILER_MATCH).find((s) => RETAILER_MATCH[s].test(row.retailer?.name ?? ''))
+      if (!slug) continue
+      // duplicate retailer rows appear on the wire; any-true wins
+      out.set(slug, (out.get(slug) ?? false) || row.isAvailable)
+    }
+    return [...out.entries()].map(([slug, isAvailable]) => ({ slug, isAvailable }))
+  } catch {
+    return [] // availability is garnish; it never breaks a PDP
+  }
+}
+
 export const graphqlProvider: typeof placeholderProvider = {
   // Locations are OUR data (NAP, hours, slugs) — never Dutchie's.
   getLocations: placeholderProvider.getLocations,
@@ -389,6 +435,7 @@ export const graphqlProvider: typeof placeholderProvider = {
   getMenu,
   getProducts,
   getDropProducts,
+  getProductAvailability,
 
   async getProductBySlug(slug: string): Promise<Product | null> {
     const all = await getProducts()

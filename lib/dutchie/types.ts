@@ -144,6 +144,14 @@ export interface Product {
   effects?: string[]
   featured?: boolean
   retailerId: string
+  /** 2026-10-05 additive batch (feature audit): POS catalog creation date
+      (NEW badges), enterprise id (cross-store availability), POS tags,
+      Dutchie's own subcategory display name, and total terpene potency. */
+  createdAt?: string
+  enterpriseProductId?: string
+  tags?: string[]
+  subcategoryDisplayName?: string
+  totalTerpenes?: { value: number; unit: '%' | 'mg' }
 }
 
 export interface ProductFilter {

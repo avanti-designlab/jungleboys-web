@@ -199,7 +199,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             {/* badge strip — the reference PDP's marks, from real fields only */}
             <div className="mt-4 flex flex-wrap justify-center gap-1.5 lg:justify-start">
               {chip(categoryLabel(product.category), 'cat')}
-              {product.subcategory && chip(product.subcategory.replace(/-/g, ' '), 'sub')}
+              {product.subcategory && chip(product.subcategoryDisplayName ?? product.subcategory.replace(/-/g, ' '), 'sub')}
               {!/^jungle boys/i.test(product.brand) && chip(product.brand, 'brand')}
               {product.strain && chip(<>Strain · {product.strain}</>, 'strain')}
             </div>
@@ -228,6 +228,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               {thc && chip(<>THC <span className="text-[var(--color-accent-ink)]">{thc.value}{thc.unit}</span></>, 'thc')}
               {cbd && chip(<>CBD <span className="text-[var(--color-accent-ink)]">{cbd.value}{cbd.unit}</span></>, 'cbd')}
               {terpTotal ? chip(<>Terps <span className="text-[var(--color-accent-ink)]">{terpTotal.toFixed(1)}%</span></>, 'terps') : null}
+              {(terpTotal ? null : product.totalTerpenes) &&
+                chip(<>Terps <span className="text-[var(--color-accent-ink)]">{product.totalTerpenes!.value}{product.totalTerpenes!.unit}</span></>, 'terps-total')}
+              {(product.effects ?? []).slice(0, 4).map((e) =>
+                chip(e.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()), `fx-${e}`)
+              )}
             </div>
 
             {product.description && (

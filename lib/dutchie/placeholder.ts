@@ -624,6 +624,12 @@ export const placeholderProvider = {
     ]
   },
 
+  // Cross-store availability (ADDITIVE, 2026-10-05): fixture mode has no
+  // cross-store data; the PDP section simply hides.
+  async getProductAvailability(_enterpriseProductId: string): Promise<{ slug: string; isAvailable: boolean }[]> {
+    return []
+  },
+
   // Fresh Drops curation (ADDITIVE amendment, 2026-09-28 — resolves the
   // long-open "curation mechanism" question): the JB team maintains a
   // CUSTOM homepage section named "Fresh Drops" per store in the Dutchie
