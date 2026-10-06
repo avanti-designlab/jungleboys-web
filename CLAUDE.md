@@ -1375,6 +1375,27 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   Dutchie "Extensions SDK" (React/TS components inside Pro storefronts) noted as ecosystem
   intel for the platform venture.
 
+- **PRE-ROLLS RECOLOR (Avanti, 2026-10-05: "too much green… swap some content boxes from
+  green to black with just some green and white accents. the main hero background can stay
+  green").** pr-process panel+cards, pr-different ring cards, and pr-shop LineShop cards all
+  went BLACK (near-black gradients) with lime keylines/green icon orbs/white type as accents;
+  pr-different's panel keeps a green glow rising from the bottom edge only; hero untouched.
+- **PLUS API FEATURE AUDIT (2026-10-05, full introspection vs codebase).** Unused and REAL:
+  (1) productAvailabilityByRetailer(enterpriseProductId) → {isAvailable, retailer} per store —
+  VERIFIED live; unlocks PDP "available at other stores" + sold-out rescue (recommended
+  pre-launch, ~half day). (2) checkout read/removeItem/updateQuantity/updateCheckout →
+  live-synced bag with REAL taxes/discounts pre-handoff (recommend post-launch). (3)
+  Product.createdAt → automatic NEW badges (~1h, recommended). (4) Retailer carries
+  fulfillmentOptions incl. DELIVERY + deliverySettings zones; checkout accepts address+
+  orderType — delivery is wireable whenever the business turns it on. (5)
+  retailersNearLocation → geo store finder. (6) specialMenuCards(menuCards{menuDisplayName/
+  Image/...}) — team-designed deal card art; none configured at DTLA yet. (7) customers/
+  orders queries are SECRET-key only (public key verified Forbidden — correct) → post-launch
+  order-status page possible server-side. (8) Minor unused product fields: descriptionHtml,
+  effects, tags/inventoryTags, subcategoryDisplayName, totalTerpenes, posMetaData.
+  createCheckout metadata/trackedCartMetaData unused (attribution hooks). Awaiting her go on
+  (1)+(3).
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
