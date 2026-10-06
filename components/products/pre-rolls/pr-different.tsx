@@ -103,7 +103,8 @@ export default function PrDifferent() {
       <div
         data-nav-theme="dark"
         className="relative flex h-[92vh] min-h-[640px] flex-col overflow-hidden rounded-[1.75rem] md:rounded-[2.5rem]"
-        style={{ background: 'radial-gradient(130% 90% at 50% 108%, #1cc257 0%, #0d7a38 22%, #06381d 52%, #02120a 100%)' }}
+        // green pulled back to a bottom glow on black (Avanti 2026-10-05)
+        style={{ background: 'radial-gradient(130% 90% at 50% 112%, #0d7a38 0%, #06381d 12%, #041710 28%, #020504 58%, #020303 100%)' }}
       >
         {/* aurora blooms so the green is alive rather than a flat wash */}
         <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
@@ -149,7 +150,7 @@ export default function PrDifferent() {
                   }}>
                   <div className="w-full rounded-2xl border border-[var(--pr-lime)]/35 px-3 py-3.5 text-center backdrop-blur-md md:rounded-[1.3rem] md:px-4 md:py-5"
                     style={{
-                      background: 'linear-gradient(160deg, rgba(11,66,33,0.95) 0%, rgba(3,22,12,0.94) 100%)',
+                      background: 'linear-gradient(160deg, rgba(16,20,17,0.95) 0%, rgba(5,7,6,0.94) 100%)',
                       boxShadow: '0 18px 44px rgba(0,0,0,0.45), inset 0 1px 0 rgba(182,255,138,0.25)',
                     }}>
                     <span aria-hidden

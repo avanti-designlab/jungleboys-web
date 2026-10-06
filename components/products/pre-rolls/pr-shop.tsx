@@ -19,12 +19,12 @@ export default function PrShop() {
       // 3.21:1. The deep end of the same ramp is the same hue and clears AA.
       accent="var(--pr-green-deep)"
       accentHot="var(--pr-green)"
-      cardFrom="var(--pr-green-hot)"
-      cardMid="var(--pr-green)"
-      cardTo="var(--pr-green-deep)"
+      cardFrom="#1a1e1b"
+      cardMid="#0d100e"
+      cardTo="#050706"
       shotTo="#eef7f1"
-      strainText="#c9f5d8"
-      shadow="0 16px 44px rgba(6,60,30,0.26)"
+      strainText="#8fe6ac"
+      shadow="0 16px 44px rgba(0,0,0,0.45)"
       featuredBg="var(--pr-shop-ink)"
       cols={4}
     />

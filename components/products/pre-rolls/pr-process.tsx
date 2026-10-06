@@ -71,7 +71,8 @@ export default function PrProcess() {
       <div
         data-nav-theme="dark"
         className="relative overflow-hidden rounded-[1.75rem] px-4 py-14 md:rounded-[2.5rem] md:px-10 md:py-20"
-        style={{ background: 'linear-gradient(168deg, #0a3f22 0%, #062916 46%, #02110a 100%)' }}
+        // black panel, green lives in the keylines + lime type (Avanti 2026-10-05: too much green)
+        style={{ background: 'linear-gradient(168deg, #0d110e 0%, #070907 46%, #030503 100%)' }}
       >
         <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
           <div className="pr-aurora-b absolute -inset-[30%]"
@@ -95,11 +96,11 @@ export default function PrProcess() {
               <article key={card.step} data-pr-proc-card
                 className="group overflow-hidden rounded-[1.6rem] border border-[var(--pr-lime)]/25 will-change-transform md:rounded-[2rem]"
                 style={{
-                  background: 'linear-gradient(160deg, rgba(12,70,36,0.7) 0%, rgba(3,22,12,0.85) 100%)',
+                  background: 'linear-gradient(160deg, rgba(18,22,19,0.92) 0%, rgba(6,8,7,0.95) 100%)',
                   boxShadow: '0 24px 60px rgba(0,0,0,0.45), inset 0 1px 0 rgba(182,255,138,0.22)',
                 }}>
                 <div className="relative m-3 aspect-[16/10] overflow-hidden rounded-[1.2rem] md:m-4 md:rounded-[1.5rem]"
-                  style={{ background: 'radial-gradient(90% 90% at 50% 30%, #0e5c2e 0%, #04180d 100%)' }}>
+                  style={{ background: 'radial-gradient(90% 90% at 50% 30%, #131a15 0%, #050806 100%)' }}>
                   {card.src ? (
                     <video
                       data-pr-proc-media
