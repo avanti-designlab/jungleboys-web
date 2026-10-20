@@ -6,9 +6,11 @@ import { useEffect, useRef, useState } from 'react'
 import 'leaflet/dist/leaflet.css'
 import type { Map as LeafletMap } from 'leaflet'
 import { CA_STORES, type Store } from '@/lib/locations'
+import { TILE_URL, TILE_OPTIONS } from '@/lib/map-tiles'
 
-// Full-width dark charcoal locations map. Gold pulsating JB pins (CARTO dark
-// basemap tiles, loaded as CSP-allowed https images — no external scripts).
+// Full-width dark charcoal locations map. Gold pulsating JB pins (OSM basemap
+// tiles CSS-darkened via lib/map-tiles, loaded as CSP-allowed https images —
+// no external scripts).
 // Click a pin → a preview card with the store image + Shop Now → its menu page.
 // Leaflet is imported dynamically (needs window); reduced-motion stills the pulse.
 
@@ -31,11 +33,7 @@ export default function LocationsMap() {
       })
       mapObj.current = map
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd',
-        maxZoom: 19,
-        attribution: '&copy; OpenStreetMap &copy; CARTO',
-      }).addTo(map)
+      L.tileLayer(TILE_URL, TILE_OPTIONS).addTo(map)
 
       const markers = CA_STORES.map((store) => {
         const icon = L.divIcon({

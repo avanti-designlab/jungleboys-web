@@ -821,6 +821,14 @@ html.jb-no-intro .jb-intro {
 .jb-pin.is-active .jb-pin-mark {
   transform: scale(1.15);
 }
+/* OSM tiles darkened in CSS (lib/map-tiles puts this class on the tile
+   container). CARTO's free dark basemap started demanding an API key
+   (2026-10-20); OSM has no dark style, so invert + desaturate recreates the
+   charcoal look. Scoped to the TILE layer only — pins, clusters and controls
+   live in other Leaflet panes and keep their true colors. */
+.jb-tiles-dark {
+  filter: invert(1) hue-rotate(180deg) brightness(0.72) contrast(0.92) saturate(0.22);
+}
 /* Leaflet chrome tuned for the charcoal theme.
    The container-scoped selector is deliberate: Leaflet sets the attribution
    background on `.leaflet-container .leaflet-control-attribution` (0,2,0), the

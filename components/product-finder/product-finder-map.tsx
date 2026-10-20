@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 import type { Map as LeafletMap, Marker } from 'leaflet'
 import { RETAILERS, type Retailer } from '@/lib/product-finder/retailers'
+import { TILE_URL, TILE_OPTIONS } from '@/lib/map-tiles'
 
 // California only on the finder map (FL has its own site/team)
 const STORES = RETAILERS.filter((r) => r.state !== 'FL')
@@ -93,11 +94,7 @@ export default function ProductFinderMap() {
       let ready = false
       map.on('dragstart click', () => ready && setCtaHidden(true))
       map.on('zoomstart', () => ready && setCtaHidden(true))
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        subdomains: 'abcd',
-        maxZoom: 19,
-        attribution: '&copy; OpenStreetMap &copy; CARTO',
-      }).addTo(map)
+      L.tileLayer(TILE_URL, TILE_OPTIONS).addTo(map)
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const cluster = (L as any).markerClusterGroup({
