@@ -1426,6 +1426,19 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   Browser.grantPermissions + Emulation.setGeolocationOverride — stub navigator.geolocation via
   Page.addScriptToEvaluateOnNewDocument instead.
 
+- **CARTO BASEMAP KILLED + REPLACED WITH CSS-DARKENED OSM (2026-10-20, Avanti's screenshots:
+  "API KEY REQUIRED" watermarked on every map).** CARTO's free basemaps.cartocdn.com tiles now
+  demand an API key. All three Leaflet maps (contact LocationsMap, product-finder map,
+  locations StateMiniMap) switched to tile.openstreetmap.org via **lib/map-tiles.ts, the ONE
+  shared tile definition** (future provider changes are one file). OSM has no dark style:
+  `.jb-tiles-dark` in globals (set via tileLayer's className, so it lands on the TILE pane
+  only) recreates the charcoal look with invert/hue-rotate/desaturate; pins/clusters/controls
+  live in other panes and keep true colors. OSM has no {s} subdomains and no {r} retina.
+  CSP img-src already allows https: wildcard, nothing to open. Verified live build: 21/21
+  tiles on contact + finder, 9/9 on locations, no watermark. If OSM's usage policy ever
+  becomes a concern at scale, the recorded alternatives are a keyed CARTO account or
+  self-hosted vector tiles; swap inside lib/map-tiles.ts.
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
