@@ -827,7 +827,11 @@ html.jb-no-intro .jb-intro {
    charcoal look. Scoped to the TILE layer only — pins, clusters and controls
    live in other Leaflet panes and keep their true colors. */
 .jb-tiles-dark {
-  filter: invert(1) hue-rotate(180deg) brightness(0.72) contrast(0.92) saturate(0.22);
+  /* grayscale FIRST kills OSM's land/forest tints entirely (the hue-rotate
+     version left olive patches); then invert + deep brightness cut lands on
+     the old CARTO dark_all charcoal (Avanti, 2026-10-20: "darker and more
+     greyscale"). Tuned headless against /contact; keep labels readable. */
+  filter: grayscale(1) invert(1) brightness(0.45) contrast(1.15);
 }
 /* Leaflet chrome tuned for the charcoal theme.
    The container-scoped selector is deliberate: Leaflet sets the attribution
