@@ -1439,6 +1439,21 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   becomes a concern at scale, the recorded alternatives are a keyed CARTO account or
   self-hosted vector tiles; swap inside lib/map-tiles.ts.
 
+- **LINE-PAGE CTA SWEEP + IN-PLACE PDP STORE PICK (Avanti, 2026-10-26: "add to cart buttons
+  do not lead to product pages… should go to that specific product page, but the choose your
+  location modal should pop up… then allow them to shop the product").** (1) flower/gt/hh/pops
+  shop strips still had the pre-PDP `href="/locations"` pills (LineShop + ORC were already
+  right) → all four now link `/shop/<slug>`; verified 34/34 CTAs across the four pages. (2)
+  PDP pick flow: StorePickerMount already auto-opens on /shop/<slug> with no store, but choose()
+  routed to the store MENU, losing the product. StorePicker now takes `stay` (passed by the
+  mount for /^\/shop\/.+/): CA pick = writeStore + close, NO navigation; FL still leaves
+  (off-site). writeStore now dispatches **jb:store-changed** (same-tab; storage event only
+  fires cross-tab) — PdpBuyBox adopts the picked store when it carries the product (else
+  current offer stays, "Also at" row covers it), and the commerce-header chip syncs off the
+  same event (CHOOSE A STORE → store name without reload). PROBE NOTE: `[role=dialog]`
+  presence is NOT "picker open" — hidden overlays (main menu) match; test visibility +
+  "Select a location" text.
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
