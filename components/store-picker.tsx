@@ -32,12 +32,18 @@ export default function StorePicker({
   open,
   onClose,
   dest,
+  stay,
 }: {
   open: boolean
   onClose: () => void
   /** door destination: routes a chosen CA store to that surface (the
       /deals and /drops evergreen doors) */
   dest?: 'deals' | 'drops'
+  /** stay on the current page after a CA pick instead of routing to the
+      store menu — the PDP flow (Avanti, 2026-10-26: land on the product,
+      pick a location, shop THAT product). FL picks still leave: FL shops
+      off-site, there is no FL PDP to stay on. */
+  stay?: boolean
 }) {
   const router = useRouter()
   const panelRef = useRef<HTMLDivElement>(null)
@@ -102,6 +108,14 @@ export default function StorePicker({
 
   const choose = (slug: string, state: 'CA' | 'FL') => {
     writeStore(slug, state)
+    // stay mode: the page under the modal IS the destination (a PDP). The
+    // write above already announced jb:store-changed, so the buy box has
+    // re-priced; close immediately — no navigation, so the mount's
+    // close-on-pathname-change never fires.
+    if (stay && state === 'CA') {
+      onClose()
+      return
+    }
     // Deliberately NOT closing here: closing before router.push() completes
     // exposes the page behind for a few frames (on /shop, the chooser list —
     // Avanti saw it as a flash of the locations page). The mount closes the

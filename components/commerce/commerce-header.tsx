@@ -150,8 +150,15 @@ export default function CommerceHeader() {
   // Effect, not initial state: localStorage must not disagree with server HTML.
   const [savedStore, setSavedStore] = useState<string | null>(null)
   useEffect(() => {
-    const s = readStore()
-    if (s?.state === 'CA') setSavedStore(s.slug)
+    const sync = () => {
+      const s = readStore()
+      if (s?.state === 'CA') setSavedStore(s.slug)
+    }
+    sync()
+    // jb:store-changed: a pick made WITHOUT navigation (the PDP's in-place
+    // picker) must still flip the chip from CHOOSE A STORE to the store name.
+    window.addEventListener('jb:store-changed', sync)
+    return () => window.removeEventListener('jb:store-changed', sync)
   }, [pathname])
 
   const storeSlug = urlStore ?? savedStore

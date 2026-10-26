@@ -63,6 +63,22 @@ export default function PdpBuyBox({
     setSlug(chosen)
   }, [offers])
 
+  // Follow a pick made in the location modal WHILE on this page (the picker
+  // stays on PDPs instead of routing to the store menu). A store that does
+  // not carry this product keeps the current offer on screen — the saved
+  // store still changed site-wide, and the "Also at" row says where it is.
+  useEffect(() => {
+    const onStoreChanged = () => {
+      const saved = readStore()?.slug
+      if (saved && offers.some((o) => o.slug === saved)) {
+        setSlug(saved)
+        setVariantId(null)
+      }
+    }
+    window.addEventListener('jb:store-changed', onStoreChanged)
+    return () => window.removeEventListener('jb:store-changed', onStoreChanged)
+  }, [offers])
+
   const offer = useMemo(() => offers.find((o) => o.slug === slug) ?? null, [offers, slug])
 
   const variant = useMemo(() => {

@@ -75,5 +75,8 @@ export default function StorePickerMount() {
 
   // picking from a door routes into that store's matching surface
   const dest = pathname === '/deals' ? ('deals' as const) : pathname === '/drops' ? ('drops' as const) : undefined
-  return <StorePicker open={open} onClose={close} dest={dest} />
+  // On a PDP the product is the point — a pick applies in place instead of
+  // routing to the store menu (Avanti, 2026-10-26).
+  const stay = /^\/shop\/.+/.test(pathname ?? '')
+  return <StorePicker open={open} onClose={close} dest={dest} stay={stay} />
 }

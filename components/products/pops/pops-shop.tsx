@@ -119,7 +119,7 @@ export default async function PopsShop() {
                             </span>
                           )}
                         </p>
-                        <PillCta label="Add to Cart" size="sm" icon="cart" hover="black" href="/locations" className="shrink-0 whitespace-nowrap" />
+                        <PillCta label="Add to Cart" size="sm" icon="cart" hover="black" href={`/shop/${p.slug}`} className="shrink-0 whitespace-nowrap" />
                       </div>
                     </div>
                   </article>

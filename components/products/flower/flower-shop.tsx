@@ -114,7 +114,7 @@ export default async function FlowerShop() {
                             <span className="ml-1 text-xs font-bold uppercase text-[var(--color-ink)]/60" style={{ fontFamily: 'var(--font-brand)' }}>· {v.option}</span>
                           </span>
                         </p>
-                        <PillCta label="Add to Cart" size="sm" icon="cart" href="/locations" className="shrink-0 whitespace-nowrap" />
+                        <PillCta label="Add to Cart" size="sm" icon="cart" href={`/shop/${p.slug}`} className="shrink-0 whitespace-nowrap" />
                       </div>
                     </div>
                   </article>

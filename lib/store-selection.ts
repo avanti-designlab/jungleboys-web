@@ -36,6 +36,13 @@ export function writeStore(slug: string, state: 'CA' | 'FL'): void {
   } catch {
     // private mode / storage disabled — the picker still works for this session
   }
+  // Same-tab announcement (the storage event only fires in OTHER tabs). The
+  // PDP buy box listens so picking a store from the modal re-prices in place.
+  try {
+    window.dispatchEvent(new CustomEvent('jb:store-changed'))
+  } catch {
+    // SSR / non-browser caller — nothing to announce
+  }
 }
 
 /**
