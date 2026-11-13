@@ -1,4 +1,4 @@
-# DRAFT — Privacy Policy update for counsel review (November 2026)
+# DRAFT: Privacy Policy update for counsel review (November 2026)
 
 > **This file does not render on the website.** The live policy is `privacy.md`
 > (last updated May 2025). This draft modernizes it for the rebuilt site and for
