@@ -1,6 +1,6 @@
 # Pre-cutover security audit: 2026-11-12
 
-Scope: the release candidate at commit `c15507c` (branch
+Scope: the release candidate (security fixes landed at commit `c15507c`; the performance fixes that followed are covered in the last section) (branch
 `claude/jungle-boys-phase-3-w2775d`, pushed to `main` and `live`), built on
 live Dutchie data. This is the per-phase audit required by 04 §8, run as the
 final gate before DNS cutover. Every result below was observed in this run;
@@ -89,3 +89,49 @@ deletion API (3 of 3 accepted, and all three confirmed absent on re-query). `a@b
 Dutchie's hosted checkout pages (their code and their cookies), the JB
 mobile app, and jungleboysflorida.com. A manual screen-reader pass of the
 buy flow is scheduled separately for launch week.
+
+## Performance on the release candidate (Core Web Vitals)
+
+Measured with `scripts/measure-lcp.mjs`: mobile 390px, 4x CPU throttle, slow
+4G, median of 5 runs with a 4s drain between runs, spread guard on. Budgets:
+LCP 2500ms, CLS 0.1. Fifteen templates, all PASS, all reliable (spread 4 to
+80ms).
+
+| Page | LCP | CLS |
+|---|---|---|
+| Home | 1296ms | 0.001 |
+| /products | 1052ms | 0.006 |
+| /products/premium-flower | 1840ms | 0.000 |
+| /products/hash-hole | 1528ms | 0.000 |
+| /products/pre-rolls | 2412ms | 0.000 |
+| /products/orc | 2456ms | 0.000 |
+| /shop | 872ms | 0.009 |
+| Storefront, DTLA | 1152ms | 0.002 |
+| Storefront, San Diego | 1216ms | 0.002 |
+| Deals, DTLA | 1024ms | 0.000 |
+| Product page (PDP) | 920ms | 0.036 |
+| /locations | 1080ms | 0.000 |
+| /rewards | 1052ms | 0.000 |
+| /faq | 824ms | 0.042 |
+| /contact | 1056ms | 0.000 |
+
+Two defects were found and fixed during this measurement:
+
+1. **Storefront LCP was a race.** San Diego measured 1795ms or 2590ms run to
+   run (the instrument reported UNRELIABLE and refused a verdict). Next 16
+   deprecated the Image `priority` prop: it now only inserts a preload link
+   and no longer raises fetch priority, so the LCP banner queued last of 16
+   image preloads, behind 15 icons. Fixed with `fetchPriority="high"` plus
+   lazy-loading the dropdown and below-hero icons, and the same migration on
+   seven other hero images. Result: San Diego 1216ms, DTLA 2420 -> 1152ms,
+   PDP 1908 -> 920ms.
+2. **/shop layout shift.** The "Continue at <store>" banner was inserted
+   after first paint for returning shoppers, moving the store list 88px
+   (CLS 0.089). The faster paint from fix 1 exposed it. A pre-paint boot flag
+   (`html.jb-has-store`) now reserves the slot. CLS 0.009.
+
+Thin margins, stated plainly: /products/orc (2456ms) and /products/pre-rolls
+(2412ms) pass within about 100ms of the budget. Both already carry high
+fetch priority, so they are bound by hero image weight, not queueing. The
+lever, if ever needed, is recompressing `skyline.webp` and the four tube
+images, which touches art and is Avanti's call.

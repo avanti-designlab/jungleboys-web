@@ -2973,3 +2973,24 @@ html[data-a11y-contrast='high'][data-theme='dark'] {
   --color-muted: #c9c9cf;
   --color-border: #5a5657;
 }
+
+/* /shop "Continue at <store>" slot. Hidden for first-time visitors; for a
+   returning CA shopper the boot script sets html.jb-has-store BEFORE paint
+   and the slot reserves the button's height so the link lands in space that
+   already exists. */
+.shop-continue-slot {
+  display: none;
+}
+html.jb-has-store .shop-continue-slot {
+  display: flex;
+  align-items: flex-start;
+  /* phones: "Continue at Downtown Los Angeles" wraps to two lines (4rem);
+     reserving for one left a 20px shift. Shorter names sit in the same slot. */
+  min-height: 4rem;
+  margin-top: 1.5rem;
+}
+@media (min-width: 640px) {
+  html.jb-has-store .shop-continue-slot {
+    min-height: 2.75rem;
+  }
+}

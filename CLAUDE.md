@@ -1532,6 +1532,24 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   (GitHub settings, no API access here).** getMenu() returns a Menu OBJECT ({products}),
   not an array.
 
+- **CWV RE-MEASURE DONE + TWO PERF DEFECTS FIXED (2026-11-12).** 15 templates, all PASS and
+  reliable; table in security/pre-cutover-audit-2026-11-12.md. (1) **Next 16 DEPRECATED Image
+  `priority`**: it now only inserts a preload <link> and does NOT raise fetch priority (docs:
+  node_modules/next/dist/docs/.../image.md). The storefront LCP banner was preloaded LAST of 16
+  images behind 15 icons, so San Diego measured BIMODAL 1795|2590ms (spread guard said
+  UNRELIABLE — an unreliable verdict here was a real race, not harness noise; the 2026-07-31
+  "contamination" story is not the only cause of two-valued LCP). Fix pattern, use it for every
+  future LCP image: `preload` + `fetchPriority="high"`, and `loading="lazy"` on icons in
+  closed dropdowns / below the hero so React stops emitting preloads for them. Results:
+  SD 1216ms, DTLA 2420->1152, PDP 1908->920. (2) **/shop CLS 0.089**: ContinueAtStore was
+  inserted post-paint for returning shoppers; latent, exposed when paint got faster. Fixed with
+  a pre-paint boot flag (html.jb-has-store, in the layout's boot script) + a reserved
+  `.shop-continue-slot` (4rem on phones because "Continue at Downtown Los Angeles" wraps to
+  two lines). RULE REINFORCED: any client-only block inserted above content needs its space
+  reserved before first paint. THIN MARGINS, not defects: /products/orc 2456ms and
+  /products/pre-rolls 2412ms are image-weight-bound (already high priority); recompressing
+  skyline.webp / the tube images is the only lever and is Avanti's call (art).
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before

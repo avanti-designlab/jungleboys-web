@@ -85,7 +85,12 @@ export default function RootLayout({
               "try{var p=JSON.parse(localStorage.getItem('jb-a11y')||'{}'),d=document.documentElement;" +
               "if(p.text)d.setAttribute('data-a11y-text','lg');" +
               "if(p.motion)d.setAttribute('data-a11y-motion','reduce');" +
-              "if(p.contrast)d.setAttribute('data-a11y-contrast','high')}catch(e){}",
+              "if(p.contrast)d.setAttribute('data-a11y-contrast','high')}catch(e){}" +
+              // returning CA shopper: reserve the /shop "Continue at" slot
+              // before first paint (it was inserted post-paint and shifted
+              // the store list 88px: CLS 0.089, 2026-11-12)
+              "try{var st=JSON.parse(localStorage.getItem('jb-store')||'null');" +
+              "if(st&&st.state==='CA')document.documentElement.classList.add('jb-has-store')}catch(e){}",
           }}
         />
         <script
