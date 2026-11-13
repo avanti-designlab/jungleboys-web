@@ -1481,6 +1481,25 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   "specialId is [String]" wire fact is SUPERSEDED. Vendor schema can tighten in place on the
   same API version; a failed prerender naming a GraphQL type is drift, not our bug.
 
+- **PRIVACY/COOKIE HARDENING (Avanti's go, 2026-11-12, same session as the a11y pass).**
+  Review verdict: the consent card EXCEEDS US requirements (opt-in + reject + policy link +
+  GA4 verified not loading pre-consent; no Meta pixel / session replay / chat widgets — the
+  CIPA-suit surface is empty and CSP proves it). Shipped: (1) **GPC honored in code** —
+  analytics.tsx refuses GA4 whenever navigator.globalPrivacyControl is set, even after
+  Accept All (Sephora-settlement theory closed; verified both directions headless).
+  (2) **Prop 65** — components/legal/prop65.tsx (OEHHA cannabis safe-harbor wording, yellow
+  triangle; DO NOT reword without counsel) renders in the footer site-wide + on every PDP,
+  because the warning must precede purchase and checkout is Dutchie's page. (3) **Privacy
+  policy redline** at content/legal/privacy-DRAFT-2026-11-counsel.md (non-routed): CPRA
+  rights incl. correct, truthful cookie section naming GA4, retention, GPC disclosure,
+  **Notice of Financial Incentive for PWF Rewards** (CCPA 1798.125 — the live policy's
+  one-liner is not a compliant notice), fresh date. live privacy.md UNTOUCHED — counsel
+  approves before any legal copy ships (recorded rule). OPEN WITH HER: send the redline to
+  counsel; add to the Lily email: does Dutchie's checkout display Prop 65 at purchase + their
+  accessibility VPAT. MEASUREMENT NOTE: Next HTML is one line — `grep -c` counts LINES and
+  reads two warnings as one; count occurrences with `grep -o | wc -l` (a PDP 404'd mid-probe
+  the same way: live slugs churn, pull a current href from a grid before probing a PDP).
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
