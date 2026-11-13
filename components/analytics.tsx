@@ -42,6 +42,12 @@ export default function Analytics() {
 
   useEffect(() => {
     const startIfConsented = () => {
+      // Global Privacy Control (2026-11-12): the browser-level "do not sell
+      // or share" signal. We do not sell or share and analytics is already
+      // opt-in, but the Sephora settlement treated an ignored GPC signal +
+      // analytics cookies as actionable, so the signal wins over everything
+      // here: GPC set means GA4 never loads, even after Accept All.
+      if ((navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl) return
       try {
         if (localStorage.getItem(CONSENT_KEY) !== 'accepted') return
       } catch {

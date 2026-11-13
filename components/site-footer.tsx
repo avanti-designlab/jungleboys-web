@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import A11yOpenButton from '@/components/a11y/a11y-open-button'
+import Prop65 from '@/components/legal/prop65'
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import FooterSignup from './footer-signup'
@@ -90,6 +91,9 @@ export default async function SiteFooter() {
               <p className="mx-auto max-w-4xl text-[10px] normal-case leading-relaxed tracking-normal text-white/60 md:mx-0">
                 {warningText.trim()}
               </p>
+              <div className="mx-auto max-w-4xl text-left md:mx-0">
+                <Prop65 tone="footer" />
+              </div>
             </div>
             <div className="flex items-center justify-center gap-6 md:justify-start">
               <Link href="/terms" className="text-white/85 transition-colors duration-200 hover:text-[var(--color-accent)]">

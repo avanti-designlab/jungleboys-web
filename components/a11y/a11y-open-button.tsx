@@ -12,7 +12,7 @@ export default function A11yOpenButton({ variant = 'solid' }: { variant?: 'solid
         onClick={open}
         className="text-white/85 transition-colors duration-200 hover:text-[var(--color-accent)]"
       >
-        Accessibility
+        Accessibility Settings
       </button>
     )
   }

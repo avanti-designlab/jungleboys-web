@@ -8,6 +8,7 @@ import { toCardProduct } from '@/lib/dutchie/card'
 import { jsonLdHtml, breadcrumbSchema, productSchema } from '@/lib/schema'
 import PdpBuyBox, { type StoreOffer } from '@/components/shop/pdp-buy-box'
 import { ProductCard } from '@/components/menu/menu-browser'
+import Prop65 from '@/components/legal/prop65'
 import { categoryLabel, STRAIN_STYLE } from '@/components/menu/labels'
 import { EffectPills, TerpenePills } from '@/components/shop/trait-pills'
 import EffectsRadar from '@/components/shop/effects-radar'
@@ -437,6 +438,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </section>
         </Reveal>
       )}
+      {/* Prop 65: the warning must precede purchase, and checkout is
+          Dutchie's page, so every PDP carries it (see components/legal/prop65) */}
+      <section className="mx-auto max-w-[1400px] px-4 pb-10 md:px-6">
+        <Prop65 />
+      </section>
     </main>
   )
 }
