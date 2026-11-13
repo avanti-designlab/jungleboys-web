@@ -46,7 +46,12 @@ function BannerTile({
         src={banner.image}
         alt={banner.alt}
         fill
-        priority={priority}
+        // Next 16 deprecated `priority`: `preload` only inserts the <link>,
+        // it no longer raises fetch priority. Without fetchPriority="high"
+        // this LCP image queued BEHIND 15 icon preloads and the San Diego
+        // storefront measured bimodal, 1795ms or 2590ms (2026-11-12 CWV).
+        preload={priority}
+        fetchPriority={priority ? 'high' : undefined}
         sizes="(max-width: 1024px) 92vw, 60vw"
         className="object-cover transition-transform duration-500 group-hover:scale-105"
       />
@@ -210,6 +215,8 @@ function CategoryTile({ category, storeSlug }: { category: ProductCategory; stor
           <img
             src={icon}
             alt=""
+            // below the hero trio: lazy, so these never preload ahead of the LCP banner
+            loading="lazy"
             className={`h-full w-full object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.12)] ${iconScale(icon)}`}
           />
         </span>

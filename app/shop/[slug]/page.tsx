@@ -175,7 +175,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                   src={shot.url}
                   alt={shot.alt}
                   fill
-                  priority
+                  preload
+                  fetchPriority="high"
                   sizes="(max-width: 1024px) 92vw, 46vw"
                   className="object-contain p-10"
                 />

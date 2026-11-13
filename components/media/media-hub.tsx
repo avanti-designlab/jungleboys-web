@@ -59,7 +59,8 @@ function VideoTile({
           src={youtubeThumb(v.id, big ? 'maxres' : 'hq')}
           alt={v.title}
           fill
-          priority={big}
+          preload={big}
+          fetchPriority={big ? 'high' : undefined}
           sizes={big ? '(max-width:1024px) 100vw, 760px' : '(max-width:767px) 100vw, (max-width:1024px) 33vw, 380px'}
           className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-105"
         />

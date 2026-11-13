@@ -124,7 +124,8 @@ function StrainOfTheWeek({
                 src={cutoutUrl(shot.url)}
                 alt={shot.alt}
                 fill
-                priority
+                preload
+                fetchPriority="high"
                 sizes="(max-width: 768px) 75vw, 400px"
                 className="object-contain drop-shadow-[0_36px_70px_rgba(0,0,0,0.6)]"
               />

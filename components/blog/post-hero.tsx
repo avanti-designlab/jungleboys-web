@@ -69,7 +69,7 @@ export function ParallaxImage({ src, alt }: { src: string; alt: string }) {
   return (
     <div ref={wrapRef} className="relative mt-10 aspect-[16/9] overflow-hidden rounded-[1.5rem]">
       <div ref={imgRef} className="absolute inset-x-0 -inset-y-[10%] will-change-transform">
-        <Image src={src} alt={alt} fill sizes="(max-width:768px) 100vw, 768px" className="object-cover" priority />
+        <Image src={src} alt={alt} fill sizes="(max-width:768px) 100vw, 768px" className="object-cover" preload fetchPriority="high" />
       </div>
     </div>
   )

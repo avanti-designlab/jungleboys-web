@@ -501,7 +501,7 @@ export default function CommerceHeader() {
                   <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white transition-transform duration-200 group-hover/row:scale-105">
                     {icon ? (
                       // eslint-disable-next-line @next/next/no-img-element -- brand icon
-                      <img src={icon} alt="" className="h-9 w-9 object-contain" />
+                      <img src={icon} alt="" loading="lazy" className="h-9 w-9 object-contain" />
                     ) : (
                       <span className="text-[18px] leading-none text-black/70">{categoryLabel(c).slice(0, 1)}</span>
                     )}
@@ -557,7 +557,7 @@ export default function CommerceHeader() {
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white transition-transform duration-200 group-hover/row:scale-105">
                   {l.icon ? (
                     // eslint-disable-next-line @next/next/no-img-element -- brand icon
-                    <img src={l.icon} alt="" className="h-9 w-9 object-contain" />
+                    <img src={l.icon} alt="" loading="lazy" className="h-9 w-9 object-contain" />
                   ) : (
                     <span className="text-[18px] leading-none text-black/70">{l.label.slice(0, 1)}</span>
                   )}

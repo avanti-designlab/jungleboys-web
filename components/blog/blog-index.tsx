@@ -95,7 +95,8 @@ export default function BlogIndex({ posts }: { posts: BlogSummary[] }) {
                   alt={featured.imageAlt}
                   fill
                   sizes="(max-width:768px) 100vw, 50vw"
-                  priority
+                  preload
+                  fetchPriority="high"
                   className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]"
                 />
               ) : (

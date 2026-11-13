@@ -124,7 +124,8 @@ export default function RewardsHero() {
             alt="The Jungle Boys app on a phone"
             width={833}
             height={833}
-            priority
+            preload
+            fetchPriority="high"
             sizes="(max-width: 1024px) 440px, 520px"
             className="relative z-10 w-full"
           />

@@ -142,7 +142,8 @@ export default function HeroDeck({ slides = HERO_SLIDES }: { slides?: HeroSlide[
                 src={s.imageMobile ?? s.image}
                 alt={s.alt}
                 fill
-                priority={i === 0}
+                preload={i === 0}
+                fetchPriority={i === 0 ? 'high' : undefined}
                 sizes="100vw"
                 className={`object-cover ${s.imageMobile ? 'md:hidden' : 'hidden'}`}
               />
@@ -153,7 +154,8 @@ export default function HeroDeck({ slides = HERO_SLIDES }: { slides?: HeroSlide[
                 alt={s.alt}
                 fill
                 loading={i === 0 && !s.imageMobile ? undefined : 'lazy'}
-                priority={i === 0 && !s.imageMobile}
+                preload={i === 0 && !s.imageMobile}
+                fetchPriority={i === 0 && !s.imageMobile ? 'high' : undefined}
                 sizes="100vw"
                 className={`object-cover ${s.imageMobile ? 'hidden md:block' : ''}`}
               />
