@@ -45,3 +45,8 @@ jobs:
         run: node --experimental-strip-types scripts/check-richtext-safe.mjs
       - name: Build
         run: npm run build
+      - name: Accessibility guard (WCAG 2.1 AA, axe serious+critical)
+        run: |
+          npx next start -p 3100 &
+          sleep 6
+          node scripts/a11y-scan.mjs --origin=http://localhost:3100

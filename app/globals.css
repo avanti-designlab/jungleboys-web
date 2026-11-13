@@ -2931,3 +2931,45 @@ body:has(.tw-page) footer {
   .orc-ember { opacity: 0; }
   .orc-word { opacity: 1; transform: none; transition: none; }
 }
+
+/* ===== Accessibility preferences (components/a11y/a11y-prefs.tsx) =====
+   Three data attributes on <html>, persisted in localStorage jb-a11y and
+   applied pre-paint by a layout boot script. First-party by decision
+   (2026-11-12): WCAG conformance lives in the site's own code, never an
+   injected overlay widget. */
+
+/* Larger text: the type scale is rem-based, so scaling the root scales it */
+html[data-a11y-text='lg'] {
+  font-size: 112.5%;
+}
+
+/* Reduce motion: the universal kill-switch. Zero-length durations jump every
+   animation and transition to its end state, so reveals resolve VISIBLE
+   (keyframes fill forward, transitions complete instantly) — the same
+   start-state rule the reduced-motion media query follows. Scroll-driven
+   GSAP surfaces already gate on the OS media query; this switch covers the
+   CSS tiers for visitors who cannot change their OS setting. */
+html[data-a11y-motion='reduce'] *,
+html[data-a11y-motion='reduce'] *::before,
+html[data-a11y-motion='reduce'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+html[data-a11y-motion='reduce'] .jb-reveal-block,
+html[data-a11y-motion='reduce'] .jb-reveal-slide {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Higher contrast: strengthen the secondary ink and borders in BOTH themes.
+   Values clear 7:1 on their grounds (vs ~4.6:1 for the defaults). */
+html[data-a11y-contrast='high'] {
+  --color-muted: #3d3d44;
+  --color-border: #b9b9b4;
+}
+html[data-a11y-contrast='high'][data-theme='dark'] {
+  --color-muted: #c9c9cf;
+  --color-border: #5a5657;
+}

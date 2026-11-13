@@ -84,11 +84,11 @@ export default function QuickCards({ cards = QUICK_CARDS }: { cards?: readonly Q
             </div>
           )
           return 'external' in c && c.external ? (
-            <a key={c.title} href={c.href} target="_blank" rel="noopener noreferrer">
+            <a key={c.title} href={c.href} target="_blank" rel="noopener noreferrer" aria-label={c.title}>
               {card}
             </a>
           ) : (
-            <Link key={c.title} href={c.href}>
+            <Link key={c.title} href={c.href} aria-label={c.title}>
               {card}
             </Link>
           )

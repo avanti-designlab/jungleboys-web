@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import A11yOpenButton from '@/components/a11y/a11y-open-button'
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import FooterSignup from './footer-signup'
@@ -101,6 +102,10 @@ export default async function SiteFooter() {
               <Link href="/careers" className="text-white/85 transition-colors duration-200 hover:text-[var(--color-accent)]">
                 Careers
               </Link>
+              <Link href="/accessibility" className="text-white/85 transition-colors duration-200 hover:text-[var(--color-accent)]">
+                Accessibility
+              </Link>
+              <A11yOpenButton variant="footer" />
             </div>
           </div>
 

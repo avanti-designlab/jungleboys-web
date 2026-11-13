@@ -4,6 +4,7 @@ import { Bebas_Neue, DM_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import AgeGate from "@/components/age-gate";
 import StorePickerMount from "@/components/store-picker-mount";
+import A11yPrefs from "@/components/a11y/a11y-prefs";
 import LoadingScreen from "@/components/loading-screen";
 import RevealGate from "@/components/reveal-gate";
 import NewsletterPopupMount from "@/components/newsletter-popup-mount";
@@ -76,6 +77,18 @@ export default function RootLayout({
           }}
         />
         <script
+          // Applies saved accessibility preferences (jb-a11y) before first
+          // paint, same reasoning as the theme script: these change text
+          // size, motion and contrast, so a post-hydration apply would flash.
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var p=JSON.parse(localStorage.getItem('jb-a11y')||'{}'),d=document.documentElement;" +
+              "if(p.text)d.setAttribute('data-a11y-text','lg');" +
+              "if(p.motion)d.setAttribute('data-a11y-motion','reduce');" +
+              "if(p.contrast)d.setAttribute('data-a11y-contrast','high')}catch(e){}",
+          }}
+        />
+        <script
           // Decides the intro BEFORE first paint. LoadingScreen and RevealGate
           // both made this call in useEffect, so a returning visitor sat under
           // an opaque #050505 panel until hydration finished — 4.2s of black on
@@ -97,6 +110,7 @@ export default function RootLayout({
           <LoadingScreen />
           <AgeGate />
           <StorePickerMount />
+          <A11yPrefs />
           <RevealGate />
           <CookieConsent />
           <Analytics />

@@ -490,7 +490,7 @@ export const graphqlProvider: typeof placeholderProvider = {
       for (let offset = 0; offset < 2000; offset += limit) {
         const page = await gql<{ menu: { products: { slug: string }[] } }>(
           ctx.key,
-          `query ($id: ID!, $sid: [String], $offset: Int!, $limit: Int!) {
+          `query ($id: ID!, $sid: [ID], $offset: Int!, $limit: Int!) {
              menu(retailerId: $id, pagination: { offset: $offset, limit: $limit },
                   filter: { menuSection: { type: SPECIALS, specialId: $sid } }) {
                products { slug }

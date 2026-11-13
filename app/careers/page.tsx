@@ -22,7 +22,7 @@ function PitchPill({ num, tag, heading, children }: { num: string; tag: string; 
   return (
     <div className="rounded-[2.25rem] bg-[var(--color-accent)] p-8 text-black shadow-[0_40px_120px_-50px_rgba(254,207,14,0.6)] md:p-10">
       <div className="flex items-baseline justify-between">
-        <span className="font-display text-5xl leading-none opacity-30">{num}</span>
+        <span className="font-display text-5xl leading-none opacity-45" aria-hidden="true">{num}</span>
         <span className="text-[11px] font-extrabold uppercase tracking-[0.3em]" style={{ fontFamily: 'var(--font-brand)' }}>
           {tag}
         </span>

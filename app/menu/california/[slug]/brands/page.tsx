@@ -214,7 +214,9 @@ export default async function StoreBrandsPage({
                       <p className="mt-3">
                         <Link
                           href={`/menu/california/${slug}?brand=${encodeURIComponent(brand)}#browse`}
-                          className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-ink)] underline-offset-4 hover:underline"
+                          className={`text-[11px] font-bold uppercase tracking-[0.2em] underline-offset-4 hover:underline ${
+                            dark ? 'text-[var(--color-accent)]' : 'text-[var(--color-accent-ink)]'
+                          }`}
                           style={{ fontFamily: 'var(--font-brand)' }}
                         >
                           View all {list.length} from {brand} →
