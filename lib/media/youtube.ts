@@ -124,7 +124,7 @@ function extractInitialData(html: string): unknown | null {
   const marker = 'ytInitialData = '
   const start = html.indexOf(marker)
   if (start === -1) return null
-  let i = start + marker.length
+  const i = start + marker.length
   if (html[i] !== '{') return null
   let depth = 0
   let inStr = false

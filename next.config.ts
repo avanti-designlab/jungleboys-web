@@ -9,6 +9,10 @@ import { securityHeaders } from "./lib/security-headers";
 import { redirects } from "./lib/redirects";
 
 const nextConfig: NextConfig = {
+  // Do not advertise the framework (pre-cutover audit, 2026-11-12): the
+  // X-Powered-By header is free reconnaissance for anyone matching a
+  // freshly published Next.js advisory to a target list.
+  poweredByHeader: false,
   images: {
     // Interim: current-site assets served from Webflow's CDN while content
     // migrates; production assets move first-party before cutover (03 CWV budget).

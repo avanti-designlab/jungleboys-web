@@ -29,7 +29,11 @@ export async function launch({
   const args = [
     `--headless=new`, `--remote-debugging-port=${port}`, '--no-first-run',
     `--window-size=${width},${height}`, '--hide-scrollbars', '--mute-audio',
-    '--force-device-scale-factor=1', '--disable-lcd-text', 'about:blank',
+    '--force-device-scale-factor=1', '--disable-lcd-text',
+    // CI runners need e.g. --no-sandbox (Ubuntu's AppArmor blocks the
+    // unprivileged-userns sandbox); never set locally
+    ...(process.env.JB_CHROME_ARGS ? process.env.JB_CHROME_ARGS.split(' ') : []),
+    'about:blank',
   ]
   const chrome = spawn(CHROME, args, { stdio: 'ignore' })
   process.on('exit', () => { try { chrome.kill() } catch {} })

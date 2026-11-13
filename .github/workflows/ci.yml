@@ -46,6 +46,9 @@ jobs:
       - name: Build
         run: npm run build
       - name: Accessibility guard (WCAG 2.1 AA, axe serious+critical)
+        env:
+          JB_CHROME: /usr/bin/google-chrome
+          JB_CHROME_ARGS: --no-sandbox
         run: |
           npx next start -p 3100 &
           sleep 6

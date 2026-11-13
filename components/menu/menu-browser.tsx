@@ -148,9 +148,7 @@ export function ProductCard({
 
   return (
     <article
-      className={`group @container relative flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white text-[var(--color-ink)] shadow-[0_10px_40px_rgba(0,0,0,0.08)] ${
-        soldOut ? 'opacity-60' : ''
-      }`}
+      className="group @container relative flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-white text-[var(--color-ink)] shadow-[0_10px_40px_rgba(0,0,0,0.08)]"
     >
       {/* stage — the shot CONTAINED in a fixed
           centered box rather than bottom-anchored at 88% width. The line pages
@@ -170,7 +168,14 @@ export function ProductCard({
             // "you can see the box of the images"). The old drop-shadow is
             // gone WITH it — on a baked-background image the shadow outlined
             // the whole rectangle, which is what made the box visible.
-            className="absolute inset-0 h-full w-full object-contain p-7 mix-blend-multiply transition-transform duration-500 ease-out group-hover:-translate-y-2 group-hover:scale-[1.03]"
+            // SOLD OUT dims the SHOT, never the whole card (2026-11-12 a11y
+            // audit): card-level opacity-60 dragged every chip and the title
+            // under the WCAG contrast floor, and the card is still a live
+            // link to the PDP, so the inactive-control exemption does not
+            // apply. The "Sold out" badge + greyed shot carry the state.
+            className={`absolute inset-0 h-full w-full object-contain p-7 mix-blend-multiply transition-transform duration-500 ease-out group-hover:-translate-y-2 group-hover:scale-[1.03] ${
+              soldOut ? 'opacity-45 grayscale' : ''
+            }`}
           />
         )}
         {soldOut ? (

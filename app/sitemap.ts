@@ -115,7 +115,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // PDPs: every distinct product slug on the live CA menus, one canonical
   // /shop/<slug> each (the recorded one-canonical-PDP strategy). Live provider
   // only — see the header note.
-  let pdps: MetadataRoute.Sitemap = []
+  const pdps: MetadataRoute.Sitemap = []
   if (process.env.DUTCHIE_PLUS_PROVIDER === 'graphql') {
     const seen = new Set<string>()
     for (const l of await getLocations()) {
