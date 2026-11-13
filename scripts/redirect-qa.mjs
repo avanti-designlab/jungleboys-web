@@ -23,22 +23,12 @@ const EXTRA = [
 ]
 for (const u of EXTRA) if (!urls.includes(u)) urls.push(u)
 
-// Phase 3 owns the location menus and the auth suite. Those redirects are
-// CORRECT today and land on routes that do not exist yet. Without this, the
-// report is ~27 expected failures and a real regression hides among them.
-// These are reported as PENDING and do not fail the run; they MUST be green
-// before cutover.
-const PENDING_PHASE_3 = [
-  /^\/menu\//,
-  /^\/(login|signup|callback|forgot-password|reset-password|delete-account)$/,
-  /^\/(profile|profile-reward)$/,   // logged-in shells, Phase 3
-  // /about was exempted here as "Phase 3" while the inventory says Phase 1 and
-  // names its own interim destination — the script was laundering a live 404 on
-  // a URL with real traffic. It now has that interim redirect, so the exemption
-  // is gone rather than reworded.
-  /^\/420-pre-game$/,   // 0 clicks/yr, status=draft in the inventory
-]
-const isPending = (u) => PENDING_PHASE_3.some((re) => re.test(u))
+// The Phase-3 exemption list is RETIRED (2026-11-12, pre-cutover run): the
+// menus, auth suite and profile shells all exist now, and its own note said
+// the pending bucket "MUST be green before cutover". Nothing is excused any
+// more: a redirect either resolves correctly, is a DECLARED interim above, or
+// fails the run.
+const isPending = () => false
 
 // Redirects where TEMPORARY is the correct answer, each with the reason it is.
 // Everything else must be 301/308: a legacy URL that has to transfer its signal
@@ -53,7 +43,18 @@ const INTERIM_TEMPORARY = {
   '/may-deals': 'seasonal deal page — rotates back into use',
   '/june-deals': 'seasonal deal page — rotates back into use',
   '/about': 'inventory still intends a real /about; 308 would say it is never coming back',
+  '/420-pre-game': 'seasonal deal page — rotates back into use (2026-09-08)',
 }
+// Pattern-declared interim: Florida menus 307 to jungleboysflorida.com by
+// ruling (Avanti, 2026-09-25: "leaving as is for now") — deliberately NOT
+// permanent so FL embed shells can return without an SEO fight.
+const INTERIM_PATTERNS = [
+  [/^\/menu\/florida\//, 'FL shops off-site for launch; temporary by ruling 2026-09-25'],
+]
+const interimReason = (u) =>
+  Object.prototype.hasOwnProperty.call(INTERIM_TEMPORARY, u)
+    ? INTERIM_TEMPORARY[u]
+    : (INTERIM_PATTERNS.find(([re]) => re.test(u)) || [])[1]
 
 // robots.txt is part of redirect correctness, not a separate concern: a
 // disallowed URL's redirect is never fetched, so the two rules interact.
@@ -96,7 +97,7 @@ for (const u of urls) {
   // property the /verify ruling turns on: a 307 tells Google the URL is coming
   // back, and it is not. Every legacy URL that must transfer its signal has to
   // be permanent; a temporary redirect here is a silent ranking loss.
-  const declaredInterim = Object.prototype.hasOwnProperty.call(INTERIM_TEMPORARY, u)
+  const declaredInterim = interimReason(u) !== undefined
   const permanent = declaredInterim
     ? chain.every((c) => c.includes('-307->') || c.includes('-302->'))
     : chain.every((c) => c.includes('-308->') || c.includes('-301->'))
@@ -108,7 +109,7 @@ for (const u of urls) {
 
   if (good) {
     const tag = declaredInterim ? 'interim' : 'ok    '
-    console.log(`${tag}  ${u}  hops=${hops} final=${status}${hops ? '  ' + chain.join(' | ') : ''}${declaredInterim ? '  — ' + INTERIM_TEMPORARY[u] : ''}`)
+    console.log(`${tag}  ${u}  hops=${hops} final=${status}${hops ? '  ' + chain.join(' | ') : ''}${declaredInterim ? '  — ' + interimReason(u) : ''}`)
   } else if (isPending(u)) {
     pending++
     console.log(`PENDING ${u}  hops=${hops} final=${status}  ${chain.join(' | ')}  (Phase 3)`)

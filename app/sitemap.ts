@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { PRODUCT_LINES, isPlaceholderLine } from '@/lib/products'
 import { getPublishedBlogPosts } from '@/lib/blog'
-import { getLocations } from '@/lib/dutchie'
+import { getLocations, getMenu } from '@/lib/dutchie'
 import { CATEGORY_COLLECTIONS } from '@/lib/collections'
 import { SITE_ORIGIN } from '@/lib/storyblok/seo'
 
@@ -13,12 +13,11 @@ import { SITE_ORIGIN } from '@/lib/storyblok/seo'
 // auth suite, /710-deals) are deliberately absent until they resolve;
 // a sitemap that advertises 404s is worse than a short sitemap.
 //
-// /shop/<slug> PDPs stay OUT for now, deliberately: their slugs come from the
-// placeholder provider, and whether real Dutchie slugs match ours is exactly
-// the open question recorded in the Phase 3 handoff (FL uses per-SKU slugs;
-// ours are per-product). Advertising product URLs that may 404 after the
-// GraphQL swap would burn crawl trust on the highest-value page type. Add them
-// the moment slugs are verified against a real payload.
+// /shop/<slug> PDPs are IN on live data only (2026-11-12, the cutover task
+// pulled forward): slug stability was verified against the real payload on
+// 2026-09-08 (per-product, human-readable). The provider guard keeps fixture
+// slugs out of the sitemap in placeholder builds, where advertising them
+// would be the future-404 this exclusion originally protected against.
 //
 // Auth and utility routes stay out entirely — they are noindex by mandate.
 
@@ -113,5 +112,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })),
   ])
 
-  return [...statics, ...lines, ...stores, ...posts]
+  // PDPs: every distinct product slug on the live CA menus, one canonical
+  // /shop/<slug> each (the recorded one-canonical-PDP strategy). Live provider
+  // only — see the header note.
+  let pdps: MetadataRoute.Sitemap = []
+  if (process.env.DUTCHIE_PLUS_PROVIDER === 'graphql') {
+    const seen = new Set<string>()
+    for (const l of await getLocations()) {
+      try {
+        for (const p of (await getMenu(l.retailerId)).products) {
+          if (!seen.has(p.slug)) {
+            seen.add(p.slug)
+            pdps.push({
+              url: `${SITE_ORIGIN}/shop/${p.slug}`,
+              changeFrequency: 'daily' as const,
+              priority: 0.7,
+            })
+          }
+        }
+      } catch {
+        // a store's menu fetch failing must not take the whole sitemap down
+      }
+    }
+  }
+
+  return [...statics, ...lines, ...stores, ...posts, ...pdps]
 }

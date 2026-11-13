@@ -378,14 +378,20 @@ async function checkSitemap() {
     else fail(`sitemap lists ${path}`)
   }
 
-  // Deliberate exclusion: PDP slugs are the placeholder provider's, and slug
-  // stability against real Dutchie payloads is an OPEN question. A /shop/ URL
-  // in the sitemap before that is verified advertises a future 404. TOP-LEVEL
-  // /shop/<slug> only — the nested <store>/shop/<category> collection pages
-  // are OUR slugs and belong in the sitemap (2026-08-04).
+  // PDP entries are MODE-SPLIT (2026-11-12, cutover task pulled forward):
+  // live builds list every real product slug (verified per-product and stable
+  // 2026-09-08); fixture builds still exclude them — fixture slugs in a
+  // sitemap would advertise future 404s. TOP-LEVEL /shop/<slug> only — the
+  // nested <store>/shop/<category> collection pages are OUR slugs and always
+  // belong (2026-08-04).
   const pdpLocs = [...html.matchAll(/<loc>https?:\/\/[^/<]+\/shop\/[^<]*<\/loc>/g)]
-  if (pdpLocs.length) fail('sitemap excludes top-level /shop/ PDPs until slugs are verified', pdpLocs[0][0])
-  else ok('sitemap excludes top-level /shop/ PDPs (slug stability unverified — recorded)')
+  if (MODE === 'live') {
+    if (pdpLocs.length > 0) ok(`sitemap lists ${pdpLocs.length} live PDPs`)
+    else fail('sitemap lists live /shop/<slug> PDPs', 'none found in live mode')
+  } else {
+    if (pdpLocs.length) fail('sitemap excludes fixture /shop/ PDPs', pdpLocs[0][0])
+    else ok('sitemap excludes fixture /shop/ PDPs (live mode lists them)')
+  }
 
   if (html.includes(`/menu/california/${MENU_STORE}/shop/flower</loc>`)) {
     ok('sitemap lists the flower category collection page')

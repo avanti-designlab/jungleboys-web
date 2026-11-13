@@ -726,7 +726,11 @@ export default function CommerceHeader() {
                 type="button"
                 disabled={checkingOut}
                 onClick={async () => {
-                  track('begin_checkout', { currency: 'USD', value: cartSubtotal(cart) / 100 })
+                  // checkout_handoff, NOT begin_checkout (dedupe ruling, 2026-11-12):
+                  // Dutchie's checkout page fires the canonical begin_checkout
+                  // into the same GA4 property, so ours double-counted the
+                  // funnel. The click stays measurable under its own name.
+                  track('checkout_handoff', { currency: 'USD', value: cartSubtotal(cart) / 100 })
                   setCheckingOut(true)
                   // a fresh quote already built this exact cart on Dutchie's
                   // side; its redirectUrl skips the rebuild round-trip
