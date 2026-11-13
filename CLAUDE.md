@@ -1454,6 +1454,33 @@ Motion: GSAP + ScrollTrigger, three tiers (Subtle/Standard/Complex); every anima
   presence is NOT "picker open" — hidden overlays (main menu) match; test visibility +
   "Select a location" text.
 
+- **ACCESSIBILITY COMPLIANCE PASS SHIPPED (Avanti's go, 2026-11-12: "legally make sure we are
+  100% compliant").** STRATEGY RECORDED: WCAG 2.1 AA conformance in OUR code; NEVER a
+  third-party overlay widget (accessiBe/UserWay class — 23% of H1-2025 ADA suits hit sites
+  WITH widgets, FTC fined accessiBe $1M; re-raise only if counsel overrules with that data in
+  hand). Audit: axe-core A/AA over 25 templates + keyboard probes on the live build. 5
+  findings, 3 real (brands View-all link accent-ink→accent on dark sections; quick-card
+  aria-labels — their img name sat inside the GSAP deck's visibility:hidden; careers numerals
+  opacity 45 + aria-hidden). Blog+rewards contrast hits were the recorded reveal-trap —
+  contrast-verify cleared all five at 6.75–18.88:1; NOTE: axe flags aria-hidden text for
+  color-contrast (visual check), so decorative text must also pass or be opaque enough.
+  NEW SURFACES: **/accessibility** statement page (footer link, sitemap; feedback channel
+  seo@jungleboys.com — keep honest, counsel reads it) and **first-party a11y preferences**
+  (components/a11y/): jb-a11y localStorage → data-a11y-text/motion/contrast attrs on <html>,
+  applied PRE-PAINT by a layout boot script (third boot script — same no-flash reasoning as
+  jb-theme). CSS in globals: text = root 112.5%; motion = universal duration kill-switch +
+  reveal force-visible; contrast = 7:1 muted/border tokens both themes. GUARD:
+  scripts/a11y-scan.mjs (axe, serious+critical, ALLOW map needs a recorded ruling to grow)
+  wired into ci.yml after build — CI now fails on a11y regressions. Keyboard verified: age
+  gate 6/6 tabs trapped, picker 8/8 + Escape. STILL OWED: ask Dutchie for the hosted
+  checkout's conformance/VPAT (one line in the Lily email); a VoiceOver manual pass on the
+  money path at launch week; hash-hole gold-on-sky ruling STANDS (axe does not flag it — the
+  keyline carries it) and is covered honestly under the statement page's known limitations.
+- **DUTCHIE SCHEMA DRIFT (2026-11-12, caught by the build):** the 2021-07 endpoint stopped
+  accepting `$sid: [String]` for the menuSection specialId filter — now `[ID]`. The 2026-09-10
+  "specialId is [String]" wire fact is SUPERSEDED. Vendor schema can tighten in place on the
+  same API version; a failed prerender naming a GraphQL type is drift, not our bug.
+
 ## Project-learned invariants (Documentation agent: append, don't rewrite)
 
 - **This repo's Next.js is newer than training data.** Read `node_modules/next/dist/docs/` before
